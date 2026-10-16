@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="crm_modern.Record">
+        <div class="o_cm o_cm_page cm-rec">
+            <div class="cm-container">
+                <t t-if="state.loading">
+                    <div class="cm-skeleton" style="height:3rem"/>
+                    <div class="cm-skeleton" style="height:14rem"/>
+                </t>
+                <EmptyState t-elif="!state.rec" icon="'fa-compass'" title="'Record not found'" description="'It may have been deleted, or you no longer have access.'"/>
+                <t t-else="">
+                    <t t-set="rec" t-value="state.rec"/>
+
+                    <!-- header: one line title + actions, one line meta -->
+                    <header class="cm-rec-head">
+                        <button type="button" class="cm-rec-crumb" t-on-click="back">
+                            <i class="fa fa-angle-left" aria-hidden="true"/> <t t-esc="isOpp ? 'Pipeline' : 'Leads'"/>
+                        </button>
+                        <div class="cm-rec-titlebar">
+                            <div class="cm-rec-title">
+                                <h1 t-esc="rec.name"/>
+                                <Stars value="rec.priority" onChange="canWrite ? (v) => this.write({ priority: v }, { quiet: true }) : undefined"/>
+                                <span t-if="rec.won_status === 'won'" class="cm-badge cm-badge-success"><i class="fa fa-trophy" aria-hidden="true"/> Won</span>
+                                <span t-elif="rec.won_status === 'lost'" class="cm-badge cm-badge-danger" t-att-title="rec.lost_reason_id ? rec.lost_reason_id[1] : ''">
+                                    <i class="fa fa-times-circle" aria-hidden="true"/> Lost<t t-if="rec.lost_reason_id"> · <t t-esc="rec.lost_reason_id[1]"/></t>
+                                </span>
+                                <span t-elif="!isOpp" class="cm-badge cm-badge-info">Lead</span>
+                                <span t-if="!canWrite" class="cm-badge cm-badge-outline" title="You can view this record but not change it">
+                                    <i class="fa fa-lock" aria-hidden="true"/> Read only
+                                </span>
+                            </div>
+                            <div class="cm-rec-actions">
+                                <t t-if="canWrite">
+                                <button t-if="!isOpp and rec.active" class="cm-btn cm-btn-primary cm-btn-sm" t-on-click="() => this.leadActions.convert([rec.id])">
+                                    <i class="fa fa-exchange" aria-hidden="true"/> Convert
+                                </button>
+                                <button t-if="isOpp and rec.active and rec.won_status !== 'won'" class="cm-btn cm-btn-success cm-btn-sm" t-on-click="() => this.leadActions.won(rec.id)">
+                                    <i class="fa fa-trophy" aria-hidden="true"/> Won
+                                </button>
+                                <button t-if="rec.active" class="cm-btn cm-btn-outline cm-btn-sm cm-btn-lost" t-on-click="() => this.leadActions.lost([rec.id])">
+                                    <i class="fa fa-times-circle" aria-hidden="true"/> Lost
+                                </button>
+                                <button t-else="" class="cm-btn cm-btn-outline cm-btn-sm" t-on-click="() => this.leadActions.restore([rec.id])">
+                                    <i class="fa fa-undo" aria-hidden="true"/> Restore
+                                </button>
+                                </t>
+                                <button t-if="canUnlink" class="cm-btn cm-btn-ghost cm-btn-icon cm-btn-sm cm-btn-delete" title="Delete" aria-label="Delete"
+                                        t-on-click="confirmDelete">
+                                    <i class="fa fa-trash-o" aria-hidden="true"/>
+                                </button>
+                                <button class="cm-btn cm-btn-ghost cm-btn-icon cm-btn-sm" title="Open in Odoo form" aria-label="Open in Odoo form" t-on-click="() => this.leadActions.openForm(rec.id)">
+                                    <i class="fa fa-external-link" aria-hidden="true"/>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="cm-rec-meta">
+                            <span t-if="rec.partner_id or rec.partner_name"><i class="fa fa-building-o" aria-hidden="true"/> <t t-esc="rec.partner_id ? rec.partner_id[1] : rec.partner_name"/></span>
+                            <span t-if="showContact"><i class="fa fa-user-o" aria-hidden="true"/> <t t-esc="rec.contact_name"/></span>
+                            <a t-if="rec.email_from" class="cm-link" t-attf-href="mailto:{{ rec.email_from }}"><i class="fa fa-envelope-o" aria-hidden="true"/> <t t-esc="rec.email_from"/></a>
+                            <a t-if="rec.phone" class="cm-link" t-attf-href="tel:{{ rec.phone }}"><i class="fa fa-phone" aria-hidden="true"/> <t t-esc="rec.phone"/></a>
+                            <span t-if="rec.create_date" class="cm-subtle">Created <t t-esc="shortDate(rec.create_date)"/></span>
+                        </div>
+                    </header>
+
+                    <nav t-if="isOpp" class="cm-stepper-wrap" aria-label="Stage">
+                        <div class="cm-stepper cm-stepper--sm">
+                            <t t-foreach="state.stages" t-as="st" t-key="st.id">
+                                <button type="button" t-att-disabled="!canWrite" t-att-aria-current="st.id === rec.stage_id[0] ? 'step' : undefined"
+                                        t-att-class="{ 'cm-done': st_index &lt; stageIndex, 'cm-won': st.is_won }"
+                                        t-on-click="() => this.setStage(st)">
+                                    <i t-if="st_index &lt; stageIndex" class="fa fa-check" aria-hidden="true"/>
+                                    <t t-esc="st.name"/>
+                                </button>
+                            </t>
+                        </div>
+                    </nav>
+
+                    <div class="cm-rec-layout">
+                        <!-- main: quick actions + timeline -->
+                        <div class="cm-rec-main">
+                            <!-- messages, notes, activities and quotations need write access (Odoo's rule) -->
+                            <RecordActions t-if="canWrite" record="rec" users="state.users" reload.bind="reload"
+                                           onAdvancedSchedule="() => this.activityActions.schedule([rec.id])"/>
+
+                            <!-- extra sections registered by other addons (registry "crm_modern.record_sections") -->
+                            <t t-foreach="recordSections" t-as="section" t-key="section.key">
+                                <t t-component="section.Component" record="rec" reload.bind="reload"/>
+                            </t>
+
+                            <div class="cm-card cm-chatter cm-timeline">
+                                <t t-foreach="[state.chatterKey]" t-as="k" t-key="k">
+                                    <Chatter threadModel="'crm.lead'" threadId="rec.id" has_activities="false"/>
+                                </t>
+                            </div>
+                        </div>
+
+                        <!-- side: key numbers, details, next steps, notes -->
+                        <aside class="cm-rec-side" t-att-class="{ 'cm-readonly': !canWrite }">
+                            <fieldset class="cm-fieldset cm-rec-side-fields" t-att-disabled="!canWrite">
+                            <div class="cm-card cm-rec-kpis">
+                                <label class="cm-kpi">
+                                    <span>Expected revenue</span>
+                                    <input type="number" min="0" step="100" class="cm-inline-input cm-tabular cm-kpi-big"
+                                           t-att-value="rec.expected_revenue" t-on-change="(ev) => this.onNumber('expected_revenue', ev)"/>
+                                </label>
+                                <div t-if="isOpp" class="cm-kpi">
+                                    <span>Probability</span>
+                                    <strong class="cm-tabular cm-kpi-big"><t t-esc="Math.round(rec.probability)"/>%</strong>
+                                    <div class="cm-kpi-bar" role="presentation"><span t-attf-style="width: {{ Math.round(rec.probability) }}%"/></div>
+                                </div>
+                                <label t-if="isOpp" class="cm-kpi cm-kpi--wide">
+                                    <span>Expected closing</span>
+                                    <input type="date" class="cm-inline-input" t-att-value="rec.date_deadline or ''" t-on-change="onDate"/>
+                                </label>
+                            </div>
+
+                            <div class="cm-card cm-rec-details">
+                                <h3 class="cm-side-title">Details</h3>
+                                <div class="cm-prop">
+                                    <label for="cm_r_user">Salesperson</label>
+                                    <select id="cm_r_user" class="cm-inline-input" t-on-change="(ev) => this.onMany2one('user_id', ev)">
+                                        <option value="">Unassigned</option>
+                                        <t t-foreach="state.users" t-as="u" t-key="u.id">
+                                            <option t-att-value="u.id" t-att-selected="rec.user_id and rec.user_id[0] === u.id" t-esc="u.name"/>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div class="cm-prop">
+                                    <label for="cm_r_team">Sales team</label>
+                                    <select id="cm_r_team" class="cm-inline-input" t-on-change="(ev) => this.onMany2one('team_id', ev)">
+                                        <option value="">No team</option>
+                                        <t t-foreach="state.teams" t-as="t" t-key="t.id">
+                                            <option t-att-value="t.id" t-att-selected="rec.team_id and rec.team_id[0] === t.id" t-esc="t.name"/>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div class="cm-prop"><span>Campaign</span><span class="cm-prop-val" t-esc="rec.campaign_id ? rec.campaign_id[1] : '—'"/></div>
+                                <div class="cm-prop"><span>Source</span><span class="cm-prop-val" t-esc="rec.source_id ? rec.source_id[1] : '—'"/></div>
+                                <div class="cm-prop cm-prop--block">
+                                    <label for="cm_r_tags">Tags</label>
+                                    <TagInput id="'cm_r_tags'" value="state.tags" onChange.bind="setTags"/>
+                                </div>
+                            </div>
+
+                            <div class="cm-card cm-rec-next">
+                                <h3 class="cm-side-title">Next steps <span t-if="state.activities.length" class="cm-count" t-esc="state.activities.length"/></h3>
+                                <p t-if="!state.activities.length" class="cm-side-empty">
+                                    <i class="fa fa-exclamation-circle" aria-hidden="true"/> Nothing planned — use the <strong>Activity</strong> tab.
+                                </p>
+                                <ul t-else="" class="cm-mini-list">
+                                    <t t-foreach="state.activities" t-as="a" t-key="a.id">
+                                        <li>
+                                            <ActivityIcon type="state.types[a.activity_type_id[0]]" small="true"/>
+                                            <div class="cm-mini-body">
+                                                <div class="cm-truncate cm-mini-title" t-esc="a.summary or a.activity_type_id[1]"/>
+                                                <div class="cm-mini-sub"><DueLabel date="a.date_deadline"/><t t-if="a.user_id"> · <t t-esc="a.user_id[1]"/></t></div>
+                                            </div>
+                                            <div t-if="canWrite" class="cm-mini-actions">
+                                                <button class="cm-icon-btn cm-icon-btn--ok" title="Mark as done" aria-label="Mark as done"
+                                                        t-on-click="() => this.activityActions.markDone(a, state.types[a.activity_type_id[0]])"><i class="fa fa-check" aria-hidden="true"/></button>
+                                                <button class="cm-icon-btn" title="Edit" aria-label="Edit activity" t-on-click="() => this.activityActions.edit(a.id)"><i class="fa fa-pencil" aria-hidden="true"/></button>
+                                                <button class="cm-icon-btn cm-icon-btn--danger" title="Cancel" aria-label="Cancel activity" t-on-click="() => this.activityActions.cancel(a.id)"><i class="fa fa-times" aria-hidden="true"/></button>
+                                            </div>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </div>
+
+                            <div class="cm-card cm-rec-notes">
+                                <label class="cm-side-title" for="cm_r_notes" t-esc="isOpp ? 'Deal notes' : 'Qualification notes'"/>
+                                <textarea id="cm_r_notes" class="cm-inline-input cm-notes" rows="3"
+                                          t-att-placeholder="isOpp ? 'Budget, decision maker, next steps…' : 'Source, budget, timeline, decision maker…'"
+                                          t-att-value="notesText" t-on-change="onDescription"/>
+                            </div>
+                            </fieldset>
+                        </aside>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+
+</templates>

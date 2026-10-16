@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="crm_modern.TeamDialog">
+        <Dialog title="'New sales team'" size="'md'" contentClass="'o_cm o_cm_dialog'">
+            <p class="cm-dialog-desc">Name the team and pick a leader. Add salespeople on the next screen.</p>
+            <form class="d-grid" style="gap:1rem" t-on-submit.prevent="save" novalidate="">
+                <div t-if="state.error" class="cm-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
+                <div class="cm-field"><label class="cm-label" for="cm_td_name">Team name *</label>
+                    <input id="cm_td_name" class="cm-input" t-model="state.name" autofocus=""/></div>
+                <div class="cm-field"><label class="cm-label" for="cm_td_leader">Team leader</label>
+                    <select id="cm_td_leader" class="cm-select" t-model="state.user_id">
+                        <option value="">No leader</option>
+                        <t t-foreach="props.users" t-as="u" t-key="u.id"><option t-att-value="u.id" t-esc="u.name"/></t>
+                    </select></div>
+                <button type="submit" class="d-none"/>
+            </form>
+            <t t-set-slot="footer">
+                <button class="cm-btn cm-btn-ghost" t-on-click="props.close">Cancel</button>
+                <button class="cm-btn cm-btn-primary" t-on-click="save">Create team</button>
+            </t>
+        </Dialog>
+    </t>
+
+
+    <t t-name="crm_modern.TeamDetail">
+        <div class="o_cm o_cm_page">
+            <div class="cm-container">
+                <div t-if="state.loading" class="cm-skeleton" style="height:20rem"/>
+                <EmptyState t-elif="!state.data" icon="'fa-users'" title="'Team not found'" description="'It may have been deleted.'"/>
+                <t t-else="">
+                    <t t-set="team" t-value="state.data.team"/>
+                    <PageHeader title="team.name" description="state.data.members.length + ' salespeople' + (team.active ? '' : ' · archived')"
+                                crumb="{ label: 'Sales Teams', onClick: () => this.back() }">
+                        <t t-set-slot="actions">
+                            <button class="cm-btn cm-btn-outline" t-on-click="() => this.openPipeline()"><i class="fa fa-columns" aria-hidden="true"/> Pipeline</button>
+                            <button t-if="canEdit" class="cm-btn cm-btn-outline" t-on-click="toggleArchive">
+                                <i t-attf-class="fa {{ team.active ? 'fa-archive' : 'fa-undo' }}" aria-hidden="true"/> <t t-esc="team.active ? 'Archive' : 'Restore'"/>
+                            </button>
+                            <button class="cm-btn cm-btn-ghost cm-btn-icon" title="All settings (Odoo form)" aria-label="All settings (Odoo form)" t-on-click="openForm">
+                                <i class="fa fa-cog" aria-hidden="true"/>
+                            </button>
+                        </t>
+                    </PageHeader>
+
+                    <div class="cm-grid-stats">
+                        <StatCard label="'Salespeople'" value="'' + state.data.members.length" icon="'fa-users'"/>
+                        <StatCard label="'Open deals'" value="'' + state.data.totals.open_count" icon="'fa-briefcase'"/>
+                        <StatCard label="'Pipeline'" value="m(state.data.totals.pipeline)" icon="'fa-line-chart'"/>
+                        <StatCard label="'Won'" value="m(state.data.totals.won)" hint="state.data.totals.won_count + ' deals'" icon="'fa-trophy'"/>
+                    </div>
+
+                    <section class="cm-card" aria-labelledby="cm_team_form">
+                        <div class="cm-card-header"><div><h3 id="cm_team_form">Team</h3>
+                            <p t-esc="canEdit ? 'Changes are saved as soon as you leave a field.' : 'Only sales managers can change the team.'"/></div></div>
+                        <fieldset class="cm-card-body cm-grid-2 cm-fieldset" t-att-disabled="!canEdit">
+                            <div class="cm-field"><label class="cm-label" for="cm_t_name">Team name</label>
+                                <input id="cm_t_name" class="cm-input" t-att-value="team.name" t-on-change="onName"/></div>
+                            <div class="cm-field"><label class="cm-label" for="cm_t_leader">Team leader</label>
+                                <select id="cm_t_leader" class="cm-select" t-on-change="onLeader">
+                                    <option value="">No leader</option>
+                                    <t t-foreach="state.users" t-as="u" t-key="u.id">
+                                        <option t-att-value="u.id" t-att-selected="team.user_id and team.user_id[0] === u.id" t-esc="u.name"/>
+                                    </t>
+                                </select></div>
+                            <div class="cm-field"><label class="cm-label" for="cm_t_alias">Email alias</label>
+                                <input id="cm_t_alias" class="cm-input" placeholder="e.g. sales" t-att-value="team.alias_name or ''" t-on-change="onAlias"/>
+                                <span class="cm-hint" t-esc="team.alias_email ? 'Incoming emails to ' + team.alias_email + ' create leads for this team.' : 'Set an alias to turn emails into leads.'"/></div>
+                            <div class="d-grid" style="gap:0.625rem;align-content:end;font-size:0.875rem">
+                                <label class="d-flex align-items-center" style="gap:0.5rem;cursor:pointer">
+                                    <input type="checkbox" class="cm-check" t-att-checked="team.use_leads" t-on-change="(ev) => this.write({ use_leads: ev.target.checked })"/>
+                                    Qualify leads before the pipeline
+                                </label>
+                                <label class="d-flex align-items-center" style="gap:0.5rem;cursor:pointer">
+                                    <input type="checkbox" class="cm-check" t-att-checked="team.use_opportunities" t-on-change="(ev) => this.write({ use_opportunities: ev.target.checked })"/>
+                                    Use the pipeline
+                                </label>
+                                <label class="d-flex align-items-center" style="gap:0.5rem;cursor:pointer">
+                                    <input type="checkbox" class="cm-check" t-att-checked="team.assignment_optout" t-on-change="(ev) => this.write({ assignment_optout: ev.target.checked })"/>
+                                    Skip automatic lead assignment
+                                </label>
+                            </div>
+                        </fieldset>
+                    </section>
+
+                    <div t-if="team.member_warning" class="cm-banner" style="background:var(--cm-warning-soft);color:var(--cm-warning)" role="status">
+                        <i class="fa fa-exclamation-triangle" aria-hidden="true"/> <t t-esc="team.member_warning"/>
+                    </div>
+
+                    <section class="cm-card" aria-labelledby="cm_team_members">
+                        <div class="cm-card-header">
+                            <div><h3 id="cm_team_members">Salespeople</h3>
+                                <p t-esc="team.is_membership_multi ? 'Salespeople can belong to several teams.' : 'Adding someone moves them from their current team.'"/></div>
+                        </div>
+                        <div class="cm-table-wrap">
+                            <table class="cm-table">
+                                <thead><tr>
+                                    <th class="cm-first">Salesperson</th>
+                                    <th class="cm-num">Open</th><th class="cm-num">Pipeline</th><th class="cm-num">Won</th>
+                                    <th class="cm-num">Leads (30 days)</th><th style="width:8rem">Capacity / 30 days</th><th>Pause assignment</th><th/>
+                                </tr></thead>
+                                <tbody>
+                                    <t t-foreach="state.data.members" t-as="mem" t-key="mem.id">
+                                        <tr>
+                                            <td class="cm-first">
+                                                <span class="cm-person">
+                                                    <Avatar id="mem.user_id and mem.user_id[0]" name="mem.user_id and mem.user_id[1]"/>
+                                                    <span>
+                                                        <span class="d-flex align-items-center" style="gap:0.375rem;font-weight:500">
+                                                            <t t-esc="mem.user_id ? mem.user_id[1] : '—'"/>
+                                                            <i t-if="team.user_id and mem.user_id and team.user_id[0] === mem.user_id[0]" class="fa fa-star" style="color:var(--cm-chart-3)" aria-label="Team leader" title="Team leader"/>
+                                                        </span>
+                                                        <span class="cm-muted d-block" style="font-size:0.75rem" t-esc="mem.email or mem.phone or ''"/>
+                                                    </span>
+                                                </span>
+                                            </td>
+                                            <td class="cm-num" t-esc="mem.open_count"/>
+                                            <td class="cm-num" t-esc="m(mem.pipeline)"/>
+                                            <td class="cm-num" style="font-weight:500" t-esc="m(mem.won)"/>
+                                            <td class="cm-num" t-esc="mem.lead_month_count"/>
+                                            <td><input type="number" min="0" class="cm-input cm-tabular" t-att-disabled="!canEdit" style="height:2rem;text-align:right"
+                                                       t-att-value="mem.assignment_max" t-attf-aria-label="Lead capacity of {{ mem.user_id and mem.user_id[1] }}"
+                                                       t-on-change="(ev) => this.onCapacity(mem, ev)"/></td>
+                                            <td><input type="checkbox" class="cm-check" t-att-disabled="!canEdit" t-att-checked="mem.assignment_optout"
+                                                       t-attf-aria-label="Pause assignment for {{ mem.user_id and mem.user_id[1] }}"
+                                                       t-on-change="(ev) => this.writeMember(mem, { assignment_optout: ev.target.checked })"/></td>
+                                            <td class="text-end" style="white-space:nowrap">
+                                                <button class="cm-btn cm-btn-ghost cm-btn-sm" t-on-click="() => this.openPipeline(mem.user_id and mem.user_id[0])">Pipeline</button>
+                                                <button t-if="canEdit" class="cm-btn cm-btn-danger-ghost cm-btn-icon cm-btn-sm" title="Remove from team"
+                                                        t-attf-aria-label="Remove {{ mem.user_id and mem.user_id[1] }} from the team"
+                                                        t-on-click="() => this.members.remove(teamId, mem.user_id[0], mem.user_id[1])">
+                                                    <i class="fa fa-trash-o" aria-hidden="true"/>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <tr t-if="!state.data.members.length"><td colspan="8" class="cm-muted text-center" style="padding:1.5rem">No salespeople in this team yet.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div t-if="canEdit" class="cm-card-footer" style="justify-content:flex-start;gap:0.5rem;flex-wrap:wrap">
+                            <select class="cm-select" style="max-width:18rem" aria-label="Salesperson to add" t-model="state.newUser">
+                                <option value="">Add a salesperson…</option>
+                                <t t-foreach="candidates" t-as="u" t-key="u.id"><option t-att-value="u.id" t-esc="u.name"/></t>
+                            </select>
+                            <button class="cm-btn cm-btn-primary" t-att-disabled="!state.newUser" t-on-click="addMember"><i class="fa fa-plus" aria-hidden="true"/> Add line</button>
+                        </div>
+                    </section>
+                </t>
+            </div>
+        </div>
+    </t>
+
+</templates>

@@ -1,0 +1,208 @@
+// Inventory Modern shell (shadcn dashboard layout): a full-height sidebar on the left,
+// a light top bar to its right, the page content below the top bar.
+// Only applies while the Inventory Modern sidebar is on screen.
+.o_web_client:has(.o_im_sidebar) {
+    --im-shell-offset: var(--im-sidebar-width);
+    &:has(.o_im_sidebar.im-collapsed) { --im-shell-offset: 4rem; }
+
+    > .o_action_manager,
+    > .o_navbar {
+        width: calc(100% - var(--im-shell-offset));
+        margin-inline-start: var(--im-shell-offset);
+        transition: margin 200ms var(--im-ease), width 200ms var(--im-ease);
+    }
+
+    // ---------- top bar ----------
+    .o_main_navbar {
+        --NavBar-entry-color: var(--im-muted-fg);
+        --NavBar-entry-color--hover: var(--im-fg);
+        --NavBar-entry-backgroundColor: transparent;
+        --NavBar-entry-backgroundColor--hover: var(--im-muted);
+        --NavBar-entry-backgroundColor--focus: var(--im-muted);
+        --NavBar-entry-backgroundColor--active: var(--im-muted);
+        --NavBar-entry-color--active: var(--im-fg);
+        --NavBar-brand-color: var(--im-fg);
+        --o-navbar-badge-bg: var(--im-primary);
+        --o-navbar-badge-color: var(--im-primary-fg);
+        --o-navbar-badge-text-shadow: none;
+        background: var(--im-card);
+        border-bottom: 1px solid var(--im-border);
+        color: var(--im-fg);
+        box-shadow: none;
+
+        // The sidebar lists this app's menus, so hide the top-bar section menus (CSS instead of
+        // a NavBar template override: nothing to break when Odoo changes the navbar markup).
+        .o_menu_sections { display: none !important; } // Odoo sets d-flex on the element
+        // The sidebar already shows the app name — don't repeat it in the top bar.
+        .o_menu_brand { display: none !important; } // beats the d-flex utility class on the element
+        .o_menu_toggle, .o_navbar_apps_menu .dropdown-toggle { color: var(--im-muted-fg); border-radius: var(--im-radius-sm); }
+        .o_menu_systray > div > .dropdown-toggle,
+        .o_menu_systray > div > button,
+        .o_menu_systray .o-dropdown > .dropdown-toggle {
+            border-radius: var(--im-radius-sm);
+        }
+        .o_switch_company_menu, .o_user_menu { color: var(--im-fg); }
+    }
+}
+
+// shadcn/ui "sidebar-07" look: neutral #fafafa panel, h-8 menu buttons, 12px muted group
+// labels, accent (not brand) background for the active page, rounded-lg logo and user.
+.o_im_sidebar {
+    position: fixed;
+    z-index: 4;
+    top: 0;
+    inset-inline-start: 0;
+    bottom: 0;
+    width: var(--im-sidebar-width);
+    display: flex;
+    flex-direction: column;
+    background: var(--im-sidebar);
+    color: var(--im-sidebar-fg);
+    border-inline-end: 1px solid var(--im-sidebar-border);
+    font-size: 0.875rem;
+    transition: width 200ms var(--im-ease);
+
+    // header: app switcher style (logo square + name + subtitle)
+    .im-sb-brand {
+        display: flex; align-items: center; gap: 0.5rem; height: var(--o-navbar-height, 46px);
+        margin: 0 0.5rem; padding: 0 0.5rem; flex-shrink: 0;
+        img {
+            width: 2rem; height: 2rem; padding: 0.3125rem; border-radius: 0.5rem; flex-shrink: 0;
+            background: var(--im-card); box-shadow: 0 0 0 1px var(--im-sidebar-border);
+        }
+        > div { display: grid; min-width: 0; line-height: 1.25; }
+        strong { font-size: 0.875rem; font-weight: 600; color: var(--im-sidebar-accent-fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        small { font-size: 0.75rem; color: var(--im-sidebar-muted-fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    }
+
+    .im-sb-nav {
+        flex: 1; overflow-y: auto; padding: 0.25rem 0; display: flex; flex-direction: column; gap: 0;
+        scrollbar-width: thin; scrollbar-color: var(--im-sidebar-border) transparent;
+        > div, > ul { padding: 0.5rem; }
+    }
+    // SidebarGroupLabel
+    .im-sb-group-label {
+        display: flex; align-items: center; width: 100%; height: 2rem; padding: 0 0.5rem; gap: 0.5rem;
+        border: 0; border-radius: 0.375rem; background: none; cursor: pointer;
+        font-size: 0.75rem; font-weight: 500; letter-spacing: 0; text-transform: none;
+        color: color-mix(in srgb, var(--im-sidebar-fg) 70%, transparent);
+        transition: background-color 150ms var(--im-ease), color 150ms var(--im-ease);
+        .fa { margin-left: auto; font-size: 0.6875rem; transition: transform 200ms var(--im-ease); }
+        &[aria-expanded="false"] .fa { transform: rotate(-90deg); }
+        &:hover { background: var(--im-sidebar-accent); color: var(--im-sidebar-accent-fg); }
+        &:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--im-ring); }
+    }
+    // SidebarMenu
+    .im-sb-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.25rem; }
+    .im-sb-subhead {
+        padding: 0.375rem 0.5rem 0; font-size: 0.6875rem; font-weight: 500;
+        color: color-mix(in srgb, var(--im-sidebar-fg) 60%, transparent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    // SidebarMenuButton
+    .im-sb-item {
+        display: flex; align-items: center; gap: 0.5rem; height: 2rem; padding: 0 0.5rem;
+        border-radius: 0.375rem; font-size: 0.875rem; font-weight: 400; line-height: 1;
+        color: var(--im-sidebar-fg); text-decoration: none; outline: none;
+        transition: background-color 150ms var(--im-ease), color 150ms var(--im-ease);
+        .fa { width: 1rem; flex-shrink: 0; text-align: center; font-size: 0.9375rem; color: inherit; opacity: 0.9; }
+        .im-sb-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        &:hover { background: var(--im-sidebar-accent); color: var(--im-sidebar-accent-fg); }
+        &:focus-visible { box-shadow: 0 0 0 2px var(--im-ring); }
+        &:active { background: var(--im-sidebar-accent); }
+        &.active {
+            background: var(--im-sidebar-accent); color: var(--im-sidebar-accent-fg); font-weight: 500;
+            .fa { opacity: 1; }
+        }
+    }
+
+    // footer: NavUser (avatar + name + email) and the collapse trigger
+    .im-sb-foot {
+        margin: 0.5rem; padding: 0.375rem 0.5rem; display: flex; align-items: center; gap: 0.5rem;
+        border-radius: 0.5rem; transition: background-color 150ms var(--im-ease);
+        &:hover { background: var(--im-sidebar-accent); }
+        img { width: 2rem; height: 2rem; border-radius: 0.5rem; object-fit: cover; flex-shrink: 0; }
+        .im-sb-user {
+            flex: 1; min-width: 0; display: grid; line-height: 1.25;
+            strong { font-size: 0.875rem; font-weight: 600; color: var(--im-sidebar-accent-fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+            small { font-size: 0.75rem; color: var(--im-sidebar-muted-fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        }
+        button {
+            display: grid; place-items: center; width: 1.75rem; height: 1.75rem; flex-shrink: 0;
+            border: 0; background: none; border-radius: 0.375rem; color: var(--im-sidebar-muted-fg); cursor: pointer;
+            &:hover { background: var(--im-card); color: var(--im-sidebar-accent-fg); box-shadow: 0 0 0 1px var(--im-sidebar-border); }
+            &:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--im-ring); }
+        }
+    }
+
+    // collapsed = icon rail (3rem buttons in a 4rem rail, like collapsible="icon")
+    &.im-collapsed {
+        width: 4rem;
+        .im-sb-brand { margin: 0; padding: 0; justify-content: center; > div { display: none; } }
+        .im-sb-group-label, .im-sb-label, .im-sb-user, .im-sb-subhead { display: none; }
+        .im-sb-nav > div, .im-sb-nav > ul { padding: 0.25rem 0.5rem; }
+        .im-sb-item { justify-content: center; padding: 0; width: 2rem; height: 2rem; margin: 0 auto; }
+        .im-sb-foot { flex-direction: column; margin: 0.5rem 0.25rem; padding: 0.375rem 0; }
+    }
+}
+
+@media print {
+    .o_im_sidebar { display: none; }
+    .o_web_client:has(.o_im_sidebar) > .o_action_manager { width: 100%; margin-inline-start: 0; }
+}
+
+// Inside the Inventory Modern app, Odoo screens opened from it (quotation form, lead form,
+// wizards...) use the same button colours as the modern pages.
+.o_web_client:has(.o_im_sidebar) > .o_action_manager {
+    .btn-primary {
+        --btn-bg: var(--im-primary);
+        --btn-border-color: var(--im-primary);
+        --btn-color: var(--im-primary-fg);
+        --btn-hover-bg: color-mix(in srgb, var(--im-primary) 88%, black);
+        --btn-hover-border-color: color-mix(in srgb, var(--im-primary) 88%, black);
+        --btn-hover-color: var(--im-primary-fg);
+        --btn-active-bg: color-mix(in srgb, var(--im-primary) 80%, black);
+        --btn-active-border-color: color-mix(in srgb, var(--im-primary) 80%, black);
+    }
+    .btn { --btn-border-radius: var(--im-radius-sm); }
+}
+
+// ---------- top bar dropdowns (Reporting, Configuration...) ----------
+.o_im_topmenu {
+    position: fixed;
+    z-index: 12;
+    top: 0;
+    inset-inline-start: calc(var(--im-shell-offset, var(--im-sidebar-width)) + 3.25rem);
+    height: var(--o-navbar-height, 46px);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: inset-inline-start 200ms var(--im-ease);
+
+    .im-tm-btn {
+        display: inline-flex; align-items: center; gap: 0.45rem; height: 2rem; padding: 0 0.75rem;
+        border: 1px solid transparent; border-radius: 0.5rem; background: transparent;
+        font-size: 0.8125rem; font-weight: 600; color: var(--im-muted-fg); cursor: pointer;
+        transition: background-color 150ms var(--im-ease), color 150ms var(--im-ease), border-color 150ms var(--im-ease);
+        .fa:first-child { color: var(--im-subtle-fg); }
+        .im-tm-caret { font-size: 0.75rem; opacity: 0.7; }
+        &:hover, &.show, &[aria-expanded="true"] { background: var(--im-muted); color: var(--im-fg); }
+        &.active { color: var(--im-fg); background: var(--im-sidebar-accent); .fa:first-child { color: var(--im-fg); } }
+        &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--im-ring); }
+    }
+}
+.o_im_topmenu_menu.dropdown-menu {
+    min-width: 15rem; max-height: 75vh; overflow-y: auto; padding: 0.375rem;
+    border: 1px solid var(--im-border); border-radius: 0.75rem; box-shadow: var(--im-shadow-lg);
+    .im-tm-head {
+        padding: 0.5rem 0.625rem 0.25rem; font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.04em;
+        text-transform: uppercase; color: var(--im-subtle-fg);
+    }
+    .im-tm-item {
+        display: flex; align-items: center; gap: 0.625rem; padding: 0.4375rem 0.625rem; border-radius: 0.5rem;
+        font-size: 0.875rem; color: var(--im-fg);
+        .fa { width: 1rem; text-align: center; color: var(--im-subtle-fg); }
+        &:hover, &.focus { background: var(--im-muted); }
+        &.active { background: var(--im-primary-soft); color: var(--im-primary-soft-fg); .fa { color: var(--im-primary); } }
+    }
+}
+@media print { .o_im_topmenu { display: none; } }

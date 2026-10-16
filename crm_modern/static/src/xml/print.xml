@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- form header actions: main ones in view, Odoo's others in "More" (see form_header.js) -->
+    <t t-name="crm_modern.StatusBarButtons">
+        <t t-if="modernHeader">
+            <t t-set="groups" t-value="modernGroups"/>
+            <div class="o_statusbar_buttons o_mh_buttons d-flex align-items-center flex-wrap gap-1">
+                <t t-foreach="groups.main" t-as="slot" t-key="slot">
+                    <t t-slot="{{ slot }}"/>
+                </t>
+                <button t-if="showModernPrint" type="button" class="btn btn-secondary o_mh_print" data-hotkey="i" t-on-click="modernPrint">Print</button>
+                <Dropdown t-if="groups.more.length" position="'bottom-start'" menuClass="'o_mh_menu'">
+                    <button type="button" class="btn btn-secondary o_mh_more" title="More actions" aria-label="More actions">
+                        <i class="fa fa-ellipsis-h" aria-hidden="true"/>
+                        <span t-esc="modernMoreLabel"/>
+                    </button>
+                    <t t-set-slot="content">
+                        <t t-foreach="groups.more" t-as="slot" t-key="slot">
+                            <DropdownItem class="'o-dropdown-item-unstyled-button o_mh_item'">
+                                <t t-slot="{{ slot }}"/>
+                            </DropdownItem>
+                        </t>
+                    </t>
+                </Dropdown>
+            </div>
+        </t>
+        <t t-else="" t-call="web.StatusBarButtons"/>
+    </t>
+
+    <!-- print preview: Odoo's HTML rendering of the report on an A4 sheet -->
+    <t t-name="crm_modern.PrintPreview">
+        <div class="o_action o_mp">
+            <Layout display="{ controlPanel: {} }">
+                <t t-set-slot="control-panel-create-button">
+                    <div class="o_mp_actions">
+                        <button type="button" class="btn btn-primary o_mp_print" t-att-disabled="!report or state.loading" t-on-click="print" data-hotkey="p">
+                            <i class="fa fa-print" aria-hidden="true"/> Print
+                        </button>
+                        <button type="button" class="btn btn-secondary o_mp_pdf" t-att-disabled="!report" t-on-click="download">
+                            <i class="fa fa-file-pdf-o" aria-hidden="true"/> Download PDF
+                        </button>
+                    </div>
+                </t>
+                <div class="o_mp_canvas">
+                    <div t-if="!report" class="o_mp_empty">
+                        <i class="fa fa-print" aria-hidden="true"/>
+                        <h3>Nothing to print</h3>
+                        <p>Open the quotation, order or invoice again and press Print.</p>
+                    </div>
+                    <t t-else="">
+                        <div class="o_mp_meta">
+                            <span class="o_mp_chip"><i class="fa fa-file-text-o" aria-hidden="true"/> <t t-esc="documentTitle"/></span>
+                            <span t-if="count > 1" class="o_mp_chip"><t t-esc="count"/> documents</span>
+                            <span class="o_mp_chip o_mp_chip--muted">A4</span>
+                        </div>
+                        <div class="o_mp_paper" t-att-class="{ 'o_mp_loading': state.loading }">
+                            <div t-if="state.loading" class="o_mp_skeleton" aria-hidden="true">
+                                <span style="width:38%"/><span style="width:62%"/><span style="width:100%;height:5rem"/><span style="width:100%"/><span style="width:100%"/><span style="width:44%;margin-left:auto"/>
+                            </div>
+                            <iframe t-ref="frame" t-att-src="htmlUrl" t-on-load="onLoad" title="Document preview"
+                                    t-attf-style="height: {{ state.height }}px"/>
+                        </div>
+                        <p class="o_mp_hint">
+                            <i class="fa fa-info-circle" aria-hidden="true"/>
+                            Exactly the document Odoo prints. Use <strong>Download PDF</strong> for the PDF file.
+                        </p>
+                    </t>
+                </div>
+            </Layout>
+        </div>
+    </t>
+
+</templates>

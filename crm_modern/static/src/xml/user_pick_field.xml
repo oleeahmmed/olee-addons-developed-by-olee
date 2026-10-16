@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="crm_modern.UserPickField">
+        <button type="button" t-attf-class="cm-userpick {{ editable ? '' : 'cm-userpick--ro' }} {{ value ? '' : 'cm-userpick--empty' }}"
+                t-att-disabled="!editable and !value" t-att-title="editable ? 'Change' : ''"
+                t-att-aria-haspopup="editable ? 'listbox' : undefined" t-on-click.stop.prevent="toggle">
+            <img t-if="value" class="cm-userpick-avatar" t-attf-src="/web/image/res.users/{{ value.id }}/avatar_128" alt=""/>
+            <span t-else="" class="cm-userpick-avatar cm-userpick-avatar--empty" aria-hidden="true"><i class="fa fa-user-plus"/></span>
+            <span class="cm-userpick-name" t-esc="value ? value.display_name : placeholder"/>
+            <i t-if="editable" class="fa fa-angle-down cm-userpick-caret" aria-hidden="true"/>
+        </button>
+    </t>
+
+    <t t-name="crm_modern.UserPickPopover">
+        <div class="o_cm cm-userpick-pop" t-on-click.stop="">
+            <RecordPicker resModel="'res.users'" domain="[['share', '=', false]]" autofocus="true"
+                          placeholder="'Search a user…'" onSelect.bind="pick"/>
+            <button t-if="props.value" type="button" class="cm-userpick-clear" t-on-click="() => this.pick(false)">
+                <i class="fa fa-times" aria-hidden="true"/> Remove <t t-esc="props.value[1]"/>
+            </button>
+        </div>
+    </t>
+
+</templates>

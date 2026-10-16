@@ -1,0 +1,287 @@
+// Shared, shadcn-style building blocks. Everything is scoped under .o_cm
+// (page roots and dialogs) so standard Odoo views are never affected.
+
+.o_cm {
+    color: var(--cm-fg);
+    font-feature-settings: "tnum" 0;
+    -webkit-font-smoothing: antialiased;
+
+    *:focus-visible {
+        outline: 2px solid transparent;
+        box-shadow: 0 0 0 3px var(--cm-ring);
+    }
+
+    .cm-tabular { font-variant-numeric: tabular-nums; }
+    .cm-muted { color: var(--cm-muted-fg); }
+    .cm-subtle { color: var(--cm-subtle-fg); }
+    .cm-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+    .cm-sr-only {
+        position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+        overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
+
+    // ---------- page header ----------
+    .cm-page-header {
+        display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 0.75rem;
+        h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; margin: 0; line-height: 1.25; }
+        p { margin: 0.25rem 0 0; font-size: 0.875rem; color: var(--cm-muted-fg); }
+        .cm-crumb {
+            display: inline-flex; align-items: center; gap: 0.25rem; margin-bottom: 0.25rem;
+            font-size: 0.75rem; font-weight: 500; color: var(--cm-muted-fg); text-decoration: none; cursor: pointer;
+            background: none; border: 0; padding: 0;
+            &:hover { color: var(--cm-fg); }
+        }
+    }
+    .cm-page-header > :first-child { flex: 1 1 22rem; }
+    .cm-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 0.5rem; }
+
+    // ---------- card ----------
+    .cm-card {
+        background: var(--cm-card);
+        border: 1px solid var(--cm-border);
+        border-radius: calc(var(--cm-radius) + 2px);
+        box-shadow: var(--cm-shadow-sm);
+    }
+    .cm-card-header {
+        display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem;
+        padding: 1.125rem 1.25rem 0.75rem;
+        h3 { font-size: 0.875rem; font-weight: 600; margin: 0; line-height: 1.3; }
+        p { font-size: 0.75rem; color: var(--cm-muted-fg); margin: 0.25rem 0 0; }
+    }
+    .cm-card-body { padding: 0 1.25rem 1.25rem; }
+    .cm-card-footer {
+        display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+        border-top: 1px solid var(--cm-border); padding: 0.75rem 1.25rem;
+    }
+
+    // ---------- buttons ----------
+    .cm-btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem;
+        height: 2.25rem; padding: 0 1rem; border-radius: var(--cm-radius-sm);
+        font-size: 0.875rem; font-weight: 500; line-height: 1; white-space: nowrap;
+        border: 1px solid transparent; cursor: pointer; user-select: none;
+        transition: background-color 150ms var(--cm-ease), border-color 150ms var(--cm-ease), color 150ms var(--cm-ease);
+        &:disabled { opacity: 0.5; pointer-events: none; }
+        .fa { font-size: 0.875rem; }
+
+        &.cm-btn-primary { background: var(--cm-primary); color: var(--cm-primary-fg);
+            &:hover { background: color-mix(in srgb, var(--cm-primary) 88%, black); } }
+        &.cm-btn-success { background: var(--cm-success); color: #fff;
+            &:hover { background: color-mix(in srgb, var(--cm-success) 88%, black); } }
+        &.cm-btn-danger { background: var(--cm-danger); color: #fff;
+            &:hover { background: color-mix(in srgb, var(--cm-danger) 88%, black); } }
+        &.cm-btn-outline { background: var(--cm-card); border-color: var(--cm-border); color: var(--cm-fg);
+            &:hover { background: var(--cm-muted); } }
+        &.cm-btn-ghost { background: transparent; color: var(--cm-fg);
+            &:hover { background: var(--cm-muted); } }
+        &.cm-btn-link { background: none; color: var(--cm-primary); padding: 0; height: auto;
+            &:hover { text-decoration: underline; } }
+        &.cm-btn-danger-ghost { background: transparent; color: var(--cm-muted-fg);
+            &:hover { background: var(--cm-danger-soft); color: var(--cm-danger); } }
+
+        &.cm-btn-sm { height: 2rem; padding: 0 0.75rem; font-size: 0.8125rem; gap: 0.35rem; }
+        &.cm-btn-icon { width: 2.25rem; padding: 0; }
+        &.cm-btn-icon.cm-btn-sm { width: 2rem; }
+    }
+
+    // ---------- badge ----------
+    .cm-badge {
+        display: inline-flex; align-items: center; gap: 0.3rem; white-space: nowrap;
+        padding: 0.125rem 0.5rem; border-radius: var(--cm-radius-sm);
+        font-size: 0.75rem; font-weight: 500; line-height: 1.25rem;
+        background: var(--cm-muted); color: var(--cm-fg);
+        .cm-dot { width: 0.375rem; height: 0.375rem; border-radius: 50%; background: currentColor; }
+        &.cm-badge-primary { background: var(--cm-primary); color: var(--cm-primary-fg); }
+        &.cm-badge-success { background: var(--cm-success-soft); color: var(--cm-success); }
+        &.cm-badge-warning { background: var(--cm-warning-soft); color: var(--cm-warning); }
+        &.cm-badge-danger { background: var(--cm-danger-soft); color: var(--cm-danger); }
+        &.cm-badge-info { background: var(--cm-info-soft); color: var(--cm-info); }
+        &.cm-badge-violet { background: var(--cm-violet-soft); color: var(--cm-violet); }
+        &.cm-badge-outline { background: transparent; border: 1px solid var(--cm-border); }
+    }
+
+    // ---------- form controls ----------
+    .cm-label { display: block; font-size: 0.75rem; font-weight: 500; margin-bottom: 0.375rem; color: var(--cm-fg); }
+    .cm-hint { font-size: 0.75rem; color: var(--cm-muted-fg); margin-top: 0.25rem; }
+    .cm-field { display: grid; gap: 0; min-width: 0; }
+    .cm-input, .cm-select, .cm-textarea {
+        width: 100%; min-width: 0; height: 2.25rem; padding: 0 0.75rem;
+        border: 1px solid var(--cm-input); border-radius: var(--cm-radius-sm);
+        background: var(--cm-card); color: var(--cm-fg); font-size: 0.875rem;
+        transition: border-color 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease);
+        &::placeholder { color: var(--cm-subtle-fg); }
+        &:focus { outline: none; border-color: var(--cm-primary); box-shadow: 0 0 0 3px var(--cm-ring); }
+        &:disabled { opacity: 0.55; cursor: not-allowed; }
+        &[aria-invalid="true"] { border-color: var(--cm-danger); }
+    }
+    .cm-textarea { height: auto; min-height: 5rem; padding: 0.5rem 0.75rem; line-height: 1.5; resize: vertical; }
+    .cm-select {
+        appearance: none; padding-right: 2rem; cursor: pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 0.6rem center; background-size: 16px;
+        &.cm-select-sm { height: 2rem; font-size: 0.8125rem; }
+    }
+    .cm-search {
+        position: relative; min-width: 0;
+        .fa-search { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--cm-subtle-fg); pointer-events: none; }
+        .cm-input { padding-left: 2.25rem; }
+    }
+    .cm-check { width: 1rem; height: 1rem; cursor: pointer; accent-color: var(--cm-primary); }
+    .cm-error {
+        display: flex; align-items: center; gap: 0.5rem; border-radius: var(--cm-radius-sm);
+        padding: 0.5rem 0.75rem; font-size: 0.75rem; font-weight: 500;
+        background: var(--cm-danger-soft); color: var(--cm-danger);
+    }
+    .cm-grid-2 { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr));
+        @media (max-width: 575.98px) { grid-template-columns: minmax(0, 1fr); } }
+    .cm-span-2 { grid-column: 1 / -1; }
+
+    // ---------- toolbar / segmented ----------
+    .cm-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+    .cm-seg {
+        display: inline-flex; align-items: center; gap: 0.25rem; max-width: 100%; overflow-x: auto;
+        height: 2.25rem; padding: 0.25rem; border-radius: var(--cm-radius); background: var(--cm-muted);
+        button {
+            display: inline-flex; align-items: center; gap: 0.375rem; height: 1.75rem; padding: 0 0.75rem;
+            border: 0; border-radius: var(--cm-radius-sm); background: transparent; white-space: nowrap;
+            font-size: 0.75rem; font-weight: 500; color: var(--cm-muted-fg); cursor: pointer;
+            transition: color 150ms var(--cm-ease), background-color 150ms var(--cm-ease);
+            &:hover { color: var(--cm-fg); }
+            &[aria-checked="true"] { background: var(--cm-card); color: var(--cm-fg); box-shadow: var(--cm-shadow-sm); }
+            .cm-count { font-size: 0.625rem; padding: 0 0.3rem; border-radius: 0.25rem; background: var(--cm-muted); color: var(--cm-muted-fg); }
+        }
+    }
+
+    // ---------- table ----------
+    .cm-table-wrap { width: 100%; overflow-x: auto; }
+    .cm-table {
+        width: 100%; border-collapse: collapse; font-size: 0.875rem;
+        thead th {
+            height: 2.5rem; padding: 0 0.75rem; text-align: left; white-space: nowrap;
+            font-size: 0.75rem; font-weight: 500; color: var(--cm-muted-fg);
+            background: color-mix(in srgb, var(--cm-muted) 55%, transparent);
+            border-bottom: 1px solid var(--cm-border);
+        }
+        tbody tr { border-bottom: 1px solid var(--cm-border); transition: background-color 120ms var(--cm-ease);
+            &:last-child { border-bottom: 0; }
+            &:hover { background: color-mix(in srgb, var(--cm-muted) 60%, transparent); }
+            &.cm-selected { background: var(--cm-primary-soft); }
+            &.cm-clickable { cursor: pointer; } }
+        td { padding: 0.625rem 0.75rem; vertical-align: middle; white-space: nowrap; }
+        .cm-num { text-align: right; font-variant-numeric: tabular-nums; }
+        .cm-first { padding-left: 1.25rem; }
+    }
+
+    // ---------- avatar ----------
+    .cm-avatar {
+        display: inline-block; flex-shrink: 0; width: 2rem; height: 2rem; border-radius: 50%;
+        object-fit: cover; background: var(--cm-muted); box-shadow: 0 0 0 2px var(--cm-card);
+        &.cm-avatar-sm { width: 1.5rem; height: 1.5rem; }
+        &.cm-avatar-lg { width: 2.75rem; height: 2.75rem; }
+    }
+    .cm-avatar-empty {
+        display: inline-grid; place-items: center; background: transparent; box-shadow: none;
+        border: 1px dashed color-mix(in srgb, var(--cm-muted-fg) 55%, transparent);
+        color: var(--cm-subtle-fg); font-size: 0.75rem;
+        &.cm-avatar-sm { font-size: 0.625rem; }
+    }
+    .cm-avatar-group { display: flex; .cm-avatar + .cm-avatar { margin-left: -0.5rem; } }
+    .cm-person { display: inline-flex; align-items: center; gap: 0.5rem; min-width: 0; }
+
+    // ---------- progress ----------
+    .cm-progress {
+        height: 0.375rem; width: 100%; border-radius: 999px; background: var(--cm-muted); overflow: hidden;
+        > span { display: block; height: 100%; border-radius: inherit; background: var(--cm-primary); transition: width 300ms var(--cm-ease); }
+        &.cm-progress-success > span { background: var(--cm-success); }
+        &.cm-progress-warning > span { background: var(--cm-chart-3); }
+    }
+
+    // ---------- stat card ----------
+    .cm-stat {
+        padding: 1rem;
+        .cm-stat-top { display: flex; align-items: center; justify-content: space-between; }
+        .cm-stat-label { font-size: 0.75rem; font-weight: 500; color: var(--cm-muted-fg); }
+        .cm-stat-icon { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: var(--cm-radius);
+            background: var(--cm-primary-soft); color: var(--cm-primary-soft-fg); }
+        .cm-stat-value { margin-top: 0.5rem; font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+        .cm-stat-hint { margin-top: 0.125rem; font-size: 0.75rem; color: var(--cm-muted-fg); }
+    }
+
+    // ---------- tag chips (Odoo color index 0–11) ----------
+    .cm-tag {
+        display: inline-flex; align-items: center; gap: 0.25rem; height: 1.25rem; padding: 0 0.5rem;
+        border-radius: 999px; font-size: 0.6875rem; font-weight: 500; white-space: nowrap;
+        background: var(--cm-muted); color: var(--cm-fg);
+        button { border: 0; background: none; padding: 0; margin-right: -0.2rem; color: inherit; opacity: 0.6; cursor: pointer; line-height: 1;
+            &:hover { opacity: 1; } }
+    }
+    $cm-tag-colors: (
+        1: (#fee2e2, #991b1b), 2: (#ffedd5, #9a3412), 3: (#fef9c3, #854d0e), 4: (#cffafe, #155e75),
+        5: (#f3e8ff, #6b21a8), 6: (#fef3c7, #78350f), 7: (#ccfbf1, #115e59), 8: (#dbeafe, #1e40af),
+        9: (#fce7f3, #9d174d), 10: (#dcfce7, #166534), 11: (#ede9fe, #5b21b6),
+    );
+    @each $i, $pair in $cm-tag-colors {
+        .cm-tag-#{$i} { background: nth($pair, 1); color: nth($pair, 2); }
+    }
+    .cm-tag-list { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+
+    // ---------- priority stars ----------
+    .cm-stars { display: inline-flex; align-items: center;
+        button, span { border: 0; background: none; padding: 0.125rem; line-height: 1; color: color-mix(in srgb, var(--cm-muted-fg) 45%, transparent); border-radius: 0.25rem; }
+        button { cursor: pointer; &:hover { background: var(--cm-muted); } }
+        .cm-on { color: #f59e0b; } }
+
+    // ---------- activity icon ----------
+    .cm-act-icon {
+        display: grid; place-items: center; flex-shrink: 0; width: 2rem; height: 2rem; border-radius: var(--cm-radius);
+        background: var(--cm-muted); color: var(--cm-fg); font-size: 0.875rem;
+        &.cm-act-sm { width: 1.375rem; height: 1.375rem; font-size: 0.6875rem; border-radius: 0.375rem; }
+        &.cm-tone-phonecall { background: var(--cm-success-soft); color: var(--cm-success); }
+        &.cm-tone-meeting { background: var(--cm-violet-soft); color: var(--cm-violet); }
+        &.cm-tone-email { background: var(--cm-info-soft); color: var(--cm-info); }
+        &.cm-tone-upload_file { background: var(--cm-warning-soft); color: var(--cm-warning); }
+        &.cm-tone-warning { background: var(--cm-warning-soft); color: var(--cm-warning); }
+        &.cm-tone-danger { background: var(--cm-danger-soft); color: var(--cm-danger); }
+    }
+    .cm-due-overdue { color: var(--cm-danger); }
+    .cm-due-today { color: var(--cm-warning); }
+    .cm-due-planned { color: var(--cm-success); }
+
+    // ---------- empty / loading ----------
+    .cm-empty {
+        display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 3.5rem 1.5rem; text-align: center;
+        .cm-empty-icon { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 50%;
+            background: var(--cm-muted); color: var(--cm-muted-fg); font-size: 1.1rem; margin-bottom: 0.25rem; }
+        strong { font-size: 0.875rem; }
+        p { max-width: 20rem; font-size: 0.75rem; color: var(--cm-muted-fg); margin: 0; }
+    }
+    .cm-skeleton {
+        border-radius: var(--cm-radius); min-height: 1rem;
+        background: linear-gradient(90deg, var(--cm-muted) 25%, color-mix(in srgb, var(--cm-muted) 50%, var(--cm-card)) 50%, var(--cm-muted) 75%);
+        background-size: 200% 100%; animation: cm-shimmer 1.2s ease-in-out infinite;
+    }
+
+    .cm-divide-y > * + * { border-top: 1px solid var(--cm-border); }
+    .cm-link { color: var(--cm-primary); text-decoration: none; cursor: pointer; &:hover { text-decoration: underline; } }
+    .cm-row-link { color: inherit; text-decoration: none; cursor: pointer; &:hover { text-decoration: underline; } }
+}
+
+@keyframes cm-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+// ---------- dialogs (Odoo Dialog with contentClass="o_cm o_cm_dialog") ----------
+.modal-content.o_cm_dialog {
+    border: 1px solid var(--cm-border);
+    border-radius: calc(var(--cm-radius) + 4px);
+    background: var(--cm-card);
+    box-shadow: var(--cm-shadow-lg);
+    overflow: hidden;
+    .modal-header { border-bottom: 0; padding: 1.25rem 1.5rem 0.25rem;
+        .modal-title { font-size: 1rem; font-weight: 600; } }
+    .modal-body { padding: 0.75rem 1.5rem 1rem; }
+    .modal-footer { border-top: 0; padding: 0.5rem 1.5rem 1.25rem; gap: 0.5rem; > * { margin: 0; } }
+    .cm-dialog-desc { font-size: 0.875rem; color: var(--cm-muted-fg); margin: 0 0 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .o_cm *, .o_cm_sidebar * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

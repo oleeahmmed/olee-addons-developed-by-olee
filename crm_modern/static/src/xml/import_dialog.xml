@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="crm_modern.ImportDialog">
+        <Dialog title="'Upload CSV'" size="'lg'" contentClass="'o_cm o_cm_dialog'">
+            <p class="cm-dialog-desc">Import records into <strong t-esc="props.campaign.title"/>. They are linked to this campaign and its sales team.</p>
+            <div class="d-grid" style="gap:1.25rem">
+                <div t-if="state.error" class="cm-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
+
+                <fieldset>
+                    <legend class="cm-label">Import as</legend>
+                    <div class="cm-choice" role="radiogroup" aria-label="Import as">
+                        <button type="button" role="radio" t-att-aria-checked="state.kind === 'lead' ? 'true' : 'false'" t-on-click="() => this.setKind('lead')">
+                            <span class="cm-choice-icon"><i class="fa fa-user-plus" aria-hidden="true"/></span>
+                            <span><strong>Leads</strong><small>Prospects to qualify</small></span>
+                        </button>
+                        <button type="button" role="radio" t-att-aria-checked="state.kind === 'opportunity' ? 'true' : 'false'" t-on-click="() => this.setKind('opportunity')">
+                            <span class="cm-choice-icon"><i class="fa fa-briefcase" aria-hidden="true"/></span>
+                            <span><strong>Opportunities</strong><small>Deals in the pipeline</small></span>
+                        </button>
+                    </div>
+                </fieldset>
+
+                <div class="cm-grid-2">
+                    <div class="cm-field">
+                        <label class="cm-label" for="cm_im_team">Sales team</label>
+                        <select id="cm_im_team" class="cm-select" t-model="state.teamId">
+                            <option value="">No team</option>
+                            <t t-foreach="state.teams" t-as="t" t-key="t.id"><option t-att-value="t.id" t-esc="t.name"/></t>
+                        </select>
+                        <span class="cm-hint" t-if="state.teamId"><t t-esc="teamMembers"/> members · saved on the campaign</span>
+                    </div>
+                    <div class="cm-field">
+                        <label class="cm-label" for="cm_im_assign">Assign salespeople</label>
+                        <select id="cm_im_assign" class="cm-select" t-model="state.assign">
+                            <option value="round_robin">Spread over the team (fewest first)</option>
+                            <option value="column">From the “Salesperson” column</option>
+                            <option value="me">Assign everything to me</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div t-if="!state.file" t-attf-class="cm-drop-zone {{ state.over ? 'cm-over' : '' }}"
+                     t-on-dragover.prevent="() => this.state.over = true" t-on-dragleave="() => this.state.over = false"
+                     t-on-drop.prevent="onDrop">
+                    <span class="cm-empty-icon" style="display:grid;place-items:center;width:2.75rem;height:2.75rem;border-radius:50%;background:var(--cm-muted);color:var(--cm-muted-fg)">
+                        <i class="fa fa-file-excel-o" aria-hidden="true"/>
+                    </span>
+                    <strong style="font-size:0.875rem">Drag a CSV file here</strong>
+                    <span class="cm-muted" style="font-size:0.75rem">or</span>
+                    <button type="button" class="cm-btn cm-btn-outline cm-btn-sm" t-on-click="() => this.fileInput.el.click()"><i class="fa fa-upload" aria-hidden="true"/> Choose file</button>
+                    <input t-ref="file" type="file" accept=".csv,text/csv" class="cm-sr-only" aria-label="CSV file" t-on-change="onPick"/>
+                    <button type="button" class="cm-btn cm-btn-link" style="font-size:0.75rem;margin-top:0.5rem" t-on-click="downloadTemplate">
+                        <i class="fa fa-download" aria-hidden="true"/> Download <t t-esc="state.kind === 'lead' ? 'lead' : 'opportunity'"/> template
+                    </button>
+                </div>
+
+                <t t-else="">
+                    <div class="d-flex flex-wrap align-items-center" style="gap:0.5rem;font-size:0.875rem">
+                        <i class="fa fa-file-text-o cm-muted" aria-hidden="true"/>
+                        <strong t-esc="state.file.name"/>
+                        <span class="cm-muted">· <t t-esc="state.file.rows.length"/> rows</span>
+                        <button type="button" class="cm-btn cm-btn-ghost cm-btn-sm ms-auto" t-on-click="() => this.state.file = null">
+                            <i class="fa fa-arrow-left" aria-hidden="true"/> Choose another file
+                        </button>
+                    </div>
+
+                    <div>
+                        <span class="cm-label">Column mapping</span>
+                        <div class="cm-map-grid">
+                            <t t-foreach="state.file.headers" t-as="h" t-key="h_index">
+                                <div>
+                                    <span class="cm-map-col cm-truncate" t-att-title="h" t-esc="h or ('Column ' + (h_index + 1))"/>
+                                    <span class="cm-muted" aria-hidden="true">→</span>
+                                    <select class="cm-select cm-select-sm" t-attf-aria-label="Map column {{ h }}"
+                                            t-att-value="state.mapping[h_index]" t-on-change="(ev) => this.setMapping(h_index, ev.target.value)">
+                                        <option value="">Don't import</option>
+                                        <t t-foreach="fields" t-as="f" t-key="f.key">
+                                            <option t-att-value="f.key" t-att-selected="state.mapping[h_index] === f.key"><t t-esc="f.label"/><t t-if="f.required"> *</t></option>
+                                        </t>
+                                    </select>
+                                </div>
+                            </t>
+                        </div>
+                        <p t-if="missing.length" class="cm-hint" style="color:var(--cm-danger);font-weight:500">
+                            Map a column to: <t t-esc="missing.map((f) => f.label).join(', ')"/>
+                        </p>
+                    </div>
+
+                    <div>
+                        <div class="d-flex align-items-center" style="gap:0.5rem;margin-bottom:0.5rem">
+                            <span class="cm-label" style="margin:0">Preview</span>
+                            <span class="cm-badge cm-badge-success"><i class="fa fa-check-circle" aria-hidden="true"/><t t-esc="valid.length"/> ready</span>
+                            <span t-if="rows.length - valid.length" class="cm-badge cm-badge-danger"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="rows.length - valid.length"/> will be skipped</span>
+                        </div>
+                        <div class="cm-preview">
+                            <table class="cm-table">
+                                <thead><tr>
+                                    <th>#</th>
+                                    <t t-foreach="mappedFields" t-as="f" t-key="f.key"><th t-esc="f.label"/></t>
+                                    <th>Check</th>
+                                </tr></thead>
+                                <tbody>
+                                    <t t-foreach="rows.slice(0, 8)" t-as="r" t-key="r_index">
+                                        <tr t-att-class="{ 'cm-invalid': r.errors.length }">
+                                            <td class="cm-muted cm-tabular" t-esc="r_index + 1"/>
+                                            <t t-foreach="mappedFields" t-as="f" t-key="f.key">
+                                                <td class="cm-truncate" style="max-width:10rem" t-esc="r.row[f.key] or '—'"/>
+                                            </t>
+                                            <td>
+                                                <span t-if="r.errors.length" style="color:var(--cm-danger);font-size:0.75rem" t-esc="r.errors.join(', ')"/>
+                                                <i t-else="" class="fa fa-check-circle" style="color:var(--cm-success)" aria-label="OK"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p t-if="rows.length > 8" class="cm-hint">Showing 8 of <t t-esc="rows.length"/> rows. Duplicates (same phone or email in this campaign) are skipped on import.</p>
+                    </div>
+                </t>
+            </div>
+            <t t-set-slot="footer">
+                <button class="cm-btn cm-btn-ghost" t-on-click="props.close">Cancel</button>
+                <button class="cm-btn cm-btn-primary" t-att-disabled="!state.file or !valid.length or missing.length or state.busy" t-on-click="runImport">
+                    <i class="fa fa-upload" aria-hidden="true"/> Import <t t-esc="valid.length or ''"/> <t t-esc="state.kind === 'lead' ? 'leads' : 'opportunities'"/>
+                </button>
+            </t>
+        </Dialog>
+    </t>
+
+</templates>

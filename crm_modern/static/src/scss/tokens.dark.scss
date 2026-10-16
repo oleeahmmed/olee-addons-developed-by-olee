@@ -1,0 +1,46 @@
+// Dark mode values (loaded in web.assets_web_dark only).
+:root {
+    --cm-bg: #0b1120;
+    --cm-fg: #e2e8f0;
+    --cm-card: #111827;
+    --cm-muted: #1e293b;
+    --cm-muted-fg: #94a3b8;
+    --cm-subtle-fg: #8b9ab0;
+    --cm-border: #1f2a3d;
+    --cm-input: #263247;
+
+    --cm-primary: #3b82f6;
+    --cm-primary-soft: #172554;
+    --cm-primary-soft-fg: #bfdbfe;
+    --cm-ring: rgba(96, 165, 250, 0.45);
+
+    --cm-success: #34d399;
+    --cm-success-soft: rgba(16, 185, 129, 0.12);
+    --cm-warning: #fbbf24;
+    --cm-warning-soft: rgba(245, 158, 11, 0.12);
+    --cm-danger: #f87171;
+    --cm-danger-soft: rgba(239, 68, 68, 0.12);
+    --cm-info: #60a5fa;
+    --cm-info-soft: rgba(59, 130, 246, 0.14);
+    --cm-violet: #a78bfa;
+    --cm-violet-soft: rgba(139, 92, 246, 0.14);
+
+    --cm-chart-1: #3b82f6;
+    --cm-chart-2: #0ea371;
+    --cm-chart-3: #d97706;
+    --cm-chart-4: #8b5cf6;
+
+    --cm-sidebar: #111113;
+    --cm-sidebar-fg: #cbd5e1;
+    --cm-sidebar-hover: #1a2335;
+    --cm-sidebar-accent: #27272a;
+    --cm-sidebar-accent-fg: #fafafa;
+    --cm-sidebar-muted-fg: #a1a1aa;
+    --cm-sidebar-border: #27272a;
+    --cm-card-matte: #131c2c;
+    --cm-edge: rgba(0, 0, 0, 0.25);
+    --cm-shadow-xs: none;
+    --cm-shadow-md: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --cm-shadow-sm: none;
+    --cm-shadow-lg: 0 12px 32px -8px rgba(0, 0, 0, 0.6);
+}

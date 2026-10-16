@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+
+
+
+    <t t-name="crm_modern.Leads">
+
+        <div class="o_cm o_cm_page o_cm_page--native">
+
+            <div class="cm-container cm-container--native">
+
+                <div t-if="!state.enabled" class="cm-card">
+
+                    <EmptyState icon="'fa-filter'" title="'Leads are turned off'"
+
+                                description="'Enable “Leads” in CRM ▸ Configuration ▸ Settings to qualify requests before they become opportunities.'"/>
+
+                </div>
+
+                <t t-else="">
+
+                    <NativeView t-key="state.nativeVersion" t-props="nativeProps"/>
+
+                </t>
+
+            </div>
+
+        </div>
+
+    </t>
+
+
+
+</templates>
+

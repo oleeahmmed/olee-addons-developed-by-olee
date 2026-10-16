@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sales_modern.Dashboard">
+        <div class="o_ss od-page">
+            <t t-if="state.loading">
+                <div class="od-head"><div class="od-skel" style="height:3.75rem;width:22rem"/><div class="od-skel" style="height:2.25rem;width:20rem"/></div>
+                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel" style="height:8.5rem"/></t></div>
+                <div class="od-grid"><div class="od-skel od-span-8" style="height:22rem"/><div class="od-skel od-span-4" style="height:22rem"/></div>
+            </t>
+            <t t-elif="state.data">
+                <t t-set="d" t-value="state.data"/>
+
+                <!-- header: who, when, filters -->
+                <header class="od-head">
+                    <div>
+                        <div class="od-eyebrow"><span class="od-live" aria-hidden="true"/> <t t-esc="d.company"/> · Sales overview</div>
+                        <h1 class="od-title"><t t-esc="greeting"/>, <t t-esc="firstName"/></h1>
+                        <p class="od-subtitle">
+                            <strong t-esc="caption.current"/>, compared with <t t-esc="caption.previous"/> · amounts untaxed
+                        </p>
+                    </div>
+                    <div class="od-head-actions">
+                        <OdFilters period="state.period" teamId="state.teamId" teams="d.team_options" onChange.bind="onFilters" busy="state.busy"/>
+                        <button type="button" class="od-btn od-btn--icon" title="Refresh" aria-label="Refresh" t-on-click="() => this.load()">
+                            <i t-attf-class="fa fa-refresh {{ state.busy ? 'fa-spin' : '' }}" aria-hidden="true"/>
+                        </button>
+                        <button t-if="state.canCreate" type="button" class="od-btn od-btn--primary" data-hotkey="c" t-on-click="newQuotation">
+                            <i class="fa fa-plus" aria-hidden="true"/> New quotation
+                        </button>
+                    </div>
+                </header>
+
+                <div t-att-class="{ 'od-busy': state.busy }">
+                    <!-- key figures -->
+                    <section class="od-kpis" aria-label="Key figures">
+                        <OdKpi featured="true" tone="'blue'" icon="'fa-line-chart'" label="'Revenue'" value="ms(k.revenue)"
+                               delta="k.revenue_delta" compareLabel="compare" spark="d.sparks.revenue"
+                               hint="k.revenue_prev ? 'Previous period ' + ms(k.revenue_prev) : 'No sales in the previous period'" onClick.bind="openSold"/>
+                        <OdKpi tone="'teal'" icon="'fa-shopping-bag'" label="'Confirmed orders'" value="number(k.orders)"
+                               delta="k.orders_delta" compareLabel="compare" spark="d.sparks.orders"
+                               hint="number(k.orders_prev) + ' in the previous period'" onClick.bind="openSold"/>
+                        <OdKpi tone="'violet'" icon="'fa-tag'" label="'Average order'" value="ms(k.avg_order)"
+                               delta="k.avg_order_delta" compareLabel="compare" hint="'per confirmed order'"/>
+                        <OdKpi tone="'sky'" icon="'fa-users'" label="'Customers'" value="number(k.customers)"
+                               hint="k.new_customers + ' ordering for the first time'"/>
+                        <OdKpi tone="'amber'" icon="'fa-exchange'" label="'Quote → order'" value="k.quoted ? k.conversion + '%' : '—'"
+                               hint="k.won + ' of ' + k.quoted + ' new quotations confirmed'"/>
+                        <OdKpi tone="'slate'" icon="'fa-file-text-o'" label="'Open quotations'" value="ms(k.open_amount)"
+                               hint="k.open_quotes + ' waiting for the customer'" onClick="() => this.go('sales_modern.action_quotations')"/>
+                    </section>
+
+                    <!-- the year, and what needs attention -->
+                    <div class="od-grid">
+                        <section class="od-card od-span-8">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-blue"><i class="fa fa-bar-chart" aria-hidden="true"/></span> Sales in <t t-esc="d.year"/></h3>
+                                    <p>Confirmed orders per month, with last year for comparison</p>
+                                </div>
+                                <div class="od-card-total"><strong class="od-num" t-esc="ms(ytd)"/><span>year to date</span></div>
+                            </div>
+                            <div class="od-card-body">
+                                <OdComboChart data="d.months" format="m" formatAxis="axis" currentLabel="'' + d.year" previousLabel="'' + (d.year - 1)"
+                                              label="'Sales per month in ' + d.year + ' compared with ' + (d.year - 1)"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-rose"><i class="fa fa-bell-o" aria-hidden="true"/></span> Needs your attention</h3>
+                                    <p>Click a line to see the documents</p>
+                                </div>
+                            </div>
+                            <div class="od-card-body">
+                                <OdAttention items="d.attention" format="ms" onClick.bind="openAttention"/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- where the money comes from, and where it is -->
+                    <div class="od-grid">
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-violet"><i class="fa fa-pie-chart" aria-hidden="true"/></span> Sales by category</h3>
+                                <p>Share of revenue, this period</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.categories.length" class="od-empty"><i class="fa fa-pie-chart" aria-hidden="true"/><strong>No sales yet in this period</strong></div>
+                                <OdDonut t-else="" items="d.categories" format="ms" centerLabel="'Revenue'"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-map-marker" aria-hidden="true"/></span> Sales by region</h3>
+                                <p t-esc="d.region_field === 'state_id' ? 'Division / district of the customer, this period' : 'Country of the customer, this period'"/>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.regions.length" class="od-empty"><i class="fa fa-map-o" aria-hidden="true"/><strong>No region on the customers yet</strong><span>Fill the State on customer addresses to see this.</span></div>
+                                <OdRank t-else="" items="d.regions" format="ms" tone="'teal'"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-green"><i class="fa fa-money" aria-hidden="true"/></span> Money in</h3>
+                                <p t-esc="f ? 'Invoiced, collected and still owed by customers' : 'What is ready to be invoiced'"/>
+                            </div>
+                                <button t-if="f" type="button" class="od-link" t-on-click="() => this.openInvoices('Open customer invoices')">Invoices <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body">
+                                <t t-if="f">
+                                    <div class="od-money">
+                                        <div class="od-tone-blue"><span>Invoiced</span><strong class="od-num" t-esc="ms(f.invoiced)"/>
+                                            <small t-if="f.invoiced_delta !== null"><t t-esc="(f.invoiced_delta >= 0 ? '+' : '') + f.invoiced_delta"/>% <t t-esc="compare"/></small>
+                                            <small t-else="">this period</small></div>
+                                        <div class="od-tone-green" t-if="f.collected !== null"><span>Collected</span><strong class="od-num" t-esc="ms(f.collected)"/>
+                                            <small t-if="f.collected_delta !== null"><t t-esc="(f.collected_delta >= 0 ? '+' : '') + f.collected_delta"/>% <t t-esc="compare"/></small>
+                                            <small t-else="">cash in, this period</small></div>
+                                        <div class="od-tone-violet" t-else=""><span>To invoice</span><strong class="od-num" t-esc="ms(k.to_invoice_amount)"/><small><t t-esc="k.to_invoice_count"/> orders</small></div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-baseline mb-2" style="font-size:0.8125rem">
+                                        <span style="font-weight:650">Customers owe</span>
+                                        <span class="od-num"><strong t-esc="m(f.receivable)"/> <span class="text-muted" style="font-size:0.75rem">· <t t-esc="f.open_count"/> invoices</span></span>
+                                    </div>
+                                    <OdStack items="f.ageing" format="ms"/>
+                                </t>
+                                <t t-else="">
+                                    <div class="od-money">
+                                        <div class="od-tone-violet"><span>To invoice</span><strong class="od-num" t-esc="ms(k.to_invoice_amount)"/><small><t t-esc="k.to_invoice_count"/> orders</small></div>
+                                        <div class="od-tone-slate"><span>Open quotations</span><strong class="od-num" t-esc="ms(k.open_amount)"/><small><t t-esc="k.open_quotes"/> quotations</small></div>
+                                    </div>
+                                    <p class="text-muted" style="font-size:0.75rem;margin:0">Receivables and cash show here for users with access to Invoicing.</p>
+                                </t>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- people -->
+                    <div class="od-grid">
+                        <section class="od-card od-span-7">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-sky"><i class="fa fa-users" aria-hidden="true"/></span> Sales teams</h3>
+                                    <p>Revenue this period · invoicing target of the month (set on each team)</p>
+                                </div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('sales_modern.action_teams')">Teams <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body od-card-body--flush">
+                                <div t-if="!d.teams.length" class="od-empty"><i class="fa fa-users" aria-hidden="true"/><strong>No sales team yet</strong></div>
+                                <div t-else="" class="od-table-wrap">
+                                    <table class="od-table">
+                                        <thead><tr><th>Team</th><th>Leader</th><th class="od-r">Revenue</th><th>Monthly target</th></tr></thead>
+                                        <tbody>
+                                            <t t-foreach="d.teams" t-as="t" t-key="t.id">
+                                                <tr class="od-clickable" t-on-click="() => this.openTeam(t)">
+                                                    <td><span class="od-cell-main" t-esc="t.name"/><span class="od-cell-sub"><t t-esc="t.members"/> members</span></td>
+                                                    <td>
+                                                        <span t-if="t.leader" class="od-person"><img t-attf-src="/web/image/res.users/{{ t.leader_id }}/avatar_128" alt="" loading="lazy"/><t t-esc="t.leader"/></span>
+                                                        <span t-else="" class="text-muted">—</span>
+                                                    </td>
+                                                    <td class="od-r od-num" style="font-weight:650" t-esc="ms(t.value)"/>
+                                                    <td>
+                                                        <t t-if="t.target">
+                                                            <div t-attf-class="od-meter od-tone-{{ targetTone(t) }}">
+                                                                <div class="od-meter-track"><span t-attf-style="width: {{ Math.min(100, targetPct(t)) }}%"/></div>
+                                                                <span class="od-meter-value od-num" t-esc="targetPct(t) + '%'"/>
+                                                            </div>
+                                                            <span class="od-cell-sub od-num"><t t-esc="ms(t.invoiced)"/> of <t t-esc="ms(t.target)"/></span>
+                                                        </t>
+                                                        <span t-else="" class="od-cell-sub">No target set</span>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-5">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-amber"><i class="fa fa-trophy" aria-hidden="true"/></span> Top salespeople</h3>
+                                <p>Revenue this period</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!salespeople.length" class="od-empty"><i class="fa fa-user" aria-hidden="true"/><strong>No confirmed orders in this period</strong></div>
+                                <OdRank t-else="" items="salespeople" format="ms" tone="'amber'" numbered="true" onClick.bind="openSalesperson"/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- customers, products, quotations about to expire -->
+                    <div class="od-grid">
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-blue"><i class="fa fa-star-o" aria-hidden="true"/></span> Top customers</h3>
+                                <p>Revenue this period</p>
+                            </div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('sales_modern.action_customers')">All <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body">
+                                <div t-if="!customers.length" class="od-empty"><i class="fa fa-address-book-o" aria-hidden="true"/><strong>No orders in this period</strong></div>
+                                <OdRank t-else="" items="customers" format="ms" tone="'blue'" onClick.bind="openCustomer"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-violet"><i class="fa fa-cube" aria-hidden="true"/></span> Best-selling products</h3>
+                                <p>Revenue and units, this period</p>
+                            </div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('sales_modern.action_products')">All <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body">
+                                <div t-if="!products.length" class="od-empty"><i class="fa fa-cube" aria-hidden="true"/><strong>Nothing sold in this period</strong></div>
+                                <OdRank t-else="" items="products" format="ms" tone="'violet'" onClick.bind="openProduct"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3 t-if="f and debtors.length"><span class="od-card-icon od-tone-rose"><i class="fa fa-exclamation-circle" aria-hidden="true"/></span> Overdue customers</h3>
+                                <h3 t-else=""><span class="od-card-icon od-tone-amber"><i class="fa fa-hourglass-half" aria-hidden="true"/></span> Expiring this week</h3>
+                                <p t-esc="f and debtors.length ? 'Who owes the most past the due date' : 'Quotations to close before they expire'"/>
+                            </div></div>
+                            <div class="od-card-body">
+                                <OdRank t-if="f and debtors.length" items="debtors" format="ms" tone="'rose'" onClick.bind="openCustomer"/>
+                                <div t-elif="!d.expiring.length" class="od-empty"><i class="fa fa-check-circle-o" aria-hidden="true"/><strong>Nothing expires this week</strong></div>
+                                <ul t-else="" class="od-attention">
+                                    <t t-foreach="d.expiring" t-as="o" t-key="o.id">
+                                        <li class="od-tone-amber od-clickable" tabindex="0" t-on-click="() => this.openOrder(o)">
+                                            <span class="od-att-icon"><i class="fa fa-file-text-o" aria-hidden="true"/></span>
+                                            <div class="od-att-body">
+                                                <span class="od-att-label"><t t-esc="o.name"/> · <t t-esc="o.partner_id ? o.partner_id[1] : ''"/></span>
+                                                <span class="od-att-sub">Until <t t-esc="shortDate(o.validity_date)"/></span>
+                                            </div>
+                                            <span class="od-num" style="font-weight:650;font-size:0.8125rem" t-esc="ms(o.amount_untaxed)"/>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- latest orders -->
+                    <section class="od-card">
+                        <div class="od-card-head">
+                            <div>
+                                <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-list-ul" aria-hidden="true"/></span> Latest orders</h3>
+                                <p>The most recent confirmed sales orders</p>
+                            </div>
+                            <button type="button" class="od-link" t-on-click="() => this.go('sales_modern.action_orders')">All orders <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                        </div>
+                        <div class="od-card-body od-card-body--flush">
+                            <div t-if="!d.recent.length" class="od-empty"><i class="fa fa-shopping-cart" aria-hidden="true"/><strong>No confirmed orders yet</strong></div>
+                            <div t-else="" class="od-table-wrap">
+                                <table class="od-table">
+                                    <thead><tr><th>Order</th><th>Customer</th><th>Salesperson</th><th>Date</th><th>Invoice</th><th class="od-r">Untaxed</th><th class="od-r">Total</th></tr></thead>
+                                    <tbody>
+                                        <t t-foreach="d.recent" t-as="o" t-key="o.id">
+                                            <tr class="od-clickable" t-on-click="() => this.openOrder(o)">
+                                                <td class="od-cell-main" t-esc="o.name"/>
+                                                <td t-esc="o.partner_id ? o.partner_id[1] : '—'"/>
+                                                <td>
+                                                    <span t-if="o.user_id" class="od-person"><img t-attf-src="/web/image/res.users/{{ o.user_id[0] }}/avatar_128" alt="" loading="lazy"/><t t-esc="o.user_id[1]"/></span>
+                                                </td>
+                                                <td class="text-muted" t-esc="shortDate(o.date_order)"/>
+                                                <td>
+                                                    <span t-if="o.invoice_status === 'invoiced'" class="od-pill od-tone-green"><i class="fa fa-check" aria-hidden="true"/> Invoiced</span>
+                                                    <span t-elif="o.invoice_status === 'to invoice'" class="od-pill od-tone-violet">To invoice</span>
+                                                    <span t-else="" class="od-pill od-tone-slate">Nothing to invoice</span>
+                                                </td>
+                                                <td class="od-r od-num" t-esc="m(o.amount_untaxed)"/>
+                                                <td class="od-r od-num" style="font-weight:650" t-esc="m(o.amount_total)"/>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

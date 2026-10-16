@@ -1,0 +1,671 @@
+// Page-level layout for the client actions.
+.o_ss.o_ss_page {
+    height: 100%;
+    overflow-y: auto;
+    background: var(--ss-bg);
+    font-size: 0.875rem;
+
+    .ss-container {
+        max-width: 1400px; margin: 0 auto; padding: 1.5rem 1.5rem 3rem;
+        display: flex; flex-direction: column; gap: 1.5rem;
+        @media (max-width: 767.98px) { padding: 1rem 1rem 2.5rem; gap: 1.25rem; }
+    }
+    &.o_ss_page--native .ss-container--native {
+        max-width: none;
+        padding: 1rem 1.25rem 2rem;
+        gap: 0;
+        @media (max-width: 767.98px) { padding: 0.75rem 0.75rem 1.5rem; }
+    }
+
+    .ss-grid-stats {
+        display: grid; gap: 1rem; grid-template-columns: repeat(4, minmax(0, 1fr));
+        @media (max-width: 1199.98px) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        @media (max-width: 575.98px) { grid-template-columns: minmax(0, 1fr); }
+    }
+    .ss-grid-main {
+        display: grid; gap: 1rem; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+        @media (max-width: 1199.98px) { grid-template-columns: minmax(0, 1fr); }
+    }
+    .ss-grid-cards {
+        display: grid; gap: 1rem; grid-template-columns: repeat(3, minmax(0, 1fr));
+        @media (max-width: 1399.98px) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        @media (max-width: 767.98px) { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    // ---------- charts ----------
+    .ss-chart {
+        position: relative;
+        svg { display: block; width: 100%; height: auto; touch-action: none; user-select: none; }
+        .ss-tooltip {
+            position: absolute; top: 0; transform: translateX(-50%); pointer-events: none;
+            background: var(--ss-card); border: 1px solid var(--ss-border); border-radius: var(--ss-radius-sm);
+            box-shadow: var(--ss-shadow-lg); padding: 0.375rem 0.625rem; font-size: 0.75rem; white-space: nowrap;
+        }
+    }
+    .ss-barlist {
+        list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem;
+        .ss-bar-meta { display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.75rem; margin-bottom: 0.25rem; }
+        .ss-bar {
+            height: 0.5rem; border-radius: 999px; background: var(--ss-muted); overflow: hidden;
+            > span { display: block; height: 100%; border-radius: inherit; background: var(--ss-chart-1); }
+        }
+    }
+
+    // ---------- list rows ----------
+    .ss-list-row {
+        display: flex; align-items: center; gap: 0.75rem; padding: 0.625rem 0.75rem; border-radius: var(--ss-radius);
+        transition: background-color 120ms var(--ss-ease);
+        &:hover { background: color-mix(in srgb, var(--ss-muted) 60%, transparent); }
+    }
+
+    // ---------- kanban ----------
+    .ss-board {
+        overflow-x: auto; margin: 0 -1.5rem; padding: 0 1.5rem 0.5rem;
+        @media (max-width: 767.98px) { margin: 0 -1rem; padding: 0 1rem 0.5rem; }
+    }
+    .ss-board-cols { display: flex; gap: 1rem; align-items: stretch; }
+    .ss-board-campaigns .ss-col { flex-basis: 26rem; width: 26rem; }
+    .ss-person-kanban-card {
+        .ss-card-header .d-flex {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .ss-card-footer {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.5rem;
+            .ss-btn { justify-content: center; }
+        }
+    }
+    .ss-card-row { flex-wrap: nowrap; }
+    .ss-card.ss-dragging { opacity: 0.4; }
+    .ss-drag-handle { cursor: grab; &:active { cursor: grabbing; } }
+    .ss-col {
+        display: flex; flex-direction: column; flex: 0 0 17.5rem; width: 17.5rem; min-height: 14rem;
+        border-radius: calc(var(--ss-radius) + 2px); padding: 0.5rem;
+        background: color-mix(in srgb, var(--ss-muted) 70%, transparent);
+        transition: background-color 150ms var(--ss-ease), box-shadow 150ms var(--ss-ease);
+        &.ss-drop { background: var(--ss-primary-soft); box-shadow: 0 0 0 2px var(--ss-ring); }
+    }
+    .ss-col-head {
+        padding: 0.25rem 0.5rem 0.5rem;
+        .ss-col-title { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 600; }
+        .ss-col-count {
+            font-size: 0.6875rem; font-weight: 500; padding: 0 0.375rem; border-radius: 0.375rem;
+            background: var(--ss-card); color: var(--ss-muted-fg);
+        }
+        .ss-col-sum {
+            display: flex; align-items: center; gap: 0.5rem; margin-top: 0.375rem;
+            .ss-progress { height: 0.25rem; }
+            span { font-size: 0.75rem; font-weight: 500; color: var(--ss-muted-fg); }
+        }
+    }
+    .ss-col-body { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; list-style: none; margin: 0; padding: 0; }
+    .ss-col-empty {
+        display: grid; place-items: center; flex: 1; min-height: 5rem; border: 1px dashed var(--ss-border);
+        border-radius: var(--ss-radius); font-size: 0.75rem; color: var(--ss-muted-fg);
+    }
+    .ss-deal {
+        position: relative; padding: 0.75rem; border-radius: var(--ss-radius); background: var(--ss-card);
+        border: 1px solid var(--ss-border); cursor: grab;
+        transition: border-color 150ms var(--ss-ease), box-shadow 150ms var(--ss-ease), opacity 150ms var(--ss-ease);
+        &:hover { border-color: color-mix(in srgb, var(--ss-primary) 40%, var(--ss-border)); box-shadow: var(--ss-shadow-sm); }
+        &:active { cursor: grabbing; }
+        &.ss-dragging { opacity: 0.4; }
+        .ss-deal-title {
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+            font-weight: 500; line-height: 1.35; background: none; border: 0; padding: 0; text-align: left; color: inherit; cursor: pointer;
+            &::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+            &:focus-visible { box-shadow: none; }
+            &:focus-visible::after { box-shadow: 0 0 0 3px var(--ss-ring); }
+        }
+        .ss-deal-foot {
+            display: flex; align-items: center; justify-content: space-between; margin-top: 0.75rem;
+            > * { position: relative; z-index: 1; }
+        }
+        .ss-deal-menu { position: relative; z-index: 1; }
+        .ss-tag-list { position: relative; z-index: 1; margin-top: 0.5rem; }
+    }
+
+    // ---------- record page ----------
+    .ss-stepper-wrap { overflow-x: auto; }
+    .ss-stepper {
+        display: flex; min-width: max-content; overflow: hidden; border: 1px solid var(--ss-border);
+        border-radius: var(--ss-radius); background: var(--ss-card);
+        button {
+            flex: 1; min-width: 7rem; height: 2.5rem; padding: 0 1.25rem; border: 0; background: transparent;
+            font-size: 0.75rem; font-weight: 500; color: var(--ss-muted-fg); cursor: pointer; white-space: nowrap;
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.375rem;
+            transition: background-color 150ms var(--ss-ease), color 150ms var(--ss-ease);
+            & + button { border-left: 1px solid var(--ss-border); }
+            &:hover { background: var(--ss-muted); color: var(--ss-fg); }
+            &.ss-done { background: var(--ss-primary-soft); color: var(--ss-primary-soft-fg); }
+            &[aria-current="step"] { background: var(--ss-primary); color: var(--ss-primary-fg); }
+            &[aria-current="step"].ss-won { background: var(--ss-success); color: #fff; }
+        }
+    }
+    .ss-record-grid {
+        display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1fr) 28rem; align-items: start;
+        @media (max-width: 1199.98px) { grid-template-columns: minmax(0, 1fr); }
+    }
+    .ss-info {
+        display: grid; gap: 0.75rem; font-size: 0.875rem; margin: 0;
+        > div { display: grid; grid-template-columns: 1.25rem 6.5rem minmax(0, 1fr); align-items: center; gap: 0.5rem; }
+        .fa { color: var(--ss-subtle-fg); text-align: center; }
+        dt { font-weight: 400; color: var(--ss-muted-fg); }
+        dd { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    }
+    .ss-chatter {
+        overflow: hidden;
+        @media (min-width: 1200px) { position: sticky; top: 1rem; max-height: calc(100vh - 8rem); overflow-y: auto; }
+    }
+    .ss-banner {
+        display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1rem; border-radius: var(--ss-radius);
+        font-size: 0.875rem; background: var(--ss-danger-soft); color: var(--ss-danger);
+        &.ss-banner-success { background: var(--ss-success-soft); color: var(--ss-success); }
+    }
+
+    // ---------- campaign / team cards ----------
+    .ss-kv {
+        display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.5rem; padding: 0.75rem;
+        border-radius: var(--ss-radius); background: color-mix(in srgb, var(--ss-muted) 70%, transparent); text-align: center;
+        &.ss-kv-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        &.ss-kv-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        button {
+            border: 0; background: none; padding: 0; color: inherit; cursor: pointer; border-radius: var(--ss-radius-sm);
+            &:hover strong { color: var(--ss-primary); }
+        }
+        strong { display: block; font-size: 0.875rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+        span { font-size: 0.6875rem; color: var(--ss-muted-fg); }
+    }
+    .ss-chan-icon {
+        display: grid; place-items: center; flex-shrink: 0; width: 2.5rem; height: 2.5rem;
+        border-radius: var(--ss-radius); background: var(--ss-primary-soft); color: var(--ss-primary-soft-fg); font-size: 1rem;
+    }
+
+    .ss-bulkbar {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem;
+        border-radius: var(--ss-radius); border: 1px solid color-mix(in srgb, var(--ss-primary) 30%, transparent);
+        background: var(--ss-primary-soft); color: var(--ss-primary-soft-fg);
+    }
+
+    .ss-config-row {
+        display: grid; align-items: center; gap: 0.75rem; padding: 0.75rem;
+        border: 1px solid var(--ss-border); border-radius: var(--ss-radius); background: var(--ss-card);
+        grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+        @media (max-width: 767.98px) { grid-template-columns: auto minmax(0, 1fr); }
+    }
+    .ss-seq {
+        display: grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: var(--ss-radius-sm);
+        font-size: 0.75rem; font-weight: 600; background: var(--ss-primary-soft); color: var(--ss-primary-soft-fg);
+        &.ss-seq-won { background: var(--ss-success-soft); color: var(--ss-success); }
+    }
+}
+
+// Import / quick-create dialogs share these.
+.o_ss_dialog {
+    .ss-choice {
+        display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem;
+        button {
+            display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; text-align: left; cursor: pointer;
+            border: 1px solid var(--ss-border); border-radius: var(--ss-radius); background: var(--ss-card); color: var(--ss-fg);
+            transition: background-color 150ms var(--ss-ease), border-color 150ms var(--ss-ease);
+            &:hover { background: var(--ss-muted); }
+            &[aria-checked="true"] { border-color: var(--ss-primary); background: var(--ss-primary-soft); }
+            .ss-choice-icon {
+                display: grid; place-items: center; flex-shrink: 0; width: 2.25rem; height: 2.25rem; border-radius: var(--ss-radius);
+                background: var(--ss-muted); color: var(--ss-muted-fg);
+            }
+            &[aria-checked="true"] .ss-choice-icon { background: var(--ss-primary); color: var(--ss-primary-fg); }
+            strong { display: block; font-size: 0.875rem; }
+            small { color: var(--ss-muted-fg); font-size: 0.75rem; }
+        }
+    }
+    .ss-drop-zone {
+        display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 2.25rem 1.5rem;
+        border: 2px dashed var(--ss-border); border-radius: calc(var(--ss-radius) + 2px); text-align: center;
+        transition: border-color 150ms var(--ss-ease), background-color 150ms var(--ss-ease);
+        &.ss-over { border-color: var(--ss-primary); background: var(--ss-primary-soft); }
+    }
+    .ss-map-grid {
+        display: grid; gap: 0.5rem; grid-template-columns: repeat(2, minmax(0, 1fr));
+        @media (max-width: 575.98px) { grid-template-columns: minmax(0, 1fr); }
+        > div {
+            display: flex; align-items: center; gap: 0.5rem; padding: 0.375rem 0.625rem;
+            border: 1px solid var(--ss-border); border-radius: var(--ss-radius-sm);
+        }
+        .ss-map-col { width: 7rem; flex-shrink: 0; font-size: 0.75rem; font-weight: 500; }
+    }
+    .ss-preview {
+        max-height: 14rem; overflow: auto; border: 1px solid var(--ss-border); border-radius: var(--ss-radius);
+        tr.ss-invalid { background: var(--ss-danger-soft); }
+    }
+    .ss-color-grid {
+        display: grid; grid-template-columns: repeat(6, 1.5rem); gap: 0.375rem;
+        button {
+            width: 1.5rem; height: 1.5rem; border-radius: 50%; border: 0; cursor: pointer; transition: transform 120ms var(--ss-ease);
+            &:hover { transform: scale(1.1); }
+            &[aria-checked="true"] { box-shadow: 0 0 0 2px var(--ss-card), 0 0 0 4px var(--ss-fg); }
+        }
+    }
+}
+
+// Embedded native Odoo views (pivot, graph, calendar, activity) inside a modern card.
+.o_ss.o_ss_page .ss-native {
+    overflow: hidden;
+    .o_ss_native_view { background: var(--ss-card); }
+    .o_control_panel { background: var(--ss-card); border-bottom: 1px solid var(--ss-border); padding: 0.75rem 1rem; }
+    .o_content { background: var(--ss-card); }
+    // scope to the view content: the view-switch buttons also carry .o_pivot / .o_graph classes
+    .o_content > .o_pivot, .o_content > .o_graph_renderer, .o_calendar_container, .o_content > .o_activity_view { min-height: 24rem; }
+
+    // Lead / opportunity kanban inside the same card as list view
+    .o_kanban_renderer {
+        padding: 0.75rem 1rem 1.25rem;
+        .o_kanban_record {
+            border-radius: var(--ss-radius);
+            border: 1px solid var(--ss-border);
+            box-shadow: var(--ss-shadow-sm);
+            transition: box-shadow 150ms var(--ss-ease), transform 150ms var(--ss-ease);
+            &:hover { box-shadow: var(--ss-shadow-md); }
+        }
+        .o_kanban_group {
+            background: color-mix(in srgb, var(--ss-muted) 55%, transparent);
+            border-radius: calc(var(--ss-radius) + 2px);
+            padding: 0.5rem;
+        }
+    }
+}
+
+
+// shadcn-style skin for the standard Odoo controls that live inside Sales Modern pages
+// (embedded list / kanban / pivot / graph / calendar / activity views, their control
+// panel, search bar, pager and view switcher). Scoped to .o_ss so the rest of Odoo
+// keeps its own look.
+
+.o_ss {
+    // ---------- Bootstrap / Odoo button tokens ----------
+    .btn {
+        --btn-border-radius: var(--ss-radius-sm);
+        --btn-font-weight: 500;
+        --btn-padding-y: 0.375rem;
+        --btn-padding-x: 0.875rem;
+        transition: background-color 150ms var(--ss-ease), border-color 150ms var(--ss-ease), color 150ms var(--ss-ease), box-shadow 150ms var(--ss-ease);
+        &:focus-visible { box-shadow: 0 0 0 3px var(--ss-ring); }
+    }
+    .btn-primary {
+        --btn-bg: var(--ss-primary);
+        --btn-border-color: var(--ss-primary);
+        --btn-color: var(--ss-primary-fg);
+        --btn-hover-bg: color-mix(in srgb, var(--ss-primary) 88%, black);
+        --btn-hover-border-color: color-mix(in srgb, var(--ss-primary) 88%, black);
+        --btn-hover-color: var(--ss-primary-fg);
+        --btn-active-bg: color-mix(in srgb, var(--ss-primary) 80%, black);
+        --btn-active-border-color: color-mix(in srgb, var(--ss-primary) 80%, black);
+        --btn-active-color: var(--ss-primary-fg);
+        --btn-disabled-bg: var(--ss-primary);
+        --btn-disabled-border-color: var(--ss-primary);
+    }
+    .btn-secondary, .btn-light, .btn-outline-secondary {
+        --btn-bg: var(--ss-card);
+        --btn-border-color: var(--ss-border);
+        --btn-color: var(--ss-fg);
+        --btn-hover-bg: var(--ss-muted);
+        --btn-hover-border-color: var(--ss-border);
+        --btn-hover-color: var(--ss-fg);
+        --btn-active-bg: var(--ss-muted);
+        --btn-active-border-color: var(--ss-border);
+        --btn-active-color: var(--ss-fg);
+    }
+    .btn-link { --btn-color: var(--ss-primary); --btn-hover-color: var(--ss-primary); }
+    a:not(.btn):not(.dropdown-item):not(.ss-sb-item) { color: var(--ss-primary); }
+
+    // ---------- control panel (card header of the embedded view) ----------
+    .ss-native {
+        > .o_view_controller, .o_ss_native_view { background: var(--ss-card); }
+        .o_control_panel {
+            gap: 0.75rem !important; // Bootstrap gap utility on the element itself
+            padding: 1rem 1.25rem !important;
+            background: var(--ss-card);
+            border-bottom: 1px solid var(--ss-border);
+        }
+        .o_control_panel_main { align-items: center; gap: 0.75rem; }
+        .o_control_panel_breadcrumbs {
+            .o_last_breadcrumb_item { font-size: 1.125rem; font-weight: 600; letter-spacing: -0.01em; color: var(--ss-fg); }
+            .o_control_panel_breadcrumbs_actions .btn { color: var(--ss-muted-fg); }
+        }
+
+        // search bar
+        .o_cp_searchview { min-width: 0; }
+        .o_searchview {
+            min-height: 2.25rem;
+            border: 1px solid var(--ss-input);
+            border-radius: var(--ss-radius-sm) 0 0 var(--ss-radius-sm);
+            background: var(--ss-card);
+            box-shadow: var(--ss-shadow-sm);
+            transition: border-color 150ms var(--ss-ease), box-shadow 150ms var(--ss-ease);
+            &:focus-within { border-color: var(--ss-primary); box-shadow: 0 0 0 3px var(--ss-ring); }
+            .o_searchview_input { font-size: 0.875rem; }
+            .o_searchview_facet {
+                border-radius: var(--ss-radius-sm);
+                background: var(--ss-muted);
+                .o_searchview_facet_label { background: var(--ss-primary); color: var(--ss-primary-fg); border-radius: var(--ss-radius-sm) 0 0 var(--ss-radius-sm); }
+            }
+        }
+        .o_searchview_dropdown_toggler {
+            border-color: var(--ss-input);
+            border-radius: 0 var(--ss-radius-sm) var(--ss-radius-sm) 0;
+            background: var(--ss-card);
+            color: var(--ss-muted-fg);
+            &:hover { background: var(--ss-muted); color: var(--ss-fg); }
+        }
+
+        // pager + view switcher → compact segmented controls
+        .o_control_panel_navigation { align-items: center; gap: 0.5rem; }
+        .o_pager { align-items: center; font-size: 0.8125rem; color: var(--ss-muted-fg); }
+        .o_pager .btn, .o_cp_switch_buttons .btn {
+            height: 2rem;
+            min-height: 0;
+            padding: 0 0.625rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .o_cp_switch_buttons {
+            padding: 0.1875rem;
+            gap: 0.125rem;
+            border-radius: var(--ss-radius);
+            background: var(--ss-muted);
+            .btn {
+                height: 1.75rem;
+                border: 0;
+                border-radius: var(--ss-radius-sm) !important; // btn-group squares the inner corners
+                background: transparent;
+                color: var(--ss-muted-fg);
+                &:hover { color: var(--ss-fg); background: color-mix(in srgb, var(--ss-card) 60%, transparent); }
+                &.active { background: var(--ss-card); color: var(--ss-fg); box-shadow: var(--ss-shadow-sm); }
+            }
+        }
+
+        // ---------- list ----------
+        .o_content { background: var(--ss-card); }
+        .o_list_renderer {
+            .o_list_table {
+                --table-bg: var(--ss-card);
+                --table-hover-bg: color-mix(in srgb, var(--ss-muted) 70%, transparent);
+                --table-striped-bg: transparent;
+                font-size: 0.875rem;
+                color: var(--ss-fg);
+            }
+            thead th {
+                height: 2.5rem;
+                background: color-mix(in srgb, var(--ss-muted) 60%, var(--ss-card));
+                color: var(--ss-muted-fg);
+                font-size: 0.75rem;
+                font-weight: 500;
+                border-bottom: 1px solid var(--ss-border);
+            }
+            tbody td { padding-top: 0.625rem; padding-bottom: 0.625rem; border-color: var(--ss-border); vertical-align: middle; }
+            tbody tr.o_data_row:hover > td { background: color-mix(in srgb, var(--ss-muted) 70%, transparent); }
+            tr.o_data_row.o_data_row_selected > td { background: var(--ss-primary-soft); }
+            tfoot { background: transparent; color: var(--ss-muted-fg); }
+            .o_list_record_selector .form-check-input, thead .form-check-input {
+                border-color: var(--ss-input);
+                &:checked { background-color: var(--ss-primary); border-color: var(--ss-primary); }
+            }
+            .o_group_header { background: color-mix(in srgb, var(--ss-muted) 45%, var(--ss-card)); font-weight: 500; }
+            .badge { border-radius: var(--ss-radius-sm); font-weight: 500; }
+        }
+        // empty filler rows Odoo adds under short lists
+        .o_list_table tbody tr:not(.o_data_row):not(.o_group_header) td { border-color: transparent; }
+
+        // ---------- kanban ----------
+        .o_kanban_renderer {
+            --KanbanRecord-padding-v: 0.875rem;
+            --KanbanRecord-padding-h: 1rem;
+            --KanbanRecord-margin-v: 0.5rem;
+            background: var(--ss-bg);
+            padding: 1rem 1.25rem 1.25rem;
+            .o_kanban_record {
+                border: 1px solid var(--ss-border);
+                border-radius: var(--ss-radius);
+                background: var(--ss-card);
+                box-shadow: var(--ss-shadow-sm);
+                transition: border-color 150ms var(--ss-ease), box-shadow 150ms var(--ss-ease);
+                &:hover { border-color: color-mix(in srgb, var(--ss-primary) 35%, var(--ss-border)); box-shadow: 0 4px 12px -4px rgba(15, 23, 42, 0.12); }
+            }
+            .o_kanban_group {
+                border-radius: calc(var(--ss-radius) + 2px);
+                background: color-mix(in srgb, var(--ss-muted) 70%, transparent);
+                padding: 0.5rem;
+                .o_kanban_header { padding: 0.25rem 0.375rem; }
+                .o_column_title { font-weight: 600; font-size: 0.875rem; }
+            }
+        }
+
+        // ---------- pivot / graph / calendar / activity ----------
+        .o_pivot table {
+            font-size: 0.8125rem;
+            th, td { border-color: var(--ss-border); }
+            thead th, .o_pivot_header_cell_closed, .o_pivot_header_cell_opened { background: color-mix(in srgb, var(--ss-muted) 55%, var(--ss-card)); }
+        }
+        .o_graph_renderer, .o_calendar_container, .o_activity_view { background: var(--ss-card); }
+        .o_graph_renderer { padding: 1rem 1.25rem; }
+        .o_calendar_container .fc { --fc-border-color: var(--ss-border); }
+        .o_activity_view table { th, td { border-color: var(--ss-border); } }
+    }
+
+    // ---------- dropdown menus rendered by the embedded views ----------
+    .dropdown-menu, .o-dropdown--menu {
+        border: 1px solid var(--ss-border);
+        border-radius: var(--ss-radius);
+        box-shadow: var(--ss-shadow-lg);
+    }
+}
+
+// Dropdowns (search filters, group by, action menu, card menus) are portaled out of
+// .o_ss into the overlay container, so give them the same shape app-wide on our pages.
+.o_web_client:has(.o_ss_page) .o-dropdown--menu.dropdown-menu,
+.o_web_client:has(.o_ss_sidebar) .o-dropdown--menu.dropdown-menu {
+    border-color: var(--ss-border);
+    border-radius: var(--ss-radius);
+    box-shadow: var(--ss-shadow-lg);
+    padding: 0.25rem;
+    .dropdown-item, .o-dropdown-item {
+        border-radius: var(--ss-radius-sm);
+        font-size: 0.875rem;
+        &:hover, &.focus, &:focus { background: var(--ss-muted); color: var(--ss-fg); }
+        &.selected, &.active { background: var(--ss-primary-soft); color: var(--ss-primary-soft-fg); }
+    }
+    .dropdown-header, .o_dropdown_title { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ss-subtle-fg); }
+}
+
+
+// ============================================================================
+// Chatter (Odoo mail component on the record page): shadcn skin
+// ============================================================================
+.o_ss .ss-chatter {
+    .o-mail-Chatter { background: transparent; }
+    .o-mail-Chatter-top { background: var(--ss-card); border-bottom: 1px solid var(--ss-border); }
+    .o-mail-Chatter-topbar {
+        gap: 0.375rem;
+        padding: 0.75rem 1rem;
+        // Send message / Log note / Activity: compact buttons; the open one is primary
+        .o-mail-Chatter-sendMessage, .o-mail-Chatter-logNote, .o-mail-Chatter-activity {
+            height: 2rem;
+            padding: 0 0.875rem;
+            border-radius: var(--ss-radius-sm);
+            font-size: 0.8125rem;
+            font-weight: 500;
+            box-shadow: none;
+        }
+        .o-mail-Chatter-sendMessage, .o-mail-Chatter-logNote, .o-mail-Chatter-activity {
+            --btn-bg: var(--ss-card);
+            --btn-color: var(--ss-fg);
+            --btn-border-color: var(--ss-border);
+            --btn-hover-bg: var(--ss-muted);
+            --btn-hover-color: var(--ss-fg);
+            --btn-hover-border-color: var(--ss-border);
+        }
+        .o-mail-Chatter-sendMessage.btn-primary, .o-mail-Chatter-logNote.btn-primary,
+        .o-mail-Chatter-sendMessage.active, .o-mail-Chatter-logNote.active {
+            --btn-bg: var(--ss-primary);
+            --btn-color: var(--ss-primary-fg);
+            --btn-border-color: var(--ss-primary);
+            --btn-hover-bg: color-mix(in srgb, var(--ss-primary) 88%, black);
+            --btn-hover-color: var(--ss-primary-fg);
+            --btn-hover-border-color: color-mix(in srgb, var(--ss-primary) 88%, black);
+        }
+        .o-mail-Chatter-attachFiles, .o-mail-Followers-button, .btn-link {
+            color: var(--ss-muted-fg);
+            border-radius: var(--ss-radius-sm);
+            &:hover { background: var(--ss-muted); color: var(--ss-fg); }
+        }
+    }
+
+    // composer
+    .o-mail-Composer {
+        padding: 0.875rem 1rem 1rem;
+        background: var(--ss-card);
+        .o-mail-Composer-coreMain {
+            border: 1px solid var(--ss-input);
+            border-radius: var(--ss-radius);
+            background: var(--ss-card);
+            box-shadow: var(--ss-shadow-sm);
+            transition: border-color 150ms var(--ss-ease), box-shadow 150ms var(--ss-ease);
+            &:focus-within { border-color: var(--ss-primary); box-shadow: 0 0 0 3px var(--ss-ring); }
+        }
+        .o-mail-Composer-bg, .o-mail-Composer-inputContainer { background: transparent; border: 0; }
+        .o-mail-Composer-input { font-size: 0.875rem; line-height: 1.5; padding: 0.625rem 0.75rem; }
+        .o-mail-Composer-input::placeholder { color: var(--ss-subtle-fg); }
+        .o-mail-Composer-send {
+            --btn-bg: var(--ss-primary);
+            --btn-border-color: var(--ss-primary);
+            --btn-color: var(--ss-primary-fg);
+            --btn-hover-bg: color-mix(in srgb, var(--ss-primary) 88%, black);
+            --btn-hover-color: var(--ss-primary-fg);
+            height: 2rem;
+            padding: 0 0.875rem;
+            border-radius: var(--ss-radius-sm);
+            font-weight: 500;
+        }
+        .o-mail-Composer-actions .btn, .o-mail-Composer-quickActions .btn {
+            color: var(--ss-muted-fg);
+            border-radius: var(--ss-radius-sm);
+            &:hover { background: var(--ss-muted); color: var(--ss-fg); }
+        }
+        .o-mail-Composer-avatar { border-radius: 50%; }
+    }
+
+    // thread + messages
+    .o-mail-Thread { padding: 0.5rem 0.75rem 1rem; background: transparent; }
+    .o-mail-DateSection { font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ss-subtle-fg); }
+    .o-mail-Message {
+        border-radius: var(--ss-radius);
+        padding: 0.375rem 0.5rem;
+        transition: background-color 120ms var(--ss-ease);
+        &:hover { background: color-mix(in srgb, var(--ss-muted) 55%, transparent); }
+        .o-mail-Message-avatar { border-radius: 50%; }
+        .o-mail-Message-author { font-weight: 600; font-size: 0.8125rem; color: var(--ss-fg); }
+        .o-mail-Message-date { font-size: 0.6875rem; color: var(--ss-subtle-fg); }
+        .o-mail-Message-body { font-size: 0.875rem; line-height: 1.55; color: var(--ss-fg); }
+        .o-mail-Message-bubble { border-radius: var(--ss-radius); border-color: var(--ss-border); background: var(--ss-card); }
+        .o-mail-Message-bubbleTail { display: none; }
+        .o-mail-Message-actions .btn { border-radius: var(--ss-radius-sm); color: var(--ss-muted-fg); }
+        a { color: var(--ss-primary); }
+    }
+    .o-mail-Message-notification { color: var(--ss-muted-fg); }
+
+    // activities inside the chatter (when shown)
+    .o-mail-Activity {
+        margin: 0.375rem 0.75rem;
+        padding: 0.625rem 0.75rem;
+        border: 1px solid var(--ss-border);
+        border-radius: var(--ss-radius);
+        background: var(--ss-card);
+        .o-mail-Activity-markDone, .o-mail-Activity-edit { border-radius: var(--ss-radius-sm); }
+    }
+    .o-mail-AttachmentList { padding: 0.5rem 1rem; }
+}
+
+// ============================================================================
+// Dialogs opened from Sales Modern pages (activity scheduler, Odoo forms,
+// lost reason, convert, ...): rounded card, quiet header, shadcn buttons.
+// Our own dialogs (.o_ss_dialog) already carry these styles.
+// ============================================================================
+.o_web_client:has(.o_ss_page) .modal .modal-content:not(.o_ss_dialog),
+.o_web_client:has(.o_ss_sidebar) .modal .modal-content:not(.o_ss_dialog) {
+    border: 1px solid var(--ss-border);
+    border-radius: calc(var(--ss-radius) + 4px);
+    box-shadow: var(--ss-shadow-lg);
+    overflow: hidden;
+
+    .modal-header {
+        border-bottom: 1px solid var(--ss-border);
+        padding: 1rem 1.5rem;
+        .modal-title { font-size: 1rem; font-weight: 600; color: var(--ss-fg); }
+    }
+    .modal-body { padding: 1.25rem 1.5rem; }
+    .modal-footer {
+        gap: 0.5rem;
+        padding: 0.875rem 1.5rem;
+        border-top: 1px solid var(--ss-border);
+        background: color-mix(in srgb, var(--ss-muted) 40%, var(--ss-card));
+        > * { margin: 0; }
+    }
+    .btn {
+        --btn-border-radius: var(--ss-radius-sm);
+        --btn-font-weight: 500;
+        &:focus-visible { box-shadow: 0 0 0 3px var(--ss-ring); }
+    }
+    .btn-primary {
+        --btn-bg: var(--ss-primary);
+        --btn-border-color: var(--ss-primary);
+        --btn-color: var(--ss-primary-fg);
+        --btn-hover-bg: color-mix(in srgb, var(--ss-primary) 88%, black);
+        --btn-hover-border-color: color-mix(in srgb, var(--ss-primary) 88%, black);
+        --btn-hover-color: var(--ss-primary-fg);
+        --btn-active-bg: color-mix(in srgb, var(--ss-primary) 80%, black);
+        --btn-active-border-color: color-mix(in srgb, var(--ss-primary) 80%, black);
+    }
+    .btn-secondary {
+        --btn-bg: var(--ss-card);
+        --btn-border-color: var(--ss-border);
+        --btn-color: var(--ss-fg);
+        --btn-hover-bg: var(--ss-muted);
+        --btn-hover-border-color: var(--ss-border);
+        --btn-hover-color: var(--ss-fg);
+        --btn-active-bg: var(--ss-primary-soft);
+        --btn-active-border-color: var(--ss-primary);
+        --btn-active-color: var(--ss-primary-soft-fg);
+    }
+    .o_form_label { font-size: 0.8125rem; font-weight: 500; color: var(--ss-muted-fg); }
+
+    // activity scheduler: activity types / plans as chips instead of grey buttons
+    .o_mail_activity_schedule_wizard {
+        .o_selection_badge {
+            border-radius: 999px;
+            padding: 0.25rem 0.875rem;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            &.active {
+                background: var(--ss-primary);
+                border-color: var(--ss-primary);
+                color: var(--ss-primary-fg);
+            }
+        }
+        .o_field_widget[name="summary"] input { font-size: 1.125rem; font-weight: 500; }
+        .oe-bordered-editor { border-color: var(--ss-input); border-radius: var(--ss-radius); }
+        .o_mail_activity_schedule_summary { border: 1px solid var(--ss-border); border-radius: var(--ss-radius); }
+    }
+}
+
+// space between kanban cards (Odoo stacks them edge to edge inside columns)
+.o_ss .ss-native .o_kanban_renderer .o_kanban_group .o_kanban_record { margin-bottom: 0.5rem; }
+.o_ss .ss-native .o_kanban_renderer .o_kanban_group .o_kanban_record:last-child { margin-bottom: 0; }
+
+// tracked values (Stage: New -> Qualified) use the brand colour instead of Odoo teal;
+// Odoo puts the text-info utility (which is !important) on them
+.o_ss .ss-chatter .o-mail-Message .text-info,
+.o_web_client:has(.o_ss_sidebar) > .o_action_manager .o-mail-Form-chatter .o-mail-Message .text-info { color: var(--ss-primary) !important; }

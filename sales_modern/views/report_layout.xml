@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        "Modern" document layout (Settings > Companies > Document Layout), used by every
+        printed document of the company: quotations, sales orders, pro-forma and invoices.
+        A standalone layout like Odoo's own Light / Boxed / Bold ones: the document body
+        (lines, taxes, totals, terms) stays Odoo's, only the frame and the styling change.
+    -->
+    <template id="external_layout_modern">
+        <t t-set="ml_accent" t-value="company.primary_color or '#2563eb'"/>
+
+        <div t-attf-class="header o_company_#{company.id}_layout o_ml_header">
+            <table class="o_ml_head o_ignore_layout_styling">
+                <tr>
+                    <td class="o_ml_brand">
+                        <img t-if="company.logo" class="o_ml_logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
+                        <div t-else="" class="o_ml_monogram" t-attf-style="background-color: #{ml_accent};" t-out="(company.name or '?')[:1]"/>
+                    </td>
+                    <td class="o_ml_company">
+                        <div class="o_ml_company_name" t-out="company.name"/>
+                        <div t-if="not is_html_empty(company.report_header)" class="o_ml_tagline" t-field="company.report_header"/>
+                        <div class="o_ml_company_address">
+                            <span t-if="company.is_company_details_empty" t-field="company.partner_id"
+                                  t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
+                            <span t-else="" t-field="company.company_details"/>
+                        </div>
+                        <div class="o_ml_company_contact">
+                            <span t-if="company.phone" t-out="company.phone"/>
+                            <span t-if="company.phone and company.email"> · </span>
+                            <span t-if="company.email" t-out="company.email"/>
+                            <t t-if="company.website"><span t-if="company.phone or company.email"> · </span><span t-out="company.website"/></t>
+                        </div>
+                        <div class="o_ml_company_vat">
+                            <t t-if="forced_vat">
+                                <t t-out="company.country_id.vat_label or 'Tax ID'"/>: <span t-out="forced_vat"/>
+                            </t>
+                            <t t-elif="company.vat">
+                                <t t-out="company.country_id.vat_label or 'Tax ID'"/>: <span t-out="company.vat"/>
+                            </t>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <div class="o_ml_accent" t-attf-style="background-color: #{ml_accent};"/>
+        </div>
+
+        <div t-attf-class="article o_report_layout_modern o_table_modern o_company_#{company.id}_layout"
+             t-att-data-oe-model="o and o._name"
+             t-att-data-oe-id="o and o.id"
+             t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <h2 class="o_ml_title" t-attf-style="color: #{ml_accent};" t-out="layout_document_title"/>
+            <t t-call="web.address_layout"/>
+            <t t-out="0"/>
+        </div>
+
+        <div t-attf-class="footer o_company_#{company.id}_layout o_ml_footer {{report_type != 'pdf' and 'mt-auto'}}">
+            <table class="o_ml_foot o_ignore_layout_styling">
+                <tr>
+                    <td class="o_ml_foot_text"><span t-field="company.report_footer"/></td>
+                    <td class="o_ml_foot_page">
+                        <div t-if="report_type == 'pdf' and display_name_in_footer" t-out="o.name"/>
+                        <div t-if="report_type == 'pdf'">Page <span class="page"/> / <span class="topage"/></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </template>
+
+    <record id="report_layout_modern" model="report.layout">
+        <field name="name">Modern</field>
+        <field name="sequence">1</field>
+        <field name="view_id" ref="sales_modern.external_layout_modern"/>
+    </record>
+</odoo>

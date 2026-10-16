@@ -1,0 +1,165 @@
+// List pages: page header with the primary "+ New …" action, and the sales team cards.
+
+// List pages use Odoo's own two-part layout, full width: the control panel (New,
+// title, search, pager, view switcher) and the view right below it, no outer card.
+.o_cm.o_cm_page.o_cm_page--native {
+    background: var(--cm-card);
+    .cm-container--native { max-width: none; height: 100%; padding: 0 !important; gap: 0; }
+    > .cm-container--native > .cm-native {
+        height: 100%; display: flex; flex-direction: column;
+        border: 0; border-radius: 0; box-shadow: none; background: var(--cm-card);
+        > .o_view_controller, > .o_cm_native_view { flex: 1 1 auto; min-height: 0; }
+        > .cm-skeleton { margin: 1rem; }
+    }
+    .cm-native {
+        .o_control_panel { padding: 0.625rem 1rem 0.75rem !important; border-bottom: 1px solid var(--cm-border); }
+        .o_control_panel_breadcrumbs .o_last_breadcrumb_item { font-size: 1.125rem; font-weight: 600; color: var(--cm-fg); }
+        .o_control_panel_main_buttons .btn-primary { border-radius: 0.5rem; font-weight: 600; padding-inline: 0.875rem; }
+    }
+}
+
+.o_cm .cm-pagebar {
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+    padding: 0.25rem 0.125rem 0;
+
+    .cm-pagebar-title { display: flex; align-items: center; gap: 0.875rem; min-width: 0; flex: 1; }
+    .cm-pagebar-icon {
+        display: grid; place-items: center; flex-shrink: 0; width: 2.5rem; height: 2.5rem; border-radius: 0.75rem;
+        background: linear-gradient(135deg, var(--cm-primary-soft), color-mix(in srgb, var(--cm-primary-soft) 40%, var(--cm-card)));
+        color: var(--cm-primary); font-size: 1.0625rem;
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cm-primary) 14%, transparent);
+    }
+    h1 { margin: 0; font-size: 1.375rem; font-weight: 650; letter-spacing: -0.02em; line-height: 1.25; color: var(--cm-fg); }
+    p { margin: 0.125rem 0 0; font-size: 0.8125rem; color: var(--cm-muted-fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .cm-pagebar-actions { display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0; }
+    .cm-btn-new {
+        height: 2.5rem; padding: 0 1.125rem 0 0.875rem; gap: 0.5rem; border-radius: 0.625rem;
+        font-size: 0.875rem; font-weight: 600;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08), 0 4px 12px -4px color-mix(in srgb, var(--cm-primary) 55%, transparent);
+        transition: transform 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease), background-color 150ms var(--cm-ease);
+        .fa {
+            display: grid; place-items: center; width: 1.25rem; height: 1.25rem; border-radius: 0.375rem;
+            background: rgba(255, 255, 255, 0.2); font-size: 0.75rem;
+        }
+        &:hover { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(15, 23, 42, 0.1), 0 8px 18px -6px color-mix(in srgb, var(--cm-primary) 60%, transparent); }
+        &:active { transform: translateY(0); }
+        &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--cm-ring); }
+        @media (prefers-reduced-motion: reduce) { transition: none; &:hover { transform: none; } }
+    }
+
+    @media (max-width: 575.98px) {
+        p { white-space: normal; }
+        .cm-pagebar-actions { width: 100%; }
+        .cm-btn-new { flex: 1; justify-content: center; }
+    }
+}
+
+// ============================================================================
+// Sales team cards (view crm_modern.crm_team_kanban_modern)
+// ============================================================================
+.o_cm .cm-native .o_cm_team_kanban {
+    &.o_kanban_renderer { --KanbanRecord-width: 22rem; }
+    .o_kanban_record {
+        padding: 1rem 1rem 0.5rem;
+        border: 1px solid var(--cm-border); border-radius: calc(var(--cm-radius) + 2px);
+        background: var(--cm-card); box-shadow: var(--cm-shadow-sm);
+        transition: border-color 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease);
+        &:hover { border-color: color-mix(in srgb, var(--cm-primary) 35%, var(--cm-border)); box-shadow: 0 8px 20px -8px rgba(15, 23, 42, 0.18); }
+    }
+
+    .o_kanban_record.o_kanban_ghost { border: 0; box-shadow: none; background: transparent; padding: 0; min-height: 0; }
+
+    .cm-tc-head { display: flex; align-items: center; gap: 0.75rem; padding-right: 1.5rem; }
+    .cm-tc-logo {
+        display: grid; place-items: center; flex-shrink: 0; width: 2.5rem; height: 2.5rem; border-radius: 0.75rem;
+        background: var(--cm-primary-soft); color: var(--cm-primary); font-size: 1rem;
+    }
+    .cm-tc-titles { min-width: 0; display: grid; }
+    .cm-tc-title { font-size: 1rem; font-weight: 650; letter-spacing: -0.01em; color: var(--cm-fg); span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; } }
+    .cm-tc-sub { font-size: 0.75rem; color: var(--cm-subtle-fg); }
+    .cm-tc-company::before { content: "·"; margin: 0 0.375rem; }
+
+    .cm-tc-people {
+        display: grid; gap: 0.5rem; margin-top: 0.875rem; padding: 0.625rem 0.75rem;
+        border-radius: var(--cm-radius); background: color-mix(in srgb, var(--cm-muted) 70%, transparent);
+    }
+    .cm-tc-person {
+        display: grid; grid-template-columns: 5.75rem minmax(0, 1fr); align-items: center; gap: 0.5rem; min-height: 1.75rem;
+        .o_field_widget { min-width: 0; }
+        .o_m2o_avatar img, .o_avatar img, img.o_avatar { width: 1.5rem; height: 1.5rem; border-radius: 50%; box-shadow: 0 0 0 2px var(--cm-card); }
+        .o_field_many2one_avatar_user span, .o_field_many2one_avatar span { font-size: 0.8125rem; font-weight: 500; }
+    }
+    .cm-tc-label { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--cm-subtle-fg); }
+    // Odoo's quick-assign button (add / remove salespeople, pick the leader): always
+    // visible as a dashed "+" avatar instead of a pencil that only shows on hover
+    .o_quick_assign {
+        width: 1.5rem; height: 1.5rem; justify-content: center; opacity: 1 !important; visibility: visible !important;
+        border: 1px dashed color-mix(in srgb, var(--cm-primary) 55%, var(--cm-border)) !important; border-radius: 50% !important;
+        background: var(--cm-card) !important; color: var(--cm-primary) !important; font-size: 0.6875rem; text-decoration: none;
+        &::before { content: "+"; font-family: inherit; font-weight: 600; font-size: 0.875rem; }
+        &:hover { background: var(--cm-primary-soft) !important; border-style: solid !important; }
+    }
+    .o_m2m_avatar_empty { min-width: 1.5rem; height: 1.5rem; line-height: 1.5rem; border-radius: 50% !important; font-size: 0.625rem; background: var(--cm-muted) !important; color: var(--cm-muted-fg); }
+    .o_tag.o_avatar img, img.o_m2m_avatar { border-radius: 50% !important; }
+
+    .cm-tc-stats {
+        display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; margin-top: 0.875rem;
+        > div { display: grid; gap: 0.125rem; min-width: 0; }
+        strong, strong .o_field_widget, strong span { font-size: 0.9375rem; line-height: 1.3; font-weight: 650; color: var(--cm-fg); font-variant-numeric: tabular-nums; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .cm-tc-won, .cm-tc-won span { color: var(--cm-success); }
+        span { font-size: 0.6875rem; color: var(--cm-subtle-fg); }
+    }
+    .cm-tc-alerts { display: flex; flex-wrap: wrap; gap: 0.375rem; margin-top: 0.75rem; }
+    .cm-tc-chip {
+        display: inline-flex; align-items: center; gap: 0.3rem; height: 1.5rem; padding: 0 0.5rem; border-radius: 999px;
+        font-size: 0.6875rem; font-weight: 600;
+        &.cm-tc-chip--danger { background: var(--cm-danger-soft); color: var(--cm-danger); }
+        &.cm-tc-chip--warning { background: var(--cm-warning-soft); color: var(--cm-warning); }
+        &.cm-tc-chip--ok { background: var(--cm-success-soft); color: var(--cm-success); }
+    }
+    .cm-tc-foot {
+        display: flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem; padding-top: 0.375rem; border-top: 1px solid var(--cm-border);
+        .cm-tc-link {
+            display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.25rem 0.5rem; margin: 0 -0.25rem;
+            font-size: 0.8125rem; font-weight: 500; color: var(--cm-muted-fg); text-decoration: none; border-radius: var(--cm-radius-sm);
+            &:hover { background: var(--cm-primary-soft); color: var(--cm-primary-soft-fg); }
+        }
+    }
+}
+
+// ---------- user picker field (team leader on the team cards) ----------
+.o_cm .cm-userpick, .cm-userpick {
+    display: inline-flex; align-items: center; gap: 0.5rem; max-width: 100%; min-width: 0; height: 2rem;
+    padding: 0 0.5rem 0 0.25rem; margin-left: -0.25rem;
+    border: 1px solid transparent; border-radius: 999px; background: transparent; color: var(--cm-fg);
+    font-size: 0.8125rem; font-weight: 600; cursor: pointer;
+    transition: background-color 150ms var(--cm-ease), border-color 150ms var(--cm-ease);
+    &:hover { background: var(--cm-card); border-color: var(--cm-border); .cm-userpick-caret { color: var(--cm-primary); } }
+    &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--cm-ring); }
+    &.cm-userpick--ro { cursor: default; &:hover { background: transparent; border-color: transparent; } }
+    &.cm-userpick--empty .cm-userpick-name { color: var(--cm-primary); font-weight: 500; }
+    &:disabled { opacity: 1; }
+    .cm-userpick-avatar { width: 1.5rem; height: 1.5rem; flex-shrink: 0; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2px var(--cm-card); }
+    .cm-userpick-avatar--empty {
+        display: grid; place-items: center; font-size: 0.6875rem; color: var(--cm-primary);
+        border: 1px dashed color-mix(in srgb, var(--cm-primary) 55%, var(--cm-border)); box-shadow: none; background: var(--cm-card);
+    }
+    .cm-userpick-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cm-userpick-caret { color: var(--cm-subtle-fg); font-size: 0.875rem; }
+}
+.cm-userpick-pop {
+    display: grid; gap: 0.25rem; width: 16rem; padding: 0.5rem;
+    .cm-picker-menu { position: static; margin-top: 0.25rem; box-shadow: none; border: 0; padding: 0; max-height: 14rem; }
+    .cm-userpick-clear {
+        display: flex; align-items: center; gap: 0.375rem; padding: 0.375rem 0.5rem; border: 0; border-top: 1px solid var(--cm-border);
+        background: none; font-size: 0.8125rem; color: var(--cm-danger); text-align: left; cursor: pointer; border-radius: 0 0 var(--cm-radius-sm) var(--cm-radius-sm);
+        &:hover { background: var(--cm-danger-soft); }
+    }
+}
+
+// read-only form sections (rights from Odoo: e.g. salespeople can't edit teams)
+.o_cm .cm-fieldset { border: 0; margin: 0; min-width: 0; &:disabled { opacity: 0.75; } }
+
+// CRM Simple campaign cards: let the action buttons wrap instead of overflowing on narrow cards
+.o_cm .cm-native .o_kanban_record footer.gap-1 { flex-wrap: wrap; row-gap: 0.375rem; }

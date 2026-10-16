@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_dashboard" model="ir.actions.client">
+        <field name="name">Sales Dashboard</field>
+        <field name="tag">sales_modern.dashboard</field>
+        <field name="path">sales-modern</field>
+    </record>
+    <record id="action_quotations" model="ir.actions.client">
+        <field name="name">Quotations</field>
+        <field name="tag">sales_modern.quotations</field>
+        <field name="path">sales-modern-quotations</field>
+    </record>
+    <record id="action_orders" model="ir.actions.client">
+        <field name="name">Sales Orders</field>
+        <field name="tag">sales_modern.orders</field>
+        <field name="path">sales-modern-orders</field>
+    </record>
+    <record id="action_to_invoice" model="ir.actions.client">
+        <field name="name">To Invoice</field>
+        <field name="tag">sales_modern.to_invoice</field>
+        <field name="path">sales-modern-to-invoice</field>
+    </record>
+    <record id="action_customers" model="ir.actions.client">
+        <field name="name">Customers</field>
+        <field name="tag">sales_modern.customers</field>
+        <field name="path">sales-modern-customers</field>
+    </record>
+    <record id="action_products" model="ir.actions.client">
+        <field name="name">Products</field>
+        <field name="tag">sales_modern.products</field>
+        <field name="path">sales-modern-products</field>
+    </record>
+    <record id="action_teams" model="ir.actions.client">
+        <field name="name">Sales Teams</field>
+        <field name="tag">sales_modern.teams</field>
+        <field name="path">sales-modern-teams</field>
+    </record>
+    <record id="action_salespeople" model="ir.actions.client">
+        <field name="name">Salespeople</field>
+        <field name="tag">sales_modern.salespeople</field>
+        <field name="path">sales-modern-salespeople</field>
+    </record>
+</odoo>

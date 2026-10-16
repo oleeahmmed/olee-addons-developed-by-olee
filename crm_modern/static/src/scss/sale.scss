@@ -1,0 +1,90 @@
+// Sales parts of Modern CRM (only used when the Sales app is installed).
+// "Quotation" tab on the opportunity page (uses Modern CRM tokens).
+.o_cm .cm-sale-tab {
+    display: grid; gap: 0.625rem;
+
+    .cm-sale-top { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+    .cm-sale-steps {
+        display: flex; align-items: center; flex-wrap: wrap; gap: 0.25rem; flex: 1; min-width: 0; list-style: none; margin: 0; padding: 0;
+        li {
+            display: inline-flex; align-items: center; gap: 0.375rem; font-size: 0.75rem; font-weight: 500; color: var(--cm-subtle-fg);
+            & + li::before { content: ""; width: 1.25rem; height: 1px; background: var(--cm-border); margin-right: 0.125rem; }
+            &.cm-on { color: var(--cm-success); }
+            &.cm-on + li.cm-on::before { background: var(--cm-success); }
+        }
+        .cm-step-dot {
+            display: inline-grid; place-items: center; width: 1.125rem; height: 1.125rem; border-radius: 50%;
+            font-size: 0.625rem; font-weight: 600; background: var(--cm-muted); color: var(--cm-muted-fg);
+        }
+        li.cm-on .cm-step-dot { background: var(--cm-success); color: #fff; }
+    }
+    .cm-sale-total { font-size: 0.75rem; color: var(--cm-muted-fg); strong { color: var(--cm-success); font-size: 0.875rem; } }
+
+    // existing quotations / orders
+    .cm-so-list { list-style: none; margin: 0; padding: 0; border: 1px solid var(--cm-border); border-radius: var(--cm-radius); overflow: hidden; }
+    .cm-so-row {
+        display: flex; align-items: center; gap: 0.625rem; padding: 0.5rem 0.625rem; flex-wrap: wrap;
+        & + .cm-so-row { border-top: 1px solid var(--cm-border); }
+        &:hover { background: color-mix(in srgb, var(--cm-muted) 50%, transparent); }
+    }
+    .cm-sale-icon {
+        display: grid; place-items: center; flex-shrink: 0; width: 1.875rem; height: 1.875rem; border-radius: var(--cm-radius-sm);
+        background: var(--cm-info-soft); color: var(--cm-info); font-size: 0.8125rem;
+        &.cm-sale-icon--order { background: var(--cm-success-soft); color: var(--cm-success); }
+        &.cm-sale-icon--cancel { background: var(--cm-muted); color: var(--cm-subtle-fg); }
+    }
+    .cm-so-main { flex: 1; min-width: 9rem; }
+    .cm-so-name { display: flex; align-items: center; gap: 0.375rem; flex-wrap: wrap; a { font-weight: 600; } .cm-badge { font-size: 0.6875rem; } }
+    .cm-so-sub { font-size: 0.6875rem; color: var(--cm-subtle-fg); }
+    .cm-so-amount { font-size: 0.875rem; font-weight: 600; min-width: 5.5rem; text-align: right; }
+    .cm-so-actions { display: flex; align-items: center; gap: 0.25rem; }
+    .cm-sale-new { justify-self: start; }
+
+    // quick quote builder
+    .cm-quote {
+        display: grid; gap: 0.625rem; padding: 0.75rem; border-radius: var(--cm-radius);
+        border: 1px dashed color-mix(in srgb, var(--cm-primary) 35%, var(--cm-border));
+        background: color-mix(in srgb, var(--cm-primary-soft) 35%, var(--cm-card));
+    }
+    .cm-quote-customer { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+    .cm-quote-label { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--cm-subtle-fg); width: 4.5rem; }
+    .cm-quote-partner { font-weight: 600; .fa { color: var(--cm-subtle-fg); margin-right: 0.25rem; } }
+    .cm-quote-partner-pick { display: flex; align-items: center; gap: 0.5rem; flex: 1; min-width: 14rem; flex-wrap: wrap; .cm-picker { flex: 1; min-width: 12rem; } }
+
+    .cm-quote-lines { display: grid; gap: 0.375rem; }
+    .cm-quote-line {
+        display: grid; grid-template-columns: minmax(10rem, 1fr) 4.5rem 7rem 6.5rem 1.75rem; align-items: center; gap: 0.5rem;
+        &.cm-quote-line--head { font-size: 0.6875rem; font-weight: 500; color: var(--cm-subtle-fg); }
+        .cm-quote-amount { font-size: 0.8125rem; font-weight: 500; }
+        @media (max-width: 575.98px) {
+            grid-template-columns: minmax(0, 1fr) 4rem 5.5rem 1.75rem;
+            .cm-quote-amount { display: none; }
+            &.cm-quote-line--head > :nth-child(4) { display: none; }
+        }
+    }
+    .cm-quote-foot { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; padding-top: 0.5rem; border-top: 1px solid var(--cm-border); }
+    .cm-quote-est {
+        display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--cm-muted-fg);
+        strong { color: var(--cm-fg); font-size: 0.9375rem; }
+        .cm-btn-link { margin-left: 0.25rem; }
+    }
+    .cm-quote-cancel { color: var(--cm-muted-fg); }
+    .cm-quote-btns { display: flex; gap: 0.375rem; flex-wrap: wrap; }
+}
+
+.o_cm.o_cm_page .cm-grid-stats.cm-grid-stats--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    @media (max-width: 767.98px) { grid-template-columns: minmax(0, 1fr); }
+}
+
+// Sales figures on the Modern CRM team card
+.o_cm .cm-native .o_cm_team_kanban .cm-tc-target {
+    display: grid; gap: 0.3rem; margin-top: 0.75rem;
+    .cm-tc-target-head { display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.6875rem; color: var(--cm-subtle-fg); }
+    .cm-tc-target-val { font-size: 0.75rem; font-weight: 600; color: var(--cm-fg); font-variant-numeric: tabular-nums; }
+    .cm-tc-target-bar {
+        height: 0.375rem; border-radius: 999px; background: var(--cm-muted); overflow: hidden;
+        span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--cm-success), color-mix(in srgb, var(--cm-success) 70%, var(--cm-primary))); }
+    }
+    .cm-tc-target-orders { font-size: 0.6875rem; color: var(--cm-subtle-fg); }
+}

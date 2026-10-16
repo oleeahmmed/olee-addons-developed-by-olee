@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        No app of its own: everything lives inside Odoo's Inventory app (stock.menu_stock_root).
+        The Dashboard comes first, so opening Inventory from the home screen opens Inventory Modern.
+        Odoo's own Inventory menus stay untouched: the sidebar merges them into these groups
+        (Operations, Products) and shows Reporting / Configuration in the top bar.
+        Visibility comes from Odoo's own groups.
+    -->
+    <menuitem id="menu_dashboard" name="Dashboard" parent="stock.menu_stock_root" action="action_dashboard"
+              sequence="-100" groups="stock.group_stock_user"/>
+
+    <menuitem id="menu_operations" name="Operations" parent="stock.menu_stock_root" sequence="-90" groups="stock.group_stock_user"/>
+    <menuitem id="menu_receipts" name="Receipts" parent="menu_operations" action="action_receipts" sequence="1"/>
+    <menuitem id="menu_deliveries" name="Deliveries" parent="menu_operations" action="action_deliveries" sequence="2"/>
+    <!-- internal transfers only make sense with several locations (same group as Odoo's menu) -->
+    <menuitem id="menu_internal" name="Internal" parent="menu_operations" action="action_internal" sequence="3"
+              groups="stock.group_stock_multi_locations"/>
+
+    <menuitem id="menu_products" name="Products" parent="stock.menu_stock_root" sequence="-80" groups="stock.group_stock_user"/>
+    <menuitem id="menu_product_list" name="Products" parent="menu_products" action="action_products" sequence="1"/>
+    <menuitem id="menu_stock" name="Stock on Hand" parent="menu_products" action="action_stock" sequence="2"/>
+    <menuitem id="menu_moves" name="Moves History" parent="menu_products" action="action_moves" sequence="3"/>
+</odoo>

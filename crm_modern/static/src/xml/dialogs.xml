@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="crm_modern.QuickCreateDialog">
+        <Dialog title="title" size="'lg'" contentClass="'o_cm o_cm_dialog'">
+            <p class="cm-dialog-desc" t-if="isOpp">Add a deal to the pipeline. Open it afterwards for activities and notes.</p>
+            <p class="cm-dialog-desc" t-else="">Capture a prospect. Qualify it later and convert it to an opportunity.</p>
+            <form class="d-grid" style="gap:1rem" t-on-submit.prevent="save" novalidate="">
+                <div t-if="state.error" class="cm-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
+                <div class="cm-field">
+                    <label class="cm-label" for="cm_qc_name"><t t-if="isOpp">Opportunity</t><t t-else="">Lead</t> *</label>
+                    <input id="cm_qc_name" class="cm-input" t-model="state.name" t-att-placeholder="isOpp ? 'e.g. 200 licenses — annual plan' : 'e.g. Website enquiry — ERP'" autofocus=""/>
+                </div>
+                <div class="cm-grid-2">
+                    <div class="cm-field"><label class="cm-label" for="cm_qc_company">Company</label>
+                        <input id="cm_qc_company" class="cm-input" t-model="state.partner_name" autocomplete="organization"/></div>
+                    <div class="cm-field"><label class="cm-label" for="cm_qc_contact">Contact name</label>
+                        <input id="cm_qc_contact" class="cm-input" t-model="state.contact_name" autocomplete="name"/></div>
+                    <div class="cm-field"><label class="cm-label" for="cm_qc_email">Email</label>
+                        <input id="cm_qc_email" type="email" class="cm-input" t-model="state.email_from" autocomplete="email"/></div>
+                    <div class="cm-field"><label class="cm-label" for="cm_qc_phone">Phone</label>
+                        <input id="cm_qc_phone" type="tel" class="cm-input" t-model="state.phone" autocomplete="tel"/></div>
+                    <div class="cm-field"><label class="cm-label" for="cm_qc_rev">Expected revenue</label>
+                        <input id="cm_qc_rev" type="number" min="0" step="100" inputmode="numeric" class="cm-input" t-model="state.expected_revenue"/></div>
+                    <div class="cm-field"><label class="cm-label" for="cm_qc_user">Salesperson</label>
+                        <select id="cm_qc_user" class="cm-select" t-model="state.user_id">
+                            <option value="">Unassigned</option>
+                            <t t-foreach="state.choices.users" t-as="u" t-key="u.id"><option t-att-value="u.id" t-esc="u.name"/></t>
+                        </select></div>
+                    <div class="cm-field"><label class="cm-label" for="cm_qc_team">Sales team</label>
+                        <select id="cm_qc_team" class="cm-select" t-model="state.team_id">
+                            <option value="">Salesperson's team</option>
+                            <t t-foreach="state.choices.teams" t-as="t" t-key="t.id"><option t-att-value="t.id" t-esc="t.name"/></t>
+                        </select></div>
+                    <div class="cm-field"><label class="cm-label" for="cm_qc_campaign">Campaign</label>
+                        <select id="cm_qc_campaign" class="cm-select" t-model="state.campaign_id">
+                            <option value="">None</option>
+                            <t t-foreach="state.choices.campaigns" t-as="c" t-key="c.id"><option t-att-value="c.id" t-esc="c.title"/></t>
+                        </select></div>
+                    <t t-if="isOpp">
+                        <div class="cm-field"><label class="cm-label" for="cm_qc_stage">Stage</label>
+                            <select id="cm_qc_stage" class="cm-select" t-model="state.stage_id">
+                                <option value="">Default</option>
+                                <t t-foreach="state.choices.stages" t-as="st" t-key="st.id"><option t-att-value="st.id" t-esc="st.name"/></t>
+                            </select></div>
+                        <div class="cm-field"><label class="cm-label" for="cm_qc_close">Expected closing</label>
+                            <input id="cm_qc_close" type="date" class="cm-input" t-model="state.date_deadline"/></div>
+                    </t>
+                    <div class="cm-field"><label class="cm-label" for="cm_qc_prio">Priority</label>
+                        <select id="cm_qc_prio" class="cm-select" t-model="state.priority">
+                            <option value="0">Low</option><option value="1">Medium</option><option value="2">High</option><option value="3">Very high</option>
+                        </select></div>
+                </div>
+                <div class="cm-field"><label class="cm-label" for="cm_qc_tags">Tags</label>
+                    <TagInput id="'cm_qc_tags'" value="state.tags" onChange="(tags) => this.state.tags = tags"/></div>
+                <button type="submit" class="d-none"/>
+            </form>
+            <t t-set-slot="footer">
+                <button class="cm-btn cm-btn-ghost" t-on-click="props.close">Cancel</button>
+                <button class="cm-btn cm-btn-primary" t-att-disabled="state.saving" t-on-click="save">
+                    <t t-if="isOpp">Create opportunity</t><t t-else="">Create lead</t>
+                </button>
+            </t>
+        </Dialog>
+    </t>
+
+    <t t-name="crm_modern.CampaignDialog">
+        <Dialog title="'New campaign'" size="'md'" contentClass="'o_cm o_cm_dialog'">
+            <p class="cm-dialog-desc">Set the sales team so new leads are spread over its members.</p>
+            <form class="d-grid" style="gap:1rem" t-on-submit.prevent="save" novalidate="">
+                <div t-if="state.error" class="cm-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
+                <div class="cm-field"><label class="cm-label" for="cm_cp_title">Campaign name *</label>
+                    <input id="cm_cp_title" class="cm-input" t-model="state.title" autofocus=""/></div>
+                <div class="cm-grid-2">
+                    <div class="cm-field"><label class="cm-label" for="cm_cp_team">Sales team</label>
+                        <select id="cm_cp_team" class="cm-select" t-model="state.team_id">
+                            <option value="">No team</option>
+                            <t t-foreach="state.choices.teams" t-as="t" t-key="t.id"><option t-att-value="t.id" t-esc="t.name"/></t>
+                        </select></div>
+                    <div class="cm-field"><label class="cm-label" for="cm_cp_user">Salesperson</label>
+                        <select id="cm_cp_user" class="cm-select" t-model="state.user_id">
+                            <option value="">Spread over team</option>
+                            <t t-foreach="state.choices.users" t-as="u" t-key="u.id"><option t-att-value="u.id" t-esc="u.name"/></t>
+                        </select></div>
+                </div>
+                <button type="submit" class="d-none"/>
+            </form>
+            <t t-set-slot="footer">
+                <button class="cm-btn cm-btn-ghost" t-on-click="props.close">Cancel</button>
+                <button class="cm-btn cm-btn-primary" t-on-click="save">Create campaign</button>
+            </t>
+        </Dialog>
+    </t>
+
+    <t t-name="crm_modern.MarkDoneDialog">
+        <Dialog title="'Mark as done'" size="'md'" contentClass="'o_cm o_cm_dialog'">
+            <div class="d-flex align-items-center" style="gap:0.75rem;margin-bottom:1rem">
+                <ActivityIcon type="props.type"/>
+                <div class="cm-truncate">
+                    <strong class="cm-truncate d-block" t-esc="props.activity.summary or (props.type and props.type.name) or 'Activity'"/>
+                    <span class="cm-muted" style="font-size:0.75rem">Feedback is logged in the chatter.</span>
+                </div>
+            </div>
+            <div class="d-grid" style="gap:1rem">
+                <div t-if="state.error" class="cm-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
+                <div t-if="needsFile" class="cm-field">
+                    <span class="cm-label">Document *</span>
+                    <label for="cm_md_file" class="cm-input d-flex align-items-center" style="gap:0.5rem;cursor:pointer;border-style:dashed">
+                        <i class="fa fa-paperclip" aria-hidden="true"/>
+                        <span class="cm-truncate" t-esc="state.file ? state.file.name : 'Choose a file…'"/>
+                    </label>
+                    <input id="cm_md_file" type="file" class="cm-sr-only" t-on-change="onFile"/>
+                </div>
+                <div class="cm-field"><label class="cm-label" for="cm_md_feedback">Feedback</label>
+                    <textarea id="cm_md_feedback" class="cm-textarea" rows="3" placeholder="How did it go?" t-model="state.feedback" autofocus=""/></div>
+            </div>
+            <t t-set-slot="footer">
+                <button class="cm-btn cm-btn-ghost" t-on-click="props.close">Discard</button>
+                <button class="cm-btn cm-btn-outline" t-att-disabled="state.busy" t-on-click="() => this.done(true)">Done &amp; schedule next</button>
+                <button class="cm-btn cm-btn-primary" t-att-disabled="state.busy" t-on-click="() => this.done(false)"><i class="fa fa-check" aria-hidden="true"/> Done</button>
+            </t>
+        </Dialog>
+    </t>
+
+</templates>

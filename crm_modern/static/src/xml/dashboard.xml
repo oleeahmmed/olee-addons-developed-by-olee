@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="crm_modern.Dashboard">
+        <div class="o_cm od-page">
+            <t t-if="state.loading">
+                <div class="od-head"><div class="od-skel" style="height:3.75rem;width:22rem"/><div class="od-skel" style="height:2.25rem;width:20rem"/></div>
+                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel" style="height:8.5rem"/></t></div>
+                <div class="od-grid"><div class="od-skel od-span-8" style="height:22rem"/><div class="od-skel od-span-4" style="height:22rem"/></div>
+            </t>
+            <t t-elif="state.data">
+                <t t-set="d" t-value="state.data"/>
+
+                <header class="od-head">
+                    <div>
+                        <div class="od-eyebrow"><span class="od-live" aria-hidden="true"/> <t t-esc="d.company"/> · CRM overview</div>
+                        <h1 class="od-title"><t t-esc="greeting"/>, <t t-esc="firstName"/></h1>
+                        <p class="od-subtitle">
+                            <strong t-esc="caption.current"/>, compared with <t t-esc="caption.previous"/> · expected revenue
+                        </p>
+                    </div>
+                    <div class="od-head-actions">
+                        <OdFilters period="state.period" teamId="state.teamId" teams="d.team_options" onChange.bind="onFilters" busy="state.busy"/>
+                        <button type="button" class="od-btn od-btn--icon" title="Refresh" aria-label="Refresh" t-on-click="() => this.load()">
+                            <i t-attf-class="fa fa-refresh {{ state.busy ? 'fa-spin' : '' }}" aria-hidden="true"/>
+                        </button>
+                        <button type="button" class="od-btn od-btn--primary" t-on-click="() => this.go('crm_modern.action_pipeline')">
+                            <i class="fa fa-columns" aria-hidden="true"/> Open pipeline
+                        </button>
+                    </div>
+                </header>
+
+                <div t-att-class="{ 'od-busy': state.busy }">
+                    <section class="od-kpis" aria-label="Key figures">
+                        <OdKpi featured="true" tone="'blue'" icon="'fa-briefcase'" label="'Open pipeline'" value="ms(k.pipeline)"
+                               hint="number(k.open_count) + ' open deals · weighted ' + ms(k.weighted)"
+                               onClick="() => this.go('crm_modern.action_pipeline')"/>
+                        <OdKpi tone="'green'" icon="'fa-trophy'" label="'Won'" value="ms(k.won)" delta="k.won_delta" compareLabel="compare"
+                               spark="d.sparks.won" hint="k.won_count + ' deals won'" onClick.bind="openWon"/>
+                        <OdKpi tone="'amber'" icon="'fa-bullseye'" label="'Win rate'" value="pct(k.win_rate)"
+                               delta="k.win_rate_delta" deltaSuffix="' pts'" compareLabel="compare"
+                               hint="k.won_count + ' won · ' + k.lost_count + ' lost'"/>
+                        <OdKpi tone="'violet'" icon="'fa-tag'" label="'Average deal'" value="ms(k.avg_deal)" hint="'per won deal'"/>
+                        <OdKpi tone="'sky'" icon="'fa-hourglass-half'" label="'Sales cycle'" value="k.cycle === null ? '—' : k.cycle + ' days'"
+                               hint="'from first contact to won'"/>
+                        <OdKpi tone="'teal'" icon="'fa-user-plus'" label="useLeads ? 'New leads &amp; deals' : 'New deals'" value="number(k.new)"
+                               delta="k.new_delta" compareLabel="compare" spark="d.sparks.new" hint="'created in this period'"/>
+                    </section>
+
+                    <div class="od-grid">
+                        <section class="od-card od-span-8">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-green"><i class="fa fa-bar-chart" aria-hidden="true"/></span> Won revenue in <t t-esc="d.year"/></h3>
+                                    <p>Deals won per month, with last year for comparison</p>
+                                </div>
+                                <div class="od-card-total"><strong class="od-num" t-esc="ms(ytd)"/><span>year to date</span></div>
+                            </div>
+                            <div class="od-card-body">
+                                <OdComboChart data="d.months" format="m" formatAxis="axis" currentLabel="'' + d.year" previousLabel="'' + (d.year - 1)"
+                                              label="'Won revenue per month in ' + d.year"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-rose"><i class="fa fa-bell-o" aria-hidden="true"/></span> Needs your attention</h3>
+                                <p>Deals that are slipping · click to open them</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <OdAttention items="d.attention" format="ms" onClick.bind="openAttention"/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="od-grid">
+                        <section class="od-card od-span-5">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-blue"><i class="fa fa-filter" aria-hidden="true"/></span> Pipeline by stage</h3>
+                                    <p>Open deals per stage, and what was won this period</p>
+                                </div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('crm_modern.action_pipeline')">Pipeline <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body">
+                                <OdFunnel stages="d.funnel" format="ms" onClick.bind="openStage"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-violet"><i class="fa fa-calendar" aria-hidden="true"/></span> Expected to close</h3>
+                                <p>Open deals by expected closing month · weighted by probability</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <ol class="od-funnel">
+                                    <t t-foreach="d.forecast" t-as="f" t-key="f.label">
+                                        <li>
+                                            <div class="od-funnel-meta">
+                                                <span class="od-funnel-name" t-esc="f.label"/>
+                                                <span class="od-funnel-count od-num"><t t-esc="f.count"/> <small>deals</small></span>
+                                                <span class="od-funnel-value od-num" t-esc="ms(f.value)"/>
+                                            </div>
+                                            <div class="od-funnel-track od-forecast-track">
+                                                <span t-attf-style="width: {{ Math.max(f.value ? 3 : 0, f.value / forecastMax * 100) }}%; opacity: 0.35"/>
+                                                <span class="od-forecast-weighted" t-attf-style="width: {{ Math.max(f.weighted ? 2 : 0, f.weighted / forecastMax * 100) }}%"/>
+                                            </div>
+                                            <span class="od-cell-sub od-num">Weighted <t t-esc="ms(f.weighted)"/></span>
+                                        </li>
+                                    </t>
+                                </ol>
+                                <div t-if="d.no_date.count" class="od-note">
+                                    <i class="fa fa-info-circle" aria-hidden="true"/>
+                                    <span><t t-esc="d.no_date.count"/> open deals (<t t-esc="ms(d.no_date.value)"/>) have no expected closing date.</span>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-3">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-rose"><i class="fa fa-thumbs-o-down" aria-hidden="true"/></span> Why we lose</h3>
+                                <p>Lost reasons, this period</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!lostReasons.length" class="od-empty"><i class="fa fa-smile-o" aria-hidden="true"/><strong>No lost deals with a reason</strong></div>
+                                <OdRank t-else="" items="lostReasons" format="number" tone="'rose'"/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="od-grid">
+                        <section class="od-card od-span-7">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-amber"><i class="fa fa-trophy" aria-hidden="true"/></span> Salespeople</h3>
+                                    <p>Won this period, win rate, open pipeline and late follow-ups</p>
+                                </div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('crm_modern.action_salespeople')">All <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body od-card-body--flush">
+                                <div t-if="!d.salespeople.length" class="od-empty"><i class="fa fa-user" aria-hidden="true"/><strong>No deals assigned yet</strong></div>
+                                <div t-else="" class="od-table-wrap">
+                                    <table class="od-table">
+                                        <thead><tr><th>Salesperson</th><th class="od-r">Won</th><th class="od-r">Win rate</th><th class="od-r">Open pipeline</th><th class="od-r">Late activities</th></tr></thead>
+                                        <tbody>
+                                            <t t-foreach="d.salespeople" t-as="r" t-key="r.id">
+                                                <tr class="od-clickable" t-on-click="() => this.openSalesperson(r)">
+                                                    <td>
+                                                        <span class="od-person">
+                                                            <img t-attf-src="/web/image/res.users/{{ r.id }}/avatar_128" alt="" loading="lazy"/>
+                                                            <span><span class="od-cell-main" t-esc="r.name"/><span class="od-cell-sub"><t t-esc="r.won_count"/> won · <t t-esc="r.open_count"/> open</span></span>
+                                                        </span>
+                                                    </td>
+                                                    <td class="od-r od-num" style="font-weight:650" t-esc="ms(r.won)"/>
+                                                    <td class="od-r">
+                                                        <span t-if="r.win_rate !== null" t-attf-class="od-pill od-tone-{{ r.win_rate >= 50 ? 'green' : (r.win_rate >= 25 ? 'amber' : 'rose') }}" t-esc="r.win_rate + '%'"/>
+                                                        <span t-else="" class="text-muted">—</span>
+                                                    </td>
+                                                    <td class="od-r od-num" t-esc="ms(r.pipeline)"/>
+                                                    <td class="od-r">
+                                                        <span t-if="r.overdue" class="od-pill od-tone-rose"><i class="fa fa-clock-o" aria-hidden="true"/> <t t-esc="r.overdue"/></span>
+                                                        <span t-else="" class="od-pill od-tone-green"><i class="fa fa-check" aria-hidden="true"/></span>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-5">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-sign-in" aria-hidden="true"/></span> Where deals come from</h3>
+                                <p>Leads &amp; deals created this period by source · won · won revenue</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!sources.length" class="od-empty"><i class="fa fa-sign-in" aria-hidden="true"/><strong>No source recorded in this period</strong>
+                                    <span t-if="d.no_source"><t t-esc="d.no_source"/> leads have no source set.</span></div>
+                                <t t-else="">
+                                    <OdRank items="sources" format="number" tone="'teal'"/>
+                                    <div t-if="d.no_source" class="od-note"><i class="fa fa-info-circle" aria-hidden="true"/> <span><t t-esc="d.no_source"/> more without a source.</span></div>
+                                </t>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="od-grid">
+                        <section class="od-card od-span-6">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-sky"><i class="fa fa-users" aria-hidden="true"/></span> Sales teams</h3>
+                                    <p>Won this period and open pipeline per team</p>
+                                </div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('crm_modern.action_teams')">Teams <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body od-card-body--flush">
+                                <div t-if="!d.teams.length" class="od-empty"><i class="fa fa-users" aria-hidden="true"/><strong>No sales team yet</strong></div>
+                                <div t-else="" class="od-table-wrap">
+                                    <table class="od-table">
+                                        <thead><tr><th>Team</th><th>Leader</th><th class="od-r">Won</th><th class="od-r">Open pipeline</th></tr></thead>
+                                        <tbody>
+                                            <t t-foreach="d.teams" t-as="t" t-key="t.id">
+                                                <tr class="od-clickable" t-on-click="() => this.openTeam(t)">
+                                                    <td><span class="od-cell-main" t-esc="t.name"/><span class="od-cell-sub"><t t-esc="t.members"/> members</span></td>
+                                                    <td>
+                                                        <span t-if="t.leader" class="od-person"><img t-attf-src="/web/image/res.users/{{ t.leader_id }}/avatar_128" alt="" loading="lazy"/><t t-esc="t.leader"/></span>
+                                                        <span t-else="" class="text-muted">—</span>
+                                                    </td>
+                                                    <td class="od-r od-num" style="font-weight:650" t-esc="ms(t.won)"/>
+                                                    <td class="od-r"><span class="od-num" t-esc="ms(t.pipeline)"/><span class="od-cell-sub"><t t-esc="t.open_count"/> deals</span></td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-6">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-violet"><i class="fa fa-bullhorn" aria-hidden="true"/></span> Campaigns</h3>
+                                    <p t-esc="useLeads ? 'Leads, deals and revenue brought by each campaign' : 'Deals and revenue brought by each campaign'"/>
+                                </div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('crm_modern.action_campaigns')">Manage <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body od-card-body--flush">
+                                <div t-if="!d.campaigns.length" class="od-empty"><i class="fa fa-bullhorn" aria-hidden="true"/><strong>No campaign results yet</strong><span>Upload leads into a campaign to track it here.</span></div>
+                                <div t-else="" class="od-table-wrap">
+                                    <table class="od-table">
+                                        <thead><tr><th>Campaign</th><th t-if="useLeads" class="od-r">Leads</th><th class="od-r">Deals</th><th class="od-r">Won</th><th class="od-r">Won revenue</th></tr></thead>
+                                        <tbody>
+                                            <t t-foreach="d.campaigns" t-as="c" t-key="c.id">
+                                                <tr>
+                                                    <td><span class="od-cell-main" t-esc="c.title"/><span class="od-cell-sub" t-esc="c.simple_team_id ? c.simple_team_id[1] : 'No team'"/></td>
+                                                    <td t-if="useLeads" class="od-r od-num" t-esc="c.simple_lead_count"/>
+                                                    <td class="od-r od-num" t-esc="c.simple_opportunity_count"/>
+                                                    <td class="od-r"><span class="od-pill od-tone-green od-num" t-esc="c.simple_won_count"/></td>
+                                                    <td class="od-r od-num" style="font-weight:650" t-esc="ms(c.simple_won_revenue)"/>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="od-grid">
+                        <section class="od-card od-span-6">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-amber"><i class="fa fa-hourglass-half" aria-hidden="true"/></span> Stuck deals</h3>
+                                <p>The biggest open deals with no stage change for 30+ days</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.stale.length" class="od-empty"><i class="fa fa-rocket" aria-hidden="true"/><strong>Every deal is moving</strong></div>
+                                <ul t-else="" class="od-attention">
+                                    <t t-foreach="d.stale" t-as="s" t-key="s.id">
+                                        <li class="od-tone-amber od-clickable" tabindex="0" t-on-click="() => this.openLead(s.id)">
+                                            <span class="od-att-icon"><i class="fa fa-briefcase" aria-hidden="true"/></span>
+                                            <div class="od-att-body">
+                                                <span class="od-att-label od-truncate" t-esc="s.name"/>
+                                                <span class="od-att-sub"><t t-esc="s.stage_id ? s.stage_id[1] : ''"/> · <t t-esc="daysSince(s.date_last_stage_update)"/> · <t t-esc="s.user_id ? s.user_id[1] : 'Unassigned'"/></span>
+                                            </div>
+                                            <span class="od-num" style="font-weight:650;font-size:0.8125rem" t-esc="ms(s.expected_revenue)"/>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-6">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-rose"><i class="fa fa-clock-o" aria-hidden="true"/></span> Late &amp; due today</h3>
+                                    <p>Follow-ups on deals that should already be done</p>
+                                </div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('crm_modern.action_activities')">Activities <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body">
+                                <div t-if="!d.late_activities.length" class="od-empty"><i class="fa fa-calendar-check-o" aria-hidden="true"/><strong>All follow-ups are on time</strong></div>
+                                <ul t-else="" class="od-attention">
+                                    <t t-foreach="d.late_activities" t-as="a" t-key="a.id">
+                                        <t t-set="dd" t-value="due(a.date_deadline)"/>
+                                        <li t-attf-class="od-tone-{{ dd.state === 'overdue' ? 'rose' : 'amber' }} od-clickable" tabindex="0" t-on-click="() => this.openLead(a.res_id)">
+                                            <span class="od-att-icon"><i class="fa fa-tasks" aria-hidden="true"/></span>
+                                            <div class="od-att-body">
+                                                <span class="od-att-label od-truncate" t-esc="a.summary or (a.activity_type_id and a.activity_type_id[1])"/>
+                                                <span class="od-att-sub od-truncate"><t t-esc="a.res_name"/> · <t t-esc="a.user_id ? a.user_id[1] : ''"/></span>
+                                            </div>
+                                            <span t-attf-class="od-pill od-tone-{{ dd.state === 'overdue' ? 'rose' : 'amber' }}" t-esc="dd.label"/>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- extra sections from other addons (registry "crm_modern.dashboard_sections") -->
+                    <t t-foreach="sections" t-as="section" t-key="section.key">
+                        <t t-component="section.Component" currencyId="d.currency_id"/>
+                    </t>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

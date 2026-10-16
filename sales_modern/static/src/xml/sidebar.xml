@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Standalone main component (no NavBar template inheritance → safe across Odoo updates). -->
+    <t t-name="sales_modern.Sidebar">
+        <t>
+        <aside t-if="visible" t-attf-class="o_ss_sidebar d-print-none {{ state.collapsed ? 'ss-collapsed' : '' }}"
+               t-att-data-rev="state.rev">
+            <div class="ss-sb-brand">
+                <img src="/sale/static/description/icon.png" alt=""/>
+                <div>
+                    <strong t-esc="brand"/>
+                    <small>Quotes, orders &amp; invoicing</small>
+                </div>
+            </div>
+            <nav class="ss-sb-nav" aria-label="Sales">
+                <t t-foreach="sections" t-as="section" t-key="section.id">
+                    <div t-if="section.childrenTree and section.childrenTree.length">
+                        <button type="button" class="ss-sb-group-label"
+                                t-att-aria-expanded="isGroupOpen(section) ? 'true' : 'false'"
+                                t-on-click="() => this.toggleGroup(section)">
+                            <t t-esc="section.name"/>
+                            <i class="fa fa-chevron-down" aria-hidden="true"/>
+                        </button>
+                        <ul t-if="isGroupOpen(section)" class="ss-sb-list">
+                            <t t-foreach="section.childrenTree" t-as="child" t-key="child.id">
+                                <li t-if="child.heading" class="ss-sb-subhead" t-esc="child.name"/>
+                                <li t-else=""><t t-call="sales_modern.SidebarItem"><t t-set="item" t-value="child"/></t></li>
+                            </t>
+                        </ul>
+                    </div>
+                    <ul t-else="" class="ss-sb-list">
+                        <li><t t-call="sales_modern.SidebarItem"><t t-set="item" t-value="section"/></t></li>
+                    </ul>
+                </t>
+            </nav>
+            <div class="ss-sb-foot">
+                <img t-attf-src="/web/image/res.users/{{ ssUser.id }}/avatar_128" alt=""/>
+                <div class="ss-sb-user">
+                    <strong t-esc="ssUser.name"/>
+                    <small t-esc="ssUser.login"/>
+                </div>
+                <button type="button" t-on-click="toggleCollapse"
+                        t-att-aria-label="state.collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+                        t-att-title="state.collapsed ? 'Expand sidebar' : 'Collapse sidebar'">
+                    <i t-attf-class="fa {{ state.collapsed ? 'fa-angle-double-right' : 'fa-angle-double-left' }}" aria-hidden="true"/>
+                </button>
+            </div>
+        </aside>
+        <!-- Reporting / Configuration / other apps: compact dropdowns in the top bar -->
+        <div t-if="visible and topSections.length" class="o_ss_topmenu d-print-none" role="menubar" aria-label="More">
+            <t t-foreach="topSections" t-as="section" t-key="section.id">
+                <Dropdown menuClass="'o_ss_topmenu_menu'" position="'bottom-start'">
+                    <button type="button" role="menuitem" t-attf-class="ss-tm-btn {{ isSectionActive(section) ? 'active' : '' }}">
+                        <i t-attf-class="fa {{ topIcon(section) }}" aria-hidden="true"/>
+                        <span t-esc="section.name"/>
+                        <i class="fa fa-angle-down ss-tm-caret" aria-hidden="true"/>
+                    </button>
+                    <t t-set-slot="content">
+                        <t t-foreach="section.childrenTree" t-as="child" t-key="child.id">
+                            <div t-if="child.heading" class="dropdown-header ss-tm-head" t-esc="child.name"/>
+                            <DropdownItem t-else="" class="'ss-tm-item' + (isActive(child) ? ' active' : '')" onSelected="() => this.open(child)">
+                                <i t-attf-class="fa {{ icon(child) }}" aria-hidden="true"/>
+                                <span t-esc="child.name"/>
+                            </DropdownItem>
+                        </t>
+                    </t>
+                </Dropdown>
+            </t>
+        </div>
+        </t>
+    </t>
+
+    <t t-name="sales_modern.SidebarItem">
+        <a t-att-href="href(item)" class="ss-sb-item" t-att-class="{ active: isActive(item) }"
+           t-att-aria-current="isActive(item) ? 'page' : undefined" t-att-title="item.name"
+           t-att-data-menu-xmlid="item.xmlid" t-on-click.prevent="() => this.open(item)">
+            <i t-attf-class="fa {{ icon(item) }}" aria-hidden="true"/>
+            <span class="ss-sb-label" t-esc="item.name"/>
+        </a>
+    </t>
+
+</templates>

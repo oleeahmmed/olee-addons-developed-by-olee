@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="crm_modern.RecordPicker">
+        <div class="cm-picker">
+            <i class="fa fa-search cm-picker-icon" aria-hidden="true"/>
+            <input t-att-id="props.id" t-ref="input" type="text" class="cm-input cm-input-sm" autocomplete="off"
+                   t-att-placeholder="label or props.placeholder" t-att-value="state.editing ? state.q : label"
+                   role="combobox" t-att-aria-expanded="state.open ? 'true' : 'false'"
+                   t-on-input="onInput" t-on-focus="onFocus" t-on-blur="onBlur" t-on-keydown="onKeydown"/>
+            <ul t-if="state.open and (state.results.length or !state.loading)" class="cm-picker-menu" role="listbox">
+                <t t-foreach="state.results" t-as="r" t-key="r[0]">
+                    <li role="option" t-att-aria-selected="r_index === state.active ? 'true' : 'false'"
+                        t-att-class="{ 'cm-active': r_index === state.active }"
+                        t-on-mousedown.prevent="noop" t-on-click="() => this.pick(r)" t-esc="r[1]"/>
+                </t>
+                <li t-if="!state.results.length" class="cm-picker-empty">No match</li>
+            </ul>
+        </div>
+    </t>
+
+    <t t-name="crm_modern.RecordActions">
+        <section class="cm-card cm-actions-card" aria-label="Quick actions">
+            <div class="cm-tabs" role="tablist">
+                <t t-foreach="tabs" t-as="tab" t-key="tab.key">
+                    <button type="button" role="tab" t-att-aria-selected="state.tab === tab.key ? 'true' : 'false'"
+                            t-att-class="{ 'cm-on': state.tab === tab.key }" t-on-click="() => this.setTab(tab.key)">
+                        <i t-attf-class="fa {{ tab.icon }}" aria-hidden="true"/><span t-esc="tab.label"/>
+                    </button>
+                </t>
+            </div>
+
+            <!-- send message / log note -->
+            <div t-if="state.tab === 'message' or state.tab === 'note'" class="cm-tab-panel" role="tabpanel">
+                <div t-attf-class="cm-compose {{ isMessage ? '' : 'cm-compose--note' }}">
+                    <textarea class="cm-compose-input" rows="2" t-model="state.body" t-on-keydown="onBodyKeydown"
+                              t-att-aria-label="isMessage ? 'Message to followers' : 'Internal note'"
+                              t-att-placeholder="isMessage ? 'Write to the customer and followers… (Ctrl+Enter to send)' : 'Log an internal note — only your team sees it… (Ctrl+Enter)'"/>
+                    <div class="cm-compose-bar">
+                        <span class="cm-muted cm-compose-hint">
+                            <t t-if="isMessage"><i class="fa fa-users" aria-hidden="true"/> Followers are notified by email</t>
+                            <t t-else=""><i class="fa fa-lock" aria-hidden="true"/> Internal — not sent to the customer</t>
+                        </span>
+                        <button type="button" class="cm-btn cm-btn-ghost cm-btn-sm" title="Full composer: recipients, templates, attachments" t-on-click="fullComposer">
+                            <i class="fa fa-paperclip" aria-hidden="true"/> <span class="cm-hide-sm">Attach / full editor</span>
+                        </button>
+                        <button type="button" class="cm-btn cm-btn-primary cm-btn-sm" t-att-disabled="state.busy or !state.body.trim()" t-on-click="post">
+                            <t t-if="isMessage"><i class="fa fa-paper-plane" aria-hidden="true"/> Send</t>
+                            <t t-else=""><i class="fa fa-check" aria-hidden="true"/> Log note</t>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- quick activity -->
+            <div t-elif="state.tab === 'activity'" class="cm-tab-panel cm-quick-act" role="tabpanel">
+                <div class="cm-chips" role="radiogroup" aria-label="Activity type">
+                    <t t-foreach="state.types" t-as="t" t-key="t.id">
+                        <button type="button" role="radio" t-att-aria-checked="state.act.typeId === t.id ? 'true' : 'false'"
+                                t-att-class="{ 'cm-on': state.act.typeId === t.id }" t-on-click="() => this.pickType(t)">
+                            <i t-attf-class="fa {{ t.icon or 'fa-tasks' }}" aria-hidden="true"/> <t t-esc="t.name"/>
+                        </button>
+                    </t>
+                </div>
+                <div class="cm-quick-act-row">
+                    <input type="text" class="cm-input cm-input-sm" t-model="state.act.summary" aria-label="Summary"
+                           t-att-placeholder="(activityType and activityType.summary) or 'Summary, e.g. Discuss proposal'"
+                           t-on-keydown="(ev) => ev.key === 'Enter' and this.schedule()"/>
+                    <select class="cm-select cm-select-sm" aria-label="Assigned to" t-on-change="onUser">
+                        <t t-foreach="props.users" t-as="u" t-key="u.id">
+                            <option t-att-value="u.id" t-att-selected="state.act.userId === u.id" t-esc="u.name"/>
+                        </t>
+                    </select>
+                </div>
+                <div class="cm-quick-act-row cm-quick-act-row--foot">
+                    <div class="cm-chips cm-chips--sm" role="radiogroup" aria-label="Due">
+                        <t t-foreach="whenOptions" t-as="o" t-key="o.key">
+                            <button type="button" role="radio" t-att-aria-checked="state.act.when === o.key ? 'true' : 'false'"
+                                    t-att-class="{ 'cm-on': state.act.when === o.key }" t-on-click="() => this.pickWhen(o.key)" t-esc="o.label"/>
+                        </t>
+                        <input type="date" t-attf-class="cm-chip-date {{ state.act.when === 'date' ? 'cm-on' : '' }}" aria-label="Due date"
+                               t-att-value="state.act.date" t-on-change="onDate"/>
+                    </div>
+                    <button type="button" class="cm-btn cm-btn-ghost cm-btn-sm" title="Odoo scheduler: notes, activity plans" t-on-click="props.onAdvancedSchedule">
+                        <i class="fa fa-list-ol" aria-hidden="true"/> <span class="cm-hide-sm">Plan / more</span>
+                    </button>
+                    <button type="button" class="cm-btn cm-btn-primary cm-btn-sm" t-att-disabled="state.busy or !state.act.typeId" t-on-click="schedule">
+                        <i class="fa fa-calendar-check-o" aria-hidden="true"/> Schedule
+                    </button>
+                </div>
+            </div>
+
+            <!-- tabs registered by other addons (quotation...) -->
+            <div t-elif="extraTab" class="cm-tab-panel" role="tabpanel">
+                <t t-component="extraTab.Component" record="props.record" reload="props.reload"/>
+            </div>
+        </section>
+    </t>
+
+</templates>

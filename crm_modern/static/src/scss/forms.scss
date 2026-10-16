@@ -1,0 +1,471 @@
+// Same look as Sales Modern for Odoo's own forms (CSS only, no template changes).
+// ============================================================================
+// Odoo forms inside the CRM app (lead, quotation / order, customer...): same skin as Sales Modern
+// ============================================================================
+$cm-app: '.o_web_client:has(.o_cm_sidebar) > .o_action_manager';
+
+// ---------- form control panel: breadcrumb + New + pager ----------
+#{$cm-app} .o_action:has(.o_form_view) > .o_control_panel,
+#{$cm-app} .o_form_view .o_control_panel {
+    background: var(--cm-card);
+    border-bottom: 1px solid var(--cm-border);
+    padding-top: 0.625rem !important;
+    padding-bottom: 0.625rem !important;
+    .o_breadcrumb {
+        .breadcrumb-item, .breadcrumb-item a { font-size: 0.8125rem; color: var(--cm-muted-fg); }
+        .o_last_breadcrumb_item { font-weight: 650; color: var(--cm-fg); }
+    }
+    .o_control_panel_main_buttons .btn-outline-primary,
+    .o_control_panel_main_buttons .btn-secondary,
+    .o_form_button_create {
+        --btn-bg: var(--cm-card);
+        --btn-color: var(--cm-primary);
+        --btn-border-color: color-mix(in srgb, var(--cm-primary) 35%, var(--cm-border));
+        --btn-hover-bg: var(--cm-primary-soft);
+        --btn-hover-color: var(--cm-primary-soft-fg);
+        --btn-hover-border-color: var(--cm-primary);
+        border-radius: 0.5rem;
+        font-weight: 600;
+        box-shadow: inset 0 -1px 0 var(--cm-edge), var(--cm-shadow-xs);
+    }
+    // smart buttons (Invoices, Journal Items, Sale Orders...) as one matte pill group
+    .o-form-buttonbox {
+        border: 1px solid var(--cm-border);
+        border-radius: 0.625rem;
+        overflow: hidden;
+        background: var(--cm-card);
+        box-shadow: inset 0 -1px 0 var(--cm-edge), var(--cm-shadow-xs);
+        .oe_stat_button {
+            border: 0 !important; border-radius: 0 !important; background: transparent;
+            & + .oe_stat_button { border-left: 1px solid var(--cm-border) !important; }
+            &:hover { background: var(--cm-card-matte); }
+            .o_button_icon { color: var(--cm-primary); }
+            .o_stat_value { font-weight: 650; color: var(--cm-fg); }
+            .o_stat_text { color: var(--cm-muted-fg); }
+        }
+    }
+}
+
+#{$cm-app} .o_form_view {
+    --formView-sheet-border-radius-md: 1rem;
+    --formView-sheet-padding-y-lg: 1.75rem;
+    --formView-sheet-padding-x-lg: 2rem;
+    --formView-sheet-padding-y-xxl: 1.75rem;
+    --formView-sheet-padding-x-xxl: 2rem;
+    background: var(--cm-bg);
+
+    // ---------- action buttons (left) + Odoo's status steps (right), as in CRM ----------
+    .o_form_statusbar {
+        background: var(--cm-bg);
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.75rem !important;
+        gap: 0.75rem;
+        align-items: center;
+    }
+    .o_statusbar_buttons {
+        gap: 0.375rem !important;
+        .btn {
+            height: 2.25rem; padding: 0 1rem; border-radius: 0.5rem;
+            font-size: 0.8125rem; font-weight: 600; letter-spacing: -0.005em;
+            display: inline-flex; align-items: center; gap: 0.375rem;
+            transition: background-color 150ms var(--cm-ease), border-color 150ms var(--cm-ease),
+                        box-shadow 150ms var(--cm-ease), transform 100ms var(--cm-ease);
+            &:active { transform: translateY(1px); }
+            &:focus-visible { box-shadow: 0 0 0 3px var(--cm-ring) !important; }
+        }
+        // matte secondary buttons: white fill, hairline border, soft bottom edge
+        .btn-secondary, .btn-light {
+            --btn-bg: var(--cm-card);
+            --btn-color: var(--cm-fg);
+            --btn-border-color: var(--cm-border);
+            --btn-hover-bg: var(--cm-card-matte);
+            --btn-hover-color: var(--cm-fg);
+            --btn-hover-border-color: color-mix(in srgb, var(--cm-fg) 16%, var(--cm-border));
+            --btn-active-bg: var(--cm-muted);
+            --btn-active-color: var(--cm-fg);
+            --btn-active-border-color: color-mix(in srgb, var(--cm-fg) 16%, var(--cm-border));
+            box-shadow: inset 0 -1px 0 var(--cm-edge), var(--cm-shadow-xs);
+        }
+        // the main action (Confirm, Create Invoice, Register Payment...)
+        .btn-primary {
+            --btn-border-color: color-mix(in srgb, var(--cm-primary) 85%, black);
+            --btn-hover-border-color: color-mix(in srgb, var(--cm-primary) 80%, black);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 1px 2px rgba(16, 24, 40, 0.12);
+        }
+        .btn-link { box-shadow: none; }
+        .o-dropdown .dropdown-toggle { border-radius: 0.5rem; }
+    }
+    // Quotation > Quotation Sent > Sales Order: Odoo's own arrow steps, every step visible
+    .o_field_statusbar .o_statusbar_status {
+        > .o_arrow_button { font-size: 0.8125rem; font-weight: 500; }
+        > .o_arrow_button_current { color: var(--cm-primary) !important; font-weight: 600; }
+    }
+
+    // ---------- the sheet: one matte white card (info area on top, tabs below) ----------
+    .o_form_sheet {
+        border-color: var(--cm-border);
+        background: linear-gradient(180deg, var(--cm-card) 0%, var(--cm-card-matte) 100%);
+        box-shadow: var(--cm-shadow-md);
+    }
+    .oe_title {
+        margin-bottom: 0.5rem;
+        h1, .o_field_widget[name="name"] { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.02em; color: var(--cm-fg); }
+    }
+    .o_inner_group {
+        row-gap: 0.25rem;
+    }
+    .o_form_label {
+        color: var(--cm-muted-fg); font-weight: 500; font-size: 0.8125rem;
+        sup { color: var(--cm-primary); }
+    }
+    .o_form_uri { color: var(--cm-fg); font-weight: 500; &:hover { color: var(--cm-primary); } }
+
+    // editable fields: a quiet underline that turns into the brand colour on focus
+    .o_field_widget:not(.o_field_x2many) .o_input {
+        border-color: transparent transparent var(--cm-border) transparent;
+        transition: border-color 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease);
+        &:hover { border-bottom-color: color-mix(in srgb, var(--cm-fg) 25%, var(--cm-border)); }
+        &:focus { border-bottom-color: var(--cm-primary); box-shadow: 0 1px 0 0 var(--cm-primary); }
+    }
+
+    // smart buttons (Invoices, Delivery, Customer Preview...)
+    .oe_button_box .oe_stat_button {
+        border-radius: var(--cm-radius);
+        .o_stat_value { font-weight: 650; color: var(--cm-fg); }
+        .o_button_icon { color: var(--cm-primary); }
+        &:hover { background: var(--cm-primary-soft); }
+    }
+
+    // ---------- Order Lines / Other Info tabs: Odoo's tabs, brand colour on the open one ----------
+    .o_notebook .nav-tabs .nav-link.active { color: var(--cm-primary); font-weight: 600; }
+
+    // ---------- order lines table ----------
+    .o_field_x2many_list .o_list_renderer { background: transparent; }
+    .o_field_x2many_list .o_list_renderer .o_list_table {
+        background: transparent;
+        thead th {
+            height: 2.5rem; font-size: 0.75rem; font-weight: 600; color: var(--cm-muted-fg);
+            background: var(--cm-muted); border-color: var(--cm-border);
+        }
+        tbody tr.o_data_row {
+            > td { border-color: var(--cm-border); padding-top: 0.625rem; padding-bottom: 0.625rem; }
+            &:hover > td { background: color-mix(in srgb, var(--cm-muted) 55%, transparent); }
+            &.o_selected_row > td { background: var(--cm-primary-soft); }
+        }
+        tr.o_is_line_section > td { background: color-mix(in srgb, var(--cm-primary-soft) 60%, var(--cm-card)); font-weight: 650; }
+        tr.o_is_line_note > td { color: var(--cm-muted-fg); font-style: italic; }
+        .o_field_x2many_list_row_add a {
+            color: var(--cm-primary); font-weight: 500; margin-right: 0.875rem;
+            &:hover { text-decoration: underline; }
+        }
+        .o_list_record_remove { color: var(--cm-subtle-fg); &:hover { color: var(--cm-danger); } }
+        tbody tr:not(.o_data_row):not(.o_group_header) td { border-color: transparent; }
+    }
+
+    // ---------- totals ----------
+    .o_field_account-tax-totals-field > table {
+        min-width: 17rem; padding: 0.75rem 1rem; border-radius: var(--cm-radius);
+        background: var(--cm-card);
+        border: 1px solid var(--cm-border); border-collapse: separate; border-spacing: 0;
+        box-shadow: inset 0 -1px 0 var(--cm-edge), var(--cm-shadow-xs);
+        td { padding: 0.25rem 0.375rem; font-variant-numeric: tabular-nums; }
+        tr:last-child td { padding-top: 0.5rem; border-top: 1px solid var(--cm-border); }
+        .o_tax_total_label { color: var(--cm-muted-fg); font-weight: 500; }
+        .oe_subtotal_footer_separator { color: var(--cm-fg); font-size: 1.25rem !important; }
+    }
+
+    .badge { border-radius: 999px; font-weight: 500; }
+    .alert { border-radius: var(--cm-radius); }
+}
+
+// chatter next to / below the form
+#{$cm-app} .o-mail-Form-chatter {
+    background: var(--cm-card);
+    // Odoo lets the side chatter take all the free width; with the sidebar that squeezes
+    // the order lines, so the chatter keeps a fixed width and the sheet gets the rest.
+    &.o-aside { flex-grow: 0; width: 23rem; border-left: 1px solid var(--cm-border); }
+    .o-mail-Chatter-topbar { flex-wrap: wrap; row-gap: 0.375rem; overflow: visible; }
+}
+#{$cm-app} .o_form_view .o_form_sheet_bg:has(+ .o-mail-Form-chatter.o-aside) { flex: 1 1 auto; min-width: 0; }
+
+// ============================================================================
+// Form header (v4): one white band on top of the sheet
+//   row 1  [+ New]  ‹ Quotations / S00023 ⚙  · smart buttons · pager
+//   row 2  [✓ Confirm] [➤ Send] [🖨 Print] [👁 Preview] [✕ Cancel]   ( Quotation › Sent › Sales Order )
+// Odoo's own control panel and status bar, only re-styled (no template changes):
+// Odoo still decides which buttons exist and when.
+// ============================================================================
+@mixin cm-tone($bg, $fg, $border, $hover-bg, $hover-border: $border) {
+    --btn-bg: #{$bg}; --btn-color: #{$fg}; --btn-border-color: #{$border};
+    --btn-hover-bg: #{$hover-bg}; --btn-hover-color: #{$fg}; --btn-hover-border-color: #{$hover-border};
+    --btn-active-bg: #{$hover-bg}; --btn-active-color: #{$fg}; --btn-active-border-color: #{$hover-border};
+}
+@mixin cm-icon($glyph) {
+    &::before { content: $glyph; font-family: FontAwesome; font-weight: normal; font-size: 0.875rem; line-height: 1; margin-right: 0.5rem; }
+}
+// solid "do it" buttons
+@mixin cm-solid($bg, $border, $hover) {
+    @include cm-tone($bg, #ffffff, $border, $hover, $hover);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 1px 2px rgba(16, 24, 40, 0.14), 0 2px 6px -2px rgba(16, 24, 40, 0.16) !important;
+}
+// outlined buttons: white, hairline border, soft bottom edge — clearly clickable
+@mixin cm-outline($fg, $border, $hover-bg) {
+    @include cm-tone(var(--cm-card), $fg, $border, $hover-bg, color-mix(in srgb, #{$fg} 30%, var(--cm-border)));
+    box-shadow: inset 0 -1px 0 var(--cm-edge), 0 1px 2px rgba(16, 24, 40, 0.05) !important;
+}
+
+#{$cm-app} .o_action:has(.o_form_view) > .o_control_panel,
+#{$cm-app} .o_form_view .o_control_panel {
+    background: var(--cm-card);
+    border-bottom: 0 !important;
+    padding: 0.875rem 1.5rem 0.625rem !important;
+
+    .o_control_panel_main { align-items: center !important; gap: 0.75rem; }
+    .o_control_panel_breadcrumbs { align-items: center; gap: 0.875rem !important; }
+
+    // + New: small outlined button with a plus badge
+    .o_form_button_create {
+        @include cm-outline(var(--cm-fg), var(--cm-border), var(--cm-card-matte));
+        height: 2.25rem; padding: 0 0.875rem 0 0.375rem; border-radius: 0.5rem;
+        display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; font-weight: 600;
+        &::before {
+            content: "\f067"; font-family: FontAwesome; font-size: 0.6875rem; font-weight: normal;
+            display: inline-grid; place-items: center; width: 1.5rem; height: 1.5rem; border-radius: 0.375rem;
+            background: var(--cm-primary); color: var(--cm-primary-fg);
+        }
+        &:hover::before { background: color-mix(in srgb, var(--cm-primary) 88%, black); }
+    }
+
+    // breadcrumb: "‹ Quotations" as a small back link, the record name big under it
+    .o_breadcrumb {
+        align-items: center;
+        .breadcrumb { margin: 0; align-items: center; }
+        .breadcrumb-item, .breadcrumb-item a { font-size: 0.75rem; font-weight: 600; color: var(--cm-muted-fg); text-decoration: none; letter-spacing: 0.01em; }
+        .breadcrumb-item a {
+            display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.125rem 0.375rem 0.125rem 0.25rem; margin-left: -0.25rem;
+            border-radius: 0.375rem;
+            &::before { content: "\f104"; font-family: FontAwesome; font-size: 0.875rem; font-weight: normal; }
+            &:hover { background: var(--cm-muted); color: var(--cm-primary); }
+        }
+        .breadcrumb-item + .breadcrumb-item::before { content: "/"; color: var(--cm-subtle-fg); padding: 0 0.25rem; }
+        .o_last_breadcrumb_item { font-size: 1.375rem !important; font-weight: 700; letter-spacing: -0.02em; color: var(--cm-fg); }
+    }
+    .o_control_panel_breadcrumbs_actions .btn {
+        width: 1.875rem; height: 1.875rem; padding: 0; border-radius: 0.5rem; color: var(--cm-subtle-fg);
+        &:hover { background: var(--cm-muted); color: var(--cm-fg); }
+    }
+    .o_form_status_indicator .btn { border-radius: 0.375rem; }
+
+    .o_pager {
+        align-items: center;
+        .o_pager_counter { font-size: 0.8125rem; color: var(--cm-muted-fg); }
+        .btn {
+            width: 2.25rem; height: 2.25rem; padding: 0; border: 1px solid var(--cm-border); background: var(--cm-card);
+            color: var(--cm-muted-fg); box-shadow: inset 0 -1px 0 var(--cm-edge);
+            &:hover { background: var(--cm-card-matte); color: var(--cm-fg); }
+        }
+        .btn-group .btn:first-child { border-radius: 0.5rem 0 0 0.5rem; }
+        .btn-group .btn:last-child { border-radius: 0 0.5rem 0.5rem 0; margin-left: -1px; }
+    }
+}
+
+#{$cm-app} .o_form_view {
+    .o_form_statusbar {
+        background: var(--cm-card) !important;
+        border-bottom: 1px solid var(--cm-border);
+        box-shadow: 0 8px 16px -14px rgba(16, 24, 40, 0.35);
+        margin-bottom: 1.25rem !important;
+        padding-top: 0.25rem !important;
+        padding-bottom: 0.875rem !important;
+        padding-inline: 1.5rem !important;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    // ---------- actions: every one a real button, coloured and ordered by what it does ----------
+    .o_statusbar_buttons {
+        gap: 0.5rem !important;
+        > .btn, > .o-dropdown > .btn {
+            order: 20;
+            height: 2.375rem; padding: 0 1rem; border-radius: 0.5rem; display: inline-flex; align-items: center;
+            font-size: 0.8125rem; font-weight: 600; letter-spacing: -0.005em; white-space: nowrap;
+            transition: background-color 150ms var(--cm-ease), border-color 150ms var(--cm-ease), color 150ms var(--cm-ease), transform 100ms var(--cm-ease);
+            &:hover { transform: translateY(-1px); }
+            &:active { transform: translateY(0); }
+            &:focus-visible { box-shadow: 0 0 0 3px var(--cm-ring) !important; }
+            @media (prefers-reduced-motion: reduce) { transition: none; &:hover { transform: none; } }
+        }
+        // any other Odoo action: neutral outlined
+        > .btn-secondary, > .btn-light, > .btn-link {
+            @include cm-outline(var(--cm-fg), var(--cm-border), var(--cm-card-matte));
+        }
+
+        // next step on a confirmed order / posted invoice: Create Invoice (violet), Pay (green)
+        > .btn#create_invoice, > .btn#create_invoice_percentage {
+            order: 0;
+            @include cm-solid(#7c3aed, #6d28d9, #6d28d9);
+            @include cm-icon("\f15c");
+            &:not(.btn-primary) { @include cm-outline(#6d28d9, #ddd6fe, #f5f3ff); }
+        }
+        > .btn[name="action_register_payment"] {
+            order: 0;
+            @include cm-solid(#059669, #047857, #047857);
+            @include cm-icon("\f0d6");
+            &:not(.oe_highlight):not(.btn-primary) { @include cm-outline(#047857, #a7f3d0, #ecfdf5); }
+        }
+        // 1. Confirm / Post: green
+        > .btn[name="action_confirm"], > .btn[name="action_post"] {
+            order: 1;
+            @include cm-solid(#059669, #047857, #047857);
+            @include cm-icon("\f00c");
+        }
+        // 2. Send by email: blue
+        > .btn[name="action_quotation_send"], > .btn[name="action_invoice_sent"] {
+            order: 2;
+            @include cm-solid(var(--cm-primary), color-mix(in srgb, var(--cm-primary) 85%, black), color-mix(in srgb, var(--cm-primary) 88%, black));
+            @include cm-icon("\f1d8");
+        }
+        // 3. Preview / Print: outlined with an icon
+        > .btn[name="action_preview_sale_order"], > .btn[name="preview_invoice"],
+        > .btn[name$="report_saleorder"], > .btn[name="action_print_pdf"], > .btn.o_mh_print {
+            order: 10;
+            @include cm-outline(var(--cm-fg), var(--cm-border), var(--cm-card-matte));
+            &::before { color: var(--cm-muted-fg); }
+        }
+        > .btn[name$="report_saleorder"], > .btn[name="action_print_pdf"], > .btn.o_mh_print { order: 9; }
+        > .btn[name="action_preview_sale_order"], > .btn[name="preview_invoice"] { @include cm-icon("\f06e"); }
+        > .btn[name$="report_saleorder"], > .btn[name="action_print_pdf"], > .btn.o_mh_print { @include cm-icon("\f02f"); }
+        // "More": every other Odoo action, in a menu
+        > .btn.o_mh_more {
+            order: 95; gap: 0.5rem; padding: 0 0.875rem;
+            @include cm-outline(var(--cm-fg), var(--cm-border), var(--cm-card-matte));
+            .fa { color: var(--cm-muted-fg); font-size: 0.875rem; }
+            &[aria-expanded="true"], &.show { --btn-bg: var(--cm-muted); }
+        }
+        // 4. Back to draft / lock / unlock
+        > .btn[name="action_draft"], > .btn[name="button_draft"] { order: 15; @include cm-icon("\f0e2"); }
+        > .btn[name="action_lock"], > .btn[name="button_hash"] { order: 16; @include cm-icon("\f023"); }
+        > .btn[name="action_unlock"] { order: 16; @include cm-icon("\f09c"); }
+        // 5. Cancel: last, outlined in red so it reads as a careful action
+        > .btn[name="action_cancel"], > .btn[name="button_cancel"], > .btn[name="button_request_cancel"] {
+            order: 90;
+            @include cm-outline(#dc2626, #fecaca, #fef2f2);
+            @include cm-icon("\f00d");
+        }
+    }
+
+    // ---------- status: segmented stepper  ( Quotation › Sent › Sales Order ) ----------
+    .o_field_statusbar .o_statusbar_status {
+        // Odoo folds the steps when the track is taller than one step, so the track
+        // gets no vertical padding/border: its frame is drawn with spread shadows instead
+        display: inline-flex; flex-wrap: wrap-reverse; align-items: center; gap: 1.125rem;
+        padding: 0 0.125rem !important; margin-right: 0.25rem; border: 0 !important; border-radius: 0.625rem !important;
+        background: var(--cm-muted) !important;
+        box-shadow: 0 0 0 0.25rem var(--cm-muted), 0 0 0 calc(0.25rem + 1px) var(--cm-border) !important;
+
+        > .o_arrow_button:not(.d-none) {
+            position: relative; display: inline-flex; align-items: center; gap: 0.4rem;
+            height: 1.875rem; margin: 0 !important; padding: 0 0.75rem !important;
+            border: 0 !important; border-radius: 0.5rem !important; background: transparent !important;
+            color: var(--cm-muted-fg) !important; font-size: 0.8125rem; font-weight: 500; white-space: nowrap;
+            opacity: 1 !important; box-shadow: none !important; clip-path: none !important;
+            &::before { display: none !important; content: none !important; }
+            // chevron to the next step (Odoo lists steps right to left; .o_first is the rightmost)
+            &::after {
+                content: "\f105" !important; font-family: FontAwesome; font-size: 0.8125rem; line-height: 1;
+                display: block !important; position: absolute !important; top: 50% !important; right: -0.875rem !important; left: auto !important;
+                width: auto !important; height: auto !important; margin-top: -0.4rem; border: 0 !important; background: none !important;
+                color: var(--cm-subtle-fg) !important; transform: none !important; clip-path: none !important;
+            }
+            &.o_first::after { display: none !important; }
+            &:not(:disabled):not(.o_arrow_button_current):hover { color: var(--cm-fg) !important; background: color-mix(in srgb, var(--cm-card) 70%, transparent) !important; }
+            &.o_arrow_button_current {
+                background: var(--cm-card) !important; color: var(--cm-primary) !important; font-weight: 650;
+                box-shadow: 0 0 0 1px var(--cm-border), 0 1px 3px rgba(16, 24, 40, 0.1) !important;
+                // check-circle in front of the current step (a span would need a template; use the label's padding)
+                padding-left: 1.875rem !important;
+                background-image: radial-gradient(circle at 0.95rem 50%, var(--cm-primary) 0 0.3125rem, transparent 0.34rem) !important;
+            }
+        }
+        > .o_arrow_button.dropdown-toggle:not(.d-none)::after { display: none !important; }
+        // small screens: Odoo shows only the current step as a dropdown
+        > .dropdown-toggle:not(.o_arrow_button):not(.d-none) {
+            height: 1.875rem; padding: 0 0.75rem !important; border: 0 !important; border-radius: 0.5rem !important;
+            background: var(--cm-card) !important; color: var(--cm-primary) !important; font-size: 0.8125rem; font-weight: 650;
+            box-shadow: 0 0 0 1px var(--cm-border), 0 1px 3px rgba(16, 24, 40, 0.1) !important; clip-path: none !important;
+        }
+    }
+
+    // ---------- totals: Odoo draws a hairline over the totals group; the card is enough ----------
+    .oe_subtotal_footer { border-top: 0 !important; padding-top: 0 !important; }
+
+    // ---------- notebook tabs (Order Lines / Other Info, Invoice Lines / Journal Items...) ----------
+    .o_notebook {
+        .o_notebook_headers { margin: 0.25rem 0 1rem !important; padding: 0 !important; border: 0 !important; overflow: visible; }
+        .nav-tabs, .nav.nav-tabs {
+            display: inline-flex !important; flex-wrap: wrap; gap: 0.125rem; width: auto;
+            padding: 0.25rem; margin: 0 !important; border-radius: 0.75rem;
+            background: var(--cm-muted); border: 1px solid var(--cm-border) !important;
+            box-shadow: inset 0 1px 2px rgba(16, 24, 40, 0.04);
+        }
+        .nav-item { margin: 0 !important; }
+        .nav-link {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            height: 2.125rem; margin: 0 !important; padding: 0 0.95rem !important;
+            border: 0 !important; border-radius: 0.5rem !important; background: transparent;
+            color: var(--cm-muted-fg) !important; font-size: 0.8125rem; font-weight: 500; white-space: nowrap;
+            transition: background-color 150ms var(--cm-ease), color 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease);
+            &::before { content: "\f0c9"; font-family: FontAwesome; font-weight: normal; font-size: 0.8125rem; opacity: 0.7; }
+            &:hover { color: var(--cm-fg) !important; background: color-mix(in srgb, var(--cm-card) 65%, transparent); }
+            &.active {
+                color: var(--cm-fg) !important; font-weight: 600; background: var(--cm-card) !important;
+                box-shadow: 0 0 0 1px var(--cm-border), 0 1px 3px rgba(16, 24, 40, 0.1) !important;
+                &::before { color: var(--cm-primary); opacity: 1; }
+            }
+            &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--cm-ring) !important; }
+        }
+        .nav-link[name="order_lines"]::before, .nav-link[name="invoice_tab"]::before { content: "\f03a"; }
+        .nav-link[name="other_information"]::before, .nav-link[name="other_tab"]::before, .nav-link[name="other_tab_entry"]::before { content: "\f05a"; }
+        .nav-link[name="aml_tab"]::before { content: "\f0ce"; }
+        .nav-link[name="customer_signature"]::before { content: "\f040"; }
+        .nav-link[name="optional_products"]::before { content: "\f067"; }
+        .nav-link[name="sales_purchases"]::before { content: "\f07a"; }
+        .nav-link[name="contact_addresses"]::before { content: "\f2bb"; }
+        .nav-link[name="accounting"]::before { content: "\f19c"; }
+        .nav-link[name="internal_notes"]::before { content: "\f249"; }
+        .o_notebook_content, .tab-content { border: 0 !important; }
+    }
+
+    // ---------- order / invoice lines: a framed table ----------
+    .o_notebook .o_field_x2many_list .o_list_renderer {
+        border: 1px solid var(--cm-border); border-radius: 0.75rem; overflow: hidden; background: var(--cm-card);
+        .o_list_table {
+            margin-bottom: 0;
+            thead th {
+                background: var(--cm-card-matte) !important; border-bottom: 1px solid var(--cm-border) !important; border-top: 0 !important;
+                font-size: 0.6875rem !important; font-weight: 650 !important; letter-spacing: 0.04em; text-transform: uppercase; color: var(--cm-muted-fg) !important;
+            }
+            .o_field_x2many_list_row_add { padding: 0.5rem 0.625rem !important; }
+            .o_field_x2many_list_row_add a {
+                display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.3rem 0.625rem; margin-right: 0.25rem !important;
+                border-radius: 0.5rem; text-decoration: none !important; font-size: 0.8125rem; font-weight: 600;
+                &::before { content: "\f067"; font-family: FontAwesome; font-weight: normal; font-size: 0.625rem; }
+                &:hover { background: var(--cm-primary-soft); text-decoration: none !important; }
+            }
+            tfoot td { border-top: 0 !important; background: transparent; }
+        }
+    }
+
+    // ---------- terms & conditions, notes: a soft writing area ----------
+    .o_form_sheet .o_field_html[name="note"], .o_form_sheet .o_field_html[name="narration"] {
+        .note-editable, .odoo-editor-editable {
+            min-height: 5.5rem; padding: 0.75rem 0.875rem !important; border-radius: 0.625rem;
+            border: 1px dashed var(--cm-border); background: color-mix(in srgb, var(--cm-card-matte) 60%, transparent);
+            &:focus { border-style: solid; border-color: var(--cm-primary); background: var(--cm-card); }
+        }
+    }
+
+    // the sales order name is already shown big in the breadcrumb: don't repeat it in the sheet
+    &.o_sale_order .o_form_sheet > .oe_title,
+    &.o_sale_order .o_form_sheet .oe_title:has(.o_field_widget[name="name"]) { display: none; }
+}

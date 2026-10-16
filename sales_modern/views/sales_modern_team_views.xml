@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Sales team card for the Sales Modern "Sales Teams" page. Standalone view (no
+        inherit_id / xpath) with a low priority, so Odoo's own team kanban is unchanged.
+        Leader and salespeople use Odoo's avatar widgets; only sales managers can edit them.
+    -->
+    <record id="crm_team_kanban_sales_modern" model="ir.ui.view">
+        <field name="name">crm.team.kanban.sales.modern</field>
+        <field name="model">crm.team</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <kanban highlight_color="color" class="o_ss_team_kanban" sample="1" quick_create="false">
+                <field name="currency_id"/>
+                <field name="active"/>
+                <field name="invoiced"/>
+                <field name="invoiced_target"/>
+                <field name="sales_modern_member_count"/>
+                <templates>
+                    <t t-name="menu">
+                        <a role="menuitem" type="object" name="sales_modern_open_quotations" class="dropdown-item">Quotations</a>
+                        <a role="menuitem" type="object" name="sales_modern_open_orders" class="dropdown-item">Sales orders</a>
+                        <a t-if="widget.editable" role="menuitem" type="open" class="dropdown-item">Edit</a>
+                        <a t-if="widget.editable and record.active.raw_value" role="menuitem" type="archive" class="dropdown-item">Archive</a>
+                        <a t-if="widget.editable and !record.active.raw_value" role="menuitem" type="unarchive" class="dropdown-item">Restore</a>
+                        <a t-if="widget.deletable" role="menuitem" type="delete" class="dropdown-item">Delete</a>
+                        <div role="separator" class="dropdown-divider"/>
+                        <field name="color" widget="kanban_color_picker"/>
+                    </t>
+                    <t t-name="card">
+                        <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+
+                        <div class="ss-tc-head">
+                            <span class="ss-tc-logo"><i class="fa fa-users" title="Sales team"/></span>
+                            <div class="ss-tc-titles">
+                                <field name="name" class="ss-tc-title"/>
+                                <span class="ss-tc-sub">
+                                    <t t-esc="record.sales_modern_member_count.raw_value"/>
+                                    <t t-if="record.sales_modern_member_count.raw_value === 1"> salesperson</t>
+                                    <t t-else=""> salespeople</t>
+                                    <field name="company_id" groups="base.group_multi_company" class="ss-tc-company"/>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="ss-tc-people">
+                            <div class="ss-tc-person">
+                                <span class="ss-tc-label">Team leader</span>
+                                <div class="d-flex align-items-center gap-2 min-w-0">
+                                    <field name="user_id" widget="many2one_avatar_user" domain="[('share', '=', False)]"/>
+                                    <field name="user_id" class="ss-tc-leader" invisible="not user_id"/>
+                                </div>
+                            </div>
+                            <div class="ss-tc-person">
+                                <span class="ss-tc-label">Salespeople</span>
+                                <field name="member_ids" widget="many2many_avatar_user" domain="[('share', '=', False)]"
+                                       groups="sales_team.group_sale_manager"/>
+                                <field name="member_ids" widget="many2many_avatar_user" readonly="1"
+                                       groups="!sales_team.group_sale_manager"/>
+                            </div>
+                        </div>
+
+                        <div class="ss-tc-stats">
+                            <div>
+                                <strong><field name="sales_modern_quotation_count"/></strong>
+                                <span>Open quotations</span>
+                            </div>
+                            <div>
+                                <strong><field name="sales_modern_quotation_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/></strong>
+                                <span>Quoted</span>
+                            </div>
+                            <div>
+                                <strong class="ss-tc-won"><field name="sales_modern_month_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/></strong>
+                                <span>Sold this month</span>
+                            </div>
+                        </div>
+
+                        <div class="ss-tc-target">
+                            <div class="ss-tc-target-head">
+                                <span>Invoiced this month</span>
+                                <span class="ss-tc-target-val">
+                                    <field name="invoiced" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <t t-if="record.invoiced_target.raw_value"> / <field name="invoiced_target" widget="monetary" options="{'currency_field': 'currency_id'}"/></t>
+                                </span>
+                            </div>
+                            <div t-if="record.invoiced_target.raw_value" class="ss-tc-target-bar" aria-hidden="true">
+                                <span t-attf-style="width: {{ Math.min(100, Math.round(100 * record.invoiced.raw_value / record.invoiced_target.raw_value)) }}%"/>
+                            </div>
+                        </div>
+
+                        <footer class="ss-tc-foot">
+                            <button type="object" name="sales_modern_open_quotations" class="btn btn-link ss-tc-link">
+                                <i class="fa fa-file-text-o" title="Quotations"/> Quotations
+                            </button>
+                            <button type="object" name="sales_modern_open_orders" class="btn btn-link ss-tc-link ms-auto">
+                                Orders <i class="fa fa-arrow-right" title="Open"/>
+                            </button>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+</odoo>

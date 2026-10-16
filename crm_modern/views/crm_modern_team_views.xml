@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Sales team card used by Modern CRM only (Sales Teams page). Standalone view
+        (no inherit_id / xpath); low priority so Odoo keeps its own team kanban.
+        Team leader and salespeople are edited right on the card (avatar widgets).
+    -->
+    <record id="crm_team_kanban_modern" model="ir.ui.view">
+        <field name="name">crm.team.kanban.modern</field>
+        <field name="model">crm.team</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <kanban highlight_color="color" class="o_cm_team_kanban" sample="1" quick_create="false">
+                <field name="currency_id"/>
+                <field name="active"/>
+                <field name="use_leads"/>
+                <field name="crm_modern_open_count"/>
+                <field name="crm_modern_overdue_count"/>
+                <field name="crm_modern_member_count"/>
+                <field name="lead_unassigned_count"/>
+                <templates>
+                    <t t-name="menu">
+                        <a role="menuitem" type="object" name="crm_modern_open_team" class="dropdown-item">Open team page</a>
+                        <a role="menuitem" type="object" name="crm_modern_open_pipeline" class="dropdown-item">Open pipeline</a>
+                        <a t-if="widget.editable" role="menuitem" type="open" class="dropdown-item">Edit</a>
+                        <a t-if="widget.editable and record.active.raw_value" role="menuitem" type="archive" class="dropdown-item">Archive</a>
+                        <a t-if="widget.editable and !record.active.raw_value" role="menuitem" type="unarchive" class="dropdown-item">Restore</a>
+                        <a t-if="widget.deletable" role="menuitem" type="delete" class="dropdown-item">Delete</a>
+                        <div role="separator" class="dropdown-divider"/>
+                        <field name="color" widget="kanban_color_picker"/>
+                    </t>
+                    <t t-name="card">
+                        <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+
+                        <div class="cm-tc-head">
+                            <span class="cm-tc-logo"><i class="fa fa-users" title="Sales team"/></span>
+                            <div class="cm-tc-titles">
+                                <field name="name" class="cm-tc-title"/>
+                                <span class="cm-tc-sub">
+                                    <t t-esc="record.crm_modern_member_count.raw_value"/>
+                                    <t t-if="record.crm_modern_member_count.raw_value === 1"> member</t>
+                                    <t t-else=""> members</t>
+                                    <field name="company_id" groups="base.group_multi_company" class="cm-tc-company"/>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="cm-tc-people">
+                            <div class="cm-tc-person">
+                                <span class="cm-tc-label">Team leader</span>
+                                <!-- one click: search and pick another leader (sales managers only) -->
+                                <field name="user_id" widget="crm_modern_user_pick" options="{'placeholder': 'Pick a leader'}"/>
+                            </div>
+                            <div class="cm-tc-person cm-tc-person--members">
+                                <span class="cm-tc-label">Salespeople</span>
+                                <!-- managers add / remove right here; others only see the avatars -->
+                                <field name="member_ids" widget="many2many_avatar_user" domain="[('share', '=', False)]"
+                                       groups="sales_team.group_sale_manager"/>
+                                <field name="member_ids" widget="many2many_avatar_user" readonly="1"
+                                       groups="!sales_team.group_sale_manager"/>
+                            </div>
+                        </div>
+
+                        <div class="cm-tc-stats">
+                            <div>
+                                <strong><field name="crm_modern_open_count"/></strong>
+                                <span>Open deals</span>
+                            </div>
+                            <div>
+                                <strong><field name="crm_modern_open_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/></strong>
+                                <span>Pipeline</span>
+                            </div>
+                            <div>
+                                <strong class="cm-tc-won"><field name="crm_modern_won_month_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/></strong>
+                                <span>Won this month</span>
+                            </div>
+                        </div>
+
+                        <field name="crm_modern_has_sale" invisible="1"/>
+                        <field name="crm_modern_invoiced_target" invisible="1"/>
+                        <div class="cm-tc-target" invisible="not crm_modern_has_sale">
+                            <div class="cm-tc-target-head">
+                                <span>Invoiced this month</span>
+                                <span class="cm-tc-target-val">
+                                    <field name="crm_modern_invoiced" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <t t-if="record.crm_modern_invoiced_target.raw_value"> / <field name="crm_modern_invoiced_target" widget="monetary" options="{'currency_field': 'currency_id'}"/></t>
+                                </span>
+                            </div>
+                            <div t-if="record.crm_modern_invoiced_target.raw_value" class="cm-tc-target-bar" aria-hidden="true">
+                                <span t-attf-style="width: {{ Math.min(100, Math.round(100 * record.crm_modern_invoiced.raw_value / record.crm_modern_invoiced_target.raw_value)) }}%"/>
+                            </div>
+                            <span class="cm-tc-target-orders"><field name="crm_modern_order_count"/> sales orders</span>
+                        </div>
+
+                        <div class="cm-tc-alerts">
+                            <span t-if="record.crm_modern_overdue_count.raw_value" class="cm-tc-chip cm-tc-chip--danger">
+                                <i class="fa fa-clock-o" title="Overdue"/> <t t-esc="record.crm_modern_overdue_count.raw_value"/> overdue
+                            </span>
+                            <span t-if="record.lead_unassigned_count.raw_value" class="cm-tc-chip cm-tc-chip--warning" groups="crm.group_use_lead">
+                                <i class="fa fa-user-times" title="Unassigned"/> <t t-esc="record.lead_unassigned_count.raw_value"/> unassigned
+                            </span>
+                            <span t-if="!record.crm_modern_overdue_count.raw_value and !record.lead_unassigned_count.raw_value" class="cm-tc-chip cm-tc-chip--ok">
+                                <i class="fa fa-check-circle" title="On track"/> On track
+                            </span>
+                        </div>
+
+                        <footer class="cm-tc-foot">
+                            <button type="object" name="crm_modern_open_pipeline" class="btn btn-link cm-tc-link">
+                                <i class="fa fa-columns" title="Pipeline"/> Pipeline
+                            </button>
+                            <button type="object" name="crm_modern_open_team" class="btn btn-link cm-tc-link ms-auto">
+                                Manage team <i class="fa fa-arrow-right" title="Open"/>
+                            </button>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+</odoo>

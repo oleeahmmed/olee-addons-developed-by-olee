@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="crm_modern.SaleOrderRow">
+        <li class="cm-so-row">
+            <span t-attf-class="cm-sale-icon {{ order.state === 'sale' ? 'cm-sale-icon--order' : '' }} {{ order.state === 'cancel' ? 'cm-sale-icon--cancel' : '' }}" aria-hidden="true">
+                <i t-attf-class="fa {{ order.state === 'sale' ? 'fa-shopping-cart' : 'fa-file-text-o' }}"/>
+            </span>
+            <div class="cm-so-main">
+                <div class="cm-so-name">
+                    <a class="cm-row-link" href="#" t-on-click.prevent="() => this.open(order)" t-esc="order.name"/>
+                    <span t-attf-class="cm-badge {{ stateBadge[order.state] ? stateBadge[order.state].tone : '' }}"
+                          t-esc="stateBadge[order.state] ? stateBadge[order.state].label : order.state"/>
+                    <span t-if="order.state === 'sale' and invoiceBadge[order.invoice_status]"
+                          t-attf-class="cm-badge {{ invoiceBadge[order.invoice_status].tone }}" t-esc="invoiceBadge[order.invoice_status].label"/>
+                </div>
+                <div class="cm-so-sub">
+                    <t t-esc="shortDate(order.date_order)"/>
+                    <t t-if="order.validity_date and (order.state === 'draft' or order.state === 'sent')"> · valid until <t t-esc="shortDate(order.validity_date)"/></t>
+                </div>
+            </div>
+            <strong class="cm-so-amount cm-tabular" t-esc="m(order.amount_total, order)"/>
+            <div class="cm-so-actions">
+                <t t-if="order.state === 'draft' or order.state === 'sent'">
+                    <button t-attf-class="cm-btn cm-btn-sm {{ order.state === 'draft' ? 'cm-btn-primary' : 'cm-btn-outline' }}"
+                            t-att-disabled="state.busy" t-on-click="() => this.send(order)">
+                        <i class="fa fa-paper-plane-o" aria-hidden="true"/> <t t-esc="order.state === 'draft' ? 'Send' : 'Resend'"/>
+                    </button>
+                    <button t-attf-class="cm-btn cm-btn-sm {{ order.state === 'sent' ? 'cm-btn-success' : 'cm-btn-outline' }}"
+                            t-att-disabled="state.busy" t-on-click="() => this.confirm(order)">
+                        <i class="fa fa-check" aria-hidden="true"/> Confirm
+                    </button>
+                </t>
+                <button t-if="order.state === 'sale' and order.invoice_status === 'to invoice'" class="cm-btn cm-btn-primary cm-btn-sm"
+                        t-att-disabled="state.busy" t-on-click="() => this.invoice(order)">
+                    <i class="fa fa-file-text" aria-hidden="true"/> Invoice
+                </button>
+                <button class="cm-icon-btn" title="Print" t-attf-aria-label="Print {{ order.name }}" t-on-click="() => this.print(order)"><i class="fa fa-print" aria-hidden="true"/></button>
+                <button t-if="order.state !== 'cancel' and !order.locked" class="cm-icon-btn cm-icon-btn--danger" title="Cancel"
+                        t-attf-aria-label="Cancel {{ order.name }}" t-att-disabled="state.busy" t-on-click="() => this.cancel(order)"><i class="fa fa-ban" aria-hidden="true"/></button>
+            </div>
+        </li>
+    </t>
+
+    <t t-name="crm_modern.SaleTab">
+        <div t-if="state.data" class="cm-sale-tab">
+            <div class="cm-sale-top">
+                <ol class="cm-sale-steps" aria-label="Sales process">
+                    <t t-foreach="steps" t-as="step" t-key="step_index">
+                        <li t-att-class="{ 'cm-on': step.on }">
+                            <span class="cm-step-dot"><i t-if="step.on" class="fa fa-check" aria-hidden="true"/><t t-else="" t-esc="step_index + 1"/></span>
+                            <t t-esc="step.label"/>
+                        </li>
+                    </t>
+                </ol>
+                <span t-if="state.data.sale_amount_total" class="cm-sale-total">Confirmed <strong class="cm-tabular" t-esc="m(state.data.sale_amount_total)"/></span>
+            </div>
+
+            <ul t-if="orders.length" class="cm-so-list">
+                <t t-foreach="orders" t-as="order" t-key="order.id">
+                    <t t-call="crm_modern.SaleOrderRow"/>
+                </t>
+            </ul>
+
+            <button t-if="orders.length and !state.building" type="button" class="cm-btn cm-btn-outline cm-btn-sm cm-sale-new" t-on-click="toggleBuilder">
+                <i class="fa fa-plus" aria-hidden="true"/> New quotation
+            </button>
+
+            <!-- quick quote builder -->
+            <div t-if="state.building" class="cm-quote">
+                <div class="cm-quote-customer">
+                    <span class="cm-quote-label">Customer</span>
+                    <t t-if="state.data.has_partner">
+                        <span class="cm-quote-partner"><i class="fa fa-building-o" aria-hidden="true"/> <t t-esc="state.data.partner_name"/></span>
+                    </t>
+                    <t t-else="">
+                        <div class="cm-quote-partner-pick">
+                            <RecordPicker resModel="'res.partner'" placeholder="'Search a customer…'" onSelect.bind="pickCustomer"/>
+                            <button t-if="state.data.suggested_customer" type="button" class="cm-btn cm-btn-outline cm-btn-sm" t-att-disabled="state.busy" t-on-click="createCustomer">
+                                <i class="fa fa-user-plus" aria-hidden="true"/> Create “<t t-esc="state.data.suggested_customer"/>”
+                            </button>
+                        </div>
+                    </t>
+                </div>
+
+                <t t-if="state.data.has_partner">
+                    <div class="cm-quote-lines" role="table" aria-label="Products">
+                        <div class="cm-quote-line cm-quote-line--head" role="row">
+                            <span role="columnheader">Product</span><span role="columnheader">Qty</span>
+                            <span role="columnheader">Unit price</span><span role="columnheader" class="text-end">Amount</span><span/>
+                        </div>
+                        <t t-foreach="state.lines" t-as="line" t-key="line.key">
+                            <div class="cm-quote-line" role="row">
+                                <RecordPicker resModel="'product.product'" domain="productDomain" value="line.product"
+                                              placeholder="'Add a product…'" onSelect="(p) => this.pickProduct(line, p)"/>
+                                <input type="number" min="0" step="1" class="cm-input cm-input-sm cm-tabular" aria-label="Quantity"
+                                       t-att-value="line.qty" t-att-disabled="!line.product" t-on-change="(ev) => this.setQty(line, ev)"/>
+                                <input type="number" min="0" step="0.01" class="cm-input cm-input-sm cm-tabular" aria-label="Unit price"
+                                       t-att-value="line.price" t-att-placeholder="line.product ? m(line.listPrice) : ''" t-att-disabled="!line.product"
+                                       t-on-change="(ev) => this.setPrice(line, ev)"/>
+                                <span class="cm-tabular text-end cm-quote-amount" t-esc="line.product ? m(lineTotal(line)) : ''"/>
+                                <button t-if="line.product" type="button" class="cm-icon-btn cm-icon-btn--danger" aria-label="Remove line" t-on-click="() => this.removeLine(line)">
+                                    <i class="fa fa-trash-o" aria-hidden="true"/>
+                                </button>
+                                <span t-else=""/>
+                            </div>
+                        </t>
+                    </div>
+                    <div class="cm-quote-foot">
+                        <div class="cm-quote-est">
+                            <span>Untaxed</span> <strong class="cm-tabular" t-esc="m(estimate)"/>
+                            <button type="button" class="cm-btn cm-btn-link cm-btn-sm" title="Odoo quotation form: discounts, optional products, terms" t-on-click="fullForm">Full form</button>
+                            <button t-if="orders.length" type="button" class="cm-btn cm-btn-link cm-btn-sm cm-quote-cancel" t-on-click="toggleBuilder">Cancel</button>
+                        </div>
+                        <div class="cm-quote-btns">
+                            <button type="button" class="cm-btn cm-btn-outline cm-btn-sm" t-att-disabled="state.busy or !filledLines.length" t-on-click="() => this.createQuotation('draft')">
+                                Save draft
+                            </button>
+                            <button type="button" class="cm-btn cm-btn-primary cm-btn-sm" t-att-disabled="state.busy or !filledLines.length" t-on-click="() => this.createQuotation('send')">
+                                <i class="fa fa-paper-plane-o" aria-hidden="true"/> Create &amp; send
+                            </button>
+                            <button type="button" class="cm-btn cm-btn-success cm-btn-sm" t-att-disabled="state.busy or !filledLines.length" t-on-click="() => this.createQuotation('confirm')">
+                                <i class="fa fa-check" aria-hidden="true"/> Confirm order
+                            </button>
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </div>
+        <div t-else="" class="cm-skeleton" style="height:5rem"/>
+    </t>
+
+    <t t-name="crm_modern.SaleDashboardSection">
+        <section t-if="state.data" class="od-sales-from-crm">
+            <div class="od-grid">
+                <div class="od-span-4"><OdKpi tone="'slate'" icon="'fa-file-text-o'" label="'Open quotations from CRM'" value="ms(state.data.open_quotation_amount)"
+                        hint="number(state.data.open_quotations) + ' quotations waiting'" onClick="() => this.go('crm_modern.action_quotations')"/></div>
+                <div class="od-span-4"><OdKpi tone="'teal'" icon="'fa-shopping-cart'" label="'Orders this month from CRM'" value="ms(state.data.orders_month_amount)"
+                        hint="number(state.data.orders_month) + ' confirmed orders'" onClick="() => this.go('crm_modern.action_sale_orders')"/></div>
+                <div class="od-span-4"><OdKpi tone="'amber'" icon="'fa-exchange'" label="'Quote → order (3 months)'" value="state.data.conversion + '%'"
+                        hint="state.data.cancelled + ' cancelled'"/></div>
+            </div>
+            <div class="od-card">
+                <div class="od-card-head">
+                    <div>
+                        <h3><span class="od-card-icon od-tone-blue"><i class="fa fa-file-text-o" aria-hidden="true"/></span> Latest quotations &amp; orders from CRM</h3>
+                        <p>Created from opportunities</p>
+                    </div>
+                    <div class="d-flex" style="gap:0.25rem">
+                        <button type="button" class="od-link" t-on-click="() => this.go('crm_modern.action_quotations')">Quotations</button>
+                        <button type="button" class="od-link" t-on-click="() => this.go('crm_modern.action_sale_orders')">Orders <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                    </div>
+                </div>
+                <div class="od-card-body od-card-body--flush">
+                    <div t-if="!state.data.recent.length" class="od-empty"><i class="fa fa-file-text-o" aria-hidden="true"/><strong>No quotations from CRM yet</strong><span>Open an opportunity and click “New quotation”.</span></div>
+                    <div t-else="" class="od-table-wrap">
+                        <table class="od-table">
+                            <thead><tr><th>Reference</th><th>Opportunity</th><th>Customer</th><th>Status</th><th>Date</th><th class="od-r">Total</th></tr></thead>
+                            <tbody>
+                                <t t-foreach="state.data.recent" t-as="o" t-key="o.id">
+                                    <tr class="od-clickable" t-on-click="() => this.openOrder(o)">
+                                        <td class="od-cell-main" t-esc="o.name"/>
+                                        <td class="od-truncate" style="max-width:16rem" t-esc="o.opportunity_id ? o.opportunity_id[1] : '—'"/>
+                                        <td t-esc="o.partner_id ? o.partner_id[1] : '—'"/>
+                                        <td><span t-attf-class="od-pill od-tone-{{ o.state === 'sale' ? 'green' : (o.state === 'sent' ? 'sky' : (o.state === 'cancel' ? 'rose' : 'slate')) }}"
+                                                  t-esc="stateBadge[o.state] ? stateBadge[o.state].label : o.state"/></td>
+                                        <td class="text-muted" t-esc="shortDate(o.date_order)"/>
+                                        <td class="od-r od-num" style="font-weight:650" t-esc="m(o.amount_total)"/>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </t>
+
+</templates>

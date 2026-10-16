@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- One client action per page; each page embeds Odoo's own views of the same records. -->
+    <record id="action_dashboard" model="ir.actions.client">
+        <field name="name">Inventory Dashboard</field>
+        <field name="tag">inventory_modern.dashboard</field>
+        <field name="path">inventory-modern</field>
+    </record>
+    <record id="action_receipts" model="ir.actions.client">
+        <field name="name">Receipts</field>
+        <field name="tag">inventory_modern.receipts</field>
+        <field name="path">inventory-modern-receipts</field>
+    </record>
+    <record id="action_deliveries" model="ir.actions.client">
+        <field name="name">Deliveries</field>
+        <field name="tag">inventory_modern.deliveries</field>
+        <field name="path">inventory-modern-deliveries</field>
+    </record>
+    <record id="action_internal" model="ir.actions.client">
+        <field name="name">Internal Transfers</field>
+        <field name="tag">inventory_modern.internal</field>
+        <field name="path">inventory-modern-internal</field>
+    </record>
+    <record id="action_products" model="ir.actions.client">
+        <field name="name">Products</field>
+        <field name="tag">inventory_modern.products</field>
+        <field name="path">inventory-modern-products</field>
+    </record>
+    <record id="action_stock" model="ir.actions.client">
+        <field name="name">Stock on Hand</field>
+        <field name="tag">inventory_modern.stock</field>
+        <field name="path">inventory-modern-stock</field>
+    </record>
+    <record id="action_moves" model="ir.actions.client">
+        <field name="name">Moves History</field>
+        <field name="tag">inventory_modern.moves</field>
+        <field name="path">inventory-modern-moves</field>
+    </record>
+</odoo>

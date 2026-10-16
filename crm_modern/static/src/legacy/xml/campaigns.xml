@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="crm_modern.Campaigns">
+        <div class="o_cm o_cm_page">
+            <div class="cm-container">
+                <PageHeader title="'Campaigns'" description="'Pick a sales team per campaign, upload leads, and see what each campaign brings in.'">
+                    <t t-set-slot="actions">
+                        <button class="cm-btn cm-btn-primary" t-on-click="create"><i class="fa fa-plus" aria-hidden="true"/> New campaign</button>
+                    </t>
+                </PageHeader>
+
+                <div t-if="!state.loading and !isNative" class="cm-grid-stats">
+                    <StatCard label="'Campaigns'" value="('' + state.campaigns.length)" hint="state.show === 'active' ? 'active' : 'archived'" icon="'fa-bullhorn'"/>
+                    <StatCard label="'Leads sourced'" value="('' + totals.leads)" icon="'fa-user-plus'"/>
+                    <StatCard label="'Opportunities'" value="('' + totals.opps)" hint="totals.won + ' won'" icon="'fa-briefcase'"/>
+                    <StatCard label="'Won revenue'" value="m(totals.revenue)" icon="'fa-money'"/>
+                </div>
+
+                <div class="cm-toolbar">
+                    <label t-if="!isNative" class="cm-search" style="width:16rem;max-width:100%">
+                        <span class="cm-sr-only">Search campaigns</span>
+                        <i class="fa fa-search" aria-hidden="true"/>
+                        <input class="cm-input" placeholder="Search campaigns…" t-on-change="onSearch"/>
+                    </label>
+                    <Segmented t-if="!isNative" label="'Show'" value="state.show" onChange.bind="setShow"
+                               options="[{ value: 'active', label: 'Active' }, { value: 'archived', label: 'Archived' }]"/>
+                    <div class="ms-auto"><t t-call="crm_modern.ViewSwitcher"/></div>
+                </div>
+
+                <t t-if="isNative and !state.loading">
+                    <t t-foreach="[state.view]" t-as="v" t-key="v">
+                        <NativeView t-props="nativeProps"/>
+                    </t>
+                </t>
+
+                <div t-elif="state.loading" class="cm-grid-cards"><t t-foreach="[1,2,3]" t-as="i" t-key="i"><div class="cm-skeleton" style="height:18rem"/></t></div>
+                <div t-elif="!columns.length" class="cm-card">
+                    <EmptyState icon="'fa-bullhorn'" title="'No campaigns here'" description="'Create a campaign, set its sales team, then upload a CSV of leads.'">
+                        <button class="cm-btn cm-btn-primary cm-btn-sm" t-on-click="create"><i class="fa fa-plus" aria-hidden="true"/> New campaign</button>
+                    </EmptyState>
+                </div>
+                <div t-else="" class="cm-board">
+                    <div class="cm-board-cols cm-board-campaigns">
+                        <t t-foreach="columns" t-as="col" t-key="col.stage.id">
+                            <section t-attf-class="cm-col {{ state.overStage === col.stage.id ? 'cm-drop' : '' }}"
+                                     t-att-aria-label="col.stage.name + ' stage'"
+                                     t-on-dragover.prevent="() => this.state.overStage = col.stage.id"
+                                     t-on-dragleave="() => this.onDragLeave(col.stage.id)"
+                                     t-on-drop.prevent="() => this.onDrop(col.stage.id)">
+                                <header class="cm-col-head">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <h2 class="cm-col-title m-0">
+                                            <t t-esc="col.stage.name"/>
+                                            <span class="cm-col-count cm-tabular" t-esc="col.cards.length"/>
+                                        </h2>
+                                        <button t-if="col.stage.id" class="cm-btn cm-btn-ghost cm-btn-icon cm-btn-sm"
+                                                t-attf-aria-label="Add campaign to {{ col.stage.name }}"
+                                                t-on-click="() => this.create(col.stage.id)"><i class="fa fa-plus" aria-hidden="true"/></button>
+                                    </div>
+                                </header>
+                                <ul class="cm-col-body">
+                                    <t t-foreach="col.cards" t-as="c" t-key="c.id">
+                                        <li>
+                        <article t-attf-class="cm-card d-flex flex-column {{ state.dragId === c.id ? 'cm-dragging' : '' }}">
+                            <div class="cm-card-header">
+                                <div class="d-flex align-items-start cm-truncate" style="gap:0.75rem;flex:1">
+                                    <span class="cm-chan-icon" aria-hidden="true"><i class="fa fa-bullhorn"/></span>
+                                    <div class="cm-truncate">
+                                        <h3 class="cm-truncate" t-esc="c.title"/>
+                                        <p t-esc="c.stage_id ? c.stage_id[1] : ''"/>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center" style="gap:0.125rem">
+                                    <button type="button" class="cm-btn cm-btn-ghost cm-btn-icon cm-btn-sm cm-drag-handle" draggable="true"
+                                            title="Drag to another stage" t-attf-aria-label="Drag {{ c.title }} to another stage"
+                                            t-on-dragstart.stop="(ev) => this.onDragStart(ev, c)" t-on-dragend="onDragEnd">
+                                        <i class="fa fa-arrows" aria-hidden="true"/>
+                                    </button>
+                                <Dropdown position="'bottom-end'">
+                                    <button class="cm-btn cm-btn-ghost cm-btn-icon cm-btn-sm" t-attf-aria-label="Actions for {{ c.title }}"><i class="fa fa-ellipsis-h" aria-hidden="true"/></button>
+                                    <t t-set-slot="content">
+                                        <t t-foreach="columns" t-as="dest" t-key="dest.stage.id">
+                                            <DropdownItem t-if="dest.stage.id and (!c.stage_id or dest.stage.id !== c.stage_id[0])" onSelected="() => this.moveTo(c, dest.stage)">
+                                                <i class="fa fa-arrow-right me-2"/>Move to <t t-esc="dest.stage.name"/>
+                                            </DropdownItem>
+                                        </t>
+                                        <div class="dropdown-divider"/>
+                                        <DropdownItem onSelected="() => this.upload(c)"><i class="fa fa-upload me-2"/>Upload CSV</DropdownItem>
+                                        <DropdownItem onSelected="() => this.add(c, 'lead')"><i class="fa fa-user-plus me-2"/>Add lead</DropdownItem>
+                                        <DropdownItem onSelected="() => this.add(c, 'opportunity')"><i class="fa fa-briefcase me-2"/>Add opportunity</DropdownItem>
+                                        <div class="dropdown-divider"/>
+                                        <DropdownItem onSelected="() => this.openForm(c)"><i class="fa fa-external-link me-2"/>Open in Odoo form</DropdownItem>
+                                        <DropdownItem onSelected="() => this.toggleArchive(c)">
+                                            <i t-attf-class="fa {{ c.active ? 'fa-archive' : 'fa-undo' }} me-2"/><t t-esc="c.active ? 'Archive' : 'Restore'"/>
+                                        </DropdownItem>
+                                    </t>
+                                </Dropdown>
+                                </div>
+                            </div>
+                            <div class="cm-card-body d-flex flex-column" style="gap:1rem;flex:1">
+                                <div class="cm-kv">
+                                    <button type="button" t-on-click="() => this.open('crm_modern.action_leads', c)"><strong t-esc="c.simple_lead_count"/><span>Leads</span></button>
+                                    <button type="button" t-on-click="() => this.open('crm_modern.action_pipeline', c)"><strong t-esc="c.simple_opportunity_count"/><span>Opportunities</span></button>
+                                    <button type="button" t-on-click="() => this.open('crm_modern.action_pipeline', c)"><strong t-esc="c.simple_open_count"/><span>Open</span></button>
+                                    <div><strong style="color:var(--cm-success)" t-esc="c.simple_won_count"/><span>Won</span></div>
+                                </div>
+                                <div class="cm-grid-2" style="gap:0.75rem">
+                                    <div class="cm-field">
+                                        <label class="cm-label" t-attf-for="cm_cteam_{{ c.id }}"><i class="fa fa-users me-1" aria-hidden="true"/>Sales team</label>
+                                        <select t-attf-id="cm_cteam_{{ c.id }}" class="cm-select cm-select-sm" t-on-change="(ev) => this.setTeam(c, ev)">
+                                            <option value="">No team</option>
+                                            <t t-foreach="state.teams" t-as="t" t-key="t.id">
+                                                <option t-att-value="t.id" t-att-selected="c.simple_team_id and c.simple_team_id[0] === t.id" t-esc="t.name"/>
+                                            </t>
+                                        </select>
+                                    </div>
+                                    <div class="cm-field">
+                                        <label class="cm-label" t-attf-for="cm_cuser_{{ c.id }}"><i class="fa fa-user me-1" aria-hidden="true"/>Salesperson</label>
+                                        <select t-attf-id="cm_cuser_{{ c.id }}" class="cm-select cm-select-sm" t-on-change="(ev) => this.setUser(c, ev)">
+                                            <option value="">Spread over team</option>
+                                            <t t-foreach="state.users" t-as="u" t-key="u.id">
+                                                <option t-att-value="u.id" t-att-selected="c.user_id and c.user_id[0] === u.id" t-esc="u.name"/>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div t-if="c.simple_team_id and state.members[c.simple_team_id[0]]" class="d-flex align-items-center" style="gap:0.5rem">
+                                    <span class="cm-avatar-group">
+                                        <t t-foreach="state.members[c.simple_team_id[0]].slice(0, 5)" t-as="mem" t-key="mem.id">
+                                            <Avatar id="mem.id" name="mem.name" size="'sm'"/>
+                                        </t>
+                                    </span>
+                                    <span class="cm-muted" style="font-size:0.75rem"><t t-esc="state.members[c.simple_team_id[0]].length"/> members share new leads</span>
+                                </div>
+                            </div>
+                            <div class="cm-card-footer">
+                                <span class="cm-muted" style="font-size:0.75rem">Won <strong class="cm-tabular" style="color:var(--cm-fg)" t-esc="m(c.simple_won_revenue)"/></span>
+                                <button class="cm-btn cm-btn-primary cm-btn-sm" t-attf-aria-label="Upload CSV to {{ c.title }}" t-on-click="() => this.upload(c)">
+                                    <i class="fa fa-upload" aria-hidden="true"/> Upload
+                                </button>
+                            </div>
+                        </article>
+                                        </li>
+                                    </t>
+                                    <li t-if="!col.cards.length" class="cm-col-empty">Drop a campaign here</li>
+                                </ul>
+                            </section>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

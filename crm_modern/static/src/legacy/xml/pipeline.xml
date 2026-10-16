@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="crm_modern.PipelineFilters">
+        <div class="cm-toolbar">
+            <t t-if="!isNative">
+            <label class="cm-search" style="width:16rem;max-width:100%">
+                <span class="cm-sr-only">Search opportunities</span>
+                <i class="fa fa-search" aria-hidden="true"/>
+                <input class="cm-input" placeholder="Search deals, companies, emails…" t-att-value="state.q" t-on-input="onSearch"/>
+            </label>
+            <select class="cm-select" style="width:11rem" aria-label="Filter by salesperson" t-on-change="(ev) => this.setFilter('user', ev.target.value)">
+                <option value="">All salespeople</option>
+                <t t-foreach="state.users" t-as="u" t-key="u.id"><option t-att-value="u.id" t-att-selected="('' + u.id) === ('' + state.user)" t-esc="u.name"/></t>
+            </select>
+            <select class="cm-select" style="width:10rem" aria-label="Filter by sales team" t-on-change="(ev) => this.setFilter('team', ev.target.value)">
+                <option value="">All teams</option>
+                <t t-foreach="state.teams" t-as="t" t-key="t.id"><option t-att-value="t.id" t-esc="t.name"/></t>
+            </select>
+            <select class="cm-select" style="width:9rem" aria-label="Filter by tag" t-on-change="(ev) => this.setFilter('tag', ev.target.value)">
+                <option value="">All tags</option>
+                <t t-foreach="Object.values(state.tags)" t-as="t" t-key="t.id"><option t-att-value="t.id" t-esc="t.name"/></t>
+            </select>
+            <select class="cm-select" style="width:11rem" aria-label="Filter by campaign" t-on-change="(ev) => this.setFilter('campaign', ev.target.value)">
+                <option value="">All campaigns</option>
+                <t t-foreach="state.campaigns" t-as="c" t-key="c.id"><option t-att-value="c.id" t-att-selected="('' + c.id) === ('' + state.campaign)" t-esc="c.title"/></t>
+            </select>
+            <Segmented label="'Status'" value="state.status" onChange="(v) => this.setFilter('status', v)"
+                       options="[{ value: 'active', label: 'Active' }, { value: 'won', label: 'Won' }, { value: 'lost', label: 'Lost' }]"/>
+            </t>
+            <div class="ms-auto"><t t-call="crm_modern.ViewSwitcher"/></div>
+        </div>
+    </t>
+
+    <t t-name="crm_modern.Pipeline">
+        <div class="o_cm o_cm_page">
+            <div class="cm-container">
+                <PageHeader title="'Pipeline'" description="(state.loading or isNative) ? 'Opportunities' : state.records.length + ' opportunities · ' + m(total) + ' expected'">
+                    <t t-set-slot="actions">
+                        <button class="cm-btn cm-btn-primary" t-on-click="() => this.create()"><i class="fa fa-plus" aria-hidden="true"/> New opportunity</button>
+                    </t>
+                </PageHeader>
+                <t t-call="crm_modern.PipelineFilters"/>
+
+                <t t-if="isNative and !state.loading">
+                    <t t-foreach="[state.view]" t-as="v" t-key="v">
+                        <NativeView t-props="nativeProps"/>
+                    </t>
+                </t>
+
+                <div t-elif="state.loading" class="d-flex" style="gap:1rem">
+                    <t t-foreach="[1,2,3,4]" t-as="i" t-key="i"><div class="cm-skeleton" style="width:17.5rem;height:22rem"/></t>
+                </div>
+
+                <div t-else="" class="cm-board">
+                    <div class="cm-board-cols">
+                        <t t-foreach="columns" t-as="col" t-key="col.stage.id">
+                            <section t-attf-class="cm-col {{ state.overStage === col.stage.id ? 'cm-drop' : '' }}"
+                                     t-att-aria-label="col.stage.name + ' stage'"
+                                     t-on-dragover.prevent="() => this.state.overStage = col.stage.id"
+                                     t-on-dragleave="() => this.onDragLeave(col.stage.id)"
+                                     t-on-drop.prevent="() => this.onDrop(col.stage.id)">
+                                <header class="cm-col-head">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <h2 class="cm-col-title m-0">
+                                            <t t-esc="col.stage.name"/>
+                                            <i t-if="col.stage.is_won" class="fa fa-trophy" style="color:var(--cm-success);font-size:0.75rem" aria-label="Won stage"/>
+                                            <span class="cm-col-count cm-tabular" t-esc="col.cards.length"/>
+                                        </h2>
+                                        <button class="cm-btn cm-btn-ghost cm-btn-icon cm-btn-sm" t-attf-aria-label="Add opportunity to {{ col.stage.name }}"
+                                                t-on-click="() => this.create(col.stage.id)"><i class="fa fa-plus" aria-hidden="true"/></button>
+                                    </div>
+                                    <div class="cm-col-sum">
+                                        <Progress value="total ? col.sum / total * 100 : 0" tone="col.stage.is_won ? 'success' : undefined" label="col.stage.name + ' share of pipeline'"/>
+                                        <span class="cm-tabular" t-esc="ms(col.sum)"/>
+                                    </div>
+                                </header>
+                                <ul class="cm-col-body">
+                                    <t t-foreach="col.cards" t-as="rec" t-key="rec.id">
+                                        <li>
+                                            <article t-attf-class="cm-deal {{ state.dragId === rec.id ? 'cm-dragging' : '' }}" draggable="true"
+                                                     t-on-dragstart="(ev) => this.onDragStart(ev, rec)" t-on-dragend="onDragEnd">
+                                                <div class="d-flex align-items-start" style="gap:0.5rem">
+                                                    <div class="cm-truncate" style="flex:1">
+                                                        <button type="button" class="cm-deal-title" t-on-click="() => this.lead.open(rec.id)" t-esc="rec.name"/>
+                                                        <div class="cm-muted cm-truncate" style="font-size:0.75rem;margin-top:0.125rem" t-esc="rec.partner_name or rec.contact_name or '—'"/>
+                                                    </div>
+                                                    <div class="cm-deal-menu">
+                                                        <Dropdown position="'bottom-end'">
+                                                            <button class="cm-btn cm-btn-ghost cm-btn-icon cm-btn-sm" style="width:1.75rem;height:1.75rem" t-attf-aria-label="Actions for {{ rec.name }}">
+                                                                <i class="fa fa-ellipsis-h" aria-hidden="true"/>
+                                                            </button>
+                                                            <t t-set-slot="content">
+                                                                <t t-foreach="columns" t-as="other" t-key="other.stage.id">
+                                                                    <DropdownItem t-if="other.stage.id !== rec.stage_id[0]" onSelected="() => this.moveTo(rec, other.stage)">
+                                                                        Move to <t t-esc="other.stage.name"/>
+                                                                    </DropdownItem>
+                                                                </t>
+                                                                <div class="dropdown-divider"/>
+                                                                <DropdownItem t-if="rec.won_status !== 'won'" onSelected="() => this.lead.won(rec.id)"><i class="fa fa-trophy me-2"/>Mark as won</DropdownItem>
+                                                                <DropdownItem t-if="rec.active" onSelected="() => this.lead.lost([rec.id])"><i class="fa fa-times-circle me-2"/>Mark as lost</DropdownItem>
+                                                                <DropdownItem t-if="!rec.active" onSelected="() => this.lead.restore([rec.id])"><i class="fa fa-undo me-2"/>Restore</DropdownItem>
+                                                                <DropdownItem onSelected="() => this.lead.openForm(rec.id)"><i class="fa fa-external-link me-2"/>Open in Odoo form</DropdownItem>
+                                                            </t>
+                                                        </Dropdown>
+                                                    </div>
+                                                </div>
+                                                <TagChips t-if="rec.tag_ids.length" tags="tagsOf(rec)" max="3"/>
+                                                <div t-if="rec.is_rotting" class="cm-badge cm-badge-warning" style="position:relative;z-index:1;margin-top:0.5rem"
+                                                     t-attf-title="No update for {{ rec.rotting_days }} days">
+                                                    <i class="fa fa-hourglass-half" aria-hidden="true"/> Stale · <t t-esc="rec.rotting_days"/>d
+                                                </div>
+                                                <div class="cm-deal-foot">
+                                                    <span class="cm-tabular" style="font-weight:600" t-esc="m(rec.expected_revenue)"/>
+                                                    <span class="d-flex align-items-center" style="gap:0.375rem">
+                                                        <span t-if="rec.activity_date_deadline" class="d-flex align-items-center" style="gap:0.25rem"
+                                                              t-att-title="'Next: ' + (rec.activity_type_id ? rec.activity_type_id[1] : '')">
+                                                            <ActivityIcon type="rec.activity_type_id and state.types[rec.activity_type_id[0]]" small="true"/>
+                                                            <DueLabel date="rec.activity_date_deadline"/>
+                                                        </span>
+                                                        <Stars value="rec.priority" onChange="(v) => this.setPriority(rec, v)"/>
+                                                        <Avatar id="rec.user_id and rec.user_id[0]" name="rec.user_id and rec.user_id[1]" size="'sm'"/>
+                                                    </span>
+                                                </div>
+                                            </article>
+                                        </li>
+                                    </t>
+                                    <li t-if="!col.cards.length" class="cm-col-empty">Drop a deal here</li>
+                                </ul>
+                            </section>
+                        </t>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </t>
+
+</templates>

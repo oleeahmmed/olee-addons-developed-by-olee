@@ -1,0 +1,56 @@
+// Sales Modern design tokens (ui-ux-pro-max, "matte white"): soft neutral page, white
+// cards with hairline borders and low, diffuse shadows (no gloss), primary #2563EB.
+// Prefixed with --ss- so nothing leaks into the rest of Odoo.
+:root {
+    --ss-radius: 0.625rem;
+    --ss-radius-sm: 0.375rem;
+
+    --ss-bg: #f3f4f6;
+    --ss-fg: #0f172a;
+    --ss-card: #ffffff;
+    --ss-muted: #f4f5f7;
+    --ss-muted-fg: #475569;
+    --ss-subtle-fg: #64748b;
+    --ss-border: #e5e7eb;
+    --ss-input: #e5e7eb;
+    --ss-card-matte: #fbfbfc;  // sheet / panel surface: white, slightly matte
+    --ss-edge: rgba(16, 24, 40, 0.06); // inner bottom edge of matte buttons
+
+    --ss-primary: #2563eb;
+    --ss-primary-fg: #ffffff;
+    --ss-primary-soft: #eef3fe;
+    --ss-primary-soft-fg: #1e40af;
+    --ss-ring: rgba(37, 99, 235, 0.35);
+
+    --ss-success: #059669;
+    --ss-success-soft: #ecfdf5;
+    --ss-warning: #b45309;
+    --ss-warning-soft: #fffbeb;
+    --ss-danger: #dc2626;
+    --ss-danger-soft: #fef2f2;
+    --ss-info: #2563eb;
+    --ss-info-soft: #eff6ff;
+    --ss-violet: #7c3aed;
+    --ss-violet-soft: #f5f3ff;
+
+    // validated categorical chart palette (CVD-safe, see dataviz validator run)
+    --ss-chart-1: #2563eb;
+    --ss-chart-2: #059669;
+    --ss-chart-3: #d97706;
+    --ss-chart-4: #7c3aed;
+
+    --ss-sidebar: #fafafa;
+    --ss-sidebar-fg: #3f3f46;
+    --ss-sidebar-hover: #f4f4f5;
+    --ss-sidebar-accent: #f0f0f2;
+    --ss-sidebar-accent-fg: #18181b;
+    --ss-sidebar-muted-fg: #71717a;
+    --ss-sidebar-border: #e4e4e7;
+    --ss-sidebar-width: 15.5rem;
+
+    --ss-shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.04);
+    --ss-shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.04);
+    --ss-shadow-md: 0 1px 2px rgba(16, 24, 40, 0.04), 0 6px 18px -8px rgba(16, 24, 40, 0.10);
+    --ss-shadow-lg: 0 12px 32px -8px rgba(15, 23, 42, 0.18);
+    --ss-ease: cubic-bezier(0.2, 0, 0, 1);
+}

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- One client action per page. Each page is an OWL component registered under the same tag. -->
+    <record id="action_dashboard" model="ir.actions.client">
+        <field name="name">Dashboard</field>
+        <field name="tag">crm_modern.dashboard</field>
+        <field name="path">modern-crm</field>
+    </record>
+    <record id="action_pipeline" model="ir.actions.client">
+        <field name="name">Pipeline</field>
+        <field name="tag">crm_modern.pipeline</field>
+        <field name="path">modern-crm-pipeline</field>
+    </record>
+    <record id="action_leads" model="ir.actions.client">
+        <field name="name">Leads</field>
+        <field name="tag">crm_modern.leads</field>
+        <field name="path">modern-crm-leads</field>
+    </record>
+    <record id="action_activities" model="ir.actions.client">
+        <field name="name">Activities</field>
+        <field name="tag">crm_modern.activities</field>
+        <field name="path">modern-crm-activities</field>
+    </record>
+    <record id="action_campaigns" model="ir.actions.client">
+        <field name="name">Campaigns</field>
+        <field name="tag">crm_modern.campaigns</field>
+        <field name="path">modern-crm-campaigns</field>
+    </record>
+    <record id="action_salespeople" model="ir.actions.client">
+        <field name="name">Salespeople</field>
+        <field name="tag">crm_modern.salespeople</field>
+        <field name="path">modern-crm-salespeople</field>
+    </record>
+    <record id="action_teams" model="ir.actions.client">
+        <field name="name">Sales Teams</field>
+        <field name="tag">crm_modern.teams</field>
+        <field name="path">modern-crm-teams</field>
+    </record>
+    <record id="action_stages" model="ir.actions.client">
+        <field name="name">Pipeline Stages</field>
+        <field name="tag">crm_modern.stages</field>
+        <field name="path">modern-crm-stages</field>
+    </record>
+    <record id="action_activity_types" model="ir.actions.client">
+        <field name="name">Activity Types</field>
+        <field name="tag">crm_modern.activity_types</field>
+        <field name="path">modern-crm-activity-types</field>
+    </record>
+    <record id="action_activity_plans" model="ir.actions.client">
+        <field name="name">Activity Plans</field>
+        <field name="tag">crm_modern.activity_plans</field>
+        <field name="path">modern-crm-activity-plans</field>
+    </record>
+    <record id="action_tags" model="ir.actions.client">
+        <field name="name">Tags</field>
+        <field name="tag">crm_modern.tags</field>
+        <field name="path">modern-crm-tags</field>
+    </record>
+    <!-- Opportunity / lead detail: opened with active_id so the URL can be shared. -->
+    <record id="action_record" model="ir.actions.client">
+        <field name="name">Opportunity</field>
+        <field name="tag">crm_modern.record</field>
+        <field name="path">modern-crm-record</field>
+    </record>
+    <!-- Sales team detail: team form on top, member lines below. -->
+    <record id="action_team" model="ir.actions.client">
+        <field name="name">Sales Team</field>
+        <field name="tag">crm_modern.team</field>
+        <field name="path">modern-crm-team</field>
+    </record>
+
+    <!-- Sales (shown only when the Sales app is installed, see ir.ui.menu) -->
+    <record id="action_quotations" model="ir.actions.client">
+        <field name="name">Quotations</field>
+        <field name="tag">crm_modern.quotations</field>
+        <field name="path">modern-crm-quotations</field>
+    </record>
+    <record id="action_sale_orders" model="ir.actions.client">
+        <field name="name">Sales Orders</field>
+        <field name="tag">crm_modern.sale_orders</field>
+        <field name="path">modern-crm-orders</field>
+    </record>
+</odoo>

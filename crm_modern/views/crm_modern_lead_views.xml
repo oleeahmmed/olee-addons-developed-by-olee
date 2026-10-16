@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Pipeline board card used by Modern CRM only (embedded on the Pipeline page).
+        A standalone view (no inherit_id / xpath), so changes to Odoo's own CRM kanban
+        can never break it. Low priority (99): Odoo's CRM keeps its default kanban.
+    -->
+    <record id="crm_lead_kanban_modern" model="ir.ui.view">
+        <field name="name">crm.lead.kanban.modern</field>
+        <field name="model">crm.lead</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <kanban highlight_color="color" default_group_by="stage_id" class="o_kanban_small_column o_opportunity_kanban o_cm_deal_kanban"
+                    on_create="quick_create" quick_create_view="crm.quick_create_opportunity_form"
+                    archivable="false" sample="1" js_class="crm_kanban">
+                <field name="stage_id" options='{"group_by_tooltip": {"requirements": "Description"}}'/>
+                <field name="probability"/>
+                <field name="active"/>
+                <field name="company_currency"/>
+                <field name="recurring_revenue_monthly"/>
+                <field name="team_id"/>
+                <field name="won_status"/>
+                <field name="expected_revenue"/>
+                <field name="date_deadline"/>
+                <field name="partner_id"/>
+                <field name="is_rotting"/>
+                <progressbar field="activity_state" colors='{"planned": "success", "today": "warning", "overdue": "danger"}'
+                             sum_field="expected_revenue" recurring_revenue_sum_field="recurring_revenue_monthly"
+                             help="This bar allows to filter the opportunities based on scheduled activities."/>
+                <templates>
+                    <t t-name="menu">
+                        <t t-if="widget.editable"><a role="menuitem" type="open" class="dropdown-item">Edit</a></t>
+                        <t t-if="widget.deletable"><a role="menuitem" type="delete" class="dropdown-item">Delete</a></t>
+                        <div role="separator" class="dropdown-divider"/>
+                        <field name="color" widget="kanban_color_picker"/>
+                    </t>
+                    <t t-name="card">
+                        <widget name="web_ribbon" title="Won" bg_color="text-bg-success" invisible="won_status != 'won'"/>
+                        <widget name="web_ribbon" title="Lost" bg_color="text-bg-danger" invisible="won_status != 'lost'"/>
+                        <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active or won_status in ['lost', 'won']"/>
+
+                        <div class="cm-kc-head">
+                            <field name="name" class="cm-kc-title"/>
+                        </div>
+
+                        <div class="cm-kc-customer" invisible="not partner_id">
+                            <field name="partner_id" widget="many2one_avatar" readonly="1" options="{'no_create': 1, 'no_open': 1}"/>
+                            <field name="partner_id" class="text-truncate"/>
+                        </div>
+                        <div class="cm-kc-customer cm-kc-customer--text" invisible="partner_id or not (contact_name or partner_name)">
+                            <i class="fa fa-user-o" title="Contact"/>
+                            <field name="contact_name" class="text-truncate" invisible="not contact_name"/>
+                            <field name="partner_name" class="text-truncate" invisible="contact_name"/>
+                        </div>
+
+                        <div class="cm-kc-money">
+                            <span t-attf-class="cm-kc-amount {{ record.expected_revenue.raw_value ? '' : 'cm-kc-zero' }}">
+                                <field name="expected_revenue" widget="monetary" options="{'currency_field': 'company_currency'}"/>
+                                <t t-if="record.recurring_revenue and record.recurring_revenue.raw_value">
+                                    <span class="cm-kc-recurring" groups="crm.group_use_recurring_revenues">
+                                        + <field name="recurring_revenue" widget="monetary" options="{'currency_field': 'company_currency'}"/>
+                                        <field name="recurring_plan"/>
+                                    </span>
+                                </t>
+                            </span>
+                            <span class="cm-kc-prob"><t t-esc="Math.round(record.probability.raw_value or 0)"/>%</span>
+                        </div>
+                        <div class="cm-kc-bar" aria-hidden="true">
+                            <span t-attf-style="width: {{ Math.min(100, Math.round(record.probability.raw_value or 0)) }}%"/>
+                        </div>
+
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" class="cm-kc-tags"/>
+                        <field name="lead_properties" widget="properties"/>
+
+                        <footer class="cm-kc-foot">
+                            <div class="d-flex align-items-center cm-kc-foot-left">
+                                <field name="priority" widget="priority" groups="base.group_user"/>
+                                <field name="activity_ids" widget="kanban_activity"/>
+                                <span class="cm-kc-date" invisible="not date_deadline" title="Expected closing">
+                                    <i class="fa fa-calendar-o" aria-hidden="true"/>
+                                    <field name="date_deadline" widget="date"/>
+                                </span>
+                            </div>
+                            <div class="ms-auto d-flex align-items-center">
+                                <field name="rotting_days" class="d-flex" widget="rotting"/>
+                                <field name="user_id" widget="many2one_avatar_user" domain="[('share', '=', False)]" class="ms-2"/>
+                            </div>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+</odoo>

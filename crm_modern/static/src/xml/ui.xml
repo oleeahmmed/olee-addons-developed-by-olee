@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="crm_modern.PageHeader">
+        <div class="cm-page-header">
+            <div class="cm-truncate">
+                <button t-if="props.crumb" type="button" class="cm-crumb" t-on-click="props.crumb.onClick">
+                    <i class="fa fa-arrow-left" aria-hidden="true"/> <t t-esc="props.crumb.label"/>
+                </button>
+                <h1 class="cm-truncate" t-esc="props.title"/>
+                <p t-if="props.description" t-esc="props.description"/>
+            </div>
+            <div t-if="props.slots and props.slots.actions" class="cm-actions">
+                <t t-slot="actions"/>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="crm_modern.StatCard">
+        <div class="cm-card cm-stat">
+            <div class="cm-stat-top">
+                <span class="cm-stat-label" t-esc="props.label"/>
+                <span class="cm-stat-icon" aria-hidden="true"><i t-attf-class="fa {{ props.icon }}"/></span>
+            </div>
+            <div class="cm-stat-value" t-esc="props.value"/>
+            <div t-if="props.hint" class="cm-stat-hint" t-esc="props.hint"/>
+        </div>
+    </t>
+
+    <t t-name="crm_modern.Segmented">
+        <div class="cm-seg" role="radiogroup" t-att-aria-label="props.label">
+            <t t-foreach="props.options" t-as="opt" t-key="opt_index">
+                <button type="button" role="radio" t-att-aria-checked="opt.value === props.value ? 'true' : 'false'"
+                        t-on-click="() => props.onChange(opt.value)">
+                    <t t-esc="opt.label"/>
+                    <span t-if="opt.count !== undefined" class="cm-count cm-tabular" t-esc="opt.count"/>
+                </button>
+            </t>
+        </div>
+    </t>
+
+    <t t-name="crm_modern.Stars">
+        <span class="cm-stars" t-att-role="props.onChange ? 'radiogroup' : undefined" aria-label="Priority">
+            <t t-foreach="[1, 2, 3]" t-as="n" t-key="n">
+                <button t-if="props.onChange" type="button" role="radio" t-att-aria-checked="level === n ? 'true' : 'false'"
+                        t-attf-aria-label="{{ n }} star priority" t-att-class="{ 'cm-on': n &lt;= level }"
+                        t-on-click.stop="() => this.set(n)">
+                    <i t-attf-class="fa {{ n &lt;= level ? 'fa-star' : 'fa-star-o' }}" aria-hidden="true"/>
+                </button>
+                <span t-else="" t-att-class="{ 'cm-on': n &lt;= level }" aria-hidden="true">
+                    <i t-attf-class="fa {{ n &lt;= level ? 'fa-star' : 'fa-star-o' }}"/>
+                </span>
+            </t>
+        </span>
+    </t>
+
+    <t t-name="crm_modern.TagChips">
+        <span t-if="props.tags.length" class="cm-tag-list">
+            <t t-foreach="shown" t-as="tag" t-key="tag.id">
+                <span t-attf-class="cm-tag cm-tag-{{ tag.color or 0 }}">
+                    <t t-esc="tag.name"/>
+                    <button t-if="props.onRemove" type="button" t-attf-aria-label="Remove tag {{ tag.name }}"
+                            t-on-click.stop="() => props.onRemove(tag.id)"><i class="fa fa-times" aria-hidden="true"/></button>
+                </span>
+            </t>
+            <span t-if="props.max and props.tags.length > props.max" class="cm-tag">+<t t-esc="props.tags.length - props.max"/></span>
+        </span>
+    </t>
+
+    <t t-name="crm_modern.ActivityIcon">
+        <span t-attf-class="cm-act-icon {{ tone }} {{ props.small ? 'cm-act-sm' : '' }}" aria-hidden="true">
+            <i t-attf-class="fa {{ icon }}"/>
+        </span>
+    </t>
+
+    <t t-name="crm_modern.DueLabel">
+        <span t-if="info.label" t-attf-class="cm-due-{{ info.state }}" style="font-size:0.75rem;font-weight:500" t-esc="info.label"/>
+    </t>
+
+    <t t-name="crm_modern.Avatar">
+        <img t-if="props.id" t-att-src="src" t-att-alt="props.name or ''" t-att-title="props.name or ''" loading="lazy"
+             t-attf-class="cm-avatar {{ props.size ? 'cm-avatar-' + props.size : '' }}"/>
+        <span t-else="" t-attf-class="cm-avatar cm-avatar-empty {{ props.size ? 'cm-avatar-' + props.size : '' }}" title="Unassigned" aria-label="Unassigned">
+            <i class="fa fa-user-o" aria-hidden="true"/>
+        </span>
+    </t>
+
+    <t t-name="crm_modern.EmptyState">
+        <div class="cm-empty">
+            <span class="cm-empty-icon" aria-hidden="true"><i t-attf-class="fa {{ props.icon }}"/></span>
+            <strong t-esc="props.title"/>
+            <p t-if="props.description" t-esc="props.description"/>
+            <div t-if="props.slots and props.slots.default" style="margin-top:0.5rem"><t t-slot="default"/></div>
+        </div>
+    </t>
+
+    <t t-name="crm_modern.Progress">
+        <div t-attf-class="cm-progress {{ props.tone ? 'cm-progress-' + props.tone : '' }}" role="progressbar"
+             t-att-aria-label="props.label" t-att-aria-valuenow="Math.round(pct)" aria-valuemin="0" aria-valuemax="100">
+            <span t-attf-style="width: {{ pct }}%"/>
+        </div>
+    </t>
+
+</templates>

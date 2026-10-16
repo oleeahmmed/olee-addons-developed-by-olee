@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="crm_modern.Stages">
+        <div class="o_cm o_cm_page">
+            <div class="cm-container">
+                <PageHeader title="'Pipeline Stages'" description="'The steps a deal goes through. Order drives the board columns and the stage stepper.'"/>
+                <div class="cm-card">
+                    <div class="cm-card-header">
+                        <div><h3>Stages</h3><p>Rename inline, reorder with the arrows. “Stale after” highlights deals with no update for that many days.</p></div>
+                    </div>
+                    <div class="cm-card-body d-grid" style="gap:0.5rem">
+                        <div t-if="state.loading" class="cm-skeleton" style="height:12rem"/>
+                        <t t-foreach="state.stages" t-as="st" t-key="st.id">
+                            <div class="cm-config-row">
+                                <span t-attf-class="cm-seq cm-tabular {{ st.is_won ? 'cm-seq-won' : '' }}" t-esc="st_index + 1"/>
+                                <div class="d-grid" style="gap:0.25rem;min-width:0">
+                                    <input class="cm-input" style="height:2rem;font-weight:500" t-att-value="st.name"
+                                           t-attf-aria-label="Name of stage {{ st_index + 1 }}" t-on-change="(ev) => this.rename(st, ev)"/>
+                                    <span class="cm-muted" style="font-size:0.75rem;padding-left:0.25rem">
+                                        <t t-esc="(state.counts[st.id] and state.counts[st.id].count) or 0"/> opportunities
+                                        <t t-if="st.team_ids.length"> · <t t-esc="st.team_ids.length"/> team(s) only</t>
+                                    </span>
+                                </div>
+                                <label class="d-flex align-items-center" style="gap:0.375rem;font-size:0.75rem;white-space:nowrap">
+                                    Stale after
+                                    <input type="number" min="0" class="cm-input cm-tabular" style="width:4.5rem;height:2rem;text-align:right"
+                                           t-att-value="st.rotting_threshold_days" t-on-change="(ev) => this.setRotting(st, ev)"/>
+                                    days
+                                </label>
+                                <div class="d-flex align-items-center" style="gap:0.75rem;font-size:0.75rem">
+                                    <label class="d-flex align-items-center" style="gap:0.375rem;cursor:pointer">
+                                        <input type="checkbox" class="cm-check" t-att-checked="st.is_won" t-on-change="(ev) => this.save(st, { is_won: ev.target.checked })"/>
+                                        <span t-if="st.is_won" class="cm-badge cm-badge-success"><i class="fa fa-trophy" aria-hidden="true"/> Won stage</span>
+                                        <t t-else="">Won stage</t>
+                                    </label>
+                                    <label class="d-flex align-items-center" style="gap:0.375rem;cursor:pointer">
+                                        <input type="checkbox" class="cm-check" t-att-checked="st.fold" t-on-change="(ev) => this.save(st, { fold: ev.target.checked })"/>
+                                        Folded
+                                    </label>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-end" style="gap:0.125rem">
+                                    <button class="cm-btn cm-btn-ghost cm-btn-icon cm-btn-sm" t-att-disabled="st_index === 0" t-attf-aria-label="Move {{ st.name }} up" t-on-click="() => this.move(st_index, -1)"><i class="fa fa-arrow-up" aria-hidden="true"/></button>
+                                    <button class="cm-btn cm-btn-ghost cm-btn-icon cm-btn-sm" t-att-disabled="st_index === state.stages.length - 1" t-attf-aria-label="Move {{ st.name }} down" t-on-click="() => this.move(st_index, 1)"><i class="fa fa-arrow-down" aria-hidden="true"/></button>
+                                    <button class="cm-btn cm-btn-ghost cm-btn-icon cm-btn-sm" t-attf-aria-label="More settings for {{ st.name }}" title="More settings" t-on-click="() => this.edit(st)"><i class="fa fa-cog" aria-hidden="true"/></button>
+                                    <button class="cm-btn cm-btn-danger-ghost cm-btn-icon cm-btn-sm" t-attf-aria-label="Delete {{ st.name }}" t-on-click="() => this.remove(st)"><i class="fa fa-trash-o" aria-hidden="true"/></button>
+                                </div>
+                            </div>
+                        </t>
+                        <form class="d-flex flex-wrap" style="gap:0.5rem;padding-top:0.5rem" t-on-submit="add">
+                            <input class="cm-input" style="max-width:22rem" placeholder="New stage name, e.g. Demo scheduled" aria-label="New stage name" t-model="state.newName"/>
+                            <button type="submit" class="cm-btn cm-btn-outline" t-att-disabled="!state.newName.trim()"><i class="fa fa-plus" aria-hidden="true"/> Add stage</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="crm_modern.ActivityTypes">
+        <div class="o_cm o_cm_page">
+            <div class="cm-container">
+                <PageHeader title="'Activity Types'" description="'The follow-ups your team schedules, their default delay and what comes next (Odoo chaining).'">
+                    <t t-set-slot="actions">
+                        <button class="cm-btn cm-btn-primary" t-on-click="() => this.edit()"><i class="fa fa-plus" aria-hidden="true"/> New activity type</button>
+                    </t>
+                </PageHeader>
+                <Segmented label="'Show'" value="state.show" onChange.bind="setShow" options="[{ value: 'active', label: 'Active' }, { value: 'archived', label: 'Archived' }]"/>
+                <div class="cm-card">
+                    <div t-if="state.loading" class="p-3"><div class="cm-skeleton" style="height:14rem"/></div>
+                    <EmptyState t-elif="!state.types.length" icon="'fa-th'" title="'No activity types'" description="'Create one to start scheduling follow-ups.'"/>
+                    <div t-else="" class="cm-table-wrap">
+                        <table class="cm-table">
+                            <thead><tr>
+                                <th class="cm-first">Activity type</th><th>Action</th><th>Default summary</th><th>Planned in</th>
+                                <th>Chaining</th><th>Applies to</th><th class="cm-num">Planned</th>
+                            </tr></thead>
+                            <tbody>
+                                <t t-foreach="state.types" t-as="t" t-key="t.id">
+                                    <tr class="cm-clickable" t-on-click="() => this.edit(t.id)">
+                                        <td class="cm-first">
+                                            <span class="d-flex align-items-center" style="gap:0.75rem">
+                                                <ActivityIcon type="t"/>
+                                                <span style="font-weight:500" t-esc="t.name"/>
+                                                <span t-if="t.decoration_type" t-attf-class="cm-badge cm-badge-{{ t.decoration_type === 'danger' ? 'danger' : 'warning' }}" t-esc="t.decoration_type === 'danger' ? 'Error' : 'Alert'"/>
+                                            </span>
+                                        </td>
+                                        <td class="cm-muted" t-esc="category[t.category] or t.category"/>
+                                        <td class="cm-muted cm-truncate" style="max-width:14rem" t-esc="t.summary or '—'"/>
+                                        <td class="cm-muted">
+                                            <t t-esc="delay(t)"/>
+                                            <div style="font-size:0.6875rem" t-esc="t.delay_from === 'previous_activity' ? 'after previous deadline' : 'after completion date'"/>
+                                        </td>
+                                        <td>
+                                            <span t-if="t.chaining_type === 'trigger' and t.triggered_next_type_id" class="cm-badge cm-badge-info">
+                                                <i class="fa fa-arrow-right" aria-hidden="true"/> Triggers <t t-esc="t.triggered_next_type_id[1]"/>
+                                            </span>
+                                            <span t-elif="t.suggested_next_type_ids.length" class="cm-tag-list">
+                                                <t t-foreach="t.suggested_next_type_ids" t-as="sid" t-key="sid">
+                                                    <span class="cm-badge"><i class="fa fa-magic" aria-hidden="true"/><t t-esc="state.names[sid]"/></span>
+                                                </t>
+                                            </span>
+                                            <span t-else="" class="cm-muted">—</span>
+                                        </td>
+                                        <td class="cm-muted" t-esc="t.res_model ? 'CRM only' : 'All models'"/>
+                                        <td class="cm-num" t-esc="state.planned[t.id] or 0"/>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="crm_modern.ActivityPlans">
+        <div class="o_cm o_cm_page">
+            <div class="cm-container">
+                <PageHeader title="'Activity Plans'" description="'Reusable sequences of activities. Launch one from any lead or opportunity via “Schedule / plan”.'">
+                    <t t-set-slot="actions">
+                        <button class="cm-btn cm-btn-primary" t-on-click="() => this.edit()"><i class="fa fa-plus" aria-hidden="true"/> New plan</button>
+                    </t>
+                </PageHeader>
+                <div t-if="state.loading" class="cm-grid-cards"><t t-foreach="[1,2,3]" t-as="i" t-key="i"><div class="cm-skeleton" style="height:14rem"/></t></div>
+                <div t-elif="!state.plans.length" class="cm-card">
+                    <EmptyState icon="'fa-tasks'" title="'No activity plans'" description="'Create a plan such as “New deal onboarding” to standardise follow-ups.'">
+                        <button class="cm-btn cm-btn-primary cm-btn-sm" t-on-click="() => this.edit()">New plan</button>
+                    </EmptyState>
+                </div>
+                <div t-else="" class="cm-grid-cards">
+                    <t t-foreach="state.plans" t-as="p" t-key="p.id">
+                        <article class="cm-card d-flex flex-column">
+                            <div class="cm-card-header">
+                                <div class="cm-truncate">
+                                    <h3 class="d-flex align-items-center" style="gap:0.5rem">
+                                        <t t-esc="p.name"/>
+                                        <span t-if="!p.active" class="cm-badge">Archived</span>
+                                    </h3>
+                                    <p t-esc="p.res_model ? 'Leads &amp; opportunities' : 'Any model'"/>
+                                </div>
+                                <button class="cm-btn cm-btn-ghost cm-btn-icon cm-btn-sm" t-attf-aria-label="Edit {{ p.name }}" t-on-click="() => this.edit(p.id)"><i class="fa fa-pencil" aria-hidden="true"/></button>
+                            </div>
+                            <div class="cm-card-body" style="flex:1">
+                                <ol class="list-unstyled m-0 d-grid" style="gap:0.75rem">
+                                    <t t-foreach="stepsOf(p)" t-as="step" t-key="step.id">
+                                        <li class="d-flex align-items-center" style="gap:0.75rem">
+                                            <ActivityIcon type="step.activity_type_id and state.types[step.activity_type_id[0]]"/>
+                                            <div class="cm-truncate" style="flex:1">
+                                                <div class="cm-truncate" style="font-weight:500" t-esc="step.summary or (step.activity_type_id and step.activity_type_id[1])"/>
+                                                <div class="cm-muted" style="font-size:0.75rem"><t t-esc="step.activity_type_id and step.activity_type_id[1]"/> · <t t-esc="delay(step)"/></div>
+                                            </div>
+                                            <Avatar t-if="step.responsible_type === 'other' and step.responsible_id" id="step.responsible_id[0]" name="step.responsible_id[1]" size="'sm'"/>
+                                            <span t-elif="step.responsible_type === 'on_demand'" class="cm-badge" title="Asked at launch"><i class="fa fa-user-o" aria-hidden="true"/> Ask</span>
+                                            <span t-else="" class="cm-badge" t-esc="step.responsible_type"/>
+                                        </li>
+                                    </t>
+                                    <li t-if="!p.template_ids.length" class="cm-muted" style="font-size:0.75rem">No steps yet.</li>
+                                </ol>
+                            </div>
+                            <div class="cm-card-footer">
+                                <span class="cm-muted" style="font-size:0.75rem"><t t-esc="p.steps_count"/> steps</span>
+                                <span t-if="p.has_user_on_demand" class="cm-badge cm-badge-violet">Asks for a responsible</span>
+                            </div>
+                        </article>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="crm_modern.Tags">
+        <div class="o_cm o_cm_page">
+            <div class="cm-container">
+                <PageHeader title="'Tags'" description="'Classify leads and opportunities. Tags can also be created on the fly from any tag field.'"/>
+                <div class="cm-card" style="padding:1rem">
+                    <form class="d-flex flex-wrap align-items-center" style="gap:0.75rem" t-on-submit="add">
+                        <input class="cm-input" style="max-width:18rem" placeholder="New tag name" aria-label="New tag name" t-model="state.newName"/>
+                        <div class="cm-color-grid" role="radiogroup" aria-label="Tag color" style="grid-template-columns:repeat(12, 1.5rem)">
+                            <t t-foreach="colors" t-as="c" t-key="c">
+                                <button type="button" role="radio" t-att-aria-checked="state.newColor === c ? 'true' : 'false'"
+                                        t-att-aria-label="colorNames[c]" t-att-title="colorNames[c]"
+                                        t-attf-class="cm-tag cm-tag-{{ c }}" style="width:1.5rem;height:1.5rem;padding:0;border-radius:50%"
+                                        t-on-click="() => this.state.newColor = c"/>
+                            </t>
+                        </div>
+                        <span t-if="state.newName.trim()" t-attf-class="cm-tag cm-tag-{{ state.newColor }}" t-esc="state.newName.trim()"/>
+                        <button type="submit" class="cm-btn cm-btn-primary ms-auto" t-att-disabled="!state.newName.trim()"><i class="fa fa-plus" aria-hidden="true"/> Create tag</button>
+                    </form>
+                </div>
+                <label class="cm-search" style="width:16rem;max-width:100%">
+                    <span class="cm-sr-only">Search tags</span>
+                    <i class="fa fa-search" aria-hidden="true"/>
+                    <input class="cm-input" placeholder="Search tags…" t-model="state.q"/>
+                </label>
+                <div class="cm-card">
+                    <div t-if="state.loading" class="p-3"><div class="cm-skeleton" style="height:12rem"/></div>
+                    <EmptyState t-elif="!filtered.length" icon="'fa-tags'" title="'No tags found'" description="'Create a tag above.'"/>
+                    <div t-else="" class="cm-table-wrap">
+                        <table class="cm-table">
+                            <thead><tr>
+                                <th class="cm-first">Tag</th><th>Name</th><th>Color</th>
+                                <th class="cm-num">Opportunities</th><th class="cm-num">Leads</th><th/>
+                            </tr></thead>
+                            <tbody>
+                                <t t-foreach="filtered" t-as="tag" t-key="tag.id">
+                                    <tr>
+                                        <td class="cm-first"><span t-attf-class="cm-tag cm-tag-{{ tag.color or 0 }}" t-esc="tag.name"/></td>
+                                        <td><input class="cm-input" style="height:2rem;width:12rem" t-att-value="tag.name" t-attf-aria-label="Rename {{ tag.name }}" t-on-change="(ev) => this.rename(tag, ev)"/></td>
+                                        <td>
+                                            <div t-if="state.picking === tag.id" class="cm-color-grid" role="radiogroup" t-attf-aria-label="Color of {{ tag.name }}" style="grid-template-columns:repeat(12, 1.25rem);gap:0.25rem">
+                                                <t t-foreach="colors" t-as="c" t-key="c">
+                                                    <button type="button" role="radio" t-att-aria-checked="tag.color === c ? 'true' : 'false'" t-att-aria-label="colorNames[c]" t-att-title="colorNames[c]"
+                                                            t-attf-class="cm-tag cm-tag-{{ c }}" style="width:1.25rem;height:1.25rem;padding:0;border-radius:50%"
+                                                            t-on-click="() => this.setColor(tag, c)"/>
+                                                </t>
+                                            </div>
+                                            <button t-else="" class="cm-btn cm-btn-ghost cm-btn-sm" t-attf-aria-label="Change color of {{ tag.name }}" t-on-click="() => this.state.picking = tag.id">
+                                                <span t-attf-class="cm-tag cm-tag-{{ tag.color or 0 }}" style="width:0.75rem;height:0.75rem;padding:0"/>
+                                                <t t-esc="colorNames[tag.color or 0]"/>
+                                            </button>
+                                        </td>
+                                        <td class="cm-num" t-esc="(state.usage[tag.id] and state.usage[tag.id].opportunity) or 0"/>
+                                        <td class="cm-num" t-esc="(state.usage[tag.id] and state.usage[tag.id].lead) or 0"/>
+                                        <td class="text-end">
+                                            <button class="cm-btn cm-btn-danger-ghost cm-btn-icon cm-btn-sm" t-attf-aria-label="Delete tag {{ tag.name }}" t-on-click="() => this.remove(tag)"><i class="fa fa-trash-o" aria-hidden="true"/></button>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

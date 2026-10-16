@@ -1,0 +1,131 @@
+// "Modern" document layout (printed quotations, sales orders, invoices...).
+// Plain CSS values only (no CSS variables): wkhtmltopdf renders with an old WebKit.
+
+$ml-ink: #0f172a;
+$ml-text: #334155;
+$ml-muted: #64748b;
+$ml-line: #e2e8f0;
+$ml-soft: #f8fafc;
+$ml-head: #1e293b;
+$ml-accent-soft: #eef3fe;
+
+// ---------- header ----------
+.o_ml_header {
+    font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: $ml-text;
+    .o_ml_head { width: 100%; border-collapse: collapse; }
+    .o_ml_head td { vertical-align: top; padding: 0; border: 0; }
+    .o_ml_brand { width: 45%; }
+    .o_ml_logo { max-height: 64px; max-width: 220px; }
+    .o_ml_monogram {
+        display: inline-block; width: 52px; height: 52px; line-height: 52px; border-radius: 12px;
+        text-align: center; font-size: 26px; font-weight: 700; color: #fff;
+    }
+    .o_ml_company { text-align: right; font-size: 11px; line-height: 1.5; }
+    .o_ml_company_name { font-size: 18px; font-weight: 700; color: $ml-ink; letter-spacing: -0.2px; }
+    .o_ml_tagline { font-size: 11px; color: $ml-muted; font-style: italic; }
+    .o_ml_company_address, .o_ml_company_contact, .o_ml_company_vat { color: $ml-muted; }
+    .o_ml_company_address address { margin: 0; }
+    .o_ml_company_vat { font-weight: 600; color: $ml-text; }
+    .o_ml_accent { height: 3px; border-radius: 2px; margin-top: 12px; }
+}
+
+// ---------- document body ----------
+.o_report_layout_modern {
+    font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    color: $ml-text;
+
+    .o_ml_title {
+        margin: 6px 0 14px; font-size: 24px; font-weight: 700; letter-spacing: -0.3px;
+        span { font-weight: 700; }
+    }
+
+    // customer / invoicing / shipping addresses as soft cards
+    // the cards sit inside the page: no negative row gutters
+    .address.row, #informations.row { margin-left: 0 !important; margin-right: 0 !important; }
+    .address {
+        margin-bottom: 16px !important;
+        > div[name="address"], > div[name="information_block"] {
+            padding: 10px 12px; border: 1px solid $ml-line; border-radius: 8px; background: $ml-soft;
+            font-size: 11.5px; line-height: 1.5;
+        }
+        > div[name="address"]::before {
+            content: "CUSTOMER"; display: block; margin-bottom: 4px;
+            font-size: 9px; font-weight: 700; letter-spacing: 1px; color: $ml-muted;
+        }
+        > div[name="information_block"] strong { display: block; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: $ml-muted; }
+        address { margin-bottom: 0; }
+        span[itemprop="name"], .o_contact_name, div[t-field] > div:first-child { font-weight: 600; color: $ml-ink; }
+    }
+
+    // order info strip (date, expiration, salesperson, reference...)
+    #informations {
+        margin: 0 0 16px !important; padding: 10px 4px; border: 1px solid $ml-line; border-radius: 8px; background: $ml-soft;
+        > div { padding: 0 10px; border-left: 1px solid $ml-line; }
+        > div:first-child { border-left: 0; }
+        strong { display: block; font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: $ml-muted; }
+        div[t-field], span { font-size: 12px; font-weight: 600; color: $ml-ink; }
+    }
+
+    h4, h5 { color: $ml-ink; font-weight: 700; }
+    p { color: $ml-text; }
+    .oe_structure { min-height: 0; }
+}
+
+// ---------- tables ----------
+.o_table_modern {
+    table:not(.o_ignore_layout_styling) {
+        border-collapse: separate; border-spacing: 0; width: 100%;
+        th, td { border-left: 0 !important; border-right: 0 !important; outline: 0 !important; }
+        thead th {
+            background-color: #f1f5f9; color: $ml-ink; border: 0 !important; border-bottom: 2px solid $ml-head !important; box-shadow: none !important;
+            padding: 8px 10px; font-size: 9.5px; font-weight: 700; letter-spacing: 0.7px; text-transform: uppercase;
+        }
+        thead th:first-child { border-top-left-radius: 6px; }
+        thead th:last-child { border-top-right-radius: 6px; }
+        tbody td {
+            padding: 8px 10px; border-bottom: 1px solid $ml-line; color: $ml-text; vertical-align: top;
+        }
+        tbody tr:nth-child(even) td { background-color: #fbfcfd; }
+        tbody td[name="td_name"], tbody td[name="account_invoice_line_name"] { color: $ml-ink; font-weight: 500; }
+        tbody tr.o_line_section td { background-color: $ml-accent-soft !important; color: $ml-ink; font-weight: 700; }
+        tbody tr.o_line_subsection td { background-color: $ml-soft !important; font-weight: 600; }
+        tbody tr.o_line_note td { color: $ml-muted; font-style: italic; }
+        tbody tr.is-subtotal td, tbody tr.o_subtotal td { background-color: $ml-soft !important; font-weight: 600; }
+    }
+
+    // totals: a boxed summary with the grand total on a dark band
+    .o_total_table:not(.o_ignore_layout_styling) {
+        margin-top: 14px; border: 1px solid $ml-line; border-radius: 8px; overflow: hidden; background: #fff;
+        td { padding: 7px 12px; border: 0 !important; color: $ml-text; }
+        tr + tr td { border-top: 1px solid $ml-line; }
+        .o_total td, tr.o_total td {
+            border: 0 !important; box-shadow: none !important;
+            background-color: $ml-head; color: #ffffff !important; font-size: 14px; font-weight: 700; padding-top: 9px; padding-bottom: 9px;
+            strong, span { color: #ffffff !important; font-weight: 700; text-shadow: none; }
+        }
+    }
+    div#total { margin-top: 0 !important; }
+}
+
+// ---------- footer ----------
+.o_ml_footer {
+    font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    .o_ml_foot { width: 100%; border-collapse: collapse; border-top: 1px solid $ml-line; }
+    .o_ml_foot td { padding: 6px 0 0; border: 0; font-size: 10px; color: $ml-muted; vertical-align: top; }
+    .o_ml_foot_page { text-align: right; white-space: nowrap; width: 30%; }
+}
+
+// ---------- terms, payment info, signature ----------
+.o_report_layout_modern {
+    #total, .clearfix { margin-bottom: 8px; }
+    p[name="payment_term"], div[name="payment_term"], #payment_term, .oe_structure + p, div[name="comment"], #terms_conditions {
+        font-size: 11px; color: $ml-muted;
+    }
+    div[name="signature"], .o_ml_sign {
+        margin-top: 24px; padding: 10px 12px; border: 1px dashed $ml-line; border-radius: 8px; text-align: center;
+        img { max-height: 60px; }
+    }
+    #qrcode, div[name="qrcode"] { margin-top: 12px; }
+}
