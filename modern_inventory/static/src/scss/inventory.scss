@@ -1,0 +1,62 @@
+// Inventory Modern dashboard: operations at a glance and the "running low" list.
+.o_im.od-page {
+    .im-ops { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.875rem;
+        @media (max-width: 767.98px) { grid-template-columns: 1fr; }
+    }
+    .im-op {
+        display: flex; flex-direction: column; gap: 0.75rem; padding: 0.875rem; border-radius: 0.875rem;
+        border: 1px solid color-mix(in srgb, var(--od-c) 16%, var(--im-border));
+        background: linear-gradient(180deg, color-mix(in srgb, var(--od-c) 5%, var(--im-card)), var(--im-card));
+    }
+    .im-op-head {
+        display: flex; align-items: center; gap: 0.625rem; padding: 0; border: 0; background: none; text-align: left; cursor: pointer;
+        &:hover .im-op-title { color: var(--od-c); }
+        &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--im-ring); border-radius: 0.5rem; }
+        .od-card-icon { display: inline-grid; place-items: center; width: 2rem; height: 2rem; border-radius: 0.5625rem; background: var(--od-soft); color: var(--od-c); }
+    }
+    .im-op-title { font-size: 0.9375rem; font-weight: 700; color: var(--im-fg); transition: color 150ms ease; }
+    .im-op-done { margin-left: auto; display: inline-flex; align-items: center; gap: 0.375rem; font-size: 0.75rem; color: var(--im-muted-fg);
+        strong { color: var(--im-fg); font-size: 0.875rem; }
+    }
+    .im-op-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.375rem; }
+    .im-stat {
+        display: flex; flex-direction: column; align-items: flex-start; gap: 0.125rem; padding: 0.5rem 0.625rem;
+        border-radius: 0.625rem; border: 1px solid var(--im-border); background: var(--im-card); cursor: pointer; text-align: left;
+        transition: border-color 150ms ease, background-color 150ms ease, transform 100ms ease;
+        strong { font-size: 1.25rem; font-weight: 750; line-height: 1.1; letter-spacing: -0.02em; }
+        span { font-size: 0.6875rem; font-weight: 600; color: var(--im-muted-fg); }
+        &:not(:disabled):hover { border-color: color-mix(in srgb, var(--od-c) 40%, var(--im-border)); transform: translateY(-1px); }
+        &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--im-ring); }
+        &:disabled { cursor: default; opacity: 0.55; strong { color: var(--im-subtle-fg); } }
+        &.im-stat--ready strong { color: #059669; }
+        &.im-stat--waiting strong { color: #d97706; }
+        &.im-stat--late strong { color: #e11d48; }
+        &.im-stat--late:not(:disabled) { background: color-mix(in srgb, #e11d48 6%, var(--im-card)); border-color: color-mix(in srgb, #e11d48 25%, var(--im-border)); }
+        &.im-stat--draft strong { color: var(--im-muted-fg); }
+    }
+    .im-op-foot { font-size: 0.75rem; color: var(--im-muted-fg); .fa { margin-right: 0.25rem; } }
+
+    .im-low { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem;
+        li { padding: 0.5rem 0.5rem; border-radius: 0.625rem; transition: background-color 150ms ease;
+            &:hover { background: var(--im-muted); }
+        }
+        .im-low-meta { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; font-size: 0.8125rem; margin-bottom: 0.375rem; }
+        .od-meter-value { min-width: 4.5rem; font-weight: 600; color: var(--im-muted-fg); }
+    }
+}
+
+// Transfer form: the reference is already shown big in the breadcrumb, so the sheet
+// keeps only Odoo's "Urgent" star (still a click to toggle), with a small label.
+.o_web_client:has(.o_im_sidebar) > .o_action_manager .o_form_view:has(.o_field_widget[name="picking_type_id"]) .o_form_sheet .oe_title {
+    margin-bottom: 0.5rem;
+    h1 { margin: 0; font-size: 1rem; align-items: center; }
+    h1 > .o_field_widget[name="name"]:not(:has(input)) { display: none; }
+    .o_field_priority {
+        display: inline-flex; align-items: center; margin: 0 !important; padding: 0.25rem 0.625rem 0.25rem 0.5rem;
+        border: 1px solid var(--im-border); border-radius: 999px; background: var(--im-card);
+        &::after { content: "Urgent"; margin-left: 0.375rem; font-size: 0.75rem; font-weight: 600; color: var(--im-muted-fg); }
+        &:has(.fa-star)::after { color: #b45309; }
+        &:has(.fa-star) { border-color: #fcd34d; background: #fffbeb; }
+        .o_priority_star { font-size: 0.875rem; }
+    }
+}

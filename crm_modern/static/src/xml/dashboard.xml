@@ -228,11 +228,11 @@
                                         <tbody>
                                             <t t-foreach="d.campaigns" t-as="c" t-key="c.id">
                                                 <tr>
-                                                    <td><span class="od-cell-main" t-esc="c.title"/><span class="od-cell-sub" t-esc="c.simple_team_id ? c.simple_team_id[1] : 'No team'"/></td>
-                                                    <td t-if="useLeads" class="od-r od-num" t-esc="c.simple_lead_count"/>
-                                                    <td class="od-r od-num" t-esc="c.simple_opportunity_count"/>
-                                                    <td class="od-r"><span class="od-pill od-tone-green od-num" t-esc="c.simple_won_count"/></td>
-                                                    <td class="od-r od-num" style="font-weight:650" t-esc="ms(c.simple_won_revenue)"/>
+                                                    <td><span class="od-cell-main" t-esc="c.title"/><span class="od-cell-sub" t-esc="c.team ? c.team[1] : 'No team'"/></td>
+                                                    <td t-if="useLeads" class="od-r od-num" t-esc="c.lead_count"/>
+                                                    <td class="od-r od-num" t-esc="c.opportunity_count"/>
+                                                    <td class="od-r"><span class="od-pill od-tone-green od-num" t-esc="c.won_count"/></td>
+                                                    <td class="od-r od-num" style="font-weight:650" t-esc="ms(c.won_revenue)"/>
                                                 </tr>
                                             </t>
                                         </tbody>

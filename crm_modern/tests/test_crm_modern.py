@@ -17,7 +17,7 @@ class TestCrmModern(TransactionCase):
         super().setUpClass()
         cls.Lead = cls.env['crm.lead']
         cls.team = cls.env['crm.team'].create({'name': 'Modern CRM test team'})
-        cls.campaign = cls.env['utm.campaign'].create({'title': 'Modern CRM test campaign', 'simple_team_id': cls.team.id})
+        cls.campaign = cls.env['utm.campaign'].create({'title': 'Modern CRM test campaign'})
 
     def test_view_ids_all_resolve(self):
         """Every view the pages embed must still exist (catches renamed xml ids)."""
@@ -41,8 +41,8 @@ class TestCrmModern(TransactionCase):
             self.assertIn(name, lead_fields, f"crm.lead.{name} is gone")
         self.assertIn('team_ids', self.env['crm.stage']._fields)
         self.assertIn('rotting_threshold_days', self.env['crm.stage']._fields)
-        for name in ('simple_team_id', 'simple_lead_count', 'simple_won_revenue'):
-            self.assertIn(name, self.env['utm.campaign']._fields, f"utm.campaign.{name} (CRM Simple) is gone")
+        for name in ('title', 'user_id'):
+            self.assertIn(name, self.env['utm.campaign']._fields, f"utm.campaign.{name} is gone")
 
     def test_features(self):
         features = self.Lead.crm_modern_features()
@@ -192,3 +192,32 @@ class TestCrmModernOwnerDashboard(TransactionCase):
         self.assertTrue(data['funnel'][-1]['won'])
         self.assertEqual([t['id'] for t in data['teams']], [team.id])
         self.assertIn(self.env.user.id, [s['id'] for s in data['salespeople']])
+
+
+@tagged('post_install', '-at_install')
+class TestCrmModernCampaigns(TransactionCase):
+    """Campaigns use only Odoo's utm.campaign; their figures come from the leads."""
+
+    def test_round_robin_import_and_campaign_stats(self):
+        Users = self.env['res.users']
+        sellers = Users.create([{
+            'name': f'Round robin seller {i}', 'login': f'crm_modern_rr_{i}',
+            'group_ids': [(6, 0, [self.env.ref('sales_team.group_sale_salesman_all_leads').id])],
+        } for i in (1, 2)])
+        team = self.env['crm.team'].create({'name': 'Round robin team'})
+        self.env['crm.team.member'].create([{'crm_team_id': team.id, 'user_id': u.id} for u in sellers])
+        campaign = self.env['utm.campaign'].create({'title': 'Round robin campaign'})
+        rows = [{'name': f'Deal {i}', 'phone': f'+88017000000{i}'} for i in range(4)]
+        res = self.env['crm.lead'].crm_modern_import('opportunity', rows, campaign.id, team.id, 'round_robin')
+        self.assertEqual(res['created'], 4)
+        leads = self.env['crm.lead'].browse(res['ids'])
+        self.assertEqual(set(leads.mapped('team_id').ids), {team.id})
+        self.assertEqual(sorted(leads.mapped('user_id').ids), sorted(sellers.ids))
+        self.assertEqual(len(leads.filtered(lambda l: l.user_id == sellers[0])), 2)
+
+        leads[0].action_set_won()
+        stats = {r['id']: r for r in self.env['crm.lead']._crm_modern_campaign_stats(limit=None)}
+        row = stats[campaign.id]
+        self.assertEqual(row['opportunity_count'], 4)
+        self.assertEqual(row['won_count'], 1)
+        self.assertEqual(row['team'][0], team.id)

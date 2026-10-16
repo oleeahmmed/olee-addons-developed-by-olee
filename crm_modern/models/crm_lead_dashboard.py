@@ -216,14 +216,7 @@ class CrmLead(models.Model):
             ['summary', 'activity_type_id', 'res_id', 'res_name', 'user_id', 'date_deadline'],
             order='date_deadline asc', limit=6)
 
-        campaigns = []
-        Campaign = self.env['utm.campaign']
-        if 'simple_card_count' in Campaign._fields:
-            campaigns = Campaign.search_read(
-                [('simple_card_count', '>', 0)] + ([('simple_team_id', '=', int(team_id))] if team_id else []),
-                ['title', 'simple_team_id', 'user_id', 'simple_lead_count', 'simple_opportunity_count',
-                 'simple_open_count', 'simple_won_count', 'simple_won_revenue'],
-                order='simple_card_count desc', limit=6)
+        campaigns = self._crm_modern_campaign_stats(team_id, limit=6)
 
         currency = self.env.company.currency_id
         return {

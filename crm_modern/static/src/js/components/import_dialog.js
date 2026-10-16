@@ -114,7 +114,7 @@ export class ImportDialog extends Component {
     static components = { Dialog };
     static props = {
         close: Function,
-        campaign: Object, // { id, title, simple_team_id }
+        campaign: Object, // { id, title, team? [id, name] }
         onImported: Function,
     };
 
@@ -124,7 +124,7 @@ export class ImportDialog extends Component {
         this.fileInput = useRef("file");
         this.state = useState({
             kind: "lead",
-            teamId: this.props.campaign.simple_team_id ? this.props.campaign.simple_team_id[0] : "",
+            teamId: this.props.campaign.team ? this.props.campaign.team[0] : "",
             assign: "round_robin",
             teams: [],
             members: {},

@@ -30,10 +30,7 @@ const MERGE_INTO = {
     "crm.crm_menu_leads": "crm_modern.menu_sales",
     "crm.crm_lead_menu_my_activities": "crm_modern.menu_sales",
     "crm.res_partner_menu_customer": "crm_modern.menu_sales",
-    "crm_simple.menu_simple_pipeline": "crm_modern.menu_sales",
-    "crm_simple.menu_simple_campaigns": "crm_modern.menu_marketing",
     "crm.crm_menu_report": "crm_modern.menu_reporting",
-    "crm_simple.menu_simple_report": "crm_modern.menu_reporting",
     "crm.crm_menu_config": "crm_modern.menu_config",
 };
 // Groups shown as dropdowns in the top bar instead of the sidebar, so the sidebar
@@ -57,7 +54,6 @@ const REPLACED = new Set([
     "crm.crm_opportunity_report_menu",
     "crm.crm_opportunity_report_menu_lead",
     "crm.crm_activity_report_menu",
-    "crm_simple.menu_simple_campaigns",
 ]);
 const COLLAPSE_KEY = "crm_modern.sidebar.collapsed";
 
@@ -102,9 +98,6 @@ for (const [xmlid, icon] of Object.entries({
     "crm.menu_crm_lost_reason": "fa-ban",
     "sale_crm.sale_order_menu_quotations_crm": "fa-file-text-o",
     // CRM Simple
-    "crm_simple.menu_simple_campaigns": "fa-bullhorn",
-    "crm_simple.menu_simple_pipeline": "fa-columns",
-    "crm_simple.menu_simple_report": "fa-bar-chart",
 })) {
     menuIcons.add(xmlid, icon);
 }

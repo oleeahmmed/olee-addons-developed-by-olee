@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="modern_inventory.AreaChart">
+        <figure class="im-chart" style="margin:0">
+            <svg t-attf-viewBox="0 0 {{ W }} {{ H }}" role="img" t-att-aria-label="props.label"
+                 t-on-pointermove="onMove" t-on-pointerleave="() => this.state.hover = null">
+                <defs>
+                    <linearGradient id="im-area-fill" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stop-color="var(--im-chart-1)" stop-opacity="0.22"/>
+                        <stop offset="100%" stop-color="var(--im-chart-1)" stop-opacity="0"/>
+                    </linearGradient>
+                </defs>
+                <t t-foreach="ticks" t-as="tick" t-key="tick_index">
+                    <line t-att-x1="P.l" t-att-x2="W - P.r" t-att-y1="y(tick)" t-att-y2="y(tick)"
+                          stroke="var(--im-border)" t-att-stroke-dasharray="tick ? '3 4' : undefined"/>
+                    <text t-att-x="P.l - 8" t-att-y="y(tick)" dy="0.32em" text-anchor="end" font-size="10"
+                          fill="var(--im-muted-fg)" t-esc="props.formatAxis(tick)"/>
+                </t>
+                <t t-foreach="props.data" t-as="d" t-key="d_index">
+                    <text t-att-x="x(d_index)" t-att-y="H - 6" text-anchor="middle" font-size="10" fill="var(--im-muted-fg)" t-esc="d.label"/>
+                </t>
+                <path t-att-d="area" fill="url(#im-area-fill)"/>
+                <path t-att-d="line" fill="none" stroke="var(--im-chart-1)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+                <t t-if="state.hover !== null">
+                    <line t-att-x1="x(state.hover)" t-att-x2="x(state.hover)" t-att-y1="P.t" t-att-y2="H - P.b"
+                          stroke="var(--im-muted-fg)" stroke-opacity="0.4"/>
+                    <circle t-att-cx="x(state.hover)" t-att-cy="y(props.data[state.hover].value)" r="5"
+                            fill="var(--im-chart-1)" stroke="var(--im-card)" stroke-width="2"/>
+                </t>
+                <circle t-att-cx="x(last)" t-att-cy="y(props.data[last].value)" r="4" fill="var(--im-chart-1)" stroke="var(--im-card)" stroke-width="2"/>
+            </svg>
+            <div t-if="state.hover !== null" class="im-tooltip" t-attf-style="left: {{ x(state.hover) / W * 100 }}%">
+                <div class="im-muted" t-esc="props.data[state.hover].label"/>
+                <strong class="im-tabular" t-esc="props.format(props.data[state.hover].value)"/>
+            </div>
+            <figcaption class="im-sr-only" t-esc="summary"/>
+        </figure>
+    </t>
+
+    <t t-name="modern_inventory.BarList">
+        <ul class="im-barlist">
+            <t t-foreach="props.items" t-as="item" t-key="item.id or item_index">
+                <li t-att-title="item.label + ': ' + props.format(item.value)"
+                    t-att-class="{ 'im-bar-link': props.onClick }" t-att-tabindex="props.onClick ? 0 : undefined"
+                    t-on-click="() => props.onClick and props.onClick(item)">
+                    <div class="im-bar-meta">
+                        <span class="im-truncate" style="font-weight:500">
+                            <t t-esc="item.label"/>
+                            <span t-if="item.sub" class="im-muted" style="font-weight:400;margin-left:0.375rem" t-esc="item.sub"/>
+                        </span>
+                        <span class="im-muted im-tabular" style="flex-shrink:0" t-esc="props.format(item.value)"/>
+                    </div>
+                    <div class="im-bar"><span t-attf-style="width: {{ width(item.value) }}%"/></div>
+                </li>
+            </t>
+        </ul>
+    </t>
+
+</templates>

@@ -66,20 +66,15 @@
 
     <t t-name="crm_modern.CampaignDialog">
         <Dialog title="'New campaign'" size="'md'" contentClass="'o_cm o_cm_dialog'">
-            <p class="cm-dialog-desc">Set the sales team so new leads are spread over its members.</p>
+            <p class="cm-dialog-desc">Name the campaign; its leads and deals are then grouped under it.</p>
             <form class="d-grid" style="gap:1rem" t-on-submit.prevent="save" novalidate="">
                 <div t-if="state.error" class="cm-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
                 <div class="cm-field"><label class="cm-label" for="cm_cp_title">Campaign name *</label>
                     <input id="cm_cp_title" class="cm-input" t-model="state.title" autofocus=""/></div>
-                <div class="cm-grid-2">
-                    <div class="cm-field"><label class="cm-label" for="cm_cp_team">Sales team</label>
-                        <select id="cm_cp_team" class="cm-select" t-model="state.team_id">
-                            <option value="">No team</option>
-                            <t t-foreach="state.choices.teams" t-as="t" t-key="t.id"><option t-att-value="t.id" t-esc="t.name"/></t>
-                        </select></div>
-                    <div class="cm-field"><label class="cm-label" for="cm_cp_user">Salesperson</label>
+                <div class="cm-field">
+                    <div class="cm-field"><label class="cm-label" for="cm_cp_user">Responsible</label>
                         <select id="cm_cp_user" class="cm-select" t-model="state.user_id">
-                            <option value="">Spread over team</option>
+                            <option value="">Nobody in particular</option>
                             <t t-foreach="state.choices.users" t-as="u" t-key="u.id"><option t-att-value="u.id" t-esc="u.name"/></t>
                         </select></div>
                 </div>

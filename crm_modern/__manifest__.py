@@ -8,21 +8,19 @@ stages, activity types, activity plans and tags.
 
 No new tables or fields: everything reads and writes the standard models
 (crm.lead, crm.stage, crm.team, utm.campaign, crm.tag, mail.activity,
-mail.activity.type, mail.activity.plan). Campaign teams and round-robin
-assignment come from CRM Simple.
+mail.activity.type, mail.activity.plan).
     """,
     'version': '19.0.1.0.0',
     'category': 'Sales/CRM',
     'author': 'Your Name',
     'license': 'LGPL-3',
-    'depends': ['crm', 'utm', 'mail', 'sales_team', 'crm_simple'],
+    'depends': ['crm', 'utm', 'mail', 'sales_team'],
     'data': [
         'views/report_layout.xml',
         'views/crm_modern_lead_views.xml',
         'views/crm_modern_team_views.xml',
         'views/crm_modern_actions.xml',
         'views/crm_modern_menus.xml',
-        'views/crm_simple_lead_option.xml',
     ],
     'assets': {
         'web.assets_backend': [

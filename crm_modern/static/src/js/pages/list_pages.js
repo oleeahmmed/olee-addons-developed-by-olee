@@ -198,12 +198,12 @@ class PipelinePage extends ListPage {
 
 class CampaignsPage extends ListPage {
     static title = _t("Campaigns");
-    static subtitle = _t("Campaigns, the team working them and what they bring in");
+    static subtitle = _t("Your campaigns — open one to see the leads and deals it brought in");
     static icon = "fa-bullhorn";
     static newLabel = _t("New campaign");
     static resModel = "utm.campaign";
     static prefix = "campaign";
-    static types = ["kanban", "list", "calendar", "pivot", "graph", "activity"];
+    static types = ["kanban", "list"];
     create() {
         return this.dialogPromise(CampaignDialog, {});
     }

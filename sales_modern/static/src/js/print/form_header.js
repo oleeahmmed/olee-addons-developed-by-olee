@@ -22,13 +22,18 @@ const MAIN_BUTTONS = new Set([
     "preview_invoice",
     "action_cancel",
     "button_cancel",
+    // Inventory transfers
+    "button_validate",
+    "action_assign",
+    "do_print_picking",
 ]);
-const PRINT_BUTTONS = new Set(["sale.action_report_saleorder", "action_print_pdf"]);
+const PRINT_BUTTONS = new Set(["sale.action_report_saleorder", "action_print_pdf", "do_print_picking"]);
 const PRINT_MODELS_BY_NAME = {
     "sale.order": "sale.action_report_saleorder",
     "account.move": "account.account_invoices",
+    "stock.picking": "stock.action_report_delivery",
 };
-const APP_SELECTOR = ".o_cm_sidebar, .o_ss_sidebar";
+const APP_SELECTOR = ".o_cm_sidebar, .o_ss_sidebar, .o_im_sidebar";
 
 function buttonName(key) {
     return (key || "").split("|")[1] || "";
@@ -85,6 +90,9 @@ if (!StatusBarButtons.__modernHeader) {
         get showModernPrint() {
             const record = this.modernRecord;
             if (!record || record.isNew) {
+                return false;
+            }
+            if (record.resModel === "stock.picking" && !["assigned", "done"].includes(record.data.state)) {
                 return false;
             }
             if (record.resModel === "account.move" && !String(record.data.move_type || "").match(/invoice|refund|receipt/)) {

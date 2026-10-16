@@ -16,7 +16,7 @@ import { Layout } from "@web/search/layout";
 import { getDefaultConfig } from "@web/views/view";
 import { getReportUrl } from "@web/webclient/actions/reports/utils";
 
-const PRINT_MODELS = ["sale.order", "account.move"];
+const PRINT_MODELS = ["sale.order", "account.move", "stock.picking"];
 
 function reportContext(report) {
     return { ...user.context, ...(report.context || {}) };

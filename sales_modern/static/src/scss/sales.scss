@@ -354,6 +354,10 @@ $ss-app: '.o_web_client:has(.o_ss_sidebar) > .o_action_manager';
             .fa { color: var(--ss-muted-fg); font-size: 0.875rem; }
             &[aria-expanded="true"], &.show { --btn-bg: var(--ss-muted); }
         }
+        // Inventory: Validate like Confirm, Check Availability outlined, Print the transfer
+        > .btn[name="button_validate"] { order: 1; @include ss-solid(#059669, #047857, #047857); @include ss-icon("\f00c"); }
+        > .btn[name="action_assign"] { order: 5; @include ss-outline(var(--ss-fg), var(--ss-border), var(--ss-card-matte)); @include ss-icon("\f046"); &::before { color: #0284c7; } }
+        > .btn[name="do_print_picking"] { order: 9; @include ss-outline(var(--ss-fg), var(--ss-border), var(--ss-card-matte)); @include ss-icon("\f02f"); &::before { color: var(--ss-muted-fg); } }
         // 4. Back to draft / lock / unlock
         > .btn[name="action_draft"], > .btn[name="button_draft"] { order: 15; @include ss-icon("\f0e2"); }
         > .btn[name="action_lock"], > .btn[name="button_hash"] { order: 16; @include ss-icon("\f023"); }
@@ -444,7 +448,9 @@ $ss-app: '.o_web_client:has(.o_ss_sidebar) > .o_action_manager';
         .nav-link[name="sales_purchases"]::before { content: "\f07a"; }
         .nav-link[name="contact_addresses"]::before { content: "\f2bb"; }
         .nav-link[name="accounting"]::before { content: "\f19c"; }
-        .nav-link[name="internal_notes"]::before { content: "\f249"; }
+        .nav-link[name="internal_notes"]::before, .nav-link[name="note"]::before { content: "\f249"; }
+        .nav-link[name="operations"]::before, .nav-link[name="detailed_operations"]::before { content: "\f0ce"; }
+        .nav-link[name="extra"]::before { content: "\f05a"; }
         .o_notebook_content, .tab-content { border: 0 !important; }
     }
 

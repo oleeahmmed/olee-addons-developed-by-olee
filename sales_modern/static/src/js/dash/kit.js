@@ -301,6 +301,9 @@ export class OdFilters extends Component {
         teams: Array,
         onChange: Function,
         busy: { type: Boolean, optional: true },
+        allLabel: { type: String, optional: true },
+        icon: { type: String, optional: true },
+        label: { type: String, optional: true },
     };
     get periods() {
         return [

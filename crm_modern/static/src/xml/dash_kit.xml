@@ -203,9 +203,9 @@
                 </t>
             </div>
             <label t-if="props.teams.length > 1" class="od-select">
-                <i class="fa fa-users" aria-hidden="true"/>
-                <select t-on-change="onTeam" aria-label="Sales team" t-att-disabled="props.busy">
-                    <option value="" t-att-selected="!props.teamId">All teams</option>
+                <i t-attf-class="fa {{ props.icon or 'fa-users' }} od-select-icon" aria-hidden="true"/>
+                <select t-on-change="onTeam" t-att-aria-label="props.label or 'Sales team'" t-att-disabled="props.busy">
+                    <option value="" t-att-selected="!props.teamId" t-esc="props.allLabel or 'All teams'"/>
                     <t t-foreach="props.teams" t-as="t" t-key="t.id">
                         <option t-att-value="t.id" t-att-selected="props.teamId === t.id" t-esc="t.name"/>
                     </t>

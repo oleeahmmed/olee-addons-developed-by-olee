@@ -96,7 +96,7 @@ export class QuickCreateDialog extends Component {
     }
 }
 
-/** New utm.campaign with its sales team (CRM Simple field) and salesperson. */
+/** New utm.campaign (Odoo's own model) with its responsible. */
 export class CampaignDialog extends Component {
     static template = "crm_modern.CampaignDialog";
     static components = { Dialog };
@@ -118,7 +118,6 @@ export class CampaignDialog extends Component {
         }
         const [id] = await this.orm.create("utm.campaign", [{
             title: s.title.trim(),
-            simple_team_id: Number(s.team_id) || false,
             user_id: Number(s.user_id) || false,
         }]);
         this.props.onSaved?.(id);

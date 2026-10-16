@@ -81,11 +81,7 @@ class CrmLead(models.Model):
 
         leaderboard = self._crm_modern_user_stats(limit=5)
 
-        campaigns = self.env['utm.campaign'].search_read(
-            [('simple_card_count', '>', 0)],
-            ['title', 'simple_team_id', 'user_id', 'simple_lead_count', 'simple_opportunity_count',
-             'simple_open_count', 'simple_won_count', 'simple_won_revenue'],
-            order='simple_card_count desc', limit=6)
+        campaigns = self._crm_modern_campaign_stats(limit=6)
 
         return {
             'currency_id': self.env.company.currency_id.id,
@@ -100,6 +96,40 @@ class CrmLead(models.Model):
             'leaderboard': leaderboard,
             'campaigns': campaigns,
         }
+
+    @api.model
+    def _crm_modern_campaign_stats(self, team_id=False, limit=6):
+        """Campaign results computed from crm.lead (campaign_id, team_id, won_status): no stored fields."""
+        Lead = self.with_context(active_test=False)
+        domain = [('campaign_id', '!=', False)] + ([('team_id', '=', int(team_id))] if team_id else [])
+        stats = {}
+        for campaign, kind, status, count, amount in Lead._read_group(
+                domain + ['|', ('active', '=', True), ('won_status', '!=', 'pending')],
+                ['campaign_id', 'type', 'won_status'], ['__count', 'expected_revenue:sum']):
+            row = stats.setdefault(campaign, {
+                'id': campaign.id, 'title': campaign.title or campaign.name, 'user_id': campaign.user_id.id and [campaign.user_id.id, campaign.user_id.name],
+                'lead_count': 0, 'opportunity_count': 0, 'open_count': 0, 'won_count': 0, 'won_revenue': 0.0, 'total': 0,
+            })
+            row['total'] += count
+            if kind == 'lead':
+                row['lead_count'] += count
+            else:
+                row['opportunity_count'] += count
+                if status == 'won':
+                    row['won_count'] += count
+                    row['won_revenue'] += amount or 0.0
+                elif status == 'pending':
+                    row['open_count'] += count
+        # the team working a campaign: the team most of its leads belong to
+        teams = {}
+        for campaign, team, count in Lead._read_group(domain + [('team_id', '!=', False)], ['campaign_id', 'team_id'], ['__count']):
+            if campaign in stats and count > teams.get(campaign, (None, 0))[1]:
+                teams[campaign] = ((team.id, team.name), count)
+        rows = list(stats.values())
+        for campaign, row in stats.items():
+            row['team'] = list(teams[campaign][0]) if campaign in teams else False
+        rows.sort(key=lambda r: (r['won_revenue'], r['total']), reverse=True)
+        return rows[:limit] if limit else rows
 
     @api.model
     def _crm_modern_user_stats(self, user_ids=None, limit=None):
@@ -185,13 +215,10 @@ class CrmLead(models.Model):
             record = self.env.ref(xmlid, raise_if_not_found=False)
             return record.id if record else False
         return {
-            'campaign_search': ref('crm_simple.simple_campaign_search'),
-            'campaign_calendar': ref('crm_simple.simple_campaign_calendar'),
-            'campaign_pivot': ref('crm_simple.simple_campaign_pivot'),
-            'campaign_graph': ref('crm_simple.simple_campaign_graph'),
-            'campaign_activity': ref('crm_simple.simple_campaign_activity'),
-            'campaign_kanban': ref('crm_simple.simple_campaign_kanban'),
-            'campaign_list': ref('crm_simple.simple_campaign_list'),
+            # utm.campaign (Odoo's own campaign views)
+            'campaign_search': ref('utm.view_utm_campaign_view_search'),
+            'campaign_kanban': ref('utm.utm_campaign_view_kanban'),
+            'campaign_list': ref('utm.utm_campaign_view_tree'),
             # crm.lead — leads
             'lead_search': ref('crm.view_crm_case_leads_filter'),
             'lead_list': ref('crm.crm_case_tree_view_leads'),
@@ -215,7 +242,7 @@ class CrmLead(models.Model):
             'member_search': ref('sales_team.crm_team_member_view_search'),
             'member_list': ref('sales_team.crm_team_member_view_tree'),
             'member_kanban': ref('sales_team.crm_team_member_view_kanban'),
-            'campaign_form': ref('crm_simple.simple_campaign_form'),
+            'campaign_form': ref('utm.utm_campaign_view_form'),
             # activities (mail.activity on leads / opportunities)
             'activity_search': ref('mail.mail_activity_view_search'),
             'activity_list': ref('mail.mail_activity_view_tree'),
@@ -284,8 +311,8 @@ class CrmLead(models.Model):
         (name, company, contact, email, phone, source, expected_revenue,
         probability, stage, date_deadline, priority, tags, salesperson, note).
         Duplicates (same phone or email inside the campaign) are skipped.
-        With ``assign == 'round_robin'`` the salesperson is left empty so
-        CRM Simple spreads the records over the campaign team.
+        With ``assign == 'round_robin'`` the records are spread in turn over the
+        active members of the chosen sales team (Odoo's crm.team.member).
         """
         if kind not in ('lead', 'opportunity'):
             raise UserError(self.env._("Choose Lead or Opportunity."))
@@ -295,9 +322,9 @@ class CrmLead(models.Model):
         campaign = self.env['utm.campaign'].browse(campaign_id).exists()
         if not campaign:
             raise UserError(self.env._("The campaign no longer exists."))
-        if team_id and campaign.simple_team_id.id != team_id:
-            campaign.simple_team_id = team_id
-        team = campaign.simple_team_id
+        team = self.env['crm.team'].browse(int(team_id)).exists() if team_id else self.env['crm.team']
+        members = team.crm_team_member_ids.filtered(lambda m: m.active and not m.assignment_optout).user_id if team else self.env['res.users']
+        turn = iter(range(10 ** 9))
 
         existing = self.with_context(active_test=False).search_read(
             [('campaign_id', '=', campaign.id)], ['phone', 'email_from'])
@@ -331,6 +358,8 @@ class CrmLead(models.Model):
             raw = (raw or '').strip()
             if assign == 'me' or own_only:
                 return self.env.user.id
+            if assign == 'round_robin':
+                return members[next(turn) % len(members)].id if members else False
             if assign != 'column' or not raw:
                 return False
             if raw not in user_cache:
