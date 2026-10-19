@@ -6,6 +6,7 @@ Run after every Odoo update:
 If an Odoo update renames a view, field or method this addon relies on,
 one of these tests fails and points at it, instead of the UI breaking later.
 """
+from odoo.exceptions import UserError
 from odoo.tests import TransactionCase, tagged
 
 
@@ -221,3 +222,34 @@ class TestCrmModernCampaigns(TransactionCase):
         self.assertEqual(row['opportunity_count'], 4)
         self.assertEqual(row['won_count'], 1)
         self.assertEqual(row['team'][0], team.id)
+
+    def test_optional_sale_never_breaks_crm(self):
+        """CRM stays usable when Sales is missing: no quotation data, menus, or RPC errors."""
+        from odoo.addons.crm_modern.models.crm_lead_sale import has_sale
+
+        Lead = self.Lead
+        features = Lead.crm_modern_features()
+        self.assertEqual(
+            features['sale'],
+            has_sale(self.env) and self.env.user.has_group('sales_team.group_sale_salesman'),
+        )
+        self.assertFalse(Lead.crm_modern_sale_data(0))
+        self.assertFalse(Lead.crm_modern_sale_data(False))
+
+        quote_menu = self.env.ref('crm_modern.menu_quotations')
+        order_menu = self.env.ref('crm_modern.menu_sale_orders')
+        black = self.env['ir.ui.menu']._load_menus_blacklist()
+        if has_sale(self.env):
+            self.assertNotIn(quote_menu.id, black)
+            self.assertNotIn(order_menu.id, black)
+            self.assertTrue(Lead.crm_modern_sale_dashboard())
+            return
+
+        self.assertIn(quote_menu.id, black)
+        self.assertIn(order_menu.id, black)
+        self.assertFalse(Lead.crm_modern_sale_dashboard())
+        ids = Lead.crm_modern_view_ids()
+        self.assertFalse(any(key.startswith(('quotation_', 'order_')) for key in ids))
+        lead = Lead.create({'name': 'CRM without Sales', 'type': 'opportunity'})
+        with self.assertRaises(UserError):
+            lead.crm_modern_quick_quotation([{'product_id': 1, 'qty': 1}])

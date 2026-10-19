@@ -13,6 +13,9 @@ menuIcons.add("crm_modern.menu_sale_orders", "fa-shopping-cart");
 class SaleOrderPage extends ListPage {
     static resModel = "sale.order";
     static types = ["list", "kanban", "calendar", "pivot", "graph", "activity"];
+    static requiresFeature = "sale";
+    static unavailableTitle = _t("Sales is not installed");
+    static unavailableDescription = _t("Quotations and sales orders from CRM appear here when the Sales app is installed.");
 
     openSaleForm(resId) {
         return this.action.doAction({

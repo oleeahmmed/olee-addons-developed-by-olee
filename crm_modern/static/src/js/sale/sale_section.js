@@ -47,8 +47,13 @@ export class SaleTab extends Component {
     }
 
     async load(record) {
-        this.state.data = await this.orm.call("crm.lead", "crm_modern_sale_data", [record.id]);
-        if (!this.state.data.orders.length) {
+        const data = await this.orm.call("crm.lead", "crm_modern_sale_data", [record.id]);
+        if (!data || !Array.isArray(data.orders)) {
+            this.state.data = null;
+            return;
+        }
+        this.state.data = data;
+        if (!data.orders.length) {
             this.state.building = true;
         }
     }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_home" model="ir.actions.client">
+        <field name="name">Home</field>
+        <field name="tag">mrp_modern.home</field>
+        <field name="path">modern-mrp-home</field>
+    </record>
+    <record id="action_dashboard" model="ir.actions.client">
+        <field name="name">Manufacturing Dashboard</field>
+        <field name="tag">mrp_modern.dashboard</field>
+        <field name="path">modern-mrp</field>
+    </record>
+    <record id="action_mos" model="ir.actions.client">
+        <field name="name">Manufacturing Orders</field>
+        <field name="tag">mrp_modern.mos</field>
+        <field name="path">modern-mrp-orders</field>
+    </record>
+    <record id="action_todo" model="ir.actions.client">
+        <field name="name">To Do</field>
+        <field name="tag">mrp_modern.todo</field>
+        <field name="path">modern-mrp-todo</field>
+    </record>
+    <record id="action_done" model="ir.actions.client">
+        <field name="name">Done</field>
+        <field name="tag">mrp_modern.done</field>
+        <field name="path">modern-mrp-done</field>
+    </record>
+    <record id="action_boms" model="ir.actions.client">
+        <field name="name">Bills of Materials</field>
+        <field name="tag">mrp_modern.boms</field>
+        <field name="path">modern-mrp-boms</field>
+    </record>
+    <record id="action_unbuild" model="ir.actions.client">
+        <field name="name">Unbuild Orders</field>
+        <field name="tag">mrp_modern.unbuild</field>
+        <field name="path">modern-mrp-unbuild</field>
+    </record>
+    <record id="action_workorders" model="ir.actions.client">
+        <field name="name">Work Orders</field>
+        <field name="tag">mrp_modern.workorders</field>
+        <field name="path">modern-mrp-workorders</field>
+    </record>
+    <record id="action_workcenters" model="ir.actions.client">
+        <field name="name">Work Centers</field>
+        <field name="tag">mrp_modern.workcenters</field>
+        <field name="path">modern-mrp-workcenters</field>
+    </record>
+    <record id="action_products" model="ir.actions.client">
+        <field name="name">Products</field>
+        <field name="tag">mrp_modern.products</field>
+        <field name="path">modern-mrp-products</field>
+    </record>
+</odoo>

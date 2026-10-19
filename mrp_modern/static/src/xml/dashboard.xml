@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="mrp_modern.Dashboard">
+        <div class="o_mr od-page">
+            <t t-if="state.loading">
+                <div class="od-head"><div class="od-skel" style="height:3.75rem;width:22rem"/><div class="od-skel" style="height:2.25rem;width:20rem"/></div>
+                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel" style="height:8.5rem"/></t></div>
+                <div class="od-grid"><div class="od-skel od-span-8" style="height:22rem"/><div class="od-skel od-span-4" style="height:22rem"/></div>
+            </t>
+            <t t-elif="state.data">
+                <t t-set="d" t-value="state.data"/>
+
+                <header class="od-head">
+                    <div>
+                        <div class="od-eyebrow"><span class="od-live" aria-hidden="true"/> <t t-esc="d.company"/> · Manufacturing overview</div>
+                        <h1 class="od-title"><t t-esc="greeting"/>, <t t-esc="firstName"/></h1>
+                        <p class="od-subtitle">
+                            <strong t-esc="caption.current"/>, compared with <t t-esc="caption.previous"/>
+                        </p>
+                    </div>
+                    <div class="od-head-actions">
+                        <OdFilters period="state.period" teams="[]" onChange.bind="onFilters" busy="state.busy"/>
+                        <button type="button" class="od-btn od-btn--icon" title="Refresh" aria-label="Refresh" t-on-click="() => this.load()">
+                            <i t-attf-class="fa fa-refresh {{ state.busy ? 'fa-spin' : '' }}" aria-hidden="true"/>
+                        </button>
+                        <button t-if="state.canCreate" type="button" class="od-btn od-btn--primary" data-hotkey="c" t-on-click="newMo">
+                            <i class="fa fa-plus" aria-hidden="true"/> New MO
+                        </button>
+                    </div>
+                </header>
+
+                <div t-att-class="{ 'od-busy': state.busy }">
+                    <section class="od-kpis" aria-label="Key figures">
+                        <OdKpi featured="true" tone="'blue'" icon="'fa-check-circle'" label="'Finished orders'" value="number(k.done)"
+                               delta="k.done_delta" compareLabel="compare" spark="d.sparks.done"
+                               hint="k.done_prev ? number(k.done_prev) + ' in the previous period' : 'No finished orders last period'" onClick.bind="openDone"/>
+                        <OdKpi tone="'teal'" icon="'fa-cubes'" label="'Units produced'" value="units(k.qty)"
+                               delta="k.qty_delta" compareLabel="compare" spark="d.sparks.qty"
+                               hint="'finished quantity this period'" onClick.bind="openDone"/>
+                        <OdKpi tone="'sky'" icon="'fa-list'" label="'Open orders'" value="number(k.open)"
+                               hint="number(k.in_progress) + ' in progress'" onClick="() => this.go('mrp_modern.action_todo')"/>
+                        <OdKpi tone="'amber'" icon="'fa-cogs'" label="'In progress'" value="number(k.in_progress)"
+                               hint="number(k.to_close) + ' ready to close'"/>
+                        <OdKpi tone="'violet'" icon="'fa-exchange'" label="'Started → done'" value="k.started ? k.conversion + '%' : '—'"
+                               hint="k.finished + ' of ' + k.started + ' new orders finished'"/>
+                        <OdKpi tone="'rose'" icon="'fa-clock-o'" label="'Late'" value="number(k.late)"
+                               hint="number(k.waiting) + ' waiting for components'"/>
+                    </section>
+
+                    <div class="od-grid">
+                        <section class="od-card od-span-8">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-blue"><i class="fa fa-bar-chart" aria-hidden="true"/></span> Finished orders in <t t-esc="d.year"/></h3>
+                                    <p>Manufacturing orders closed per month, with last year for comparison</p>
+                                </div>
+                                <div class="od-card-total"><strong class="od-num" t-esc="number(ytd)"/><span>year to date</span></div>
+                            </div>
+                            <div class="od-card-body">
+                                <OdComboChart data="d.months" format="units" formatAxis="unitsAxis" currentLabel="'' + d.year" previousLabel="'' + (d.year - 1)"
+                                              label="'Finished orders per month in ' + d.year + ' compared with ' + (d.year - 1)"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-rose"><i class="fa fa-bell-o" aria-hidden="true"/></span> Needs your attention</h3>
+                                    <p>Click a line to see the documents</p>
+                                </div>
+                            </div>
+                            <div class="od-card-body">
+                                <OdAttention items="d.attention" format="units" onClick.bind="openAttention"/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="od-grid">
+                        <section class="od-card od-span-8">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-violet"><i class="fa fa-cube" aria-hidden="true"/></span> Most produced products</h3>
+                                <p>Finished quantity this period</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.products.length" class="od-empty"><i class="fa fa-cube" aria-hidden="true"/><strong>Nothing produced yet in this period</strong></div>
+                                <OdRank t-else="" items="products" format="units" tone="'violet'" onClick.bind="openProduct"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-sitemap" aria-hidden="true"/></span> Bills of materials</h3>
+                                <p>How products are built</p>
+                            </div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('mrp_modern.action_boms')">BoMs <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body">
+                                <div class="od-money">
+                                    <div class="od-tone-teal"><span>Active BoMs</span><strong class="od-num" t-esc="number(d.boms)"/><small>used by manufacturing orders</small></div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <section class="od-card">
+                        <div class="od-card-head">
+                            <div>
+                                <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-list-ul" aria-hidden="true"/></span> Latest manufacturing orders</h3>
+                                <p>Most recently planned orders</p>
+                            </div>
+                            <button type="button" class="od-link" t-on-click="() => this.go('mrp_modern.action_mos')">All orders <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                        </div>
+                        <div class="od-card-body od-card-body--flush">
+                            <div t-if="!d.recent.length" class="od-empty"><i class="fa fa-industry" aria-hidden="true"/><strong>No manufacturing order yet</strong></div>
+                            <div t-else="" class="od-table-wrap">
+                                <table class="od-table">
+                                    <thead><tr><th>Order</th><th>Product</th><th>Qty</th><th>Responsible</th><th>Start</th><th>Status</th></tr></thead>
+                                    <tbody>
+                                        <t t-foreach="d.recent" t-as="o" t-key="o.id">
+                                            <tr class="od-clickable" t-on-click="() => this.openMo(o)">
+                                                <td class="od-cell-main" t-esc="o.name"/>
+                                                <td t-esc="o.product_id ? o.product_id[1] : '—'"/>
+                                                <td class="od-num" t-esc="units(o.product_qty)"/>
+                                                <td>
+                                                    <span t-if="o.user_id" class="od-person"><img t-attf-src="/web/image/res.users/{{ o.user_id[0] }}/avatar_128" alt="" loading="lazy"/><t t-esc="o.user_id[1]"/></span>
+                                                </td>
+                                                <td class="text-muted" t-esc="shortDate(o.date_start)"/>
+                                                <td>
+                                                    <span t-attf-class="od-pill od-tone-{{ statePill[o.state] ? statePill[o.state].tone : 'slate' }}"
+                                                          t-esc="statePill[o.state] ? statePill[o.state].label : o.state"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

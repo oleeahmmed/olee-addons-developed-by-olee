@@ -95,6 +95,8 @@ class CrmLead(models.Model):
         action is what the client should open next (mail composer for 'send').
         """
         self.ensure_one()
+        if not has_sale(self.env):
+            raise UserError(self.env._("The Sales app is not installed."))
         if not self.partner_id:
             raise UserError(self.env._("Choose the customer first."))
         order_lines = []

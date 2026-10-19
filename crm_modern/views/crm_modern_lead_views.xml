@@ -91,4 +91,77 @@
             </kanban>
         </field>
     </record>
+
+    <!--
+        New lead / opportunity: only the 7 fields you actually fill in.
+        After save, Odoo's full form (stages, notes, extra info…) comes back.
+    -->
+    <record id="crm_lead_view_form_simple_create" model="ir.ui.view">
+        <field name="name">crm.lead.form.simple.create</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="attributes">
+                <attribute name="invisible">not id</attribute>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="attributes">
+                <attribute name="invisible">not id</attribute>
+            </xpath>
+            <!-- keep Expected Revenue; hide Probability / AI on create -->
+            <!-- Lead create: the Expected Revenue / Probability row is empty and left a hole. -->
+            <xpath expr="//div[hasclass('oe_title')]/h2" position="attributes">
+                <attribute name="invisible">type == 'lead' and not id</attribute>
+            </xpath>
+            <xpath expr="//h2//label[@for='probability']/.." position="attributes">
+                <attribute name="invisible">not id</attribute>
+            </xpath>
+            <xpath expr="//h2//span[@groups='!crm.group_use_recurring_revenues']" position="attributes">
+                <attribute name="invisible">not id</attribute>
+            </xpath>
+            <xpath expr="//field[@name='recurring_revenue']" position="attributes">
+                <attribute name="invisible">not id</attribute>
+            </xpath>
+            <xpath expr="//field[@name='recurring_plan']/.." position="attributes">
+                <attribute name="invisible">not id</attribute>
+            </xpath>
+            <!-- lead: company + contact, not the full address block -->
+            <xpath expr="//group[@name='lead_partner']/label[@for='street']" position="attributes">
+                <attribute name="invisible">not id</attribute>
+            </xpath>
+            <xpath expr="//group[@name='lead_partner']/div[hasclass('o_address_format')]" position="attributes">
+                <attribute name="invisible">not id</attribute>
+            </xpath>
+            <xpath expr="//group[@name='lead_partner']/field[@name='website']" position="attributes">
+                <attribute name="invisible">not id</attribute>
+            </xpath>
+            <xpath expr="//group[@name='lead_partner']/field[@name='lang_id']" position="attributes">
+                <attribute name="invisible">lang_active_count &lt;= 1 or not id</attribute>
+            </xpath>
+            <xpath expr="//group[@name='lead_info']/field[@name='function']" position="attributes">
+                <attribute name="invisible">not id</attribute>
+            </xpath>
+            <xpath expr="//group[@name='lead_info']/field[@name='email_cc']" position="attributes">
+                <attribute name="invisible">not id</attribute>
+            </xpath>
+            <!-- salesperson stays; team / tags / stars wait until the record exists -->
+            <xpath expr="//group[@invisible=&quot;type == 'opportunity'&quot;]/field[@name='team_id']" position="attributes">
+                <attribute name="invisible">not id</attribute>
+            </xpath>
+            <xpath expr="//group[@invisible=&quot;type == 'lead'&quot;]/field[@name='tag_ids']" position="attributes">
+                <attribute name="invisible">not id</attribute>
+            </xpath>
+            <xpath expr="//field[@name='priority'][@nolabel='1']" position="attributes">
+                <attribute name="invisible">not id</attribute>
+            </xpath>
+            <xpath expr="//group[@name='lead_priority']" position="attributes">
+                <attribute name="invisible">type == 'opportunity' or not id</attribute>
+            </xpath>
+            <xpath expr="//field[@name='lead_properties']/.." position="attributes">
+                <attribute name="invisible">not id</attribute>
+            </xpath>
+            <xpath expr="//notebook" position="attributes">
+                <attribute name="invisible">not id</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>

@@ -8,6 +8,7 @@ import { registry } from "@web/core/registry";
 import { session } from "@web/session";
 import { user } from "@web/core/user";
 import { useBus, useService } from "@web/core/utils/hooks";
+import { loadFeatures } from "../core/features";
 
 /**
  * Modern CRM left sidebar.
@@ -55,6 +56,7 @@ const REPLACED = new Set([
     "crm.crm_opportunity_report_menu",
     "crm.crm_opportunity_report_menu_lead",
     "crm.crm_activity_report_menu",
+    "sale_crm.sale_order_menu_quotations_crm",
 ]);
 const COLLAPSE_KEY = "crm_modern.sidebar.collapsed";
 
@@ -163,10 +165,14 @@ export class ModernSidebar extends Component {
         onWillStart(async () => {
             // The "+" button only offers what the user is actually allowed to create.
             const models = [...new Set(createTargets.getEntries().map(([, spec]) => spec.resModel))];
-            const allowed = await Promise.all(
-                models.map((m) => user.checkAccessRight(m, "create").catch(() => false))
-            );
+            const [allowed, features] = await Promise.all([
+                Promise.all(models.map((m) => user.checkAccessRight(m, "create").catch(() => false))),
+                loadFeatures(this.orm).catch(() => ({})),
+            ]);
             this.state.rights = Object.fromEntries(models.map((m, i) => [m, allowed[i]]));
+            if (!features.sale) {
+                this.state.rights["sale.order"] = false;
+            }
         });
     }
 

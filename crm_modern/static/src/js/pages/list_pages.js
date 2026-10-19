@@ -5,7 +5,9 @@ import { user } from "@web/core/user";
 import { useService } from "@web/core/utils/hooks";
 import { session } from "@web/session";
 import { CampaignDialog, QuickCreateDialog } from "../components/dialogs";
+import { EmptyState } from "../components/ui";
 import { NativeView } from "../components/native_view";
+import { loadFeatures } from "../core/features";
 import { openRecord } from "../core/utils";
 import { readStoredView, storeView } from "../core/lead_views";
 import { TeamDialog } from "./team_pages";
@@ -30,7 +32,7 @@ function loadViewIds(orm) {
  */
 export class ListPage extends Component {
     static template = "crm_modern.ListPage";
-    static components = { NativeView };
+    static components = { NativeView, EmptyState };
     static props = ["*"];
 
     // ---- page description (overridden by each page) ----
@@ -41,6 +43,10 @@ export class ListPage extends Component {
     static subtitle = ""; // one line under the title: what the page is for
     static icon = "";
     static newLabel = _t("New");
+    /** Feature flag from crm.lead.crm_modern_features; the page stays empty when it is off. */
+    static requiresFeature = null;
+    static unavailableTitle = "";
+    static unavailableDescription = "";
     get domain() {
         return [];
     }
@@ -67,13 +73,17 @@ export class ListPage extends Component {
         if (!C.types.includes(view)) {
             view = C.types[0];
         }
-        this.state = useState({ ready: false, view, viewIds: {}, version: 0, canCreate: false });
+        this.state = useState({ ready: false, view, viewIds: {}, version: 0, canCreate: false, unavailable: false });
         onWillStart(async () => {
-            const [viewIds, canCreate] = await Promise.all([
+            const [viewIds, features] = await Promise.all([
                 loadViewIds(this.orm),
-                user.checkAccessRight(C.resModel, "create").catch(() => false),
+                C.requiresFeature ? loadFeatures(this.orm).catch(() => ({})) : {},
             ]);
-            Object.assign(this.state, { viewIds, canCreate, ready: true });
+            const unavailable = Boolean(C.requiresFeature && !features[C.requiresFeature]);
+            const canCreate = unavailable
+                ? false
+                : await user.checkAccessRight(C.resModel, "create").catch(() => false);
+            Object.assign(this.state, { viewIds, canCreate, unavailable, ready: true });
         });
     }
 

@@ -8,6 +8,7 @@ import { useService } from "@web/core/utils/hooks";
 import { RecordActions } from "../components/record_actions";
 import { TagInput } from "../components/tag_input";
 import { UI } from "../components/ui";
+import { loadFeatures } from "../core/features";
 import { ACTIVITY_FIELDS, loadActivityTypes, useActivityActions, useLeadActions } from "../core/hooks";
 import { money, shortDate } from "../core/utils";
 
@@ -35,7 +36,7 @@ export class RecordPage extends Component {
         this.notification = useService("notification");
         this.dialog = useService("dialog");
         this.state = useState({
-            loading: true, rec: null, canWrite: false, canUnlink: false, stages: [], activities: [], types: {}, users: [], teams: [], tags: [], chatterKey: 1,
+            loading: true, rec: null, canWrite: false, canUnlink: false, stages: [], activities: [], types: {}, users: [], teams: [], tags: [], features: {}, chatterKey: 1,
         });
         this.activityActions = useActivityActions(() => this.reload());
         this.leadActions = useLeadActions(() => this.reload());
@@ -53,13 +54,14 @@ export class RecordPage extends Component {
             this.state.loading = false;
             return;
         }
-        const [[rec], users, teams, types] = await Promise.all([
+        const [[rec], users, teams, types, features] = await Promise.all([
             this.orm.read("crm.lead", [id], FIELDS, { context: { active_test: false } }),
             this.orm.searchRead("res.users", [["share", "=", false]], ["name"], { order: "name" }),
             this.orm.searchRead("crm.team", [], ["name"], { order: "sequence, name" }),
             loadActivityTypes(this.orm),
+            loadFeatures(this.orm).catch(() => ({})),
         ]);
-        Object.assign(this.state, { users, teams, types });
+        Object.assign(this.state, { users, teams, types, features });
         await this.applyRecord(rec);
     }
 
@@ -155,7 +157,7 @@ export class RecordPage extends Component {
     get recordSections() {
         return recordSections
             .getEntries()
-            .filter(([, s]) => !s.isVisible || s.isVisible(this.state.rec))
+            .filter(([, s]) => !s.isVisible || s.isVisible(this.state.rec, this.state.features))
             .map(([key, s]) => ({ key, Component: s.Component }));
     }
     get canWrite() {

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        No app of its own: everything lives inside Odoo's Manufacturing app (mrp.menu_mrp_root).
+        The Dashboard comes first, so opening Manufacturing from the home screen opens Manufacturing Modern.
+        Odoo's own Manufacturing menus stay untouched: the sidebar merges them into these groups
+        (Operations, Products) and shows Reporting / Configuration / Planning in the top bar.
+        Visibility comes from Odoo's own groups.
+    -->
+    <menuitem id="menu_home" name="Home" parent="mrp.menu_mrp_root" action="action_home"
+              sequence="-110" groups="mrp.group_mrp_user"/>
+    <menuitem id="menu_dashboard" name="Dashboard" parent="mrp.menu_mrp_root" action="action_dashboard"
+              sequence="50" groups="mrp.group_mrp_user"/>
+
+    <menuitem id="menu_operations" name="Operations" parent="mrp.menu_mrp_root" sequence="-90" groups="mrp.group_mrp_user"/>
+    <menuitem id="menu_todo" name="To Do" parent="menu_operations" action="action_todo" sequence="1"/>
+    <menuitem id="menu_mos" name="Manufacturing Orders" parent="menu_operations" action="action_mos" sequence="2"/>
+    <menuitem id="menu_done" name="Done" parent="menu_operations" action="action_done" sequence="3"/>
+    <menuitem id="menu_unbuild" name="Unbuild Orders" parent="menu_operations" action="action_unbuild" sequence="4"/>
+    <menuitem id="menu_workorders" name="Work Orders" parent="menu_operations" action="action_workorders" sequence="5"
+              groups="mrp.group_mrp_routings"/>
+
+    <menuitem id="menu_products" name="Products" parent="mrp.menu_mrp_root" sequence="-80" groups="mrp.group_mrp_user"/>
+    <menuitem id="menu_product_list" name="Products" parent="menu_products" action="action_products" sequence="1"/>
+    <menuitem id="menu_boms" name="Bills of Materials" parent="menu_products" action="action_boms" sequence="2"/>
+    <menuitem id="menu_workcenters" name="Work Centers" parent="menu_products" action="action_workcenters" sequence="3"
+              groups="mrp.group_mrp_routings"/>
+</odoo>

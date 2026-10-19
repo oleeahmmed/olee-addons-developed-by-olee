@@ -381,6 +381,11 @@ html[data-mt-theme] {
     --mt-content-bg-accent: #ececee;
     --mt-card-matte: color-mix(in srgb, var(--mt-card) 92%, var(--mt-muted));
 
+    // Stitch-style dotted canvas (CSS dots, not a picture). Light editor paper.
+    --mt-stitch-bg: #f4f4f5;
+    --mt-stitch-dot: rgba(24, 24, 27, 0.16);
+    --mt-stitch-size: 16px;
+
     // --- navigation (light shell: white top bar, soft grey sidebar) --------
     // Sidebar and top bar are one continuous chrome, so they share a single colour.
     --mt-chrome-bg: hsl(0 0% 99%);

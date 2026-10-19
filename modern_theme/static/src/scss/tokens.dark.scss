@@ -315,6 +315,10 @@ html[data-mt-theme] {
     --mt-content-bg-accent: color-mix(in srgb, var(--mt-primary) 11%, hsl(226 42% 8%));
     --mt-card-matte: color-mix(in srgb, var(--mt-card) 88%, var(--mt-muted));
 
+    --mt-stitch-bg: color-mix(in srgb, var(--mt-content-bg) 70%, #050505);
+    --mt-stitch-dot: rgba(255, 255, 255, 0.12);
+    --mt-stitch-size: 16px;
+
     --mt-chrome-bg: color-mix(in srgb, var(--mt-card) 65%, var(--mt-content-bg));
     --mt-topbar-bg: var(--mt-chrome-bg);
     --mt-sidebar-bg: var(--mt-chrome-bg);

@@ -8,7 +8,7 @@
 // dividers between sections, switches for booleans. Odoo's own form markup is
 // only restyled, so every field widget and button keeps working.
 
-$mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_sidebar)';
+$mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_sidebar, .o_mr_sidebar)';
 $mt-form: '#{$mt-apps} > .o_action_manager > .o_form_view';
 $mt-any-form: '#{$mt-form}, #{$mt-apps} .modal .o_form_view';
 
@@ -413,7 +413,7 @@ $mt-bar-height: 3.5rem;
             position: relative;
             display: block !important;
             min-width: 0;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
 
             > .o_cell,
             > .o_wrap_field_boolean > .o_cell {
@@ -425,8 +425,8 @@ $mt-bar-height: 3.5rem;
             > .o_wrap_label { margin-bottom: 0.25rem !important; line-height: 1.25; }
         }
 
-        // Floating label: it sits on the empty input and moves up when the field is
-        // focused or filled. The label lives in the row's top padding, above the underline.
+        // Persistent small label, always a hair above the value (never a placeholder).
+        // Empty: muted. Focus: primary. Filled: stays up. 8px rhythm.
         > .mt-row:has(> .o_wrap_label + .o_cell .o_input) {
             > .o_wrap_label {
                 position: absolute;
@@ -436,10 +436,14 @@ $mt-bar-height: 3.5rem;
                 z-index: 1;
                 margin: 0 !important;
                 pointer-events: none;
-                transform-origin: left top;
-                transition: transform 150ms ease, color 150ms ease;
 
-                .o_form_label { font-size: 0.75rem; line-height: 1rem; transition: color 150ms ease; }
+                .o_form_label {
+                    font-size: 0.6875rem;
+                    line-height: 1rem;
+                    font-weight: 500 !important;
+                    letter-spacing: 0.01em;
+                    transition: color 150ms ease;
+                }
                 sup { pointer-events: auto; }
             }
 
@@ -447,10 +451,7 @@ $mt-bar-height: 3.5rem;
 
             &:focus-within > .o_wrap_label .o_form_label { color: var(--mt-primary); }
 
-            &:has(.o_field_widget.mt_empty):not(:has(.o_field_widget:not(.mt_empty))):not(:has(.o_readonly_modifier)):not(:focus-within) {
-                > .o_wrap_label { transform: translateY(1.25rem) scale(1.1667); }
-                .o_input::placeholder { color: transparent !important; }
-            }
+            .o_input::placeholder { color: color-mix(in srgb, var(--mt-muted-foreground) 55%, transparent) !important; }
         }
 
         // fields placed in an `o_row` with extras (unit, button…): the field takes the room
@@ -465,7 +466,7 @@ $mt-bar-height: 3.5rem;
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
-            min-height: 2.25rem;
+            min-height: 1.75rem;
 
             > .o_wrap_field_boolean {
                 display: flex !important;
@@ -500,7 +501,7 @@ $mt-bar-height: 3.5rem;
 
     // many2one: underline the whole widget so it spans the avatar and the dropdown slot
     .o_inner_group .o_field_widget[class*="o_field_many2one"] {
-        min-height: 1.625rem;
+        min-height: 1.375rem;
         display: flex;
         align-items: center;
         border-bottom: 1px solid var(--mt-border);
@@ -534,7 +535,7 @@ $mt-bar-height: 3.5rem;
         }
 
         input.o_input {
-            min-height: 1.5rem;
+            min-height: 1.25rem;
             padding: 0.1875rem 1.5rem 0.1875rem 0.125rem;
             border: 0 !important;
             background: transparent;
@@ -544,12 +545,32 @@ $mt-bar-height: 3.5rem;
         }
     }
 
+    // Salesperson / contact: avatar sits in a compact chip on the underline.
+    .o_inner_group .o_field_widget:has(.o_avatar, .o_m2o_avatar, img.rounded) {
+        min-height: 1.75rem;
+        gap: 0.5rem;
+        padding: 0.125rem 0.25rem 0.25rem 0;
+
+        .o_avatar,
+        .o_m2o_avatar,
+        img.rounded,
+        .o_avatar img,
+        .o_m2o_avatar img {
+            width: 1.5rem !important;
+            height: 1.5rem !important;
+            border-radius: 999px !important;
+            flex: 0 0 auto;
+            object-fit: cover;
+            box-shadow: 0 0 0 1px var(--mt-border);
+        }
+    }
+
     .o_inner_group .o_field_widget:not(.o_field_boolean):not(.o_field_html):not(.o_field_many2many_tags):not(.o_field_x2many):not(.o_field_monetary):not([class*="o_field_many2one"]) {
         input.o_input:not([type="checkbox"]):not([type="radio"]),
         button.o_input,
         select.o_input,
         textarea.o_input {
-            min-height: 1.625rem;
+            min-height: 1.375rem;
             padding: 0.1875rem 0.125rem;
             border: 0 !important;
             border-bottom: 1px solid var(--mt-border) !important;
@@ -587,7 +608,7 @@ $mt-bar-height: 3.5rem;
     // monetary: Odoo overlays the currency on a borderless input, so underline the wrapper
     .o_inner_group .o_field_monetary > div {
         min-width: 8rem;
-        min-height: 1.625rem;
+        min-height: 1.375rem;
         align-items: center !important;
         border-bottom: 1px solid var(--mt-border);
         border-radius: 0 0 0.375rem 0.375rem;
@@ -607,7 +628,7 @@ $mt-bar-height: 3.5rem;
     }
 
     .o_inner_group .o_field_many2many_tags .o_field_tags {
-        min-height: 1.625rem;
+        min-height: 1.375rem;
         padding: 0.125rem 0;
         border-bottom: 1px solid var(--mt-border);
         border-radius: 0 0 0.375rem 0.375rem;
@@ -662,7 +683,7 @@ $mt-bar-height: 3.5rem;
 
     // record title (lead name, product name, contact name…)
     .oe_title {
-        margin-bottom: 1.25rem;
+        margin-bottom: 0.5rem;
 
         h1, h2 { margin: 0; }
 
@@ -698,7 +719,23 @@ $mt-bar-height: 3.5rem;
     // CRM lead/opportunity: Expected Revenue and Probability sit in an <h2> under the
     // name; show them as two normal fields instead of heading-size text.
     &.o_lead_opportunity_form .oe_title {
-        > .d-flex { margin-bottom: 1rem; }
+        > .d-flex { margin-bottom: 0.25rem; }
+
+        h1 .o_field_text > div { height: auto !important; }
+        h1 textarea.o_input {
+            min-height: 2rem !important;
+            height: 2rem !important;
+            padding-block: 0.25rem;
+        }
+
+        // empty Expected Revenue / Probability row must not leave a hole
+        h2.row:not(:has(> :not(.o_invisible_modifier))) {
+            display: none !important;
+            height: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden;
+        }
 
         h2.row {
             display: grid !important;
@@ -729,7 +766,7 @@ $mt-bar-height: 3.5rem;
             > div > .d-flex,
             #probability {
                 flex: 1 0 100%;
-                min-height: 1.625rem;
+                min-height: 1.375rem;
                 align-items: center !important;
                 border-bottom: 1px solid var(--mt-border);
                 border-radius: 0 0 0.375rem 0.375rem;

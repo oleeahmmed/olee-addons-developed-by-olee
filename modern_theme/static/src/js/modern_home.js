@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component } from "@odoo/owl";
+import { Component, onWillStart, useState } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 
@@ -15,6 +15,13 @@ export function registerModernHome(tag, config) {
 
         setup() {
             this.action = useService("action");
+            this.orm = useService("orm");
+            this.state = useState({ cards: config.cards || [] });
+            if (typeof config.filterCards === "function") {
+                onWillStart(async () => {
+                    this.state.cards = await config.filterCards(this.orm, config.cards);
+                });
+            }
         }
 
         get title() {
@@ -24,7 +31,7 @@ export function registerModernHome(tag, config) {
             return config.subtitle || "";
         }
         get cards() {
-            return config.cards;
+            return this.state.cards;
         }
 
         openCard(card) {

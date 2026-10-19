@@ -9,6 +9,9 @@
                     <div class="cm-skeleton" style="height:3.5rem;margin:1rem 1.25rem"/>
                     <div class="cm-skeleton" style="height:16rem;margin:0 1.25rem 1.25rem"/>
                 </div>
+                <div t-elif="state.unavailable" class="cm-card">
+                    <EmptyState icon="'fa-puzzle-piece'" title="page.unavailableTitle" description="page.unavailableDescription"/>
+                </div>
                 <NativeView t-else="" t-key="state.version" t-props="nativeProps"/>
             </div>
         </div>

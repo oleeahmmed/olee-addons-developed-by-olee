@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="mrp_modern.PageHeader">
+        <div class="mr-page-header">
+            <div class="mr-truncate">
+                <button t-if="props.crumb" type="button" class="mr-crumb" t-on-click="props.crumb.onClick">
+                    <i class="fa fa-arrow-left" aria-hidden="true"/> <t t-esc="props.crumb.label"/>
+                </button>
+                <h1 class="mr-truncate" t-esc="props.title"/>
+                <p t-if="props.description" t-esc="props.description"/>
+            </div>
+            <div t-if="props.slots and props.slots.actions" class="mr-actions">
+                <t t-slot="actions"/>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="mrp_modern.StatCard">
+        <div class="mr-card mr-stat">
+            <div class="mr-stat-top">
+                <span class="mr-stat-label" t-esc="props.label"/>
+                <span class="mr-stat-icon" aria-hidden="true"><i t-attf-class="fa {{ props.icon }}"/></span>
+            </div>
+            <div class="mr-stat-value" t-esc="props.value"/>
+            <div t-if="props.hint" class="mr-stat-hint" t-esc="props.hint"/>
+        </div>
+    </t>
+
+    <t t-name="mrp_modern.Segmented">
+        <div class="mr-seg" role="radiogroup" t-att-aria-label="props.label">
+            <t t-foreach="props.options" t-as="opt" t-key="opt_index">
+                <button type="button" role="radio" t-att-aria-checked="opt.value === props.value ? 'true' : 'false'"
+                        t-on-click="() => props.onChange(opt.value)">
+                    <t t-esc="opt.label"/>
+                    <span t-if="opt.count !== undefined" class="mr-count mr-tabular" t-esc="opt.count"/>
+                </button>
+            </t>
+        </div>
+    </t>
+
+    <t t-name="mrp_modern.Stars">
+        <span class="mr-stars" t-att-role="props.onChange ? 'radiogroup' : undefined" aria-label="Priority">
+            <t t-foreach="[1, 2, 3]" t-as="n" t-key="n">
+                <button t-if="props.onChange" type="button" role="radio" t-att-aria-checked="level === n ? 'true' : 'false'"
+                        t-attf-aria-label="{{ n }} star priority" t-att-class="{ 'mr-on': n &lt;= level }"
+                        t-on-click.stop="() => this.set(n)">
+                    <i t-attf-class="fa {{ n &lt;= level ? 'fa-star' : 'fa-star-o' }}" aria-hidden="true"/>
+                </button>
+                <span t-else="" t-att-class="{ 'mr-on': n &lt;= level }" aria-hidden="true">
+                    <i t-attf-class="fa {{ n &lt;= level ? 'fa-star' : 'fa-star-o' }}"/>
+                </span>
+            </t>
+        </span>
+    </t>
+
+    <t t-name="mrp_modern.TagChips">
+        <span t-if="props.tags.length" class="mr-tag-list">
+            <t t-foreach="shown" t-as="tag" t-key="tag.id">
+                <span t-attf-class="mr-tag mr-tag-{{ tag.color or 0 }}">
+                    <t t-esc="tag.name"/>
+                    <button t-if="props.onRemove" type="button" t-attf-aria-label="Remove tag {{ tag.name }}"
+                            t-on-click.stop="() => props.onRemove(tag.id)"><i class="fa fa-times" aria-hidden="true"/></button>
+                </span>
+            </t>
+            <span t-if="props.max and props.tags.length > props.max" class="mr-tag">+<t t-esc="props.tags.length - props.max"/></span>
+        </span>
+    </t>
+
+    <t t-name="mrp_modern.ActivityIcon">
+        <span t-attf-class="mr-act-icon {{ tone }} {{ props.small ? 'mr-act-sm' : '' }}" aria-hidden="true">
+            <i t-attf-class="fa {{ icon }}"/>
+        </span>
+    </t>
+
+    <t t-name="mrp_modern.DueLabel">
+        <span t-if="info.label" t-attf-class="mr-due-{{ info.state }}" style="font-size:0.75rem;font-weight:500" t-esc="info.label"/>
+    </t>
+
+    <t t-name="mrp_modern.Avatar">
+        <img t-if="props.id" t-att-src="src" t-att-alt="props.name or ''" t-att-title="props.name or ''" loading="lazy"
+             t-attf-class="mr-avatar {{ props.size ? 'mr-avatar-' + props.size : '' }}"/>
+        <span t-else="" t-attf-class="mr-avatar mr-avatar-empty {{ props.size ? 'mr-avatar-' + props.size : '' }}" title="Unassigned" aria-label="Unassigned">
+            <i class="fa fa-user-o" aria-hidden="true"/>
+        </span>
+    </t>
+
+    <t t-name="mrp_modern.EmptyState">
+        <div class="mr-empty">
+            <span class="mr-empty-icon" aria-hidden="true"><i t-attf-class="fa {{ props.icon }}"/></span>
+            <strong t-esc="props.title"/>
+            <p t-if="props.description" t-esc="props.description"/>
+            <div t-if="props.slots and props.slots.default" style="margin-top:0.5rem"><t t-slot="default"/></div>
+        </div>
+    </t>
+
+    <t t-name="mrp_modern.Progress">
+        <div t-attf-class="mr-progress {{ props.tone ? 'mr-progress-' + props.tone : '' }}" role="progressbar"
+             t-att-aria-label="props.label" t-att-aria-valuenow="Math.round(pct)" aria-valuemin="0" aria-valuemax="100">
+            <span t-attf-style="width: {{ pct }}%"/>
+        </div>
+    </t>
+
+</templates>

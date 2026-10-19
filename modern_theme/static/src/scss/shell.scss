@@ -197,7 +197,7 @@ html[data-mt-theme] {
 // Records are created from the sidebar "+ New" (it follows the page you are on),
 // so the control-panel "New" buttons are hidden.
 // ---------------------------------------------------------------------------
-.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_sidebar) > .o_action_manager .o_control_panel {
+.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_sidebar, .o_mr_sidebar) > .o_action_manager .o_control_panel {
     .o_list_button_add,
     .o-kanban-button-new,
     .o_form_button_create {

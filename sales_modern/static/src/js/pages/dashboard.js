@@ -190,6 +190,9 @@ export class SalesDashboard extends Component {
         }
     }
     openInvoices(name, extra = []) {
+        if (!this.state.data?.finance) {
+            return;
+        }
         return this.action.doAction({
             type: "ir.actions.act_window",
             name,

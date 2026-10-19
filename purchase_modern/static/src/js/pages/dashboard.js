@@ -165,6 +165,9 @@ export class PurchaseDashboard extends Component {
         }
     }
     openBills(name, extra = []) {
+        if (!this.state.data?.finance) {
+            return;
+        }
         return this.action.doAction({
             type: "ir.actions.act_window",
             name,

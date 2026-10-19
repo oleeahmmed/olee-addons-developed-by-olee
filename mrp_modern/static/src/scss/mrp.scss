@@ -1,0 +1,9 @@
+// Manufacturing Modern specific styles: dashboard bits. Form pages are styled by modern_theme (form.scss).
+
+ .o_mr {
+    .mr-text-danger { color: var(--mr-danger); font-weight: 500; }
+    .mr-bar-link { cursor: pointer; border-radius: var(--mr-radius-sm);
+        &:hover .mr-bar-meta span:first-child { color: var(--mr-primary); }
+        &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--mr-ring); }
+    }
+}
