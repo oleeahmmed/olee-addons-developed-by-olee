@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="inventory_modern.Dashboard">
+        <div class="o_im od-page">
+            <t t-if="state.loading">
+                <div class="od-head"><div class="od-skel" style="height:3.75rem;width:22rem"/><div class="od-skel" style="height:2.25rem;width:20rem"/></div>
+                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel" style="height:8.5rem"/></t></div>
+                <div class="od-grid"><div class="od-skel od-span-8" style="height:22rem"/><div class="od-skel od-span-4" style="height:22rem"/></div>
+            </t>
+            <t t-elif="state.data">
+                <t t-set="d" t-value="state.data"/>
+
+                <header class="od-head">
+                    <div>
+                        <div class="od-eyebrow"><span class="od-live" aria-hidden="true"/> <t t-esc="d.company"/> · Inventory overview</div>
+                        <h1 class="od-title"><t t-esc="greeting"/>, <t t-esc="firstName"/></h1>
+                        <p class="od-subtitle">
+                            Stock right now · movements <strong t-esc="caption.current"/>, compared with <t t-esc="caption.previous"/>
+                        </p>
+                    </div>
+                    <div class="od-head-actions">
+                        <OdFilters period="state.period" teamId="state.warehouseId" teams="d.warehouse_options" onChange.bind="onFilters"
+                                   busy="state.busy" allLabel="'All warehouses'" icon="'fa-building-o'" label="'Warehouse'"/>
+                        <button type="button" class="od-btn od-btn--icon" title="Refresh" aria-label="Refresh" t-on-click="() => this.load()">
+                            <i t-attf-class="fa fa-refresh {{ state.busy ? 'fa-spin' : '' }}" aria-hidden="true"/>
+                        </button>
+                        <button t-if="state.canCreate" type="button" class="od-btn" t-on-click="() => this.newTransfer('incoming')">
+                            <i class="fa fa-download" aria-hidden="true"/> Receive
+                        </button>
+                        <button t-if="state.canCreate" type="button" class="od-btn od-btn--primary" t-on-click="() => this.newTransfer('outgoing')">
+                            <i class="fa fa-truck" aria-hidden="true"/> New delivery
+                        </button>
+                    </div>
+                </header>
+
+                <div t-att-class="{ 'od-busy': state.busy }">
+                    <section class="od-kpis" aria-label="Key figures">
+                        <OdKpi featured="true" tone="'blue'" icon="'fa-cubes'" label="'Stock value'" value="ms(k.stock_value)"
+                               hint="'at cost · ' + m(k.stock_value)" onClick="() => this.go('inventory_modern.action_stock')"/>
+                        <OdKpi tone="'teal'" icon="'fa-check-circle-o'" label="'Products in stock'" value="number(k.in_stock)"
+                               hint="'of ' + number(k.storable) + ' tracked products'" onClick="() => this.go('inventory_modern.action_products')"/>
+                        <OdKpi tone="'rose'" icon="'fa-ban'" label="'Out of stock'" value="number(k.out_of_stock)"
+                               hint="'tracked products with nothing on hand'" onClick="() => this.openAttention({ key: 'out_of_stock', label: 'Out of stock' })"/>
+                        <OdKpi tone="'violet'" icon="'fa-refresh'" label="'To reorder'" value="number(k.to_reorder)"
+                               hint="'below their reordering rule'" onClick="() => this.go('stock.action_replenishment')"/>
+                        <OdKpi tone="'sky'" icon="'fa-truck'" label="'Units delivered'" value="units(k.units_out)"
+                               delta="k.units_out_delta" compareLabel="compare" spark="d.sparks.out" hint="compare"/>
+                        <OdKpi tone="'amber'" icon="'fa-download'" label="'Units received'" value="units(k.units_in)"
+                               delta="k.units_in_delta" compareLabel="compare" spark="d.sparks.in" hint="compare"/>
+                    </section>
+
+                    <!-- operations at a glance + what needs attention -->
+                    <div class="od-grid">
+                        <section class="od-card od-span-8">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-blue"><i class="fa fa-tasks" aria-hidden="true"/></span> Operations at a glance</h3>
+                                    <p>What is planned, ready, waiting and late — click a number to open the transfers</p>
+                                </div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('stock.stock_picking_type_action')">Overview <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body">
+                                <div class="im-ops">
+                                    <t t-foreach="d.ops" t-as="op" t-key="op.code">
+                                        <t t-set="info" t-value="codeInfo[op.code]"/>
+                                        <div t-attf-class="im-op od-tone-{{ info.tone }}">
+                                            <button type="button" class="im-op-head" t-on-click="() => this.openOp(op, 'all')">
+                                                <span class="od-card-icon"><i t-attf-class="fa {{ info.icon }}" aria-hidden="true"/></span>
+                                                <span class="im-op-title" t-esc="info.label"/>
+                                                <span class="im-op-done" t-att-title="'Done ' + compare">
+                                                    <strong class="od-num" t-esc="number(op.done)"/> done
+                                                    <span t-if="op.done_delta !== null" t-attf-class="od-delta od-delta--{{ op.done_delta >= 0 ? 'good' : 'bad' }}">
+                                                        <t t-esc="(op.done_delta >= 0 ? '+' : '') + op.done_delta + '%'"/>
+                                                    </span>
+                                                </span>
+                                            </button>
+                                            <div class="im-op-stats">
+                                                <button type="button" class="im-stat im-stat--ready" t-on-click="() => this.openOp(op, 'ready')" t-att-disabled="!op.ready">
+                                                    <strong class="od-num" t-esc="op.ready"/><span>Ready</span>
+                                                </button>
+                                                <button type="button" class="im-stat im-stat--waiting" t-on-click="() => this.openOp(op, 'waiting')" t-att-disabled="!op.waiting">
+                                                    <strong class="od-num" t-esc="op.waiting"/><span>Waiting</span>
+                                                </button>
+                                                <button type="button" class="im-stat im-stat--late" t-on-click="() => this.openOp(op, 'late')" t-att-disabled="!op.late">
+                                                    <strong class="od-num" t-esc="op.late"/><span>Late</span>
+                                                </button>
+                                                <button type="button" class="im-stat im-stat--draft" t-on-click="() => this.openOp(op, 'draft')" t-att-disabled="!op.draft">
+                                                    <strong class="od-num" t-esc="op.draft"/><span>Draft</span>
+                                                </button>
+                                            </div>
+                                            <div class="im-op-foot"><i class="fa fa-calendar-o" aria-hidden="true"/> <t t-esc="op.today"/> planned for today</div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-rose"><i class="fa fa-bell-o" aria-hidden="true"/></span> Needs your attention</h3>
+                                <p>Click a line to see the documents</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <OdAttention items="d.attention" format="units" onClick.bind="openAttention"/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- movement trend + where the stock is -->
+                    <div class="od-grid">
+                        <section class="od-card od-span-8">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-sky"><i class="fa fa-bar-chart" aria-hidden="true"/></span> Units delivered in <t t-esc="d.year"/></h3>
+                                    <p>Delivered to customers per month, with last year for comparison</p>
+                                </div>
+                                <div class="od-card-total"><strong class="od-num" t-esc="units(ytdOut)"/><span>units year to date</span></div>
+                            </div>
+                            <div class="od-card-body">
+                                <OdComboChart data="d.months" format="units" formatAxis="unitsAxis" currentLabel="'' + d.year" previousLabel="'' + (d.year - 1)"
+                                              label="'Units delivered per month in ' + d.year"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-violet"><i class="fa fa-pie-chart" aria-hidden="true"/></span> Stock by category</h3>
+                                <p>Share of the stock value, at cost</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.categories.length" class="od-empty"><i class="fa fa-pie-chart" aria-hidden="true"/><strong>Nothing in stock yet</strong></div>
+                                <OdDonut t-else="" items="d.categories" format="ms" centerLabel="'Stock value'"/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- products -->
+                    <div class="od-grid">
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-rocket" aria-hidden="true"/></span> Best movers</h3>
+                                <p>Most units delivered, this period</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!movers.length" class="od-empty"><i class="fa fa-truck" aria-hidden="true"/><strong>Nothing delivered in this period</strong></div>
+                                <OdRank t-else="" items="movers" format="units" tone="'teal'" numbered="true" onClick.bind="openProduct"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-amber"><i class="fa fa-moon-o" aria-hidden="true"/></span> Sleeping stock</h3>
+                                <p>On the shelf, not delivered for 90 days · <t t-esc="ms(k.sleeping_value)"/> in <t t-esc="k.sleeping_count"/> products</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!sleeping.length" class="od-empty"><i class="fa fa-check-circle-o" aria-hidden="true"/><strong>Everything in stock is moving</strong></div>
+                                <OdRank t-else="" items="sleeping" format="ms" tone="'amber'" onClick.bind="openProduct"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-violet"><i class="fa fa-refresh" aria-hidden="true"/></span> Running low</h3>
+                                    <p>Forecast against the minimum of the reordering rule</p>
+                                </div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('stock.action_replenishment')">Replenish <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body">
+                                <div t-if="!d.low_stock.length" class="od-empty"><i class="fa fa-smile-o" aria-hidden="true"/><strong>Nothing below its minimum</strong><span>Reordering rules live in Replenishment.</span></div>
+                                <ul t-else="" class="im-low">
+                                    <t t-foreach="d.low_stock" t-as="row" t-key="row.id">
+                                        <li class="od-clickable" t-on-click="() => this.openProduct(row)">
+                                            <div class="im-low-meta">
+                                                <span class="od-truncate" style="font-weight:600" t-esc="row.label"/>
+                                                <span class="od-pill od-tone-violet od-num">Order <t t-esc="units(row.to_order)"/></span>
+                                            </div>
+                                            <div t-attf-class="od-meter od-tone-{{ lowPct(row) &lt; 50 ? 'rose' : 'amber' }}">
+                                                <div class="od-meter-track"><span t-attf-style="width: {{ lowPct(row) }}%"/></div>
+                                                <span class="od-meter-value od-num" t-esc="units(row.forecast) + ' / ' + units(row.min)"/>
+                                            </div>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- warehouses + upcoming transfers -->
+                    <div class="od-grid">
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-blue"><i class="fa fa-building-o" aria-hidden="true"/></span> Warehouses</h3>
+                                <p>Stock value per warehouse, at cost</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!warehouses.length" class="od-empty"><i class="fa fa-building-o" aria-hidden="true"/><strong>No warehouse</strong></div>
+                                <OdRank t-else="" items="warehouses" format="ms" tone="'blue'"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-8">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-amber"><i class="fa fa-calendar" aria-hidden="true"/></span> Coming up</h3>
+                                    <p>The next transfers to prepare, earliest first</p>
+                                </div>
+                            </div>
+                            <div class="od-card-body od-card-body--flush">
+                                <div t-if="!d.upcoming.length" class="od-empty"><i class="fa fa-calendar-check-o" aria-hidden="true"/><strong>Nothing planned</strong></div>
+                                <div t-else="" class="od-table-wrap">
+                                    <t t-call="inventory_modern.PickingTable"><t t-set="rows" t-value="d.upcoming"/><t t-set="dateField" t-value="'scheduled_date'"/></t>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <section class="od-card">
+                        <div class="od-card-head">
+                            <div>
+                                <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-check" aria-hidden="true"/></span> Recently done</h3>
+                                <p>The latest validated transfers</p>
+                            </div>
+                            <button type="button" class="od-link" t-on-click="() => this.go('inventory_modern.action_moves')">Moves history <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                        </div>
+                        <div class="od-card-body od-card-body--flush">
+                            <div t-if="!d.recent.length" class="od-empty"><i class="fa fa-history" aria-hidden="true"/><strong>No transfer validated yet</strong></div>
+                            <div t-else="" class="od-table-wrap">
+                                <t t-call="inventory_modern.PickingTable"><t t-set="rows" t-value="d.recent"/><t t-set="dateField" t-value="'date_done'"/></t>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </div>
+    </t>
+
+    <t t-name="inventory_modern.PickingTable">
+        <table class="od-table">
+            <thead><tr><th>Reference</th><th>Type</th><th>Contact</th><th>Source</th><th t-esc="dateField === 'date_done' ? 'Done on' : 'Scheduled'"/><th>Status</th></tr></thead>
+            <tbody>
+                <t t-foreach="rows" t-as="p" t-key="p.id">
+                    <tr class="od-clickable" t-on-click="() => this.openPicking(p)">
+                        <td>
+                            <span class="od-cell-main"><i t-if="p.priority === '1'" class="fa fa-star text-warning me-1" aria-label="Urgent"/><t t-esc="p.name"/></span>
+                        </td>
+                        <td>
+                            <span t-attf-class="od-pill od-tone-{{ codeInfo[p.picking_type_code] ? codeInfo[p.picking_type_code].tone : 'slate' }}">
+                                <i t-attf-class="fa {{ codeInfo[p.picking_type_code] ? codeInfo[p.picking_type_code].icon : 'fa-exchange' }}" aria-hidden="true"/>
+                                <t t-esc="p.picking_type_id ? p.picking_type_id[1] : ''"/>
+                            </span>
+                        </td>
+                        <td class="od-truncate" style="max-width:14rem" t-esc="p.partner_id ? p.partner_id[1] : '—'"/>
+                        <td class="text-muted od-truncate" style="max-width:10rem" t-esc="p.origin or '—'"/>
+                        <td t-attf-class="{{ isLate(p) ? 'text-danger fw-semibold' : 'text-muted' }}" t-esc="shortDateTime(p[dateField])"/>
+                        <td><span t-attf-class="od-pill od-tone-{{ stateTone(p) }}" t-esc="isLate(p) ? 'Late' : stateLabel(p)"/></td>
+                    </tr>
+                </t>
+            </tbody>
+        </table>
+    </t>
+
+</templates>

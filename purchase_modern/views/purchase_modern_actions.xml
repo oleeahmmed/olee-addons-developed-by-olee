@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_dashboard" model="ir.actions.client">
+        <field name="name">Purchase Dashboard</field>
+        <field name="tag">purchase_modern.dashboard</field>
+        <field name="path">modern-purchase</field>
+    </record>
+    <record id="action_rfqs" model="ir.actions.client">
+        <field name="name">Requests for Quotation</field>
+        <field name="tag">purchase_modern.rfqs</field>
+        <field name="path">modern-purchase-rfqs</field>
+    </record>
+    <record id="action_orders" model="ir.actions.client">
+        <field name="name">Purchase Orders</field>
+        <field name="tag">purchase_modern.orders</field>
+        <field name="path">modern-purchase-orders</field>
+    </record>
+    <record id="action_to_bill" model="ir.actions.client">
+        <field name="name">To Bill</field>
+        <field name="tag">purchase_modern.to_bill</field>
+        <field name="path">modern-purchase-to-bill</field>
+    </record>
+    <record id="action_vendors" model="ir.actions.client">
+        <field name="name">Vendors</field>
+        <field name="tag">purchase_modern.vendors</field>
+        <field name="path">modern-purchase-vendors</field>
+    </record>
+    <record id="action_products" model="ir.actions.client">
+        <field name="name">Products</field>
+        <field name="tag">purchase_modern.products</field>
+        <field name="path">modern-purchase-products</field>
+    </record>
+</odoo>

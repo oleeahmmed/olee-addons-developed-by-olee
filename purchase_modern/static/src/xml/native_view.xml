@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="purchase_modern.NativeView">
+        <div class="mp-card mp-native">
+            <t t-foreach="[state.version + '_' + props.type]" t-as="version" t-key="version">
+                <View t-props="viewProps"/>
+            </t>
+        </div>
+    </t>
+
+    <t t-name="purchase_modern.ViewSwitcher">
+        <div class="mp-seg" role="radiogroup" aria-label="View">
+            <t t-foreach="viewOptions" t-as="opt" t-key="opt.value">
+                <button type="button" role="radio" t-att-aria-checked="state.view === opt.value ? 'true' : 'false'"
+                        t-att-title="opt.label" t-on-click="() => this.setView(opt.value)">
+                    <i t-attf-class="fa {{ opt.icon }}" aria-hidden="true"/>
+                    <span class="d-none d-md-inline" t-esc="opt.label"/>
+                </button>
+            </t>
+        </div>
+    </t>
+
+</templates>
