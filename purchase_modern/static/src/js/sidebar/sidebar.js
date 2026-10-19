@@ -47,6 +47,7 @@ const COLLAPSE_KEY = "purchase_modern.sidebar.collapsed";
 /** Font Awesome icon per menu xmlid (Odoo ships FA 4.7). Other addons may add entries. */
 export const menuIcons = registry.category("purchase_modern.menu_icons");
 for (const [xmlid, icon] of Object.entries({
+    "purchase_modern.menu_home": "fa-home",
     "purchase_modern.menu_dashboard": "fa-th-large",
     "purchase_modern.menu_rfqs": "fa-file-text-o",
     "purchase_modern.menu_orders": "fa-shopping-cart",
@@ -86,6 +87,8 @@ for (const [xmlid, spec] of Object.entries({
 }
 /** Page the "+" falls back to when the current page has nothing to create. */
 const DEFAULT_CREATE = "purchase_modern.menu_rfqs";
+/** Models a page shows but that are not created on their own (e.g. activities need a record). */
+const NO_CREATE = new Set(["mail.activity"]);
 
 export class ModernPurchaseSidebar extends Component {
     static template = "purchase_modern.Sidebar";
@@ -108,6 +111,11 @@ export class ModernPurchaseSidebar extends Component {
         const refresh = () => this.state.rev++;
         useBus(this.env.bus, "MENUS:APP-CHANGED", refresh);
         useBus(this.env.bus, "ACTION_MANAGER:UPDATE", refresh);
+        // the current controller is only switched once the new page is mounted
+        useBus(this.env.bus, "ACTION_MANAGER:UI-UPDATED", () => {
+            refresh();
+            this.checkActionRights();
+        });
         useBus(routerBus, "ROUTE_CHANGE", () => {
             this.state.menuId = false;
             refresh();
@@ -198,7 +206,7 @@ export class ModernPurchaseSidebar extends Component {
     }
 
     /** The record the "+" button creates: the one of the page you are on. */
-    get createSpec() {
+    get pageCreateSpec() {
         this.state.rev; // re-evaluate on navigation / app change
         for (const section of this.allSections) {
             for (const child of section.childrenTree || []) {
@@ -207,7 +215,34 @@ export class ModernPurchaseSidebar extends Component {
                 }
             }
         }
-        return createTargets.get(DEFAULT_CREATE, null);
+        return null;
+    }
+    /** Pages without their own entry (Configuration...): create the record the page shows. */
+    get actionCreateSpec() {
+        this.state.rev; // re-evaluate on navigation / app change
+        const action = this.action.currentController?.action;
+        const model = action?.res_model;
+        const context = action?.context || {};
+        if (!model || NO_CREATE.has(model) || context.create === false) {
+            return null;
+        }
+        const known = createTargets.getAll().find((spec) => spec.resModel === model);
+        if (known) {
+            return known;
+        }
+        const defaults = Object.entries(context).filter(([key]) => key.startsWith("default_"));
+        return { resModel: model, label: _t("New"), context: Object.fromEntries(defaults) };
+    }
+    checkActionRights() {
+        const model = this.action.currentController?.action?.res_model;
+        if (model && !(model in this.state.rights)) {
+            user.checkAccessRight(model, "create")
+                .catch(() => false)
+                .then((allowed) => (this.state.rights[model] = allowed));
+        }
+    }
+    get createSpec() {
+        return this.pageCreateSpec || this.actionCreateSpec || createTargets.get(DEFAULT_CREATE, null);
     }
     get createLabel() {
         return this.createSpec?.label || _t("New");

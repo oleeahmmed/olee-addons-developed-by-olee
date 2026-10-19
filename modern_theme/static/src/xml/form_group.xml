@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- One wrapper per group row (label + input), layout-neutral (display: contents).
+         The modern apps turn it into a box: floating labels and balanced columns (form.scss). -->
+    <t t-inherit="web.Form.InnerGroup" t-inherit-mode="extension">
+        <xpath expr="//t[@t-foreach='getRows()']" position="inside">
+            <div class="mt-row d-contents"/>
+        </xpath>
+        <xpath expr="//div[hasclass('mt-row')]" position="inside">
+            <xpath expr="//t[@t-foreach='row']" position="move"/>
+        </xpath>
+    </t>
+
+</templates>

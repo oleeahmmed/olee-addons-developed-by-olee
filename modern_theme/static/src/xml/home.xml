@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="modern_theme.Home">
+        <div class="mt-home">
+            <div class="mt-home-head">
+                <h1 t-esc="title"/>
+                <p t-if="subtitle" t-esc="subtitle"/>
+            </div>
+            <div class="mt-home-grid">
+                <t t-foreach="cards" t-as="card" t-key="card.action">
+                    <button type="button" class="mt-home-card" t-on-click="() => this.openCard(card)">
+                        <span class="mt-home-card-icon" aria-hidden="true"><i t-attf-class="fa {{ card.icon }}"/></span>
+                        <strong t-esc="card.label"/>
+                        <small t-if="card.hint" t-esc="card.hint"/>
+                    </button>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

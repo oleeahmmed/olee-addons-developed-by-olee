@@ -1,0 +1,1111 @@
+// Add / edit form pages of the modern apps (CRM, Sales, Inventory, Purchase).
+//
+// One card:  header (back link, record name, New, pager)
+//            ├─ form column: action bar (buttons · status steps), then the fields
+//            └─ chatter column: Send message · Log note · Activity, then the timeline
+//
+// Fields follow a settings-panel look: label above a rounded input, hairline
+// dividers between sections, switches for booleans. Odoo's own form markup is
+// only restyled, so every field widget and button keeps working.
+
+$mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_sidebar)';
+$mt-form: '#{$mt-apps} > .o_action_manager > .o_form_view';
+$mt-any-form: '#{$mt-form}, #{$mt-apps} .modal .o_form_view';
+
+$mt-bar-height: 3.5rem;
+
+@mixin mt-pill-btn {
+    height: 2.125rem;
+    padding: 0 0.875rem;
+    border-radius: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    white-space: nowrap;
+    box-shadow: none;
+    transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+
+    // overrides.scss paints .btn-secondary directly, so read the --btn-* values explicitly.
+    background-color: var(--btn-bg);
+    color: var(--btn-color);
+    border: 1px solid var(--btn-border-color);
+
+    &:hover {
+        background-color: var(--btn-hover-bg);
+        color: var(--btn-hover-color);
+        border-color: var(--btn-hover-border-color);
+    }
+
+    &:active {
+        background-color: var(--btn-active-bg);
+        color: var(--btn-active-color);
+    }
+
+    &:focus-visible { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-ring) 35%, transparent) !important; }
+}
+
+@mixin mt-pill-outline {
+    --btn-bg: var(--mt-card);
+    --btn-color: var(--mt-foreground);
+    --btn-border-color: var(--mt-border);
+    --btn-hover-bg: var(--mt-muted);
+    --btn-hover-color: var(--mt-foreground);
+    --btn-hover-border-color: color-mix(in srgb, var(--mt-foreground) 18%, var(--mt-border));
+    --btn-active-bg: var(--mt-muted);
+    --btn-active-color: var(--mt-foreground);
+    --btn-active-border-color: color-mix(in srgb, var(--mt-foreground) 18%, var(--mt-border));
+    --btn-disabled-bg: var(--mt-card);
+    --btn-disabled-color: var(--mt-muted-foreground);
+    --btn-disabled-border-color: var(--mt-border);
+}
+
+@mixin mt-pill-solid {
+    --btn-bg: var(--mt-primary);
+    --btn-color: var(--mt-primary-foreground);
+    --btn-border-color: var(--mt-primary);
+    --btn-hover-bg: color-mix(in srgb, var(--mt-primary) 88%, var(--mt-foreground));
+    --btn-hover-color: var(--mt-primary-foreground);
+    --btn-hover-border-color: color-mix(in srgb, var(--mt-primary) 88%, var(--mt-foreground));
+    --btn-active-bg: color-mix(in srgb, var(--mt-primary) 80%, var(--mt-foreground));
+    --btn-active-color: var(--mt-primary-foreground);
+    --btn-active-border-color: color-mix(in srgb, var(--mt-primary) 80%, var(--mt-foreground));
+}
+
+// ===========================================================================
+// 1. The card
+// ===========================================================================
+#{$mt-form} {
+    height: 100%;
+    background: transparent;
+
+    > .o_form_view_container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 0;
+        overflow: hidden;
+        background: var(--mt-card);
+        border: 1px solid var(--mt-border);
+        border-radius: var(--mt-shell-radius, 1rem);
+        box-shadow: var(--mt-shell-shadow);
+    }
+
+    .o_content {
+        flex: 1 1 auto;
+        min-height: 0;
+        background: var(--mt-card);
+    }
+
+    .o_form_renderer {
+        height: 100%;
+        background: var(--mt-card);
+    }
+}
+
+// ===========================================================================
+// 2. Header: ‹ Back link, record name, New, smart buttons, pager
+// ===========================================================================
+#{$mt-form} .o_control_panel {
+    flex-shrink: 0;
+    margin: 0 !important;
+    padding: 0.875rem 1.5rem !important;
+    background: var(--mt-card) !important;
+    border-bottom: 1px solid var(--mt-border) !important;
+    box-shadow: none !important;
+
+    .o_control_panel_main {
+        align-items: center !important;
+        gap: 0.75rem 1rem;
+        flex-wrap: wrap;
+    }
+
+    .o_control_panel_breadcrumbs {
+        align-items: center !important;
+        gap: 0.875rem !important;
+        min-width: 0;
+    }
+
+    .o_form_button_create {
+        @include mt-pill-btn;
+        @include mt-pill-outline;
+        height: 2rem;
+        padding: 0 0.875rem 0 0.625rem;
+
+        &::before {
+            content: "\f067";
+            font-family: FontAwesome;
+            font-size: 0.6875rem;
+            color: var(--mt-primary);
+        }
+    }
+
+    .o_breadcrumb {
+        flex-direction: column !important;
+        justify-content: center !important;
+        gap: 0.125rem;
+
+        .breadcrumb {
+            margin: 0;
+
+            .breadcrumb-item,
+            .breadcrumb-item a {
+                font-size: 0.75rem;
+                font-weight: 500 !important;
+                color: var(--mt-muted-foreground) !important;
+                text-decoration: none;
+            }
+
+            .breadcrumb-item a {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.3rem;
+
+                &::before { content: "\f104"; font-family: FontAwesome; font-size: 0.8125rem; }
+                &:hover { color: var(--mt-foreground) !important; }
+            }
+
+            .breadcrumb-item + .breadcrumb-item::before { color: var(--mt-border); }
+        }
+
+        .o_last_breadcrumb_item {
+            font-size: 1.25rem !important;
+            font-weight: 650;
+            letter-spacing: -0.015em;
+            color: var(--mt-foreground);
+        }
+    }
+
+    .o_control_panel_breadcrumbs_actions .btn,
+    .o_form_status_indicator .btn {
+        width: 1.75rem;
+        height: 1.75rem;
+        padding: 0;
+        border-radius: 999px;
+        color: var(--mt-muted-foreground);
+
+        &:hover { background: var(--mt-muted); color: var(--mt-foreground); }
+    }
+
+    .o-form-buttonbox {
+        gap: 0.375rem;
+        border: 0;
+        background: transparent;
+
+        .oe_stat_button {
+            height: 2.25rem;
+            padding: 0 0.75rem;
+            border: 1px solid var(--mt-border) !important;
+            border-radius: 999px !important;
+            background: var(--mt-card);
+            color: var(--mt-foreground);
+
+            &:hover { background: var(--mt-muted); }
+            .o_button_icon { color: var(--mt-muted-foreground); }
+            .o_stat_value { font-weight: 650; color: var(--mt-foreground); }
+            .o_stat_text { color: var(--mt-muted-foreground); }
+        }
+    }
+
+    .o_pager {
+        .o_pager_counter { font-size: 0.8125rem; color: var(--mt-muted-foreground); }
+
+        .btn {
+            width: 2rem;
+            height: 2rem;
+            padding: 0;
+            border: 1px solid var(--mt-border);
+            background: var(--mt-card);
+            color: var(--mt-muted-foreground);
+
+            &:hover { background: var(--mt-muted); color: var(--mt-foreground); }
+        }
+
+        .btn-group .btn:first-child { border-radius: 999px 0 0 999px; }
+        .btn-group .btn:last-child { border-radius: 0 999px 999px 0; margin-left: -1px; }
+    }
+}
+
+// ===========================================================================
+// 3. Form column: action bar on top, fields below
+// ===========================================================================
+#{$mt-form} {
+    .o_form_sheet_bg {
+        flex: 1 1 auto;
+        min-width: 0;
+        padding: 0 !important;
+        background: var(--mt-card) !important;
+        border: 0 !important;
+    }
+
+    .o_form_sheet_bg:has(+ .o-mail-Form-chatter.o-aside),
+    .o-mail-Form-chatter.o-aside .o-mail-Chatter {
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: transparent transparent;
+
+        &:hover { scrollbar-color: color-mix(in srgb, var(--mt-muted-foreground) 35%, transparent) transparent; }
+    }
+
+    .o_form_statusbar {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        min-height: $mt-bar-height;
+        margin: 0 !important;
+        padding: 0.6875rem 1.5rem !important;
+        gap: 0.75rem;
+        align-items: center;
+        flex-wrap: wrap;
+        background: var(--mt-card) !important;
+        border-bottom: 1px solid var(--mt-border);
+        box-shadow: none !important;
+    }
+
+    .o_statusbar_buttons {
+        gap: 0.5rem !important;
+
+        > .btn,
+        > .o-dropdown > .btn,
+        > .dropdown > .btn {
+            @include mt-pill-btn;
+        }
+
+        > .btn-secondary,
+        > .btn-light,
+        > .btn-link,
+        > .btn-outline-primary,
+        > .btn-outline-secondary,
+        > .o-dropdown > .btn {
+            @include mt-pill-outline;
+        }
+
+        > .btn-primary,
+        > .btn.oe_highlight { @include mt-pill-solid; }
+
+        > .btn .fa { font-size: 0.8125rem; color: inherit; }
+    }
+
+    // Status steps as plain text:  Quotation  ›  Quotation Sent  ›  Sales Order
+    // (no padding/border on the track: Odoo folds the steps when it grows taller)
+    .o_field_statusbar .o_statusbar_status {
+        align-items: center;
+        gap: 1.25rem;
+        padding: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+
+        > .o_arrow_button {
+            position: relative;
+            height: 1.75rem;
+            margin: 0 !important;
+            padding: 0 0.25rem !important;
+            border: 0 !important;
+            border-radius: 0.375rem !important;
+            background: transparent !important;
+            color: var(--mt-muted-foreground) !important;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            opacity: 1 !important;
+            box-shadow: none !important;
+            clip-path: none !important;
+
+            &::before { display: none !important; content: none !important; }
+
+            // chevron to the next step (Odoo lists steps right to left; .o_first is the last one)
+            &::after {
+                content: "\f105" !important;
+                display: block !important;
+                position: absolute !important;
+                top: 50% !important;
+                right: -0.875rem !important;
+                left: auto !important;
+                width: auto !important;
+                height: auto !important;
+                margin-top: -0.45rem;
+                border: 0 !important;
+                background: none !important;
+                font-family: FontAwesome;
+                font-size: 0.8125rem;
+                line-height: 1;
+                color: var(--mt-border) !important;
+                transform: none !important;
+                clip-path: none !important;
+            }
+
+            &.o_first::after,
+            &.dropdown-toggle::after { display: none !important; }
+
+            &:not(:disabled):not(.o_arrow_button_current):hover { color: var(--mt-foreground) !important; }
+
+            &.o_arrow_button_current {
+                color: var(--mt-primary) !important;
+                font-weight: 600;
+                box-shadow: inset 0 -2px 0 var(--mt-primary) !important;
+                border-radius: 0 !important;
+            }
+        }
+    }
+
+    .o_form_sheet {
+        max-width: none !important;
+        width: auto !important;
+        margin: 0 !important;
+        padding: 1.5rem 1.5rem 2rem !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+
+    // The order / RFQ number is the page title already: don't repeat it in the sheet.
+    &.o_sale_order .o_form_sheet .oe_title:has(.o_field_widget[name="name"]),
+    &.o_purchase_order .o_form_sheet .oe_title:has(.o_field_widget[name="name"]) { display: none; }
+}
+
+// ===========================================================================
+// 4. Fields: label above a rounded input, sections divided by hairlines
+// ===========================================================================
+#{$mt-form},
+#{$mt-apps} .modal .o_form_view {
+    .o_form_label {
+        margin: 0;
+        font-size: 0.8125rem;
+        font-weight: 500 !important;
+        color: var(--mt-muted-foreground);
+
+        sup { color: var(--mt-muted-foreground); }
+    }
+
+    // Two field columns side by side on wide screens, one column below.
+    .o_group.row {
+        --gutter-x: 2rem;
+        row-gap: 0;
+        margin-inline: calc(var(--gutter-x) * -0.5);
+    }
+
+    // Groups without section titles: all their fields share one balanced two-column
+    // grid, instead of one column with a single field next to one with five.
+    .o_group.row:has(> .o_inner_group):not(:has(.o_horizontal_separator, .oe_subtotal_footer, .o_field_x2many, .o_field_html, .o_inner_group .o_group)) {
+        @media (min-width: 992px) {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            column-gap: 2rem;
+            margin-inline: 0;
+
+            > * { grid-column: 1 / -1; }
+            > .o_newline { display: none; }
+            > .o_inner_group { display: contents !important; }
+
+            .mt-row { grid-column: auto; }
+        }
+    }
+
+    .o_inner_group:not(.oe_subtotal_footer) {
+        display: flex !important;
+        flex-direction: column;
+        gap: 0 !important;
+        margin-bottom: 0.25rem;
+
+        > .mt-row {
+            position: relative;
+            display: block !important;
+            min-width: 0;
+            margin-bottom: 0.5rem;
+
+            > .o_cell,
+            > .o_wrap_field_boolean > .o_cell {
+                padding: 0 !important;
+                margin: 0 !important;
+                min-width: 0;
+            }
+
+            > .o_wrap_label { margin-bottom: 0.25rem !important; line-height: 1.25; }
+        }
+
+        // Floating label: it sits on the empty input and moves up when the field is
+        // focused or filled. The label lives in the row's top padding, above the underline.
+        > .mt-row:has(> .o_wrap_label + .o_cell .o_input) {
+            > .o_wrap_label {
+                position: absolute;
+                top: 0;
+                left: 0.125rem;
+                right: 0;
+                z-index: 1;
+                margin: 0 !important;
+                pointer-events: none;
+                transform-origin: left top;
+                transition: transform 150ms ease, color 150ms ease;
+
+                .o_form_label { font-size: 0.75rem; line-height: 1rem; transition: color 150ms ease; }
+                sup { pointer-events: auto; }
+            }
+
+            > .o_cell:not(.o_wrap_label) { padding-top: 1rem !important; }
+
+            &:focus-within > .o_wrap_label .o_form_label { color: var(--mt-primary); }
+
+            &:has(.o_field_widget.mt_empty):not(:has(.o_field_widget:not(.mt_empty))):not(:has(.o_readonly_modifier)):not(:focus-within) {
+                > .o_wrap_label { transform: translateY(1.25rem) scale(1.1667); }
+                .o_input::placeholder { color: transparent !important; }
+            }
+        }
+
+        // fields placed in an `o_row` with extras (unit, button…): the field takes the room
+        .o_row {
+            > .o_field_widget:not(.o_field_boolean) { flex: 1 1 auto; width: auto; min-width: 0; }
+            > div:empty { display: none; }
+        }
+
+        // Boolean rows: label on the left, switch on the right, like a settings row.
+        > .mt-row:has(.o_field_boolean):not(:has(.o_input)) {
+            display: flex !important;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            min-height: 2.25rem;
+
+            > .o_wrap_field_boolean {
+                display: flex !important;
+                flex: 1 1 auto;
+                align-items: center;
+                justify-content: space-between;
+                gap: 1rem;
+                margin: 0 !important;
+
+                > .o_wrap_label { order: 0 !important; }
+                > .o_wrap_input { order: 1 !important; }
+            }
+
+            .o_wrap_label { margin: 0 !important; }
+        }
+    }
+
+    // section titles inside the form ("Sales", "Invoicing", "Shipping"…): a plain heading
+    .o_horizontal_separator {
+        margin: 0.25rem 0 0.75rem !important;
+        padding: 0;
+        border: 0 !important;
+        font-size: 0.875rem !important;
+        font-weight: 600 !important;
+        text-transform: none !important;
+        letter-spacing: 0;
+        color: var(--mt-foreground) !important;
+    }
+
+    // --- inputs (fields laid out in groups; the record title is styled below) ---
+    .o_inner_group .o_input { line-height: 1.25; }
+
+    // many2one: underline the whole widget so it spans the avatar and the dropdown slot
+    .o_inner_group .o_field_widget[class*="o_field_many2one"] {
+        min-height: 1.625rem;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid var(--mt-border);
+        border-radius: 0 0 0.375rem 0.375rem;
+        transition: border-color 150ms ease, box-shadow 150ms ease;
+
+        &:hover { border-bottom-color: color-mix(in srgb, var(--mt-foreground) 28%, var(--mt-border)); }
+
+        &:focus-within {
+            border-bottom-color: var(--mt-primary);
+            box-shadow: 0 1px 0 0 var(--mt-primary);
+        }
+
+        > *,
+        .o_many2one,
+        .o_field_many2one_selection {
+            flex: 1 1 auto;
+            width: 100%;
+            min-width: 0;
+            margin: 0 !important;
+        }
+
+        .o_input_dropdown { flex: 1 1 auto; }
+
+        &.oe_inline {
+            display: inline-flex;
+            width: auto !important;
+            vertical-align: baseline;
+
+            > *, .o_many2one, .o_field_many2one_selection { width: auto; }
+        }
+
+        input.o_input {
+            min-height: 1.5rem;
+            padding: 0.1875rem 1.5rem 0.1875rem 0.125rem;
+            border: 0 !important;
+            background: transparent;
+            box-shadow: none !important;
+            color: var(--mt-foreground);
+            font-size: 0.875rem;
+        }
+    }
+
+    .o_inner_group .o_field_widget:not(.o_field_boolean):not(.o_field_html):not(.o_field_many2many_tags):not(.o_field_x2many):not(.o_field_monetary):not([class*="o_field_many2one"]) {
+        input.o_input:not([type="checkbox"]):not([type="radio"]),
+        button.o_input,
+        select.o_input,
+        textarea.o_input {
+            min-height: 1.625rem;
+            padding: 0.1875rem 0.125rem;
+            border: 0 !important;
+            border-bottom: 1px solid var(--mt-border) !important;
+            border-radius: 0 0 0.375rem 0.375rem !important;
+            background-color: transparent;
+            color: var(--mt-foreground);
+            font-size: 0.875rem;
+            box-shadow: none;
+            transition: border-color 150ms ease, box-shadow 150ms ease;
+
+            &::placeholder { color: color-mix(in srgb, var(--mt-muted-foreground) 70%, transparent); }
+            &:hover { border-bottom-color: color-mix(in srgb, var(--mt-foreground) 28%, var(--mt-border)) !important; }
+
+            &:focus {
+                border-bottom-color: var(--mt-primary) !important;
+                box-shadow: 0 1px 0 0 var(--mt-primary) !important;
+                outline: none;
+            }
+        }
+    }
+
+    .o_inner_group .o_field_invalid[class*="o_field_many2one"] {
+        border-bottom-color: var(--mt-destructive, #dc2626);
+    }
+
+    .o_field_invalid {
+        input.o_input,
+        select.o_input,
+        textarea.o_input,
+        .o_field_tags {
+            border-color: var(--mt-destructive, #dc2626) !important;
+        }
+    }
+
+    // monetary: Odoo overlays the currency on a borderless input, so underline the wrapper
+    .o_inner_group .o_field_monetary > div {
+        min-width: 8rem;
+        min-height: 1.625rem;
+        align-items: center !important;
+        border-bottom: 1px solid var(--mt-border);
+        border-radius: 0 0 0.375rem 0.375rem;
+        transition: border-color 150ms ease, box-shadow 150ms ease;
+
+        &:focus-within {
+            border-bottom-color: var(--mt-primary);
+            box-shadow: 0 1px 0 0 var(--mt-primary);
+        }
+
+        .o_input {
+            border: 0 !important;
+            background: transparent;
+            box-shadow: none !important;
+            font-size: 0.875rem;
+        }
+    }
+
+    .o_inner_group .o_field_many2many_tags .o_field_tags {
+        min-height: 1.625rem;
+        padding: 0.125rem 0;
+        border-bottom: 1px solid var(--mt-border);
+        border-radius: 0 0 0.375rem 0.375rem;
+        align-items: center;
+        gap: 0.25rem;
+
+        &:focus-within {
+            border-bottom-color: var(--mt-primary);
+            box-shadow: 0 1px 0 0 var(--mt-primary);
+        }
+
+        .o_input { border: 0 !important; box-shadow: none !important; background: transparent; }
+
+        .o_tag, .badge {
+            border-radius: 999px;
+            padding: 0.1875rem 0.5625rem;
+            font-weight: 500;
+        }
+    }
+
+    // booleans as switches
+    .o_field_boolean .form-check-input {
+        width: 2.25rem;
+        height: 1.25rem;
+        margin: 0;
+        border: 0;
+        border-radius: 999px;
+        cursor: pointer;
+        background-color: var(--mt-input, var(--mt-border));
+        background-image: radial-gradient(circle at 0.625rem 50%, #fff 0.4375rem, transparent 0.5rem);
+        transition: background-color 150ms ease, background-position 150ms ease;
+
+        &:checked {
+            background-color: var(--mt-primary);
+            background-image: radial-gradient(circle at 1.625rem 50%, #fff 0.4375rem, transparent 0.5rem);
+        }
+
+        &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-ring) 25%, transparent); }
+    }
+
+    // html fields (terms & conditions, internal notes): soft writing box
+    .o_field_html {
+        .note-editable,
+        .odoo-editor-editable {
+            min-height: 5rem;
+            padding: 0.75rem 0.875rem !important;
+            border: 1px solid var(--mt-border);
+            border-radius: 0.75rem;
+            background: var(--mt-background, var(--mt-card));
+        }
+    }
+
+    // record title (lead name, product name, contact name…)
+    .oe_title {
+        margin-bottom: 1.25rem;
+
+        h1, h2 { margin: 0; }
+
+        h1 .o_input,
+        h1 .o_field_widget,
+        .o_field_widget[name="name"] .o_input {
+            font-size: 1.375rem;
+            font-weight: 650;
+            letter-spacing: -0.015em;
+            color: var(--mt-foreground);
+        }
+
+        // the title reads as text; it shows its box on hover and while editing
+        .o_input {
+            min-height: 0;
+            padding: 0.25rem 0.625rem;
+            margin-left: -0.625rem;
+            border: 1px solid transparent !important;
+            border-radius: 0.75rem;
+            background: transparent;
+            box-shadow: none;
+            transition: border-color 150ms ease, box-shadow 150ms ease;
+
+            &:hover { border-color: var(--mt-border) !important; }
+
+            &:focus {
+                border-color: var(--mt-ring) !important;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-ring) 18%, transparent);
+            }
+        }
+    }
+
+    // CRM lead/opportunity: Expected Revenue and Probability sit in an <h2> under the
+    // name; show them as two normal fields instead of heading-size text.
+    &.o_lead_opportunity_form .oe_title {
+        > .d-flex { margin-bottom: 1rem; }
+
+        h2.row {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            column-gap: 2rem;
+            margin: 0 !important;
+            padding: 0 !important;
+            font-size: 0.875rem;
+            font-weight: 400;
+            line-height: 1.5;
+
+            > div {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                width: auto !important;
+                min-width: 0;
+                padding: 0 !important;
+            }
+
+            .o_form_label {
+                display: inline-block !important;
+                margin: 0 0 0.25rem;
+                font-size: 0.75rem;
+                line-height: 1rem;
+            }
+
+            > div > .d-flex,
+            #probability {
+                flex: 1 0 100%;
+                min-height: 1.625rem;
+                align-items: center !important;
+                border-bottom: 1px solid var(--mt-border);
+                border-radius: 0 0 0.375rem 0.375rem;
+                transition: border-color 150ms ease, box-shadow 150ms ease;
+
+                &:focus-within {
+                    border-bottom-color: var(--mt-primary);
+                    box-shadow: 0 1px 0 0 var(--mt-primary);
+                }
+            }
+
+            .o_field_widget { flex: 1 1 auto; width: auto; min-width: 0; }
+
+            .o_input {
+                padding: 0.25rem 0.125rem;
+                border: 0 !important;
+                background: transparent;
+                box-shadow: none !important;
+                font-size: 0.875rem !important;
+                font-weight: 400;
+                color: var(--mt-foreground);
+            }
+
+            .opacity-50 {
+                padding: 0 0.25rem !important;
+                opacity: 1 !important;
+                color: var(--mt-muted-foreground);
+            }
+
+            > div:first-child .opacity-50 { display: none; }
+
+            .o_crm_pls_tooltip_button {
+                margin: 0 0 0.25rem 0.25rem !important;
+                padding: 0 !important;
+                background: transparent !important;
+
+                img { height: 0.875rem; margin: 0 !important; }
+            }
+        }
+    }
+
+    // --- tabs: plain text tabs on one hairline, flush with the content ---------
+    .o_notebook {
+        margin-top: 0.75rem;
+
+        .o_notebook_headers {
+            margin: 0 0 0.875rem !important;
+            padding: 0 !important;
+            border: 0 !important;
+            overflow: visible;
+        }
+
+        .nav-tabs {
+            display: flex !important;
+            flex-wrap: wrap;
+            gap: 0 1.75rem;
+            width: 100%;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: 0 !important;
+            border-bottom: 1px solid var(--mt-border) !important;
+            border-radius: 0;
+            background: transparent;
+        }
+
+        .nav-item { margin: 0 !important; padding: 0 !important; border: 0 !important; }
+
+        .nav-link {
+            height: 2.5rem;
+            margin: 0 0 -1px !important;
+            padding: 0 !important;
+            display: inline-flex;
+            align-items: center;
+            border: 0 !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            color: var(--mt-muted-foreground) !important;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            white-space: nowrap;
+            box-shadow: none;
+            transition: color 150ms ease, box-shadow 150ms ease;
+
+            &:hover { color: var(--mt-foreground) !important; }
+
+            &.active {
+                color: var(--mt-foreground) !important;
+                font-weight: 600;
+                box-shadow: inset 0 -2px 0 var(--mt-primary);
+            }
+        }
+
+        .o_notebook_content,
+        .tab-content { border: 0 !important; padding: 0 !important; background: transparent; }
+    }
+
+    // --- line tables (order lines, operations…) -------------------------------
+    .o_field_x2many_list .o_list_renderer {
+        border: 1px solid var(--mt-border);
+        border-radius: 0.875rem;
+        overflow: hidden;
+        background: var(--mt-card);
+
+        .o_list_table {
+            margin: 0;
+
+            thead th {
+                background: var(--mt-muted) !important;
+                border-bottom: 1px solid var(--mt-border) !important;
+                border-top: 0 !important;
+                font-size: 0.75rem !important;
+                font-weight: 600 !important;
+                color: var(--mt-muted-foreground) !important;
+            }
+
+            tbody td {
+                padding-block: 0.625rem !important;
+                border-color: var(--mt-border);
+                vertical-align: middle;
+            }
+
+            // Odoo pads short tables with blank rows and renders an empty footer
+            tbody tr:not(.o_data_row):not(:has(.o_field_x2many_list_row_add)),
+            tfoot:not(:has(td:not(:empty))) {
+                display: none;
+            }
+
+            tbody tr:has(.o_field_x2many_list_row_add) td {
+                padding-block: 0.5rem !important;
+                border-bottom: 0 !important;
+            }
+
+            // the line being edited: underline its inputs instead of Odoo's boxes
+            .o_selected_row .o_input {
+                border: 0 !important;
+                border-bottom: 1px solid var(--mt-border) !important;
+                border-radius: 0 !important;
+                background: transparent !important;
+                box-shadow: none !important;
+
+                &:focus { border-bottom-color: var(--mt-primary) !important; }
+            }
+
+            .o_field_x2many_list_row_add a {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.35rem;
+                margin-right: 0.5rem !important;
+                padding: 0.25rem 0.625rem;
+                border-radius: 999px;
+                color: var(--mt-primary);
+                font-size: 0.8125rem;
+                font-weight: 500;
+                text-decoration: none !important;
+
+                &::before { content: "\f067"; font-family: FontAwesome; font-size: 0.625rem; }
+                &:hover { background: color-mix(in srgb, var(--mt-primary) 10%, transparent); }
+            }
+
+            tfoot td { border-top: 0 !important; background: transparent; }
+        }
+    }
+
+    // totals
+    .oe_subtotal_footer { border-top: 0 !important; }
+
+    .o_field_account-tax-totals-field > table {
+        min-width: 17rem;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--mt-border);
+        border-radius: 0.875rem;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: var(--mt-card);
+
+        td { padding: 0.25rem 0.375rem; font-variant-numeric: tabular-nums; }
+        tr:last-child td { padding-top: 0.5rem; border-top: 1px solid var(--mt-border); }
+    }
+
+    .alert { border-radius: 0.75rem; }
+}
+
+// ===========================================================================
+// 5. Chatter column
+// ===========================================================================
+#{$mt-form} .o-mail-Form-chatter {
+    background: var(--mt-card);
+
+    &.o-aside {
+        flex: 0 0 24rem;
+        width: 24rem;
+        max-width: 40%;
+        border-left: 1px solid var(--mt-border);
+    }
+
+    &:not(.o-aside) { border-top: 1px solid var(--mt-border); }
+}
+
+#{$mt-apps} .o-mail-Chatter {
+    background: var(--mt-card);
+    color: var(--mt-foreground);
+
+    .o-mail-Chatter-top {
+        background: var(--mt-card) !important;
+        border-bottom: 1px solid var(--mt-border);
+        padding: 0 1rem;
+
+        &.shadow-sm { box-shadow: 0 6px 12px -12px rgba(15, 23, 42, 0.45) !important; }
+    }
+
+    .o-mail-Chatter-topbar {
+        min-height: $mt-bar-height;
+        align-items: center;
+        gap: 0.375rem;
+        overflow: visible !important;
+
+        .o-mail-Chatter-sendMessage,
+        .o-mail-Chatter-logNote,
+        .o-mail-Chatter-activity {
+            @include mt-pill-btn;
+            @include mt-pill-outline;
+            margin: 0 !important;
+            padding: 0 0.8125rem;
+
+            &::before {
+                font-family: FontAwesome;
+                font-weight: normal;
+                font-size: 0.75rem;
+                color: var(--mt-muted-foreground);
+            }
+
+            &.active {
+                @include mt-pill-solid;
+                background: var(--mt-primary) !important;
+                color: var(--mt-primary-foreground) !important;
+                border-color: var(--mt-primary) !important;
+                &::before { color: inherit; }
+            }
+        }
+
+        .o-mail-Chatter-sendMessage {
+            @include mt-pill-solid;
+            &::before { content: "\f0e0"; color: inherit; }
+        }
+
+        .o-mail-Chatter-logNote::before { content: "\f249"; }
+        .o-mail-Chatter-activity::before { content: "\f017"; }
+
+        > .btn-link,
+        .o-mail-Chatter-attachFiles,
+        .o-mail-Followers-button {
+            min-width: 1.875rem;
+            height: 1.875rem;
+            padding: 0 0.375rem !important;
+            border-radius: 999px;
+            color: var(--mt-muted-foreground) !important;
+            text-decoration: none;
+
+            &:hover { background: var(--mt-muted); color: var(--mt-foreground) !important; }
+        }
+    }
+
+    // On a record that isn't saved yet, Odoo saves it first when you click
+    // Send message / Log note / Activity — say so, instead of looking broken.
+    &.o-chatter-disabled .o-mail-Chatter-top::after {
+        content: "Fill in the required fields: the record is saved automatically when you send a message, log a note or plan an activity.";
+        display: block;
+        margin: 0 0 0.75rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.625rem;
+        background: var(--mt-muted);
+        color: var(--mt-muted-foreground);
+        font-size: 0.75rem;
+        line-height: 1.45;
+    }
+
+    .o-mail-Composer {
+        .o-mail-Composer-avatar { border-radius: 999px !important; }
+
+        .o-mail-Composer-inputContainer {
+            border: 1px solid var(--mt-border) !important;
+            border-radius: 0.875rem !important;
+            background: var(--mt-background, var(--mt-card)) !important;
+            overflow: hidden;
+        }
+
+        &.o-focused .o-mail-Composer-inputContainer {
+            border-color: var(--mt-ring) !important;
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-ring) 18%, transparent) !important;
+        }
+
+        .o-mail-Composer-bg { background: transparent !important; }
+
+        .o-mail-Composer-input {
+            font-size: 0.875rem !important;
+            color: var(--mt-foreground);
+            &:focus { box-shadow: none !important; outline: none; }
+        }
+
+        .o-mail-Composer-send {
+            @include mt-pill-btn;
+            @include mt-pill-solid;
+        }
+    }
+
+    .o-mail-Chatter-content,
+    .o-mail-Thread { background: var(--mt-card) !important; }
+
+    .o-mail-DateSection > span {
+        padding: 0.125rem 0.625rem !important;
+        border: 1px solid var(--mt-border);
+        border-radius: 999px;
+        background: var(--mt-card);
+        font-size: 0.6875rem !important;
+        color: var(--mt-muted-foreground) !important;
+    }
+
+    .o-mail-Message {
+        border-radius: 0.75rem;
+
+        &:hover { background: color-mix(in srgb, var(--mt-muted) 60%, transparent); }
+        .o-mail-Message-avatar { border-radius: 999px !important; }
+        .o-mail-Message-author { font-weight: 600 !important; color: var(--mt-foreground) !important; }
+        .o-mail-Message-date { color: var(--mt-muted-foreground) !important; }
+        .o-mail-Message-body { color: var(--mt-foreground); }
+
+        .o-mail-Message-bubble {
+            border-color: var(--mt-border) !important;
+            background: var(--mt-muted) !important;
+            border-radius: 0.25rem 0.875rem 0.875rem 0.875rem !important;
+            opacity: 1 !important;
+        }
+    }
+
+    .o-mail-Activity {
+        padding: 0.625rem 0.75rem !important;
+        border: 1px solid var(--mt-border);
+        border-radius: 0.875rem;
+        background: var(--mt-card);
+    }
+}
+
+// ===========================================================================
+// 6. Dialog forms (quick create, wizards): same header / body / footer rhythm
+// ===========================================================================
+#{$mt-apps} .modal .modal-content:has(.o_form_view) {
+    border: 1px solid var(--mt-border);
+    border-radius: 1rem;
+    overflow: hidden;
+    background: var(--mt-card);
+
+    .modal-header {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--mt-border);
+        background: var(--mt-card);
+
+        .modal-title { font-size: 1.0625rem; font-weight: 650; color: var(--mt-foreground); }
+    }
+
+    .modal-body { padding: 1.25rem 1.5rem; background: var(--mt-card); }
+
+    .o_form_view .o_form_sheet {
+        padding: 0 !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        background: transparent !important;
+    }
+
+    .modal-footer {
+        padding: 0.875rem 1.5rem;
+        gap: 0.5rem;
+        border-top: 1px solid var(--mt-border);
+        background: var(--mt-card);
+
+        .btn { @include mt-pill-btn; margin: 0; }
+        .btn-secondary, .btn-light { @include mt-pill-outline; }
+        .btn-primary { @include mt-pill-solid; }
+    }
+}

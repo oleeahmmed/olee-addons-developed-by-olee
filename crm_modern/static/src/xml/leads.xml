@@ -20,9 +20,6 @@
 
                 <t t-else="">
 
-                    <PageBar title="title" subtitle="subtitle" icon="'fa-filter'"
-                             newLabel="newLabel" onCreate="() => this.create()"/>
-
                     <NativeView t-key="state.nativeVersion" t-props="nativeProps"/>
 
                 </t>

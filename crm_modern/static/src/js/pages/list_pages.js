@@ -6,7 +6,6 @@ import { useService } from "@web/core/utils/hooks";
 import { session } from "@web/session";
 import { CampaignDialog, QuickCreateDialog } from "../components/dialogs";
 import { NativeView } from "../components/native_view";
-import { PageBar } from "../components/page_bar";
 import { openRecord } from "../core/utils";
 import { readStoredView, storeView } from "../core/lead_views";
 import { TeamDialog } from "./team_pages";
@@ -31,7 +30,7 @@ function loadViewIds(orm) {
  */
 export class ListPage extends Component {
     static template = "crm_modern.ListPage";
-    static components = { NativeView, PageBar };
+    static components = { NativeView };
     static props = ["*"];
 
     // ---- page description (overridden by each page) ----

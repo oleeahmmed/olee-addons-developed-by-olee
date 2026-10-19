@@ -18,4 +18,4 @@ THEME_PRESETS = [
 # Indigo is the default: a deep blue-indigo top bar and sidebars with white text
 # over a soft, cool light content area. Every other preset keeps the exact same
 # surfaces — only the accent hue changes.
-DEFAULT_PRESET = "indigo"
+DEFAULT_PRESET = "blue"

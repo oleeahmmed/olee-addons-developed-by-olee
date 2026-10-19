@@ -20,28 +20,22 @@
 
     // ---------- top bar: same colour band as the sidebar ----------
     .o_main_navbar {
-        --NavBar-entry-color: color-mix(in srgb, var(--mt-nav-fg, var(--im-muted-fg)) 84%, transparent);
-        --NavBar-entry-color--hover: var(--mt-nav-fg, var(--im-fg));
-        --NavBar-entry-color--active: var(--mt-nav-fg, var(--im-fg));
+        --NavBar-entry-color: var(--mt-muted-foreground, var(--im-muted-fg));
+        --NavBar-entry-color--hover: var(--mt-foreground, var(--im-fg));
+        --NavBar-entry-color--active: var(--mt-foreground, var(--im-fg));
         --NavBar-entry-backgroundColor: transparent;
         --NavBar-entry-backgroundColor--hover: var(--mt-nav-hover, var(--im-muted));
         --NavBar-entry-backgroundColor--focus: var(--mt-nav-hover, var(--im-muted));
         --NavBar-entry-backgroundColor--active: var(--mt-nav-hover, var(--im-muted));
         --NavBar-brand-color: var(--mt-nav-fg, var(--im-fg));
-        --o-navbar-badge-bg: var(--mt-nav-fg, var(--im-primary));
-        --o-navbar-badge-color: var(--mt-nav-bg, var(--im-primary-fg));
+        --o-navbar-badge-bg: var(--mt-primary, var(--im-primary));
+        --o-navbar-badge-color: var(--mt-primary-foreground, var(--im-primary-fg));
         --o-navbar-badge-text-shadow: none;
 
-        background-color: var(--mt-nav-bg, var(--im-card));
-        background-image: linear-gradient(
-            100deg,
-            var(--mt-nav-bg-2, var(--im-card)) 0%,
-            var(--mt-nav-bg, var(--im-card)) 55%,
-            color-mix(in srgb, var(--mt-nav-bg, var(--im-card)) 88%, black) 100%
-        );
-        color: var(--mt-nav-fg, var(--im-fg));
-        border-bottom: 1px solid var(--mt-nav-border, var(--im-border));
-        box-shadow: 0 1px 0 color-mix(in srgb, black 14%, transparent);
+        background: var(--mt-topbar-bg, var(--im-card));
+        color: var(--mt-foreground, var(--im-fg));
+        border-bottom: 1px solid var(--mt-border, var(--im-border));
+        box-shadow: none;
 
         // The sidebar lists this app's menus, so hide the top-bar section menus (CSS instead of
         // a NavBar template override: nothing to break when Odoo changes the navbar markup).
@@ -72,8 +66,8 @@
         .o_notification_counter,
         .o-mail-MessagingMenu-counter,
         .o-mail-ActivityMenu-counter {
-            background-color: var(--mt-nav-fg, var(--im-primary)) !important;
-            color: var(--mt-nav-bg, var(--im-primary-fg)) !important;
+            background-color: var(--mt-primary, var(--im-primary)) !important;
+            color: var(--mt-primary-foreground, var(--im-primary-fg)) !important;
         }
     }
 }
@@ -92,16 +86,9 @@
     flex-direction: column;
     overflow: hidden;
     font-size: 0.875rem;
-    color: var(--mt-nav-fg, var(--im-sidebar-fg));
-    background-color: var(--mt-nav-bg, var(--im-sidebar));
-    background-image:
-        radial-gradient(115% 40% at 0% 0%, color-mix(in srgb, white 12%, transparent), transparent 62%),
-        linear-gradient(
-            180deg,
-            var(--mt-nav-bg-2, var(--im-sidebar)) 0%,
-            var(--mt-nav-bg, var(--im-sidebar)) 46%
-        );
-    border-inline-end: 1px solid var(--mt-nav-border, var(--im-sidebar-border));
+    color: var(--im-sidebar-fg);
+    background: var(--mt-sidebar-bg, var(--im-sidebar));
+    border-inline-end: 1px solid var(--im-sidebar-border);
     transition: width 200ms var(--im-ease);
 
     // header: app switcher style (logo tile + name + subtitle)
@@ -268,7 +255,7 @@
         font-size: 0.8125rem;
         font-weight: 400;
         line-height: 1;
-        color: color-mix(in srgb, var(--mt-nav-fg, var(--im-sidebar-fg)) 88%, transparent);
+        color: var(--im-sidebar-fg);
         text-decoration: none;
         outline: none;
         transition: background-color 150ms var(--im-ease), color 150ms var(--im-ease);
@@ -278,8 +265,12 @@
             flex-shrink: 0;
             text-align: center;
             font-size: 0.9375rem;
-            color: inherit;
-            opacity: 0.85;
+            color: var(--im-sidebar-muted-fg);
+        }
+
+        &.active .fa,
+        &:hover .fa {
+            color: var(--im-sidebar-accent-fg);
         }
 
         .im-sb-label {

@@ -377,25 +377,26 @@ html[data-mt-theme="teal"] {
 :root,
 html[data-mt-theme] {
     // --- surfaces ---------------------------------------------------------
-    // Content area: a breath of the accent over a cool light grey, so white
-    // cards lift off the page without a heavy shadow.
-    --mt-content-bg: color-mix(in srgb, var(--mt-primary) 3.5%, hsl(220 26% 97%));
-    --mt-content-bg-accent: color-mix(in srgb, var(--mt-primary) 7%, hsl(220 26% 95%));
+    --mt-content-bg: #f4f4f5;
+    --mt-content-bg-accent: #ececee;
     --mt-card-matte: color-mix(in srgb, var(--mt-card) 92%, var(--mt-muted));
 
-    // --- navigation chrome (top bar + app sidebars) ------------------------
-    // A deep, slightly desaturated version of the accent: rich enough to feel
-    // like an app shell, dark enough for white text to stay readable.
-    --mt-nav-bg: color-mix(in srgb, var(--mt-primary) 52%, hsl(228 46% 9%));
-    --mt-nav-bg-2: color-mix(in srgb, var(--mt-primary) 76%, hsl(228 46% 9%));
-    --mt-nav-fg: hsl(210 40% 98%);
-    --mt-nav-muted-fg: color-mix(in srgb, var(--mt-primary) 20%, hsl(210 40% 98%));
-    --mt-nav-hover: color-mix(in srgb, var(--mt-nav-fg) 12%, transparent);
-    --mt-nav-active-bg: var(--mt-nav-fg);
-    --mt-nav-active-fg: var(--mt-nav-bg);
-    --mt-nav-border: color-mix(in srgb, var(--mt-nav-fg) 14%, transparent);
-    --mt-nav-tile: color-mix(in srgb, var(--mt-nav-fg) 16%, transparent);
-    --mt-nav-scrollbar: color-mix(in srgb, var(--mt-nav-fg) 22%, transparent);
+    // --- navigation (light shell: white top bar, soft grey sidebar) --------
+    // Sidebar and top bar are one continuous chrome, so they share a single colour.
+    --mt-chrome-bg: hsl(0 0% 99%);
+    --mt-topbar-bg: var(--mt-chrome-bg);
+    --mt-sidebar-bg: var(--mt-chrome-bg);
+    --mt-sidebar-bg-2: hsl(240 5% 96%);
+    --mt-nav-bg: var(--mt-topbar-bg);
+    --mt-nav-bg-2: var(--mt-topbar-bg);
+    --mt-nav-fg: var(--mt-foreground);
+    --mt-nav-muted-fg: var(--mt-muted-foreground);
+    --mt-nav-hover: var(--mt-muted);
+    --mt-nav-active-bg: color-mix(in srgb, var(--mt-primary) 12%, var(--mt-card));
+    --mt-nav-active-fg: var(--mt-primary);
+    --mt-nav-border: var(--mt-border);
+    --mt-nav-tile: var(--mt-card);
+    --mt-nav-scrollbar: color-mix(in srgb, var(--mt-foreground) 22%, transparent);
 
     // --- elevation --------------------------------------------------------
     --mt-shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.04);

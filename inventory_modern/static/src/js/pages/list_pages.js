@@ -5,8 +5,6 @@ import { user } from "@web/core/user";
 import { useService } from "@web/core/utils/hooks";
 import { session } from "@web/session";
 import { NativeView } from "../components/native_view";
-import { PageBar } from "../components/page_bar";
-
 let viewIdsPromise = null;
 /** View ids are the same for every page and every user: fetch them once per page load. */
 export function loadViewIds(orm) {
@@ -53,7 +51,7 @@ export function openFullForm(action, resModel, resId, { viewId = false, context 
  */
 export class ListPage extends Component {
     static template = "inventory_modern.ListPage";
-    static components = { NativeView, PageBar };
+    static components = { NativeView };
     static props = ["*"];
 
     static title = "";

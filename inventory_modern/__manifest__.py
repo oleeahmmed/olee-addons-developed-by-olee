@@ -13,11 +13,11 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
 * Rights, record rules, routes, settings and reports are Odoo's own. Odoo's
   original Inventory menus stay available (sidebar groups and top-bar menus).
     """,
-    'version': '19.0.2.0.0',
+    'version': '19.0.2.0.2',
     'category': 'Inventory/Inventory',
     'author': 'Your Name',
     'license': 'LGPL-3',
-    'depends': ['stock', 'mail'],
+    'depends': ['modern_theme', 'stock', 'mail'],
     'data': [
         'views/report_layout.xml',
         'views/inventory_modern_actions.xml',
@@ -33,7 +33,6 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
             'inventory_modern/static/src/scss/sidebar.scss',
             'inventory_modern/static/src/scss/forms.scss',
             'inventory_modern/static/src/scss/print.scss',
-            'inventory_modern/static/src/scss/chatter.scss',
             'inventory_modern/static/src/scss/dash.scss',
             'inventory_modern/static/src/scss/inventory.scss',
             'inventory_modern/static/src/js/core/*.js',

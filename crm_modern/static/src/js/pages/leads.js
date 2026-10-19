@@ -13,8 +13,6 @@ import { QuickCreateDialog } from "../components/dialogs";
 import { UI } from "../components/ui";
 
 import { NativeView } from "../components/native_view";
-import { PageBar } from "../components/page_bar";
-
 import {
 
     leadEmbeddedViews,
@@ -39,7 +37,7 @@ export class Leads extends Component {
 
     static template = "crm_modern.Leads";
 
-    static components = { ...UI, NativeView, PageBar };
+    static components = { ...UI, NativeView };
 
     static props = ["*"];
 

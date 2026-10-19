@@ -10,11 +10,11 @@ No new tables or fields: everything reads and writes the standard models
 (crm.lead, crm.stage, crm.team, utm.campaign, crm.tag, mail.activity,
 mail.activity.type, mail.activity.plan).
     """,
-    'version': '19.0.2.0.0',
+    'version': '19.0.2.0.2',
     'category': 'Sales/CRM',
     'author': 'Your Name',
     'license': 'LGPL-3',
-    'depends': ['crm', 'utm', 'mail', 'sales_team'],
+    'depends': ['modern_theme', 'crm', 'utm', 'mail', 'sales_team'],
     'data': [
         'views/report_layout.xml',
         'views/crm_modern_lead_views.xml',
@@ -31,9 +31,7 @@ mail.activity.type, mail.activity.plan).
             'crm_modern/static/src/scss/list.scss',
             'crm_modern/static/src/scss/sidebar.scss',
             'crm_modern/static/src/scss/sale.scss',
-            'crm_modern/static/src/scss/forms.scss',
             'crm_modern/static/src/scss/print.scss',
-            'crm_modern/static/src/scss/chatter.scss',
             'crm_modern/static/src/scss/dash.scss',
             'crm_modern/static/src/js/core/*.js',
             'crm_modern/static/src/js/components/*.js',

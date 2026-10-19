@@ -1,0 +1,207 @@
+// ===========================================================================
+// Kanban views of the modern apps: a dotted canvas (Stitch-like) behind
+// rich cards, and glassy stage columns. Native views and the addons' own pages.
+// ===========================================================================
+$mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_sidebar)';
+
+#{$mt-apps} .o_kanban_view {
+    --mt-dot: color-mix(in srgb, var(--mt-foreground) 16%, transparent);
+    --mt-dot-strong: color-mix(in srgb, var(--mt-foreground) 30%, transparent);
+    --mt-canvas-tint: color-mix(in srgb, var(--mt-muted) 55%, var(--mt-card));
+    --mt-card-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 2px 6px -2px rgba(15, 23, 42, 0.06);
+    --mt-card-shadow-hover: 0 2px 4px rgba(15, 23, 42, 0.04), 0 14px 28px -12px rgba(15, 23, 42, 0.22);
+
+    // --- the canvas: a fine dot grid, darker in a soft spotlight at the centre.
+    // Layers, top to bottom: faint dots, an edge fade, strong dots, the tint.
+    > .o_content {
+        background-color: var(--mt-canvas-tint) !important;
+        background-image:
+            radial-gradient(circle at center, var(--mt-dot) 1px, transparent 1.4px),
+            radial-gradient(ellipse 65% 60% at 50% 45%, transparent 0%, var(--mt-canvas-tint) 100%),
+            radial-gradient(circle at center, var(--mt-dot-strong) 1px, transparent 1.4px) !important;
+        background-size: 18px 18px, 100% 100%, 18px 18px;
+        background-attachment: local, scroll, local;
+    }
+
+    .o_kanban_renderer {
+        --KanbanRecord-padding-v: 0.875rem;
+        --KanbanRecord-padding-h: 1rem;
+        --KanbanRecord-margin-v: 0.625rem;
+        --KanbanRecord-margin-h: 0.375rem;
+        background: transparent !important;
+        padding: 1.25rem 1.25rem 1.5rem !important;
+    }
+
+    // --- cards ------------------------------------------------------------
+    .o_kanban_record:not(.o_kanban_ghost):not(.o_kanban_quick_create) {
+        position: relative;
+        border: 1px solid var(--mt-border) !important;
+        border-radius: 0.875rem !important;
+        background: var(--mt-card) !important;
+        color: var(--mt-foreground);
+        box-shadow: var(--mt-card-shadow) !important;
+        overflow: hidden;
+        transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+
+        &:hover,
+        &:focus-visible {
+            transform: translateY(-2px);
+            border-color: color-mix(in srgb, var(--mt-primary) 35%, var(--mt-border)) !important;
+            box-shadow: var(--mt-card-shadow-hover) !important;
+            outline: none;
+        }
+
+        // a hairline of brand colour along the top, brighter on hover
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--mt-primary), color-mix(in srgb, var(--mt-primary) 25%, transparent));
+            opacity: 0.35;
+            transition: opacity 180ms ease;
+            pointer-events: none;
+        }
+
+        &:hover::before { opacity: 1; }
+
+        // card title: the first strong line
+        > span.fw-bold:first-child,
+        > .fw-bold:first-child,
+        .o_kanban_record_title,
+        .oe_kanban_details strong:first-child {
+            font-size: 0.9375rem !important;
+            font-weight: 650 !important;
+            letter-spacing: -0.01em;
+            color: var(--mt-foreground);
+        }
+
+        .text-muted,
+        .o_kanban_record_subtitle { color: var(--mt-muted-foreground) !important; }
+
+        // footer: a dashed hairline above the meta row
+        footer,
+        .o_kanban_record_bottom {
+            margin-top: 0.625rem;
+            padding-top: 0.625rem !important;
+            border-top: 1px dashed var(--mt-border);
+        }
+
+        // tags as soft pills
+        .o_field_many2many_tags .o_tag,
+        .badge {
+            border-radius: 999px;
+            padding: 0.1875rem 0.5625rem;
+            font-size: 0.6875rem;
+            font-weight: 600;
+        }
+
+        // avatars with a ring
+        .o_avatar img,
+        .o_m2o_avatar img,
+        img.rounded {
+            border-radius: 999px !important;
+            box-shadow: 0 0 0 2px var(--mt-card), 0 0 0 3px var(--mt-border);
+        }
+
+        // product / contact pictures
+        .o_kanban_image,
+        .o_kanban_image_fill {
+            border-radius: 0.625rem;
+            overflow: hidden;
+            background-color: var(--mt-muted);
+        }
+
+        .o_priority_star.fa-star { color: #f59e0b; }
+
+        .o-mail-ActivityButton i { color: var(--mt-muted-foreground) !important; }
+
+        // card menu
+        .o_dropdown_kanban .dropdown-toggle {
+            margin: 0.375rem 0.375rem 0 0;
+            border-radius: 0.5rem !important;
+            color: var(--mt-muted-foreground);
+
+            &:hover { background: var(--mt-muted); color: var(--mt-foreground); }
+        }
+
+        // Odoo's colour stripe (kanban colour picker) stays on the left
+        &[class*="o_kanban_color_"]:not(.o_kanban_color_0)::after {
+            border-radius: 0.875rem 0 0 0.875rem;
+        }
+    }
+
+    .o_kanban_record.o_kanban_ghost {
+        border: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+
+    // drag & drop
+    .o_kanban_record.o_dragged {
+        transform: rotate(-1.5deg) scale(1.02);
+        box-shadow: 0 24px 48px -16px rgba(15, 23, 42, 0.35) !important;
+    }
+
+    // --- stage columns (grouped kanban) ------------------------------------
+    .o_kanban_group:not(.o_column_folded) {
+        margin: 0 0.375rem;
+        padding: 0 0.5rem 0.5rem !important;
+        border: 1px solid color-mix(in srgb, var(--mt-border) 80%, transparent);
+        border-radius: 1rem;
+        background: color-mix(in srgb, var(--mt-card) 30%, transparent) !important;
+    }
+
+    .o_kanban_header {
+        margin: 0 -0.5rem 0.375rem;
+        padding: 0.75rem 0.875rem 0.625rem !important;
+        border-radius: 1rem 1rem 0 0;
+        background: color-mix(in srgb, var(--mt-card) 85%, transparent);
+        backdrop-filter: blur(6px);
+
+        .o_column_title {
+            font-size: 0.875rem !important;
+            font-weight: 650 !important;
+            color: var(--mt-foreground) !important;
+        }
+
+        .o_kanban_counter { margin-top: 0.375rem; }
+
+        .o_column_progress {
+            height: 0.375rem;
+            border-radius: 999px;
+            background: var(--mt-muted) !important;
+            overflow: hidden;
+        }
+
+        .o_animated_number { font-size: 0.8125rem; color: var(--mt-foreground) !important; }
+
+        .o_kanban_quick_add,
+        .o_group_config .btn {
+            border-radius: 0.5rem;
+            color: var(--mt-muted-foreground);
+
+            &:hover { background: var(--mt-muted); color: var(--mt-primary); }
+        }
+    }
+
+    .o_kanban_group.o_column_folded {
+        border-radius: 1rem;
+        background: color-mix(in srgb, var(--mt-card) 55%, transparent) !important;
+    }
+
+    // "Add a column" / quick create
+    .o_column_quick_create .o_quick_create_folded,
+    .o_kanban_group .o_kanban_quick_create {
+        border: 1px dashed color-mix(in srgb, var(--mt-primary) 35%, var(--mt-border)) !important;
+        border-radius: 0.875rem !important;
+        background: color-mix(in srgb, var(--mt-card) 80%, transparent) !important;
+        box-shadow: none !important;
+    }
+
+    .o_kanban_load_more .btn {
+        border-radius: 999px;
+        background: var(--mt-card);
+        border: 1px solid var(--mt-border);
+    }
+}

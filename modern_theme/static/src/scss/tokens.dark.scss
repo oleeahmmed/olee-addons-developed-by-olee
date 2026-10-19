@@ -315,19 +315,20 @@ html[data-mt-theme] {
     --mt-content-bg-accent: color-mix(in srgb, var(--mt-primary) 11%, hsl(226 42% 8%));
     --mt-card-matte: color-mix(in srgb, var(--mt-card) 88%, var(--mt-muted));
 
-    // Navigation shell stays accent-tinted, but much deeper: the active page
-    // becomes the accent itself instead of a white pill, which reads better
-    // against a dark content area.
-    --mt-nav-bg: color-mix(in srgb, var(--mt-primary) 26%, hsl(228 44% 5%));
-    --mt-nav-bg-2: color-mix(in srgb, var(--mt-primary) 44%, hsl(228 44% 6%));
-    --mt-nav-fg: hsl(210 40% 96%);
-    --mt-nav-muted-fg: color-mix(in srgb, var(--mt-primary) 34%, hsl(210 32% 96%));
-    --mt-nav-hover: color-mix(in srgb, var(--mt-nav-fg) 10%, transparent);
-    --mt-nav-active-bg: var(--mt-primary);
-    --mt-nav-active-fg: var(--mt-primary-foreground);
-    --mt-nav-border: color-mix(in srgb, var(--mt-nav-fg) 12%, transparent);
-    --mt-nav-tile: color-mix(in srgb, var(--mt-nav-fg) 12%, transparent);
-    --mt-nav-scrollbar: color-mix(in srgb, var(--mt-nav-fg) 18%, transparent);
+    --mt-chrome-bg: color-mix(in srgb, var(--mt-card) 65%, var(--mt-content-bg));
+    --mt-topbar-bg: var(--mt-chrome-bg);
+    --mt-sidebar-bg: var(--mt-chrome-bg);
+    --mt-sidebar-bg-2: hsl(226 34% 10%);
+    --mt-nav-bg: var(--mt-topbar-bg);
+    --mt-nav-bg-2: var(--mt-topbar-bg);
+    --mt-nav-fg: var(--mt-foreground);
+    --mt-nav-muted-fg: var(--mt-muted-foreground);
+    --mt-nav-hover: var(--mt-muted);
+    --mt-nav-active-bg: color-mix(in srgb, var(--mt-primary) 22%, var(--mt-card));
+    --mt-nav-active-fg: var(--mt-primary);
+    --mt-nav-border: var(--mt-border);
+    --mt-nav-tile: var(--mt-card);
+    --mt-nav-scrollbar: color-mix(in srgb, var(--mt-foreground) 28%, transparent);
 
     --mt-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
     --mt-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.25);

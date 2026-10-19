@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- One client action per page; each page embeds Odoo's own views of the same records. -->
+    <record id="action_home" model="ir.actions.client">
+        <field name="name">Home</field>
+        <field name="tag">inventory_modern.home</field>
+        <field name="path">modern-inventory-home</field>
+    </record>
     <record id="action_dashboard" model="ir.actions.client">
         <field name="name">Inventory Dashboard</field>
         <field name="tag">inventory_modern.dashboard</field>

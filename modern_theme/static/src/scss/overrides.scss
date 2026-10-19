@@ -227,7 +227,8 @@ html[data-mt-theme] {
     }
 }
 
-a:not(.btn):not(.dropdown-item):not(.nav-link) {
+// Kept at plain `a` specificity so component styles (sidebar items…) can recolour links.
+a:where(:not(.btn):not(.dropdown-item):not(.nav-link)) {
     color: var(--mt-primary);
 }
 

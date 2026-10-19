@@ -44,13 +44,13 @@ $mt-addon-prefixes: cm, im, mp, ss;
         --#{$p}-chart-1: var(--mt-primary) !important;
 
         // --- navigation shell (sidebar + its top-bar dropdowns) -------------
-        --#{$p}-sidebar: var(--mt-nav-bg) !important;
-        --#{$p}-sidebar-fg: var(--mt-nav-fg) !important;
+        --#{$p}-sidebar: var(--mt-sidebar-bg, #fafafa) !important;
+        --#{$p}-sidebar-fg: var(--mt-foreground) !important;
         --#{$p}-sidebar-hover: var(--mt-nav-hover) !important;
-        --#{$p}-sidebar-accent: var(--mt-nav-hover) !important;
-        --#{$p}-sidebar-accent-fg: var(--mt-nav-fg) !important;
-        --#{$p}-sidebar-muted-fg: var(--mt-nav-muted-fg) !important;
-        --#{$p}-sidebar-border: var(--mt-nav-border) !important;
+        --#{$p}-sidebar-accent: var(--mt-nav-active-bg) !important;
+        --#{$p}-sidebar-accent-fg: var(--mt-nav-active-fg) !important;
+        --#{$p}-sidebar-muted-fg: var(--mt-muted-foreground) !important;
+        --#{$p}-sidebar-border: var(--mt-border) !important;
         --#{$p}-sidebar-tile: var(--mt-nav-tile) !important;
         --#{$p}-sidebar-active-bg: var(--mt-nav-active-bg) !important;
         --#{$p}-sidebar-active-fg: var(--mt-nav-active-fg) !important;

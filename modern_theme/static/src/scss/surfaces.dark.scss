@@ -1,0 +1,210 @@
+// Odoo Community ships no dark Bootstrap build: everything Odoo compiles from its
+// light Sass variables (view background, tables, light buttons, cards…) would stay
+// white. Remap those surfaces onto the dark theme tokens.
+
+:root,
+html[data-mt-theme] {
+    --body-bg: var(--mt-background);
+    --body-color: var(--mt-foreground);
+    --emphasis-color: var(--mt-foreground);
+    --heading-color: var(--mt-foreground);
+    --secondary-color: var(--mt-muted-foreground);
+    --tertiary-color: var(--mt-muted-foreground);
+    --secondary-bg: var(--mt-muted);
+    --tertiary-bg: var(--mt-muted);
+    --border-color: var(--mt-border);
+    --border-color-translucent: var(--mt-border);
+    color-scheme: dark;
+}
+
+body {
+    background-color: var(--mt-content-bg);
+    color: var(--mt-foreground);
+}
+
+// --- surfaces -------------------------------------------------------------
+.bg-view,
+.text-bg-view,
+.bg-white,
+.bg-body,
+.text-bg-white {
+    --background-color: var(--mt-card) !important;
+    background-color: var(--mt-card) !important;
+    color: var(--mt-foreground) !important;
+}
+
+.bg-light,
+.text-bg-light,
+.bg-100,
+.bg-200,
+.bg-300 {
+    background-color: var(--mt-muted) !important;
+    color: var(--mt-foreground) !important;
+}
+
+.text-dark,
+.text-black,
+.text-body,
+.text-900,
+.text-800,
+.text-emphasis {
+    color: var(--mt-foreground) !important;
+}
+
+.text-700,
+.text-600,
+.text-500,
+.text-muted,
+.text-body-secondary {
+    color: var(--mt-muted-foreground) !important;
+}
+
+hr { color: var(--mt-border); }
+
+.breadcrumb {
+    --breadcrumb-bg: transparent;
+    background-color: transparent;
+}
+
+.card {
+    --card-bg: var(--mt-card);
+    --card-color: var(--mt-foreground);
+    --card-border-color: var(--mt-border);
+    --card-cap-bg: var(--mt-muted);
+}
+
+.list-group {
+    --list-group-bg: var(--mt-card);
+    --list-group-color: var(--mt-foreground);
+    --list-group-border-color: var(--mt-border);
+    --list-group-action-hover-bg: var(--mt-muted);
+    --list-group-action-hover-color: var(--mt-foreground);
+}
+
+.nav-tabs {
+    --nav-tabs-border-color: var(--mt-border);
+    --nav-tabs-link-active-bg: var(--mt-card);
+    --nav-tabs-link-active-color: var(--mt-foreground);
+    --nav-tabs-link-active-border-color: var(--mt-border) var(--mt-border) var(--mt-card);
+    --nav-tabs-link-hover-border-color: var(--mt-border);
+}
+
+// --- overlays -------------------------------------------------------------
+.dropdown-menu,
+.o-dropdown--menu {
+    --dropdown-bg: var(--mt-card);
+    --dropdown-color: var(--mt-foreground);
+    --dropdown-border-color: var(--mt-border);
+    --dropdown-divider-bg: var(--mt-border);
+    --dropdown-link-color: var(--mt-foreground);
+    --dropdown-link-hover-bg: var(--mt-muted);
+    --dropdown-link-hover-color: var(--mt-foreground);
+    --dropdown-header-color: var(--mt-muted-foreground);
+    background-color: var(--mt-card);
+    color: var(--mt-foreground);
+}
+
+.dropdown-item {
+    color: var(--mt-foreground);
+    &:hover, &:focus, &.focus { background-color: var(--mt-muted); color: var(--mt-foreground); }
+}
+
+.modal {
+    --modal-bg: var(--mt-card);
+    --modal-color: var(--mt-foreground);
+    --modal-border-color: var(--mt-border);
+    --modal-header-border-color: var(--mt-border);
+    --modal-footer-border-color: var(--mt-border);
+}
+
+.modal-content {
+    background-color: var(--mt-card);
+    color: var(--mt-foreground);
+}
+
+.popover,
+.o_popover {
+    --popover-bg: var(--mt-card);
+    --popover-body-color: var(--mt-foreground);
+    --popover-border-color: var(--mt-border);
+    --popover-header-bg: var(--mt-muted);
+    background-color: var(--mt-card);
+    color: var(--mt-foreground);
+}
+
+.o_notification {
+    background-color: var(--mt-card) !important;
+    color: var(--mt-foreground);
+    border: 1px solid var(--mt-border);
+
+    .o_notification_content,
+    .o_notification_title { color: var(--mt-foreground); }
+}
+
+// --- buttons --------------------------------------------------------------
+.btn-light,
+.btn-secondary {
+    --btn-bg: var(--mt-muted);
+    --btn-color: var(--mt-foreground);
+    --btn-border-color: var(--mt-border);
+    --btn-hover-bg: color-mix(in srgb, var(--mt-muted) 85%, var(--mt-foreground));
+    --btn-hover-color: var(--mt-foreground);
+    --btn-hover-border-color: var(--mt-border);
+    --btn-active-bg: color-mix(in srgb, var(--mt-muted) 78%, var(--mt-foreground));
+    --btn-active-color: var(--mt-foreground);
+    --btn-active-border-color: var(--mt-border);
+    --btn-disabled-bg: var(--mt-muted);
+    --btn-disabled-color: var(--mt-muted-foreground);
+}
+
+.btn-light.border-0 { --btn-border-color: transparent; }
+
+// --- views ----------------------------------------------------------------
+.table,
+.o_list_table {
+    --table-bg: var(--mt-card) !important;
+    --table-color: var(--mt-foreground);
+    --table-border-color: var(--mt-border);
+    --table-striped-bg: var(--mt-muted);
+    --table-striped-color: var(--mt-foreground);
+    --table-hover-bg: var(--mt-muted);
+    --table-hover-color: var(--mt-foreground);
+    --table-active-bg: color-mix(in srgb, var(--mt-primary) 14%, var(--mt-card));
+    --table-active-color: var(--mt-foreground);
+    color: var(--mt-foreground);
+}
+
+.o_list_renderer .o_list_sortable_icon { background-color: transparent !important; }
+
+.o_input,
+.o_field_widget input,
+.o_field_widget textarea,
+.o_field_widget select {
+    color: var(--mt-foreground);
+}
+
+.o_kanban_record,
+.o_kanban_renderer .o_kanban_record {
+    background-color: var(--mt-card);
+    color: var(--mt-foreground);
+    border-color: var(--mt-border);
+}
+
+.o_view_nocontent .o_nocontent_help {
+    color: var(--mt-muted-foreground);
+
+    p, .o_view_nocontent_smiling_face, .o_view_nocontent_empty_folder { color: var(--mt-foreground) !important; }
+}
+
+.o-mail-ImStatus { background-color: var(--mt-card) !important; }
+
+// Purchase / Sales "My …" KPI strip above lists.
+.purchase-dashboard-card,
+.o_sale_dashboard .btn,
+.o_purchase_dashboard .btn {
+    background-color: var(--mt-muted) !important;
+    color: var(--mt-foreground) !important;
+    border-color: var(--mt-border) !important;
+
+    &:hover { background-color: color-mix(in srgb, var(--mt-muted) 85%, var(--mt-foreground)) !important; }
+}
