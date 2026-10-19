@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.modern.theme</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Modern Theme" string="Modern Theme" name="modern_theme"
+                     logo="/modern_theme/static/description/icon.png">
+                    <block title="Appearance" name="modern_theme_appearance">
+                        <setting id="modern_theme_preset_setting"
+                                 string="Theme Color"
+                                 help="Accent color used across the whole interface, for every user.">
+                            <field name="modern_theme_preset" widget="modern_theme_preset_picker"/>
+                        </setting>
+                        <setting id="modern_theme_dark_mode_setting"
+                                 string="Dark Mode"
+                                 help="Switch your own interface to dark mode. Every user can also flip this instantly from the toggle next to their profile picture.">
+                            <field name="modern_theme_dark_mode"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

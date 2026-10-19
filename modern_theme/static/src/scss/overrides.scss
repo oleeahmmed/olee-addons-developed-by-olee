@@ -1,0 +1,167 @@
+// Modern Theme — bridges the shadcn/ui tokens defined in tokens(.dark).scss
+// onto the real Odoo backend: Bootstrap's own runtime CSS variables first
+// (covers most buttons, links, badges, form validation out of the box),
+// then the handful of Odoo-specific selectors that don't go through them.
+
+:root,
+html[data-mt-theme] {
+    // --- Bootstrap bridge --------------------------------------------------
+    --bs-primary: var(--mt-primary);
+    --bs-primary-rgb: var(--mt-primary-rgb);
+    --bs-link-color: var(--mt-primary);
+    --bs-link-color-rgb: var(--mt-primary-rgb);
+    --bs-link-hover-color: var(--mt-primary);
+    --bs-focus-ring-color: rgba(var(--mt-primary-rgb), 0.25);
+    --bs-border-radius: var(--mt-radius);
+    --bs-border-radius-lg: calc(var(--mt-radius) + 0.125rem);
+    --bs-border-radius-sm: calc(var(--mt-radius) - 0.125rem);
+}
+
+// --- Buttons -----------------------------------------------------------
+.btn-primary {
+    background-color: var(--mt-primary);
+    border-color: var(--mt-primary);
+    color: var(--mt-primary-foreground);
+
+    &:hover, &:focus, &:active, &:not(:disabled):not(.disabled):active {
+        background-color: var(--mt-primary);
+        border-color: var(--mt-primary);
+        color: var(--mt-primary-foreground);
+        filter: brightness(0.93);
+    }
+    &:focus, &:focus-visible {
+        box-shadow: 0 0 0 0.2rem rgba(var(--mt-primary-rgb), 0.35);
+    }
+}
+.btn-outline-primary {
+    color: var(--mt-primary);
+    border-color: var(--mt-primary);
+    &:hover, &:active {
+        background-color: var(--mt-primary);
+        border-color: var(--mt-primary);
+        color: var(--mt-primary-foreground);
+    }
+}
+.btn, .o_input, .form-control, .form-select, .modal-content, .dropdown-menu, .o_notification {
+    border-radius: var(--mt-radius);
+}
+
+// --- Links / focus -------------------------------------------------------
+a:not(.btn):not(.dropdown-item):not(.nav-link) {
+    color: var(--mt-primary);
+}
+.o_field_widget .o_input:focus,
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--mt-primary);
+    box-shadow: 0 0 0 0.2rem rgba(var(--mt-primary-rgb), 0.2);
+}
+
+// --- Checkboxes / switches ------------------------------------------------
+.form-check-input:checked,
+.o_switch_value:checked ~ .o_switch {
+    background-color: var(--mt-primary);
+    border-color: var(--mt-primary);
+}
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(var(--mt-primary-rgb), 0.2);
+}
+
+// --- Navigation (tabs / pills / notebook) --------------------------------
+.nav-tabs .nav-link.active,
+.nav-pills .nav-link.active,
+.o_notebook .nav-link.active {
+    color: var(--mt-primary);
+    border-color: var(--mt-primary);
+}
+.o_notebook .nav-link.active {
+    border-bottom: 2px solid var(--mt-primary);
+}
+
+// --- Navbar: subtle accent for the current app ---------------------------
+.o_main_navbar {
+    .o_app.focus,
+    .o_app.bg-primary-subtle {
+        background-color: rgba(var(--mt-primary-rgb), 0.12) !important;
+        color: var(--mt-primary) !important;
+    }
+}
+
+// --- List view: selection / hover -----------------------------------------
+.o_list_view {
+    .o_data_row.o_data_row_selected,
+    .o_data_row td.o_list_record_selector input:checked ~ * {
+        background-color: rgba(var(--mt-primary-rgb), 0.06);
+    }
+}
+
+// --- Kanban: selected card -------------------------------------------------
+.o_kanban_view .o_kanban_record.o_record_selected {
+    box-shadow: 0 0 0 2px var(--mt-primary) inset;
+}
+
+// --- Statusbar (stage buttons) ---------------------------------------------
+.o_statusbar_status .o_arrow_button.o_arrow_button_current,
+.o_statusbar_status .o_arrow_button.text-bg-primary {
+    background-color: var(--mt-primary) !important;
+    color: var(--mt-primary-foreground) !important;
+}
+
+// --- Badges / progress ------------------------------------------------------
+.badge.text-bg-primary {
+    background-color: var(--mt-primary) !important;
+    color: var(--mt-primary-foreground) !important;
+}
+.progress-bar {
+    background-color: var(--mt-primary);
+}
+
+// --- Pagination --------------------------------------------------------
+.pagination .page-item.active .page-link {
+    background-color: var(--mt-primary);
+    border-color: var(--mt-primary);
+}
+
+// --- Dropdown items (active app, hover) -------------------------------
+.dropdown-item:active,
+.dropdown-item.active {
+    background-color: var(--mt-primary);
+    color: var(--mt-primary-foreground);
+}
+
+// --- Modern Theme: systray toggle -------------------------------------
+.o_modern_theme_toggle_btn {
+    border: none;
+    background: transparent;
+    color: inherit;
+    opacity: 0.75;
+    font-size: 1.05rem;
+    &:hover {
+        opacity: 1;
+        color: var(--mt-primary);
+    }
+}
+
+// --- Modern Theme: settings swatch picker ------------------------------
+.o_modern_theme_preset_picker {
+    .o_modern_theme_swatch {
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        cursor: pointer;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+        transition: transform 0.1s ease-in-out;
+
+        &:hover {
+            transform: scale(1.08);
+        }
+        &.selected {
+            border-color: var(--mt-foreground, #111827);
+            box-shadow: 0 0 0 2px var(--mt-background, #fff), 0 0 0 4px var(--mt-foreground, #111827);
+        }
+    }
+}

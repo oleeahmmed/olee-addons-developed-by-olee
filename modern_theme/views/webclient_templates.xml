@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="webclient_bootstrap_theme" inherit_id="web.webclient_bootstrap">
+        <xpath expr="//t[@t-set='body_classname']" position="after">
+            <t t-set="html_data" t-value="{'data-mt-theme': modern_theme_preset}"/>
+        </xpath>
+    </template>
+
+</odoo>

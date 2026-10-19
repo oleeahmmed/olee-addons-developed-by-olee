@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="modern_theme.ThemePresetPickerField">
+        <div class="o_modern_theme_preset_picker d-flex flex-wrap gap-2">
+            <t t-foreach="options" t-as="option" t-key="option[0]">
+                <button type="button"
+                        class="o_modern_theme_swatch"
+                        t-att-class="{ selected: value === option[0] }"
+                        t-att-style="'background-color:' + swatchColor(option[0])"
+                        t-att-title="option[1]"
+                        t-on-click="() => this.select(option[0])">
+                    <i t-if="value === option[0]" class="fa fa-check" aria-hidden="true"/>
+                </button>
+            </t>
+        </div>
+    </t>
+
+</templates>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="modern_theme.ThemeToggle">
+        <div class="o_modern_theme_toggle d-flex align-items-center px-2">
+            <button type="button"
+                    class="btn btn-sm o_modern_theme_toggle_btn"
+                    t-on-click="onClick"
+                    t-att-title="isDark ? 'Switch to light mode' : 'Switch to dark mode'">
+                <i t-if="isDark" class="fa fa-sun-o" aria-hidden="true"/>
+                <i t-else="" class="fa fa-moon-o" aria-hidden="true"/>
+            </button>
+        </div>
+    </t>
+
+</templates>

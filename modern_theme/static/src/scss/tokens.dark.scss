@@ -1,0 +1,258 @@
+// Modern Theme — dark design tokens.
+//
+// Only loaded in the "web.assets_web_dark" bundle, which always includes
+// tokens.scss first (through "web.assets_web"), so these declarations win
+// for every selector they share with it.
+
+:root,
+html[data-mt-theme="zinc"] {
+    --mt-background: hsl(240 10% 3.9%);
+    --mt-foreground: hsl(0 0% 98%);
+    --mt-card: hsl(240 10% 3.9%);
+    --mt-card-foreground: hsl(0 0% 98%);
+    --mt-primary: hsl(0 0% 98%);
+    --mt-primary-rgb: 250, 250, 250;
+    --mt-primary-foreground: hsl(240 5.9% 10%);
+    --mt-secondary: hsl(240 3.7% 15.9%);
+    --mt-secondary-foreground: hsl(0 0% 98%);
+    --mt-muted: hsl(240 3.7% 15.9%);
+    --mt-muted-foreground: hsl(240 5% 64.9%);
+    --mt-accent: hsl(240 3.7% 15.9%);
+    --mt-accent-foreground: hsl(0 0% 98%);
+    --mt-destructive: hsl(0 62.8% 30.6%);
+    --mt-destructive-foreground: hsl(0 0% 98%);
+    --mt-border: hsl(240 3.7% 15.9%);
+    --mt-input: hsl(240 3.7% 15.9%);
+    --mt-ring: hsl(240 4.9% 83.9%);
+}
+
+html[data-mt-theme="slate"] {
+    --mt-background: hsl(222.2 84% 4.9%);
+    --mt-foreground: hsl(210 40% 98%);
+    --mt-card: hsl(222.2 84% 4.9%);
+    --mt-card-foreground: hsl(210 40% 98%);
+    --mt-primary: hsl(210 40% 98%);
+    --mt-primary-rgb: 248, 250, 252;
+    --mt-primary-foreground: hsl(222.2 47.4% 11.2%);
+    --mt-secondary: hsl(217.2 32.6% 17.5%);
+    --mt-secondary-foreground: hsl(210 40% 98%);
+    --mt-muted: hsl(217.2 32.6% 17.5%);
+    --mt-muted-foreground: hsl(215 20.2% 65.1%);
+    --mt-accent: hsl(217.2 32.6% 17.5%);
+    --mt-accent-foreground: hsl(210 40% 98%);
+    --mt-destructive: hsl(0 62.8% 30.6%);
+    --mt-destructive-foreground: hsl(210 40% 98%);
+    --mt-border: hsl(217.2 32.6% 17.5%);
+    --mt-input: hsl(217.2 32.6% 17.5%);
+    --mt-ring: hsl(212.7 26.8% 83.9%);
+}
+
+html[data-mt-theme="stone"] {
+    --mt-background: hsl(20 14.3% 4.1%);
+    --mt-foreground: hsl(60 9.1% 97.8%);
+    --mt-card: hsl(20 14.3% 4.1%);
+    --mt-card-foreground: hsl(60 9.1% 97.8%);
+    --mt-primary: hsl(60 9.1% 97.8%);
+    --mt-primary-rgb: 250, 250, 249;
+    --mt-primary-foreground: hsl(24 9.8% 10%);
+    --mt-secondary: hsl(12 6.5% 15.1%);
+    --mt-secondary-foreground: hsl(60 9.1% 97.8%);
+    --mt-muted: hsl(12 6.5% 15.1%);
+    --mt-muted-foreground: hsl(24 5.4% 63.9%);
+    --mt-accent: hsl(12 6.5% 15.1%);
+    --mt-accent-foreground: hsl(60 9.1% 97.8%);
+    --mt-destructive: hsl(0 62.8% 30.6%);
+    --mt-destructive-foreground: hsl(60 9.1% 97.8%);
+    --mt-border: hsl(12 6.5% 15.1%);
+    --mt-input: hsl(12 6.5% 15.1%);
+    --mt-ring: hsl(24 5.7% 82.9%);
+}
+
+html[data-mt-theme="gray"] {
+    --mt-background: hsl(224 71.4% 4.1%);
+    --mt-foreground: hsl(210 20% 98%);
+    --mt-card: hsl(224 71.4% 4.1%);
+    --mt-card-foreground: hsl(210 20% 98%);
+    --mt-primary: hsl(210 20% 98%);
+    --mt-primary-rgb: 249, 250, 251;
+    --mt-primary-foreground: hsl(220.9 39.3% 11%);
+    --mt-secondary: hsl(215 27.9% 16.9%);
+    --mt-secondary-foreground: hsl(210 20% 98%);
+    --mt-muted: hsl(215 27.9% 16.9%);
+    --mt-muted-foreground: hsl(217.9 10.6% 64.9%);
+    --mt-accent: hsl(215 27.9% 16.9%);
+    --mt-accent-foreground: hsl(210 20% 98%);
+    --mt-destructive: hsl(0 62.8% 30.6%);
+    --mt-destructive-foreground: hsl(210 20% 98%);
+    --mt-border: hsl(215 27.9% 16.9%);
+    --mt-input: hsl(215 27.9% 16.9%);
+    --mt-ring: hsl(216 12.2% 83.9%);
+}
+
+html[data-mt-theme="neutral"] {
+    --mt-background: hsl(0 0% 3.9%);
+    --mt-foreground: hsl(0 0% 98%);
+    --mt-card: hsl(0 0% 3.9%);
+    --mt-card-foreground: hsl(0 0% 98%);
+    --mt-primary: hsl(0 0% 98%);
+    --mt-primary-rgb: 250, 250, 250;
+    --mt-primary-foreground: hsl(0 0% 9%);
+    --mt-secondary: hsl(0 0% 14.9%);
+    --mt-secondary-foreground: hsl(0 0% 98%);
+    --mt-muted: hsl(0 0% 14.9%);
+    --mt-muted-foreground: hsl(0 0% 63.9%);
+    --mt-accent: hsl(0 0% 14.9%);
+    --mt-accent-foreground: hsl(0 0% 98%);
+    --mt-destructive: hsl(0 62.8% 30.6%);
+    --mt-destructive-foreground: hsl(0 0% 98%);
+    --mt-border: hsl(0 0% 14.9%);
+    --mt-input: hsl(0 0% 14.9%);
+    --mt-ring: hsl(0 0% 83.1%);
+}
+
+html[data-mt-theme="red"] {
+    --mt-background: hsl(0 0% 3.9%);
+    --mt-foreground: hsl(0 0% 98%);
+    --mt-card: hsl(0 0% 3.9%);
+    --mt-card-foreground: hsl(0 0% 98%);
+    --mt-primary: hsl(0 72.2% 50.6%);
+    --mt-primary-rgb: 220, 38, 38;
+    --mt-primary-foreground: hsl(0 85.7% 97.3%);
+    --mt-secondary: hsl(0 0% 14.9%);
+    --mt-secondary-foreground: hsl(0 0% 98%);
+    --mt-muted: hsl(0 0% 14.9%);
+    --mt-muted-foreground: hsl(0 0% 63.9%);
+    --mt-accent: hsl(0 0% 14.9%);
+    --mt-accent-foreground: hsl(0 0% 98%);
+    --mt-destructive: hsl(0 62.8% 30.6%);
+    --mt-destructive-foreground: hsl(0 0% 98%);
+    --mt-border: hsl(0 0% 14.9%);
+    --mt-input: hsl(0 0% 14.9%);
+    --mt-ring: hsl(0 72.2% 50.6%);
+}
+
+html[data-mt-theme="rose"] {
+    --mt-background: hsl(20 14.3% 4.1%);
+    --mt-foreground: hsl(0 0% 95%);
+    --mt-card: hsl(24 9.8% 10%);
+    --mt-card-foreground: hsl(0 0% 95%);
+    --mt-primary: hsl(346.8 77.2% 49.8%);
+    --mt-primary-rgb: 225, 29, 72;
+    --mt-primary-foreground: hsl(355.7 100% 97.3%);
+    --mt-secondary: hsl(240 3.7% 15.9%);
+    --mt-secondary-foreground: hsl(0 0% 98%);
+    --mt-muted: hsl(0 0% 15%);
+    --mt-muted-foreground: hsl(240 5% 64.9%);
+    --mt-accent: hsl(12 6.5% 15.1%);
+    --mt-accent-foreground: hsl(0 0% 98%);
+    --mt-destructive: hsl(0 62.8% 30.6%);
+    --mt-destructive-foreground: hsl(0 85.7% 97.3%);
+    --mt-border: hsl(240 3.7% 15.9%);
+    --mt-input: hsl(240 3.7% 15.9%);
+    --mt-ring: hsl(346.8 77.2% 49.8%);
+}
+
+html[data-mt-theme="orange"] {
+    --mt-background: hsl(20 14.3% 4.1%);
+    --mt-foreground: hsl(60 9.1% 97.8%);
+    --mt-card: hsl(20 14.3% 4.1%);
+    --mt-card-foreground: hsl(60 9.1% 97.8%);
+    --mt-primary: hsl(20.5 90.2% 48.2%);
+    --mt-primary-rgb: 234, 88, 12;
+    --mt-primary-foreground: hsl(60 9.1% 97.8%);
+    --mt-secondary: hsl(12 6.5% 15.1%);
+    --mt-secondary-foreground: hsl(60 9.1% 97.8%);
+    --mt-muted: hsl(12 6.5% 15.1%);
+    --mt-muted-foreground: hsl(24 5.4% 63.9%);
+    --mt-accent: hsl(12 6.5% 15.1%);
+    --mt-accent-foreground: hsl(60 9.1% 97.8%);
+    --mt-destructive: hsl(0 62.8% 30.6%);
+    --mt-destructive-foreground: hsl(60 9.1% 97.8%);
+    --mt-border: hsl(12 6.5% 15.1%);
+    --mt-input: hsl(12 6.5% 15.1%);
+    --mt-ring: hsl(20.5 90.2% 48.2%);
+}
+
+html[data-mt-theme="green"] {
+    --mt-background: hsl(20 14.3% 4.1%);
+    --mt-foreground: hsl(0 0% 95%);
+    --mt-card: hsl(24 9.8% 10%);
+    --mt-card-foreground: hsl(0 0% 95%);
+    --mt-primary: hsl(142.1 70.6% 45.3%);
+    --mt-primary-rgb: 34, 197, 94;
+    --mt-primary-foreground: hsl(144.9 80.4% 10%);
+    --mt-secondary: hsl(240 3.7% 15.9%);
+    --mt-secondary-foreground: hsl(0 0% 98%);
+    --mt-muted: hsl(0 0% 15%);
+    --mt-muted-foreground: hsl(240 5% 64.9%);
+    --mt-accent: hsl(12 6.5% 15.1%);
+    --mt-accent-foreground: hsl(0 0% 98%);
+    --mt-destructive: hsl(0 62.8% 30.6%);
+    --mt-destructive-foreground: hsl(0 85.7% 97.3%);
+    --mt-border: hsl(240 3.7% 15.9%);
+    --mt-input: hsl(240 3.7% 15.9%);
+    --mt-ring: hsl(142.4 71.8% 29.2%);
+}
+
+html[data-mt-theme="blue"] {
+    --mt-background: hsl(222.2 84% 4.9%);
+    --mt-foreground: hsl(210 40% 98%);
+    --mt-card: hsl(222.2 84% 4.9%);
+    --mt-card-foreground: hsl(210 40% 98%);
+    --mt-primary: hsl(217.2 91.2% 59.8%);
+    --mt-primary-rgb: 59, 130, 246;
+    --mt-primary-foreground: hsl(222.2 47.4% 11.2%);
+    --mt-secondary: hsl(217.2 32.6% 17.5%);
+    --mt-secondary-foreground: hsl(210 40% 98%);
+    --mt-muted: hsl(217.2 32.6% 17.5%);
+    --mt-muted-foreground: hsl(215 20.2% 65.1%);
+    --mt-accent: hsl(217.2 32.6% 17.5%);
+    --mt-accent-foreground: hsl(210 40% 98%);
+    --mt-destructive: hsl(0 62.8% 30.6%);
+    --mt-destructive-foreground: hsl(210 40% 98%);
+    --mt-border: hsl(217.2 32.6% 17.5%);
+    --mt-input: hsl(217.2 32.6% 17.5%);
+    --mt-ring: hsl(224.3 76.3% 48%);
+}
+
+html[data-mt-theme="yellow"] {
+    --mt-background: hsl(20 14.3% 4.1%);
+    --mt-foreground: hsl(60 9.1% 97.8%);
+    --mt-card: hsl(20 14.3% 4.1%);
+    --mt-card-foreground: hsl(60 9.1% 97.8%);
+    --mt-primary: hsl(47.9 95.8% 53.1%);
+    --mt-primary-rgb: 250, 204, 21;
+    --mt-primary-foreground: hsl(26 83.3% 14.1%);
+    --mt-secondary: hsl(12 6.5% 15.1%);
+    --mt-secondary-foreground: hsl(60 9.1% 97.8%);
+    --mt-muted: hsl(12 6.5% 15.1%);
+    --mt-muted-foreground: hsl(24 5.4% 63.9%);
+    --mt-accent: hsl(12 6.5% 15.1%);
+    --mt-accent-foreground: hsl(60 9.1% 97.8%);
+    --mt-destructive: hsl(0 62.8% 30.6%);
+    --mt-destructive-foreground: hsl(60 9.1% 97.8%);
+    --mt-border: hsl(12 6.5% 15.1%);
+    --mt-input: hsl(12 6.5% 15.1%);
+    --mt-ring: hsl(35.5 91.7% 32.9%);
+}
+
+html[data-mt-theme="violet"] {
+    --mt-background: hsl(224 71.4% 4.1%);
+    --mt-foreground: hsl(210 20% 98%);
+    --mt-card: hsl(224 71.4% 4.1%);
+    --mt-card-foreground: hsl(210 20% 98%);
+    --mt-primary: hsl(263.4 70% 50.4%);
+    --mt-primary-rgb: 109, 40, 217;
+    --mt-primary-foreground: hsl(210 20% 98%);
+    --mt-secondary: hsl(215 27.9% 16.9%);
+    --mt-secondary-foreground: hsl(210 20% 98%);
+    --mt-muted: hsl(215 27.9% 16.9%);
+    --mt-muted-foreground: hsl(217.9 10.6% 64.9%);
+    --mt-accent: hsl(215 27.9% 16.9%);
+    --mt-accent-foreground: hsl(210 20% 98%);
+    --mt-destructive: hsl(0 62.8% 30.6%);
+    --mt-destructive-foreground: hsl(210 20% 98%);
+    --mt-border: hsl(215 27.9% 16.9%);
+    --mt-input: hsl(215 27.9% 16.9%);
+    --mt-ring: hsl(263.4 70% 50.4%);
+}

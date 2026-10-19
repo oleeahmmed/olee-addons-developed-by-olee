@@ -1,0 +1,35 @@
+// Modern Theme — brings the "modern" UI addons (crm_modern, modern_inventory,
+// sales_modern) in line with the chosen theme preset and light/dark mode.
+//
+// Those addons ship their own small design-token systems (--cm-*, --im-*,
+// --ss-*) with a fixed accent color. The !important declarations are needed
+// because, in the dark asset bundle, those addons' own tokens.dark.scss can
+// legitimately load either before or after this file depending on addon
+// install order — !important makes modern_theme win either way. Harmless
+// no-op wherever one of these addons isn't installed: the selectors below
+// just never match anything.
+:root {
+    --cm-primary: var(--mt-primary) !important;
+    --cm-primary-fg: var(--mt-primary-foreground) !important;
+    --cm-primary-soft: color-mix(in srgb, var(--mt-primary) 15%, var(--mt-background)) !important;
+    --cm-primary-soft-fg: var(--mt-primary) !important;
+    --cm-ring: color-mix(in srgb, var(--mt-primary) 45%, transparent) !important;
+    --cm-info: var(--mt-primary) !important;
+    --cm-chart-1: var(--mt-primary) !important;
+
+    --im-primary: var(--mt-primary) !important;
+    --im-primary-fg: var(--mt-primary-foreground) !important;
+    --im-primary-soft: color-mix(in srgb, var(--mt-primary) 15%, var(--mt-background)) !important;
+    --im-primary-soft-fg: var(--mt-primary) !important;
+    --im-ring: color-mix(in srgb, var(--mt-primary) 45%, transparent) !important;
+    --im-info: var(--mt-primary) !important;
+    --im-chart-1: var(--mt-primary) !important;
+
+    --ss-primary: var(--mt-primary) !important;
+    --ss-primary-fg: var(--mt-primary-foreground) !important;
+    --ss-primary-soft: color-mix(in srgb, var(--mt-primary) 15%, var(--mt-background)) !important;
+    --ss-primary-soft-fg: var(--mt-primary) !important;
+    --ss-ring: color-mix(in srgb, var(--mt-primary) 45%, transparent) !important;
+    --ss-info: var(--mt-primary) !important;
+    --ss-chart-1: var(--mt-primary) !important;
+}
