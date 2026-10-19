@@ -7,6 +7,7 @@ import { Component } from "@odoo/owl";
 // Swatch colors are only used to draw the picker; the actual theme colors
 // applied across the interface live in tokens.scss / tokens.dark.scss.
 export const THEME_SWATCH_COLORS = {
+    indigo: "#1e3fae",
     zinc: "#18181b",
     slate: "#0f172a",
     stone: "#1c1917",
@@ -19,6 +20,7 @@ export const THEME_SWATCH_COLORS = {
     blue: "#2563eb",
     yellow: "#facc15",
     violet: "#7c3aed",
+    teal: "#109384",
 };
 
 export class ThemePresetPickerField extends Component {

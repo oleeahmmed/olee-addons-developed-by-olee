@@ -43,6 +43,22 @@ List pages (Pipeline, Leads, Activities, Campaigns, Salespeople, Sales Teams, co
 and the Quotations / Sales Orders pages of `crm_modern_sale`) use Odoo's own two-part layout,
 full width: the control panel (New, title, search, pager, views) and the view below it.
 
+## The "+" button in the sidebar
+Right under the app name, the sidebar shows a single **+ New …** button. It always
+creates the record of the page you are on: **New opportunity** on Pipeline, **New
+lead** on Leads, **New campaign** on Campaigns, **New tag** under
+Configuration ▸ Tags and so on. It opens Odoo's own form, empty — the very same
+screen used to view and edit a record. The button only appears when you are
+allowed to create (`checkAccessRight`), and it collapses to a plain **+** square
+when the sidebar is folded to icons.
+
+## Theme
+Colours come from the `modern_theme` addon: install it and the sidebar, the top
+bar, the dashboards, the lists and the forms all follow the preset chosen in
+**Settings ▸ Modern Theme** (Indigo by default) and switch to dark mode with the
+user's own toggle. Modern CRM keeps working, with its own colours, if
+`modern_theme` is not installed.
+
 ## Depends on
 `crm`, `utm`, `mail`, `sales_team`, and **`crm_simple`** (campaign sales team,
 round-robin assignment, campaign counters).

@@ -1,10 +1,11 @@
-import { Component, useState } from "@odoo/owl";
+import { Component, onWillStart, useState } from "@odoo/owl";
 import { browser } from "@web/core/browser/browser";
 import { Dropdown } from "@web/core/dropdown/dropdown";
 import { DropdownItem } from "@web/core/dropdown/dropdown_item";
 import { routerBus } from "@web/core/browser/router";
 import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
+import { session } from "@web/session";
 import { user } from "@web/core/user";
 import { useBus, useService } from "@web/core/utils/hooks";
 
@@ -68,6 +69,24 @@ for (const [xmlid, icon] of Object.entries({
     menuIcons.add(xmlid, icon);
 }
 
+/**
+ * What the sidebar's "+" button creates, one entry per page: the model behind
+ * the page you are on and the label shown on the button.
+ */
+export const createTargets = registry.category("purchase_modern.create_targets");
+for (const [xmlid, spec] of Object.entries({
+    "purchase_modern.menu_rfqs": { resModel: "purchase.order", label: _t("New request for quotation") },
+    "purchase_modern.menu_orders": { resModel: "purchase.order", label: _t("New purchase order") },
+    "purchase_modern.menu_to_bill": { resModel: "purchase.order", label: _t("New purchase order") },
+    "purchase_modern.menu_vendors": { resModel: "res.partner", label: _t("New vendor"), context: { default_supplier_rank: 1 } },
+    "purchase_modern.menu_products": { resModel: "product.template", label: _t("New product"), context: { default_purchase_ok: true, default_is_storable: true } },
+    "purchase_modern.menu_pricelists": { resModel: "product.supplierinfo", label: _t("New vendor pricelist") },
+})) {
+    createTargets.add(xmlid, spec);
+}
+/** Page the "+" falls back to when the current page has nothing to create. */
+const DEFAULT_CREATE = "purchase_modern.menu_rfqs";
+
 export class ModernPurchaseSidebar extends Component {
     static template = "purchase_modern.Sidebar";
     static components = { Dropdown, DropdownItem };
@@ -76,13 +95,15 @@ export class ModernPurchaseSidebar extends Component {
     setup() {
         this.menu = useService("menu");
         this.ui = useState(useService("ui"));
+        this.orm = useService("orm");
+        this.action = useService("action");
         let collapsed = false;
         try {
             collapsed = browser.localStorage.getItem(COLLAPSE_KEY) === "1";
         } catch {
             // storage unavailable: keep the default
         }
-        this.state = useState({ rev: 0, menuId: false, closed: {}, collapsed });
+        this.state = useState({ rev: 0, menuId: false, closed: {}, collapsed, rights: {} });
         this.mpUser = { id: user.userId, name: user.name, login: user.login };
         const refresh = () => this.state.rev++;
         useBus(this.env.bus, "MENUS:APP-CHANGED", refresh);
@@ -90,6 +111,14 @@ export class ModernPurchaseSidebar extends Component {
         useBus(routerBus, "ROUTE_CHANGE", () => {
             this.state.menuId = false;
             refresh();
+        });
+        onWillStart(async () => {
+            // The "+" button only offers what the user is actually allowed to create.
+            const models = [...new Set(createTargets.getEntries().map(([, spec]) => spec.resModel))];
+            const allowed = await Promise.all(
+                models.map((m) => user.checkAccessRight(m, "create").catch(() => false))
+            );
+            this.state.rights = Object.fromEntries(models.map((m, i) => [m, allowed[i]]));
         });
     }
 
@@ -166,6 +195,60 @@ export class ModernPurchaseSidebar extends Component {
     }
     get visible() {
         return Boolean(this.app && !this.ui.isSmall && this.sections.length);
+    }
+
+    /** The record the "+" button creates: the one of the page you are on. */
+    get createSpec() {
+        this.state.rev; // re-evaluate on navigation / app change
+        for (const section of this.allSections) {
+            for (const child of section.childrenTree || []) {
+                if (!child.heading && this.isActive(child) && createTargets.contains(child.xmlid)) {
+                    return createTargets.get(child.xmlid);
+                }
+            }
+        }
+        return createTargets.get(DEFAULT_CREATE, null);
+    }
+    get createLabel() {
+        return this.createSpec?.label || _t("New");
+    }
+    get canCreate() {
+        const model = this.createSpec?.resModel;
+        return Boolean(model) && this.state.rights[model] !== false;
+    }
+    /**
+     * "+" button: open Odoo's own form, empty, for the page you are on — so
+     * creating is exactly the same screen as viewing and editing.
+     */
+    async onNew() {
+        const spec = this.createSpec;
+        if (!spec) {
+            return;
+        }
+        const context = { ...(spec.context || {}) };
+        if (spec.pickingTypeCode) {
+            // Transfers need an operation type; take the one of the current company.
+            const companyId = user.context?.allowed_company_ids?.[0] || session.company_id;
+            const types = await this.orm
+                .searchRead(
+                    "stock.picking.type",
+                    [["code", "=", spec.pickingTypeCode], ["company_id", "=", companyId]],
+                    ["id"],
+                    { limit: 1 }
+                )
+                .catch(() => []);
+            if (types.length) {
+                context.default_picking_type_id = types[0].id;
+            }
+        }
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            name: spec.label,
+            res_model: spec.resModel,
+            views: [[false, "form"]],
+            target: "current",
+            context,
+        });
     }
 
     icon(item) {

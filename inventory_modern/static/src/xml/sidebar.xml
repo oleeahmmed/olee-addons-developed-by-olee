@@ -13,6 +13,12 @@
                     <small>Stock, receipts &amp; deliveries</small>
                 </div>
             </div>
+            <button t-if="createSpec and canCreate" type="button" class="im-sb-new"
+                    t-att-title="createLabel" t-att-aria-label="createLabel"
+                    t-on-click="onNew">
+                <i class="fa fa-plus" aria-hidden="true"/>
+                <span class="im-sb-new-label"><t t-esc="createLabel"/></span>
+            </button>
             <nav class="im-sb-nav" aria-label="Inventory">
                 <t t-foreach="sections" t-as="section" t-key="section.id">
                     <div t-if="section.childrenTree and section.childrenTree.length">

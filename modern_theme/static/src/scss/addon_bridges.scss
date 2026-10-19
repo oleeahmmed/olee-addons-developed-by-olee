@@ -1,44 +1,67 @@
-// Modern Theme — brings the "modern" UI addons (crm_modern, modern_inventory,
-// sales_modern, modern_purchase) in line with the chosen theme preset and
+// Modern Theme — brings the "modern" UI addons (crm_modern, inventory_modern,
+// purchase_modern, sales_modern) in line with the chosen theme preset and
 // light/dark mode.
 //
 // Those addons ship their own small design-token systems (--cm-*, --im-*,
-// --ss-*, --mp-*) with a fixed accent color. The !important declarations are needed
-// because, in the dark asset bundle, those addons' own tokens.dark.scss can
-// legitimately load either before or after this file depending on addon
-// install order — !important makes modern_theme win either way. Harmless
-// no-op wherever one of these addons isn't installed: the selectors below
-// just never match anything.
+// --ss-*, --mp-*) with a fixed accent colour and fixed neutrals. This file
+// re-points every one of those tokens at the Modern Theme tokens, so changing
+// the preset in Settings (or switching to dark mode) restyles the addons'
+// sidebars, top bars, dashboards, lists and forms too.
+//
+// The !important declarations are needed because, in the dark asset bundle,
+// those addons' own tokens.dark.scss can legitimately load either before or
+// after this file depending on addon install order — !important makes
+// modern_theme win either way. Harmless no-op wherever one of these addons
+// isn't installed: the declarations just never get used by any rule.
+
+// Prefixes of the addon token systems this file bridges.
+$mt-addon-prefixes: cm, im, mp, ss;
+
 :root {
-    --cm-primary: var(--mt-primary) !important;
-    --cm-primary-fg: var(--mt-primary-foreground) !important;
-    --cm-primary-soft: color-mix(in srgb, var(--mt-primary) 15%, var(--mt-background)) !important;
-    --cm-primary-soft-fg: var(--mt-primary) !important;
-    --cm-ring: color-mix(in srgb, var(--mt-primary) 45%, transparent) !important;
-    --cm-info: var(--mt-primary) !important;
-    --cm-chart-1: var(--mt-primary) !important;
+    @each $p in $mt-addon-prefixes {
+        // --- surfaces ------------------------------------------------------
+        --#{$p}-bg: var(--mt-content-bg) !important;
+        --#{$p}-card: var(--mt-card) !important;
+        --#{$p}-card-matte: var(--mt-card-matte) !important;
+        --#{$p}-fg: var(--mt-foreground) !important;
+        --#{$p}-muted: var(--mt-muted) !important;
+        --#{$p}-muted-fg: var(--mt-muted-foreground) !important;
+        --#{$p}-subtle-fg: var(--mt-muted-foreground) !important;
+        --#{$p}-border: var(--mt-border) !important;
+        --#{$p}-input: var(--mt-input) !important;
+        --#{$p}-edge: color-mix(in srgb, var(--mt-foreground) 8%, transparent) !important;
 
-    --im-primary: var(--mt-primary) !important;
-    --im-primary-fg: var(--mt-primary-foreground) !important;
-    --im-primary-soft: color-mix(in srgb, var(--mt-primary) 15%, var(--mt-background)) !important;
-    --im-primary-soft-fg: var(--mt-primary) !important;
-    --im-ring: color-mix(in srgb, var(--mt-primary) 45%, transparent) !important;
-    --im-info: var(--mt-primary) !important;
-    --im-chart-1: var(--mt-primary) !important;
+        // --- accent --------------------------------------------------------
+        --#{$p}-primary: var(--mt-primary) !important;
+        --#{$p}-primary-fg: var(--mt-primary-foreground) !important;
+        --#{$p}-primary-soft: color-mix(in srgb, var(--mt-primary) 13%, var(--mt-card)) !important;
+        --#{$p}-primary-soft-fg: var(--mt-primary) !important;
+        --#{$p}-ring: color-mix(in srgb, var(--mt-primary) 45%, transparent) !important;
+        --#{$p}-info: var(--mt-primary) !important;
+        --#{$p}-info-soft: color-mix(in srgb, var(--mt-primary) 12%, var(--mt-card)) !important;
 
-    --ss-primary: var(--mt-primary) !important;
-    --ss-primary-fg: var(--mt-primary-foreground) !important;
-    --ss-primary-soft: color-mix(in srgb, var(--mt-primary) 15%, var(--mt-background)) !important;
-    --ss-primary-soft-fg: var(--mt-primary) !important;
-    --ss-ring: color-mix(in srgb, var(--mt-primary) 45%, transparent) !important;
-    --ss-info: var(--mt-primary) !important;
-    --ss-chart-1: var(--mt-primary) !important;
+        // --- charts: the first series follows the accent -------------------
+        --#{$p}-chart-1: var(--mt-primary) !important;
 
-    --mp-primary: var(--mt-primary) !important;
-    --mp-primary-fg: var(--mt-primary-foreground) !important;
-    --mp-primary-soft: color-mix(in srgb, var(--mt-primary) 15%, var(--mt-background)) !important;
-    --mp-primary-soft-fg: var(--mt-primary) !important;
-    --mp-ring: color-mix(in srgb, var(--mt-primary) 45%, transparent) !important;
-    --mp-info: var(--mt-primary) !important;
-    --mp-chart-1: var(--mt-primary) !important;
+        // --- navigation shell (sidebar + its top-bar dropdowns) -------------
+        --#{$p}-sidebar: var(--mt-nav-bg) !important;
+        --#{$p}-sidebar-fg: var(--mt-nav-fg) !important;
+        --#{$p}-sidebar-hover: var(--mt-nav-hover) !important;
+        --#{$p}-sidebar-accent: var(--mt-nav-hover) !important;
+        --#{$p}-sidebar-accent-fg: var(--mt-nav-fg) !important;
+        --#{$p}-sidebar-muted-fg: var(--mt-nav-muted-fg) !important;
+        --#{$p}-sidebar-border: var(--mt-nav-border) !important;
+        --#{$p}-sidebar-tile: var(--mt-nav-tile) !important;
+        --#{$p}-sidebar-active-bg: var(--mt-nav-active-bg) !important;
+        --#{$p}-sidebar-active-fg: var(--mt-nav-active-fg) !important;
+
+        // --- shape & elevation ---------------------------------------------
+        --#{$p}-radius: var(--mt-radius) !important;
+        --#{$p}-radius-sm: var(--mt-radius-sm) !important;
+        --#{$p}-ease: var(--mt-ease) !important;
+        --#{$p}-shadow-xs: var(--mt-shadow-xs) !important;
+        --#{$p}-shadow-sm: var(--mt-shadow-sm) !important;
+        --#{$p}-shadow-md: var(--mt-shadow-md) !important;
+        --#{$p}-shadow-lg: var(--mt-shadow-lg) !important;
+    }
 }

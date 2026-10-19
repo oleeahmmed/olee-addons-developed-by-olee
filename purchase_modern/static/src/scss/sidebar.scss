@@ -1,9 +1,15 @@
-// Modern Purchase shell (shadcn dashboard layout): a full-height sidebar on the left,
-// a light top bar to its right, the page content below the top bar.
+// Modern Purchase shell: a full-height, accent-coloured sidebar on the left, the
+// top bar continuing the same colour band to its right, and the page content
+// below it on a soft neutral surface.
+//
+// Every colour comes from the Modern Theme tokens (--mt-nav-*), so switching
+// preset in Settings or switching to dark mode restyles the whole shell. The
+// Modern Purchase tokens (--mp-*) are only the fallback for the rare setup where
+// modern_theme is not installed.
 // Only applies while the Modern Purchase sidebar is on screen.
 .o_web_client:has(.o_mp_sidebar) {
     --mp-shell-offset: var(--mp-sidebar-width);
-    &:has(.o_mp_sidebar.mp-collapsed) { --mp-shell-offset: 4rem; }
+    &:has(.o_mp_sidebar.mp-collapsed) { --mp-shell-offset: 4.25rem; }
 
     > .o_action_manager,
     > .o_navbar {
@@ -12,41 +18,69 @@
         transition: margin 200ms var(--mp-ease), width 200ms var(--mp-ease);
     }
 
-    // ---------- top bar ----------
+    // ---------- top bar: same colour band as the sidebar ----------
     .o_main_navbar {
-        --NavBar-entry-color: var(--mp-muted-fg);
-        --NavBar-entry-color--hover: var(--mp-fg);
+        --NavBar-entry-color: color-mix(in srgb, var(--mt-nav-fg, var(--mp-muted-fg)) 84%, transparent);
+        --NavBar-entry-color--hover: var(--mt-nav-fg, var(--mp-fg));
+        --NavBar-entry-color--active: var(--mt-nav-fg, var(--mp-fg));
         --NavBar-entry-backgroundColor: transparent;
-        --NavBar-entry-backgroundColor--hover: var(--mp-muted);
-        --NavBar-entry-backgroundColor--focus: var(--mp-muted);
-        --NavBar-entry-backgroundColor--active: var(--mp-muted);
-        --NavBar-entry-color--active: var(--mp-fg);
-        --NavBar-brand-color: var(--mp-fg);
-        --o-navbar-badge-bg: var(--mp-primary);
-        --o-navbar-badge-color: var(--mp-primary-fg);
+        --NavBar-entry-backgroundColor--hover: var(--mt-nav-hover, var(--mp-muted));
+        --NavBar-entry-backgroundColor--focus: var(--mt-nav-hover, var(--mp-muted));
+        --NavBar-entry-backgroundColor--active: var(--mt-nav-hover, var(--mp-muted));
+        --NavBar-brand-color: var(--mt-nav-fg, var(--mp-fg));
+        --o-navbar-badge-bg: var(--mt-nav-fg, var(--mp-primary));
+        --o-navbar-badge-color: var(--mt-nav-bg, var(--mp-primary-fg));
         --o-navbar-badge-text-shadow: none;
-        background: var(--mp-card);
-        border-bottom: 1px solid var(--mp-border);
-        color: var(--mp-fg);
-        box-shadow: none;
+
+        background-color: var(--mt-nav-bg, var(--mp-card));
+        background-image: linear-gradient(
+            100deg,
+            var(--mt-nav-bg-2, var(--mp-card)) 0%,
+            var(--mt-nav-bg, var(--mp-card)) 55%,
+            color-mix(in srgb, var(--mt-nav-bg, var(--mp-card)) 88%, black) 100%
+        );
+        color: var(--mt-nav-fg, var(--mp-fg));
+        border-bottom: 1px solid var(--mt-nav-border, var(--mp-border));
+        box-shadow: 0 1px 0 color-mix(in srgb, black 14%, transparent);
 
         // The sidebar lists this app's menus, so hide the top-bar section menus (CSS instead of
         // a NavBar template override: nothing to break when Odoo changes the navbar markup).
         .o_menu_sections { display: none !important; } // Odoo sets d-flex on the element
         // The sidebar already shows the app name — don't repeat it in the top bar.
         .o_menu_brand { display: none !important; } // beats the d-flex utility class on the element
-        .o_menu_toggle, .o_navbar_apps_menu .dropdown-toggle { color: var(--mp-muted-fg); border-radius: var(--mp-radius-sm); }
+
+        .o_menu_toggle,
+        .o_navbar_apps_menu .dropdown-toggle,
         .o_menu_systray > div > .dropdown-toggle,
         .o_menu_systray > div > button,
         .o_menu_systray .o-dropdown > .dropdown-toggle {
-            border-radius: var(--mp-radius-sm);
+            border-radius: var(--mt-radius-sm, var(--mp-radius-sm));
+            color: var(--mt-nav-fg, var(--mp-muted-fg));
+
+            &:hover, &:focus {
+                background-color: var(--mt-nav-hover, var(--mp-muted));
+                color: var(--mt-nav-fg, var(--mp-fg));
+            }
         }
-        .o_switch_company_menu, .o_user_menu { color: var(--mp-fg); }
+
+        .o_switch_company_menu,
+        .o_user_menu {
+            color: var(--mt-nav-fg, var(--mp-fg));
+        }
+
+        .badge,
+        .o_notification_counter,
+        .o-mail-MessagingMenu-counter,
+        .o-mail-ActivityMenu-counter {
+            background-color: var(--mt-nav-fg, var(--mp-primary)) !important;
+            color: var(--mt-nav-bg, var(--mp-primary-fg)) !important;
+        }
     }
 }
 
-// shadcn/ui "sidebar-07" look: neutral #fafafa panel, h-8 menu buttons, 12px muted group
-// labels, accent (not brand) background for the active page, rounded-lg logo and user.
+// ---------------------------------------------------------------------------
+// Sidebar
+// ---------------------------------------------------------------------------
 .o_mp_sidebar {
     position: fixed;
     z-index: 4;
@@ -56,92 +90,346 @@
     width: var(--mp-sidebar-width);
     display: flex;
     flex-direction: column;
-    background: var(--mp-sidebar);
-    color: var(--mp-sidebar-fg);
-    border-inline-end: 1px solid var(--mp-sidebar-border);
+    overflow: hidden;
     font-size: 0.875rem;
+    color: var(--mt-nav-fg, var(--mp-sidebar-fg));
+    background-color: var(--mt-nav-bg, var(--mp-sidebar));
+    background-image:
+        radial-gradient(115% 40% at 0% 0%, color-mix(in srgb, white 12%, transparent), transparent 62%),
+        linear-gradient(
+            180deg,
+            var(--mt-nav-bg-2, var(--mp-sidebar)) 0%,
+            var(--mt-nav-bg, var(--mp-sidebar)) 46%
+        );
+    border-inline-end: 1px solid var(--mt-nav-border, var(--mp-sidebar-border));
     transition: width 200ms var(--mp-ease);
 
-    // header: app switcher style (logo square + name + subtitle)
+    // header: app switcher style (logo tile + name + subtitle)
     .mp-sb-brand {
-        display: flex; align-items: center; gap: 0.5rem; height: var(--o-navbar-height, 46px);
-        margin: 0 0.5rem; padding: 0 0.5rem; flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        height: var(--o-navbar-height, 46px);
+        padding: 0 0.875rem;
+        flex-shrink: 0;
+        border-bottom: 1px solid var(--mt-nav-border, var(--mp-sidebar-border));
+
         img {
-            width: 2rem; height: 2rem; padding: 0.3125rem; border-radius: 0.5rem; flex-shrink: 0;
-            background: var(--mp-card); box-shadow: 0 0 0 1px var(--mp-sidebar-border);
+            width: 2rem;
+            height: 2rem;
+            padding: 0.3125rem;
+            border-radius: 0.625rem;
+            flex-shrink: 0;
+            background: color-mix(in srgb, white 92%, transparent);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
         }
+
         > div { display: grid; min-width: 0; line-height: 1.25; }
-        strong { font-size: 0.875rem; font-weight: 600; color: var(--mp-sidebar-accent-fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        small { font-size: 0.75rem; color: var(--mp-sidebar-muted-fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        strong {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--mt-nav-fg, var(--mp-sidebar-accent-fg));
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        small {
+            font-size: 0.6875rem;
+            color: var(--mt-nav-muted-fg, var(--mp-sidebar-muted-fg));
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    // "+ New …" button, right under the app name: creates a record for the
+    // page you are on (quotation on Quotations, product on Products…).
+    .mp-sb-new {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        height: 2.375rem;
+        margin: 0.75rem 0.75rem 0.25rem;
+        padding: 0 0.75rem;
+        flex-shrink: 0;
+        border: 0;
+        border-radius: 0.625rem;
+        background: var(--mt-nav-active-bg, var(--mp-primary));
+        color: var(--mt-nav-active-fg, var(--mp-primary-fg));
+        font-size: 0.8125rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.14), 0 4px 12px -6px rgba(0, 0, 0, 0.35);
+        transition: filter 140ms var(--mp-ease), transform 140ms var(--mp-ease);
+
+        > i { font-size: 0.8125rem; flex-shrink: 0; }
+
+        .mp-sb-new-label {
+            flex: 1;
+            min-width: 0;
+            text-align: start;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        &:hover { filter: brightness(0.95); }
+        &:active { transform: translateY(1px); }
+
+        &:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--mt-nav-bg, var(--mp-sidebar)),
+                        0 0 0 4px var(--mt-nav-fg, var(--mp-primary));
+        }
     }
 
     .mp-sb-nav {
-        flex: 1; overflow-y: auto; padding: 0.25rem 0; display: flex; flex-direction: column; gap: 0;
-        scrollbar-width: thin; scrollbar-color: var(--mp-sidebar-border) transparent;
-        > div, > ul { padding: 0.5rem; }
+        flex: 1;
+        overflow-y: auto;
+        padding: 0.5rem 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        scrollbar-width: thin;
+        scrollbar-color: var(--mt-nav-scrollbar, var(--mp-sidebar-border)) transparent;
+
+        > div, > ul { padding: 0.25rem 0.5rem; }
     }
+
     // SidebarGroupLabel
     .mp-sb-group-label {
-        display: flex; align-items: center; width: 100%; height: 2rem; padding: 0 0.5rem; gap: 0.5rem;
-        border: 0; border-radius: 0.375rem; background: none; cursor: pointer;
-        font-size: 0.75rem; font-weight: 500; letter-spacing: 0; text-transform: none;
-        color: color-mix(in srgb, var(--mp-sidebar-fg) 70%, transparent);
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 1.75rem;
+        padding: 0 0.5rem;
+        gap: 0.5rem;
+        border: 0;
+        border-radius: var(--mt-radius-sm, 0.375rem);
+        background: none;
+        cursor: pointer;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--mt-nav-muted-fg, var(--mp-sidebar-muted-fg));
         transition: background-color 150ms var(--mp-ease), color 150ms var(--mp-ease);
-        .fa { margin-left: auto; font-size: 0.6875rem; transition: transform 200ms var(--mp-ease); }
+
+        .fa {
+            margin-left: auto;
+            font-size: 0.625rem;
+            opacity: 0.8;
+            transition: transform 200ms var(--mp-ease);
+        }
+
         &[aria-expanded="false"] .fa { transform: rotate(-90deg); }
-        &:hover { background: var(--mp-sidebar-accent); color: var(--mp-sidebar-accent-fg); }
-        &:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--mp-ring); }
+
+        &:hover {
+            background: var(--mt-nav-hover, var(--mp-sidebar-accent));
+            color: var(--mt-nav-fg, var(--mp-sidebar-accent-fg));
+        }
+
+        &:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--mt-nav-fg, var(--mp-ring));
+        }
     }
+
     // SidebarMenu
-    .mp-sb-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.25rem; }
-    .mp-sb-subhead {
-        padding: 0.375rem 0.5rem 0; font-size: 0.6875rem; font-weight: 500;
-        color: color-mix(in srgb, var(--mp-sidebar-fg) 60%, transparent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    .mp-sb-list {
+        list-style: none;
+        margin: 0 0 0.5rem;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
     }
+
+    .mp-sb-subhead {
+        padding: 0.375rem 0.5rem 0.125rem;
+        font-size: 0.6875rem;
+        font-weight: 500;
+        color: var(--mt-nav-muted-fg, var(--mp-sidebar-muted-fg));
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
     // SidebarMenuButton
     .mp-sb-item {
-        display: flex; align-items: center; gap: 0.5rem; height: 2rem; padding: 0 0.5rem;
-        border-radius: 0.375rem; font-size: 0.875rem; font-weight: 400; line-height: 1;
-        color: var(--mp-sidebar-fg); text-decoration: none; outline: none;
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        height: 2rem;
+        padding: 0 0.5rem;
+        border-radius: var(--mt-radius-sm, 0.375rem);
+        font-size: 0.8125rem;
+        font-weight: 400;
+        line-height: 1;
+        color: color-mix(in srgb, var(--mt-nav-fg, var(--mp-sidebar-fg)) 88%, transparent);
+        text-decoration: none;
+        outline: none;
         transition: background-color 150ms var(--mp-ease), color 150ms var(--mp-ease);
-        .fa { width: 1rem; flex-shrink: 0; text-align: center; font-size: 0.9375rem; color: inherit; opacity: 0.9; }
-        .mp-sb-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        &:hover { background: var(--mp-sidebar-accent); color: var(--mp-sidebar-accent-fg); }
-        &:focus-visible { box-shadow: 0 0 0 2px var(--mp-ring); }
-        &:active { background: var(--mp-sidebar-accent); }
+
+        .fa {
+            width: 1rem;
+            flex-shrink: 0;
+            text-align: center;
+            font-size: 0.9375rem;
+            color: inherit;
+            opacity: 0.85;
+        }
+
+        .mp-sb-label {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        &:hover, &:active {
+            background: var(--mt-nav-hover, var(--mp-sidebar-accent));
+            color: var(--mt-nav-fg, var(--mp-sidebar-accent-fg));
+        }
+
+        &:focus-visible {
+            box-shadow: 0 0 0 2px var(--mt-nav-fg, var(--mp-ring));
+        }
+
         &.active {
-            background: var(--mp-sidebar-accent); color: var(--mp-sidebar-accent-fg); font-weight: 500;
+            background: var(--mt-nav-active-bg, var(--mp-sidebar-accent));
+            color: var(--mt-nav-active-fg, var(--mp-sidebar-accent-fg));
+            font-weight: 600;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+
             .fa { opacity: 1; }
         }
     }
 
     // footer: NavUser (avatar + name + email) and the collapse trigger
     .mp-sb-foot {
-        margin: 0.5rem; padding: 0.375rem 0.5rem; display: flex; align-items: center; gap: 0.5rem;
-        border-radius: 0.5rem; transition: background-color 150ms var(--mp-ease);
-        &:hover { background: var(--mp-sidebar-accent); }
-        img { width: 2rem; height: 2rem; border-radius: 0.5rem; object-fit: cover; flex-shrink: 0; }
-        .mp-sb-user {
-            flex: 1; min-width: 0; display: grid; line-height: 1.25;
-            strong { font-size: 0.875rem; font-weight: 600; color: var(--mp-sidebar-accent-fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-            small { font-size: 0.75rem; color: var(--mp-sidebar-muted-fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        margin: 0.5rem 0.75rem 0.75rem;
+        padding: 0.375rem 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-shrink: 0;
+        border-radius: 0.625rem;
+        background: color-mix(in srgb, black 16%, transparent);
+        transition: background-color 150ms var(--mp-ease);
+
+        &:hover { background: color-mix(in srgb, black 24%, transparent); }
+
+        img {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 0.5rem;
+            object-fit: cover;
+            flex-shrink: 0;
+            box-shadow: 0 0 0 1px color-mix(in srgb, white 18%, transparent);
         }
+
+        .mp-sb-user {
+            flex: 1;
+            min-width: 0;
+            display: grid;
+            line-height: 1.25;
+
+            strong {
+                font-size: 0.8125rem;
+                font-weight: 600;
+                color: var(--mt-nav-fg, var(--mp-sidebar-accent-fg));
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            small {
+                font-size: 0.6875rem;
+                color: var(--mt-nav-muted-fg, var(--mp-sidebar-muted-fg));
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+
         button {
-            display: grid; place-items: center; width: 1.75rem; height: 1.75rem; flex-shrink: 0;
-            border: 0; background: none; border-radius: 0.375rem; color: var(--mp-sidebar-muted-fg); cursor: pointer;
-            &:hover { background: var(--mp-card); color: var(--mp-sidebar-accent-fg); box-shadow: 0 0 0 1px var(--mp-sidebar-border); }
-            &:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--mp-ring); }
+            display: grid;
+            place-items: center;
+            width: 1.75rem;
+            height: 1.75rem;
+            flex-shrink: 0;
+            border: 0;
+            background: none;
+            border-radius: var(--mt-radius-sm, 0.375rem);
+            color: var(--mt-nav-muted-fg, var(--mp-sidebar-muted-fg));
+            cursor: pointer;
+            transition: background-color 140ms var(--mp-ease), color 140ms var(--mp-ease);
+
+            &:hover {
+                background: var(--mt-nav-hover, var(--mp-card));
+                color: var(--mt-nav-fg, var(--mp-sidebar-accent-fg));
+            }
+
+            &:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 2px var(--mt-nav-fg, var(--mp-ring));
+            }
         }
     }
 
-    // collapsed = icon rail (3rem buttons in a 4rem rail, like collapsible="icon")
+    // collapsed = icon rail
     &.mp-collapsed {
-        width: 4rem;
-        .mp-sb-brand { margin: 0; padding: 0; justify-content: center; > div { display: none; } }
-        .mp-sb-group-label, .mp-sb-label, .mp-sb-user, .mp-sb-subhead { display: none; }
-        .mp-sb-nav > div, .mp-sb-nav > ul { padding: 0.25rem 0.5rem; }
-        .mp-sb-item { justify-content: center; padding: 0; width: 2rem; height: 2rem; margin: 0 auto; }
-        .mp-sb-foot { flex-direction: column; margin: 0.5rem 0.25rem; padding: 0.375rem 0; }
+        width: 4.25rem;
+
+        .mp-sb-brand {
+            padding: 0;
+            justify-content: center;
+
+            > div { display: none; }
+        }
+
+        .mp-sb-new {
+            margin: 0.75rem auto 0.25rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            padding: 0;
+            justify-content: center;
+
+            .mp-sb-new-label { display: none; }
+
+            > i { font-size: 1rem; }
+        }
+
+        .mp-sb-group-label,
+        .mp-sb-label,
+        .mp-sb-user,
+        .mp-sb-subhead {
+            display: none;
+        }
+
+        .mp-sb-nav > div,
+        .mp-sb-nav > ul { padding: 0.25rem; }
+
+        .mp-sb-item {
+            justify-content: center;
+            padding: 0;
+            width: 2.25rem;
+            height: 2.25rem;
+            margin: 0 auto;
+
+            .fa { width: auto; }
+        }
+
+        .mp-sb-foot {
+            flex-direction: column;
+            margin: 0.5rem 0.375rem 0.75rem;
+            padding: 0.5rem 0;
+            gap: 0.375rem;
+        }
     }
 }
 
@@ -163,7 +451,7 @@
         --btn-active-bg: color-mix(in srgb, var(--mp-primary) 80%, black);
         --btn-active-border-color: color-mix(in srgb, var(--mp-primary) 80%, black);
     }
-    .btn { --btn-border-radius: var(--mp-radius-sm); }
+    .btn { --btn-border-radius: var(--mt-radius-sm, var(--mp-radius-sm)); }
 }
 
 // ---------- top bar dropdowns (Reporting, Configuration...) ----------
@@ -171,7 +459,7 @@
     position: fixed;
     z-index: 12;
     top: 0;
-    inset-inline-start: calc(var(--mp-shell-offset, var(--mp-sidebar-width)) + 3.25rem);
+    inset-inline-start: calc(var(--mp-shell-offset, var(--mp-sidebar-width)) + 3.5rem);
     height: var(--o-navbar-height, 46px);
     display: flex;
     align-items: center;
@@ -179,30 +467,79 @@
     transition: inset-inline-start 200ms var(--mp-ease);
 
     .mp-tm-btn {
-        display: inline-flex; align-items: center; gap: 0.45rem; height: 2rem; padding: 0 0.75rem;
-        border: 1px solid transparent; border-radius: 0.5rem; background: transparent;
-        font-size: 0.8125rem; font-weight: 600; color: var(--mp-muted-fg); cursor: pointer;
-        transition: background-color 150ms var(--mp-ease), color 150ms var(--mp-ease), border-color 150ms var(--mp-ease);
-        .fa:first-child { color: var(--mp-subtle-fg); }
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        height: 2rem;
+        padding: 0 0.625rem;
+        border: 1px solid transparent;
+        border-radius: 0.5rem;
+        background: transparent;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: color-mix(in srgb, var(--mt-nav-fg, var(--mp-muted-fg)) 85%, transparent);
+        cursor: pointer;
+        transition: background-color 150ms var(--mp-ease), color 150ms var(--mp-ease),
+                    border-color 150ms var(--mp-ease);
+
+        .fa:first-child { color: inherit; opacity: 0.8; }
         .mp-tm-caret { font-size: 0.75rem; opacity: 0.7; }
-        &:hover, &.show, &[aria-expanded="true"] { background: var(--mp-muted); color: var(--mp-fg); }
-        &.active { color: var(--mp-fg); background: var(--mp-sidebar-accent); .fa:first-child { color: var(--mp-fg); } }
-        &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--mp-ring); }
+
+        &:hover,
+        &.show,
+        &[aria-expanded="true"],
+        &.active {
+            background: var(--mt-nav-hover, var(--mp-muted));
+            color: var(--mt-nav-fg, var(--mp-fg));
+        }
+
+        &.active .fa:first-child { color: inherit; opacity: 1; }
+
+        &:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px var(--mt-nav-hover, var(--mp-ring));
+        }
     }
 }
+
 .o_mp_topmenu_menu.dropdown-menu {
-    min-width: 15rem; max-height: 75vh; overflow-y: auto; padding: 0.375rem;
-    border: 1px solid var(--mp-border); border-radius: 0.75rem; box-shadow: var(--mp-shadow-lg);
+    min-width: 15rem;
+    max-height: 75vh;
+    overflow-y: auto;
+    padding: 0.375rem;
+    border: 1px solid var(--mp-border);
+    border-radius: 0.75rem;
+    box-shadow: var(--mp-shadow-lg);
+
     .mp-tm-head {
-        padding: 0.5rem 0.625rem 0.25rem; font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.04em;
-        text-transform: uppercase; color: var(--mp-subtle-fg);
+        padding: 0.5rem 0.625rem 0.25rem;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--mp-subtle-fg);
     }
+
     .mp-tm-item {
-        display: flex; align-items: center; gap: 0.625rem; padding: 0.4375rem 0.625rem; border-radius: 0.5rem;
-        font-size: 0.875rem; color: var(--mp-fg);
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        padding: 0.4375rem 0.625rem;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        color: var(--mp-fg);
+
         .fa { width: 1rem; text-align: center; color: var(--mp-subtle-fg); }
+
         &:hover, &.focus { background: var(--mp-muted); }
-        &.active { background: var(--mp-primary-soft); color: var(--mp-primary-soft-fg); .fa { color: var(--mp-primary); } }
+
+        &.active {
+            background: var(--mp-primary-soft);
+            color: var(--mp-primary-soft-fg);
+
+            .fa { color: var(--mp-primary); }
+        }
     }
 }
+
 @media print { .o_mp_topmenu { display: none; } }

@@ -13,6 +13,12 @@
                     <small>Leads &amp; pipeline</small>
                 </div>
             </div>
+            <button t-if="createSpec and canCreate" type="button" class="cm-sb-new"
+                    t-att-title="createLabel" t-att-aria-label="createLabel"
+                    t-on-click="onNew">
+                <i class="fa fa-plus" aria-hidden="true"/>
+                <span class="cm-sb-new-label"><t t-esc="createLabel"/></span>
+            </button>
             <nav class="cm-sb-nav" aria-label="CRM">
                 <t t-foreach="sections" t-as="section" t-key="section.id">
                     <div t-if="section.childrenTree and section.childrenTree.length">

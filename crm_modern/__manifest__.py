@@ -10,7 +10,7 @@ No new tables or fields: everything reads and writes the standard models
 (crm.lead, crm.stage, crm.team, utm.campaign, crm.tag, mail.activity,
 mail.activity.type, mail.activity.plan).
     """,
-    'version': '19.0.1.0.0',
+    'version': '19.0.2.0.0',
     'category': 'Sales/CRM',
     'author': 'Your Name',
     'license': 'LGPL-3',

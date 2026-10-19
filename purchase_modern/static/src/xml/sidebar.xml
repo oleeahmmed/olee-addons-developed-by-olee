@@ -13,6 +13,12 @@
                     <small>RFQs, orders &amp; vendor bills</small>
                 </div>
             </div>
+            <button t-if="createSpec and canCreate" type="button" class="mp-sb-new"
+                    t-att-title="createLabel" t-att-aria-label="createLabel"
+                    t-on-click="onNew">
+                <i class="fa fa-plus" aria-hidden="true"/>
+                <span class="mp-sb-new-label"><t t-esc="createLabel"/></span>
+            </button>
             <nav class="mp-sb-nav" aria-label="Purchase">
                 <t t-foreach="sections" t-as="section" t-key="section.id">
                     <div t-if="section.childrenTree and section.childrenTree.length">

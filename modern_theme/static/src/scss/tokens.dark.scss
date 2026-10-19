@@ -2,9 +2,37 @@
 //
 // Only loaded in the "web.assets_web_dark" bundle, which always includes
 // tokens.scss first (through "web.assets_web"), so these declarations win
-// for every selector they share with it.
+// for every selector they share with it. Selector specificity is kept
+// identical to tokens.scss on purpose (per-preset `html[data-mt-theme="…"]`
+// rules, and `:root, html[data-mt-theme]` for the derived block): same
+// specificity + later in the bundle = dark wins.
 
 :root,
+html[data-mt-theme="indigo"] {
+    --mt-background: hsl(226 45% 6%);
+    --mt-foreground: hsl(210 40% 98%);
+    --mt-card: hsl(226 38% 9%);
+    --mt-card-foreground: hsl(210 40% 98%);
+    --mt-primary: hsl(224 76% 60%);
+    --mt-primary-rgb: 91, 127, 250;
+    --mt-primary-foreground: hsl(226 60% 8%);
+    --mt-secondary: hsl(226 28% 16%);
+    --mt-secondary-foreground: hsl(210 40% 98%);
+    --mt-muted: hsl(226 28% 16%);
+    --mt-muted-foreground: hsl(220 14% 65%);
+    --mt-accent: hsl(226 28% 16%);
+    --mt-accent-foreground: hsl(210 40% 98%);
+    --mt-destructive: hsl(0 62.8% 45%);
+    --mt-destructive-foreground: hsl(0 0% 98%);
+    --mt-border: hsl(226 26% 18%);
+    --mt-input: hsl(226 26% 18%);
+    --mt-ring: hsl(224 76% 60%);
+
+    --mt-success: hsl(160 60% 45%);
+    --mt-warning: hsl(38 92% 55%);
+    --mt-info: hsl(224 76% 60%);
+}
+
 html[data-mt-theme="zinc"] {
     --mt-background: hsl(240 10% 3.9%);
     --mt-foreground: hsl(0 0% 98%);
@@ -255,4 +283,55 @@ html[data-mt-theme="violet"] {
     --mt-border: hsl(215 27.9% 16.9%);
     --mt-input: hsl(215 27.9% 16.9%);
     --mt-ring: hsl(263.4 70% 50.4%);
+}
+
+html[data-mt-theme="teal"] {
+    --mt-background: hsl(180 30% 5%);
+    --mt-foreground: hsl(170 30% 97%);
+    --mt-card: hsl(180 26% 8%);
+    --mt-card-foreground: hsl(170 30% 97%);
+    --mt-primary: hsl(172 66% 50%);
+    --mt-primary-rgb: 43, 212, 189;
+    --mt-primary-foreground: hsl(174 80% 8%);
+    --mt-secondary: hsl(180 22% 15%);
+    --mt-secondary-foreground: hsl(170 30% 97%);
+    --mt-muted: hsl(180 22% 15%);
+    --mt-muted-foreground: hsl(180 12% 62%);
+    --mt-accent: hsl(180 22% 15%);
+    --mt-accent-foreground: hsl(170 30% 97%);
+    --mt-destructive: hsl(0 62.8% 45%);
+    --mt-destructive-foreground: hsl(0 0% 98%);
+    --mt-border: hsl(180 20% 17%);
+    --mt-input: hsl(180 20% 17%);
+    --mt-ring: hsl(172 66% 50%);
+}
+
+// ---------------------------------------------------------------------------
+// Derived tokens (dark) — same selectors as tokens.scss, loaded later.
+// ---------------------------------------------------------------------------
+:root,
+html[data-mt-theme] {
+    --mt-content-bg: color-mix(in srgb, var(--mt-primary) 7%, hsl(226 42% 6%));
+    --mt-content-bg-accent: color-mix(in srgb, var(--mt-primary) 11%, hsl(226 42% 8%));
+    --mt-card-matte: color-mix(in srgb, var(--mt-card) 88%, var(--mt-muted));
+
+    // Navigation shell stays accent-tinted, but much deeper: the active page
+    // becomes the accent itself instead of a white pill, which reads better
+    // against a dark content area.
+    --mt-nav-bg: color-mix(in srgb, var(--mt-primary) 26%, hsl(228 44% 5%));
+    --mt-nav-bg-2: color-mix(in srgb, var(--mt-primary) 44%, hsl(228 44% 6%));
+    --mt-nav-fg: hsl(210 40% 96%);
+    --mt-nav-muted-fg: color-mix(in srgb, var(--mt-primary) 34%, hsl(210 32% 96%));
+    --mt-nav-hover: color-mix(in srgb, var(--mt-nav-fg) 10%, transparent);
+    --mt-nav-active-bg: var(--mt-primary);
+    --mt-nav-active-fg: var(--mt-primary-foreground);
+    --mt-nav-border: color-mix(in srgb, var(--mt-nav-fg) 12%, transparent);
+    --mt-nav-tile: color-mix(in srgb, var(--mt-nav-fg) 12%, transparent);
+    --mt-nav-scrollbar: color-mix(in srgb, var(--mt-nav-fg) 18%, transparent);
+
+    --mt-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --mt-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.25);
+    --mt-shadow-md: 0 1px 2px rgba(0, 0, 0, 0.35), 0 6px 18px -8px rgba(0, 0, 0, 0.55);
+    --mt-shadow-lg: 0 12px 32px -8px rgba(0, 0, 0, 0.65);
+    --mt-shadow-xl: 0 24px 48px -12px rgba(0, 0, 0, 0.75);
 }

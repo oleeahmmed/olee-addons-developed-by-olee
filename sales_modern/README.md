@@ -32,6 +32,23 @@ underline tabs, a clean order-lines table, a totals card and a fixed-width chatt
 The sidebar (shadcn style) keeps the everyday pages; Team, Reporting, Configuration and groups other apps add
 to Sales are compact dropdowns in the top bar.
 
+## The "+" button in the sidebar
+Right under the app name, the sidebar shows a single **+ New …** button. It always
+creates the record of the page you are on: **New quotation** on Quotations, **New
+sales order** on Sales Orders / To Invoice, **New customer** on Customers, **New
+product** on Products, **New sales team** on Sales Teams and so on. It opens
+Odoo's own form, empty — the very same screen used to view and edit a record, so
+nothing is lost. The button only appears when you are allowed to create
+(`checkAccessRight`), and it collapses to a plain **+** square when the sidebar is
+folded to icons.
+
+## Theme
+Colours come from the `modern_theme` addon: install it and the sidebar, the top
+bar, the dashboards, the lists and the forms all follow the preset chosen in
+**Settings ▸ Modern Theme** (Indigo by default) and switch to dark mode with the
+user's own toggle. Sales Modern keeps working, with its own colours, if
+`modern_theme` is not installed.
+
 ## Printed documents: "Modern" layout
 A new document layout (**Settings > Companies > Document Layout > Modern**), set on install
 for companies still using Odoo's default Light layout. Every printed document uses it:

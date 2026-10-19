@@ -13,6 +13,12 @@
                     <small>Quotes, orders &amp; invoicing</small>
                 </div>
             </div>
+            <button t-if="createSpec and canCreate" type="button" class="ss-sb-new"
+                    t-att-title="createLabel" t-att-aria-label="createLabel"
+                    t-on-click="onNew">
+                <i class="fa fa-plus" aria-hidden="true"/>
+                <span class="ss-sb-new-label"><t t-esc="createLabel"/></span>
+            </button>
             <nav class="ss-sb-nav" aria-label="Sales">
                 <t t-foreach="sections" t-as="section" t-key="section.id">
                     <div t-if="section.childrenTree and section.childrenTree.length">

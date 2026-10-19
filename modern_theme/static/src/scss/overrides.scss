@@ -1,55 +1,236 @@
 // Modern Theme — bridges the shadcn/ui tokens defined in tokens(.dark).scss
 // onto the real Odoo backend: Bootstrap's own runtime CSS variables first
 // (covers most buttons, links, badges, form validation out of the box),
-// then the handful of Odoo-specific selectors that don't go through them.
+// then the Odoo-specific surfaces (action manager, control panel, dropdowns,
+// modals), then the navigation shell, and finally the handful of selectors
+// that don't go through any variable.
+//
+// Everything is expressed with the --mt-* tokens, so switching preset in
+// Settings (or switching to dark mode) restyles the whole client at once.
+//
+// Section order matters: the navigation shell comes *after* the generic
+// link/button rules so it wins on equal specificity.
 
+// ===========================================================================
+// 1. Bootstrap bridge
+// ===========================================================================
 :root,
 html[data-mt-theme] {
     // --- Bootstrap bridge --------------------------------------------------
     --bs-primary: var(--mt-primary);
     --bs-primary-rgb: var(--mt-primary-rgb);
+    --bs-secondary: var(--mt-secondary);
+    --bs-secondary-rgb: 100, 116, 139;
+    --bs-success: var(--mt-success, #16a34a);
+    --bs-danger: var(--mt-destructive);
+    --bs-warning: var(--mt-warning, #d97706);
+    --bs-body-bg: var(--mt-content-bg);
+    --bs-body-color: var(--mt-foreground);
+    --bs-border-color: var(--mt-border);
     --bs-link-color: var(--mt-primary);
     --bs-link-color-rgb: var(--mt-primary-rgb);
     --bs-link-hover-color: var(--mt-primary);
     --bs-focus-ring-color: rgba(var(--mt-primary-rgb), 0.25);
     --bs-border-radius: var(--mt-radius);
     --bs-border-radius-lg: calc(var(--mt-radius) + 0.125rem);
-    --bs-border-radius-sm: calc(var(--mt-radius) - 0.125rem);
+    --bs-border-radius-sm: var(--mt-radius-sm);
+    --bs-emphasis-color: var(--mt-foreground);
+    --bs-secondary-color: var(--mt-muted-foreground);
+    --bs-secondary-bg: var(--mt-muted);
+    --bs-tertiary-bg: var(--mt-muted);
 }
 
-// --- Buttons -----------------------------------------------------------
+// ===========================================================================
+// 2. Global polish: radii, focus rings, scrollbars, popovers
+// ===========================================================================
+.btn,
+.o_input,
+.form-control,
+.form-select,
+.modal-content,
+.dropdown-menu,
+.o_notification,
+.o-dropdown--menu,
+.o_popover {
+    border-radius: var(--mt-radius);
+}
+
+.o_input,
+.form-control,
+.form-select {
+    border-color: var(--mt-input);
+    color: var(--mt-foreground);
+    background-color: var(--mt-background);
+    transition: border-color 140ms var(--mt-ease), box-shadow 140ms var(--mt-ease);
+
+    &::placeholder {
+        color: color-mix(in srgb, var(--mt-muted-foreground) 70%, transparent);
+    }
+}
+
+.dropdown-menu,
+.o-dropdown--menu,
+.o_popover {
+    border: 1px solid var(--mt-border);
+    box-shadow: var(--mt-shadow-lg);
+    padding: 0.375rem;
+}
+
+// Thin, quiet scrollbars everywhere the web client scrolls.
+.o_web_client,
+.o_action_manager,
+.o_content,
+.modal-body,
+.dropdown-menu,
+.o-dropdown--menu {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--mt-muted-foreground) 45%, transparent) transparent;
+}
+
+// ===========================================================================
+// 3. Content surfaces
+// ===========================================================================
+.o_web_client {
+    background-color: var(--mt-content-bg);
+
+    > .o_action_manager {
+        background-color: var(--mt-content-bg);
+    }
+}
+
+.o_action_manager {
+    .o_content,
+    .o_view_controller {
+        background-color: transparent;
+    }
+}
+
+// Control panel: a calm, hairline-separated header instead of a heavy band.
+.o_control_panel {
+    background-color: var(--mt-background) !important;
+    border-bottom: 1px solid var(--mt-border);
+    box-shadow: none;
+
+    .o_cp_top,
+    .o_cp_bottom {
+        background-color: transparent;
+        border-color: var(--mt-border);
+    }
+
+    .o_cp_top_left,
+    .o_cp_bottom_left {
+        min-width: 0;
+    }
+
+    .o_searchview,
+    .o_searchview_input_container {
+        border-radius: var(--mt-radius);
+        border-color: var(--mt-input);
+        background: var(--mt-background);
+    }
+
+    .o_cp_buttons .btn {
+        border-radius: var(--mt-radius);
+    }
+}
+
+.o_search_panel {
+    background-color: var(--mt-background);
+    border-inline-end: 1px solid var(--mt-border);
+}
+
+// --- views: rounder sheets, calmer list headers ------------------------
+.o_form_view {
+    .o_form_sheet_bg {
+        background-color: var(--mt-content-bg);
+    }
+
+    .o_form_sheet {
+        border: 1px solid var(--mt-border);
+        border-radius: calc(var(--mt-radius) + 0.125rem);
+        box-shadow: var(--mt-shadow-md);
+    }
+
+    .o_notebook {
+        --mt-notebook-link-color: var(--mt-muted-foreground);
+    }
+}
+
+.o_list_view {
+    thead th {
+        background-color: var(--mt-muted);
+        color: var(--mt-muted-foreground);
+    }
+}
+
+.o_kanban_view {
+    background-color: transparent;
+}
+
+// Home screen (app grid): the same calm page colour as the rest.
+.o_home_menu {
+    background-color: var(--mt-content-bg);
+    background-image: radial-gradient(
+        120% 80% at 50% -20%,
+        color-mix(in srgb, var(--mt-primary) 10%, transparent),
+        transparent 60%
+    );
+}
+
+// ===========================================================================
+// 4. Buttons, links, form controls
+// ===========================================================================
 .btn-primary {
     background-color: var(--mt-primary);
     border-color: var(--mt-primary);
     color: var(--mt-primary-foreground);
 
-    &:hover, &:focus, &:active, &:not(:disabled):not(.disabled):active {
+    &:hover,
+    &:focus,
+    &:active,
+    &:not(:disabled):not(.disabled):active {
         background-color: var(--mt-primary);
         border-color: var(--mt-primary);
         color: var(--mt-primary-foreground);
         filter: brightness(0.93);
     }
-    &:focus, &:focus-visible {
+
+    &:focus,
+    &:focus-visible {
         box-shadow: 0 0 0 0.2rem rgba(var(--mt-primary-rgb), 0.35);
     }
 }
+
 .btn-outline-primary {
     color: var(--mt-primary);
     border-color: var(--mt-primary);
-    &:hover, &:active {
+
+    &:hover,
+    &:active {
         background-color: var(--mt-primary);
         border-color: var(--mt-primary);
         color: var(--mt-primary-foreground);
     }
 }
-.btn, .o_input, .form-control, .form-select, .modal-content, .dropdown-menu, .o_notification {
-    border-radius: var(--mt-radius);
+
+.btn-secondary {
+    background-color: var(--mt-secondary);
+    border-color: var(--mt-border);
+    color: var(--mt-secondary-foreground);
+
+    &:hover,
+    &:focus,
+    &:active {
+        background-color: color-mix(in srgb, var(--mt-secondary) 88%, var(--mt-foreground));
+        border-color: var(--mt-border);
+        color: var(--mt-secondary-foreground);
+    }
 }
 
-// --- Links / focus -------------------------------------------------------
 a:not(.btn):not(.dropdown-item):not(.nav-link) {
     color: var(--mt-primary);
 }
+
 .o_field_widget .o_input:focus,
 .form-control:focus,
 .form-select:focus {
@@ -63,6 +244,7 @@ a:not(.btn):not(.dropdown-item):not(.nav-link) {
     background-color: var(--mt-primary);
     border-color: var(--mt-primary);
 }
+
 .form-check-input:focus {
     box-shadow: 0 0 0 0.2rem rgba(var(--mt-primary-rgb), 0.2);
 }
@@ -74,17 +256,9 @@ a:not(.btn):not(.dropdown-item):not(.nav-link) {
     color: var(--mt-primary);
     border-color: var(--mt-primary);
 }
+
 .o_notebook .nav-link.active {
     border-bottom: 2px solid var(--mt-primary);
-}
-
-// --- Navbar: subtle accent for the current app ---------------------------
-.o_main_navbar {
-    .o_app.focus,
-    .o_app.bg-primary-subtle {
-        background-color: rgba(var(--mt-primary-rgb), 0.12) !important;
-        color: var(--mt-primary) !important;
-    }
 }
 
 // --- List view: selection / hover -----------------------------------------
@@ -112,6 +286,7 @@ a:not(.btn):not(.dropdown-item):not(.nav-link) {
     background-color: var(--mt-primary) !important;
     color: var(--mt-primary-foreground) !important;
 }
+
 .progress-bar {
     background-color: var(--mt-primary);
 }
@@ -123,26 +298,151 @@ a:not(.btn):not(.dropdown-item):not(.nav-link) {
 }
 
 // --- Dropdown items (active app, hover) -------------------------------
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: var(--mt-muted);
+}
+
 .dropdown-item:active,
 .dropdown-item.active {
     background-color: var(--mt-primary);
     color: var(--mt-primary-foreground);
 }
 
-// --- Modern Theme: systray toggle -------------------------------------
-.o_modern_theme_toggle_btn {
-    border: none;
-    background: transparent;
-    color: inherit;
-    opacity: 0.75;
-    font-size: 1.05rem;
-    &:hover {
-        opacity: 1;
-        color: var(--mt-primary);
+// --- Modals -----------------------------------------------------------
+.modal-content {
+    border: 1px solid var(--mt-border);
+    box-shadow: var(--mt-shadow-xl);
+}
+
+.modal-header,
+.modal-footer {
+    border-color: var(--mt-border);
+}
+
+// ===========================================================================
+// 5. The navigation shell — one continuous band of accent colour across
+//    the top of every screen.
+// ===========================================================================
+.o_main_navbar {
+    // Odoo's own navbar custom properties (the supported way to restyle it)
+    --NavBar-backgroundColor: var(--mt-nav-bg);
+    --NavBar-entry-color: color-mix(in srgb, var(--mt-nav-fg) 84%, transparent);
+    --NavBar-entry-color--hover: var(--mt-nav-fg);
+    --NavBar-entry-color--active: var(--mt-nav-fg);
+    --NavBar-entry-color--focus: var(--mt-nav-fg);
+    --NavBar-entry-backgroundColor: transparent;
+    --NavBar-entry-backgroundColor--hover: var(--mt-nav-hover);
+    --NavBar-entry-backgroundColor--active: var(--mt-nav-hover);
+    --NavBar-entry-backgroundColor--focus: var(--mt-nav-hover);
+    --NavBar-entry-borderRadius: var(--mt-radius-sm);
+    --NavBar-brand-color: var(--mt-nav-fg);
+    --NavBar-badge-color: var(--mt-nav-bg);
+    --o-navbar-badge-bg: var(--mt-nav-fg);
+    --o-navbar-badge-color: var(--mt-nav-bg);
+    --o-navbar-badge-text-shadow: none;
+
+    background-color: var(--mt-nav-bg);
+    background-image: linear-gradient(
+        100deg,
+        var(--mt-nav-bg-2) 0%,
+        var(--mt-nav-bg) 55%,
+        color-mix(in srgb, var(--mt-nav-bg) 88%, black) 100%
+    );
+    color: var(--mt-nav-fg);
+    border-bottom: 1px solid var(--mt-nav-border);
+    box-shadow: 0 1px 0 color-mix(in srgb, black 14%, transparent);
+
+    // Everything the navbar shows must stay legible on the coloured band.
+    a:not(.btn):not(.dropdown-item),
+    button:not(.btn),
+    .o_menu_toggle,
+    .o_navbar_apps_menu > .dropdown-toggle,
+    .o_menu_brand,
+    .o_menu_sections .dropdown-toggle,
+    .o_menu_systray > div > a,
+    .o_menu_systray > div > button,
+    .o_menu_systray .dropdown-toggle,
+    .o_menu_systray .o-dropdown > .dropdown-toggle,
+    .o_user_menu,
+    .o_switch_company_menu,
+    .o_navbar_help,
+    .o_fullscreen_button {
+        color: var(--mt-nav-fg);
+    }
+
+    .o_menu_toggle,
+    .o_navbar_apps_menu .dropdown-toggle,
+    .o_menu_sections .dropdown-toggle,
+    .o_menu_systray > div > .dropdown-toggle,
+    .o_menu_systray > div > button,
+    .o_switch_company_menu > .dropdown-toggle,
+    .o_user_menu > .dropdown-toggle {
+        border-radius: var(--mt-radius-sm);
+
+        &:hover,
+        &:focus {
+            background-color: var(--mt-nav-hover);
+            color: var(--mt-nav-fg);
+        }
+    }
+
+    // Unread counters read as soft white pills instead of the default orange.
+    .badge,
+    .o_notification_counter,
+    [class*="ounter"],
+    [class*="badge"] {
+        background-color: var(--mt-nav-fg) !important;
+        color: var(--mt-nav-bg) !important;
+        text-shadow: none;
+    }
+
+    .o_menu_brand {
+        font-weight: 600;
+    }
+
+    .o_menu_sections .o_nav_entry,
+    .o_menu_sections > li {
+        border-color: var(--mt-nav-border);
+    }
+
+    // The app switcher keeps a light surface: it is a panel, not the shell.
+    .dropdown-menu,
+    .o-dropdown--menu {
+        color: var(--mt-foreground);
     }
 }
 
-// --- Modern Theme: settings swatch picker ------------------------------
+// ===========================================================================
+// 6. Modern Theme's own widgets
+// ===========================================================================
+.o_modern_theme_toggle_btn {
+    display: inline-grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: none;
+    border-radius: var(--mt-radius-sm);
+    background: transparent;
+    color: inherit;
+    opacity: 0.85;
+    font-size: 1.05rem;
+    transition: background-color 140ms var(--mt-ease), opacity 140ms var(--mt-ease);
+
+    &:hover {
+        opacity: 1;
+        background-color: var(--mt-nav-hover);
+        color: var(--mt-nav-fg);
+    }
+
+    &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--mt-nav-fg);
+    }
+}
+
+// --- Settings swatch picker -----------------------------------------------
 .o_modern_theme_preset_picker {
     .o_modern_theme_swatch {
         width: 2.25rem;
@@ -159,9 +459,14 @@ a:not(.btn):not(.dropdown-item):not(.nav-link) {
         &:hover {
             transform: scale(1.08);
         }
+
         &.selected {
             border-color: var(--mt-foreground, #111827);
             box-shadow: 0 0 0 2px var(--mt-background, #fff), 0 0 0 4px var(--mt-foreground, #111827);
+        }
+
+        i {
+            font-size: 0.875rem;
         }
     }
 }

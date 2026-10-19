@@ -13,7 +13,7 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
 * Rights, record rules, routes, settings and reports are Odoo's own. Odoo's
   original Inventory menus stay available (sidebar groups and top-bar menus).
     """,
-    'version': '19.0.1.0.0',
+    'version': '19.0.2.0.0',
     'category': 'Inventory/Inventory',
     'author': 'Your Name',
     'license': 'LGPL-3',
