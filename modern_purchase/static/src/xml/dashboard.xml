@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="modern_purchase.Dashboard">
+        <div class="o_mp od-page">
+            <t t-if="state.loading">
+                <div class="od-head"><div class="od-skel" style="height:3.75rem;width:22rem"/><div class="od-skel" style="height:2.25rem;width:20rem"/></div>
+                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel" style="height:8.5rem"/></t></div>
+                <div class="od-grid"><div class="od-skel od-span-8" style="height:22rem"/><div class="od-skel od-span-4" style="height:22rem"/></div>
+            </t>
+            <t t-elif="state.data">
+                <t t-set="d" t-value="state.data"/>
+
+                <!-- header: who, when, filters -->
+                <header class="od-head">
+                    <div>
+                        <div class="od-eyebrow"><span class="od-live" aria-hidden="true"/> <t t-esc="d.company"/> · Purchase overview</div>
+                        <h1 class="od-title"><t t-esc="greeting"/>, <t t-esc="firstName"/></h1>
+                        <p class="od-subtitle">
+                            <strong t-esc="caption.current"/>, compared with <t t-esc="caption.previous"/> · amounts untaxed
+                        </p>
+                    </div>
+                    <div class="od-head-actions">
+                        <OdFilters period="state.period" teams="[]" onChange.bind="onFilters" busy="state.busy"/>
+                        <button type="button" class="od-btn od-btn--icon" title="Refresh" aria-label="Refresh" t-on-click="() => this.load()">
+                            <i t-attf-class="fa fa-refresh {{ state.busy ? 'fa-spin' : '' }}" aria-hidden="true"/>
+                        </button>
+                        <button t-if="state.canCreate" type="button" class="od-btn od-btn--primary" data-hotkey="c" t-on-click="newRfq">
+                            <i class="fa fa-plus" aria-hidden="true"/> New RFQ
+                        </button>
+                    </div>
+                </header>
+
+                <div t-att-class="{ 'od-busy': state.busy }">
+                    <!-- key figures -->
+                    <section class="od-kpis" aria-label="Key figures">
+                        <OdKpi featured="true" tone="'blue'" icon="'fa-line-chart'" label="'Spend'" value="ms(k.spend)"
+                               delta="k.spend_delta" compareLabel="compare" spark="d.sparks.spend"
+                               hint="k.spend_prev ? 'Previous period ' + ms(k.spend_prev) : 'No purchases in the previous period'" onClick.bind="openSpent"/>
+                        <OdKpi tone="'teal'" icon="'fa-shopping-bag'" label="'Confirmed orders'" value="number(k.orders)"
+                               delta="k.orders_delta" compareLabel="compare" spark="d.sparks.orders"
+                               hint="number(k.orders_prev) + ' in the previous period'" onClick.bind="openSpent"/>
+                        <OdKpi tone="'violet'" icon="'fa-tag'" label="'Average order'" value="ms(k.avg_order)"
+                               delta="k.avg_order_delta" compareLabel="compare" hint="'per confirmed order'"/>
+                        <OdKpi tone="'sky'" icon="'fa-users'" label="'Vendors'" value="number(k.vendors)"
+                               hint="k.new_vendors + ' bought from for the first time'"/>
+                        <OdKpi tone="'amber'" icon="'fa-exchange'" label="'RFQ → order'" value="k.requested ? k.conversion + '%' : '—'"
+                               hint="k.confirmed + ' of ' + k.requested + ' new RFQs confirmed'"/>
+                        <OdKpi tone="'slate'" icon="'fa-file-text-o'" label="'Open RFQs'" value="ms(k.open_amount)"
+                               hint="k.open_rfqs + ' waiting for a reply'" onClick="() => this.go('modern_purchase.action_rfqs')"/>
+                    </section>
+
+                    <!-- the year, and what needs attention -->
+                    <div class="od-grid">
+                        <section class="od-card od-span-8">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-blue"><i class="fa fa-bar-chart" aria-hidden="true"/></span> Spend in <t t-esc="d.year"/></h3>
+                                    <p>Confirmed orders per month, with last year for comparison</p>
+                                </div>
+                                <div class="od-card-total"><strong class="od-num" t-esc="ms(ytd)"/><span>year to date</span></div>
+                            </div>
+                            <div class="od-card-body">
+                                <OdComboChart data="d.months" format="m" formatAxis="axis" currentLabel="'' + d.year" previousLabel="'' + (d.year - 1)"
+                                              label="'Spend per month in ' + d.year + ' compared with ' + (d.year - 1)"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-rose"><i class="fa fa-bell-o" aria-hidden="true"/></span> Needs your attention</h3>
+                                    <p>Click a line to see the documents</p>
+                                </div>
+                            </div>
+                            <div class="od-card-body">
+                                <OdAttention items="d.attention" format="ms" onClick.bind="openAttention"/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- where the money goes, and where it is -->
+                    <div class="od-grid">
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-violet"><i class="fa fa-pie-chart" aria-hidden="true"/></span> Spend by category</h3>
+                                <p>Share of spend, this period</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.categories.length" class="od-empty"><i class="fa fa-pie-chart" aria-hidden="true"/><strong>No purchases yet in this period</strong></div>
+                                <OdDonut t-else="" items="d.categories" format="ms" centerLabel="'Spend'"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-map-marker" aria-hidden="true"/></span> Spend by region</h3>
+                                <p>Country of the vendor, this period</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.regions.length" class="od-empty"><i class="fa fa-map-o" aria-hidden="true"/><strong>No region on the vendors yet</strong><span>Fill the Country on vendor addresses to see this.</span></div>
+                                <OdRank t-else="" items="d.regions" format="ms" tone="'teal'"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-green"><i class="fa fa-money" aria-hidden="true"/></span> Money out</h3>
+                                <p t-esc="f ? 'Billed, paid and still owed to vendors' : 'What is waiting for a vendor bill'"/>
+                            </div>
+                                <button t-if="f" type="button" class="od-link" t-on-click="() => this.openBills('Open vendor bills')">Bills <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body">
+                                <t t-if="f">
+                                    <div class="od-money">
+                                        <div class="od-tone-blue"><span>Billed</span><strong class="od-num" t-esc="ms(f.billed)"/>
+                                            <small t-if="f.billed_delta !== null"><t t-esc="(f.billed_delta >= 0 ? '+' : '') + f.billed_delta"/>% <t t-esc="compare"/></small>
+                                            <small t-else="">this period</small></div>
+                                        <div class="od-tone-green" t-if="f.paid !== null"><span>Paid</span><strong class="od-num" t-esc="ms(f.paid)"/>
+                                            <small t-if="f.paid_delta !== null"><t t-esc="(f.paid_delta >= 0 ? '+' : '') + f.paid_delta"/>% <t t-esc="compare"/></small>
+                                            <small t-else="">cash out, this period</small></div>
+                                        <div class="od-tone-violet" t-else=""><span>To bill</span><strong class="od-num" t-esc="ms(k.to_bill_amount)"/><small><t t-esc="k.to_bill_count"/> orders</small></div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-baseline mb-2" style="font-size:0.8125rem">
+                                        <span style="font-weight:650">We owe vendors</span>
+                                        <span class="od-num"><strong t-esc="m(f.payable)"/> <span class="text-muted" style="font-size:0.75rem">· <t t-esc="f.open_count"/> bills</span></span>
+                                    </div>
+                                    <OdStack items="f.ageing" format="ms"/>
+                                </t>
+                                <t t-else="">
+                                    <div class="od-money">
+                                        <div class="od-tone-violet"><span>To bill</span><strong class="od-num" t-esc="ms(k.to_bill_amount)"/><small><t t-esc="k.to_bill_count"/> orders</small></div>
+                                        <div class="od-tone-slate"><span>Open RFQs</span><strong class="od-num" t-esc="ms(k.open_amount)"/><small><t t-esc="k.open_rfqs"/> RFQs</small></div>
+                                    </div>
+                                    <p class="text-muted" style="font-size:0.75rem;margin:0">Payables and cash show here for users with access to Invoicing.</p>
+                                </t>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- buyers and vendors -->
+                    <div class="od-grid">
+                        <section class="od-card od-span-5">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-amber"><i class="fa fa-trophy" aria-hidden="true"/></span> Top buyers</h3>
+                                <p>Spend this period</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!buyers.length" class="od-empty"><i class="fa fa-user" aria-hidden="true"/><strong>No confirmed orders in this period</strong></div>
+                                <OdRank t-else="" items="buyers" format="ms" tone="'amber'" numbered="true" onClick.bind="openBuyer"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-7">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-sky"><i class="fa fa-hourglass-half" aria-hidden="true"/></span> RFQs waiting for a reply</h3>
+                                    <p>Sent over 7 days ago, nothing back yet</p>
+                                </div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('modern_purchase.action_rfqs')">All RFQs <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body od-card-body--flush">
+                                <div t-if="!d.waiting_rfqs.length" class="od-empty"><i class="fa fa-check-circle-o" aria-hidden="true"/><strong>Nothing waiting</strong></div>
+                                <ul t-else="" class="od-attention">
+                                    <t t-foreach="d.waiting_rfqs" t-as="o" t-key="o.id">
+                                        <li class="od-tone-amber od-clickable" tabindex="0" t-on-click="() => this.openOrder(o)">
+                                            <span class="od-att-icon"><i class="fa fa-file-text-o" aria-hidden="true"/></span>
+                                            <div class="od-att-body">
+                                                <span class="od-att-label"><t t-esc="o.name"/> · <t t-esc="o.partner_id ? o.partner_id[1] : ''"/></span>
+                                                <span class="od-att-sub">Sent <t t-esc="shortDate(o.date_order)"/></span>
+                                            </div>
+                                            <span class="od-num" style="font-weight:650;font-size:0.8125rem" t-esc="ms(o.amount_untaxed)"/>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- vendors, products, overdue bills -->
+                    <div class="od-grid">
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-blue"><i class="fa fa-star-o" aria-hidden="true"/></span> Top vendors</h3>
+                                <p>Spend this period</p>
+                            </div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('modern_purchase.action_vendors')">All <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body">
+                                <div t-if="!vendors.length" class="od-empty"><i class="fa fa-address-book-o" aria-hidden="true"/><strong>No orders in this period</strong></div>
+                                <OdRank t-else="" items="vendors" format="ms" tone="'blue'" onClick.bind="openVendor"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-violet"><i class="fa fa-cube" aria-hidden="true"/></span> Most purchased products</h3>
+                                <p>Spend and units, this period</p>
+                            </div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('modern_purchase.action_products')">All <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body">
+                                <div t-if="!products.length" class="od-empty"><i class="fa fa-cube" aria-hidden="true"/><strong>Nothing bought in this period</strong></div>
+                                <OdRank t-else="" items="products" format="ms" tone="'violet'" onClick.bind="openProduct"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-rose"><i class="fa fa-exclamation-circle" aria-hidden="true"/></span> Overdue vendors</h3>
+                                <p>Who we owe the most, past the due date</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <OdRank t-if="f and creditors.length" items="creditors" format="ms" tone="'rose'" onClick.bind="openVendor"/>
+                                <div t-else="" class="od-empty"><i class="fa fa-check-circle-o" aria-hidden="true"/><strong>Nothing overdue</strong></div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- latest orders -->
+                    <section class="od-card">
+                        <div class="od-card-head">
+                            <div>
+                                <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-list-ul" aria-hidden="true"/></span> Latest orders</h3>
+                                <p>The most recent confirmed purchase orders</p>
+                            </div>
+                            <button type="button" class="od-link" t-on-click="() => this.go('modern_purchase.action_orders')">All orders <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                        </div>
+                        <div class="od-card-body od-card-body--flush">
+                            <div t-if="!d.recent.length" class="od-empty"><i class="fa fa-shopping-cart" aria-hidden="true"/><strong>No confirmed orders yet</strong></div>
+                            <div t-else="" class="od-table-wrap">
+                                <table class="od-table">
+                                    <thead><tr><th>Order</th><th>Vendor</th><th>Buyer</th><th>Date</th><th>Bill</th><th class="od-r">Untaxed</th><th class="od-r">Total</th></tr></thead>
+                                    <tbody>
+                                        <t t-foreach="d.recent" t-as="o" t-key="o.id">
+                                            <tr class="od-clickable" t-on-click="() => this.openOrder(o)">
+                                                <td class="od-cell-main" t-esc="o.name"/>
+                                                <td t-esc="o.partner_id ? o.partner_id[1] : '—'"/>
+                                                <td>
+                                                    <span t-if="o.user_id" class="od-person"><img t-attf-src="/web/image/res.users/{{ o.user_id[0] }}/avatar_128" alt="" loading="lazy"/><t t-esc="o.user_id[1]"/></span>
+                                                </td>
+                                                <td class="text-muted" t-esc="shortDate(o.date_order)"/>
+                                                <td>
+                                                    <span t-if="o.invoice_status === 'invoiced'" class="od-pill od-tone-green"><i class="fa fa-check" aria-hidden="true"/> Billed</span>
+                                                    <span t-elif="o.invoice_status === 'to invoice'" class="od-pill od-tone-violet">To bill</span>
+                                                    <span t-else="" class="od-pill od-tone-slate">Nothing to bill</span>
+                                                </td>
+                                                <td class="od-r od-num" t-esc="m(o.amount_untaxed)"/>
+                                                <td class="od-r od-num" style="font-weight:650" t-esc="m(o.amount_total)"/>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

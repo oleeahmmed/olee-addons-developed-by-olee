@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        No app of its own: everything lives inside Odoo's Purchase app (purchase.menu_purchase_root).
+        The Dashboard comes first, so opening Purchase from the home screen opens Modern Purchase.
+        Odoo's own Purchase menus are left untouched; the sidebar shows them under
+        "Reporting" and "Configuration", so every standard screen stays one click away.
+        Visibility comes from Odoo's groups (Purchase app rights).
+    -->
+    <menuitem id="menu_dashboard" name="Dashboard" parent="purchase.menu_purchase_root" action="action_dashboard"
+              sequence="-100" groups="purchase.group_purchase_user"/>
+
+    <menuitem id="menu_buy" name="Buy" parent="purchase.menu_purchase_root" sequence="-90" groups="purchase.group_purchase_user"/>
+    <menuitem id="menu_rfqs" name="Requests for Quotation" parent="menu_buy" action="action_rfqs" sequence="1"/>
+    <menuitem id="menu_orders" name="Purchase Orders" parent="menu_buy" action="action_orders" sequence="2"/>
+    <menuitem id="menu_to_bill" name="To Bill" parent="menu_buy" action="action_to_bill" sequence="3"/>
+    <menuitem id="menu_vendors" name="Vendors" parent="menu_buy" action="action_vendors" sequence="4"/>
+
+    <menuitem id="menu_catalog" name="Catalog" parent="purchase.menu_purchase_root" sequence="-80" groups="purchase.group_purchase_user"/>
+    <menuitem id="menu_products" name="Products" parent="menu_catalog" action="action_products" sequence="1"/>
+    <menuitem id="menu_pricelists" name="Vendor Pricelists" parent="menu_catalog"
+              action="product.product_supplierinfo_type_action" sequence="2"/>
+</odoo>
