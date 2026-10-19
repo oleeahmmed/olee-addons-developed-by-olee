@@ -15,6 +15,10 @@
         .o_control_panel { padding: 0.625rem 1rem 0.75rem !important; border-bottom: 1px solid var(--cm-border); }
         .o_control_panel_breadcrumbs .o_last_breadcrumb_item { font-size: 1.125rem; font-weight: 600; color: var(--cm-fg); }
         .o_control_panel_main_buttons .btn-primary { border-radius: 0.5rem; font-weight: 600; padding-inline: 0.875rem; }
+        // The page's own PageBar already has a "+ New" button right above this view,
+        // so Odoo's own New button here would just be a plainer duplicate of it.
+        .o_cm_native_view .o_list_button_add,
+        .o_cm_native_view .o-kanban-button-new { display: none; }
     }
 }
 

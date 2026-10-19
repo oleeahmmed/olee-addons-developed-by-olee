@@ -24,6 +24,8 @@
     <t t-name="sales_modern.ListPage">
         <div class="o_ss o_ss_page o_ss_page--native">
             <div class="ss-container ss-container--native">
+                <PageBar title="page.title" subtitle="page.subtitle" icon="page.icon"
+                         newLabel="page.newLabel" onCreate="canCreate ? (() => this.onNew()) : undefined"/>
                 <div t-if="!state.ready" class="ss-card ss-native">
                     <div class="ss-skeleton" style="height:3.5rem;margin:1rem 1.25rem"/>
                     <div class="ss-skeleton" style="height:16rem;margin:0 1.25rem 1.25rem"/>
