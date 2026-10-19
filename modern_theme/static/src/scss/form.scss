@@ -229,8 +229,9 @@ $mt-bar-height: 3.5rem;
 
 // ===========================================================================
 // 3. Form column: action bar on top, fields below
+// (full page AND dialogs — statusbar/sheet whites must not leak in dark mode)
 // ===========================================================================
-#{$mt-form} {
+#{$mt-any-form} {
     .o_form_sheet_bg {
         flex: 1 1 auto;
         min-width: 0;
@@ -640,13 +641,17 @@ $mt-bar-height: 3.5rem;
             box-shadow: 0 1px 0 0 var(--mt-primary);
         }
 
-        .o_input { border: 0 !important; box-shadow: none !important; background: transparent; }
+        .o_input { border: 0 !important; box-shadow: none !important; background: transparent !important; }
 
         .o_tag, .badge {
             border-radius: 999px;
             padding: 0.1875rem 0.5625rem;
             font-weight: 500;
         }
+    }
+    .o_field_many2many_tags,
+    .o_field_tags {
+        background: transparent !important;
     }
 
     // booleans as switches
@@ -1128,11 +1133,41 @@ $mt-bar-height: 3.5rem;
 
     .modal-body { padding: 1.25rem 1.5rem; background: var(--mt-card); }
 
+    .o_form_view,
+    .o_form_renderer,
+    .o_form_sheet_bg,
+    .o_form_view header,
+    .o_form_statusbar {
+        background: var(--mt-card) !important;
+        box-shadow: none !important;
+    }
+
+    .o_form_view header,
+    .o_form_statusbar {
+        margin: 0 !important;
+        padding: 0 0 0.75rem !important;
+        border: 0 !important;
+        border-bottom: 1px solid var(--mt-border) !important;
+        min-height: 0;
+    }
+
     .o_form_view .o_form_sheet {
-        padding: 0 !important;
+        padding: 0.75rem 0 0 !important;
         border: 0 !important;
         box-shadow: none !important;
         background: transparent !important;
+    }
+
+    .oe_button_box, .o-form-buttonbox {
+        background: transparent !important;
+        border: 0 !important;
+    }
+
+    .o_field_many2many_tags,
+    .o_field_tags,
+    .o_field_many2many_tags .o_input {
+        background: transparent !important;
+        color: var(--mt-foreground);
     }
 
     .modal-footer {

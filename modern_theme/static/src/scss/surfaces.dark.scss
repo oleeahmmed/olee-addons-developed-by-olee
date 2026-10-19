@@ -208,3 +208,96 @@ hr { color: var(--mt-border); }
 
     &:hover { background-color: color-mix(in srgb, var(--mt-muted) 85%, var(--mt-foreground)) !important; }
 }
+
+// Odoo compiles many surfaces from the light Sass $o-view-background-color (white).
+// Remap those leftovers so dialogs, statusbars, sheets and tags follow the theme.
+.o_form_view,
+.o_form_renderer,
+.o_form_sheet_bg,
+.o_form_sheet,
+.o_form_view_container,
+.o_form_view header,
+.o_form_statusbar,
+.o_control_panel,
+.o_searchview,
+.o_searchview .o_searchview_input,
+.o_calendar_renderer,
+.o_kanban_quick_create {
+    background-color: var(--mt-card) !important;
+    color: var(--mt-foreground);
+}
+
+.o_form_view header,
+.o_form_statusbar {
+    border-color: var(--mt-border) !important;
+    box-shadow: none !important;
+}
+
+.o_field_statusbar > .o_statusbar_status {
+    --o-statusbar-border: var(--mt-card);
+    --o-statusbar-background-active: var(--mt-primary);
+    --o-statusbar-border-active: var(--mt-primary);
+    --o-statusbar-background-hover: var(--mt-muted);
+}
+
+.o_arrow_button {
+    color: var(--mt-foreground) !important;
+
+    &.o_arrow_button_current,
+    &.o_arrow_button_current:disabled {
+        color: var(--mt-primary-foreground) !important;
+        background-color: var(--mt-primary) !important;
+    }
+}
+
+.o_field_many2many_tags,
+.o_field_tags,
+.o_field_many2many_tags .o_input,
+.o_field_tags .o_input,
+.o_tag_input {
+    background-color: transparent !important;
+    color: var(--mt-foreground);
+}
+
+.o_field_html .note-editable,
+.o_field_html .odoo-editor-editable,
+.o-mail-Composer-inputContainer {
+    background-color: var(--mt-muted) !important;
+    color: var(--mt-foreground);
+    border-color: var(--mt-border) !important;
+}
+
+.o_progressbar .o_progress {
+    background-color: var(--mt-muted) !important;
+}
+
+.fc, .o_calendar_widget {
+    --fc-page-bg-color: var(--mt-card);
+    --fc-neutral-bg-color: var(--mt-muted);
+    --fc-border-color: var(--mt-border);
+    --fc-page-text-color: var(--mt-foreground);
+}
+
+.o_search_panel {
+    background-color: var(--mt-card) !important;
+    color: var(--mt-foreground);
+    border-color: var(--mt-border) !important;
+}
+
+.accordion, .accordion-item, .accordion-button {
+    background-color: var(--mt-card) !important;
+    color: var(--mt-foreground) !important;
+    border-color: var(--mt-border) !important;
+}
+
+.o_settings_container, .app_settings_block, .o_setting_box {
+    background-color: var(--mt-card) !important;
+    color: var(--mt-foreground);
+}
+
+.o_dialog .modal-content,
+.o_technical_modal .modal-content {
+    background-color: var(--mt-card);
+    color: var(--mt-foreground);
+    border-color: var(--mt-border);
+}

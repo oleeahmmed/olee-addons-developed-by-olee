@@ -143,6 +143,7 @@ export class ListPage extends Component {
             this.action.doAction(
                 {
                     type: "ir.actions.act_window",
+                    name: String(this.pageTitle || this.constructor.title || ""),
                     res_model: this.constructor.resModel,
                     res_id: resId || false,
                     views: [[this.viewId("form"), "form"]],

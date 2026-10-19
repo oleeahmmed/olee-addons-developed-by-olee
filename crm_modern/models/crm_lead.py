@@ -217,12 +217,12 @@ class CrmLead(models.Model):
         return {
             # utm.campaign (Odoo's own campaign views)
             'campaign_search': ref('utm.view_utm_campaign_view_search'),
-            'campaign_kanban': ref('utm.utm_campaign_view_kanban'),
+            'campaign_kanban': ref('crm_modern.utm_campaign_kanban_modern') or ref('utm.utm_campaign_view_kanban'),
             'campaign_list': ref('utm.utm_campaign_view_tree'),
             # crm.lead — leads
             'lead_search': ref('crm.view_crm_case_leads_filter'),
             'lead_list': ref('crm.crm_case_tree_view_leads'),
-            'lead_kanban': ref('crm.view_crm_lead_kanban'),
+            'lead_kanban': ref('crm_modern.crm_lead_kanban_modern') or ref('crm.view_crm_lead_kanban'),
             'lead_calendar': ref('crm.crm_case_calendar_view_leads'),
             'lead_pivot': ref('crm.crm_lead_view_pivot'),
             'lead_graph': ref('crm.crm_lead_view_graph'),
@@ -323,6 +323,8 @@ class CrmLead(models.Model):
         if not campaign:
             raise UserError(self.env._("The campaign no longer exists."))
         team = self.env['crm.team'].browse(int(team_id)).exists() if team_id else self.env['crm.team']
+        if not team:
+            team = campaign.crm_modern_team_id
         members = team.crm_team_member_ids.filtered(lambda m: m.active and not m.assignment_optout).user_id if team else self.env['res.users']
         turn = iter(range(10 ** 9))
 

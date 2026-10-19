@@ -70,6 +70,7 @@ export class NativeView extends Component {
             this.action.doAction(
                 {
                     type: "ir.actions.act_window",
+                    name: this.props.displayName || "",
                     res_model: this.props.resModel,
                     res_id: resId || false,
                     views: [[this.props.formViewId || false, "form"]],

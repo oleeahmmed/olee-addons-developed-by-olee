@@ -72,6 +72,20 @@
                         <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" class="cm-kc-tags"/>
                         <field name="lead_properties" widget="properties"/>
 
+                        <div class="cm-kc-assign oe_kanban_action">
+                            <div class="cm-kc-assign-item">
+                                <span class="cm-kc-assign-label">Team</span>
+                                <field name="team_id" widget="crm_modern_m2o_pick"
+                                       options="{'placeholder': 'Assign team', 'icon': 'fa-users', 'searchPlaceholder': 'Search a team…'}"/>
+                            </div>
+                            <div class="cm-kc-assign-item">
+                                <span class="cm-kc-assign-label">Owner</span>
+                                <field name="user_id" widget="crm_modern_user_pick"
+                                       options="{'placeholder': 'Assign salesperson', 'searchPlaceholder': 'Search a salesperson…'}"
+                                       domain="[('share', '=', False)]"/>
+                            </div>
+                        </div>
+
                         <footer class="cm-kc-foot">
                             <div class="d-flex align-items-center cm-kc-foot-left">
                                 <field name="priority" widget="priority" groups="base.group_user"/>
@@ -83,7 +97,6 @@
                             </div>
                             <div class="ms-auto d-flex align-items-center">
                                 <field name="rotting_days" class="d-flex" widget="rotting"/>
-                                <field name="user_id" widget="many2one_avatar_user" domain="[('share', '=', False)]" class="ms-2"/>
                             </div>
                         </footer>
                     </t>

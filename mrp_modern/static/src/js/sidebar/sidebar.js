@@ -12,30 +12,29 @@ import { useBus, useService } from "@web/core/utils/hooks";
 /**
  * Manufacturing Modern left sidebar, shown inside Odoo's Manufacturing app.
  *
- * Upgrade-safe by design: a standalone main component that only uses the public
- * `menu`, `ui` and `action` services (no NavBar template override); the app's
- * top-bar section menus are hidden with CSS (sidebar.scss).
+ * Same layout as CRM / Sales Modern: a standalone main component (public `menu`,
+ * `ui` and `action` services; no NavBar template override). Odoo's top-bar
+ * section menus are hidden with CSS; we draw our own.
  *
- * It shows the whole Manufacturing app menu, nothing hidden:
- *  - Manufacturing Modern's own pages (Dashboard, Operations, Products);
- *  - Odoo's Operations / Products menus merged into those groups, minus the
- *    entries Manufacturing Modern already shows with its own page;
- *  - every other Manufacturing menu as its own group (Planning, Reporting,
- *    Configuration...), including menus other apps add to Manufacturing.
- * Menus follow Odoo's groups and settings: if Odoo hides a menu, so does the sidebar.
+ * Sidebar = everyday pages only (Home, Dashboard, Operations, Products).
+ * Top bar = Reporting, Configuration, and anything other apps add to MRP.
+ * Leftover Odoo menus (Scrap, Lots, Planning…) go into those top-bar groups,
+ * never into the sidebar. Odoo's groups still decide what each user sees.
  */
 const APP_XMLID = "mrp.menu_mrp_root";
 const OWN_PREFIXES = ["mrp_modern."];
-// Odoo top-level groups whose remaining entries go into one of our groups
+// Leftover Odoo entries go into our top-bar groups, not the sidebar.
 const MERGE_INTO = {
-    "mrp.menu_mrp_manufacturing": "mrp_modern.menu_operations",
-    "mrp.menu_mrp_bom": "mrp_modern.menu_products",
+    "mrp.menu_mrp_manufacturing": "mrp_modern.menu_config",
+    "mrp.menu_mrp_bom": "mrp_modern.menu_config",
+    "mrp.mrp_planning_menu_root": "mrp_modern.menu_config",
+    "mrp.menu_mrp_reporting": "mrp_modern.menu_reporting",
+    "mrp.menu_mrp_configuration": "mrp_modern.menu_config",
 };
-// Groups shown as dropdowns in the top bar instead of the sidebar, so the sidebar
-// only lists the everyday pages. Groups other apps add are top-bar dropdowns too.
-const TOP_GROUPS = new Set(["mrp.mrp_planning_menu_root", "mrp.menu_mrp_reporting", "mrp.menu_mrp_configuration"]);
+// Groups shown as dropdowns in the top bar instead of the sidebar.
+const TOP_GROUPS = new Set(["mrp_modern.menu_reporting", "mrp_modern.menu_config"]);
 const TOP_ICONS = { reporting: "fa-bar-chart", config: "fa-cog", planning: "fa-calendar" };
-// Odoo entries replaced by a Manufacturing Modern page on the same records
+// Odoo entries replaced by a Manufacturing Modern page / menu on the same records
 const REPLACED = new Set([
     "mrp.menu_mrp_production_action",
     "mrp.menu_mrp_unbuild",
@@ -43,6 +42,10 @@ const REPLACED = new Set([
     "mrp.menu_mrp_bom_form_action",
     "mrp.menu_mrp_product_form",
     "mrp.menu_view_resource_search_mrp",
+    "mrp.menu_mrp_work_order_report",
+    "mrp.menu_mrp_workcenter_productivity_report",
+    "mrp.menu_mrp_config",
+    "mrp.menu_mrp_routing_action",
 ]);
 const COLLAPSE_KEY = "mrp_modern.sidebar.collapsed";
 
@@ -59,6 +62,10 @@ for (const [xmlid, icon] of Object.entries({
     "mrp_modern.menu_product_list": "fa-cube",
     "mrp_modern.menu_boms": "fa-sitemap",
     "mrp_modern.menu_workcenters": "fa-wrench",
+    "mrp_modern.menu_settings": "fa-cog",
+    "mrp_modern.menu_operations_setup": "fa-list-ol",
+    "mrp_modern.menu_report_workorders": "fa-bar-chart",
+    "mrp_modern.menu_report_oee": "fa-line-chart",
     "mrp.menu_mrp_production_action": "fa-industry",
     "mrp.menu_mrp_unbuild": "fa-undo",
     "mrp.menu_mrp_workorder_todo": "fa-cogs",
@@ -153,13 +160,17 @@ export class MrpModernSidebar extends Component {
             const target = byXmlid[MERGE_INTO[menu.xmlid]];
             const entries = this.entries(menu).filter((e) => e.heading || !REPLACED.has(e.xmlid));
             if (target) {
-                target.childrenTree.push(...entries.filter((e) => !e.heading));
+                target.childrenTree.push(...entries);
             } else if (entries.some((e) => !e.heading)) {
-                // a leaf menu directly under Sales becomes a one-item group
                 odoo.push(menu.childrenTree?.length ? { ...menu, childrenTree: entries } : { ...menu, childrenTree: [menu] });
             }
         }
-        return [...own, ...odoo];
+        for (const section of [...own, ...odoo]) {
+            section.childrenTree = section.childrenTree.filter(
+                (e, i, all) => !e.heading || (all[i + 1] && !all[i + 1].heading)
+            );
+        }
+        return [...own, ...odoo].filter((s) => s.childrenTree.length || s.actionID || s.actionPath);
     }
     /**
      * Entries of an Odoo group for the sidebar: leaves (menus with an action), and a

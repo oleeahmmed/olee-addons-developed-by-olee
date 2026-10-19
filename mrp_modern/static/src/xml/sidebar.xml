@@ -7,7 +7,7 @@
         <aside t-if="visible" t-attf-class="o_mr_sidebar d-print-none {{ state.collapsed ? 'mr-collapsed' : '' }}"
                t-att-data-rev="state.rev">
             <div class="mr-sb-brand">
-                <img src="/mrp_modern/static/description/icon.png" alt=""/>
+                <img src="/mrp/static/description/icon.png" alt=""/>
                 <div>
                     <strong t-esc="brand"/>
                     <small>Orders, BoMs &amp; shop floor</small>

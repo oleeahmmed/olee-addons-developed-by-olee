@@ -6,11 +6,12 @@ Modern CRM gives Odoo CRM a clean, shadcn-style interface with a left sidebar:
 dashboard, pipeline board, leads, activities, campaigns, salespeople, sales teams,
 stages, activity types, activity plans and tags.
 
-No new tables or fields: everything reads and writes the standard models
+No new tables: everything reads and writes the standard models
 (crm.lead, crm.stage, crm.team, utm.campaign, crm.tag, mail.activity,
-mail.activity.type, mail.activity.plan).
+mail.activity.type, mail.activity.plan). Campaigns store a default sales
+team (crm_modern_team_id) so empty campaigns remember who owns uploaded leads.
     """,
-    'version': '19.0.2.0.2',
+    'version': '19.0.2.1.0',
     'category': 'Sales/CRM',
     'author': 'Your Name',
     'license': 'LGPL-3',
@@ -18,6 +19,7 @@ mail.activity.type, mail.activity.plan).
     'data': [
         'views/report_layout.xml',
         'views/crm_modern_lead_views.xml',
+        'views/crm_modern_campaign_views.xml',
         'views/crm_modern_team_views.xml',
         'views/crm_modern_actions.xml',
         'views/crm_modern_menus.xml',

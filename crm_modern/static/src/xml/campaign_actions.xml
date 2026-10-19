@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="crm_modern.CampaignQuickActions">
+        <div t-if="state.canCreate" class="o_cm cm-cq" t-on-click.stop="">
+            <button type="button" class="cm-btn cm-btn-primary cm-btn-sm" t-on-click="upload">
+                <i class="fa fa-upload" aria-hidden="true"/> Upload CSV
+            </button>
+            <button t-if="state.useLeads" type="button" class="cm-btn cm-btn-outline cm-btn-sm"
+                    t-on-click="(ev) => this.add('lead', ev)">
+                <i class="fa fa-user-plus" aria-hidden="true"/> Lead
+            </button>
+            <button type="button" class="cm-btn cm-btn-outline cm-btn-sm"
+                    t-on-click="(ev) => this.add('opportunity', ev)">
+                <i class="fa fa-briefcase" aria-hidden="true"/> Opportunity
+            </button>
+        </div>
+    </t>
+
+</templates>

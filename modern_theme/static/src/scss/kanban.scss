@@ -26,10 +26,11 @@ $mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_
     .o_cm_page--native:has(.o_kanban_view),
     .o_ss_page--native:has(.o_kanban_view),
     .o_mp_page--native:has(.o_kanban_view),
-    .o_im_page--native:has(.o_kanban_view) {
+    .o_im_page--native:has(.o_kanban_view),
+    .o_mr_page--native:has(.o_kanban_view) {
         background: transparent !important;
 
-        .cm-native, .ss-native, .mp-native, .im-native {
+        .cm-native, .ss-native, .mp-native, .im-native, .mr-native {
             background: transparent !important;
         }
     }

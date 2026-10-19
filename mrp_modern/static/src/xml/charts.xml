@@ -6,7 +6,7 @@
             <svg t-attf-viewBox="0 0 {{ W }} {{ H }}" role="img" t-att-aria-label="props.label"
                  t-on-pointermove="onMove" t-on-pointerleave="() => this.state.hover = null">
                 <defs>
-                    <linearGradient id="mp-area-fill" x1="0" x2="0" y1="0" y2="1">
+                    <linearGradient id="mr-area-fill" x1="0" x2="0" y1="0" y2="1">
                         <stop offset="0%" stop-color="var(--mr-chart-1)" stop-opacity="0.22"/>
                         <stop offset="100%" stop-color="var(--mr-chart-1)" stop-opacity="0"/>
                     </linearGradient>
@@ -20,7 +20,7 @@
                 <t t-foreach="props.data" t-as="d" t-key="d_index">
                     <text t-att-x="x(d_index)" t-att-y="H - 6" text-anchor="middle" font-size="10" fill="var(--mr-muted-fg)" t-esc="d.label"/>
                 </t>
-                <path t-att-d="area" fill="url(#mp-area-fill)"/>
+                <path t-att-d="area" fill="url(#mr-area-fill)"/>
                 <path t-att-d="line" fill="none" stroke="var(--mr-chart-1)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
                 <t t-if="state.hover !== null">
                     <line t-att-x1="x(state.hover)" t-att-x2="x(state.hover)" t-att-y1="P.t" t-att-y2="H - P.b"

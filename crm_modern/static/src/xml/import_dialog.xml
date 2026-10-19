@@ -10,7 +10,7 @@
                 <fieldset>
                     <legend class="cm-label">Import as</legend>
                     <div class="cm-choice" role="radiogroup" aria-label="Import as">
-                        <button type="button" role="radio" t-att-aria-checked="state.kind === 'lead' ? 'true' : 'false'" t-on-click="() => this.setKind('lead')">
+                        <button t-if="state.useLeads" type="button" role="radio" t-att-aria-checked="state.kind === 'lead' ? 'true' : 'false'" t-on-click="() => this.setKind('lead')">
                             <span class="cm-choice-icon"><i class="fa fa-user-plus" aria-hidden="true"/></span>
                             <span><strong>Leads</strong><small>Prospects to qualify</small></span>
                         </button>

@@ -2,6 +2,7 @@ import { Component, onWillStart, useRef, useState } from "@odoo/owl";
 import { Dialog } from "@web/core/dialog/dialog";
 import { _t } from "@web/core/l10n/translation";
 import { useService } from "@web/core/utils/hooks";
+import { loadFeatures } from "../core/features";
 
 const MAX_BYTES = 5 * 1024 * 1024;
 
@@ -133,13 +134,19 @@ export class ImportDialog extends Component {
             error: null,
             over: false,
             busy: false,
+            useLeads: true,
         });
         onWillStart(async () => {
-            const [teams, members] = await Promise.all([
+            const [teams, members, features] = await Promise.all([
                 this.orm.searchRead("crm.team", [], ["name"], { order: "sequence, name" }),
                 this.orm.searchRead("crm.team.member", [], ["crm_team_id"]),
+                loadFeatures(this.orm).catch(() => ({})),
             ]);
             this.state.teams = teams;
+            this.state.useLeads = Boolean(features.use_leads);
+            if (!this.state.useLeads) {
+                this.state.kind = "opportunity";
+            }
             for (const m of members) {
                 const t = m.crm_team_id && m.crm_team_id[0];
                 this.state.members[t] = (this.state.members[t] || 0) + 1;

@@ -199,6 +199,11 @@ class TestCrmModernOwnerDashboard(TransactionCase):
 class TestCrmModernCampaigns(TransactionCase):
     """Campaigns use only Odoo's utm.campaign; their figures come from the leads."""
 
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.Lead = cls.env['crm.lead']
+
     def test_round_robin_import_and_campaign_stats(self):
         Users = self.env['res.users']
         sellers = Users.create([{
@@ -222,6 +227,49 @@ class TestCrmModernCampaigns(TransactionCase):
         self.assertEqual(row['opportunity_count'], 4)
         self.assertEqual(row['won_count'], 1)
         self.assertEqual(row['team'][0], team.id)
+
+    def test_campaign_kanban_assign_and_import_default_team(self):
+        """Campaign card stores a team, assigns it on open deals, and CSV uses it."""
+        team = self.env['crm.team'].create({'name': 'Campaign assign team'})
+        other = self.env['crm.team'].create({'name': 'Other campaign team'})
+        campaign = self.env['utm.campaign'].create({'title': 'Assign from card'})
+        pending = self.env['crm.lead'].create({
+            'name': 'Pending from campaign', 'type': 'opportunity',
+            'campaign_id': campaign.id, 'team_id': other.id,
+        })
+        won = self.env['crm.lead'].create({
+            'name': 'Won from campaign', 'type': 'opportunity',
+            'campaign_id': campaign.id, 'team_id': other.id,
+        })
+        won.action_set_won()
+        campaign.write({'crm_modern_team_id': team.id})
+        self.assertEqual(pending.team_id, team)
+        self.assertEqual(won.team_id, other)
+
+        empty = self.env['utm.campaign'].create({
+            'title': 'Empty campaign remembers team',
+            'crm_modern_team_id': team.id,
+        })
+        self.assertEqual(empty.crm_modern_team_id, team)
+        res = self.env['crm.lead'].crm_modern_import(
+            'opportunity', [{'name': 'Imported deal', 'phone': '+8801711111111'}], empty.id,
+        )
+        imported = self.env['crm.lead'].browse(res['ids'])
+        self.assertEqual(imported.team_id, team)
+        self.assertEqual(campaign.crm_modern_open_pipeline()['context'], {'crm_modern_campaign_id': campaign.id})
+        self.assertEqual(campaign.crm_modern_open_leads()['context'], {'crm_modern_campaign_id': campaign.id})
+
+        kanban = self.env.ref('crm_modern.utm_campaign_kanban_modern')
+        self.assertEqual(self.env['crm.lead'].crm_modern_view_ids()['campaign_kanban'], kanban.id)
+        self.env['utm.campaign'].get_view(kanban.id, 'kanban')
+        form = self.env['utm.campaign'].get_view(self.env.ref('utm.utm_campaign_view_form').id, 'form')
+        self.assertIn('crm_modern_team_id', form['arch'])
+        self.assertIn('crm_modern_campaign_actions', form['arch'])
+        self.assertIn('crm_modern_m2o_pick', form['arch'])
+        lead_kanban = self.env.ref('crm_modern.crm_lead_kanban_modern')
+        lead_arch = self.env['crm.lead'].get_view(lead_kanban.id, 'kanban')['arch']
+        self.assertIn('crm_modern_m2o_pick', lead_arch)
+        self.assertIn('crm_modern_user_pick', lead_arch)
 
     def test_optional_sale_never_breaks_crm(self):
         """CRM stays usable when Sales is missing: no quotation data, menus, or RPC errors."""

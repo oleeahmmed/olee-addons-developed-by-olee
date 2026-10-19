@@ -6,11 +6,11 @@ import { user } from "@web/core/user";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
 import { RecordPicker } from "./record_picker";
 
-/** Popover content: search a user, or clear the field. */
-class UserPickPopover extends Component {
-    static template = "crm_modern.UserPickPopover";
+/** Search popover: pick a record or clear the field. */
+class M2oPickPopover extends Component {
+    static template = "crm_modern.M2oPickPopover";
     static components = { RecordPicker };
-    static props = ["value", "placeholder", "onPick", "close"];
+    static props = ["value", "placeholder", "resModel", "domain", "onPick", "close"];
 
     pick(value) {
         this.props.onPick(value);
@@ -19,23 +19,33 @@ class UserPickPopover extends Component {
 }
 
 /**
- * Many2one to res.users shown as "avatar + name ▾" on kanban cards: one click opens
- * a search popover to change it (Odoo's own avatar widget only lets you assign when
- * empty). Saves through the record (Odoo's write, access rights and tracking apply);
- * read-only for users who may not write the model.
+ * Many2one shown as "icon/avatar + name ▾": one click opens a search popover.
+ * Saves through the record (Odoo's write, access rights and tracking apply);
+ * stays read-only when the user may not write the model.
  */
-export class UserPickField extends Component {
-    static template = "crm_modern.UserPickField";
-    static props = { ...standardFieldProps, placeholder: { type: String, optional: true } };
+export class M2oPickField extends Component {
+    static template = "crm_modern.M2oPickField";
+    static props = {
+        ...standardFieldProps,
+        placeholder: { type: String, optional: true },
+        resModel: { type: String, optional: true },
+        domain: { type: Array, optional: true },
+        icon: { type: String, optional: true },
+        avatar: { type: Boolean, optional: true },
+        searchPlaceholder: { type: String, optional: true },
+    };
 
     setup() {
-        this.popover = usePopover(UserPickPopover, { position: "bottom-start" });
+        this.popover = usePopover(M2oPickPopover, { position: "bottom-start" });
         this.state = useState({ canWrite: false });
         onWillStart(async () => {
             this.state.canWrite = await user.checkAccessRight(this.props.record.resModel, "write").catch(() => false);
         });
     }
 
+    get relation() {
+        return this.props.resModel || this.props.record.fields[this.props.name]?.relation;
+    }
     get value() {
         return this.props.record.data[this.props.name];
     }
@@ -43,8 +53,15 @@ export class UserPickField extends Component {
         return !this.props.readonly && this.state.canWrite;
     }
     get placeholder() {
-        return this.props.placeholder || _t("Pick someone");
+        return this.props.placeholder || _t("Assign");
     }
+    get showAvatar() {
+        return this.props.avatar !== false && this.relation === "res.users";
+    }
+    get icon() {
+        return this.props.icon || (this.relation === "crm.team" ? "fa-users" : "fa-search");
+    }
+
     toggle(ev) {
         if (!this.editable) {
             return;
@@ -55,7 +72,9 @@ export class UserPickField extends Component {
         }
         this.popover.open(ev.currentTarget, {
             value: this.value ? [this.value.id, this.value.display_name] : false,
-            placeholder: this.placeholder,
+            placeholder: this.props.searchPlaceholder || this.placeholder,
+            resModel: this.relation,
+            domain: this.props.domain || [],
             onPick: (picked) => this.save(picked),
         });
     }
@@ -65,12 +84,34 @@ export class UserPickField extends Component {
     }
 }
 
-registry.category("fields").add("crm_modern_user_pick", {
-    component: UserPickField,
-    displayName: _t("Modern CRM: user picker"),
-    supportedTypes: ["many2one"],
-    extractProps: ({ attrs, options }, dynamicInfo) => ({
+function extractPickProps({ attrs, options }, dynamicInfo, extra = {}) {
+    return {
         readonly: dynamicInfo.readonly,
         placeholder: options.placeholder || attrs.placeholder,
-    }),
+        domain: Array.isArray(options.domain) ? options.domain : extra.domain,
+        icon: options.icon || extra.icon,
+        avatar: extra.avatar,
+        resModel: extra.resModel,
+        searchPlaceholder: options.searchPlaceholder,
+    };
+}
+
+registry.category("fields").add("crm_modern_user_pick", {
+    component: M2oPickField,
+    displayName: _t("Modern CRM: salesperson picker"),
+    supportedTypes: ["many2one"],
+    extractProps: (info, dynamicInfo) =>
+        extractPickProps(info, dynamicInfo, {
+            resModel: "res.users",
+            domain: [["share", "=", false]],
+            icon: "fa-user-plus",
+            avatar: true,
+        }),
+});
+
+registry.category("fields").add("crm_modern_m2o_pick", {
+    component: M2oPickField,
+    displayName: _t("Modern CRM: assign picker"),
+    supportedTypes: ["many2one"],
+    extractProps: (info, dynamicInfo) => extractPickProps(info, dynamicInfo, { avatar: false }),
 });

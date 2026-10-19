@@ -108,12 +108,18 @@
     .cm-userpick-avatar--empty {
         display: grid; place-items: center; font-size: 0.6875rem; color: var(--cm-primary);
         border: 1px dashed color-mix(in srgb, var(--cm-primary) 55%, var(--cm-border)); box-shadow: none; background: var(--cm-card);
+        &.cm-userpick-avatar--filled {
+            color: var(--cm-muted-fg); border-style: solid; border-color: var(--cm-border); background: var(--cm-muted);
+        }
     }
     .cm-userpick-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .cm-userpick-caret { color: var(--cm-subtle-fg); font-size: 0.875rem; }
 }
 .cm-userpick-pop {
     display: grid; gap: 0.25rem; width: 16rem; padding: 0.5rem;
+    background: var(--cm-card); color: var(--cm-fg); border: 1px solid var(--cm-border);
+    border-radius: var(--cm-radius); box-shadow: var(--cm-shadow, 0 12px 32px rgba(0, 0, 0, 0.28));
+    .cm-picker input { color: var(--cm-fg); background: var(--cm-card); }
     .cm-picker-menu { position: static; margin-top: 0.25rem; box-shadow: none; border: 0; padding: 0; max-height: 14rem; }
     .cm-userpick-clear {
         display: flex; align-items: center; gap: 0.375rem; padding: 0.375rem 0.5rem; border: 0; border-top: 1px solid var(--cm-border);
@@ -127,3 +133,37 @@
 
 // CRM Simple campaign cards: let the action buttons wrap instead of overflowing on narrow cards
 .o_cm .cm-native .o_kanban_record footer.gap-1 { flex-wrap: wrap; row-gap: 0.375rem; }
+
+.o_cm .cm-cq, .cm-cq, .cm-cc-form-actions .cm-cq {
+    display: flex; flex-wrap: wrap; gap: 0.375rem; align-items: center;
+}
+.o_form_view .cm-cc-form-actions { padding: 0 1.5rem 1rem; }
+
+.o_cm .cm-native .o_cm_campaign_kanban {
+    .o_kanban_record {
+        padding: 0.875rem 0.875rem 0.625rem;
+        border: 1px solid var(--cm-border); border-radius: calc(var(--cm-radius) + 2px);
+        background: var(--cm-card); box-shadow: var(--cm-shadow-sm);
+        &:hover { border-color: color-mix(in srgb, var(--cm-primary) 35%, var(--cm-border)); }
+    }
+    .cm-cc-head { display: flex; align-items: flex-start; gap: 0.75rem; padding-right: 1.25rem; }
+    .cm-cc-logo {
+        display: grid; place-items: center; flex-shrink: 0; width: 2.25rem; height: 2.25rem; border-radius: 0.75rem;
+        background: var(--cm-primary-soft); color: var(--cm-primary); font-size: 0.9375rem;
+    }
+    .cm-cc-titles { min-width: 0; }
+    .cm-cc-title { font-size: 0.9375rem; font-weight: 650; color: var(--cm-fg); span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } }
+    .cm-cc-tags { margin-top: 0.25rem; .o_tag { font-size: 0.6875rem; border-radius: 999px; } }
+    .cm-cc-stats {
+        display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.375rem; margin-top: 0.75rem;
+        .cm-cc-stat, button.cm-cc-stat {
+            display: grid; gap: 0.0625rem; padding: 0.375rem 0.5rem; border: 0; border-radius: var(--cm-radius-sm);
+            background: color-mix(in srgb, var(--cm-muted) 55%, transparent); text-align: start; cursor: pointer; color: inherit;
+            &:hover { background: var(--cm-primary-soft); }
+            strong, strong span { font-size: 0.9375rem; font-weight: 650; font-variant-numeric: tabular-nums; }
+            span { font-size: 0.6875rem; color: var(--cm-subtle-fg); }
+        }
+        div.cm-cc-stat { cursor: default; &:hover { background: color-mix(in srgb, var(--cm-muted) 55%, transparent); } }
+    }
+    .cm-cc-foot { margin-top: 0.625rem; padding-top: 0.5rem; border-top: 1px dashed var(--cm-border); }
+}

@@ -13,7 +13,7 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
 * Rights, record rules, work orders, settings and reports are Odoo's own.
   Odoo's original Manufacturing menus stay available (sidebar groups and top-bar menus).
     """,
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.1.0',
     'category': 'Manufacturing/Manufacturing',
     'author': 'Olee',
     'license': 'LGPL-3',
