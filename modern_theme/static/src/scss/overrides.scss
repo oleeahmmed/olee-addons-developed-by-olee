@@ -210,9 +210,17 @@ html[data-mt-theme] {
 
     .o_searchview,
     .o_searchview_input_container {
-        border-radius: var(--mt-radius);
+        min-height: 2rem;
+        height: 2rem;
+        border-radius: 0.5rem 0 0 0.5rem;
         border-color: var(--mt-input);
         background: var(--mt-background);
+    }
+
+    .o_searchview_dropdown_toggler {
+        min-height: 2rem;
+        height: 2rem;
+        border-radius: 0 0.5rem 0.5rem 0;
     }
 
     .o_cp_buttons .btn {
@@ -380,11 +388,55 @@ a:where(:not(.btn):not(.dropdown-item):not(.nav-link)) {
 }
 
 // --- List view: selection / hover -----------------------------------------
-.o_list_view {
-    .o_data_row.o_data_row_selected,
-    .o_data_row td.o_list_record_selector input:checked ~ * {
-        background-color: rgba(var(--mt-primary-rgb), 0.06);
+// Odoo marks selected rows with Bootstrap .table-info (compiled light cyan).
+// OmniRouters uses muted on the same dark canvas; only the checkbox fills.
+.o_list_table {
+    > tbody > tr.table-info,
+    > tbody > tr.table-active,
+    > tbody > tr.o_data_row_selected {
+        --bs-table-color: var(--mt-foreground);
+        --bs-table-bg: var(--mt-muted);
+        --bs-table-border-color: var(--mt-border);
+        --bs-table-striped-bg: var(--mt-muted);
+        --bs-table-striped-color: var(--mt-foreground);
+        --bs-table-hover-bg: var(--mt-muted);
+        --bs-table-hover-color: var(--mt-foreground);
+        --bs-table-active-bg: var(--mt-muted);
+        --bs-table-active-color: var(--mt-foreground);
+        --bs-table-accent-bg: transparent;
+        --table-accent-bg: transparent;
+        --table-bg: var(--mt-muted);
+        color: var(--mt-foreground);
+
+        > td, > th {
+            background-color: var(--mt-muted) !important;
+            color: var(--mt-foreground) !important;
+            box-shadow: none !important;
+            --bs-table-accent-bg: transparent;
+        }
     }
+
+    .o_list_record_selector .form-check-input,
+    thead .form-check-input {
+        width: 1rem;
+        height: 1rem;
+        margin-top: 0;
+        border-radius: 0.3rem;
+        background-color: transparent;
+        border: 1px solid var(--mt-input);
+        box-shadow: none;
+
+        &:checked {
+            background-color: var(--mt-primary);
+            border-color: var(--mt-primary);
+        }
+    }
+}
+
+.o_selection_box .list-group-item.active {
+    background-color: var(--mt-muted);
+    color: var(--mt-foreground);
+    border-color: var(--mt-border);
 }
 
 // --- Kanban: selected card -------------------------------------------------

@@ -217,9 +217,43 @@ hr { color: var(--mt-border); }
     --table-striped-color: var(--mt-foreground);
     --table-hover-bg: var(--mt-muted);
     --table-hover-color: var(--mt-foreground);
-    --table-active-bg: color-mix(in srgb, var(--mt-primary) 14%, var(--mt-card));
+    --table-active-bg: var(--mt-muted);
     --table-active-color: var(--mt-foreground);
+    --bs-table-active-bg: var(--mt-muted);
+    --bs-table-active-color: var(--mt-foreground);
     color: var(--mt-foreground);
+}
+
+// Kill Bootstrap's compiled .table-info (light cyan) on selected list rows.
+.o_list_table > tbody > tr.table-info,
+.o_list_table > tbody > tr.o_data_row_selected {
+    --bs-table-color: var(--mt-foreground) !important;
+    --bs-table-bg: var(--mt-muted) !important;
+    --bs-table-accent-bg: transparent !important;
+    --table-accent-bg: transparent !important;
+
+    > * {
+        background-color: var(--mt-muted) !important;
+        color: var(--mt-foreground) !important;
+        box-shadow: none !important;
+    }
+}
+
+.o_selection_box {
+    --bs-list-group-bg: var(--mt-muted);
+    --bs-list-group-color: var(--mt-foreground);
+    --bs-list-group-border-color: var(--mt-border);
+    --bs-list-group-active-bg: var(--mt-muted);
+    --bs-list-group-active-color: var(--mt-foreground);
+    --bs-list-group-active-border-color: var(--mt-border);
+
+    .list-group-item,
+    .list-group-item.active {
+        background-color: var(--mt-muted) !important;
+        color: var(--mt-foreground) !important;
+        border-color: var(--mt-border) !important;
+    }
+    .btn-link, .o_unselect_all { color: var(--mt-muted-foreground) !important; }
 }
 
 .o_list_renderer {

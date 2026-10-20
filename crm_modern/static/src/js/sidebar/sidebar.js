@@ -21,23 +21,29 @@ import { TeamDialog } from "../pages/team_pages";
  * NavBar template, so changes to the navbar in an Odoo update cannot break the
  * web client. The app's top-bar section menus are hidden with CSS (sidebar.scss).
  *
- * It shows the whole CRM app menu, nothing hidden: Modern CRM's own groups (Dashboard,
- * Marketing, Deals, Team, Reporting, Configuration) with Odoo's matching CRM menus
- * merged into them, minus the entries Modern CRM already shows with its own page; every
- * other CRM menu (other apps' too) as its own group, named as in Odoo, with a small
- * heading per sub-section. Odoo's groups and settings decide what each user sees.
+ * Everyday pages sit flat in the sidebar (Home, Dashboard, Campaigns, Leads…).
+ * Team, Reporting and Configuration stay as top-bar dropdowns. Odoo's matching
+ * CRM menus are merged into those groups, minus pages Modern CRM already shows.
  */
 const APP_XMLID = "crm.crm_menu_root";
 const OWN_PREFIXES = ["crm_modern."];
 // Odoo / CRM Simple top-level menus whose entries go into one of our groups
 const MERGE_INTO = {
-    "crm.crm_menu_sales": "crm_modern.menu_sales",
-    "crm.crm_menu_leads": "crm_modern.menu_sales",
-    "crm.crm_lead_menu_my_activities": "crm_modern.menu_sales",
-    "crm.res_partner_menu_customer": "crm_modern.menu_sales",
     "crm.crm_menu_report": "crm_modern.menu_reporting",
     "crm.crm_menu_config": "crm_modern.menu_config",
 };
+const SIDEBAR_ORDER = [
+    "crm_modern.menu_home",
+    "crm_modern.menu_dashboard",
+    "crm_modern.menu_campaigns",
+    "crm_modern.menu_leads",
+    "crm_modern.menu_pipeline",
+    "crm_modern.menu_activities",
+    "crm_modern.menu_quotations",
+    "crm_modern.menu_sale_orders",
+    "crm_modern.menu_customers",
+];
+const FLAT_GROUPS = new Set(["crm_modern.menu_marketing", "crm_modern.menu_sales"]);
 // Groups shown as dropdowns in the top bar instead of the sidebar, so the sidebar
 // only lists the everyday pages. Groups other apps add are top-bar dropdowns too.
 const TOP_GROUPS = new Set(["crm_modern.menu_team", "crm_modern.menu_reporting", "crm_modern.menu_config"]);
@@ -235,9 +241,25 @@ export class ModernSidebar extends Component {
         }
         return result;
     }
-    /** Sidebar: the everyday pages. */
+    /** Sidebar: the everyday pages, flat — no Marketing / Deals dropdowns. */
     get sections() {
-        return this.allSections.filter((s) => !this.isTop(s));
+        const flat = [];
+        for (const section of this.allSections.filter((s) => !this.isTop(s))) {
+            if (FLAT_GROUPS.has(section.xmlid) && section.childrenTree?.length) {
+                for (const child of section.childrenTree) {
+                    if (!child.heading) {
+                        flat.push({ ...child, own: true, childrenTree: [] });
+                    }
+                }
+            } else {
+                flat.push(section);
+            }
+        }
+        return flat.sort((a, b) => {
+            const ia = SIDEBAR_ORDER.indexOf(a.xmlid);
+            const ib = SIDEBAR_ORDER.indexOf(b.xmlid);
+            return (ia === -1 ? 100 : ia) - (ib === -1 ? 100 : ib);
+        });
     }
     /** Top bar: Reporting, Configuration and other apps' groups, as dropdowns. */
     get topSections() {
@@ -264,9 +286,14 @@ export class ModernSidebar extends Component {
     /** The record the "+" button creates: the one of the page you are on. */
     get pageCreateSpec() {
         this.state.rev; // re-evaluate on navigation / app change
+        const match = (item) =>
+            item && !item.heading && this.isActive(item) && createTargets.contains(item.xmlid);
         for (const section of this.allSections) {
+            if (match(section)) {
+                return createTargets.get(section.xmlid);
+            }
             for (const child of section.childrenTree || []) {
-                if (!child.heading && this.isActive(child) && createTargets.contains(child.xmlid)) {
+                if (match(child)) {
                     return createTargets.get(child.xmlid);
                 }
             }

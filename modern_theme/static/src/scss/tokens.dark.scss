@@ -9,28 +9,30 @@
 
 :root,
 html[data-mt-theme="indigo"] {
-    --mt-background: hsl(226 45% 6%);
-    --mt-foreground: hsl(210 40% 98%);
-    --mt-card: hsl(226 38% 9%);
-    --mt-card-foreground: hsl(210 40% 98%);
-    --mt-primary: hsl(224 76% 60%);
-    --mt-primary-rgb: 91, 127, 250;
-    --mt-primary-foreground: hsl(226 60% 8%);
-    --mt-secondary: hsl(226 28% 16%);
-    --mt-secondary-foreground: hsl(210 40% 98%);
-    --mt-muted: hsl(226 28% 16%);
-    --mt-muted-foreground: hsl(220 14% 65%);
-    --mt-accent: hsl(226 28% 16%);
-    --mt-accent-foreground: hsl(210 40% 98%);
+    // OmniRouters Forest Whisper dark (live /keys, 2026-10-20):
+    // canvas #1f2322, mint create #009883, filters 32px.
+    --mt-background: hsl(165 8% 13%);
+    --mt-foreground: hsl(0 0% 95%);
+    --mt-card: hsl(165 6% 14%);
+    --mt-card-foreground: hsl(0 0% 95%);
+    --mt-primary: hsl(172 100% 30%);
+    --mt-primary-rgb: 0, 152, 131;
+    --mt-primary-foreground: hsl(0 0% 100%);
+    --mt-secondary: hsl(165 8% 18%);
+    --mt-secondary-foreground: hsl(0 0% 95%);
+    --mt-muted: hsl(165 10% 18%);
+    --mt-muted-foreground: hsl(0 0% 74%);
+    --mt-accent: hsl(165 12% 20%);
+    --mt-accent-foreground: hsl(0 0% 95%);
     --mt-destructive: hsl(0 62.8% 45%);
     --mt-destructive-foreground: hsl(0 0% 98%);
-    --mt-border: hsl(226 26% 18%);
-    --mt-input: hsl(226 26% 18%);
-    --mt-ring: hsl(224 76% 60%);
+    --mt-border: hsl(165 16% 20%);
+    --mt-input: hsl(165 16% 22%);
+    --mt-ring: hsl(172 100% 30%);
 
-    --mt-success: hsl(160 60% 45%);
+    --mt-success: hsl(172 66% 45%);
     --mt-warning: hsl(38 92% 55%);
-    --mt-info: hsl(224 76% 60%);
+    --mt-info: hsl(172 100% 30%);
 }
 
 html[data-mt-theme="zinc"] {
@@ -311,25 +313,25 @@ html[data-mt-theme="teal"] {
 // ---------------------------------------------------------------------------
 :root,
 html[data-mt-theme] {
-    --mt-content-bg: color-mix(in srgb, var(--mt-primary) 7%, hsl(226 42% 6%));
-    --mt-content-bg-accent: color-mix(in srgb, var(--mt-primary) 11%, hsl(226 42% 8%));
+    --mt-content-bg: color-mix(in srgb, var(--mt-primary) 6%, hsl(165 8% 12%));
+    --mt-content-bg-accent: color-mix(in srgb, var(--mt-primary) 10%, hsl(165 8% 14%));
     --mt-card-matte: color-mix(in srgb, var(--mt-card) 88%, var(--mt-muted));
 
     --mt-stitch-bg: color-mix(in srgb, var(--mt-content-bg) 70%, #050505);
     --mt-stitch-dot: rgba(255, 255, 255, 0.12);
     --mt-stitch-size: 16px;
 
-    --mt-chrome-bg: color-mix(in srgb, var(--mt-card) 65%, var(--mt-content-bg));
+    --mt-chrome-bg: color-mix(in srgb, var(--mt-card) 70%, var(--mt-content-bg));
     --mt-topbar-bg: var(--mt-chrome-bg);
     --mt-sidebar-bg: var(--mt-chrome-bg);
-    --mt-sidebar-bg-2: hsl(226 34% 10%);
+    --mt-sidebar-bg-2: hsl(165 8% 11%);
     --mt-nav-bg: var(--mt-topbar-bg);
     --mt-nav-bg-2: var(--mt-topbar-bg);
     --mt-nav-fg: var(--mt-foreground);
     --mt-nav-muted-fg: var(--mt-muted-foreground);
     --mt-nav-hover: var(--mt-muted);
-    --mt-nav-active-bg: color-mix(in srgb, var(--mt-primary) 22%, var(--mt-card));
-    --mt-nav-active-fg: var(--mt-primary);
+    --mt-nav-active-bg: color-mix(in srgb, var(--mt-primary) 18%, hsl(165 10% 16%));
+    --mt-nav-active-fg: var(--mt-foreground);
     --mt-nav-border: var(--mt-border);
     --mt-nav-tile: var(--mt-card);
     --mt-nav-scrollbar: color-mix(in srgb, var(--mt-foreground) 28%, transparent);

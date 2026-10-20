@@ -325,7 +325,7 @@
         > .o_view_controller, .o_mp_native_view { background: var(--mp-card); }
         .o_control_panel {
             gap: 0.75rem !important; // Bootstrap gap utility on the element itself
-            padding: 1rem 1.25rem !important;
+            padding: 0.625rem 1rem !important;
             background: var(--mp-card);
             border-bottom: 1px solid var(--mp-border);
         }
@@ -338,14 +338,13 @@
         // search bar
         .o_cp_searchview { min-width: 0; }
         .o_searchview {
-            min-height: 2.25rem;
+            min-height: 2rem;
+            height: 2rem;
             border: 1px solid var(--mp-input);
-            border-radius: var(--mp-radius-sm) 0 0 var(--mp-radius-sm);
+            border-radius: 0.5rem 0 0 0.5rem;
             background: var(--mp-card);
-            box-shadow: var(--mp-shadow-sm);
-            transition: border-color 150ms var(--mp-ease), box-shadow 150ms var(--mp-ease);
-            &:focus-within { border-color: var(--mp-primary); box-shadow: 0 0 0 3px var(--mp-ring); }
-            .o_searchview_input { font-size: 0.875rem; }
+            box-shadow: none;
+            .o_searchview_input { font-size: 0.8125rem; }
             .o_searchview_facet {
                 border-radius: var(--mp-radius-sm);
                 background: var(--mp-muted);
@@ -353,8 +352,10 @@
             }
         }
         .o_searchview_dropdown_toggler {
+            min-height: 2rem;
+            height: 2rem;
             border-color: var(--mp-input);
-            border-radius: 0 var(--mp-radius-sm) var(--mp-radius-sm) 0;
+            border-radius: 0 0.5rem 0.5rem 0;
             background: var(--mp-card);
             color: var(--mp-muted-fg);
             &:hover { background: var(--mp-muted); color: var(--mp-fg); }
@@ -407,7 +408,12 @@
             }
             tbody td { padding-top: 0.625rem; padding-bottom: 0.625rem; border-color: var(--mp-border); vertical-align: middle; }
             tbody tr.o_data_row:hover > td { background: color-mix(in srgb, var(--mp-muted) 70%, transparent); }
-            tr.o_data_row.o_data_row_selected > td { background: var(--mp-primary-soft); }
+            tr.o_data_row.o_data_row_selected > td,
+            tr.table-info > td {
+                background: var(--mp-muted) !important;
+                color: var(--mp-fg) !important;
+                box-shadow: none !important;
+            }
             tfoot { background: transparent; color: var(--mp-muted-fg); }
             .o_list_record_selector .form-check-input, thead .form-check-input {
                 border-color: var(--mp-input);

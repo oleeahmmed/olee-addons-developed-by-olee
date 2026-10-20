@@ -275,10 +275,15 @@ class TestCrmModernCampaigns(TransactionCase):
         detail = campaign.crm_modern_campaign_detail()
         self.assertEqual(detail['campaign']['id'], campaign.id)
         self.assertEqual(detail['campaign']['team_id'][0], team.id)
-        self.assertLess(
-            self.env.ref('crm_modern.menu_marketing').sequence,
-            self.env.ref('crm_modern.menu_sales').sequence,
+        order = (
+            'menu_home', 'menu_dashboard', 'menu_campaigns', 'menu_leads',
+            'menu_pipeline', 'menu_activities', 'menu_quotations',
+            'menu_sale_orders', 'menu_customers',
         )
+        seqs = [self.env.ref(f'crm_modern.{name}').sequence for name in order]
+        self.assertEqual(seqs, sorted(seqs))
+        self.assertFalse(self.env.ref('crm_modern.menu_marketing').active)
+        self.assertFalse(self.env.ref('crm_modern.menu_sales').active)
 
         kanban = self.env.ref('crm_modern.utm_campaign_kanban_modern')
         self.assertEqual(self.env['crm.lead'].crm_modern_view_ids()['campaign_kanban'], kanban.id)

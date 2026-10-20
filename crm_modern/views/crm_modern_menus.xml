@@ -2,28 +2,27 @@
 <odoo>
     <!--
         No app of its own: everything lives inside Odoo's CRM app (crm.crm_menu_root).
-        The Dashboard comes first, so opening CRM from the home screen opens Modern CRM.
-        Odoo's own CRM menus are left untouched; the sidebar shows them under
-        "Reporting" and "Odoo CRM", so every standard screen stays one click away.
+        Everyday pages are flat on the CRM root (Home, Dashboard, Campaigns, Leads…).
+        Team, Reporting and Configuration stay grouped for the top-bar dropdowns.
         Visibility comes from Odoo's groups (CRM app rights, CRM Settings).
     -->
     <menuitem id="menu_home" name="Home" parent="crm.crm_menu_root" action="action_home" sequence="-110"/>
-    <menuitem id="menu_dashboard" name="Dashboard" parent="crm.crm_menu_root" action="action_dashboard" sequence="50"/>
-
-    <menuitem id="menu_marketing" name="Marketing" parent="crm.crm_menu_root" sequence="-90" groups="sales_team.group_sale_salesman"/>
-    <menuitem id="menu_campaigns" name="Campaigns" parent="menu_marketing" action="action_campaigns" sequence="1"/>
-
-    <menuitem id="menu_sales" name="Deals" parent="crm.crm_menu_root" sequence="-80" groups="sales_team.group_sale_salesman"/>
-    <menuitem id="menu_pipeline" name="Pipeline" parent="menu_sales" action="action_pipeline" sequence="1"/>
+    <menuitem id="menu_dashboard" name="Dashboard" parent="crm.crm_menu_root" action="action_dashboard" sequence="-100"/>
+    <menuitem id="menu_campaigns" name="Campaigns" parent="crm.crm_menu_root" action="action_campaigns" sequence="-90" groups="sales_team.group_sale_salesman"/>
     <!-- Shown only when CRM ▸ Settings ▸ "Leads" is enabled, exactly like the standard CRM Leads menu. -->
-    <menuitem id="menu_leads" name="Leads" parent="menu_sales" action="action_leads" sequence="2" groups="crm.group_use_lead"/>
-    <menuitem id="menu_activities" name="Activities" parent="menu_sales" action="action_activities" sequence="3"/>
+    <menuitem id="menu_leads" name="Leads" parent="crm.crm_menu_root" action="action_leads" sequence="-85" groups="crm.group_use_lead"/>
+    <menuitem id="menu_pipeline" name="Pipeline" parent="crm.crm_menu_root" action="action_pipeline" sequence="-80" groups="sales_team.group_sale_salesman"/>
+    <menuitem id="menu_activities" name="Activities" parent="crm.crm_menu_root" action="action_activities" sequence="-75" groups="sales_team.group_sale_salesman"/>
     <!-- Only when the Sales app is installed (hidden otherwise by ir.ui.menu._load_menus_blacklist) -->
-    <menuitem id="menu_quotations" name="Quotations" parent="menu_sales" action="action_quotations" sequence="4"/>
-    <menuitem id="menu_sale_orders" name="Sales Orders" parent="menu_sales" action="action_sale_orders" sequence="5"/>
-    <menuitem id="menu_customers" name="Customers" parent="menu_sales" action="action_customers" sequence="6"/>
+    <menuitem id="menu_quotations" name="Quotations" parent="crm.crm_menu_root" action="action_quotations" sequence="-70" groups="sales_team.group_sale_salesman"/>
+    <menuitem id="menu_sale_orders" name="Sales Orders" parent="crm.crm_menu_root" action="action_sale_orders" sequence="-65" groups="sales_team.group_sale_salesman"/>
+    <menuitem id="menu_customers" name="Customers" parent="crm.crm_menu_root" action="action_customers" sequence="-60" groups="sales_team.group_sale_salesman"/>
 
-    <menuitem id="menu_team" name="Team" parent="crm.crm_menu_root" sequence="-70" groups="sales_team.group_sale_salesman"/>
+    <!-- Kept inactive so upgrades drop the old Marketing / Deals sidebar groups. -->
+    <menuitem id="menu_marketing" name="Marketing" parent="crm.crm_menu_root" sequence="90" groups="sales_team.group_sale_salesman" active="False"/>
+    <menuitem id="menu_sales" name="Deals" parent="crm.crm_menu_root" sequence="91" groups="sales_team.group_sale_salesman" active="False"/>
+
+    <menuitem id="menu_team" name="Team" parent="crm.crm_menu_root" sequence="-50" groups="sales_team.group_sale_salesman"/>
     <menuitem id="menu_salespeople" name="Salespeople" parent="menu_team" action="action_salespeople" sequence="1"/>
     <menuitem id="menu_teams" name="Sales Teams" parent="menu_team" action="action_teams" sequence="2"/>
 
