@@ -133,13 +133,14 @@ class TestCrmModern(TransactionCase):
         self.env['crm.team'].get_view(kanban.id, 'kanban')
 
     def test_lives_inside_the_crm_app(self):
-        """No app of its own: opening CRM from the home screen opens the Modern CRM dashboard."""
+        """No app of its own: opening CRM from the home screen opens Modern CRM Home."""
         Menu = self.env['ir.ui.menu']
         self.assertFalse(self.env.ref('crm_modern.menu_root', raise_if_not_found=False))
         crm_root = self.env.ref('crm.crm_menu_root')
-        self.assertEqual(self.env.ref('crm_modern.menu_dashboard').parent_id, crm_root)
+        self.assertEqual(self.env.ref('crm_modern.menu_home').parent_id, crm_root)
+        self.assertEqual(self.env.ref('crm_modern.menu_dashboard').parent_id, self.env.ref('crm_modern.menu_sales'))
         menus = Menu.load_web_menus(False)
-        self.assertEqual(menus[crm_root.id]['actionID'], self.env.ref('crm_modern.action_dashboard').id)
+        self.assertEqual(menus[crm_root.id]['actionID'], self.env.ref('crm_modern.action_home').id)
         # Odoo's own CRM menus are untouched
         for xmlid in ('crm.crm_menu_sales', 'crm.crm_menu_report', 'crm.crm_menu_config'):
             self.assertEqual(self.env.ref(xmlid).parent_id, crm_root)
@@ -275,15 +276,23 @@ class TestCrmModernCampaigns(TransactionCase):
         detail = campaign.crm_modern_campaign_detail()
         self.assertEqual(detail['campaign']['id'], campaign.id)
         self.assertEqual(detail['campaign']['team_id'][0], team.id)
-        order = (
-            'menu_home', 'menu_dashboard', 'menu_campaigns', 'menu_leads',
-            'menu_pipeline', 'menu_activities', 'menu_quotations',
-            'menu_sale_orders', 'menu_customers',
-        )
-        seqs = [self.env.ref(f'crm_modern.{name}').sequence for name in order]
-        self.assertEqual(seqs, sorted(seqs))
-        self.assertFalse(self.env.ref('crm_modern.menu_marketing').active)
-        self.assertFalse(self.env.ref('crm_modern.menu_sales').active)
+        crm_group = self.env.ref('crm_modern.menu_marketing')
+        sales_group = self.env.ref('crm_modern.menu_sales')
+        self.assertTrue(crm_group.active)
+        self.assertTrue(sales_group.active)
+        self.assertEqual(crm_group.name, 'CRM')
+        self.assertEqual(sales_group.name, 'Sales')
+        for xmlid in ('menu_campaigns', 'menu_leads', 'menu_pipeline', 'menu_activities'):
+            self.assertEqual(self.env.ref(f'crm_modern.{xmlid}').parent_id, crm_group)
+        for xmlid in ('menu_quotations', 'menu_sale_orders', 'menu_customers', 'menu_dashboard'):
+            self.assertEqual(self.env.ref(f'crm_modern.{xmlid}').parent_id, sales_group)
+        self.assertEqual(self.env.ref('crm_modern.menu_home').parent_id, self.env.ref('crm.crm_menu_root'))
+        crm_order = ('menu_campaigns', 'menu_leads', 'menu_pipeline', 'menu_activities')
+        sales_order = ('menu_quotations', 'menu_sale_orders', 'menu_customers', 'menu_dashboard')
+        crm_seqs = [self.env.ref(f'crm_modern.{name}').sequence for name in crm_order]
+        sales_seqs = [self.env.ref(f'crm_modern.{name}').sequence for name in sales_order]
+        self.assertEqual(crm_seqs, sorted(crm_seqs))
+        self.assertEqual(sales_seqs, sorted(sales_seqs))
 
         kanban = self.env.ref('crm_modern.utm_campaign_kanban_modern')
         self.assertEqual(self.env['crm.lead'].crm_modern_view_ids()['campaign_kanban'], kanban.id)

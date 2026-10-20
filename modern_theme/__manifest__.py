@@ -1,7 +1,7 @@
 {
     "name": "Modern Theme",
     "summary": "Light/Dark mode and shadcn/ui-inspired color themes for the Odoo backend.",
-    "version": "19.0.2.1.2",
+    "version": "19.0.2.2.0",
     "category": "Themes/Backend",
     "author": "Olee",
     "license": "LGPL-3",
@@ -25,6 +25,10 @@
         ],
         "web.assets_backend_lazy": [
             "modern_theme/static/src/js/graph_colors.js",
+        ],
+        "web.assets_frontend": [
+            "modern_theme/static/src/scss/tokens.scss",
+            "modern_theme/static/src/scss/login.scss",
         ],
         "web.assets_web_dark": [
             "modern_theme/static/src/scss/tokens.dark.scss",

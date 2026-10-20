@@ -21,9 +21,11 @@ import { TeamDialog } from "../pages/team_pages";
  * NavBar template, so changes to the navbar in an Odoo update cannot break the
  * web client. The app's top-bar section menus are hidden with CSS (sidebar.scss).
  *
- * Everyday pages sit flat in the sidebar (Home, Dashboard, Campaigns, Leads…).
- * Team, Reporting and Configuration stay as top-bar dropdowns. Odoo's matching
- * CRM menus are merged into those groups, minus pages Modern CRM already shows.
+ * Home is a top-level item. Everyday pages sit in two sidebar groups:
+ * CRM (Campaigns, Leads, Pipeline, Activities) and Sales (Quotations,
+ * Sales Orders, Customers, Dashboard). Team, Reporting and Configuration
+ * stay as top-bar dropdowns. Odoo's matching CRM menus are merged into
+ * those groups, minus pages Modern CRM already shows.
  */
 const APP_XMLID = "crm.crm_menu_root";
 const OWN_PREFIXES = ["crm_modern."];
@@ -34,16 +36,23 @@ const MERGE_INTO = {
 };
 const SIDEBAR_ORDER = [
     "crm_modern.menu_home",
-    "crm_modern.menu_dashboard",
-    "crm_modern.menu_campaigns",
-    "crm_modern.menu_leads",
-    "crm_modern.menu_pipeline",
-    "crm_modern.menu_activities",
-    "crm_modern.menu_quotations",
-    "crm_modern.menu_sale_orders",
-    "crm_modern.menu_customers",
+    "crm_modern.menu_marketing",
+    "crm_modern.menu_sales",
 ];
-const FLAT_GROUPS = new Set(["crm_modern.menu_marketing", "crm_modern.menu_sales"]);
+const GROUP_CHILD_ORDER = {
+    "crm_modern.menu_marketing": [
+        "crm_modern.menu_campaigns",
+        "crm_modern.menu_leads",
+        "crm_modern.menu_pipeline",
+        "crm_modern.menu_activities",
+    ],
+    "crm_modern.menu_sales": [
+        "crm_modern.menu_quotations",
+        "crm_modern.menu_sale_orders",
+        "crm_modern.menu_customers",
+        "crm_modern.menu_dashboard",
+    ],
+};
 // Groups shown as dropdowns in the top bar instead of the sidebar, so the sidebar
 // only lists the everyday pages. Groups other apps add are top-bar dropdowns too.
 const TOP_GROUPS = new Set(["crm_modern.menu_team", "crm_modern.menu_reporting", "crm_modern.menu_config"]);
@@ -241,25 +250,25 @@ export class ModernSidebar extends Component {
         }
         return result;
     }
-    /** Sidebar: the everyday pages, flat — no Marketing / Deals dropdowns. */
+    /** Sidebar: Home, then CRM and Sales groups. */
     get sections() {
-        const flat = [];
-        for (const section of this.allSections.filter((s) => !this.isTop(s))) {
-            if (FLAT_GROUPS.has(section.xmlid) && section.childrenTree?.length) {
-                for (const child of section.childrenTree) {
-                    if (!child.heading) {
-                        flat.push({ ...child, own: true, childrenTree: [] });
-                    }
+        const rank = (xmlid, order) => {
+            const i = order.indexOf(xmlid);
+            return i === -1 ? 100 : i;
+        };
+        return this.allSections
+            .filter((s) => !this.isTop(s))
+            .map((section) => {
+                const childOrder = GROUP_CHILD_ORDER[section.xmlid];
+                if (!childOrder || !section.childrenTree?.length) {
+                    return section;
                 }
-            } else {
-                flat.push(section);
-            }
-        }
-        return flat.sort((a, b) => {
-            const ia = SIDEBAR_ORDER.indexOf(a.xmlid);
-            const ib = SIDEBAR_ORDER.indexOf(b.xmlid);
-            return (ia === -1 ? 100 : ia) - (ib === -1 ? 100 : ib);
-        });
+                const children = [...section.childrenTree].sort(
+                    (a, b) => rank(a.xmlid, childOrder) - rank(b.xmlid, childOrder)
+                );
+                return { ...section, childrenTree: children };
+            })
+            .sort((a, b) => rank(a.xmlid, SIDEBAR_ORDER) - rank(b.xmlid, SIDEBAR_ORDER));
     }
     /** Top bar: Reporting, Configuration and other apps' groups, as dropdowns. */
     get topSections() {
