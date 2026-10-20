@@ -50,7 +50,14 @@ export class M2oPickField extends Component {
         return this.props.record.data[this.props.name];
     }
     get editable() {
-        return !this.props.readonly && this.state.canWrite;
+        if (this.props.readonly || !this.state.canWrite) {
+            return false;
+        }
+        const rec = this.props.record;
+        if (typeof rec.isFieldReadonly === "function" && rec.isFieldReadonly(this.props.name)) {
+            return false;
+        }
+        return true;
     }
     get placeholder() {
         return this.props.placeholder || _t("Assign");
@@ -59,7 +66,16 @@ export class M2oPickField extends Component {
         return this.props.avatar !== false && this.relation === "res.users";
     }
     get icon() {
-        return this.props.icon || (this.relation === "crm.team" ? "fa-users" : "fa-search");
+        if (this.props.icon) {
+            return this.props.icon;
+        }
+        if (this.relation === "crm.team") {
+            return "fa-users";
+        }
+        if (this.relation === "utm.campaign") {
+            return "fa-bullhorn";
+        }
+        return "fa-search";
     }
 
     toggle(ev) {

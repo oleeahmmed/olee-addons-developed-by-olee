@@ -6,7 +6,6 @@ import { user } from "@web/core/user";
 import { TagInput } from "./tag_input";
 import { ActivityIcon, TagChips } from "./ui";
 import { FormDrawer } from "./form_drawer";
-import { ImportDialog } from "./import_dialog";
 import { OrSelectCard } from "@modern_theme/js/or_select_card";
 
 const EMAIL_RE = /^\S+@\S+\.\S+$/;
@@ -79,6 +78,23 @@ export class QuickCreateDialog extends Component {
     get teamEmptyHint() {
         return _t("Uses the salesperson's default team");
     }
+    get userCardOptions() {
+        return this.state.choices.users.map((u) => ({
+            id: u.id,
+            title: u.name,
+            hint: _t("Salesperson"),
+        }));
+    }
+
+    resetForm() {
+        const d = this.props.defaults || {};
+        Object.assign(this.state, {
+            name: "", partner_name: "", contact_name: "", email_from: "", phone: "",
+            expected_revenue: "", user_id: d.user_id ?? user.userId, team_id: d.team_id || "",
+            campaign_id: d.campaign_id || "", stage_id: d.stage_id || "", date_deadline: "",
+            priority: "1", tags: [], error: null, saving: false,
+        });
+    }
 
     async save() {
         const s = this.state;
@@ -137,7 +153,6 @@ export class CampaignDialog extends Component {
     setup() {
         this.orm = useService("orm");
         this.action = useService("action");
-        this.dialog = useService("dialog");
         this.state = useState({
             choices: { users: [], teams: [], stages: [], tags: [] },
             title: "",
@@ -146,18 +161,25 @@ export class CampaignDialog extends Component {
             stage_id: "",
             tags: [],
             useLeads: false,
-            canCreateLead: false,
             error: null,
             saving: false,
+            fresh: false,
         });
         onWillStart(() => this.load());
     }
 
     get isEdit() {
-        return Boolean(this.props.resId);
+        return Boolean(this.props.resId) && !this.state.fresh;
+    }
+    get newLabel() {
+        return _t("New campaign");
     }
     get title() {
-        return this.isEdit ? _t("Campaign") : _t("New campaign");
+        if (!this.isEdit) {
+            return _t("New campaign");
+        }
+        const name = (this.state.title || "").trim();
+        return name || _t("Campaign");
     }
     get subtitle() {
         return this.isEdit
@@ -183,6 +205,27 @@ export class CampaignDialog extends Component {
             badge: st.id === this.state.choices.stages[0]?.id ? _t("Default") : "",
         }));
     }
+    get userCardOptions() {
+        return this.state.choices.users.map((u) => ({
+            id: u.id,
+            title: u.name,
+            hint: _t("Salesperson"),
+        }));
+    }
+
+    resetForm() {
+        const stages = this.state.choices.stages;
+        Object.assign(this.state, {
+            title: "",
+            team_id: "",
+            user_id: "",
+            stage_id: stages[0] ? String(stages[0].id) : "",
+            tags: [],
+            error: null,
+            saving: false,
+            fresh: true,
+        });
+    }
 
     async load() {
         if (this.props.resId) {
@@ -196,7 +239,6 @@ export class CampaignDialog extends Component {
                 stage_id: c.stage_id ? String(c.stage_id[0]) : "",
                 tags: c.tag_ids || [],
                 useLeads: Boolean(data.use_leads),
-                canCreateLead: Boolean(data.can_create_lead),
             });
             return;
         }
@@ -222,27 +264,6 @@ export class CampaignDialog extends Component {
 
     removeTag(id) {
         this.state.tags = this.state.tags.filter((t) => t.id !== id);
-    }
-
-    importPayload() {
-        const team = this.state.choices.teams.find((t) => String(t.id) === this.state.team_id);
-        return {
-            id: this.props.resId,
-            title: this.state.title,
-            team: team ? [team.id, team.name] : false,
-            team_id: this.state.team_id,
-            user_id: this.state.user_id,
-        };
-    }
-
-    upload() {
-        if (!this.state.canCreateLead || !this.props.resId) {
-            return;
-        }
-        this.dialog.add(ImportDialog, {
-            campaign: this.importPayload(),
-            onImported: () => this.props.onSaved?.(this.props.resId),
-        });
     }
 
     async openLeads() {
@@ -274,7 +295,7 @@ export class CampaignDialog extends Component {
         }
         vals.tag_ids = [[6, 0, s.tags.map((t) => t.id)]];
         try {
-            let id = this.props.resId;
+            let id = this.isEdit ? this.props.resId : false;
             if (id) {
                 await this.orm.write("utm.campaign", [id], vals);
             } else {

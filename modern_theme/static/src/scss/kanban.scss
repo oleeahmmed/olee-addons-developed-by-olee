@@ -22,15 +22,15 @@ $mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_
 
 #{$mt-apps} {
     // Native wrappers paint a solid card over the view; drop it for kanban so
-    // the dotted paper fills the board, not a white slab.
-    .o_cm_page--native:has(.o_kanban_view),
+    // the dotted paper fills the board, not a white slab — except CRM, whose
+    // pipeline / leads / campaigns boards share the list-page card shell.
     .o_ss_page--native:has(.o_kanban_view),
     .o_mp_page--native:has(.o_kanban_view),
     .o_im_page--native:has(.o_kanban_view),
     .o_mr_page--native:has(.o_kanban_view) {
         background: transparent !important;
 
-        .cm-native, .ss-native, .mp-native, .im-native, .mr-native {
+        .ss-native, .mp-native, .im-native, .mr-native {
             background: transparent !important;
         }
     }
@@ -155,9 +155,28 @@ $mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_
         box-shadow: none !important;
     }
 
+    // Drag helper: no tilt (that was the messy ghost). Placeholder is an empty clone.
     .o_kanban_record.o_dragged {
-        transform: rotate(-1.5deg) scale(1.02);
-        box-shadow: 0 24px 48px -16px rgba(15, 23, 42, 0.35) !important;
+        transform: none !important;
+        opacity: 1 !important;
+        cursor: grabbing;
+        z-index: 1000;
+        border-color: var(--or-accent-border, var(--mt-primary)) !important;
+        box-shadow: 0 0 0 4px var(--or-accent-ring, color-mix(in srgb, var(--mt-primary) 22%, transparent)),
+            0 18px 36px -12px rgba(15, 23, 42, 0.28) !important;
+        transition: box-shadow 160ms var(--mt-ease, ease), border-color 160ms var(--mt-ease, ease) !important;
+        &::before { opacity: 1; }
+    }
+
+    .o_kanban_record.opacity-50 {
+        background: color-mix(in srgb, var(--or-accent, var(--mt-primary)) 10%, transparent) !important;
+        border: 2px dashed var(--or-accent-border, var(--mt-primary)) !important;
+        box-shadow: none !important;
+        opacity: 1 !important;
+        overflow: hidden;
+        pointer-events: none;
+        &::before, &::after { display: none !important; }
+        > * { visibility: hidden !important; }
     }
 
     // --- stage columns ----------------------------------------------------
@@ -169,6 +188,22 @@ $mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_
         background: color-mix(in srgb, var(--mt-card) 62%, transparent) !important;
         backdrop-filter: blur(8px);
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+        transition: border-color 180ms var(--mt-ease, ease), box-shadow 180ms var(--mt-ease, ease), background-color 180ms var(--mt-ease, ease);
+
+        &:hover {
+            border-color: var(--or-accent-border, var(--mt-primary)) !important;
+            box-shadow: 0 0 0 4px var(--or-accent-ring, color-mix(in srgb, var(--mt-primary) 22%, transparent)),
+                inset 0 1px 0 rgba(255, 255, 255, 0.45);
+            animation: or-select-pop 220ms var(--or-ease, var(--mt-ease)), or-border-pulse 1.4s var(--or-ease, var(--mt-ease)) 220ms infinite;
+        }
+
+        &.o_kanban_hover {
+            background: color-mix(in srgb, var(--or-accent-soft, var(--mt-primary)) 55%, var(--mt-card)) !important;
+            border-color: var(--or-accent-border, var(--mt-primary)) !important;
+            box-shadow: 0 0 0 4px var(--or-accent-ring, color-mix(in srgb, var(--mt-primary) 22%, transparent)),
+                inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+            animation: or-select-pop 220ms var(--or-ease, var(--mt-ease)), or-border-pulse 1.2s var(--or-ease, var(--mt-ease)) 220ms infinite;
+        }
     }
 
     .o_kanban_header {
@@ -222,5 +257,31 @@ $mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_
         border-radius: 999px;
         background: var(--mt-card);
         border: 1px solid var(--mt-border);
+    }
+
+    // CRM NativeView: one card around list AND kanban (no dotted void).
+    .o_cm_page--native {
+        .o_kanban_view,
+        .o_kanban_view > .o_content,
+        .o_kanban_renderer {
+            background-image: none !important;
+            background-attachment: scroll !important;
+        }
+        .o_kanban_view,
+        .o_kanban_view > .o_content {
+            background-color: var(--cm-card, var(--mt-card)) !important;
+        }
+        .o_kanban_renderer {
+            background-color: color-mix(in srgb, var(--mt-muted) 70%, var(--mt-card)) !important;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .o_kanban_group:not(.o_column_folded):hover,
+        .o_kanban_group:not(.o_column_folded).o_kanban_hover,
+        .o_kanban_record.o_dragged {
+            animation: none !important;
+            transition: none !important;
+        }
     }
 }

@@ -5,6 +5,7 @@ import { user } from "@web/core/user";
 import { useBus, useService } from "@web/core/utils/hooks";
 import { session } from "@web/session";
 import { CampaignDialog, QuickCreateDialog } from "../components/dialogs";
+import { ActivityPlanDialog, ActivityTypeDialog, StageDialog, TagDialog } from "../components/config_dialogs";
 import { EmptyState } from "../components/ui";
 import { NativeView } from "../components/native_view";
 import { loadFeatures } from "../core/features";
@@ -297,6 +298,12 @@ class StagesPage extends ListPage {
     static resModel = "crm.stage";
     static prefix = "stage";
     static types = ["list"];
+    open(resId) {
+        return this.dialogPromise(StageDialog, { resId });
+    }
+    create() {
+        return this.dialogPromise(StageDialog, {});
+    }
 }
 
 class ActivityTypesPage extends ListPage {
@@ -313,6 +320,12 @@ class ActivityTypesPage extends ListPage {
     get context() {
         return { default_res_model: "crm.lead" };
     }
+    open(resId) {
+        return this.dialogPromise(ActivityTypeDialog, { resId });
+    }
+    create() {
+        return this.dialogPromise(ActivityTypeDialog, {});
+    }
 }
 
 class ActivityPlansPage extends ListPage {
@@ -327,7 +340,13 @@ class ActivityPlansPage extends ListPage {
         return [["res_model", "in", [false, "crm.lead"]]];
     }
     get context() {
-        return { default_res_model: "crm.lead", dialog_size: "large" };
+        return { default_res_model: "crm.lead" };
+    }
+    open(resId) {
+        return this.dialogPromise(ActivityPlanDialog, { resId });
+    }
+    create() {
+        return this.dialogPromise(ActivityPlanDialog, {});
     }
 }
 
@@ -339,6 +358,12 @@ class TagsPage extends ListPage {
     static resModel = "crm.tag";
     static prefix = "tag";
     static types = ["list"];
+    open(resId) {
+        return this.dialogPromise(TagDialog, { resId });
+    }
+    create() {
+        return this.dialogPromise(TagDialog, {});
+    }
 }
 
 const actions = registry.category("actions");

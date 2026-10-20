@@ -3,20 +3,30 @@
 
     <t t-name="crm_modern.FormDrawer">
         <Dialog title="props.title" size="'md'" contentClass="'o_cm o_cm_drawer o_or_sheet'" bodyClass="'or-sheet-body'" header="false">
-            <div class="or-sheet-head">
-                <div class="or-sheet-head-text">
-                    <h2 class="or-sheet-title" t-esc="props.title"/>
-                    <p t-if="props.subtitle" class="or-sheet-subtitle" t-esc="props.subtitle"/>
-                </div>
-                <button type="button" class="or-sheet-close" aria-label="Close" tabindex="-1" t-on-click="props.close">
-                    <span aria-hidden="true">&#215;</span>
+            <aside class="or-sheet-rail" aria-label="Drawer actions">
+                <button type="button" class="or-sheet-rail-btn" t-att-title="newLabel" t-att-aria-label="newLabel" t-on-click.stop="onNew">
+                    <i class="fa fa-plus" aria-hidden="true"/>
                 </button>
-            </div>
-            <div t-if="props.slots &amp;&amp; props.slots.actions" class="or-sheet-actions">
-                <t t-slot="actions"/>
-            </div>
-            <div class="or-sheet-stack">
-                <t t-slot="default"/>
+                <button type="button" class="or-sheet-rail-btn" aria-label="Close" title="Close" t-on-click.stop="close">
+                    <span class="or-sheet-close-icon" aria-hidden="true">&#215;</span>
+                </button>
+            </aside>
+            <div class="or-sheet-main">
+                <div class="or-sheet-head">
+                    <div class="or-sheet-head-text">
+                        <h2 class="or-sheet-title" t-esc="props.title"/>
+                        <p t-if="props.subtitle" class="or-sheet-subtitle" t-esc="props.subtitle"/>
+                        <div t-if="props.slots &amp;&amp; props.slots.actions" class="or-sheet-actions">
+                            <t t-slot="actions"/>
+                        </div>
+                    </div>
+                    <button type="button" class="or-sheet-close" aria-label="Close" title="Close" t-on-click.stop="close">
+                        <span class="or-sheet-close-icon" aria-hidden="true">&#215;</span>
+                    </button>
+                </div>
+                <div class="or-sheet-stack">
+                    <t t-slot="default"/>
+                </div>
             </div>
             <t t-set-slot="footer">
                 <t t-slot="footer"/>

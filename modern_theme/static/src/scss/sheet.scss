@@ -60,6 +60,17 @@ $or-sheet: '.o_or_sheet, .o_cm_drawer, .or-sheet';
     100% { transform: scale(1); box-shadow: 0 0 0 4px var(--or-accent-ring); }
 }
 
+@keyframes or-border-pulse {
+    0%, 100% { box-shadow: 0 0 0 3px var(--or-accent-ring); }
+    50% { box-shadow: 0 0 0 6px var(--or-accent-ring); }
+}
+
+@mixin or-animated-border {
+    border-color: var(--or-accent-border) !important;
+    box-shadow: 0 0 0 4px var(--or-accent-ring);
+    animation: or-select-pop 220ms var(--or-ease), or-border-pulse 1.4s var(--or-ease) 220ms infinite;
+}
+
 // ---------------------------------------------------------------------------
 // Overlay: light frost, hide toasts, flush viewport (no 28px modal padding)
 // ---------------------------------------------------------------------------
@@ -156,7 +167,18 @@ body:has(.modal-content.or-sheet) {
     box-shadow: var(--or-sheet-shadow) !important;
     animation: or-sheet-in 240ms var(--or-ease);
 
-    .btn-close { display: none !important; }
+    // Odoo's .btn-close is not used (Dialog header=false). Never hide a close
+    // control — drawers were shipping without a visible ×. Restyle it if present.
+    .btn-close {
+        width: 2rem;
+        height: 2rem;
+        margin: 0;
+        padding: 0;
+        opacity: 1;
+        background: transparent;
+        box-shadow: none;
+        filter: none;
+    }
 
     *:focus-visible {
         outline: none;
@@ -168,15 +190,12 @@ body:has(.modal-content.or-sheet) {
     .modal-body {
         flex: 1 1 auto;
         min-height: 0;
-        overflow-x: hidden;
-        overflow-y: auto;
-        padding: 1.5rem 1.75rem 8rem !important;
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        overflow: hidden;
+        padding: 0 !important;
         background: var(--or-sheet-bg);
-        scrollbar-width: thin;
-        scrollbar-color: transparent transparent;
-        &:hover {
-            scrollbar-color: color-mix(in srgb, var(--or-sheet-muted) 40%, transparent) transparent;
-        }
     }
 
     .modal-footer {
@@ -199,19 +218,82 @@ body:has(.modal-content.or-sheet) {
     }
 }
 
+.or-sheet-rail {
+    flex: 0 0 var(--or-rail-width);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    width: var(--or-rail-width);
+    padding: 0.85rem 0.4rem;
+    border-right: 1px solid var(--or-sheet-border);
+    background: color-mix(in srgb, var(--or-icon-bg) 70%, var(--or-sheet-bg));
+}
+
+.or-sheet-main {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 1.5rem 1.75rem 8rem;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    &:hover {
+        scrollbar-color: color-mix(in srgb, var(--or-sheet-muted) 40%, transparent) transparent;
+    }
+}
+
+.or-sheet-rail-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0.55rem;
+    background: transparent;
+    color: var(--or-close-fg, #475569);
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    @include or-control-motion;
+
+    .or-sheet-close-icon { font-size: 1.35rem; line-height: 1; }
+
+    &:hover,
+    &:focus-visible {
+        background: var(--or-sheet-bg);
+        color: var(--or-close-hover, var(--or-sheet-fg));
+        box-shadow: 0 0 0 4px var(--or-focus-ring);
+    }
+}
+
 .or-sheet-head,
 .cm-drawer-head {
+    position: sticky;
+    top: -1.5rem;
+    z-index: 8;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 0.75rem;
-    width: 100%;
+    width: auto;
     min-width: 0;
-    margin-bottom: 1.5rem;
+    margin: -1.5rem -1.75rem 1.25rem;
+    padding: 1.35rem 1.75rem 0.9rem;
+    background: var(--or-sheet-bg);
+    box-shadow: 0 10px 12px -12px rgba(15, 23, 42, 0.12);
 }
 
 .or-sheet-head-text,
-.cm-drawer-head-text { min-width: 0; flex: 1; }
+.cm-drawer-head-text {
+    min-width: 0;
+    flex: 1;
+    padding-right: 0.25rem;
+}
 
 .or-sheet-title,
 .cm-drawer-title {
@@ -234,26 +316,47 @@ body:has(.modal-content.or-sheet) {
 }
 
 .or-sheet-close,
-.cm-drawer-close {
+.cm-drawer-close,
+.modal-content.o_or_sheet .or-sheet-close,
+.modal-content.o_cm_drawer .or-sheet-close,
+.modal-content.or-sheet .or-sheet-close {
+    position: relative;
+    z-index: 9;
     flex: 0 0 auto;
-    width: 1.75rem;
-    height: 1.75rem;
-    padding: 0;
-    margin: -0.15rem -0.25rem 0 0;
-    border: 0;
-    border-radius: 0.375rem;
-    background: transparent;
-    color: var(--or-sheet-subtle);
-    font-size: 1.35rem;
-    font-weight: 400;
-    line-height: 1;
-    display: inline-flex;
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     align-items: center;
     justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    margin: -0.2rem -0.35rem 0 0;
+    border: 0;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--or-close-fg, #475569);
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1;
     cursor: pointer;
+    pointer-events: auto;
     @include or-control-motion;
 
-    &:hover { background: var(--or-icon-bg); color: var(--or-sheet-fg); }
+    .or-sheet-close-icon {
+        display: block;
+        margin-top: -0.1rem;
+        font-size: 1.5rem;
+        line-height: 1;
+        color: inherit;
+    }
+
+    &:hover,
+    &:focus-visible {
+        background: var(--or-icon-bg);
+        color: var(--or-close-hover, var(--or-sheet-fg));
+        box-shadow: none;
+    }
 }
 
 .or-sheet-actions,
@@ -261,7 +364,7 @@ body:has(.modal-content.or-sheet) {
     display: flex;
     flex-wrap: wrap;
     gap: 0.375rem;
-    margin: -0.5rem 0 1.25rem;
+    margin: 0.75rem 0 0;
 }
 
 .or-sheet-stack,
@@ -323,6 +426,192 @@ body:has(.modal-content.or-sheet) {
     flex-wrap: wrap;
     gap: 0.375rem;
     margin-bottom: 0.5rem;
+}
+
+.or-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    height: var(--or-chip-h, 1.75rem);
+    padding: 0 0.7rem;
+    border: 1px solid var(--or-sheet-border);
+    border-radius: 999px;
+    background: var(--or-sheet-bg);
+    color: var(--or-sheet-fg);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    @include or-control-motion;
+
+    .fa { font-size: 0.7rem; color: var(--or-sheet-muted); }
+
+    &:hover {
+        background: var(--or-icon-bg);
+        border-color: color-mix(in srgb, var(--or-sheet-fg) 14%, var(--or-sheet-border));
+    }
+
+    &:focus-visible {
+        outline: none;
+        border-color: var(--or-focus-border);
+        box-shadow: 0 0 0 4px var(--or-focus-ring);
+    }
+
+    &.is-on {
+        border-color: var(--or-accent-border);
+        background: var(--or-accent-soft);
+        box-shadow: 0 0 0 3px var(--or-accent-ring);
+        color: var(--or-sheet-fg);
+    }
+}
+
+.or-field-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    @media (max-width: 575.98px) { grid-template-columns: minmax(0, 1fr); }
+}
+
+.or-field-split {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    gap: 0.5rem;
+    align-items: start;
+}
+
+.or-step-list { display: grid; gap: 0.75rem; margin-bottom: 0.75rem; }
+
+.or-step-card {
+    display: grid;
+    gap: 0.65rem;
+    padding: 0.85rem;
+    border: 1px solid var(--or-sheet-border);
+    border-radius: 0.75rem;
+    background: var(--or-sheet-bg);
+}
+
+.or-step-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.or-step-index {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: var(--or-icon-bg);
+    color: var(--or-sheet-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.or-color-dots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.or-color-dot {
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.12);
+    &.is-on {
+        border-color: var(--or-sheet-fg);
+        box-shadow: 0 0 0 3px var(--or-accent-ring);
+    }
+}
+
+.or-link {
+    border: 0;
+    padding: 0;
+    background: none;
+    color: var(--or-sheet-muted);
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    @include or-control-motion;
+
+    &:hover { color: var(--or-sheet-fg); text-decoration: underline; }
+}
+
+.or-toggle {
+    position: relative;
+    flex: 0 0 auto;
+    width: 2.5rem;
+    height: 1.375rem;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: #e5e7eb;
+    cursor: pointer;
+    @include or-control-motion;
+
+    &::after {
+        content: "";
+        position: absolute;
+        top: 0.125rem;
+        left: 0.125rem;
+        width: 1.125rem;
+        height: 1.125rem;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.18);
+        transition: transform var(--or-focus-duration) var(--or-ease);
+    }
+
+    &[aria-checked="true"],
+    &.is-on {
+        background: var(--or-toggle-on, #14b8a6);
+        &::after { transform: translateX(1.125rem); }
+    }
+}
+
+.or-menu {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    right: 0;
+    z-index: 8;
+    max-height: 15rem;
+    overflow: auto;
+    margin: 0;
+    padding: 0.35rem;
+    list-style: none;
+    border: 1px solid var(--or-sheet-border);
+    border-radius: 0.75rem;
+    background: var(--or-sheet-bg);
+    box-shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.18);
+    scrollbar-width: thin;
+}
+
+.or-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.45rem 0.55rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: inherit;
+    font-size: 0.875rem;
+    text-align: left;
+    cursor: pointer;
+    @include or-control-motion;
+
+    &:hover,
+    &[aria-selected="true"],
+    &.is-active { background: var(--or-icon-bg); }
 }
 
 .or-field,
@@ -401,6 +690,7 @@ body:has(.modal-content.or-sheet) {
     @include or-control-motion;
 
     &:hover { background: var(--or-save-hover); }
+    &:focus-visible { outline: none; box-shadow: 0 0 0 4px var(--or-focus-ring); }
     &:disabled { opacity: 0.5; pointer-events: none; }
 }
 
@@ -477,7 +767,7 @@ body:has(.modal-content.or-sheet) {
     padding: 0 0.55rem;
     border: 1px solid var(--or-sheet-border);
     border-radius: 999px;
-    background: #fff;
+    background: var(--or-sheet-bg);
     color: var(--or-sheet-fg);
     font-size: 0.6875rem;
     font-weight: 500;

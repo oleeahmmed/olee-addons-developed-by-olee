@@ -1,10 +1,11 @@
 import { Component, onWillStart, onWillUpdateProps, useState } from "@odoo/owl";
-import { Dialog } from "@web/core/dialog/dialog";
 import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
 import { user } from "@web/core/user";
 import { useService } from "@web/core/utils/hooks";
 import { UI } from "../components/ui";
+import { FormDrawer } from "../components/form_drawer";
+import { OrSelectCard } from "@modern_theme/js/or_select_card";
 import { money, openInDialog } from "../core/utils";
 
 /** Shared add/remove of salespeople on crm.team (through member_ids, so Odoo's membership rules apply). */
@@ -28,15 +29,31 @@ function useMembership(onChanged) {
     };
 }
 
-/** Small dialog to create a team, then open its page. */
+/** Right-sheet create for a team; member lines stay on the team page. */
 export class TeamDialog extends Component {
     static template = "crm_modern.TeamDialog";
-    static components = { Dialog };
+    static components = { FormDrawer, OrSelectCard };
     static props = { close: Function, users: Array, onSaved: Function };
 
     setup() {
         this.orm = useService("orm");
         this.state = useState({ name: "", user_id: "", error: null });
+    }
+    get title() {
+        return _t("New sales team");
+    }
+    get subtitle() {
+        return _t("Name the team and pick a leader. Add salespeople on the next screen.");
+    }
+    resetForm() {
+        Object.assign(this.state, { name: "", user_id: "", error: null });
+    }
+    get userCardOptions() {
+        return this.props.users.map((u) => ({
+            id: u.id,
+            title: u.name,
+            hint: _t("Team leader"),
+        }));
     }
     async save() {
         if (!this.state.name.trim()) {

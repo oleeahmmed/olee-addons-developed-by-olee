@@ -1,9 +1,12 @@
 // Compact opportunity / lead page (ui-ux-pro-max: dense dashboard spacing, 8px rhythm,
 // one primary action per area, 150–200ms transitions, visible focus rings).
 .o_cm.o_cm_page.cm-rec {
-    .cm-container { gap: 0.875rem; padding-top: 1rem; max-width: 1320px; }
+    .cm-container { gap: 0.875rem; padding: 1rem 1.25rem 2rem; max-width: none; width: 100%; }
 
-    // ---------- header ----------
+    // ---------- header + stage (one card) ----------
+    .cm-rec-hero {
+        display: grid; gap: 0.75rem; padding: 1rem 1.25rem 1rem;
+    }
     .cm-rec-head { display: grid; gap: 0.25rem; }
     .cm-rec-crumb {
         justify-self: start; display: inline-flex; align-items: center; gap: 0.375rem; height: 1.5rem; padding: 0 0.375rem;
@@ -26,32 +29,47 @@
     }
 
     // compact stage stepper
-    .cm-stepper--sm button { height: 2rem; min-width: 6rem; padding: 0 0.875rem; }
+    .cm-rec-hero .cm-stepper-wrap { margin: 0; }
+    .cm-stepper--sm button { height: 2.125rem; min-width: 6rem; padding: 0 0.875rem;
+        transition: background-color 160ms var(--cm-ease), color 160ms var(--cm-ease), box-shadow 160ms var(--cm-ease), border-color 160ms var(--cm-ease);
+        &:hover:not([aria-current="step"]):not(:disabled) {
+            border-color: var(--or-accent-border, var(--cm-primary));
+            box-shadow: 0 0 0 3px var(--or-accent-ring, var(--cm-ring));
+        }
+    }
 
-    // ---------- layout ----------
+    // ---------- layout: deal facts left, chatter right ----------
     .cm-rec-layout {
-        display: grid; gap: 0.875rem; grid-template-columns: minmax(0, 1fr) 19.5rem; align-items: start;
+        display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr) minmax(22rem, 28rem); align-items: start;
         @media (max-width: 1099.98px) { grid-template-columns: minmax(0, 1fr); }
     }
-    .cm-rec-main { display: flex; flex-direction: column; gap: 0.875rem; min-width: 0; }
-    .cm-rec-side {
-        display: flex; flex-direction: column; gap: 0.75rem; min-width: 0;
-        @media (min-width: 1100px) { position: sticky; top: 0; }
-        > .cm-card { padding: 0.875rem 1rem; }
+    .cm-rec-main { display: flex; flex-direction: column; gap: 0.875rem; min-width: 0;
+        .cm-card { padding: 0.875rem 1rem; }
     }
-
-    // narrow screens: one column — numbers, quick actions, details, next steps, notes, timeline
+    .cm-rec-feed {
+        display: flex; flex-direction: column; gap: 0; min-width: 0;
+        background: var(--cm-card);
+        border: 1px solid var(--cm-border);
+        border-radius: calc(var(--cm-radius) + 2px);
+        box-shadow: var(--cm-shadow-sm);
+        overflow: hidden;
+        @media (min-width: 1100px) {
+            position: sticky; top: 0.75rem;
+            height: calc(100vh - 5.5rem);
+            max-height: calc(100vh - 5.5rem);
+        }
+        .cm-actions-card, .cm-timeline {
+            border: 0; border-radius: 0; box-shadow: none; background: transparent;
+        }
+        .cm-actions-card { flex: 0 0 auto; border-bottom: 1px solid var(--cm-border); }
+        .cm-timeline {
+            flex: 1 1 auto; min-height: 12rem; overflow: auto;
+            @media (min-width: 1100px) { max-height: none; }
+        }
+        .cm-compose-hint { max-width: 9rem; }
+    }
     @media (max-width: 1099.98px) {
-        .cm-rec-main, .cm-rec-side { display: contents; }
-        .cm-rec-kpis { order: 1; }
-        .cm-actions-card { order: 2; }
-        .cm-rec-next { order: 3; }
-        .cm-rec-details { order: 4; }
-        .cm-rec-notes { order: 5; }
-        .cm-rec-main > * { order: 6; }
-        .cm-rec-main > .cm-actions-card { order: 2; }
-        .cm-timeline { order: 7; }
-        .cm-rec-side > .cm-card { padding: 0.875rem 1rem; }
+        .cm-rec-feed { height: auto; max-height: none; }
     }
 
     // ---------- side cards ----------
@@ -62,12 +80,16 @@
     .cm-count { font-size: 0.6875rem; padding: 0 0.375rem; border-radius: 999px; background: var(--cm-primary-soft); color: var(--cm-primary-soft-fg); letter-spacing: 0; }
 
     .cm-rec-kpis {
-        display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem 1rem;
+        display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem 1rem;
+        padding-bottom: 0.75rem; border-bottom: 1px solid var(--cm-border);
+        @media (max-width: 639.98px) { grid-template-columns: 1fr 1fr; }
         .cm-kpi { display: grid; gap: 0.125rem; margin: 0; min-width: 0; cursor: text;
             > span { font-size: 0.6875rem; font-weight: 500; color: var(--cm-subtle-fg); }
         }
-        .cm-kpi--wide { grid-column: 1 / -1; }
-        .cm-kpi-big { font-size: 1.25rem; font-weight: 650; letter-spacing: -0.02em; line-height: 1.6; height: auto; }
+        .cm-kpi-big { font-size: 1.25rem; font-weight: 650; letter-spacing: -0.02em; line-height: 1.6; height: auto;
+            &[type="number"] { appearance: textfield; -moz-appearance: textfield; }
+            &[type="number"]::-webkit-inner-spin-button, &[type="number"]::-webkit-outer-spin-button { appearance: none; margin: 0; }
+        }
         .cm-kpi-bar { height: 0.25rem; border-radius: 999px; background: var(--cm-muted); overflow: hidden;
             span { display: block; height: 100%; border-radius: inherit; background: var(--cm-primary); transition: width 200ms var(--cm-ease); }
         }
@@ -86,7 +108,13 @@
     }
     select.cm-inline-input { appearance: none; cursor: pointer; text-overflow: ellipsis; }
 
-    .cm-rec-details { display: grid; gap: 0.125rem; }
+    .cm-rec-deal { display: grid; gap: 0.875rem; }
+    .cm-rec-notes .cm-side-title { margin-bottom: 0.375rem; }
+    .cm-rec-props {
+        display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.25rem 1.25rem;
+        @media (max-width: 639.98px) { grid-template-columns: minmax(0, 1fr); }
+        .cm-prop--block { grid-column: 1 / -1; }
+    }
     .cm-prop {
         display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); align-items: center; gap: 0.5rem; min-height: 1.875rem;
         font-size: 0.8125rem;
@@ -118,9 +146,9 @@
     .cm-stepper button:disabled { cursor: default; }
     .cm-notes { height: auto; min-height: 4rem; padding: 0.375rem; line-height: 1.5; resize: vertical; border-color: var(--cm-border); }
 
-    // ---------- timeline (Odoo chatter, composer buttons moved to the action card) ----------
-    .cm-timeline {
-        max-height: none; position: static; overflow: visible;
+    // ---------- timeline (composer lives in RecordActions above this card) ----------
+    .cm-rec-feed .cm-chatter.cm-timeline {
+        position: static; max-height: none; overflow: auto;
         .o-mail-Chatter-topbar {
             .o-mail-Chatter-sendMessage, .o-mail-Chatter-logNote, .o-mail-Chatter-activity { display: none !important; }
             padding: 0.5rem 0.75rem; min-height: 0;
@@ -238,6 +266,7 @@
         cursor: pointer;
         transition: border-color 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease), transform 150ms var(--cm-ease);
         &:hover { border-color: color-mix(in srgb, var(--cm-primary) 40%, var(--cm-border)); box-shadow: 0 6px 16px -6px rgba(15, 23, 42, 0.16); transform: translateY(-1px); }
+        &.o_dragged { transform: none; }
         &:focus-visible, &:focus-within { outline: none; }
         @media (prefers-reduced-motion: reduce) { transition: none; &:hover { transform: none; } }
     }

@@ -143,8 +143,8 @@
         flex-shrink: 0;
         border: 0;
         border-radius: 0.625rem;
-        background: var(--mt-nav-active-bg, var(--cm-primary));
-        color: var(--mt-nav-active-fg, var(--cm-primary-fg));
+        background: var(--mt-primary, var(--cm-primary));
+        color: var(--mt-primary-foreground, var(--cm-primary-fg));
         font-size: 0.8125rem;
         font-weight: 600;
         cursor: pointer;

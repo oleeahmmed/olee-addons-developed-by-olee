@@ -354,7 +354,13 @@ html[data-mt-theme] {
     --or-focus-ring: color-mix(in srgb, var(--mt-foreground) 12%, transparent);
     --or-accent-soft: color-mix(in srgb, var(--or-accent) 14%, var(--mt-card));
     --or-icon-bg: var(--mt-muted);
+    --or-save-bg: var(--mt-primary);
+    --or-save-fg: var(--mt-primary-foreground);
+    --or-save-hover: color-mix(in srgb, var(--mt-primary) 82%, #fff);
     --or-pill-bg: var(--mt-card);
     --or-pill-border: var(--mt-border);
     --or-pill-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    --or-close-fg: var(--mt-muted-foreground);
+    --or-close-hover: var(--mt-foreground);
+    --or-toggle-on: #2dd4bf;
 }

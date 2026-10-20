@@ -12,7 +12,7 @@
                 <t t-else="">
                     <t t-set="rec" t-value="state.rec"/>
 
-                    <!-- header: one line title + actions, one line meta -->
+                    <section class="cm-card cm-rec-hero">
                     <header class="cm-rec-head">
                         <button type="button" class="cm-rec-crumb" t-on-click="back">
                             <i class="fa fa-angle-left" aria-hidden="true"/> <t t-esc="isOpp ? 'Pipeline' : 'Leads'"/>
@@ -75,80 +75,66 @@
                             </t>
                         </div>
                     </nav>
+                    </section>
 
                     <div class="cm-rec-layout">
-                        <!-- main: quick actions + timeline -->
-                        <div class="cm-rec-main">
-                            <!-- messages, notes, activities and quotations need write access (Odoo's rule) -->
-                            <RecordActions t-if="canWrite" record="rec" users="state.users" reload.bind="reload"
-                                           onAdvancedSchedule="() => this.activityActions.schedule([rec.id])"/>
-
-                            <!-- extra sections registered by other addons (registry "crm_modern.record_sections") -->
-                            <t t-foreach="recordSections" t-as="section" t-key="section.key">
-                                <t t-component="section.Component" record="rec" reload.bind="reload"/>
-                            </t>
-
-                            <div class="cm-card cm-chatter cm-timeline">
-                                <t t-foreach="[state.chatterKey]" t-as="k" t-key="k">
-                                    <Chatter threadModel="'crm.lead'" threadId="rec.id" has_activities="false"/>
-                                </t>
-                            </div>
-                        </div>
-
-                        <!-- side: key numbers, details, next steps, notes -->
-                        <aside class="cm-rec-side" t-att-class="{ 'cm-readonly': !canWrite }">
+                        <!-- deal facts: one card for numbers + owner + notes; activities only if scheduled -->
+                        <div class="cm-rec-main" t-att-class="{ 'cm-readonly': !canWrite }">
                             <fieldset class="cm-fieldset cm-rec-side-fields" t-att-disabled="!canWrite">
-                            <div class="cm-card cm-rec-kpis">
-                                <label class="cm-kpi">
-                                    <span>Expected revenue</span>
-                                    <input type="number" min="0" step="100" class="cm-inline-input cm-tabular cm-kpi-big"
-                                           t-att-value="rec.expected_revenue" t-on-change="(ev) => this.onNumber('expected_revenue', ev)"/>
-                                </label>
-                                <div t-if="isOpp" class="cm-kpi">
-                                    <span>Probability</span>
-                                    <strong class="cm-tabular cm-kpi-big"><t t-esc="Math.round(rec.probability)"/>%</strong>
-                                    <div class="cm-kpi-bar" role="presentation"><span t-attf-style="width: {{ Math.round(rec.probability) }}%"/></div>
+                            <div class="cm-card cm-rec-deal">
+                                <div class="cm-rec-kpis">
+                                    <label class="cm-kpi">
+                                        <span>Expected revenue</span>
+                                        <input type="number" min="0" step="100" class="cm-inline-input cm-tabular cm-kpi-big"
+                                               t-att-value="rec.expected_revenue" t-on-change="(ev) => this.onNumber('expected_revenue', ev)"/>
+                                    </label>
+                                    <div t-if="isOpp" class="cm-kpi">
+                                        <span>Probability</span>
+                                        <strong class="cm-tabular cm-kpi-big"><t t-esc="Math.round(rec.probability)"/>%</strong>
+                                        <div class="cm-kpi-bar" role="presentation"><span t-attf-style="width: {{ Math.round(rec.probability) }}%"/></div>
+                                    </div>
+                                    <label t-if="isOpp" class="cm-kpi">
+                                        <span>Expected closing</span>
+                                        <input type="date" class="cm-inline-input" t-att-value="rec.date_deadline or ''" t-on-change="onDate"/>
+                                    </label>
                                 </div>
-                                <label t-if="isOpp" class="cm-kpi cm-kpi--wide">
-                                    <span>Expected closing</span>
-                                    <input type="date" class="cm-inline-input" t-att-value="rec.date_deadline or ''" t-on-change="onDate"/>
-                                </label>
+                                <div class="cm-rec-props">
+                                    <div class="cm-prop">
+                                        <label for="cm_r_user">Salesperson</label>
+                                        <select id="cm_r_user" class="cm-inline-input" t-on-change="(ev) => this.onMany2one('user_id', ev)">
+                                            <option value="">Unassigned</option>
+                                            <t t-foreach="state.users" t-as="u" t-key="u.id">
+                                                <option t-att-value="u.id" t-att-selected="rec.user_id and rec.user_id[0] === u.id" t-esc="u.name"/>
+                                            </t>
+                                        </select>
+                                    </div>
+                                    <div class="cm-prop">
+                                        <label for="cm_r_team">Sales team</label>
+                                        <select id="cm_r_team" class="cm-inline-input" t-on-change="(ev) => this.onMany2one('team_id', ev)">
+                                            <option value="">No team</option>
+                                            <t t-foreach="state.teams" t-as="t" t-key="t.id">
+                                                <option t-att-value="t.id" t-att-selected="rec.team_id and rec.team_id[0] === t.id" t-esc="t.name"/>
+                                            </t>
+                                        </select>
+                                    </div>
+                                    <div class="cm-prop"><span>Campaign</span><span class="cm-prop-val" t-esc="rec.campaign_id ? rec.campaign_id[1] : '—'"/></div>
+                                    <div class="cm-prop"><span>Source</span><span class="cm-prop-val" t-esc="rec.source_id ? rec.source_id[1] : '—'"/></div>
+                                    <div class="cm-prop cm-prop--block">
+                                        <label for="cm_r_tags">Tags</label>
+                                        <TagInput id="'cm_r_tags'" value="state.tags" onChange.bind="setTags"/>
+                                    </div>
+                                </div>
+                                <div class="cm-rec-notes">
+                                    <label class="cm-side-title" for="cm_r_notes" t-esc="isOpp ? 'Deal notes' : 'Qualification notes'"/>
+                                    <textarea id="cm_r_notes" class="cm-inline-input cm-notes" rows="3"
+                                              t-att-placeholder="isOpp ? 'Budget, decision maker, next steps…' : 'Source, budget, timeline, decision maker…'"
+                                              t-att-value="notesText" t-on-change="onDescription"/>
+                                </div>
                             </div>
 
-                            <div class="cm-card cm-rec-details">
-                                <h3 class="cm-side-title">Details</h3>
-                                <div class="cm-prop">
-                                    <label for="cm_r_user">Salesperson</label>
-                                    <select id="cm_r_user" class="cm-inline-input" t-on-change="(ev) => this.onMany2one('user_id', ev)">
-                                        <option value="">Unassigned</option>
-                                        <t t-foreach="state.users" t-as="u" t-key="u.id">
-                                            <option t-att-value="u.id" t-att-selected="rec.user_id and rec.user_id[0] === u.id" t-esc="u.name"/>
-                                        </t>
-                                    </select>
-                                </div>
-                                <div class="cm-prop">
-                                    <label for="cm_r_team">Sales team</label>
-                                    <select id="cm_r_team" class="cm-inline-input" t-on-change="(ev) => this.onMany2one('team_id', ev)">
-                                        <option value="">No team</option>
-                                        <t t-foreach="state.teams" t-as="t" t-key="t.id">
-                                            <option t-att-value="t.id" t-att-selected="rec.team_id and rec.team_id[0] === t.id" t-esc="t.name"/>
-                                        </t>
-                                    </select>
-                                </div>
-                                <div class="cm-prop"><span>Campaign</span><span class="cm-prop-val" t-esc="rec.campaign_id ? rec.campaign_id[1] : '—'"/></div>
-                                <div class="cm-prop"><span>Source</span><span class="cm-prop-val" t-esc="rec.source_id ? rec.source_id[1] : '—'"/></div>
-                                <div class="cm-prop cm-prop--block">
-                                    <label for="cm_r_tags">Tags</label>
-                                    <TagInput id="'cm_r_tags'" value="state.tags" onChange.bind="setTags"/>
-                                </div>
-                            </div>
-
-                            <div class="cm-card cm-rec-next">
-                                <h3 class="cm-side-title">Next steps <span t-if="state.activities.length" class="cm-count" t-esc="state.activities.length"/></h3>
-                                <p t-if="!state.activities.length" class="cm-side-empty">
-                                    <i class="fa fa-exclamation-circle" aria-hidden="true"/> Nothing planned — use the <strong>Activity</strong> tab.
-                                </p>
-                                <ul t-else="" class="cm-mini-list">
+                            <div t-if="state.activities.length" class="cm-card cm-rec-next">
+                                <h3 class="cm-side-title">Next steps <span class="cm-count" t-esc="state.activities.length"/></h3>
+                                <ul class="cm-mini-list">
                                     <t t-foreach="state.activities" t-as="a" t-key="a.id">
                                         <li>
                                             <ActivityIcon type="state.types[a.activity_type_id[0]]" small="true"/>
@@ -166,14 +152,22 @@
                                     </t>
                                 </ul>
                             </div>
-
-                            <div class="cm-card cm-rec-notes">
-                                <label class="cm-side-title" for="cm_r_notes" t-esc="isOpp ? 'Deal notes' : 'Qualification notes'"/>
-                                <textarea id="cm_r_notes" class="cm-inline-input cm-notes" rows="3"
-                                          t-att-placeholder="isOpp ? 'Budget, decision maker, next steps…' : 'Source, budget, timeline, decision maker…'"
-                                          t-att-value="notesText" t-on-change="onDescription"/>
-                            </div>
                             </fieldset>
+
+                            <t t-foreach="recordSections" t-as="section" t-key="section.key">
+                                <t t-component="section.Component" record="rec" reload.bind="reload"/>
+                            </t>
+                        </div>
+
+                        <!-- activity feed: composer + chatter -->
+                        <aside class="cm-rec-feed">
+                            <RecordActions t-if="canWrite" record="rec" users="state.users" reload.bind="reload"
+                                           onAdvancedSchedule="() => this.activityActions.schedule([rec.id])"/>
+                            <div class="cm-card cm-chatter cm-timeline">
+                                <t t-foreach="[state.chatterKey]" t-as="k" t-key="k">
+                                    <Chatter threadModel="'crm.lead'" threadId="rec.id" has_activities="false"/>
+                                </t>
+                            </div>
                         </aside>
                     </div>
                 </t>

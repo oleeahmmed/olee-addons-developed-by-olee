@@ -10,6 +10,8 @@ import { user } from "@web/core/user";
 import { useBus, useService } from "@web/core/utils/hooks";
 import { loadFeatures } from "../core/features";
 import { CampaignDialog, QuickCreateDialog } from "../components/dialogs";
+import { ActivityPlanDialog, ActivityTypeDialog, StageDialog, TagDialog } from "../components/config_dialogs";
+import { TeamDialog } from "../pages/team_pages";
 
 /**
  * Modern CRM left sidebar.
@@ -336,6 +338,28 @@ export class ModernSidebar extends Component {
                 type: context.default_type === "lead" ? "lead" : "opportunity",
                 defaults: context,
                 onSaved: reload,
+            });
+            return;
+        }
+        if (spec.resModel === "crm.stage") {
+            this.dialog.add(StageDialog, { onSaved: reload });
+            return;
+        }
+        if (spec.resModel === "mail.activity.type") {
+            this.dialog.add(ActivityTypeDialog, { onSaved: reload });
+            return;
+        }
+        if (spec.resModel === "mail.activity.plan") {
+            this.dialog.add(ActivityPlanDialog, { onSaved: reload });
+            return;
+        }
+        if (spec.resModel === "crm.tag") {
+            this.dialog.add(TagDialog, { onSaved: reload });
+            return;
+        }
+        if (spec.resModel === "crm.team") {
+            this.orm.searchRead("res.users", [["share", "=", false]], ["name"], { order: "name" }).then((users) => {
+                this.dialog.add(TeamDialog, { users, onSaved: reload });
             });
             return;
         }

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="crm_modern.StageDialog">
+        <FormDrawer title="title" subtitle="subtitle" close="props.close" onNew.bind="resetForm" newLabel="newLabel">
+            <form class="or-sheet-fields" t-on-submit.prevent="save" novalidate="">
+                <div t-if="state.error" class="or-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
+                <div class="or-field">
+                    <label class="or-label" for="cm_st_name">Name</label>
+                    <input id="cm_st_name" class="or-input" t-model="state.name" placeholder="e.g. Qualified" autofocus=""/>
+                </div>
+                <div class="or-field">
+                    <label class="or-label" for="cm_st_seq">Order</label>
+                    <input id="cm_st_seq" type="number" min="0" step="1" class="or-input" t-model="state.sequence"/>
+                    <p class="or-hint">Lower numbers appear first on the board.</p>
+                </div>
+                <div class="or-field">
+                    <span class="or-label">Sales teams</span>
+                    <div class="or-sheet-chips">
+                        <button type="button" class="or-chip" t-att-class="{ 'is-on': !state.team_ids.length }" t-on-click="() => this.state.team_ids = []">All teams</button>
+                        <t t-foreach="state.teams" t-as="tm" t-key="tm.id">
+                            <button type="button" class="or-chip" t-att-class="{ 'is-on': state.team_ids.includes(tm.id) }"
+                                    t-on-click="() => this.toggleTeam(tm.id)" t-esc="tm.name"/>
+                        </t>
+                    </div>
+                    <p class="or-hint">Empty means the stage shows on every pipeline.</p>
+                </div>
+                <div class="or-field or-field-row">
+                    <div>
+                        <span class="or-label">Won stage</span>
+                        <button type="button" class="or-toggle" t-att-aria-checked="state.is_won ? 'true' : 'false'"
+                                t-att-class="{ 'is-on': state.is_won }" t-on-click="() => this.state.is_won = !this.state.is_won"/>
+                    </div>
+                    <div>
+                        <span class="or-label">Fold when empty</span>
+                        <button type="button" class="or-toggle" t-att-aria-checked="state.fold ? 'true' : 'false'"
+                                t-att-class="{ 'is-on': state.fold }" t-on-click="() => this.state.fold = !this.state.fold"/>
+                    </div>
+                </div>
+                <div class="or-field">
+                    <label class="or-label" for="cm_st_rot">Days before a deal looks stuck</label>
+                    <input id="cm_st_rot" type="number" min="0" step="1" class="or-input" t-model="state.rotting_threshold_days"/>
+                    <p class="or-hint">0 turns this off.</p>
+                </div>
+                <div class="or-field">
+                    <label class="or-label" for="cm_st_req">What belongs in this stage</label>
+                    <textarea id="cm_st_req" class="or-textarea" rows="3" t-model="state.requirements"
+                              placeholder="e.g. Quote sent, next meeting booked…"/>
+                </div>
+                <button type="submit" class="d-none"/>
+            </form>
+            <t t-set-slot="footer">
+                <button type="button" class="or-save-pill" t-att-disabled="state.saving" t-on-click="save">Save changes</button>
+            </t>
+        </FormDrawer>
+    </t>
+
+    <t t-name="crm_modern.ActivityTypeDialog">
+        <FormDrawer title="title" subtitle="subtitle" close="props.close" onNew.bind="resetForm" newLabel="newLabel">
+            <form class="or-sheet-fields" t-on-submit.prevent="save" novalidate="">
+                <div t-if="state.error" class="or-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
+                <div class="or-field">
+                    <label class="or-label" for="cm_at_name">Name</label>
+                    <input id="cm_at_name" class="or-input" t-model="state.name" placeholder="e.g. Follow-up call" autofocus=""/>
+                </div>
+                <div class="or-field">
+                    <label class="or-label">Icon</label>
+                    <OrSelectCard value="state.icon" options="iconOptions" onChange="(id) => this.state.icon = id"/>
+                </div>
+                <div class="or-field">
+                    <label class="or-label" for="cm_at_sum">Default summary</label>
+                    <input id="cm_at_sum" class="or-input" t-model="state.summary" placeholder="Shown on the activity"/>
+                </div>
+                <div class="or-field">
+                    <span class="or-label">Schedule after</span>
+                    <div class="or-field-split">
+                        <input type="number" min="0" step="1" class="or-input" t-model="state.delay_count" aria-label="Delay"/>
+                        <OrSelectCard value="state.delay_unit" options="unitOptions" onChange="(id) => this.state.delay_unit = id"/>
+                    </div>
+                </div>
+                <div class="or-field">
+                    <label class="or-label">Action</label>
+                    <OrSelectCard value="state.category" options="categoryOptions" onChange="(id) => this.state.category = id"/>
+                </div>
+                <div class="or-field">
+                    <label class="or-label">Default assignee</label>
+                    <OrSelectCard value="state.default_user_id" options="userOptions" allowEmpty="true"
+                                  placeholder="'Unassigned'" emptyHint="'Whoever schedules it'"
+                                  onChange="(id) => this.state.default_user_id = id"/>
+                </div>
+                <div class="or-field">
+                    <label class="or-label" for="cm_at_note">Default note</label>
+                    <textarea id="cm_at_note" class="or-textarea" rows="3" t-model="state.note" placeholder="Optional talking points…"/>
+                </div>
+                <button type="submit" class="d-none"/>
+            </form>
+            <t t-set-slot="footer">
+                <button type="button" class="or-save-pill" t-att-disabled="state.saving" t-on-click="save">Save changes</button>
+            </t>
+        </FormDrawer>
+    </t>
+
+    <t t-name="crm_modern.ActivityPlanDialog">
+        <FormDrawer title="title" subtitle="subtitle" close="props.close" onNew.bind="resetForm" newLabel="newLabel">
+            <form class="or-sheet-fields" t-on-submit.prevent="save" novalidate="">
+                <div t-if="state.error" class="or-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
+                <div class="or-field">
+                    <label class="or-label" for="cm_ap_name">Name</label>
+                    <input id="cm_ap_name" class="or-input" t-model="state.name" placeholder="e.g. New lead intro" autofocus=""/>
+                </div>
+                <div class="or-field">
+                    <span class="or-label">Activities</span>
+                    <div class="or-step-list">
+                        <t t-foreach="state.steps" t-as="step" t-key="step.key">
+                            <div class="or-step-card">
+                                <div class="or-step-head">
+                                    <span class="or-step-index"><t t-esc="step_index + 1"/></span>
+                                    <button type="button" class="or-link" t-on-click="() => this.removeStep(step.key)">Remove</button>
+                                </div>
+                                <OrSelectCard value="step.activity_type_id" options="typeOptions"
+                                              placeholder="'Pick a type'" emptyHint="'Call, email, meeting…'"
+                                              onChange="(id) => this.setStep(step.key, 'activity_type_id', id)"/>
+                                <input type="text" class="or-input" t-att-value="step.summary"
+                                       t-on-input="(ev) => this.setStep(step.key, 'summary', ev.target.value)"
+                                       placeholder="Summary"/>
+                                <div class="or-field-split">
+                                    <input type="number" min="0" step="1" class="or-input" t-att-value="step.delay_count"
+                                           t-on-input="(ev) => this.setStep(step.key, 'delay_count', ev.target.value)"
+                                           aria-label="Delay"/>
+                                    <OrSelectCard value="step.delay_unit" options="unitOptions"
+                                                  onChange="(id) => this.setStep(step.key, 'delay_unit', id)"/>
+                                </div>
+                                <OrSelectCard value="step.delay_from" options="whenOptions"
+                                              onChange="(id) => this.setStep(step.key, 'delay_from', id)"/>
+                                <OrSelectCard value="step.responsible_type" options="assignOptions"
+                                              onChange="(id) => this.setStep(step.key, 'responsible_type', id)"/>
+                                <OrSelectCard t-if="step.responsible_type === 'other'" value="step.responsible_id"
+                                              options="userOptions" placeholder="'Pick a user'"
+                                              onChange="(id) => this.setStep(step.key, 'responsible_id', id)"/>
+                            </div>
+                        </t>
+                    </div>
+                    <button type="button" class="or-chip" t-on-click="addStep"><i class="fa fa-plus" aria-hidden="true"/> Add activity</button>
+                </div>
+                <button type="submit" class="d-none"/>
+            </form>
+            <t t-set-slot="footer">
+                <button type="button" class="or-save-pill" t-att-disabled="state.saving" t-on-click="save">Save changes</button>
+            </t>
+        </FormDrawer>
+    </t>
+
+    <t t-name="crm_modern.TagDialog">
+        <FormDrawer title="title" subtitle="subtitle" close="props.close" onNew.bind="resetForm" newLabel="newLabel">
+            <form class="or-sheet-fields" t-on-submit.prevent="save" novalidate="">
+                <div t-if="state.error" class="or-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
+                <div class="or-field">
+                    <label class="or-label" for="cm_tg_name">Name</label>
+                    <input id="cm_tg_name" class="or-input" t-model="state.name" placeholder="e.g. Hot lead" autofocus=""/>
+                </div>
+                <div class="or-field">
+                    <span class="or-label">Color</span>
+                    <div class="or-color-dots" role="radiogroup" aria-label="Color">
+                        <t t-foreach="colors" t-as="c" t-key="c">
+                            <button type="button" role="radio" t-att-aria-checked="state.color === c ? 'true' : 'false'"
+                                    t-attf-class="or-color-dot o_colorlist_item_color_{{ c }} {{ state.color === c ? 'is-on' : '' }}"
+                                    t-on-click="() => this.state.color = c" t-att-title="'Color ' + c"/>
+                        </t>
+                    </div>
+                </div>
+                <button type="submit" class="d-none"/>
+            </form>
+            <t t-set-slot="footer">
+                <button type="button" class="or-save-pill" t-att-disabled="state.saving" t-on-click="save">Save changes</button>
+            </t>
+        </FormDrawer>
+    </t>
+
+</templates>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
 
-    <!-- Odoo's own layout, full width: control panel (+, title, search, pager, views) then the view. -->
+    <!-- Full-width NativeView card: control panel (+, title, search, pager, views) then list or kanban. -->
     <t t-name="crm_modern.ListPage">
         <div class="o_cm o_cm_page o_cm_page--native">
             <div class="cm-container cm-container--native">

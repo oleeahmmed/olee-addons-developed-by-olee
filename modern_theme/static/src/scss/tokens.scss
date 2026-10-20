@@ -438,11 +438,16 @@ html[data-mt-theme] {
     --or-accent-soft: #f0fdfa;
     --or-accent-ring: rgba(45, 212, 191, 0.22);
     --or-icon-bg: #f1f5f9;
-    --or-save-bg: #0a0a0a;
-    --or-save-fg: #ffffff;
-    --or-save-hover: #171717;
+    --or-save-bg: var(--mt-primary);
+    --or-save-fg: var(--mt-primary-foreground);
+    --or-save-hover: color-mix(in srgb, var(--mt-primary) 86%, #000);
+    --or-rail-width: 3.25rem;
     --or-pill-bg: #ffffff;
     --or-pill-border: rgba(226, 232, 240, 0.95);
     --or-pill-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+    --or-close-fg: #475569;
+    --or-close-hover: #0f172a;
+    --or-toggle-on: #14b8a6;
+    --or-chip-h: 1.75rem;
     --or-ease: var(--mt-ease);
 }

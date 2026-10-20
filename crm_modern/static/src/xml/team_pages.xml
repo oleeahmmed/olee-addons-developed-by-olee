@@ -2,24 +2,23 @@
 <templates xml:space="preserve">
 
     <t t-name="crm_modern.TeamDialog">
-        <Dialog title="'New sales team'" size="'md'" contentClass="'o_cm o_cm_dialog'">
-            <p class="cm-dialog-desc">Name the team and pick a leader. Add salespeople on the next screen.</p>
-            <form class="d-grid" style="gap:1rem" t-on-submit.prevent="save" novalidate="">
-                <div t-if="state.error" class="cm-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
-                <div class="cm-field"><label class="cm-label" for="cm_td_name">Team name *</label>
-                    <input id="cm_td_name" class="cm-input" t-model="state.name" autofocus=""/></div>
-                <div class="cm-field"><label class="cm-label" for="cm_td_leader">Team leader</label>
-                    <select id="cm_td_leader" class="cm-select" t-model="state.user_id">
-                        <option value="">No leader</option>
-                        <t t-foreach="props.users" t-as="u" t-key="u.id"><option t-att-value="u.id" t-esc="u.name"/></t>
-                    </select></div>
+        <FormDrawer title="title" subtitle="subtitle" close="props.close" onNew.bind="resetForm" newLabel="title">
+            <form class="or-sheet-fields" t-on-submit.prevent="save" novalidate="">
+                <div t-if="state.error" class="or-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
+                <div class="or-field"><label class="or-label" for="cm_td_name">Team name</label>
+                    <input id="cm_td_name" class="or-input" t-model="state.name" placeholder="Enter a name" autofocus=""/></div>
+                <div class="or-field">
+                    <label class="or-label" for="cm_td_leader">Team leader</label>
+                    <OrSelectCard id="'cm_td_leader'" value="state.user_id" options="userCardOptions"
+                                  placeholder="'No leader'" emptyHint="'Pick a leader later'"
+                                  allowEmpty="true" onChange="(id) => this.state.user_id = id"/>
+                </div>
                 <button type="submit" class="d-none"/>
             </form>
             <t t-set-slot="footer">
-                <button class="cm-btn cm-btn-ghost" t-on-click="props.close">Cancel</button>
-                <button class="cm-btn cm-btn-primary" t-on-click="save">Create team</button>
+                <button type="button" class="or-save-pill" t-on-click="save">Save changes</button>
             </t>
-        </Dialog>
+        </FormDrawer>
     </t>
 
 

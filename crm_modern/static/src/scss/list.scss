@@ -1,20 +1,82 @@
-// List pages: page header with the primary "+ New …" action, and the sales team cards.
-
-// List pages use Odoo's own two-part layout, full width: the control panel (New,
-// title, search, pager, view switcher) and the view right below it, no outer card.
+// List / kanban / calendar share one full-width card: control panel + view.
+// NativeView (.cm-card.cm-native) is the single outer section — same shell for
+// pipeline, leads and campaigns, whether the inner view is a table or a board.
 .o_cm.o_cm_page.o_cm_page--native {
-    background: var(--cm-card);
-    .cm-container--native { max-width: none; height: 100%; padding: 0 !important; gap: 0; }
+    background: var(--cm-bg);
+    overflow: hidden;
+    .cm-container--native {
+        max-width: none;
+        width: 100%;
+        height: 100%;
+        padding: 1rem 1.25rem 1.25rem !important;
+        gap: 0;
+        display: flex;
+        flex-direction: column;
+        @media (max-width: 767.98px) { padding: 0.75rem 0.75rem 1rem !important; }
+    }
     > .cm-container--native > .cm-native {
-        height: 100%; display: flex; flex-direction: column;
-        border: 0; border-radius: 0; box-shadow: none; background: var(--cm-card);
-        > .o_view_controller, > .o_cm_native_view { flex: 1 1 auto; min-height: 0; }
+        flex: 1 1 auto;
+        min-height: 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: var(--or-sheet-bg, var(--cm-card));
+        border: 1px solid var(--or-sheet-border, var(--cm-border));
+        border-radius: calc(var(--or-input-radius, var(--cm-radius)) + 2px);
+        box-shadow: var(--cm-shadow-sm);
+        > .o_view_controller, > .o_cm_native_view { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
         > .cm-skeleton { margin: 1rem; }
     }
     .cm-native {
-        .o_control_panel { padding: 0.625rem 1rem 0.75rem !important; border-bottom: 1px solid var(--cm-border); }
+        .o_control_panel { padding: 0.625rem 1rem 0.75rem !important; border-bottom: 1px solid var(--or-sheet-border, var(--cm-border)); }
         .o_control_panel_breadcrumbs .o_last_breadcrumb_item { font-size: 1.125rem; font-weight: 600; color: var(--cm-fg); }
         .o_control_panel_main_buttons .btn-primary { border-radius: 0.5rem; font-weight: 600; padding-inline: 0.875rem; }
+        .o_searchview,
+        .o_searchview_input_container {
+            min-height: 2.25rem;
+            border-radius: var(--or-input-radius, 0.625rem);
+            border-color: var(--or-input-border, var(--cm-input));
+            background: var(--or-input-bg, var(--cm-card));
+        }
+        // Kill the Stitch dotted canvas so the board sits on the card, like list.
+        .o_kanban_view,
+        .o_kanban_view > .o_content,
+        .o_kanban_renderer {
+            background-image: none !important;
+            background-attachment: scroll !important;
+        }
+        .o_kanban_view,
+        .o_kanban_view > .o_content {
+            background-color: var(--cm-card) !important;
+            flex: 1 1 auto;
+            min-height: 0;
+        }
+        .o_kanban_renderer {
+            background-color: color-mix(in srgb, var(--cm-muted) 70%, var(--cm-card)) !important;
+            flex: 1 1 auto;
+            min-height: 0;
+        }
+        .o_view_nocontent { background: transparent; }
+        .o_list_renderer {
+            margin: 0.875rem 1rem 1.25rem;
+            border: 1px solid var(--cm-border);
+            border-radius: 0.75rem;
+            background: var(--cm-card);
+            overflow: hidden;
+            box-shadow: var(--cm-shadow-sm);
+        }
+        .o_list_table thead th {
+            height: 2.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--cm-muted-fg);
+            background: color-mix(in srgb, var(--cm-muted) 55%, transparent);
+            border-bottom: 1px solid var(--cm-border);
+        }
+        .o_list_table tbody .o_data_row:hover > td {
+            background: color-mix(in srgb, var(--cm-muted) 55%, transparent);
+        }
     }
 }
 
@@ -29,7 +91,7 @@
         border: 1px solid var(--cm-border); border-radius: calc(var(--cm-radius) + 2px);
         background: var(--cm-card); box-shadow: var(--cm-shadow-sm);
         transition: border-color 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease);
-        &:hover { border-color: color-mix(in srgb, var(--cm-primary) 35%, var(--cm-border)); box-shadow: 0 8px 20px -8px rgba(15, 23, 42, 0.18); }
+        &:hover { border-color: color-mix(in srgb, var(--or-accent, var(--cm-primary)) 40%, var(--cm-border)); box-shadow: 0 8px 20px -8px rgba(15, 23, 42, 0.14); }
     }
 
     .o_kanban_record.o_kanban_ghost { border: 0; box-shadow: none; background: transparent; padding: 0; min-height: 0; }
@@ -144,7 +206,7 @@
         padding: 0.875rem 0.875rem 0.625rem;
         border: 1px solid var(--cm-border); border-radius: calc(var(--cm-radius) + 2px);
         background: var(--cm-card); box-shadow: var(--cm-shadow-sm);
-        &:hover { border-color: color-mix(in srgb, var(--cm-primary) 35%, var(--cm-border)); }
+        &:hover { border-color: color-mix(in srgb, var(--or-accent, var(--cm-primary)) 40%, var(--cm-border)); }
     }
     .cm-cc-head { display: flex; align-items: flex-start; gap: 0.75rem; padding-right: 1.25rem; }
     .cm-cc-logo {

@@ -21,9 +21,8 @@ const FIELDS = [
 ];
 
 /**
- * Opportunity / lead detail: compact header + stage stepper, one tabbed action card
- * (message, note, activity, quotation...), the timeline, and a side column with the
- * key numbers, details, next steps and notes.
+ * Opportunity / lead detail: compact header + stage stepper, deal facts on the
+ * left, composer + chatter on the right.
  */
 export class RecordPage extends Component {
     static template = "crm_modern.Record";

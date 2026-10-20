@@ -281,6 +281,9 @@ class TestCrmModernCampaigns(TransactionCase):
         lead_arch = self.env['crm.lead'].get_view(lead_kanban.id, 'kanban')['arch']
         self.assertIn('crm_modern_m2o_pick', lead_arch)
         self.assertIn('crm_modern_user_pick', lead_arch)
+        self.assertIn('campaign_id', lead_arch)
+        self.assertIn('Assign campaign', lead_arch)
+        self.assertIn('Assign salesperson', lead_arch)
 
     def test_optional_sale_never_breaks_crm(self):
         """CRM stays usable when Sales is missing: no quotation data, menus, or RPC errors."""
