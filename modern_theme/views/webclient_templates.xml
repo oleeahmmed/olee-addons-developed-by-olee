@@ -22,13 +22,7 @@
         <xpath expr="//div[hasclass('container')]" position="attributes">
             <attribute name="class" add="o_mt_login_wrap" separator=" "/>
         </xpath>
-        <xpath expr="//div[hasclass('container')]" position="before">
-            <aside class="o_mt_login_aside" aria-hidden="true">
-                <p class="o_mt_login_kicker">Welcome</p>
-                <h1 t-esc="request.env.company.name"/>
-                <p>Sign in to continue to your workspace.</p>
-            </aside>
-        </xpath>
+        <xpath expr="//a[contains(@href, 'utm_medium=auth')]" position="replace"/>
     </template>
 
 </odoo>
