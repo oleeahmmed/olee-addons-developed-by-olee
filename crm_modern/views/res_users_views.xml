@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Odoo 19 keeps res.users.action_id (Home Action) but does not put it
+        on the user form. Inherit the Preferences hook so an admin can change
+        the post-login page without a code deploy.
+    -->
+    <record id="view_users_form_home_action" model="ir.ui.view">
+        <field name="name">res.users.form.crm.modern.home.action</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <group name="other_preferences" position="inside">
+                <field name="action_id" options="{'no_create': True, 'no_open': True}"/>
+            </group>
+        </field>
+    </record>
+    <record id="view_users_preferences_home_action" model="ir.ui.view">
+        <field name="name">res.users.preferences.crm.modern.home.action</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
+        <field name="arch" type="xml">
+            <group name="other_preferences" position="inside">
+                <field name="action_id" options="{'no_create': True, 'no_open': True}"/>
+            </group>
+        </field>
+    </record>
+</odoo>
