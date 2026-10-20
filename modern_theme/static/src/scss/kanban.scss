@@ -52,8 +52,8 @@ $mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_
         --KanbanRecord-padding-h: 1rem;
         --KanbanRecord-margin-v: 0.625rem;
         --KanbanRecord-margin-h: 0.375rem;
-        --mt-card-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 8px 20px -10px rgba(15, 23, 42, 0.16);
-        --mt-card-shadow-hover: 0 2px 6px rgba(15, 23, 42, 0.06), 0 18px 36px -16px rgba(15, 23, 42, 0.28);
+        --mt-card-shadow: var(--mt-shadow-md);
+        --mt-card-shadow-hover: var(--mt-shadow-lg);
         @include mt-stitch-canvas;
         padding: 1.25rem 1.25rem 1.75rem !important;
     }
@@ -65,7 +65,7 @@ $mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_
         border-radius: 0.875rem !important;
         background: var(--mt-card) !important;
         color: var(--mt-foreground);
-        box-shadow: var(--mt-card-shadow, 0 1px 2px rgba(15, 23, 42, 0.05)) !important;
+        box-shadow: var(--mt-card-shadow, var(--mt-shadow-md)) !important;
         overflow: hidden;
         transition: transform 180ms var(--mt-ease, ease), box-shadow 180ms var(--mt-ease, ease), border-color 180ms var(--mt-ease, ease);
 
@@ -73,7 +73,7 @@ $mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_
         &:focus-visible {
             transform: translateY(-2px);
             border-color: color-mix(in srgb, var(--mt-primary) 38%, var(--mt-border)) !important;
-            box-shadow: var(--mt-card-shadow-hover, 0 18px 36px -16px rgba(15, 23, 42, 0.28)) !important;
+            box-shadow: var(--mt-card-shadow-hover, var(--mt-shadow-lg)) !important;
             outline: none;
         }
 
@@ -132,7 +132,7 @@ $mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_
             background-color: var(--mt-muted);
         }
 
-        .o_priority_star.fa-star { color: #f59e0b; }
+        .o_priority_star.fa-star { color: var(--mt-warning); }
 
         .o-mail-ActivityButton i { color: var(--mt-muted-foreground) !important; }
 
@@ -161,11 +161,39 @@ $mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_
         opacity: 1 !important;
         cursor: grabbing;
         z-index: 1000;
-        border-color: var(--or-accent-border, var(--mt-primary)) !important;
-        box-shadow: 0 0 0 4px var(--or-accent-ring, color-mix(in srgb, var(--mt-primary) 22%, transparent)),
-            0 18px 36px -12px rgba(15, 23, 42, 0.28) !important;
+        overflow: visible;
+        border-color: color-mix(in srgb, var(--or-sheet-fg, var(--mt-foreground)) 18%, var(--mt-border)) !important;
+        box-shadow: var(--mt-shadow-lg) !important;
         transition: box-shadow 160ms var(--mt-ease, ease), border-color 160ms var(--mt-ease, ease) !important;
         &::before { opacity: 1; }
+        &::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1.5px;
+            pointer-events: none;
+            z-index: 2;
+            background: conic-gradient(
+                from var(--or-run),
+                transparent 0deg 255deg,
+                color-mix(in srgb, var(--or-sheet-fg, var(--mt-foreground)) 12%, transparent) 278deg,
+                color-mix(in srgb, var(--or-sheet-fg, var(--mt-foreground)) 38%, transparent) 308deg,
+                color-mix(in srgb, var(--or-sheet-fg, var(--mt-foreground)) 82%, transparent) 332deg,
+                var(--or-sheet-fg, var(--mt-foreground)) 346deg,
+                color-mix(in srgb, var(--or-sheet-fg, var(--mt-foreground)) 40%, transparent) 356deg,
+                transparent 360deg
+            );
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            animation: or-border-run var(--or-run-duration, 2.35s) linear infinite;
+        }
     }
 
     .o_kanban_record.opacity-50 {
@@ -181,28 +209,23 @@ $mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_
 
     // --- stage columns ----------------------------------------------------
     .o_kanban_group:not(.o_column_folded) {
+        position: relative;
         margin: 0 0.375rem;
         padding: 0 0.5rem 0.5rem !important;
         border: 1px solid color-mix(in srgb, var(--mt-border) 70%, transparent) !important;
         border-radius: 1rem;
         background: color-mix(in srgb, var(--mt-card) 62%, transparent) !important;
         backdrop-filter: blur(8px);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
-        transition: border-color 180ms var(--mt-ease, ease), box-shadow 180ms var(--mt-ease, ease), background-color 180ms var(--mt-ease, ease);
+        box-shadow: inset 0 1px 0 color-mix(in srgb, var(--mt-foreground) 8%, transparent);
+        transition: border-color 180ms var(--mt-ease, ease), background-color 180ms var(--mt-ease, ease);
 
         &:hover {
-            border-color: var(--or-accent-border, var(--mt-primary)) !important;
-            box-shadow: 0 0 0 4px var(--or-accent-ring, color-mix(in srgb, var(--mt-primary) 22%, transparent)),
-                inset 0 1px 0 rgba(255, 255, 255, 0.45);
-            animation: or-select-pop 220ms var(--or-ease, var(--mt-ease)), or-border-pulse 1.4s var(--or-ease, var(--mt-ease)) 220ms infinite;
+            border-color: color-mix(in srgb, var(--or-sheet-fg, var(--mt-foreground)) 14%, var(--mt-border)) !important;
         }
 
         &.o_kanban_hover {
-            background: color-mix(in srgb, var(--or-accent-soft, var(--mt-primary)) 55%, var(--mt-card)) !important;
-            border-color: var(--or-accent-border, var(--mt-primary)) !important;
-            box-shadow: 0 0 0 4px var(--or-accent-ring, color-mix(in srgb, var(--mt-primary) 22%, transparent)),
-                inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
-            animation: or-select-pop 220ms var(--or-ease, var(--mt-ease)), or-border-pulse 1.2s var(--or-ease, var(--mt-ease)) 220ms infinite;
+            background: color-mix(in srgb, var(--or-accent-soft, var(--mt-primary)) 40%, var(--mt-card)) !important;
+            border-color: color-mix(in srgb, var(--or-sheet-fg, var(--mt-foreground)) 16%, var(--mt-border)) !important;
         }
     }
 
@@ -282,6 +305,7 @@ $mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_
         .o_kanban_record.o_dragged {
             animation: none !important;
             transition: none !important;
+            &::after { animation: none !important; }
         }
     }
 }

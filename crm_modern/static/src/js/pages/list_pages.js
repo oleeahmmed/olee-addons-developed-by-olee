@@ -5,7 +5,7 @@ import { user } from "@web/core/user";
 import { useBus, useService } from "@web/core/utils/hooks";
 import { session } from "@web/session";
 import { CampaignDialog, QuickCreateDialog } from "../components/dialogs";
-import { ActivityPlanDialog, ActivityTypeDialog, StageDialog, TagDialog } from "../components/config_dialogs";
+import { ActivityPlanDialog, ActivityTypeDialog, LostReasonDialog, MemberDialog, StageDialog, TagDialog } from "../components/config_dialogs";
 import { EmptyState } from "../components/ui";
 import { NativeView } from "../components/native_view";
 import { loadFeatures } from "../core/features";
@@ -233,14 +233,10 @@ class TeamsPage extends ListPage {
     static prefix = "team";
     static types = ["kanban", "list"];
     open(resId) {
-        return this.action.doAction("crm_modern.action_team", { additionalContext: { active_id: resId } });
+        return this.dialogPromise(TeamDialog, { resId });
     }
-    async create() {
-        const users = await this.orm.searchRead("res.users", [["share", "=", false]], ["name"], { order: "name" });
-        return this.dialogPromise(TeamDialog, {
-            users,
-            onSaved: (id) => this.action.doAction("crm_modern.action_team", { additionalContext: { active_id: id } }),
-        });
+    create() {
+        return this.dialogPromise(TeamDialog, {});
     }
 }
 
@@ -252,6 +248,12 @@ class SalespeoplePage extends ListPage {
     static resModel = "crm.team.member";
     static prefix = "member";
     static types = ["list", "kanban"];
+    open(resId) {
+        return this.dialogPromise(MemberDialog, { resId });
+    }
+    create() {
+        return this.dialogPromise(MemberDialog, {});
+    }
 }
 
 class ActivitiesPage extends ListPage {
@@ -366,6 +368,22 @@ class TagsPage extends ListPage {
     }
 }
 
+class LostReasonsPage extends ListPage {
+    static title = _t("Lost Reasons");
+    static subtitle = _t("Why a deal was lost — salespeople pick one of these");
+    static icon = "fa-ban";
+    static newLabel = _t("New lost reason");
+    static resModel = "crm.lost.reason";
+    static prefix = "lost";
+    static types = ["list"];
+    open(resId) {
+        return this.dialogPromise(LostReasonDialog, { resId });
+    }
+    create() {
+        return this.dialogPromise(LostReasonDialog, {});
+    }
+}
+
 const actions = registry.category("actions");
 actions.add("crm_modern.pipeline", PipelinePage);
 actions.add("crm_modern.campaigns", CampaignsPage);
@@ -376,3 +394,4 @@ actions.add("crm_modern.stages", StagesPage);
 actions.add("crm_modern.activity_types", ActivityTypesPage);
 actions.add("crm_modern.activity_plans", ActivityPlansPage);
 actions.add("crm_modern.tags", TagsPage);
+actions.add("crm_modern.lost_reasons", LostReasonsPage);

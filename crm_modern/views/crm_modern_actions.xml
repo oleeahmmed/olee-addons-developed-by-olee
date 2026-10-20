@@ -67,6 +67,11 @@
         <field name="tag">crm_modern.tags</field>
         <field name="path">modern-crm-tags</field>
     </record>
+    <record id="action_lost_reasons" model="ir.actions.client">
+        <field name="name">Lost Reasons</field>
+        <field name="tag">crm_modern.lost_reasons</field>
+        <field name="path">modern-crm-lost-reasons</field>
+    </record>
     <!-- Opportunity / lead detail: opened with active_id so the URL can be shared. -->
     <record id="action_record" model="ir.actions.client">
         <field name="name">Opportunity</field>

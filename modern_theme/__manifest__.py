@@ -21,6 +21,10 @@
             "modern_theme/static/src/scss/kanban.scss",
             "modern_theme/static/src/js/**/*",
             "modern_theme/static/src/xml/**/*",
+            ("remove", "modern_theme/static/src/js/graph_colors.js"),
+        ],
+        "web.assets_backend_lazy": [
+            "modern_theme/static/src/js/graph_colors.js",
         ],
         "web.assets_web_dark": [
             "modern_theme/static/src/scss/tokens.dark.scss",

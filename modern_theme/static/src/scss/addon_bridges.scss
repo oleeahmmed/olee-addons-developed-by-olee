@@ -40,11 +40,23 @@ $mt-addon-prefixes: cm, im, mp, ss;
         --#{$p}-info: var(--mt-primary) !important;
         --#{$p}-info-soft: color-mix(in srgb, var(--mt-primary) 12%, var(--mt-card)) !important;
 
-        // --- charts: the first series follows the accent -------------------
+        --#{$p}-success: var(--mt-success) !important;
+        --#{$p}-success-soft: color-mix(in srgb, var(--mt-success) 14%, var(--mt-card)) !important;
+        --#{$p}-warning: var(--mt-warning) !important;
+        --#{$p}-warning-soft: color-mix(in srgb, var(--mt-warning) 14%, var(--mt-card)) !important;
+        --#{$p}-danger: var(--mt-destructive) !important;
+        --#{$p}-danger-soft: color-mix(in srgb, var(--mt-destructive) 14%, var(--mt-card)) !important;
+        --#{$p}-violet: var(--mt-info) !important;
+        --#{$p}-violet-soft: color-mix(in srgb, var(--mt-info) 14%, var(--mt-card)) !important;
+
+        // --- charts: follow the theme (not a second palette) ---------------
         --#{$p}-chart-1: var(--mt-primary) !important;
+        --#{$p}-chart-2: var(--mt-success) !important;
+        --#{$p}-chart-3: var(--mt-warning) !important;
+        --#{$p}-chart-4: var(--mt-info) !important;
 
         // --- navigation shell (sidebar + its top-bar dropdowns) -------------
-        --#{$p}-sidebar: var(--mt-sidebar-bg, #fafafa) !important;
+        --#{$p}-sidebar: var(--mt-sidebar-bg) !important;
         --#{$p}-sidebar-fg: var(--mt-foreground) !important;
         --#{$p}-sidebar-hover: var(--mt-nav-hover) !important;
         --#{$p}-sidebar-accent: var(--mt-nav-active-bg) !important;
@@ -63,5 +75,26 @@ $mt-addon-prefixes: cm, im, mp, ss;
         --#{$p}-shadow-sm: var(--mt-shadow-sm) !important;
         --#{$p}-shadow-md: var(--mt-shadow-md) !important;
         --#{$p}-shadow-lg: var(--mt-shadow-lg) !important;
+    }
+}
+
+// Native Odoo tags (color index 0–11) inside modern apps: theme tokens only.
+.o_web_client:has(.o_cm_sidebar, .o_ss_sidebar, .o_im_sidebar, .o_mp_sidebar, .o_mr_sidebar) {
+    .o_tag {
+        &, &::after {
+            --Tag__badge-background-color: transparent !important;
+        }
+        &.o_tag_color_0, &.o_tag_color_0::after { background-color: var(--mt-muted) !important; color: var(--mt-muted-foreground) !important; }
+        &.o_tag_color_1, &.o_tag_color_1::after { background-color: color-mix(in srgb, var(--mt-destructive) 16%, var(--mt-card)) !important; color: var(--mt-destructive) !important; }
+        &.o_tag_color_2, &.o_tag_color_2::after { background-color: color-mix(in srgb, var(--mt-warning) 16%, var(--mt-card)) !important; color: var(--mt-warning) !important; }
+        &.o_tag_color_3, &.o_tag_color_3::after { background-color: color-mix(in srgb, var(--mt-warning) 12%, var(--mt-card)) !important; color: var(--mt-warning) !important; }
+        &.o_tag_color_4, &.o_tag_color_4::after { background-color: color-mix(in srgb, var(--mt-primary) 16%, var(--mt-card)) !important; color: var(--mt-primary) !important; }
+        &.o_tag_color_5, &.o_tag_color_5::after { background-color: color-mix(in srgb, var(--mt-info, var(--mt-primary)) 16%, var(--mt-card)) !important; color: var(--mt-info, var(--mt-primary)) !important; }
+        &.o_tag_color_6, &.o_tag_color_6::after { background-color: color-mix(in srgb, var(--mt-warning) 22%, var(--mt-card)) !important; color: var(--mt-warning) !important; }
+        &.o_tag_color_7, &.o_tag_color_7::after { background-color: color-mix(in srgb, var(--mt-success) 16%, var(--mt-card)) !important; color: var(--mt-success) !important; }
+        &.o_tag_color_8, &.o_tag_color_8::after { background-color: color-mix(in srgb, var(--mt-primary) 22%, var(--mt-card)) !important; color: var(--mt-primary) !important; }
+        &.o_tag_color_9, &.o_tag_color_9::after { background-color: color-mix(in srgb, var(--mt-destructive) 22%, var(--mt-card)) !important; color: var(--mt-destructive) !important; }
+        &.o_tag_color_10, &.o_tag_color_10::after { background-color: color-mix(in srgb, var(--mt-success) 22%, var(--mt-card)) !important; color: var(--mt-success) !important; }
+        &.o_tag_color_11, &.o_tag_color_11::after { background-color: color-mix(in srgb, var(--mt-info, var(--mt-primary)) 22%, var(--mt-card)) !important; color: var(--mt-info, var(--mt-primary)) !important; }
     }
 }

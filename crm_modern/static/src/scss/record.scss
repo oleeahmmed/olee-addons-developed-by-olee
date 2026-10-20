@@ -33,8 +33,8 @@
     .cm-stepper--sm button { height: 2.125rem; min-width: 6rem; padding: 0 0.875rem;
         transition: background-color 160ms var(--cm-ease), color 160ms var(--cm-ease), box-shadow 160ms var(--cm-ease), border-color 160ms var(--cm-ease);
         &:hover:not([aria-current="step"]):not(:disabled) {
-            border-color: var(--or-accent-border, var(--cm-primary));
-            box-shadow: 0 0 0 3px var(--or-accent-ring, var(--cm-ring));
+            border-color: var(--cm-border);
+            background: var(--cm-muted);
         }
     }
 
@@ -265,7 +265,7 @@
         box-shadow: var(--cm-shadow-sm);
         cursor: pointer;
         transition: border-color 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease), transform 150ms var(--cm-ease);
-        &:hover { border-color: color-mix(in srgb, var(--cm-primary) 40%, var(--cm-border)); box-shadow: 0 6px 16px -6px rgba(15, 23, 42, 0.16); transform: translateY(-1px); }
+        &:hover { border-color: color-mix(in srgb, var(--cm-primary) 40%, var(--cm-border)); box-shadow: var(--cm-shadow-md); transform: translateY(-1px); }
         &.o_dragged { transform: none; }
         &:focus-visible, &:focus-within { outline: none; }
         @media (prefers-reduced-motion: reduce) { transition: none; &:hover { transform: none; } }

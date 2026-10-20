@@ -9,6 +9,82 @@
 
 $or-sheet: '.o_or_sheet, .o_cm_drawer, .or-sheet';
 
+@keyframes or-sheet-in {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+@keyframes or-frost-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes or-select-pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.01); }
+    100% { transform: scale(1); }
+}
+
+// Dark highlight that runs along a rounded border (OmniRouters Group field).
+@mixin or-running-border {
+    position: relative;
+
+    &::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1.5px;
+        pointer-events: none;
+        z-index: 2;
+        background: conic-gradient(
+            from var(--or-run),
+            transparent 0deg 255deg,
+            color-mix(in srgb, var(--or-sheet-fg) 12%, transparent) 278deg,
+            color-mix(in srgb, var(--or-sheet-fg) 38%, transparent) 308deg,
+            color-mix(in srgb, var(--or-sheet-fg) 82%, transparent) 332deg,
+            var(--or-sheet-fg) 346deg,
+            color-mix(in srgb, var(--or-sheet-fg) 40%, transparent) 356deg,
+            transparent 360deg
+        );
+        -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        animation: or-border-run var(--or-run-duration, 2.35s) linear infinite;
+    }
+}
+
+@mixin or-running-border-input {
+    border-color: transparent !important;
+    box-shadow: none !important;
+    background-color: transparent;
+    background-image:
+        linear-gradient(var(--or-run-fill-bg, var(--or-input-bg)), var(--or-run-fill-bg, var(--or-input-bg))),
+        conic-gradient(
+            from var(--or-run),
+            var(--or-input-border) 0deg 255deg,
+            color-mix(in srgb, var(--or-sheet-fg) 16%, var(--or-input-border)) 278deg,
+            color-mix(in srgb, var(--or-sheet-fg) 48%, var(--or-input-border)) 308deg,
+            color-mix(in srgb, var(--or-sheet-fg) 86%, var(--or-input-border)) 332deg,
+            var(--or-sheet-fg) 346deg,
+            color-mix(in srgb, var(--or-sheet-fg) 45%, var(--or-input-border)) 356deg,
+            var(--or-input-border) 360deg
+        );
+    background-origin: padding-box, border-box;
+    background-clip: padding-box, border-box;
+    animation: or-border-run var(--or-run-duration, 2.35s) linear infinite;
+}
+
+@mixin or-animated-border {
+    border-color: color-mix(in srgb, var(--or-sheet-fg) 16%, var(--or-input-border, var(--mt-border))) !important;
+    @include or-running-border;
+}
+
 @mixin or-control-motion {
     transition:
         border-color var(--or-focus-duration) var(--or-ease),
@@ -36,39 +112,11 @@ $or-sheet: '.o_or_sheet, .o_cm_drawer, .or-sheet';
     &:focus,
     &:focus-visible {
         outline: none;
-        border-color: var(--or-focus-border);
-        box-shadow: 0 0 0 4px var(--or-focus-ring);
+        @include or-running-border-input;
     }
 
     &:disabled { opacity: 0.55; cursor: not-allowed; }
     &[aria-invalid="true"] { border-color: var(--mt-destructive, #dc2626); }
-}
-
-@keyframes or-sheet-in {
-    from { transform: translateX(100%); }
-    to { transform: translateX(0); }
-}
-
-@keyframes or-frost-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes or-select-pop {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 var(--or-accent-ring); }
-    50% { transform: scale(1.012); }
-    100% { transform: scale(1); box-shadow: 0 0 0 4px var(--or-accent-ring); }
-}
-
-@keyframes or-border-pulse {
-    0%, 100% { box-shadow: 0 0 0 3px var(--or-accent-ring); }
-    50% { box-shadow: 0 0 0 6px var(--or-accent-ring); }
-}
-
-@mixin or-animated-border {
-    border-color: var(--or-accent-border) !important;
-    box-shadow: 0 0 0 4px var(--or-accent-ring);
-    animation: or-select-pop 220ms var(--or-ease), or-border-pulse 1.4s var(--or-ease) 220ms infinite;
 }
 
 // ---------------------------------------------------------------------------
@@ -285,7 +333,7 @@ body:has(.modal-content.or-sheet) {
     margin: -1.5rem -1.75rem 1.25rem;
     padding: 1.35rem 1.75rem 0.9rem;
     background: var(--or-sheet-bg);
-    box-shadow: 0 10px 12px -12px rgba(15, 23, 42, 0.12);
+    box-shadow: var(--mt-shadow-md);
 }
 
 .or-sheet-head-text,
@@ -455,15 +503,15 @@ body:has(.modal-content.or-sheet) {
 
     &:focus-visible {
         outline: none;
-        border-color: var(--or-focus-border);
-        box-shadow: 0 0 0 4px var(--or-focus-ring);
+        border-color: color-mix(in srgb, var(--or-sheet-fg) 18%, var(--or-sheet-border));
+        @include or-running-border;
     }
 
     &.is-on {
-        border-color: var(--or-accent-border);
+        border-color: color-mix(in srgb, var(--or-sheet-fg) 16%, var(--or-sheet-border));
         background: var(--or-accent-soft);
-        box-shadow: 0 0 0 3px var(--or-accent-ring);
         color: var(--or-sheet-fg);
+        @include or-running-border;
     }
 }
 
@@ -524,7 +572,7 @@ body:has(.modal-content.or-sheet) {
     border: 2px solid transparent;
     border-radius: 999px;
     cursor: pointer;
-    box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.12);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mt-foreground) 12%, transparent);
     &.is-on {
         border-color: var(--or-sheet-fg);
         box-shadow: 0 0 0 3px var(--or-accent-ring);
@@ -552,7 +600,7 @@ body:has(.modal-content.or-sheet) {
     padding: 0;
     border: 0;
     border-radius: 999px;
-    background: #e5e7eb;
+    background: var(--mt-muted);
     cursor: pointer;
     @include or-control-motion;
 
@@ -564,14 +612,14 @@ body:has(.modal-content.or-sheet) {
         width: 1.125rem;
         height: 1.125rem;
         border-radius: 50%;
-        background: #fff;
-        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.18);
+        background: var(--mt-card);
+        box-shadow: var(--mt-shadow-xs);
         transition: transform var(--or-focus-duration) var(--or-ease);
     }
 
     &[aria-checked="true"],
     &.is-on {
-        background: var(--or-toggle-on, #14b8a6);
+        background: var(--or-toggle-on, var(--mt-primary));
         &::after { transform: translateX(1.125rem); }
     }
 }
@@ -581,7 +629,7 @@ body:has(.modal-content.or-sheet) {
     top: calc(100% + 0.35rem);
     left: 0;
     right: 0;
-    z-index: 8;
+    z-index: 40;
     max-height: 15rem;
     overflow: auto;
     margin: 0;
@@ -589,8 +637,8 @@ body:has(.modal-content.or-sheet) {
     list-style: none;
     border: 1px solid var(--or-sheet-border);
     border-radius: 0.75rem;
-    background: var(--or-sheet-bg);
-    box-shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.18);
+    background: color-mix(in srgb, var(--mt-muted) 35%, var(--mt-card));
+    box-shadow: var(--mt-shadow-lg);
     scrollbar-width: thin;
 }
 
@@ -650,6 +698,29 @@ body:has(.modal-content.or-sheet) {
     background-repeat: no-repeat;
     background-position: right 0.75rem center;
     background-size: 16px;
+
+    &:focus,
+    &:focus-visible {
+        background-color: transparent;
+        background-image:
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"),
+            linear-gradient(var(--or-input-bg), var(--or-input-bg)),
+            conic-gradient(
+                from var(--or-run),
+                var(--or-input-border) 0deg 255deg,
+                color-mix(in srgb, var(--or-sheet-fg) 16%, var(--or-input-border)) 278deg,
+                color-mix(in srgb, var(--or-sheet-fg) 48%, var(--or-input-border)) 308deg,
+                color-mix(in srgb, var(--or-sheet-fg) 86%, var(--or-input-border)) 332deg,
+                var(--or-sheet-fg) 346deg,
+                color-mix(in srgb, var(--or-sheet-fg) 45%, var(--or-input-border)) 356deg,
+                var(--or-input-border) 360deg
+            );
+        background-repeat: no-repeat, no-repeat, no-repeat;
+        background-position: right 0.75rem center, 0 0, 0 0;
+        background-size: 16px 16px, auto, auto;
+        background-origin: padding-box, padding-box, border-box;
+        background-clip: padding-box, padding-box, border-box;
+    }
 }
 
 .or-input.d-flex,
@@ -659,6 +730,12 @@ body:has(.modal-content.or-sheet) {
     height: auto;
     min-height: var(--or-input-height);
     padding: 0.35rem 0.75rem;
+
+    &:focus-within {
+        outline: none;
+        border-color: color-mix(in srgb, var(--or-sheet-fg) 16%, var(--or-input-border));
+        @include or-running-border;
+    }
 }
 
 .or-error {
@@ -669,8 +746,8 @@ body:has(.modal-content.or-sheet) {
     padding: 0.5rem 0.75rem;
     font-size: 0.75rem;
     font-weight: 500;
-    background: color-mix(in srgb, var(--mt-destructive, #dc2626) 10%, #fff);
-    color: var(--mt-destructive, #dc2626);
+    background: color-mix(in srgb, var(--mt-destructive) 12%, var(--mt-card));
+    color: var(--mt-destructive);
 }
 
 .or-save-pill,
@@ -707,6 +784,14 @@ body:has(.modal-content.or-sheet) {
     .cm-error { border-radius: var(--or-input-radius); }
 }
 
+.or-field:has(.or-select-card-menu),
+.cm-field:has(.or-select-card-menu),
+.or-select-card-wrap:has(.or-select-card-menu) {
+    position: relative;
+    z-index: 80;
+    isolation: isolate;
+}
+
 .or-select-card-wrap { position: relative; min-width: 0; }
 
 .or-select-card-wrap .or-select-card {
@@ -724,23 +809,26 @@ body:has(.modal-content.or-sheet) {
     cursor: pointer;
     @include or-control-motion;
 
-    &:hover { border-color: color-mix(in srgb, var(--or-accent) 35%, var(--or-input-border)); }
+    &:hover { border-color: color-mix(in srgb, var(--or-sheet-fg) 18%, var(--or-input-border)); }
 
     &:focus,
     &:focus-visible {
         outline: none;
-        border-color: var(--or-focus-border);
-        box-shadow: 0 0 0 4px var(--or-focus-ring);
+        border-color: color-mix(in srgb, var(--or-sheet-fg) 18%, var(--or-input-border));
+        @include or-running-border;
     }
 
     &.is-selected {
-        border-color: var(--or-accent-border);
-        background: var(--or-accent-soft);
-        box-shadow: 0 0 0 4px var(--or-accent-ring);
+        border-color: color-mix(in srgb, var(--or-sheet-fg) 14%, var(--or-input-border));
+        background: var(--or-input-bg);
         animation: or-select-pop 220ms var(--or-ease);
+        @include or-running-border;
     }
 
-    &.is-open { border-color: var(--or-focus-border); }
+    &.is-open {
+        border-color: color-mix(in srgb, var(--or-sheet-fg) 18%, var(--or-input-border));
+        @include or-running-border;
+    }
 }
 
 .or-select-card-text { min-width: 0; flex: 1; }
@@ -794,14 +882,14 @@ body:has(.modal-content.or-sheet) {
     top: calc(100% + 0.4rem);
     left: 0;
     right: 0;
-    z-index: 8;
+    z-index: 80;
     max-height: 16rem;
     overflow: auto;
     padding: 0.35rem;
     border: 1px solid var(--or-sheet-border);
     border-radius: 0.75rem;
-    background: var(--or-sheet-bg);
-    box-shadow: 0 12px 32px -8px rgba(15, 23, 42, 0.18);
+    background: var(--mt-card);
+    box-shadow: var(--mt-shadow-lg);
     scrollbar-width: thin;
 }
 
@@ -822,9 +910,8 @@ body:has(.modal-content.or-sheet) {
     &:hover { background: var(--or-icon-bg); }
 
     &.is-active {
-        border-color: var(--or-accent-border);
-        background: var(--or-accent-soft);
-        box-shadow: 0 0 0 3px var(--or-accent-ring);
+        border-color: color-mix(in srgb, var(--or-sheet-fg) 14%, var(--or-sheet-border));
+        background: var(--or-icon-bg);
     }
 }
 
@@ -849,19 +936,24 @@ select.or-select-card {
 
     &:hover { border-color: color-mix(in srgb, var(--or-accent) 35%, var(--or-input-border)); }
 
-    &:focus,
-    &:focus-visible,
     &:has(option:checked:not([value=""])) {
-        outline: none;
-        border-color: var(--or-accent-border);
-        background-color: var(--or-accent-soft);
-        box-shadow: 0 0 0 4px var(--or-accent-ring);
+        background-color: var(--or-input-bg);
+        border-color: color-mix(in srgb, var(--or-sheet-fg) 14%, var(--or-input-border));
     }
 
     &:focus,
     &:focus-visible {
-        animation: or-select-pop 220ms var(--or-ease);
+        outline: none;
+        --or-run-fill-bg: var(--or-input-bg);
+        animation: or-select-pop 220ms var(--or-ease), or-border-run var(--or-run-duration, 2.35s) linear infinite;
+        @include or-running-border-input;
     }
+}
+
+.o_web_client .o_kanban_group:not(.o_column_folded):hover,
+.o_web_client .o_kanban_group:not(.o_column_folded).o_kanban_hover {
+    border-color: color-mix(in srgb, var(--or-sheet-fg) 14%, var(--mt-border)) !important;
+    @include or-running-border;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -871,8 +963,12 @@ select.or-select-card {
     .or-select-card,
     .or-input,
     .or-select,
-    .or-textarea {
-        animation-duration: 0.01ms !important;
+    .or-textarea,
+    .or-chip,
+    .o_web_client .o_kanban_group {
+        animation: none !important;
         transition-duration: 0.01ms !important;
+
+        &::after { animation: none !important; }
     }
 }

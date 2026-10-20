@@ -258,6 +258,8 @@ class CrmLead(models.Model):
             'plan_list': ref('mail.mail_activity_plan_view_tree'),
             'plan_kanban': ref('mail.mail_activity_plan_view_kanban'),
             'tag_list': ref('sales_team.sales_team_crm_tag_view_tree'),
+            'lost_search': ref('crm.crm_lost_reason_view_search'),
+            'lost_list': ref('crm.crm_lost_reason_view_tree'),
         }
 
     # ------------------------------------------------------------------

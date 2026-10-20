@@ -86,10 +86,10 @@ $mt-bar-height: 3.5rem;
         height: 100%;
         min-height: 0;
         overflow: hidden;
-        background: var(--mt-card);
-        border: 1px solid var(--mt-border);
-        border-radius: var(--mt-shell-radius, 1rem);
-        box-shadow: var(--mt-shell-shadow);
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
     }
 
     .o_content {

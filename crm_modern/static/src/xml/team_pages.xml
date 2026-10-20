@@ -2,21 +2,50 @@
 <templates xml:space="preserve">
 
     <t t-name="crm_modern.TeamDialog">
-        <FormDrawer title="title" subtitle="subtitle" close="props.close" onNew.bind="resetForm" newLabel="title">
+        <FormDrawer title="title" subtitle="subtitle" close="props.close" onNew.bind="resetForm" newLabel="newLabel">
             <form class="or-sheet-fields" t-on-submit.prevent="save" novalidate="">
                 <div t-if="state.error" class="or-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
-                <div class="or-field"><label class="or-label" for="cm_td_name">Team name</label>
-                    <input id="cm_td_name" class="or-input" t-model="state.name" placeholder="Enter a name" autofocus=""/></div>
                 <div class="or-field">
-                    <label class="or-label" for="cm_td_leader">Team leader</label>
-                    <OrSelectCard id="'cm_td_leader'" value="state.user_id" options="userCardOptions"
+                    <label class="or-label" for="cm_td_name">Team name</label>
+                    <input id="cm_td_name" class="or-input" t-model="state.name" placeholder="e.g. Sales" autofocus=""/>
+                </div>
+                <div class="or-field">
+                    <label class="or-label">Team leader</label>
+                    <OrSelectCard value="state.user_id" options="userCardOptions"
                                   placeholder="'No leader'" emptyHint="'Pick a leader later'"
                                   allowEmpty="true" onChange="(id) => this.state.user_id = id"/>
+                </div>
+                <div class="or-field">
+                    <label class="or-label" for="cm_td_alias">Email alias</label>
+                    <input id="cm_td_alias" class="or-input" t-model="state.alias_name" placeholder="e.g. sales"/>
+                    <p class="or-hint">Optional. Incoming mail to this alias can create leads.</p>
+                </div>
+                <div class="or-field">
+                    <span class="or-label">How the team works</span>
+                    <div class="or-field-row">
+                        <div>
+                            <span class="or-label">Qualify leads first</span>
+                            <button type="button" class="or-toggle" t-att-aria-checked="state.use_leads ? 'true' : 'false'"
+                                    t-att-class="{ 'is-on': state.use_leads }" t-on-click="() => this.state.use_leads = !this.state.use_leads"/>
+                        </div>
+                        <div>
+                            <span class="or-label">Use the pipeline</span>
+                            <button type="button" class="or-toggle" t-att-aria-checked="state.use_opportunities ? 'true' : 'false'"
+                                    t-att-class="{ 'is-on': state.use_opportunities }" t-on-click="() => this.state.use_opportunities = !this.state.use_opportunities"/>
+                        </div>
+                    </div>
+                    <div class="or-field-row" style="margin-top:0.75rem">
+                        <div>
+                            <span class="or-label">Skip auto-assignment</span>
+                            <button type="button" class="or-toggle" t-att-aria-checked="state.assignment_optout ? 'true' : 'false'"
+                                    t-att-class="{ 'is-on': state.assignment_optout }" t-on-click="() => this.state.assignment_optout = !this.state.assignment_optout"/>
+                        </div>
+                    </div>
                 </div>
                 <button type="submit" class="d-none"/>
             </form>
             <t t-set-slot="footer">
-                <button type="button" class="or-save-pill" t-on-click="save">Save changes</button>
+                <button type="button" class="or-save-pill" t-att-disabled="state.saving" t-on-click="save">Save changes</button>
             </t>
         </FormDrawer>
     </t>

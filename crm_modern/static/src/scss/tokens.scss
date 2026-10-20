@@ -1,56 +1,54 @@
-// Modern CRM design tokens — from the Pulse CRM design system (ui-ux-pro-max):
-// Flat design · primary #2563EB · deal green #059669 · slate neutrals · dense dashboard spacing.
-// Prefixed with --cm- so nothing leaks into the rest of Odoo.
+// Modern CRM design tokens — aliases of the global Modern Theme (--mt-*).
+// Never a second palette: changing the preset or light/dark restyles CRM too.
 :root {
-    --cm-radius: 0.625rem;
-    --cm-radius-sm: 0.375rem;
+    --cm-radius: var(--mt-radius, 0.625rem);
+    --cm-radius-sm: var(--mt-radius-sm, 0.375rem);
 
-    --cm-bg: #f8fafc;
-    --cm-fg: #0f172a;
-    --cm-card: #ffffff;
-    --cm-muted: #f1f5f9;
-    --cm-muted-fg: #475569;
-    --cm-subtle-fg: #64748b;
-    --cm-border: #e2e8f0;
-    --cm-input: #e2e8f0;
-    --cm-card-matte: #fbfbfc;
-    --cm-edge: rgba(16, 24, 40, 0.06);
+    --cm-bg: var(--mt-content-bg, var(--mt-background));
+    --cm-fg: var(--mt-foreground);
+    --cm-card: var(--mt-card);
+    --cm-muted: var(--mt-muted);
+    --cm-muted-fg: var(--mt-muted-foreground);
+    --cm-subtle-fg: var(--mt-muted-foreground);
+    --cm-border: var(--mt-border);
+    --cm-input: var(--mt-input);
+    --cm-card-matte: var(--mt-card-matte, var(--mt-card));
+    --cm-edge: color-mix(in srgb, var(--mt-foreground) 8%, transparent);
 
-    --cm-primary: #2563eb;
-    --cm-primary-fg: #ffffff;
-    --cm-primary-soft: #eef3fe;
-    --cm-primary-soft-fg: #1e40af;
-    --cm-ring: rgba(37, 99, 235, 0.35);
+    --cm-primary: var(--mt-primary);
+    --cm-primary-fg: var(--mt-primary-foreground);
+    --cm-primary-soft: color-mix(in srgb, var(--mt-primary) 13%, var(--mt-card));
+    --cm-primary-soft-fg: var(--mt-primary);
+    --cm-ring: color-mix(in srgb, var(--mt-primary) 45%, transparent);
 
-    --cm-success: #059669;
-    --cm-success-soft: #ecfdf5;
-    --cm-warning: #b45309;
-    --cm-warning-soft: #fffbeb;
-    --cm-danger: #dc2626;
-    --cm-danger-soft: #fef2f2;
-    --cm-info: #2563eb;
-    --cm-info-soft: #eff6ff;
-    --cm-violet: #7c3aed;
-    --cm-violet-soft: #f5f3ff;
+    --cm-success: var(--mt-success);
+    --cm-success-soft: color-mix(in srgb, var(--mt-success) 14%, var(--mt-card));
+    --cm-warning: var(--mt-warning);
+    --cm-warning-soft: color-mix(in srgb, var(--mt-warning) 14%, var(--mt-card));
+    --cm-danger: var(--mt-destructive);
+    --cm-danger-soft: color-mix(in srgb, var(--mt-destructive) 14%, var(--mt-card));
+    --cm-info: var(--mt-info, var(--mt-primary));
+    --cm-info-soft: color-mix(in srgb, var(--mt-info, var(--mt-primary)) 14%, var(--mt-card));
+    --cm-violet: var(--mt-info, var(--mt-primary));
+    --cm-violet-soft: color-mix(in srgb, var(--mt-info, var(--mt-primary)) 14%, var(--mt-card));
 
-    // validated categorical chart palette (CVD-safe, see dataviz validator run)
-    --cm-chart-1: #2563eb;
-    --cm-chart-2: #059669;
-    --cm-chart-3: #d97706;
-    --cm-chart-4: #7c3aed;
+    --cm-chart-1: var(--mt-primary);
+    --cm-chart-2: var(--mt-success);
+    --cm-chart-3: var(--mt-warning);
+    --cm-chart-4: var(--mt-info, var(--mt-primary));
 
-    --cm-sidebar: #fafafa;
-    --cm-sidebar-fg: #3f3f46;
-    --cm-sidebar-hover: #f4f4f5;
-    --cm-sidebar-accent: #f0f0f2;
-    --cm-sidebar-accent-fg: #18181b;
-    --cm-sidebar-muted-fg: #71717a;
-    --cm-sidebar-border: #e4e4e7;
+    --cm-sidebar: var(--mt-sidebar-bg, var(--mt-card));
+    --cm-sidebar-fg: var(--mt-foreground);
+    --cm-sidebar-hover: var(--mt-nav-hover, var(--mt-muted));
+    --cm-sidebar-accent: var(--mt-nav-active-bg, var(--mt-muted));
+    --cm-sidebar-accent-fg: var(--mt-nav-active-fg, var(--mt-primary));
+    --cm-sidebar-muted-fg: var(--mt-muted-foreground);
+    --cm-sidebar-border: var(--mt-border);
     --cm-sidebar-width: 15.5rem;
 
-    --cm-shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.04);
-    --cm-shadow-md: 0 1px 2px rgba(16, 24, 40, 0.04), 0 6px 18px -8px rgba(16, 24, 40, 0.10);
-    --cm-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
-    --cm-shadow-lg: 0 12px 32px -8px rgba(15, 23, 42, 0.18);
-    --cm-ease: cubic-bezier(0.2, 0, 0, 1);
+    --cm-shadow-xs: var(--mt-shadow-xs);
+    --cm-shadow-md: var(--mt-shadow-md);
+    --cm-shadow-sm: var(--mt-shadow-sm);
+    --cm-shadow-lg: var(--mt-shadow-lg);
+    --cm-ease: var(--mt-ease, cubic-bezier(0.2, 0, 0, 1));
 }

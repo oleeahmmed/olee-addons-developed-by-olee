@@ -10,7 +10,7 @@ import { user } from "@web/core/user";
 import { useBus, useService } from "@web/core/utils/hooks";
 import { loadFeatures } from "../core/features";
 import { CampaignDialog, QuickCreateDialog } from "../components/dialogs";
-import { ActivityPlanDialog, ActivityTypeDialog, StageDialog, TagDialog } from "../components/config_dialogs";
+import { ActivityPlanDialog, ActivityTypeDialog, LostReasonDialog, MemberDialog, StageDialog, TagDialog } from "../components/config_dialogs";
 import { TeamDialog } from "../pages/team_pages";
 
 /**
@@ -49,6 +49,7 @@ const REPLACED = new Set([
     "crm.crm_lead_menu_my_activities",
     "crm.sales_team_menu_team_pipeline",
     "crm.crm_team_config",
+    "crm.crm_team_member_config",
     "crm.crm_team_menu_config_activity_types",
     "crm.mail_activity_plan_menu_config_lead",
     "crm.menu_crm_lead_stage_act",
@@ -357,10 +358,16 @@ export class ModernSidebar extends Component {
             this.dialog.add(TagDialog, { onSaved: reload });
             return;
         }
+        if (spec.resModel === "crm.team.member") {
+            this.dialog.add(MemberDialog, { onSaved: reload });
+            return;
+        }
+        if (spec.resModel === "crm.lost.reason") {
+            this.dialog.add(LostReasonDialog, { onSaved: reload });
+            return;
+        }
         if (spec.resModel === "crm.team") {
-            this.orm.searchRead("res.users", [["share", "=", false]], ["name"], { order: "name" }).then((users) => {
-                this.dialog.add(TeamDialog, { users, onSaved: reload });
-            });
+            this.dialog.add(TeamDialog, { onSaved: reload });
             return;
         }
         this.action.doAction({

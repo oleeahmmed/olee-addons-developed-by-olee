@@ -108,9 +108,6 @@
                             <button type="object" name="crm_modern_open_pipeline" class="btn btn-link cm-tc-link">
                                 <i class="fa fa-columns" title="Pipeline"/> Pipeline
                             </button>
-                            <button type="object" name="crm_modern_open_team" class="btn btn-link cm-tc-link ms-auto">
-                                Manage team <i class="fa fa-arrow-right" title="Open"/>
-                            </button>
                         </footer>
                     </t>
                 </templates>

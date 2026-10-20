@@ -108,7 +108,7 @@
             border-radius: 0.625rem;
             flex-shrink: 0;
             background: color-mix(in srgb, white 92%, transparent);
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+            box-shadow: var(--cm-shadow-xs);
         }
 
         > div { display: grid; min-width: 0; line-height: 1.25; }
@@ -148,7 +148,7 @@
         font-size: 0.8125rem;
         font-weight: 600;
         cursor: pointer;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.14), 0 4px 12px -6px rgba(0, 0, 0, 0.35);
+        box-shadow: var(--cm-shadow-md);
         transition: filter 140ms var(--cm-ease), transform 140ms var(--cm-ease);
 
         > i { font-size: 0.8125rem; flex-shrink: 0; }
@@ -294,7 +294,7 @@
             background: var(--mt-nav-active-bg, var(--cm-sidebar-accent));
             color: var(--mt-nav-active-fg, var(--cm-sidebar-accent-fg));
             font-weight: 600;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+            box-shadow: var(--cm-shadow-xs);
 
             .fa { opacity: 1; }
         }
@@ -436,11 +436,11 @@
         --btn-bg: var(--cm-primary);
         --btn-border-color: var(--cm-primary);
         --btn-color: var(--cm-primary-fg);
-        --btn-hover-bg: color-mix(in srgb, var(--cm-primary) 88%, black);
-        --btn-hover-border-color: color-mix(in srgb, var(--cm-primary) 88%, black);
+        --btn-hover-bg: color-mix(in srgb, var(--cm-primary) 88%, var(--cm-fg));
+        --btn-hover-border-color: color-mix(in srgb, var(--cm-primary) 88%, var(--cm-fg));
         --btn-hover-color: var(--cm-primary-fg);
-        --btn-active-bg: color-mix(in srgb, var(--cm-primary) 80%, black);
-        --btn-active-border-color: color-mix(in srgb, var(--cm-primary) 80%, black);
+        --btn-active-bg: color-mix(in srgb, var(--cm-primary) 80%, var(--cm-fg));
+        --btn-active-border-color: color-mix(in srgb, var(--cm-primary) 80%, var(--cm-fg));
     }
     .btn { --btn-border-radius: var(--mt-radius-sm, var(--cm-radius-sm)); }
 }

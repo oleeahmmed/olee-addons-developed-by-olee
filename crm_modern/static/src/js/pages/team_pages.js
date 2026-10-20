@@ -29,45 +29,114 @@ function useMembership(onChanged) {
     };
 }
 
-/** Right-sheet create for a team; member lines stay on the team page. */
+/** Right-sheet create / edit for a sales team. */
 export class TeamDialog extends Component {
     static template = "crm_modern.TeamDialog";
     static components = { FormDrawer, OrSelectCard };
-    static props = { close: Function, users: Array, onSaved: Function };
+    static props = {
+        close: Function,
+        users: { type: Array, optional: true },
+        onSaved: { type: Function, optional: true },
+        resId: { type: [Number, Boolean], optional: true },
+    };
 
     setup() {
         this.orm = useService("orm");
-        this.state = useState({ name: "", user_id: "", error: null });
+        this.state = useState({
+            users: this.props.users || [],
+            name: "",
+            user_id: "",
+            alias_name: "",
+            use_leads: false,
+            use_opportunities: true,
+            assignment_optout: false,
+            error: null,
+            saving: false,
+            fresh: false,
+        });
+        onWillStart(() => this.load());
     }
-    get title() {
+    get isEdit() {
+        return Boolean(this.props.resId) && !this.state.fresh;
+    }
+    get newLabel() {
         return _t("New sales team");
     }
-    get subtitle() {
-        return _t("Name the team and pick a leader. Add salespeople on the next screen.");
+    get title() {
+        return this.isEdit ? this.state.name || _t("Sales team") : _t("New sales team");
     }
-    resetForm() {
-        Object.assign(this.state, { name: "", user_id: "", error: null });
+    get subtitle() {
+        return this.isEdit
+            ? _t("Name, leader and how this team takes leads.")
+            : _t("Name the team and pick a leader. Add salespeople from the list.");
     }
     get userCardOptions() {
-        return this.props.users.map((u) => ({
+        return this.state.users.map((u) => ({
             id: u.id,
             title: u.name,
             hint: _t("Team leader"),
         }));
     }
-    async save() {
-        if (!this.state.name.trim()) {
-            this.state.error = _t("Team name is required.");
+    async load() {
+        if (!this.state.users.length) {
+            this.state.users = await this.orm.searchRead("res.users", [["share", "=", false]], ["name"], { order: "name" });
+        }
+        if (!this.props.resId) {
             return;
         }
-        const leader = Number(this.state.user_id) || false;
-        const [id] = await this.orm.create("crm.team", [{
-            name: this.state.name.trim(),
+        const [team] = await this.orm.read("crm.team", [this.props.resId], [
+            "name", "user_id", "alias_name", "use_leads", "use_opportunities", "assignment_optout",
+        ]);
+        if (!team) {
+            return;
+        }
+        Object.assign(this.state, {
+            name: team.name || "",
+            user_id: team.user_id ? team.user_id[0] : "",
+            alias_name: team.alias_name || "",
+            use_leads: Boolean(team.use_leads),
+            use_opportunities: Boolean(team.use_opportunities),
+            assignment_optout: Boolean(team.assignment_optout),
+        });
+    }
+    resetForm() {
+        Object.assign(this.state, {
+            name: "", user_id: "", alias_name: "", use_leads: false, use_opportunities: true,
+            assignment_optout: false, error: null, saving: false, fresh: true,
+        });
+    }
+    async save() {
+        const s = this.state;
+        if (!s.name.trim()) {
+            s.error = _t("Give the team a name.");
+            return;
+        }
+        s.saving = true;
+        const leader = Number(s.user_id) || false;
+        const vals = {
+            name: s.name.trim(),
             user_id: leader,
-            member_ids: leader ? [[4, leader]] : [],
-        }]);
-        this.props.close();
-        this.props.onSaved(id);
+            alias_name: s.alias_name.trim() || false,
+            use_leads: s.use_leads,
+            use_opportunities: s.use_opportunities,
+            assignment_optout: s.assignment_optout,
+        };
+        try {
+            let id = this.isEdit ? this.props.resId : false;
+            if (id) {
+                await this.orm.write("crm.team", [id], vals);
+            } else {
+                if (leader) {
+                    vals.member_ids = [[4, leader]];
+                }
+                [id] = await this.orm.create("crm.team", [vals]);
+            }
+            this.props.onSaved?.(id);
+            this.props.close();
+        } catch (e) {
+            s.saving = false;
+            throw e;
+        }
     }
 }
 

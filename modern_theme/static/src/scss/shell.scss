@@ -2,25 +2,157 @@
 
 :root,
 html[data-mt-theme] {
-    --mt-canvas: var(--mt-content-bg, #f4f4f5);
+    --mt-canvas: var(--mt-content-bg);
     --mt-shell-radius: 1rem;
-    --mt-shell-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 4px 16px -4px rgba(15, 23, 42, 0.08);
+    --mt-shell-shadow: var(--mt-shadow-md);
 }
 
 .o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_sidebar, .o_mr_sidebar) {
     background: var(--mt-canvas) !important;
 
     > .o_action_manager {
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+        overflow: hidden;
         background: var(--mt-canvas);
         padding: 0.625rem 0.875rem 0.875rem;
         box-sizing: border-box;
+
+        // One OmniRouters-style wrap: everything besides top bar + sidebar
+        // sits in a single rounded card that fills the remaining body.
+        > * {
+            flex: 1 1 auto;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--mt-card);
+            border: 1px solid var(--mt-border);
+            border-radius: var(--mt-shell-radius);
+            box-shadow: var(--mt-shell-shadow);
+        }
+
+        .o_cm_page,
+        .o_ss_page,
+        .o_im_page,
+        .o_mp_page,
+        .o_mr_page,
+        .od-page,
+        .o_view_controller,
+        .o_form_view_container {
+            flex: 1 1 auto;
+            min-height: 0;
+        }
+
+        .o_cm_page,
+        .o_ss_page,
+        .o_im_page,
+        .o_mp_page,
+        .o_mr_page,
+        .od-page {
+            height: auto;
+        }
+
+        > .od-page,
+        > .o_cm.od-page,
+        > .o_ss.od-page,
+        > .o_im.od-page,
+        > .o_mp.od-page,
+        > .o_mr.od-page {
+            overflow-y: auto;
+        }
+
+        .o_cm_page--native,
+        .o_ss_page--native,
+        .o_im_page--native,
+        .o_mp_page--native,
+        .o_mr_page--native {
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+
+            [class*="-container--native"] {
+                flex: 1 1 auto;
+                min-height: 0;
+                width: 100%;
+                max-width: none;
+                padding: 0 !important;
+                gap: 0;
+            }
+
+            [class*="-native"] {
+                flex: 1 1 auto;
+                min-height: 0;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+                border: 0;
+                border-radius: 0;
+                box-shadow: none;
+                background: transparent;
+            }
+
+            .o_view_controller,
+            [class*="_native_view"] {
+                flex: 1 1 auto;
+                min-height: 0;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .o_content {
+                flex: 1 1 auto;
+                min-height: 0;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+                background: transparent;
+            }
+
+            .o_list_view,
+            .o_kanban_view,
+            .o_list_renderer,
+            .o_kanban_renderer {
+                flex: 1 1 auto;
+                min-height: 0;
+            }
+
+            .o_list_renderer {
+                margin: 0;
+                border: 0;
+                border-radius: 0;
+                box-shadow: none;
+                overflow: auto;
+                background: transparent;
+            }
+        }
     }
 
     .o_main_navbar {
-        background: var(--mt-chrome-bg, var(--mt-card, #fff)) !important;
+        background: var(--mt-chrome-bg, var(--mt-card)) !important;
         border-bottom: 1px solid var(--mt-border) !important;
         box-shadow: none !important;
         color: var(--mt-foreground);
+    }
+
+    // Search sits in the card header. Odoo autofocuses it on every list, which
+    // used to paint a loud green ring. Keep a quiet border; no focus glow.
+    .o_searchview,
+    .o_searchview_input_container {
+        box-shadow: none !important;
+        outline: none !important;
+        &:focus,
+        &:focus-within {
+            border-color: var(--mt-border, var(--mt-input)) !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+    }
+    .o_searchview_input:focus,
+    .o_searchview_input:focus-visible {
+        outline: none !important;
+        box-shadow: none !important;
     }
 }
 
@@ -220,11 +352,19 @@ html[data-mt-theme] {
     flex-direction: column;
     min-height: 0;
     flex: 1 1 auto;
-    background: var(--mt-card, #fff);
+    background: var(--mt-card);
     border: 1px solid var(--mt-border);
     border-radius: var(--mt-shell-radius);
     box-shadow: var(--mt-shell-shadow);
     overflow: hidden;
+}
+
+.o_graph_view .o_graph_renderer,
+.o_graph_canvas_container,
+.o_pivot,
+.o_calendar_container {
+    background: var(--mt-card);
+    color: var(--mt-foreground);
 }
 
 .mt-page-toolbar {
@@ -253,7 +393,7 @@ html[data-mt-theme] {
 .mt-home {
     box-sizing: border-box;
     padding: 1.25rem 1.5rem 1.5rem;
-    background: var(--mt-card, #fff);
+    background: var(--mt-card);
     border: 1px solid var(--mt-border);
     border-radius: var(--mt-shell-radius);
     box-shadow: var(--mt-shell-shadow);
@@ -290,7 +430,7 @@ html[data-mt-theme] {
     text-align: start;
     border: 1px solid var(--mt-border);
     border-radius: calc(var(--mt-radius, 0.5rem) + 0.125rem);
-    background: var(--mt-card, #fff);
+    background: var(--mt-card);
     color: var(--mt-foreground);
     cursor: pointer;
     transition: border-color 150ms ease, box-shadow 150ms ease;
@@ -305,7 +445,7 @@ html[data-mt-theme] {
     }
     &:hover {
         border-color: color-mix(in srgb, var(--mt-primary) 35%, var(--mt-border));
-        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+        box-shadow: var(--mt-shadow-md);
     }
 }
 

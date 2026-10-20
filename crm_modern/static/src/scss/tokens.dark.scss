@@ -1,46 +1,41 @@
-// Dark mode values (loaded in web.assets_web_dark only).
+// Dark mode: CRM tokens stay aliases of --mt-* (tokens.dark.scss already
+// swapped those). This file only exists so the dark asset bundle has a hook;
+// do not re-hardcode a second palette here.
 :root {
-    --cm-bg: #0b1120;
-    --cm-fg: #e2e8f0;
-    --cm-card: #111827;
-    --cm-muted: #1e293b;
-    --cm-muted-fg: #94a3b8;
-    --cm-subtle-fg: #8b9ab0;
-    --cm-border: #1f2a3d;
-    --cm-input: #263247;
-
-    --cm-primary: #3b82f6;
-    --cm-primary-soft: #172554;
-    --cm-primary-soft-fg: #bfdbfe;
-    --cm-ring: rgba(96, 165, 250, 0.45);
-
-    --cm-success: #34d399;
-    --cm-success-soft: rgba(16, 185, 129, 0.12);
-    --cm-warning: #fbbf24;
-    --cm-warning-soft: rgba(245, 158, 11, 0.12);
-    --cm-danger: #f87171;
-    --cm-danger-soft: rgba(239, 68, 68, 0.12);
-    --cm-info: #60a5fa;
-    --cm-info-soft: rgba(59, 130, 246, 0.14);
-    --cm-violet: #a78bfa;
-    --cm-violet-soft: rgba(139, 92, 246, 0.14);
-
-    --cm-chart-1: #3b82f6;
-    --cm-chart-2: #0ea371;
-    --cm-chart-3: #d97706;
-    --cm-chart-4: #8b5cf6;
-
-    --cm-sidebar: #111113;
-    --cm-sidebar-fg: #cbd5e1;
-    --cm-sidebar-hover: #1a2335;
-    --cm-sidebar-accent: #27272a;
-    --cm-sidebar-accent-fg: #fafafa;
-    --cm-sidebar-muted-fg: #a1a1aa;
-    --cm-sidebar-border: #27272a;
-    --cm-card-matte: #131c2c;
-    --cm-edge: rgba(0, 0, 0, 0.25);
-    --cm-shadow-xs: none;
-    --cm-shadow-md: 0 1px 2px rgba(0, 0, 0, 0.3);
-    --cm-shadow-sm: none;
-    --cm-shadow-lg: 0 12px 32px -8px rgba(0, 0, 0, 0.6);
+    --cm-bg: var(--mt-content-bg, var(--mt-background));
+    --cm-fg: var(--mt-foreground);
+    --cm-card: var(--mt-card);
+    --cm-muted: var(--mt-muted);
+    --cm-muted-fg: var(--mt-muted-foreground);
+    --cm-subtle-fg: var(--mt-muted-foreground);
+    --cm-border: var(--mt-border);
+    --cm-input: var(--mt-input);
+    --cm-card-matte: var(--mt-card-matte, var(--mt-card));
+    --cm-edge: color-mix(in srgb, var(--mt-foreground) 10%, transparent);
+    --cm-primary: var(--mt-primary);
+    --cm-primary-fg: var(--mt-primary-foreground);
+    --cm-primary-soft: color-mix(in srgb, var(--mt-primary) 18%, var(--mt-card));
+    --cm-primary-soft-fg: var(--mt-primary);
+    --cm-ring: color-mix(in srgb, var(--mt-primary) 45%, transparent);
+    --cm-success: var(--mt-success);
+    --cm-success-soft: color-mix(in srgb, var(--mt-success) 16%, var(--mt-card));
+    --cm-warning: var(--mt-warning);
+    --cm-warning-soft: color-mix(in srgb, var(--mt-warning) 16%, var(--mt-card));
+    --cm-danger: var(--mt-destructive);
+    --cm-danger-soft: color-mix(in srgb, var(--mt-destructive) 16%, var(--mt-card));
+    --cm-info: var(--mt-info, var(--mt-primary));
+    --cm-info-soft: color-mix(in srgb, var(--mt-info, var(--mt-primary)) 16%, var(--mt-card));
+    --cm-violet: var(--mt-info, var(--mt-primary));
+    --cm-violet-soft: color-mix(in srgb, var(--mt-info, var(--mt-primary)) 16%, var(--mt-card));
+    --cm-chart-1: var(--mt-primary);
+    --cm-chart-2: var(--mt-success);
+    --cm-chart-3: var(--mt-warning);
+    --cm-chart-4: var(--mt-info, var(--mt-primary));
+    --cm-sidebar: var(--mt-sidebar-bg, var(--mt-card));
+    --cm-sidebar-fg: var(--mt-foreground);
+    --cm-sidebar-hover: var(--mt-nav-hover, var(--mt-muted));
+    --cm-sidebar-accent: var(--mt-nav-active-bg, var(--mt-muted));
+    --cm-sidebar-accent-fg: var(--mt-nav-active-fg, var(--mt-primary));
+    --cm-sidebar-muted-fg: var(--mt-muted-foreground);
+    --cm-sidebar-border: var(--mt-border);
 }

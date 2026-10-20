@@ -15,9 +15,8 @@
     &.o_cm_page--native .cm-container--native {
         max-width: none;
         width: 100%;
-        padding: 1rem 1.25rem 1.25rem;
+        padding: 0;
         gap: 0;
-        @media (max-width: 767.98px) { padding: 0.75rem 0.75rem 1rem; }
     }
 
     .cm-grid-stats {
@@ -142,12 +141,10 @@
             display: inline-flex; align-items: center; justify-content: center; gap: 0.375rem;
             transition: background-color 150ms var(--cm-ease), color 150ms var(--cm-ease), box-shadow 160ms var(--cm-ease);
             & + button { border-left: 1px solid var(--cm-border); }
-            &:hover { background: var(--cm-muted); color: var(--cm-fg);
-                box-shadow: inset 0 0 0 1px var(--or-accent-border, var(--cm-primary)), 0 0 0 3px var(--or-accent-ring, var(--cm-ring));
-            }
+            &:hover { background: var(--cm-muted); color: var(--cm-fg); }
             &.cm-done { background: var(--cm-primary-soft); color: var(--cm-primary-soft-fg); }
             &[aria-current="step"] { background: var(--cm-primary); color: var(--cm-primary-fg); }
-            &[aria-current="step"].cm-won { background: var(--cm-success); color: #fff; }
+            &[aria-current="step"].cm-won { background: var(--cm-success); color: var(--cm-primary-fg); }
         }
     }
     .cm-record-grid {
@@ -304,11 +301,11 @@
         --btn-bg: var(--cm-primary);
         --btn-border-color: var(--cm-primary);
         --btn-color: var(--cm-primary-fg);
-        --btn-hover-bg: color-mix(in srgb, var(--cm-primary) 88%, black);
-        --btn-hover-border-color: color-mix(in srgb, var(--cm-primary) 88%, black);
+        --btn-hover-bg: color-mix(in srgb, var(--cm-primary) 88%, var(--cm-fg));
+        --btn-hover-border-color: color-mix(in srgb, var(--cm-primary) 88%, var(--cm-fg));
         --btn-hover-color: var(--cm-primary-fg);
-        --btn-active-bg: color-mix(in srgb, var(--cm-primary) 80%, black);
-        --btn-active-border-color: color-mix(in srgb, var(--cm-primary) 80%, black);
+        --btn-active-bg: color-mix(in srgb, var(--cm-primary) 80%, var(--cm-fg));
+        --btn-active-border-color: color-mix(in srgb, var(--cm-primary) 80%, var(--cm-fg));
         --btn-active-color: var(--cm-primary-fg);
         --btn-disabled-bg: var(--cm-primary);
         --btn-disabled-border-color: var(--cm-primary);
@@ -349,9 +346,7 @@
             border: 1px solid var(--cm-input);
             border-radius: var(--cm-radius-sm) 0 0 var(--cm-radius-sm);
             background: var(--cm-card);
-            box-shadow: var(--cm-shadow-sm);
-            transition: border-color 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease);
-            &:focus-within { border-color: var(--cm-primary); box-shadow: 0 0 0 3px var(--cm-ring); }
+            box-shadow: none;
             .o_searchview_input { font-size: 0.875rem; }
             .o_searchview_facet {
                 border-radius: var(--cm-radius-sm);
@@ -439,7 +434,7 @@
                 background: var(--cm-card);
                 box-shadow: var(--cm-shadow-sm);
                 transition: border-color 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease);
-                &:hover { border-color: color-mix(in srgb, var(--cm-primary) 35%, var(--cm-border)); box-shadow: 0 4px 12px -4px rgba(15, 23, 42, 0.12); }
+                &:hover { border-color: color-mix(in srgb, var(--cm-primary) 35%, var(--cm-border)); box-shadow: var(--cm-shadow-md); }
             }
             .o_kanban_group {
                 border-radius: calc(var(--cm-radius) + 2px);
@@ -456,8 +451,16 @@
             th, td { border-color: var(--cm-border); }
             thead th, .o_pivot_header_cell_closed, .o_pivot_header_cell_opened { background: color-mix(in srgb, var(--cm-muted) 55%, var(--cm-card)); }
         }
-        .o_graph_renderer, .o_calendar_container, .o_activity_view { background: var(--cm-card); }
-        .o_graph_renderer { padding: 1rem 1.25rem; }
+        .o_graph_renderer, .o_calendar_container, .o_activity_view { background: var(--cm-card); color: var(--cm-fg); }
+        .o_graph_renderer {
+            padding: 1rem 1.25rem;
+            .o_graph_canvas_container { background: var(--cm-card); }
+            .o_graph_tooltip, .o-tooltip {
+                background: var(--cm-card) !important;
+                color: var(--cm-fg) !important;
+                border-color: var(--cm-border) !important;
+            }
+        }
         .o_calendar_container .fc { --fc-border-color: var(--cm-border); }
         .o_activity_view table { th, td { border-color: var(--cm-border); } }
     }
@@ -518,9 +521,9 @@
             --btn-bg: var(--cm-primary);
             --btn-color: var(--cm-primary-fg);
             --btn-border-color: var(--cm-primary);
-            --btn-hover-bg: color-mix(in srgb, var(--cm-primary) 88%, black);
+            --btn-hover-bg: color-mix(in srgb, var(--cm-primary) 88%, var(--cm-fg));
             --btn-hover-color: var(--cm-primary-fg);
-            --btn-hover-border-color: color-mix(in srgb, var(--cm-primary) 88%, black);
+            --btn-hover-border-color: color-mix(in srgb, var(--cm-primary) 88%, var(--cm-fg));
         }
         .o-mail-Chatter-attachFiles, .o-mail-Followers-button, .btn-link {
             color: var(--cm-muted-fg);
@@ -548,7 +551,7 @@
             --btn-bg: var(--cm-primary);
             --btn-border-color: var(--cm-primary);
             --btn-color: var(--cm-primary-fg);
-            --btn-hover-bg: color-mix(in srgb, var(--cm-primary) 88%, black);
+            --btn-hover-bg: color-mix(in srgb, var(--cm-primary) 88%, var(--cm-fg));
             --btn-hover-color: var(--cm-primary-fg);
             height: 2rem;
             padding: 0 0.875rem;
@@ -628,11 +631,11 @@
         --btn-bg: var(--cm-primary);
         --btn-border-color: var(--cm-primary);
         --btn-color: var(--cm-primary-fg);
-        --btn-hover-bg: color-mix(in srgb, var(--cm-primary) 88%, black);
-        --btn-hover-border-color: color-mix(in srgb, var(--cm-primary) 88%, black);
+        --btn-hover-bg: color-mix(in srgb, var(--cm-primary) 88%, var(--cm-fg));
+        --btn-hover-border-color: color-mix(in srgb, var(--cm-primary) 88%, var(--cm-fg));
         --btn-hover-color: var(--cm-primary-fg);
-        --btn-active-bg: color-mix(in srgb, var(--cm-primary) 80%, black);
-        --btn-active-border-color: color-mix(in srgb, var(--cm-primary) 80%, black);
+        --btn-active-bg: color-mix(in srgb, var(--cm-primary) 80%, var(--cm-fg));
+        --btn-active-border-color: color-mix(in srgb, var(--cm-primary) 80%, var(--cm-fg));
     }
     .btn-secondary {
         --btn-bg: var(--cm-card);

@@ -176,4 +176,67 @@
         </FormDrawer>
     </t>
 
+    <t t-name="crm_modern.MemberDialog">
+        <FormDrawer title="title" subtitle="subtitle" close="props.close" onNew.bind="resetForm" newLabel="newLabel">
+            <form class="or-sheet-fields" t-on-submit.prevent="save" novalidate="">
+                <div t-if="state.error" class="or-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
+                <div class="or-field">
+                    <label class="or-label">Salesperson</label>
+                    <OrSelectCard value="state.user_id" options="userOptions"
+                                  placeholder="'Pick a person'" emptyHint="'Who will own the leads'"
+                                  onChange="(id) => this.state.user_id = id"/>
+                </div>
+                <div class="or-field">
+                    <label class="or-label">Sales team</label>
+                    <OrSelectCard value="state.crm_team_id" options="teamOptions"
+                                  placeholder="'Pick a team'" emptyHint="'Where they sell'"
+                                  onChange="(id) => this.state.crm_team_id = id"/>
+                </div>
+                <div class="or-field">
+                    <label class="or-label" for="cm_mb_cap">Leads they can take (30 days)</label>
+                    <input id="cm_mb_cap" type="number" min="0" step="1" class="or-input" t-model="state.assignment_max"/>
+                    <p class="or-hint">0 means they will not get new leads automatically.</p>
+                </div>
+                <div class="or-field or-field-row">
+                    <div>
+                        <span class="or-label">Pause assignment</span>
+                        <button type="button" class="or-toggle" t-att-aria-checked="state.assignment_optout ? 'true' : 'false'"
+                                t-att-class="{ 'is-on': state.assignment_optout }" t-on-click="() => this.state.assignment_optout = !this.state.assignment_optout"/>
+                    </div>
+                    <div>
+                        <span class="or-label">Active</span>
+                        <button type="button" class="or-toggle" t-att-aria-checked="state.active ? 'true' : 'false'"
+                                t-att-class="{ 'is-on': state.active }" t-on-click="() => this.state.active = !this.state.active"/>
+                    </div>
+                </div>
+                <button type="submit" class="d-none"/>
+            </form>
+            <t t-set-slot="footer">
+                <button type="button" class="or-save-pill" t-att-disabled="state.saving" t-on-click="save">Save changes</button>
+            </t>
+        </FormDrawer>
+    </t>
+
+    <t t-name="crm_modern.LostReasonDialog">
+        <FormDrawer title="title" subtitle="subtitle" close="props.close" onNew.bind="resetForm" newLabel="newLabel">
+            <form class="or-sheet-fields" t-on-submit.prevent="save" novalidate="">
+                <div t-if="state.error" class="or-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
+                <div class="or-field">
+                    <label class="or-label" for="cm_lr_name">Reason</label>
+                    <input id="cm_lr_name" class="or-input" t-model="state.name" placeholder="e.g. Price too high" autofocus=""/>
+                </div>
+                <div class="or-field">
+                    <span class="or-label">Active</span>
+                    <button type="button" class="or-toggle" t-att-aria-checked="state.active ? 'true' : 'false'"
+                            t-att-class="{ 'is-on': state.active }" t-on-click="() => this.state.active = !this.state.active"/>
+                    <p class="or-hint">Turn off to hide it from the lost-deal list without deleting it.</p>
+                </div>
+                <button type="submit" class="d-none"/>
+            </form>
+            <t t-set-slot="footer">
+                <button type="button" class="or-save-pill" t-att-disabled="state.saving" t-on-click="save">Save changes</button>
+            </t>
+        </FormDrawer>
+    </t>
+
 </templates>

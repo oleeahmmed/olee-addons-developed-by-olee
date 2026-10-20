@@ -2,17 +2,18 @@
 // NativeView (.cm-card.cm-native) is the single outer section — same shell for
 // pipeline, leads and campaigns, whether the inner view is a table or a board.
 .o_cm.o_cm_page.o_cm_page--native {
-    background: var(--cm-bg);
+    background: transparent;
     overflow: hidden;
     .cm-container--native {
         max-width: none;
         width: 100%;
-        height: 100%;
-        padding: 1rem 1.25rem 1.25rem !important;
+        height: auto;
+        flex: 1 1 auto;
+        min-height: 0;
+        padding: 0 !important;
         gap: 0;
         display: flex;
         flex-direction: column;
-        @media (max-width: 767.98px) { padding: 0.75rem 0.75rem 1rem !important; }
     }
     > .cm-container--native > .cm-native {
         flex: 1 1 auto;
@@ -21,10 +22,10 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        background: var(--or-sheet-bg, var(--cm-card));
-        border: 1px solid var(--or-sheet-border, var(--cm-border));
-        border-radius: calc(var(--or-input-radius, var(--cm-radius)) + 2px);
-        box-shadow: var(--cm-shadow-sm);
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
         > .o_view_controller, > .o_cm_native_view { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
         > .cm-skeleton { margin: 1rem; }
     }
@@ -59,12 +60,14 @@
         }
         .o_view_nocontent { background: transparent; }
         .o_list_renderer {
-            margin: 0.875rem 1rem 1.25rem;
-            border: 1px solid var(--cm-border);
-            border-radius: 0.75rem;
-            background: var(--cm-card);
-            overflow: hidden;
-            box-shadow: var(--cm-shadow-sm);
+            flex: 1 1 auto;
+            min-height: 0;
+            margin: 0;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            overflow: auto;
+            box-shadow: none;
         }
         .o_list_table thead th {
             height: 2.5rem;
@@ -91,7 +94,7 @@
         border: 1px solid var(--cm-border); border-radius: calc(var(--cm-radius) + 2px);
         background: var(--cm-card); box-shadow: var(--cm-shadow-sm);
         transition: border-color 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease);
-        &:hover { border-color: color-mix(in srgb, var(--or-accent, var(--cm-primary)) 40%, var(--cm-border)); box-shadow: 0 8px 20px -8px rgba(15, 23, 42, 0.14); }
+        &:hover { border-color: color-mix(in srgb, var(--or-accent, var(--cm-primary)) 40%, var(--cm-border)); box-shadow: var(--cm-shadow-md); }
     }
 
     .o_kanban_record.o_kanban_ghost { border: 0; box-shadow: none; background: transparent; padding: 0; min-height: 0; }
@@ -180,7 +183,7 @@
 .cm-userpick-pop {
     display: grid; gap: 0.25rem; width: 16rem; padding: 0.5rem;
     background: var(--cm-card); color: var(--cm-fg); border: 1px solid var(--cm-border);
-    border-radius: var(--cm-radius); box-shadow: var(--cm-shadow, 0 12px 32px rgba(0, 0, 0, 0.28));
+    border-radius: var(--cm-radius); box-shadow: var(--cm-shadow-lg);
     .cm-picker input { color: var(--cm-fg); background: var(--cm-card); }
     .cm-picker-menu { position: static; margin-top: 0.25rem; box-shadow: none; border: 0; padding: 0; max-height: 14rem; }
     .cm-userpick-clear {

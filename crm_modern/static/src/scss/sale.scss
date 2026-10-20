@@ -16,7 +16,7 @@
             display: inline-grid; place-items: center; width: 1.125rem; height: 1.125rem; border-radius: 50%;
             font-size: 0.625rem; font-weight: 600; background: var(--cm-muted); color: var(--cm-muted-fg);
         }
-        li.cm-on .cm-step-dot { background: var(--cm-success); color: #fff; }
+        li.cm-on .cm-step-dot { background: var(--cm-success); color: var(--cm-primary-fg); }
     }
     .cm-sale-total { font-size: 0.75rem; color: var(--cm-muted-fg); strong { color: var(--cm-success); font-size: 0.875rem; } }
 

@@ -28,7 +28,7 @@ class TestCrmModern(TransactionCase):
 
     def test_client_actions_and_menus(self):
         for xmlid in ('dashboard', 'pipeline', 'leads', 'activities', 'campaigns', 'campaign', 'salespeople',
-                      'teams', 'stages', 'activity_types', 'activity_plans', 'tags', 'record', 'team'):
+                      'teams', 'stages', 'activity_types', 'activity_plans', 'tags', 'lost_reasons', 'record', 'team'):
             action = self.env.ref(f'crm_modern.action_{xmlid}')
             self.assertEqual(action.tag, f'crm_modern.{xmlid}')
         leads_menu = self.env.ref('crm_modern.menu_leads')

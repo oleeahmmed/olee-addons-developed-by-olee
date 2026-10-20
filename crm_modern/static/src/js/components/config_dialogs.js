@@ -564,3 +564,182 @@ export class TagDialog extends Component {
         }
     }
 }
+
+/** A salesperson in one sales team. */
+export class MemberDialog extends Component {
+    static template = "crm_modern.MemberDialog";
+    static components = { FormDrawer, OrSelectCard };
+    static props = { close: Function, onSaved: { type: Function, optional: true }, resId: { type: [Number, Boolean], optional: true } };
+
+    setup() {
+        this.orm = useService("orm");
+        this.state = useState({
+            users: [],
+            teams: [],
+            user_id: "",
+            crm_team_id: "",
+            assignment_max: 30,
+            assignment_optout: false,
+            active: true,
+            error: null,
+            saving: false,
+            fresh: false,
+        });
+        onWillStart(() => this.load());
+    }
+
+    get isEdit() {
+        return Boolean(this.props.resId) && !this.state.fresh;
+    }
+    get newLabel() {
+        return _t("Add salesperson");
+    }
+    get title() {
+        if (this.isEdit) {
+            const user = this.state.users.find((u) => u.id == this.state.user_id);
+            return user?.name || _t("Salesperson");
+        }
+        return _t("Add salesperson");
+    }
+    get subtitle() {
+        return _t("Who sells, on which team, and how many leads they can take.");
+    }
+    get userOptions() {
+        return this.state.users.map((u) => ({ id: u.id, title: u.name }));
+    }
+    get teamOptions() {
+        return this.state.teams.map((t) => ({ id: t.id, title: t.name }));
+    }
+
+    async load() {
+        const [users, teams] = await Promise.all([
+            this.orm.searchRead("res.users", [["share", "=", false]], ["name"], { order: "name" }),
+            this.orm.searchRead("crm.team", [], ["name"], { order: "sequence, name" }),
+        ]);
+        this.state.users = users;
+        this.state.teams = teams;
+        if (!this.props.resId) {
+            if (teams[0]) {
+                this.state.crm_team_id = teams[0].id;
+            }
+            return;
+        }
+        const [row] = await this.orm.read("crm.team.member", [this.props.resId], [
+            "user_id", "crm_team_id", "assignment_max", "assignment_optout", "active",
+        ]);
+        if (!row) {
+            return;
+        }
+        Object.assign(this.state, {
+            user_id: row.user_id ? row.user_id[0] : "",
+            crm_team_id: row.crm_team_id ? row.crm_team_id[0] : "",
+            assignment_max: row.assignment_max || 0,
+            assignment_optout: Boolean(row.assignment_optout),
+            active: row.active !== false,
+        });
+    }
+
+    resetForm() {
+        Object.assign(this.state, {
+            user_id: "", crm_team_id: this.state.teams[0]?.id || "", assignment_max: 30,
+            assignment_optout: false, active: true, error: null, saving: false, fresh: true,
+        });
+    }
+
+    async save() {
+        const s = this.state;
+        if (!s.user_id) {
+            s.error = _t("Pick a salesperson.");
+            return;
+        }
+        if (!s.crm_team_id) {
+            s.error = _t("Pick a sales team.");
+            return;
+        }
+        s.saving = true;
+        const vals = {
+            user_id: Number(s.user_id),
+            crm_team_id: Number(s.crm_team_id),
+            assignment_max: Number(s.assignment_max) || 0,
+            assignment_optout: s.assignment_optout,
+            active: s.active,
+        };
+        try {
+            let id = this.isEdit ? this.props.resId : false;
+            if (id) {
+                await this.orm.write("crm.team.member", [id], vals);
+            } else {
+                [id] = await this.orm.create("crm.team.member", [vals]);
+            }
+            this.props.onSaved?.(id);
+            this.props.close();
+        } catch (e) {
+            s.saving = false;
+            throw e;
+        }
+    }
+}
+
+/** Why a deal was marked lost. */
+export class LostReasonDialog extends Component {
+    static template = "crm_modern.LostReasonDialog";
+    static components = { FormDrawer };
+    static props = { close: Function, onSaved: { type: Function, optional: true }, resId: { type: [Number, Boolean], optional: true } };
+
+    setup() {
+        this.orm = useService("orm");
+        this.state = useState({ name: "", active: true, error: null, saving: false, fresh: false });
+        onWillStart(() => this.load());
+    }
+
+    get isEdit() {
+        return Boolean(this.props.resId) && !this.state.fresh;
+    }
+    get newLabel() {
+        return _t("New lost reason");
+    }
+    get title() {
+        return this.isEdit ? this.state.name || _t("Lost reason") : _t("New lost reason");
+    }
+    get subtitle() {
+        return _t("A short reason salespeople pick when they mark a deal lost.");
+    }
+
+    async load() {
+        if (!this.props.resId) {
+            return;
+        }
+        const [row] = await this.orm.read("crm.lost.reason", [this.props.resId], ["name", "active"]);
+        if (row) {
+            this.state.name = row.name || "";
+            this.state.active = row.active !== false;
+        }
+    }
+
+    resetForm() {
+        Object.assign(this.state, { name: "", active: true, error: null, saving: false, fresh: true });
+    }
+
+    async save() {
+        const s = this.state;
+        if (!s.name.trim()) {
+            s.error = _t("Give the reason a name.");
+            return;
+        }
+        s.saving = true;
+        const vals = { name: s.name.trim(), active: s.active };
+        try {
+            let id = this.isEdit ? this.props.resId : false;
+            if (id) {
+                await this.orm.write("crm.lost.reason", [id], vals);
+            } else {
+                [id] = await this.orm.create("crm.lost.reason", [vals]);
+            }
+            this.props.onSaved?.(id);
+            this.props.close();
+        } catch (e) {
+            s.saving = false;
+            throw e;
+        }
+    }
+}

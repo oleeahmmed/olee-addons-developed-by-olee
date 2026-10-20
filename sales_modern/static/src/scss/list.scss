@@ -3,8 +3,9 @@
 // List pages use Odoo's own two-part layout, full width: the control panel (New,
 // title, search, pager, view switcher) and the view right below it, no outer card.
 .o_ss.o_ss_page.o_ss_page--native {
-    background: var(--ss-card);
-    .ss-container--native { max-width: none; height: 100%; padding: 0 !important; gap: 0; }
+    background: transparent;
+    overflow: hidden;
+    .ss-container--native { max-width: none; flex: 1 1 auto; min-height: 0; height: auto; padding: 0 !important; gap: 0; }
     > .ss-container--native > .ss-native {
         height: 100%; display: flex; flex-direction: column;
         border: 0; border-radius: 0; box-shadow: none; background: var(--ss-card);

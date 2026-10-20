@@ -411,43 +411,54 @@ html[data-mt-theme] {
     --mt-shadow-xl: 0 24px 48px -12px rgba(15, 23, 42, 0.22);
 
     // --- OmniRouters right sheet (simple forms; not order-line pages) ------
-    // Reconstructed from /keys Create API Key screenshots (no login).
-    // Desktop sheet is ~28–32rem; 32rem matches the wider console panel.
+    // All colours come from the active --mt-* preset (never a second palette).
     --or-sheet-width: 32rem;
-    --or-sheet-bg: #ffffff;
-    --or-sheet-border: #e5e7eb;
-    --or-sheet-fg: #0f172a;
-    --or-sheet-muted: #64748b;
-    --or-sheet-subtle: #94a3b8;
-    --or-sheet-shadow: -18px 0 48px rgba(15, 23, 42, 0.08);
+    --or-sheet-bg: var(--mt-card);
+    --or-sheet-border: var(--mt-border);
+    --or-sheet-fg: var(--mt-foreground);
+    --or-sheet-muted: var(--mt-muted-foreground);
+    --or-sheet-subtle: var(--mt-muted-foreground);
+    --or-sheet-shadow: var(--mt-shadow-xl);
     --or-sheet-safe-bottom: 2.75rem;
-    --or-overlay: rgba(255, 255, 255, 0.62);
+    --or-overlay: color-mix(in srgb, var(--mt-background) 62%, transparent);
     --or-overlay-blur: 12px;
     --or-input-height: 2.5rem;
-    --or-input-radius: 0.625rem;
-    --or-input-border: #e5e7eb;
-    --or-input-bg: #ffffff;
-    --or-input-placeholder: #94a3b8;
+    --or-input-radius: var(--mt-radius);
+    --or-input-border: var(--mt-border);
+    --or-input-bg: var(--mt-card);
+    --or-input-placeholder: var(--mt-muted-foreground);
     --or-field-gap: 1.25rem;
     --or-label-size: 0.875rem;
     --or-focus-duration: 180ms;
-    --or-focus-border: #171717;
-    --or-focus-ring: rgba(23, 23, 23, 0.08);
-    --or-accent: #2dd4bf;
-    --or-accent-border: #5eead4;
-    --or-accent-soft: #f0fdfa;
-    --or-accent-ring: rgba(45, 212, 191, 0.22);
-    --or-icon-bg: #f1f5f9;
+    --or-focus-border: var(--mt-foreground);
+    --or-focus-ring: color-mix(in srgb, var(--mt-foreground) 8%, transparent);
+    --or-accent: var(--mt-primary);
+    --or-accent-border: color-mix(in srgb, var(--mt-primary) 55%, var(--mt-border));
+    --or-accent-soft: color-mix(in srgb, var(--mt-primary) 12%, var(--mt-card));
+    --or-accent-ring: color-mix(in srgb, var(--mt-primary) 22%, transparent);
+    --or-icon-bg: var(--mt-muted);
     --or-save-bg: var(--mt-primary);
     --or-save-fg: var(--mt-primary-foreground);
-    --or-save-hover: color-mix(in srgb, var(--mt-primary) 86%, #000);
+    --or-save-hover: color-mix(in srgb, var(--mt-primary) 86%, var(--mt-foreground));
     --or-rail-width: 3.25rem;
-    --or-pill-bg: #ffffff;
-    --or-pill-border: rgba(226, 232, 240, 0.95);
-    --or-pill-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
-    --or-close-fg: #475569;
-    --or-close-hover: #0f172a;
-    --or-toggle-on: #14b8a6;
+    --or-pill-bg: var(--mt-card);
+    --or-pill-border: var(--mt-border);
+    --or-pill-shadow: var(--mt-shadow-md);
+    --or-close-fg: var(--mt-muted-foreground);
+    --or-close-hover: var(--mt-foreground);
+    --or-toggle-on: var(--mt-primary);
     --or-chip-h: 1.75rem;
     --or-ease: var(--mt-ease);
+    --or-run-duration: 2.35s;
+}
+
+@property --or-run {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+
+@keyframes or-border-run {
+    from { --or-run: 0deg; }
+    to { --or-run: 360deg; }
 }
