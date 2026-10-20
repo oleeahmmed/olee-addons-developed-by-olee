@@ -565,6 +565,14 @@ export class TagDialog extends Component {
     }
 }
 
+/** Same Sales privilege levels as Settings → Users (plus Team Documents). */
+export const SALE_ACCESS_OPTIONS = [
+    { id: "none", title: _t("No"), hint: _t("No sales or CRM documents") },
+    { id: "own", title: _t("User: Own Documents Only"), hint: _t("Only their own leads and orders") },
+    { id: "team", title: _t("User: Team Documents"), hint: _t("Their team’s documents, plus their own") },
+    { id: "all", title: _t("User: All Documents"), hint: _t("Everyone’s leads and orders") },
+];
+
 /** Internal login created from CRM, not from Odoo's Users app. */
 export class UserDialog extends Component {
     static template = "crm_modern.UserDialog";
@@ -578,7 +586,7 @@ export class UserDialog extends Component {
             name: "",
             login: "",
             password: "",
-            is_salesperson: true,
+            sale_access: "own",
             team_id: "",
             active: true,
             error: null,
@@ -599,8 +607,14 @@ export class UserDialog extends Component {
     }
     get subtitle() {
         return this.isEdit
-            ? _t("Name, login and whether they sell. Leave the password blank to keep it.")
-            : _t("Name, email and password. They can log in right away.");
+            ? _t("Name, login and sales document access. Leave the password blank to keep it.")
+            : _t("Name, email, password and how much of Sales/CRM they can see.");
+    }
+    get saleAccessOptions() {
+        return SALE_ACCESS_OPTIONS;
+    }
+    get needsTeam() {
+        return this.state.sale_access && this.state.sale_access !== "none";
     }
     get teamOptions() {
         return this.state.teams.map((t) => ({ id: t.id, title: t.name }));
@@ -622,7 +636,7 @@ export class UserDialog extends Component {
             name: row.name || "",
             login: row.login || "",
             password: "",
-            is_salesperson: Boolean(row.is_salesperson),
+            sale_access: row.sale_access || (row.is_salesperson ? "own" : "none"),
             team_id: row.team_id || "",
             active: row.active !== false,
         });
@@ -630,7 +644,7 @@ export class UserDialog extends Component {
 
     resetForm() {
         Object.assign(this.state, {
-            name: "", login: "", password: "", is_salesperson: true,
+            name: "", login: "", password: "", sale_access: "own",
             team_id: this.state.teams[0]?.id || "", active: true, error: null, saving: false, fresh: true,
         });
     }
@@ -650,12 +664,13 @@ export class UserDialog extends Component {
             return;
         }
         s.saving = true;
+        const saleAccess = s.sale_access || "none";
         const vals = {
             name: s.name.trim(),
             login: s.login.trim(),
             password: s.password || false,
-            is_salesperson: s.is_salesperson,
-            team_id: s.is_salesperson ? Number(s.team_id) || false : false,
+            sale_access: saleAccess,
+            team_id: saleAccess !== "none" ? Number(s.team_id) || false : false,
             active: s.active,
         };
         try {
@@ -801,7 +816,7 @@ export class MemberDialog extends Component {
                     name: s.newName.trim(),
                     login: s.newLogin.trim(),
                     password: s.newPassword,
-                    is_salesperson: true,
+                    sale_access: "own",
                     team_id: Number(s.crm_team_id),
                 }]);
             }

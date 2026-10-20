@@ -359,20 +359,37 @@ class TestCrmModernCampaigns(TransactionCase):
             lead.crm_modern_quick_quotation([{'product_id': 1, 'qty': 1}])
 
     def test_create_user_from_crm(self):
+        team = self.env['crm.team'].create({'name': 'CRM user dialog team'})
         login = 'amina.modern@example.com'
         uid = self.env['res.users'].crm_modern_create_user({
             'name': 'Amina Rahman',
             'login': login,
             'password': 'AminaPass1',
-            'is_salesperson': True,
-            'team_id': self.team.id,
+            'sale_access': 'own',
+            'team_id': team.id,
         })
         user = self.env['res.users'].browse(uid)
         self.assertEqual(user.login, login)
         self.assertIn(self.env.ref('sales_team.group_sale_salesman'), user.all_group_ids)
-        self.assertIn(user, self.team.member_ids)
+        self.assertIn(user, team.member_ids)
         user.crm_modern_write_user({'name': 'Amina R.'})
         self.assertEqual(user.name, 'Amina R.')
         form = user.crm_modern_user_form()
+        self.assertEqual(form['sale_access'], 'own')
         self.assertTrue(form['is_salesperson'])
-        self.assertEqual(form['team_id'], self.team.id)
+        self.assertEqual(form['team_id'], team.id)
+
+        team_group = self.env.ref('crm_modern.group_sale_team_documents')
+        user.crm_modern_write_user({'sale_access': 'team'})
+        self.assertIn(team_group, user.all_group_ids)
+        self.assertEqual(user.crm_modern_user_form()['sale_access'], 'team')
+
+        all_group = self.env.ref('sales_team.group_sale_salesman_all_leads')
+        user.crm_modern_write_user({'sale_access': 'all'})
+        self.assertIn(all_group, user.all_group_ids)
+        self.assertNotIn(team_group, user.group_ids)
+        self.assertEqual(user.crm_modern_user_form()['sale_access'], 'all')
+
+        user.crm_modern_write_user({'sale_access': 'none'})
+        self.assertEqual(user.crm_modern_user_form()['sale_access'], 'none')
+        self.assertNotIn(self.env.ref('sales_team.group_sale_salesman'), user.all_group_ids)

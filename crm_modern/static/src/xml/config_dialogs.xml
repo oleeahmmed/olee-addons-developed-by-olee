@@ -194,19 +194,21 @@
                     <input id="cm_usr_pw" class="or-input" type="password" autocomplete="new-password" t-model="state.password"
                            t-att-placeholder="isEdit ? 'Leave blank to keep the current password' : 'Choose a password'"/>
                 </div>
-                <div class="or-field or-field-row">
+                <div class="or-field">
+                    <label class="or-label">Sales documents</label>
+                    <OrSelectCard value="state.sale_access" options="saleAccessOptions"
+                                  placeholder="'Pick access'" emptyHint="'How much of Sales/CRM they can see'"
+                                  onChange="(id) => this.state.sale_access = id || 'none'"/>
+                    <p class="or-hint">Same levels as Settings → Users → Sales. Team Documents is for their sales team only.</p>
+                </div>
+                <div t-if="isEdit" class="or-field or-field-row">
                     <div>
-                        <span class="or-label">Salesperson</span>
-                        <button type="button" class="or-toggle" t-att-aria-checked="state.is_salesperson ? 'true' : 'false'"
-                                t-att-class="{ 'is-on': state.is_salesperson }" t-on-click="() => this.state.is_salesperson = !this.state.is_salesperson"/>
-                    </div>
-                    <div t-if="isEdit">
                         <span class="or-label">Active</span>
                         <button type="button" class="or-toggle" t-att-aria-checked="state.active ? 'true' : 'false'"
                                 t-att-class="{ 'is-on': state.active }" t-on-click="() => this.state.active = !this.state.active"/>
                     </div>
                 </div>
-                <div t-if="state.is_salesperson" class="or-field">
+                <div t-if="needsTeam" class="or-field">
                     <label class="or-label">Sales team</label>
                     <OrSelectCard value="state.team_id" options="teamOptions"
                                   placeholder="'No team yet'" emptyHint="'Add them to a team later'"

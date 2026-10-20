@@ -3,6 +3,7 @@ from . import crm_team
 from . import utm_campaign
 from . import crm_lead_sale
 from . import ir_ui_menu
+from . import ir_rule
 from . import crm_lead_dashboard
 from . import res_users
 from . import res_company
