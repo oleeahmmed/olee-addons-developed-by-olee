@@ -62,9 +62,9 @@ html[data-mt-theme] {
 // ===========================================================================
 // 2. Global polish: radii, focus rings, scrollbars, popovers
 // ===========================================================================
-.btn,
-.o_input,
-.form-control,
+.btn:not(.o_searchview_dropdown_toggler),
+.o_input:not(.o_searchview_input),
+.form-control:not(.o_searchview),
 .form-select,
 .modal-content,
 .dropdown-menu,
@@ -74,8 +74,8 @@ html[data-mt-theme] {
     border-radius: var(--mt-radius);
 }
 
-.o_input,
-.form-control,
+.o_input:not(.o_searchview_input),
+.form-control:not(.o_searchview),
 .form-select {
     border-color: var(--mt-input);
     color: var(--mt-foreground);
@@ -208,19 +208,73 @@ html[data-mt-theme] {
         min-width: 0;
     }
 
-    .o_searchview,
-    .o_searchview_input_container {
+    // One OmniRouters field: hairline on the group, no nested input/button borders.
+    .o_cp_searchview {
+        gap: 0 !important;
+        flex-wrap: nowrap;
+        align-items: stretch;
         min-height: 2rem;
         height: 2rem;
-        border-radius: 0.5rem 0 0 0.5rem;
-        border-color: var(--mt-input);
-        background: var(--mt-background);
-    }
+        border: 1px solid var(--mt-input);
+        border-radius: 0.5rem;
+        overflow: hidden;
+        background: var(--mt-card);
 
-    .o_searchview_dropdown_toggler {
-        min-height: 2rem;
-        height: 2rem;
-        border-radius: 0 0.5rem 0.5rem 0;
+        &:focus-within {
+            border-color: var(--mt-border);
+        }
+
+        .o_searchview,
+        .o_searchview.form-control {
+            min-height: 2rem !important;
+            height: 2rem !important;
+            padding-top: 0;
+            padding-bottom: 0;
+            border: 0 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            outline: none !important;
+            background: transparent !important;
+
+            &:focus,
+            &:focus-within {
+                border: 0 !important;
+                box-shadow: none !important;
+                outline: none !important;
+            }
+        }
+
+        .o_searchview_input_container {
+            min-height: 0;
+            height: auto;
+            border: 0 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            background: transparent !important;
+        }
+
+        .o_searchview_input,
+        .o_searchview_input.o_input {
+            min-height: 0;
+            height: auto;
+            padding: 0;
+            border: 0 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            outline: none !important;
+            background: transparent !important;
+        }
+
+        .o_searchview_dropdown_toggler {
+            margin-left: 0 !important;
+            min-height: 2rem !important;
+            height: 2rem !important;
+            border: 0 !important;
+            border-left: 1px solid var(--mt-input) !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            background: transparent;
+        }
     }
 
     .o_cp_buttons .btn {
@@ -358,7 +412,7 @@ a:where(:not(.btn):not(.dropdown-item):not(.nav-link)) {
 }
 
 .o_field_widget .o_input:focus,
-.form-control:focus,
+.form-control:not(.o_searchview):focus,
 .form-select:focus {
     border-color: var(--mt-primary);
     box-shadow: 0 0 0 0.2rem rgba(var(--mt-primary-rgb), 0.2);

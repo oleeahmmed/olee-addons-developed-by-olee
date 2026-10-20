@@ -257,16 +257,16 @@
 .o_cm .cm-native .o_kanban_renderer.o_cm_deal_kanban,
 .o_cm .cm-native .o_cm_deal_kanban {
     .o_kanban_group { background: color-mix(in srgb, var(--cm-muted) 75%, transparent); }
-    .o_kanban_record {
+    .o_kanban_record:not(.o_kanban_ghost):not(.opacity-50) {
         padding: 0.75rem 0.875rem 0.625rem;
         border: 1px solid var(--cm-border);
         border-radius: var(--cm-radius);
         background: var(--cm-card);
         box-shadow: var(--cm-shadow-sm);
         cursor: pointer;
-        transition: border-color 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease), transform 150ms var(--cm-ease);
-        &:hover { border-color: color-mix(in srgb, var(--cm-primary) 40%, var(--cm-border)); box-shadow: var(--cm-shadow-md); transform: translateY(-1px); }
-        &.o_dragged { transform: none; }
+        transition: border-color 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease);
+        &:hover { border-color: color-mix(in srgb, var(--cm-primary) 40%, var(--cm-border)); box-shadow: var(--cm-shadow-md); }
+        &.o_dragged { transform: none !important; }
         &:focus-visible, &:focus-within { outline: none; }
         @media (prefers-reduced-motion: reduce) { transition: none; &:hover { transform: none; } }
     }

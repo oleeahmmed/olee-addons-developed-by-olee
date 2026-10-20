@@ -266,11 +266,11 @@
     .o_kanban_renderer {
         padding: 0.75rem 1rem 1.25rem;
         background: color-mix(in srgb, var(--cm-muted) 55%, var(--cm-card));
-        .o_kanban_record {
+        .o_kanban_record:not(.o_kanban_ghost):not(.opacity-50) {
             border-radius: var(--cm-radius);
             border: 1px solid var(--cm-border);
             box-shadow: var(--cm-shadow-sm);
-            transition: box-shadow 150ms var(--cm-ease), transform 150ms var(--cm-ease);
+            transition: box-shadow 150ms var(--cm-ease);
             &:hover { box-shadow: var(--cm-shadow-md); }
         }
         .o_kanban_group {
@@ -344,9 +344,9 @@
         .o_searchview {
             min-height: 2rem;
             height: 2rem;
-            border: 1px solid var(--cm-input);
-            border-radius: 0.5rem 0 0 0.5rem;
-            background: var(--cm-card);
+            border: 0;
+            border-radius: 0;
+            background: transparent;
             box-shadow: none;
             .o_searchview_input { font-size: 0.8125rem; }
             .o_searchview_facet {
@@ -358,9 +358,10 @@
         .o_searchview_dropdown_toggler {
             min-height: 2rem;
             height: 2rem;
-            border-color: var(--cm-input);
-            border-radius: 0 0.5rem 0.5rem 0;
-            background: var(--cm-card);
+            border: 0;
+            border-left: 1px solid var(--cm-input);
+            border-radius: 0;
+            background: transparent;
             color: var(--cm-muted-fg);
             &:hover { background: var(--cm-muted); color: var(--cm-fg); }
         }
@@ -437,7 +438,7 @@
             --KanbanRecord-margin-v: 0.5rem;
             background: color-mix(in srgb, var(--cm-muted) 70%, var(--cm-card));
             padding: 1rem 1.25rem 1.25rem;
-            .o_kanban_record {
+            .o_kanban_record:not(.o_kanban_ghost):not(.opacity-50) {
                 border: 1px solid var(--cm-border);
                 border-radius: var(--cm-radius);
                 background: var(--cm-card);

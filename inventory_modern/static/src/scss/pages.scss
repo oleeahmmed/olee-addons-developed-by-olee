@@ -340,9 +340,9 @@
         .o_searchview {
             min-height: 2rem;
             height: 2rem;
-            border: 1px solid var(--im-input);
-            border-radius: 0.5rem 0 0 0.5rem;
-            background: var(--im-card);
+            border: 0;
+            border-radius: 0;
+            background: transparent;
             box-shadow: none;
             .o_searchview_input { font-size: 0.8125rem; }
             .o_searchview_facet {
@@ -354,9 +354,10 @@
         .o_searchview_dropdown_toggler {
             min-height: 2rem;
             height: 2rem;
-            border-color: var(--im-input);
-            border-radius: 0 0.5rem 0.5rem 0;
-            background: var(--im-card);
+            border: 0;
+            border-left: 1px solid var(--im-input);
+            border-radius: 0;
+            background: transparent;
             color: var(--im-muted-fg);
             &:hover { background: var(--im-muted); color: var(--im-fg); }
         }

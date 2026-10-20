@@ -136,38 +136,17 @@ html[data-mt-theme] {
         color: var(--mt-foreground);
     }
 
-    // Search sits in the card header. OmniRouters filters are 32px; Odoo
-    // defaults taller. Quiet border, no autofocus glow.
-    .o_searchview,
-    .o_searchview_input_container {
-        min-height: 2rem !important;
+    // Search sits in the card header. OmniRouters filters are 32px; one
+    // hairline around the group, no nested input or caret borders.
+    .o_cp_searchview {
+        min-height: 2rem;
         height: 2rem;
-        padding-top: 0;
-        padding-bottom: 0;
-        border-radius: 0.5rem 0 0 0.5rem;
-        box-shadow: none !important;
-        outline: none !important;
-        &:focus,
-        &:focus-within {
-            border-color: var(--mt-border, var(--mt-input)) !important;
-            box-shadow: none !important;
-            outline: none !important;
-        }
+        border-radius: 0.5rem;
+        overflow: hidden;
     }
     .o_searchview_input {
         font-size: 0.8125rem;
         line-height: 1.25;
-    }
-    .o_searchview_input:focus,
-    .o_searchview_input:focus-visible {
-        outline: none !important;
-        box-shadow: none !important;
-    }
-    .o_searchview_dropdown_toggler {
-        min-height: 2rem !important;
-        height: 2rem;
-        padding: 0 0.5rem;
-        border-radius: 0 0.5rem 0.5rem 0;
     }
 }
 

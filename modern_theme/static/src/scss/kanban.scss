@@ -67,11 +67,10 @@ $mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_
         color: var(--mt-foreground);
         box-shadow: var(--mt-card-shadow, var(--mt-shadow-md)) !important;
         overflow: hidden;
-        transition: transform 180ms var(--mt-ease, ease), box-shadow 180ms var(--mt-ease, ease), border-color 180ms var(--mt-ease, ease);
+        transition: box-shadow 180ms var(--mt-ease, ease), border-color 180ms var(--mt-ease, ease);
 
         &:hover,
         &:focus-visible {
-            transform: translateY(-2px);
             border-color: color-mix(in srgb, var(--mt-primary) 38%, var(--mt-border)) !important;
             box-shadow: var(--mt-card-shadow-hover, var(--mt-shadow-lg)) !important;
             outline: none;
@@ -150,17 +149,27 @@ $mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_
     }
 
     .o_kanban_record.o_kanban_ghost {
+        max-height: 0 !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
         border: 0 !important;
         background: transparent !important;
         box-shadow: none !important;
+        overflow: hidden;
+        pointer-events: none;
+        &::before, &::after { display: none !important; }
     }
 
-    // Drag helper: no tilt (that was the messy ghost). Placeholder is an empty clone.
+    // Drag helper: no tilt. Keep it in viewport coords — columns must not
+    // create a containing block (no filter / transform / backdrop-filter).
     .o_kanban_record.o_dragged {
         transform: none !important;
+        filter: none !important;
+        backdrop-filter: none !important;
         opacity: 1 !important;
         cursor: grabbing;
-        z-index: 1000;
+        z-index: 1050;
         overflow: visible;
         border-color: color-mix(in srgb, var(--or-sheet-fg, var(--mt-foreground)) 18%, var(--mt-border)) !important;
         box-shadow: var(--mt-shadow-lg) !important;
@@ -214,8 +223,10 @@ $mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_
         padding: 0 0.5rem 0.5rem !important;
         border: 1px solid color-mix(in srgb, var(--mt-border) 70%, transparent) !important;
         border-radius: 1rem;
-        background: color-mix(in srgb, var(--mt-card) 62%, transparent) !important;
-        backdrop-filter: blur(8px);
+        background: color-mix(in srgb, var(--mt-muted) 55%, var(--mt-card)) !important;
+        transform: none;
+        filter: none;
+        backdrop-filter: none;
         box-shadow: inset 0 1px 0 color-mix(in srgb, var(--mt-foreground) 8%, transparent);
         transition: border-color 180ms var(--mt-ease, ease), background-color 180ms var(--mt-ease, ease);
 
@@ -233,8 +244,10 @@ $mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_
         margin: 0 -0.5rem 0.5rem;
         padding: 0.75rem 0.875rem 0.625rem !important;
         border-radius: 1rem 1rem 0 0;
-        background: color-mix(in srgb, var(--mt-card) 88%, transparent) !important;
-        backdrop-filter: blur(8px);
+        background: color-mix(in srgb, var(--mt-card) 92%, var(--mt-muted)) !important;
+        transform: none;
+        filter: none;
+        backdrop-filter: none;
 
         .o_column_title {
             font-size: 0.875rem !important;

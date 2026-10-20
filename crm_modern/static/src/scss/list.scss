@@ -37,9 +37,9 @@
         .o_searchview_input_container {
             min-height: 2rem;
             height: 2rem;
-            border-radius: 0.5rem 0 0 0.5rem;
-            border-color: var(--or-input-border, var(--cm-input));
-            background: var(--or-input-bg, var(--cm-card));
+            border: 0;
+            border-radius: 0;
+            background: transparent;
         }
         // Kill the Stitch dotted canvas so the board sits on the card, like list.
         .o_kanban_view,
