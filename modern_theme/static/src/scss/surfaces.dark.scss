@@ -381,9 +381,39 @@ hr { color: var(--mt-border); }
     border-color: var(--mt-border) !important;
 }
 
-.o_settings_container, .app_settings_block, .o_setting_box {
+.o_settings_container,
+.app_settings_block,
+.o_setting_box {
     background-color: var(--mt-card) !important;
     color: var(--mt-foreground);
+}
+
+.o_form_view.o_base_settings,
+.o_form_view.o_base_settings_view {
+    .o_form_renderer {
+        --settings__tab-bg: var(--mt-muted);
+        --settings__tab-bg--active: var(--mt-card);
+        --settings__tab-color: var(--mt-foreground);
+        --settings__title-bg: transparent;
+    }
+
+    .o_setting_container .settings {
+        background-color: var(--mt-background) !important;
+    }
+
+    .settings_tab .tab:hover,
+    .settings_tab .tab.selected {
+        color: var(--mt-foreground) !important;
+    }
+
+    .settingSearchHeader {
+        background-color: var(--mt-card) !important;
+    }
+
+    .highlighter {
+        background: color-mix(in srgb, var(--mt-primary) 32%, transparent);
+        color: var(--mt-foreground);
+    }
 }
 
 .o_dialog .modal-content,

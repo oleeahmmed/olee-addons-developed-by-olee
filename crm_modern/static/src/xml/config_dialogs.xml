@@ -176,15 +176,77 @@
         </FormDrawer>
     </t>
 
-    <t t-name="crm_modern.MemberDialog">
+    <t t-name="crm_modern.UserDialog">
         <FormDrawer title="title" subtitle="subtitle" close="props.close" onNew.bind="resetForm" newLabel="newLabel">
             <form class="or-sheet-fields" t-on-submit.prevent="save" novalidate="">
                 <div t-if="state.error" class="or-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
                 <div class="or-field">
+                    <label class="or-label" for="cm_usr_name">Name</label>
+                    <input id="cm_usr_name" class="or-input" t-model="state.name" placeholder="e.g. Amina Rahman" autofocus=""/>
+                </div>
+                <div class="or-field">
+                    <label class="or-label" for="cm_usr_login">Email / login</label>
+                    <input id="cm_usr_login" class="or-input" type="email" autocomplete="off" t-model="state.login" placeholder="e.g. amina@company.com"/>
+                    <p class="or-hint">This is what they type on the login page.</p>
+                </div>
+                <div class="or-field">
+                    <label class="or-label" for="cm_usr_pw">Password</label>
+                    <input id="cm_usr_pw" class="or-input" type="password" autocomplete="new-password" t-model="state.password"
+                           t-att-placeholder="isEdit ? 'Leave blank to keep the current password' : 'Choose a password'"/>
+                </div>
+                <div class="or-field or-field-row">
+                    <div>
+                        <span class="or-label">Salesperson</span>
+                        <button type="button" class="or-toggle" t-att-aria-checked="state.is_salesperson ? 'true' : 'false'"
+                                t-att-class="{ 'is-on': state.is_salesperson }" t-on-click="() => this.state.is_salesperson = !this.state.is_salesperson"/>
+                    </div>
+                    <div t-if="isEdit">
+                        <span class="or-label">Active</span>
+                        <button type="button" class="or-toggle" t-att-aria-checked="state.active ? 'true' : 'false'"
+                                t-att-class="{ 'is-on': state.active }" t-on-click="() => this.state.active = !this.state.active"/>
+                    </div>
+                </div>
+                <div t-if="state.is_salesperson" class="or-field">
+                    <label class="or-label">Sales team</label>
+                    <OrSelectCard value="state.team_id" options="teamOptions"
+                                  placeholder="'No team yet'" emptyHint="'Add them to a team later'"
+                                  allowEmpty="true" onChange="(id) => this.state.team_id = id"/>
+                </div>
+                <button type="submit" class="d-none"/>
+            </form>
+            <t t-set-slot="footer">
+                <button type="button" class="or-save-pill" t-att-disabled="state.saving" t-on-click="save">Save</button>
+            </t>
+        </FormDrawer>
+    </t>
+
+    <t t-name="crm_modern.MemberDialog">
+        <FormDrawer title="title" subtitle="subtitle" close="props.close" onNew.bind="resetForm" newLabel="newLabel">
+            <form class="or-sheet-fields" t-on-submit.prevent="save" novalidate="">
+                <div t-if="state.error" class="or-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
+                <t t-if="state.createNew">
+                    <div class="or-field">
+                        <label class="or-label" for="cm_mb_new_name">Name</label>
+                        <input id="cm_mb_new_name" class="or-input" t-model="state.newName" placeholder="e.g. Amina Rahman" autofocus=""/>
+                    </div>
+                    <div class="or-field">
+                        <label class="or-label" for="cm_mb_new_login">Email / login</label>
+                        <input id="cm_mb_new_login" class="or-input" type="email" autocomplete="off" t-model="state.newLogin" placeholder="e.g. amina@company.com"/>
+                    </div>
+                    <div class="or-field">
+                        <label class="or-label" for="cm_mb_new_pw">Password</label>
+                        <input id="cm_mb_new_pw" class="or-input" type="password" autocomplete="new-password" t-model="state.newPassword"/>
+                    </div>
+                    <p class="or-hint"><button type="button" class="btn btn-link p-0" t-on-click="cancelCreate">Pick someone who already has a login</button></p>
+                </t>
+                <div t-else="" class="or-field">
                     <label class="or-label">Salesperson</label>
                     <OrSelectCard value="state.user_id" options="userOptions"
                                   placeholder="'Pick a person'" emptyHint="'Who will own the leads'"
                                   onChange="(id) => this.state.user_id = id"/>
+                    <p t-if="!isEdit" class="or-hint">
+                        <button type="button" class="btn btn-link p-0" t-on-click="startCreate">Person isn't in the list? Create a login</button>
+                    </p>
                 </div>
                 <div class="or-field">
                     <label class="or-label">Sales team</label>

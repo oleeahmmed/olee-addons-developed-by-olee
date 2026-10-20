@@ -651,8 +651,14 @@ a:where(:not(.btn):not(.dropdown-item):not(.nav-link)) {
     background: transparent;
     color: inherit;
     opacity: 0.85;
-    font-size: 1.05rem;
+    line-height: 0;
     transition: background-color 140ms var(--mt-ease), opacity 140ms var(--mt-ease);
+
+    svg {
+        display: block;
+        width: 1.125rem;
+        height: 1.125rem;
+    }
 
     &:hover {
         opacity: 1;
@@ -663,6 +669,54 @@ a:where(:not(.btn):not(.dropdown-item):not(.nav-link)) {
     &:focus-visible {
         outline: none;
         box-shadow: 0 0 0 2px var(--mt-nav-fg);
+    }
+}
+
+.o-dropdown--menu.o_mt_theme_menu,
+.o_mt_theme_menu {
+    min-width: 12.5rem;
+    padding: 0.45rem 0.4rem 0.5rem;
+    z-index: 2000;
+
+    .o_mt_theme_menu_label {
+        padding: 0.35rem 0.65rem 0.25rem;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--mt-muted-foreground);
+    }
+
+    .o_mt_theme_option {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        padding: 0.45rem 0.65rem;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--mt-foreground);
+
+        .o_mt_theme_option_icon {
+            display: inline-grid;
+            place-items: center;
+            width: 1.5rem;
+            height: 1.5rem;
+            color: var(--mt-muted-foreground);
+
+            svg { width: 1rem; height: 1rem; }
+        }
+
+        &.active {
+            background: var(--mt-muted);
+            color: var(--mt-foreground);
+
+            .o_mt_theme_option_icon { color: var(--mt-primary); }
+        }
+
+        &:hover {
+            background: var(--mt-muted);
+        }
     }
 }
 

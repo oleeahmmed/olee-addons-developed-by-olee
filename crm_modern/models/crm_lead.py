@@ -284,6 +284,10 @@ class CrmLead(models.Model):
             'partner_list': ref('base.view_partner_tree'),
             'partner_kanban': ref('base.res_partner_kanban_view'),
             'partner_form': ref('base.view_partner_form'),
+            # internal users (Odoo's views; create/edit uses the CRM drawer)
+            'user_search': ref('base.view_users_search'),
+            'user_list': ref('base.view_users_tree'),
+            'user_kanban': ref('base.view_res_users_kanban'),
         }
 
     # ------------------------------------------------------------------

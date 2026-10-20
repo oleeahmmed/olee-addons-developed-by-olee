@@ -565,6 +565,115 @@ export class TagDialog extends Component {
     }
 }
 
+/** Internal login created from CRM, not from Odoo's Users app. */
+export class UserDialog extends Component {
+    static template = "crm_modern.UserDialog";
+    static components = { FormDrawer, OrSelectCard };
+    static props = { close: Function, onSaved: { type: Function, optional: true }, resId: { type: [Number, Boolean], optional: true } };
+
+    setup() {
+        this.orm = useService("orm");
+        this.state = useState({
+            teams: [],
+            name: "",
+            login: "",
+            password: "",
+            is_salesperson: true,
+            team_id: "",
+            active: true,
+            error: null,
+            saving: false,
+            fresh: false,
+        });
+        onWillStart(() => this.load());
+    }
+
+    get isEdit() {
+        return Boolean(this.props.resId) && !this.state.fresh;
+    }
+    get newLabel() {
+        return _t("New user");
+    }
+    get title() {
+        return this.isEdit ? this.state.name || _t("User") : _t("New user");
+    }
+    get subtitle() {
+        return this.isEdit
+            ? _t("Name, login and whether they sell. Leave the password blank to keep it.")
+            : _t("Name, email and password. They can log in right away.");
+    }
+    get teamOptions() {
+        return this.state.teams.map((t) => ({ id: t.id, title: t.name }));
+    }
+
+    async load() {
+        this.state.teams = await this.orm.searchRead("crm.team", [], ["name"], { order: "sequence, name" });
+        if (!this.props.resId) {
+            if (this.state.teams[0]) {
+                this.state.team_id = this.state.teams[0].id;
+            }
+            return;
+        }
+        const row = await this.orm.call("res.users", "crm_modern_user_form", [this.props.resId]);
+        if (!row) {
+            return;
+        }
+        Object.assign(this.state, {
+            name: row.name || "",
+            login: row.login || "",
+            password: "",
+            is_salesperson: Boolean(row.is_salesperson),
+            team_id: row.team_id || "",
+            active: row.active !== false,
+        });
+    }
+
+    resetForm() {
+        Object.assign(this.state, {
+            name: "", login: "", password: "", is_salesperson: true,
+            team_id: this.state.teams[0]?.id || "", active: true, error: null, saving: false, fresh: true,
+        });
+    }
+
+    async save() {
+        const s = this.state;
+        if (!s.name.trim()) {
+            s.error = _t("Give the person a name.");
+            return;
+        }
+        if (!s.login.trim()) {
+            s.error = _t("Give them an email to log in with.");
+            return;
+        }
+        if (!this.isEdit && !s.password) {
+            s.error = _t("Set a password so they can log in.");
+            return;
+        }
+        s.saving = true;
+        const vals = {
+            name: s.name.trim(),
+            login: s.login.trim(),
+            password: s.password || false,
+            is_salesperson: s.is_salesperson,
+            team_id: s.is_salesperson ? Number(s.team_id) || false : false,
+            active: s.active,
+        };
+        try {
+            let id = this.isEdit ? this.props.resId : false;
+            if (id) {
+                await this.orm.call("res.users", "crm_modern_write_user", [id, vals]);
+            } else {
+                id = await this.orm.call("res.users", "crm_modern_create_user", [vals]);
+            }
+            this.props.onSaved?.(id);
+            this.props.close();
+        } catch (e) {
+            s.saving = false;
+            throw e;
+        }
+    }
+}
+
 /** A salesperson in one sales team. */
 export class MemberDialog extends Component {
     static template = "crm_modern.MemberDialog";
@@ -581,6 +690,10 @@ export class MemberDialog extends Component {
             assignment_max: 30,
             assignment_optout: false,
             active: true,
+            createNew: false,
+            newName: "",
+            newLogin: "",
+            newPassword: "",
             error: null,
             saving: false,
             fresh: false,
@@ -602,7 +715,9 @@ export class MemberDialog extends Component {
         return _t("Add salesperson");
     }
     get subtitle() {
-        return _t("Who sells, on which team, and how many leads they can take.");
+        return this.state.createNew
+            ? _t("Create a login and put them on a team.")
+            : _t("Who sells, on which team, and how many leads they can take.");
     }
     get userOptions() {
         return this.state.users.map((u) => ({ id: u.id, title: u.name }));
@@ -642,34 +757,78 @@ export class MemberDialog extends Component {
     resetForm() {
         Object.assign(this.state, {
             user_id: "", crm_team_id: this.state.teams[0]?.id || "", assignment_max: 30,
-            assignment_optout: false, active: true, error: null, saving: false, fresh: true,
+            assignment_optout: false, active: true, createNew: false,
+            newName: "", newLogin: "", newPassword: "",
+            error: null, saving: false, fresh: true,
         });
+    }
+
+    startCreate() {
+        Object.assign(this.state, { createNew: true, user_id: "", error: null });
+    }
+    cancelCreate() {
+        Object.assign(this.state, { createNew: false, newName: "", newLogin: "", newPassword: "", error: null });
     }
 
     async save() {
         const s = this.state;
-        if (!s.user_id) {
-            s.error = _t("Pick a salesperson.");
-            return;
-        }
         if (!s.crm_team_id) {
             s.error = _t("Pick a sales team.");
             return;
         }
+        if (s.createNew) {
+            if (!s.newName.trim()) {
+                s.error = _t("Give the person a name.");
+                return;
+            }
+            if (!s.newLogin.trim()) {
+                s.error = _t("Give them an email to log in with.");
+                return;
+            }
+            if (!s.newPassword) {
+                s.error = _t("Set a password so they can log in.");
+                return;
+            }
+        } else if (!s.user_id) {
+            s.error = _t("Pick a salesperson, or create a new login.");
+            return;
+        }
         s.saving = true;
-        const vals = {
-            user_id: Number(s.user_id),
-            crm_team_id: Number(s.crm_team_id),
-            assignment_max: Number(s.assignment_max) || 0,
-            assignment_optout: s.assignment_optout,
-            active: s.active,
-        };
         try {
+            let userId = Number(s.user_id) || false;
+            if (s.createNew) {
+                userId = await this.orm.call("res.users", "crm_modern_create_user", [{
+                    name: s.newName.trim(),
+                    login: s.newLogin.trim(),
+                    password: s.newPassword,
+                    is_salesperson: true,
+                    team_id: Number(s.crm_team_id),
+                }]);
+            }
+            const vals = {
+                user_id: userId,
+                crm_team_id: Number(s.crm_team_id),
+                assignment_max: Number(s.assignment_max) || 0,
+                assignment_optout: s.assignment_optout,
+                active: s.active,
+            };
             let id = this.isEdit ? this.props.resId : false;
             if (id) {
                 await this.orm.write("crm.team.member", [id], vals);
-            } else {
+            } else if (!s.createNew) {
                 [id] = await this.orm.create("crm.team.member", [vals]);
+            } else {
+                const members = await this.orm.search("crm.team.member", [
+                    ["user_id", "=", userId], ["crm_team_id", "=", Number(s.crm_team_id)],
+                ], { limit: 1 });
+                id = members[0] || false;
+                if (id) {
+                    await this.orm.write("crm.team.member", [id], {
+                        assignment_max: vals.assignment_max,
+                        assignment_optout: vals.assignment_optout,
+                        active: vals.active,
+                    });
+                }
             }
             this.props.onSaved?.(id);
             this.props.close();

@@ -29,9 +29,20 @@ class TestCrmModern(TransactionCase):
     def test_client_actions_and_menus(self):
         for xmlid in ('dashboard', 'pipeline', 'leads', 'activities', 'campaigns', 'campaign', 'salespeople',
                       'teams', 'stages', 'activity_types', 'activity_plans', 'tags', 'lost_reasons', 'record',
-                      'team', 'customers'):
+                      'team', 'customers', 'users'):
             action = self.env.ref(f'crm_modern.action_{xmlid}')
             self.assertEqual(action.tag, f'crm_modern.{xmlid}')
+        users_menu = self.env.ref('crm_modern.menu_users')
+        self.assertEqual(users_menu.parent_id, self.env.ref('crm.crm_menu_root'))
+        self.assertEqual(users_menu.action.id, self.env.ref('crm_modern.action_users').id)
+        self.assertEqual(
+            self.env.ref('crm_modern.menu_company').action.id,
+            self.env.ref('crm_modern.action_company').id,
+        )
+        self.assertEqual(
+            self.env.ref('crm_modern.menu_general_settings').action.id,
+            self.env.ref('base_setup.action_general_configuration').id,
+        )
         leads_menu = self.env.ref('crm_modern.menu_leads')
         self.assertIn(self.env.ref('crm.group_use_lead'), leads_menu.group_ids if 'group_ids' in leads_menu._fields else leads_menu.groups_id)
 
@@ -346,3 +357,22 @@ class TestCrmModernCampaigns(TransactionCase):
         lead = Lead.create({'name': 'CRM without Sales', 'type': 'opportunity'})
         with self.assertRaises(UserError):
             lead.crm_modern_quick_quotation([{'product_id': 1, 'qty': 1}])
+
+    def test_create_user_from_crm(self):
+        login = 'amina.modern@example.com'
+        uid = self.env['res.users'].crm_modern_create_user({
+            'name': 'Amina Rahman',
+            'login': login,
+            'password': 'AminaPass1',
+            'is_salesperson': True,
+            'team_id': self.team.id,
+        })
+        user = self.env['res.users'].browse(uid)
+        self.assertEqual(user.login, login)
+        self.assertIn(self.env.ref('sales_team.group_sale_salesman'), user.all_group_ids)
+        self.assertIn(user, self.team.member_ids)
+        user.crm_modern_write_user({'name': 'Amina R.'})
+        self.assertEqual(user.name, 'Amina R.')
+        form = user.crm_modern_user_form()
+        self.assertTrue(form['is_salesperson'])
+        self.assertEqual(form['team_id'], self.team.id)

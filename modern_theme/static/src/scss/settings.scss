@@ -1,0 +1,192 @@
+// General Settings / Users / Company: OmniRouters-style surface on Odoo's own forms.
+// Tokens only — light and dark both pick up --mt-* from the active theme.
+
+.o_form_view.o_base_settings,
+.o_form_view.o_base_settings_view {
+    background: var(--mt-background);
+
+    .o_form_renderer {
+        --settings__tab-bg: var(--mt-muted);
+        --settings__tab-bg--active: var(--mt-card);
+        --settings__tab-color: var(--mt-foreground);
+        --settings__title-bg: transparent;
+        background: var(--mt-background) !important;
+        color: var(--mt-foreground);
+    }
+
+    .o_control_panel {
+        background: var(--mt-card) !important;
+        border-bottom: 1px solid var(--mt-border) !important;
+        color: var(--mt-foreground);
+    }
+
+    .o_setting_container {
+        background: var(--mt-background);
+
+        .settings_tab {
+            background: var(--mt-muted) !important;
+            border-right: 1px solid var(--mt-border);
+            padding: 0.75rem 0.5rem;
+
+            .tab {
+                height: 2.5rem;
+                margin: 0.125rem 0.25rem;
+                padding: 0 0.875rem;
+                border-radius: 0.5rem;
+                color: var(--mt-muted-foreground) !important;
+                font-weight: 500;
+
+                .icon {
+                    filter: none;
+                    opacity: 0.9;
+                }
+
+                &:hover {
+                    color: var(--mt-foreground) !important;
+                    background: color-mix(in srgb, var(--mt-card) 70%, transparent);
+                }
+
+                &.selected {
+                    color: var(--mt-foreground) !important;
+                    background: var(--mt-card) !important;
+                    box-shadow: inset 2px 0 0 var(--mt-primary), 0 1px 2px color-mix(in srgb, var(--mt-foreground) 8%, transparent);
+                }
+            }
+        }
+
+        .settings {
+            background: var(--mt-background) !important;
+            color: var(--mt-foreground);
+            padding: 0.5rem 0 2rem;
+
+            .settingSearchHeader {
+                background: var(--mt-card) !important;
+                border: 1px solid var(--mt-border);
+                border-radius: 0.75rem;
+                margin: 1rem 1.25rem 1.25rem;
+                color: var(--mt-foreground);
+
+                .o_searchview,
+                input {
+                    background: transparent !important;
+                    color: var(--mt-foreground);
+                    border: 0;
+                }
+            }
+
+            > .app_settings_block {
+                h2 {
+                    background: transparent !important;
+                    color: var(--mt-foreground);
+                    font-size: 1rem;
+                    font-weight: 650;
+                    letter-spacing: -0.01em;
+                    padding-top: 1.25rem;
+                }
+
+                h3 {
+                    color: var(--mt-muted-foreground);
+                }
+            }
+        }
+    }
+
+    .o_settings_container {
+        background: transparent !important;
+        gap: 0.75rem;
+    }
+
+    .o_setting_box,
+    .app_settings_block .o_setting_box {
+        background: var(--mt-card) !important;
+        color: var(--mt-foreground);
+        border: 1px solid var(--mt-border) !important;
+        border-radius: 0.75rem;
+        padding: 1rem 1.125rem;
+        margin: 0 1.25rem 0.5rem;
+
+        .o_form_label,
+        .o_setting_right_pane > label,
+        .o_setting_right_pane .o_form_label {
+            color: var(--mt-foreground);
+            font-weight: 550;
+        }
+
+        .text-muted,
+        .o_doc_link,
+        p.text-muted,
+        .o_setting_right_pane > .text-muted,
+        .o_setting_help {
+            color: var(--mt-muted-foreground) !important;
+        }
+
+        a, .btn-link {
+            color: var(--mt-primary) !important;
+
+            &:hover { color: color-mix(in srgb, var(--mt-primary) 80%, var(--mt-foreground)) !important; }
+        }
+
+        .o_field_widget input,
+        .o_field_widget select,
+        .o_field_widget .o_input {
+            background: var(--mt-background);
+            color: var(--mt-foreground);
+            border-color: var(--mt-border);
+            border-radius: 0.5rem;
+        }
+    }
+
+    .highlighter {
+        background: color-mix(in srgb, var(--mt-primary) 28%, transparent);
+        color: var(--mt-foreground);
+    }
+}
+
+// Users and company forms (Odoo native) when opened from the modern workspace.
+.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_sidebar, .o_mr_sidebar)
+    > .o_action_manager
+    > .o_form_view:not(.o_base_settings):not(.o_base_settings_view) {
+    .o_notebook {
+        --notebook-bg: var(--mt-card);
+        background: var(--mt-card);
+
+        .nav-tabs {
+            background: var(--mt-card);
+            border-color: var(--mt-border);
+
+            .nav-link {
+                color: var(--mt-muted-foreground);
+                border-radius: 0.5rem 0.5rem 0 0;
+
+                &:hover { color: var(--mt-foreground); }
+                &.active {
+                    color: var(--mt-foreground);
+                    background: var(--mt-card);
+                    border-color: var(--mt-border);
+                    border-bottom-color: var(--mt-card);
+                    box-shadow: inset 0 -2px 0 var(--mt-primary);
+                }
+            }
+        }
+    }
+
+    .o_inner_group,
+    .o_group {
+        .o_form_label { color: var(--mt-muted-foreground); }
+        .o_field_widget { color: var(--mt-foreground); }
+    }
+
+    .oe_title {
+        color: var(--mt-foreground);
+
+        .o_field_widget input {
+            font-weight: 650;
+            letter-spacing: -0.015em;
+        }
+    }
+
+    .o_field_widget a,
+    .o_form_uri {
+        color: var(--mt-primary) !important;
+    }
+}

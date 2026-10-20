@@ -101,4 +101,15 @@
         <field name="tag">crm_modern.sale_orders</field>
         <field name="path">modern-crm-orders</field>
     </record>
+    <record id="action_users" model="ir.actions.client">
+        <field name="name">Users</field>
+        <field name="tag">crm_modern.users</field>
+        <field name="path">modern-crm-users</field>
+    </record>
+    <record id="action_company" model="ir.actions.server">
+        <field name="name">Company</field>
+        <field name="model_id" ref="base.model_res_company"/>
+        <field name="state">code</field>
+        <field name="code">action = model.crm_modern_open_company()</field>
+    </record>
 </odoo>

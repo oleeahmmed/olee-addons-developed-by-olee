@@ -10,7 +10,7 @@ import { user } from "@web/core/user";
 import { useBus, useService } from "@web/core/utils/hooks";
 import { loadFeatures } from "../core/features";
 import { CampaignDialog, QuickCreateDialog } from "../components/dialogs";
-import { ActivityPlanDialog, ActivityTypeDialog, LostReasonDialog, MemberDialog, StageDialog, TagDialog } from "../components/config_dialogs";
+import { ActivityPlanDialog, ActivityTypeDialog, LostReasonDialog, MemberDialog, StageDialog, TagDialog, UserDialog } from "../components/config_dialogs";
 import { TeamDialog } from "../pages/team_pages";
 
 /**
@@ -38,6 +38,7 @@ const SIDEBAR_ORDER = [
     "crm_modern.menu_home",
     "crm_modern.menu_marketing",
     "crm_modern.menu_sales",
+    "crm_modern.menu_users",
 ];
 const GROUP_CHILD_ORDER = {
     "crm_modern.menu_marketing": [
@@ -55,6 +56,16 @@ const GROUP_CHILD_ORDER = {
     "crm_modern.menu_team": [
         "crm_modern.menu_teams",
         "crm_modern.menu_salespeople",
+    ],
+    "crm_modern.menu_config": [
+        "crm_modern.menu_general_settings",
+        "crm_modern.menu_settings",
+        "crm_modern.menu_company",
+        "crm_modern.menu_stages",
+        "crm_modern.menu_activity_types",
+        "crm_modern.menu_activity_plans",
+        "crm_modern.menu_tags",
+        "crm_modern.menu_lost_reasons",
     ],
 };
 // Groups shown as dropdowns in the top bar instead of the sidebar, so the sidebar
@@ -94,7 +105,10 @@ for (const [xmlid, icon] of Object.entries({
     "crm_modern.menu_activities": "fa-clock-o",
     "crm_modern.menu_campaigns": "fa-bullhorn",
     "crm_modern.menu_salespeople": "fa-user",
+    "crm_modern.menu_users": "fa-user-circle",
     "crm_modern.menu_teams": "fa-users",
+    "crm_modern.menu_company": "fa-building-o",
+    "crm_modern.menu_general_settings": "fa-sliders",
     "crm_modern.menu_stages": "fa-list-ol",
     "crm_modern.menu_activity_types": "fa-th",
     "crm_modern.menu_activity_plans": "fa-tasks",
@@ -143,6 +157,7 @@ for (const [xmlid, spec] of Object.entries({
     "crm_modern.menu_quotations": { resModel: "sale.order", label: _t("New quotation") },
     "crm_modern.menu_sale_orders": { resModel: "sale.order", label: _t("New sales order") },
     "crm_modern.menu_salespeople": { resModel: "crm.team.member", label: _t("New salesperson") },
+    "crm_modern.menu_users": { resModel: "res.users", label: _t("New user") },
     "crm_modern.menu_teams": { resModel: "crm.team", label: _t("New sales team") },
     "crm_modern.menu_stages": { resModel: "crm.stage", label: _t("New stage") },
     "crm_modern.menu_activity_types": { resModel: "mail.activity.type", label: _t("New activity type") },
@@ -426,6 +441,10 @@ export class ModernSidebar extends Component {
         }
         if (spec.resModel === "crm.team") {
             this.dialog.add(TeamDialog, { onSaved: reload });
+            return;
+        }
+        if (spec.resModel === "res.users") {
+            this.dialog.add(UserDialog, { onSaved: reload });
             return;
         }
         this.action.doAction({

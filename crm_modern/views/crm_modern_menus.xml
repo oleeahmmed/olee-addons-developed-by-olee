@@ -23,6 +23,8 @@
     <menuitem id="menu_customers" name="Customers" parent="menu_sales" action="action_customers" sequence="3" groups="sales_team.group_sale_salesman"/>
     <menuitem id="menu_dashboard" name="Dashboard" parent="menu_sales" action="action_dashboard" sequence="4"/>
 
+    <menuitem id="menu_users" name="Users" parent="crm.crm_menu_root" action="action_users" sequence="-80" groups="base.group_erp_manager"/>
+
     <menuitem id="menu_team" name="Team" parent="crm.crm_menu_root" sequence="-50" groups="sales_team.group_sale_salesman"/>
     <menuitem id="menu_teams" name="Sales Teams" parent="menu_team" action="action_teams" sequence="1"/>
     <menuitem id="menu_salespeople" name="Salespeople" parent="menu_team" action="action_salespeople" sequence="2"/>
@@ -35,13 +37,14 @@
     <menuitem id="menu_report_activities" name="Activities Analysis" parent="menu_reporting" action="crm.crm_activity_report_action" sequence="4"/>
 
     <menuitem id="menu_config" name="Configuration" parent="crm.crm_menu_root" sequence="30" groups="sales_team.group_sale_manager"/>
-    <!-- Odoo's own CRM settings screen (same rights as the standard Settings menu). -->
-    <menuitem id="menu_settings" name="Settings" parent="menu_config" action="crm.crm_config_settings_action" sequence="0" groups="base.group_system"/>
-    <menuitem id="menu_stages" name="Pipeline Stages" parent="menu_config" action="action_stages" sequence="1"/>
-    <menuitem id="menu_activity_types" name="Activity Types" parent="menu_config" action="action_activity_types" sequence="2"/>
-    <menuitem id="menu_activity_plans" name="Activity Plans" parent="menu_config" action="action_activity_plans" sequence="3"/>
-    <menuitem id="menu_tags" name="Tags" parent="menu_config" action="action_tags" sequence="4"/>
-    <menuitem id="menu_lost_reasons" name="Lost Reasons" parent="menu_config" action="action_lost_reasons" sequence="5"/>
+    <menuitem id="menu_general_settings" name="General Settings" parent="menu_config" action="base_setup.action_general_configuration" sequence="0" groups="base.group_system"/>
+    <menuitem id="menu_settings" name="CRM Settings" parent="menu_config" action="crm.crm_config_settings_action" sequence="1" groups="base.group_system"/>
+    <menuitem id="menu_company" name="Company" parent="menu_config" action="action_company" sequence="2" groups="base.group_erp_manager"/>
+    <menuitem id="menu_stages" name="Pipeline Stages" parent="menu_config" action="action_stages" sequence="3"/>
+    <menuitem id="menu_activity_types" name="Activity Types" parent="menu_config" action="action_activity_types" sequence="4"/>
+    <menuitem id="menu_activity_plans" name="Activity Plans" parent="menu_config" action="action_activity_plans" sequence="5"/>
+    <menuitem id="menu_tags" name="Tags" parent="menu_config" action="action_tags" sequence="6"/>
+    <menuitem id="menu_lost_reasons" name="Lost Reasons" parent="menu_config" action="action_lost_reasons" sequence="7"/>
 
     <function model="res.users" name="_crm_modern_set_default_home_action"/>
 </odoo>

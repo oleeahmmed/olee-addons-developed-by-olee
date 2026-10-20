@@ -1,12 +1,14 @@
+import { Component } from "@odoo/owl";
+import { Dropdown } from "@web/core/dropdown/dropdown";
+import { DropdownItem } from "@web/core/dropdown/dropdown_item";
 import { registry } from "@web/core/registry";
 import { session } from "@web/session";
 import { user } from "@web/core/user";
 import { useService } from "@web/core/utils/hooks";
 
-import { Component } from "@odoo/owl";
-
 export class ThemeToggle extends Component {
     static template = "modern_theme.ThemeToggle";
+    static components = { Dropdown, DropdownItem };
     static props = {};
 
     setup() {
@@ -14,9 +16,12 @@ export class ThemeToggle extends Component {
         this.isDark = Boolean(session.modern_theme?.dark_mode);
     }
 
-    async onClick() {
+    async setDark(dark) {
+        if (Boolean(dark) === this.isDark) {
+            return;
+        }
         await this.orm.write("res.users", [user.userId], {
-            modern_theme_dark_mode: !this.isDark,
+            modern_theme_dark_mode: Boolean(dark),
         });
         window.location.reload();
     }

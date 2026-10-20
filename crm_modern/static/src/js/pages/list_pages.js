@@ -5,7 +5,7 @@ import { user } from "@web/core/user";
 import { useBus, useService } from "@web/core/utils/hooks";
 import { session } from "@web/session";
 import { CampaignDialog, QuickCreateDialog } from "../components/dialogs";
-import { ActivityPlanDialog, ActivityTypeDialog, LostReasonDialog, MemberDialog, StageDialog, TagDialog } from "../components/config_dialogs";
+import { ActivityPlanDialog, ActivityTypeDialog, LostReasonDialog, MemberDialog, StageDialog, TagDialog, UserDialog } from "../components/config_dialogs";
 import { EmptyState } from "../components/ui";
 import { NativeView } from "../components/native_view";
 import { loadFeatures } from "../core/features";
@@ -398,6 +398,28 @@ class CustomersPage extends ListPage {
     }
 }
 
+class UsersPage extends ListPage {
+    static title = _t("Users");
+    static subtitle = _t("People who can log in — add them here, not from Odoo's Users app");
+    static icon = "fa-user-circle";
+    static newLabel = _t("New user");
+    static resModel = "res.users";
+    static prefix = "user";
+    static types = ["list", "kanban"];
+    get domain() {
+        return [["share", "=", false]];
+    }
+    get context() {
+        return { search_default_filter_no_share: 1 };
+    }
+    open(resId) {
+        return this.dialogPromise(UserDialog, { resId });
+    }
+    create() {
+        return this.dialogPromise(UserDialog, {});
+    }
+}
+
 class LostReasonsPage extends ListPage {
     static title = _t("Lost Reasons");
     static subtitle = _t("Why a deal was lost — salespeople pick one of these");
@@ -426,3 +448,4 @@ actions.add("crm_modern.activity_plans", ActivityPlansPage);
 actions.add("crm_modern.tags", TagsPage);
 actions.add("crm_modern.lost_reasons", LostReasonsPage);
 actions.add("crm_modern.customers", CustomersPage);
+actions.add("crm_modern.users", UsersPage);

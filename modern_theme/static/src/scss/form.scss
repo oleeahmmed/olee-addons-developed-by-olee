@@ -9,7 +9,8 @@
 // only restyled, so every field widget and button keeps working.
 
 $mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_sidebar, .o_mr_sidebar)';
-$mt-form: '#{$mt-apps} > .o_action_manager > .o_form_view';
+// Settings is a two-pane app form — keep Odoo's layout and restyle it in settings.scss.
+$mt-form: '#{$mt-apps} > .o_action_manager > .o_form_view:not(.o_base_settings):not(.o_base_settings_view)';
 $mt-any-form: '#{$mt-form}, #{$mt-apps} .modal .o_form_view';
 
 $mt-bar-height: 3.5rem;
