@@ -1,0 +1,922 @@
+// Shared workspace chrome for crm / sales / inventory / purchase / mrp.
+// Generated from crm_modern sidebar, components, and native-list rules.
+// Feature cards (campaign/team kanban) stay in the CRM addon.
+
+:root {
+    @each $p in cm, ss, im, mp, mr {
+        --#{$p}-sidebar-width: 15.5rem;
+    }
+}
+
+@keyframes mt-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+@mixin mt-workspace-sidebar($p) {
+// Modern CRM shell: a full-height, accent-coloured sidebar on the left, the
+// top bar continuing the same colour band to its right, and the page content
+// below it on a soft neutral surface.
+//
+// Every colour comes from the Modern Theme tokens (--mt-nav-*), so switching
+// preset in Settings or switching to dark mode restyles the whole shell. The
+// Modern CRM tokens (--#{$p}-*) are only the fallback for the rare setup where
+// modern_theme is not installed.
+// Only applies while the Modern CRM sidebar is on screen.
+.o_web_client:has(.o_#{$p}_sidebar) {
+    --#{$p}-shell-offset: var(--#{$p}-sidebar-width);
+    &:has(.o_#{$p}_sidebar.#{$p}-collapsed) { --#{$p}-shell-offset: 4.25rem; }
+
+    > .o_action_manager,
+    > .o_navbar {
+        width: calc(100% - var(--#{$p}-shell-offset));
+        margin-inline-start: var(--#{$p}-shell-offset);
+        transition: margin 200ms var(--#{$p}-ease), width 200ms var(--#{$p}-ease);
+    }
+
+    // ---------- top bar: same colour band as the sidebar ----------
+    .o_main_navbar {
+        --NavBar-entry-color: var(--mt-muted-foreground, var(--#{$p}-muted-fg));
+        --NavBar-entry-color--hover: var(--mt-foreground, var(--#{$p}-fg));
+        --NavBar-entry-color--active: var(--mt-foreground, var(--#{$p}-fg));
+        --NavBar-entry-backgroundColor: transparent;
+        --NavBar-entry-backgroundColor--hover: var(--mt-nav-hover, var(--#{$p}-muted));
+        --NavBar-entry-backgroundColor--focus: var(--mt-nav-hover, var(--#{$p}-muted));
+        --NavBar-entry-backgroundColor--active: var(--mt-nav-hover, var(--#{$p}-muted));
+        --NavBar-brand-color: var(--mt-nav-fg, var(--#{$p}-fg));
+        --o-navbar-badge-bg: var(--mt-primary, var(--#{$p}-primary));
+        --o-navbar-badge-color: var(--mt-primary-foreground, var(--#{$p}-primary-fg));
+        --o-navbar-badge-text-shadow: none;
+
+        background: var(--mt-topbar-bg, var(--#{$p}-card));
+        color: var(--mt-foreground, var(--#{$p}-fg));
+        border-bottom: 1px solid var(--mt-border, var(--#{$p}-border));
+        box-shadow: none;
+
+        // The sidebar lists this app's menus, so hide the top-bar section menus (CSS instead of
+        // a NavBar template override: nothing to break when Odoo changes the navbar markup).
+        .o_menu_sections { display: none !important; } // Odoo sets d-flex on the element
+        // The sidebar already shows the app name — don't repeat it in the top bar.
+        .o_menu_brand { display: none !important; } // beats the d-flex utility class on the element
+
+        .o_menu_toggle,
+        .o_navbar_apps_menu .dropdown-toggle,
+        .o_menu_systray > div > .dropdown-toggle,
+        .o_menu_systray > div > button,
+        .o_menu_systray .o-dropdown > .dropdown-toggle {
+            border-radius: var(--mt-radius-sm, var(--#{$p}-radius-sm));
+            color: var(--mt-nav-fg, var(--#{$p}-muted-fg));
+
+            &:hover, &:focus {
+                background-color: var(--mt-nav-hover, var(--#{$p}-muted));
+                color: var(--mt-nav-fg, var(--#{$p}-fg));
+            }
+        }
+
+        .o_switch_company_menu,
+        .o_user_menu {
+            color: var(--mt-nav-fg, var(--#{$p}-fg));
+        }
+
+        .badge,
+        .o_notification_counter,
+        .o-mail-MessagingMenu-counter,
+        .o-mail-ActivityMenu-counter {
+            background-color: var(--mt-primary, var(--#{$p}-primary)) !important;
+            color: var(--mt-primary-foreground, var(--#{$p}-primary-fg)) !important;
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Sidebar
+// ---------------------------------------------------------------------------
+.o_#{$p}_sidebar {
+    position: fixed;
+    z-index: 4;
+    top: 0;
+    inset-inline-start: 0;
+    bottom: 0;
+    width: var(--#{$p}-sidebar-width);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-size: 0.875rem;
+    color: var(--#{$p}-sidebar-fg);
+    background: var(--mt-sidebar-bg, var(--#{$p}-sidebar));
+    border-inline-end: 1px solid var(--#{$p}-sidebar-border);
+    transition: width 200ms var(--#{$p}-ease);
+
+    // header: app switcher style (logo tile + name + subtitle)
+    .#{$p}-sb-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        height: var(--o-navbar-height, 46px);
+        padding: 0 0.875rem;
+        flex-shrink: 0;
+        border-bottom: 1px solid var(--mt-nav-border, var(--#{$p}-sidebar-border));
+
+        img {
+            width: 2rem;
+            height: 2rem;
+            padding: 0.3125rem;
+            border-radius: 0.625rem;
+            flex-shrink: 0;
+            background: color-mix(in srgb, white 92%, transparent);
+            box-shadow: var(--#{$p}-shadow-xs);
+        }
+
+        > div { display: grid; min-width: 0; line-height: 1.25; }
+
+        strong {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--mt-nav-fg, var(--#{$p}-sidebar-accent-fg));
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        small {
+            font-size: 0.6875rem;
+            color: var(--mt-nav-muted-fg, var(--#{$p}-sidebar-muted-fg));
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+
+    // "+ New …" button, right under the app name: creates a record for the
+    // page you are on (quotation on Quotations, product on Products…).
+    .#{$p}-sb-new {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        height: 2.15rem;
+        margin: 0.75rem 0.75rem 0.25rem;
+        padding: 0 1.05rem;
+        flex-shrink: 0;
+        border: 0;
+        border-radius: 999px;
+        background: var(--or-save-bg, var(--mt-primary, var(--#{$p}-primary)));
+        color: var(--or-save-fg, var(--mt-primary-foreground, var(--#{$p}-primary-fg)));
+        font-size: 0.8125rem;
+        font-weight: 600;
+        line-height: 1;
+        cursor: pointer;
+        box-shadow: none;
+        transition: background-color 150ms var(--#{$p}-ease);
+
+        > i { font-size: 0.75rem; flex-shrink: 0; color: inherit; }
+
+        .#{$p}-sb-new-label {
+            min-width: 0;
+            text-align: start;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        &:hover { background: var(--or-save-hover, var(--mt-primary)); filter: none; }
+        &:active { transform: none; }
+
+        &:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 4px var(--or-focus-ring, var(--mt-ring, var(--#{$p}-ring)));
+        }
+    }
+
+    .#{$p}-sb-nav {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0.5rem 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        scrollbar-width: thin;
+        scrollbar-color: var(--mt-nav-scrollbar, var(--#{$p}-sidebar-border)) transparent;
+
+        > div, > ul { padding: 0.25rem 0.5rem; }
+    }
+
+    // SidebarGroupLabel
+    .#{$p}-sb-group-label {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 1.75rem;
+        padding: 0 0.5rem;
+        gap: 0.5rem;
+        border: 0;
+        border-radius: var(--mt-radius-sm, 0.375rem);
+        background: none;
+        cursor: pointer;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--mt-nav-muted-fg, var(--#{$p}-sidebar-muted-fg));
+        transition: background-color 150ms var(--#{$p}-ease), color 150ms var(--#{$p}-ease);
+
+        .fa {
+            margin-left: auto;
+            font-size: 0.625rem;
+            opacity: 0.8;
+            transition: transform 200ms var(--#{$p}-ease);
+        }
+
+        &[aria-expanded="false"] .fa { transform: rotate(-90deg); }
+
+        &:hover {
+            background: var(--mt-nav-hover, var(--#{$p}-sidebar-accent));
+            color: var(--mt-nav-fg, var(--#{$p}-sidebar-accent-fg));
+        }
+
+        &:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--mt-nav-fg, var(--#{$p}-ring));
+        }
+    }
+
+    // SidebarMenu
+    .#{$p}-sb-list {
+        list-style: none;
+        margin: 0 0 0.5rem;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
+    }
+
+    .#{$p}-sb-subhead {
+        padding: 0.375rem 0.5rem 0.125rem;
+        font-size: 0.6875rem;
+        font-weight: 500;
+        color: var(--mt-nav-muted-fg, var(--#{$p}-sidebar-muted-fg));
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    // SidebarMenuButton
+    .#{$p}-sb-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        height: 2rem;
+        padding: 0 0.5rem;
+        border-radius: var(--mt-radius-sm, 0.375rem);
+        font-size: 0.8125rem;
+        font-weight: 400;
+        line-height: 1;
+        color: var(--mt-muted-foreground, var(--#{$p}-sidebar-muted-fg));
+        text-decoration: none;
+        outline: none;
+        transition: background-color 150ms var(--#{$p}-ease), color 150ms var(--#{$p}-ease);
+
+        .fa {
+            width: 1rem;
+            flex-shrink: 0;
+            text-align: center;
+            font-size: 0.9375rem;
+            color: inherit;
+        }
+
+        &.active .fa,
+        &:hover .fa {
+            color: inherit;
+        }
+
+        .#{$p}-sb-label {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        &:hover, &:active {
+            background: var(--mt-nav-hover, var(--#{$p}-sidebar-accent));
+            color: var(--mt-nav-fg, var(--#{$p}-sidebar-accent-fg));
+        }
+
+        &:focus-visible {
+            box-shadow: 0 0 0 2px var(--mt-nav-fg, var(--#{$p}-ring));
+        }
+
+        &.active {
+            background: var(--mt-nav-active-bg, var(--#{$p}-sidebar-accent));
+            color: var(--mt-nav-active-fg, var(--#{$p}-sidebar-accent-fg));
+            font-weight: 600;
+            box-shadow: var(--#{$p}-shadow-xs);
+
+            .fa { opacity: 1; }
+        }
+    }
+
+    // footer: NavUser (avatar + name + email) and the collapse trigger
+    .#{$p}-sb-foot {
+        margin: 0.5rem 0.75rem 0.75rem;
+        padding: 0.375rem 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex-shrink: 0;
+        border-radius: 0.625rem;
+        background: color-mix(in srgb, black 16%, transparent);
+        transition: background-color 150ms var(--#{$p}-ease);
+
+        &:hover { background: color-mix(in srgb, black 24%, transparent); }
+
+        img {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 0.5rem;
+            object-fit: cover;
+            flex-shrink: 0;
+            box-shadow: 0 0 0 1px color-mix(in srgb, white 18%, transparent);
+        }
+
+        .#{$p}-sb-user {
+            flex: 1;
+            min-width: 0;
+            display: grid;
+            line-height: 1.25;
+
+            strong {
+                font-size: 0.8125rem;
+                font-weight: 600;
+                color: var(--mt-nav-fg, var(--#{$p}-sidebar-accent-fg));
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            small {
+                font-size: 0.6875rem;
+                color: var(--mt-nav-muted-fg, var(--#{$p}-sidebar-muted-fg));
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+
+        button {
+            display: grid;
+            place-items: center;
+            width: 1.75rem;
+            height: 1.75rem;
+            flex-shrink: 0;
+            border: 0;
+            background: none;
+            border-radius: var(--mt-radius-sm, 0.375rem);
+            color: var(--mt-nav-muted-fg, var(--#{$p}-sidebar-muted-fg));
+            cursor: pointer;
+            transition: background-color 140ms var(--#{$p}-ease), color 140ms var(--#{$p}-ease);
+
+            &:hover {
+                background: var(--mt-nav-hover, var(--#{$p}-card));
+                color: var(--mt-nav-fg, var(--#{$p}-sidebar-accent-fg));
+            }
+
+            &:focus-visible {
+                outline: none;
+                box-shadow: 0 0 0 2px var(--mt-nav-fg, var(--#{$p}-ring));
+            }
+        }
+    }
+
+    // collapsed = icon rail
+    &.#{$p}-collapsed {
+        width: 4.25rem;
+
+        .#{$p}-sb-brand {
+            padding: 0;
+            justify-content: center;
+
+            > div { display: none; }
+        }
+
+        .#{$p}-sb-new {
+            margin: 0.75rem auto 0.25rem;
+            width: 2.15rem;
+            height: 2.15rem;
+            padding: 0;
+            justify-content: center;
+
+            .#{$p}-sb-new-label { display: none; }
+
+            > i { font-size: 0.875rem; color: inherit; }
+        }
+
+        .#{$p}-sb-group-label,
+        .#{$p}-sb-label,
+        .#{$p}-sb-user,
+        .#{$p}-sb-subhead {
+            display: none;
+        }
+
+        .#{$p}-sb-nav > div,
+        .#{$p}-sb-nav > ul { padding: 0.25rem; }
+
+        .#{$p}-sb-item {
+            justify-content: center;
+            padding: 0;
+            width: 2.25rem;
+            height: 2.25rem;
+            margin: 0 auto;
+
+            .fa { width: auto; }
+        }
+
+        .#{$p}-sb-foot {
+            flex-direction: column;
+            margin: 0.5rem 0.375rem 0.75rem;
+            padding: 0.5rem 0;
+            gap: 0.375rem;
+        }
+    }
+}
+
+@media print {
+    .o_#{$p}_sidebar { display: none; }
+    .o_web_client:has(.o_#{$p}_sidebar) > .o_action_manager { width: 100%; margin-inline-start: 0; }
+}
+
+// Inside the Modern CRM app, Odoo screens opened from it (quotation form, lead form,
+// wizards...) use the same button colours as the modern pages.
+.o_web_client:has(.o_#{$p}_sidebar) > .o_action_manager {
+    .btn-primary {
+        --btn-bg: var(--#{$p}-primary);
+        --btn-border-color: var(--#{$p}-primary);
+        --btn-color: var(--#{$p}-primary-fg);
+        --btn-hover-bg: color-mix(in srgb, var(--#{$p}-primary) 88%, var(--#{$p}-fg));
+        --btn-hover-border-color: color-mix(in srgb, var(--#{$p}-primary) 88%, var(--#{$p}-fg));
+        --btn-hover-color: var(--#{$p}-primary-fg);
+        --btn-active-bg: color-mix(in srgb, var(--#{$p}-primary) 80%, var(--#{$p}-fg));
+        --btn-active-border-color: color-mix(in srgb, var(--#{$p}-primary) 80%, var(--#{$p}-fg));
+    }
+    .btn { --btn-border-radius: var(--mt-radius-sm, var(--#{$p}-radius-sm)); }
+}
+
+// ---------- top bar dropdowns (Reporting, Configuration...) ----------
+.o_#{$p}_topmenu {
+    position: fixed;
+    z-index: 12;
+    top: 0;
+    inset-inline-start: calc(var(--#{$p}-shell-offset, var(--#{$p}-sidebar-width)) + 3.5rem);
+    height: var(--o-navbar-height, 46px);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    transition: inset-inline-start 200ms var(--#{$p}-ease);
+
+    .#{$p}-tm-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        height: 2rem;
+        padding: 0 0.625rem;
+        border: 1px solid transparent;
+        border-radius: 0.5rem;
+        background: transparent;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: color-mix(in srgb, var(--mt-nav-fg, var(--#{$p}-muted-fg)) 85%, transparent);
+        cursor: pointer;
+        transition: background-color 150ms var(--#{$p}-ease), color 150ms var(--#{$p}-ease),
+                    border-color 150ms var(--#{$p}-ease);
+
+        .fa:first-child { color: inherit; opacity: 1; }
+        .#{$p}-tm-caret { font-size: 0.75rem; opacity: 0.85; }
+
+        &:hover,
+        &.show,
+        &[aria-expanded="true"],
+        &.active {
+            background: var(--mt-nav-hover, var(--#{$p}-muted));
+            color: var(--mt-nav-fg, var(--#{$p}-fg));
+        }
+
+        &.active .fa:first-child { color: inherit; opacity: 1; }
+
+        &:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px var(--mt-nav-hover, var(--#{$p}-ring));
+        }
+    }
+}
+
+.o_#{$p}_topmenu_menu.dropdown-menu {
+    min-width: 15rem;
+    max-height: 75vh;
+    overflow-y: auto;
+    padding: 0.375rem;
+    border: 1px solid var(--#{$p}-border);
+    border-radius: 0.75rem;
+    box-shadow: var(--#{$p}-shadow-lg);
+
+    .#{$p}-tm-head {
+        padding: 0.5rem 0.625rem 0.25rem;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--#{$p}-subtle-fg);
+    }
+
+    .#{$p}-tm-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        padding: 0.4375rem 0.625rem;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        color: var(--#{$p}-fg);
+
+        .fa { width: 1rem; text-align: center; color: var(--#{$p}-subtle-fg); }
+
+        &:hover, &.focus { background: var(--#{$p}-muted); }
+
+        &.active {
+            background: var(--#{$p}-primary-soft);
+            color: var(--#{$p}-primary-soft-fg);
+
+            .fa { color: var(--#{$p}-primary); }
+        }
+    }
+}
+
+@media print { .o_#{$p}_topmenu { display: none; } }
+}
+
+@mixin mt-workspace-components($p) {
+// Shared, shadcn-style building blocks. Everything is scoped under .o_#{$p}
+// (page roots and dialogs) so standard Odoo views are never affected.
+
+.o_#{$p} {
+    color: var(--#{$p}-fg);
+    font-feature-settings: "tnum" 0;
+    -webkit-font-smoothing: antialiased;
+
+    *:focus-visible {
+        outline: 2px solid transparent;
+        box-shadow: 0 0 0 3px var(--#{$p}-ring);
+    }
+
+    .#{$p}-tabular { font-variant-numeric: tabular-nums; }
+    .#{$p}-muted { color: var(--#{$p}-muted-fg); }
+    .#{$p}-subtle { color: var(--#{$p}-subtle-fg); }
+    .#{$p}-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+    .#{$p}-sr-only {
+        position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+        overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+    }
+
+    // ---------- page header ----------
+    .#{$p}-page-header {
+        display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 0.75rem;
+        h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; margin: 0; line-height: 1.25; }
+        p { margin: 0.25rem 0 0; font-size: 0.875rem; color: var(--#{$p}-muted-fg); }
+        .#{$p}-crumb {
+            display: inline-flex; align-items: center; gap: 0.25rem; margin-bottom: 0.25rem;
+            font-size: 0.75rem; font-weight: 500; color: var(--#{$p}-muted-fg); text-decoration: none; cursor: pointer;
+            background: none; border: 0; padding: 0;
+            &:hover { color: var(--#{$p}-fg); }
+        }
+    }
+    .#{$p}-page-header > :first-child { flex: 1 1 22rem; }
+    .#{$p}-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 0.5rem; }
+
+    // ---------- card ----------
+    .#{$p}-card {
+        background: var(--#{$p}-card);
+        border: 1px solid var(--#{$p}-border);
+        border-radius: calc(var(--#{$p}-radius) + 2px);
+        box-shadow: var(--#{$p}-shadow-sm);
+    }
+    .#{$p}-card-header {
+        display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem;
+        padding: 1.125rem 1.25rem 0.75rem;
+        h3 { font-size: 0.875rem; font-weight: 600; margin: 0; line-height: 1.3; }
+        p { font-size: 0.75rem; color: var(--#{$p}-muted-fg); margin: 0.25rem 0 0; }
+    }
+    .#{$p}-card-body { padding: 0 1.25rem 1.25rem; }
+    .#{$p}-card-footer {
+        display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+        border-top: 1px solid var(--#{$p}-border); padding: 0.75rem 1.25rem;
+    }
+
+    // ---------- buttons ----------
+    .#{$p}-btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem;
+        height: 2.25rem; padding: 0 1rem; border-radius: var(--#{$p}-radius-sm);
+        font-size: 0.875rem; font-weight: 500; line-height: 1; white-space: nowrap;
+        border: 1px solid transparent; cursor: pointer; user-select: none;
+        transition: background-color 150ms var(--#{$p}-ease), border-color 150ms var(--#{$p}-ease), color 150ms var(--#{$p}-ease);
+        &:disabled { opacity: 0.5; pointer-events: none; }
+        .fa { font-size: 0.875rem; }
+
+        &.#{$p}-btn-primary { background: var(--#{$p}-primary); color: var(--#{$p}-primary-fg);
+            &:hover { background: color-mix(in srgb, var(--#{$p}-primary) 88%, var(--#{$p}-fg)); } }
+        &.#{$p}-btn-success { background: var(--#{$p}-success); color: var(--#{$p}-primary-fg);
+            &:hover { background: color-mix(in srgb, var(--#{$p}-success) 88%, var(--#{$p}-fg)); } }
+        &.#{$p}-btn-danger { background: var(--#{$p}-danger); color: var(--#{$p}-primary-fg);
+            &:hover { background: color-mix(in srgb, var(--#{$p}-danger) 88%, var(--#{$p}-fg)); } }
+        &.#{$p}-btn-outline { background: var(--#{$p}-card); border-color: var(--#{$p}-border); color: var(--#{$p}-fg);
+            &:hover { background: var(--#{$p}-muted); } }
+        &.#{$p}-btn-ghost { background: transparent; color: var(--#{$p}-fg);
+            &:hover { background: var(--#{$p}-muted); } }
+        &.#{$p}-btn-link { background: none; color: var(--#{$p}-primary); padding: 0; height: auto;
+            &:hover { text-decoration: underline; } }
+        &.#{$p}-btn-danger-ghost { background: transparent; color: var(--#{$p}-muted-fg);
+            &:hover { background: var(--#{$p}-danger-soft); color: var(--#{$p}-danger); } }
+
+        &.#{$p}-btn-sm { height: 2rem; padding: 0 0.75rem; font-size: 0.8125rem; gap: 0.35rem; }
+        &.#{$p}-btn-icon { width: 2.25rem; padding: 0; }
+        &.#{$p}-btn-icon.#{$p}-btn-sm { width: 2rem; }
+    }
+
+    // ---------- badge ----------
+    .#{$p}-badge {
+        display: inline-flex; align-items: center; gap: 0.3rem; white-space: nowrap;
+        padding: 0.125rem 0.5rem; border-radius: var(--#{$p}-radius-sm);
+        font-size: 0.75rem; font-weight: 500; line-height: 1.25rem;
+        background: var(--#{$p}-muted); color: var(--#{$p}-fg);
+        .#{$p}-dot { width: 0.375rem; height: 0.375rem; border-radius: 50%; background: currentColor; }
+        &.#{$p}-badge-primary { background: var(--#{$p}-primary); color: var(--#{$p}-primary-fg); }
+        &.#{$p}-badge-success { background: var(--#{$p}-success-soft); color: var(--#{$p}-success); }
+        &.#{$p}-badge-warning { background: var(--#{$p}-warning-soft); color: var(--#{$p}-warning); }
+        &.#{$p}-badge-danger { background: var(--#{$p}-danger-soft); color: var(--#{$p}-danger); }
+        &.#{$p}-badge-info { background: var(--#{$p}-info-soft); color: var(--#{$p}-info); }
+        &.#{$p}-badge-violet { background: var(--#{$p}-violet-soft); color: var(--#{$p}-violet); }
+        &.#{$p}-badge-outline { background: transparent; border: 1px solid var(--#{$p}-border); }
+    }
+
+    // ---------- form controls ----------
+    .#{$p}-label { display: block; font-size: 0.75rem; font-weight: 500; margin-bottom: 0.375rem; color: var(--#{$p}-fg); }
+    .#{$p}-hint { font-size: 0.75rem; color: var(--#{$p}-muted-fg); margin-top: 0.25rem; }
+    .#{$p}-field { display: grid; gap: 0; min-width: 0; }
+    .#{$p}-input, .#{$p}-select, .#{$p}-textarea {
+        width: 100%; min-width: 0; height: 2.25rem; padding: 0 0.75rem;
+        border: 1px solid var(--#{$p}-input); border-radius: var(--#{$p}-radius-sm);
+        background: var(--#{$p}-card); color: var(--#{$p}-fg); font-size: 0.875rem;
+        transition: border-color 150ms var(--#{$p}-ease), box-shadow 150ms var(--#{$p}-ease);
+        &::placeholder { color: var(--#{$p}-subtle-fg); }
+        &:focus { outline: none; border-color: var(--#{$p}-primary); box-shadow: 0 0 0 3px var(--#{$p}-ring); }
+        &:disabled { opacity: 0.55; cursor: not-allowed; }
+        &[aria-invalid="true"] { border-color: var(--#{$p}-danger); }
+    }
+    .#{$p}-textarea { height: auto; min-height: 5rem; padding: 0.5rem 0.75rem; line-height: 1.5; resize: vertical; }
+    .#{$p}-select {
+        appearance: none; padding-right: 2rem; cursor: pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 0.6rem center; background-size: 16px;
+        &.#{$p}-select-sm { height: 2rem; font-size: 0.8125rem; }
+    }
+    .#{$p}-search {
+        position: relative; min-width: 0;
+        .fa-search { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--#{$p}-subtle-fg); pointer-events: none; }
+        .#{$p}-input { padding-left: 2.25rem; }
+    }
+    .#{$p}-check { width: 1rem; height: 1rem; cursor: pointer; accent-color: var(--#{$p}-primary); }
+    .#{$p}-error {
+        display: flex; align-items: center; gap: 0.5rem; border-radius: var(--#{$p}-radius-sm);
+        padding: 0.5rem 0.75rem; font-size: 0.75rem; font-weight: 500;
+        background: var(--#{$p}-danger-soft); color: var(--#{$p}-danger);
+    }
+    .#{$p}-grid-2 { display: grid; gap: 1rem; grid-template-columns: repeat(2, minmax(0, 1fr));
+        @media (max-width: 575.98px) { grid-template-columns: minmax(0, 1fr); } }
+    .#{$p}-span-2 { grid-column: 1 / -1; }
+
+    // ---------- toolbar / segmented ----------
+    .#{$p}-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+    .#{$p}-seg {
+        display: inline-flex; align-items: center; gap: 0.25rem; max-width: 100%; overflow-x: auto;
+        height: 2.25rem; padding: 0.25rem; border-radius: var(--#{$p}-radius); background: var(--#{$p}-muted);
+        button {
+            display: inline-flex; align-items: center; gap: 0.375rem; height: 1.75rem; padding: 0 0.75rem;
+            border: 0; border-radius: var(--#{$p}-radius-sm); background: transparent; white-space: nowrap;
+            font-size: 0.75rem; font-weight: 500; color: var(--#{$p}-muted-fg); cursor: pointer;
+            transition: color 150ms var(--#{$p}-ease), background-color 150ms var(--#{$p}-ease);
+            &:hover { color: var(--#{$p}-fg); }
+            &[aria-checked="true"] { background: var(--#{$p}-card); color: var(--#{$p}-fg); box-shadow: var(--#{$p}-shadow-sm); }
+            .#{$p}-count { font-size: 0.625rem; padding: 0 0.3rem; border-radius: 0.25rem; background: var(--#{$p}-muted); color: var(--#{$p}-muted-fg); }
+        }
+    }
+
+    // ---------- table ----------
+    .#{$p}-table-wrap { width: 100%; overflow-x: auto; }
+    .#{$p}-table {
+        width: 100%; border-collapse: collapse; font-size: 0.875rem;
+        thead th {
+            height: 2.5rem; padding: 0 0.75rem; text-align: left; white-space: nowrap;
+            font-size: 0.75rem; font-weight: 500; color: var(--#{$p}-muted-fg);
+            background: color-mix(in srgb, var(--#{$p}-muted) 55%, transparent);
+            border-bottom: 1px solid var(--#{$p}-border);
+        }
+        tbody tr { border-bottom: 1px solid var(--#{$p}-border); transition: background-color 120ms var(--#{$p}-ease);
+            &:last-child { border-bottom: 0; }
+            &:hover { background: color-mix(in srgb, var(--#{$p}-muted) 60%, transparent); }
+            &.#{$p}-selected { background: var(--#{$p}-primary-soft); }
+            &.#{$p}-clickable { cursor: pointer; } }
+        td { padding: 0.625rem 0.75rem; vertical-align: middle; white-space: nowrap; }
+        .#{$p}-num { text-align: right; font-variant-numeric: tabular-nums; }
+        .#{$p}-first { padding-left: 1.25rem; }
+    }
+
+    // ---------- avatar ----------
+    .#{$p}-avatar {
+        display: inline-block; flex-shrink: 0; width: 2rem; height: 2rem; border-radius: 50%;
+        object-fit: cover; background: var(--#{$p}-muted); box-shadow: 0 0 0 2px var(--#{$p}-card);
+        &.#{$p}-avatar-sm { width: 1.5rem; height: 1.5rem; }
+        &.#{$p}-avatar-lg { width: 2.75rem; height: 2.75rem; }
+    }
+    .#{$p}-avatar-empty {
+        display: inline-grid; place-items: center; background: transparent; box-shadow: none;
+        border: 1px dashed color-mix(in srgb, var(--#{$p}-muted-fg) 55%, transparent);
+        color: var(--#{$p}-subtle-fg); font-size: 0.75rem;
+        &.#{$p}-avatar-sm { font-size: 0.625rem; }
+    }
+    .#{$p}-avatar-group { display: flex; .#{$p}-avatar + .#{$p}-avatar { margin-left: -0.5rem; } }
+    .#{$p}-person { display: inline-flex; align-items: center; gap: 0.5rem; min-width: 0; }
+
+    // ---------- progress ----------
+    .#{$p}-progress {
+        height: 0.375rem; width: 100%; border-radius: 999px; background: var(--#{$p}-muted); overflow: hidden;
+        > span { display: block; height: 100%; border-radius: inherit; background: var(--#{$p}-primary); transition: width 300ms var(--#{$p}-ease); }
+        &.#{$p}-progress-success > span { background: var(--#{$p}-success); }
+        &.#{$p}-progress-warning > span { background: var(--#{$p}-chart-3); }
+    }
+
+    // ---------- stat card ----------
+    .#{$p}-stat {
+        padding: 1rem;
+        .#{$p}-stat-top { display: flex; align-items: center; justify-content: space-between; }
+        .#{$p}-stat-label { font-size: 0.75rem; font-weight: 500; color: var(--#{$p}-muted-fg); }
+        .#{$p}-stat-icon { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: var(--#{$p}-radius);
+            background: var(--#{$p}-primary-soft); color: var(--#{$p}-primary-soft-fg); }
+        .#{$p}-stat-value { margin-top: 0.5rem; font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+        .#{$p}-stat-hint { margin-top: 0.125rem; font-size: 0.75rem; color: var(--#{$p}-muted-fg); }
+    }
+
+    // ---------- tag chips (Odoo color index 0–11) ----------
+    .#{$p}-tag {
+        display: inline-flex; align-items: center; gap: 0.25rem; height: 1.25rem; padding: 0 0.5rem;
+        border-radius: 999px; font-size: 0.6875rem; font-weight: 500; white-space: nowrap;
+        background: var(--#{$p}-muted); color: var(--#{$p}-fg);
+        button { border: 0; background: none; padding: 0; margin-right: -0.2rem; color: inherit; opacity: 0.6; cursor: pointer; line-height: 1;
+            &:hover { opacity: 1; } }
+    }
+    .#{$p}-tag-1 { background: var(--#{$p}-danger-soft); color: var(--#{$p}-danger); }
+    .#{$p}-tag-2, .#{$p}-tag-6 { background: var(--#{$p}-warning-soft); color: var(--#{$p}-warning); }
+    .#{$p}-tag-3 { background: color-mix(in srgb, var(--#{$p}-warning) 22%, var(--#{$p}-card)); color: var(--#{$p}-warning); }
+    .#{$p}-tag-4, .#{$p}-tag-8 { background: var(--#{$p}-info-soft); color: var(--#{$p}-info); }
+    .#{$p}-tag-5, .#{$p}-tag-11 { background: var(--#{$p}-violet-soft); color: var(--#{$p}-violet); }
+    .#{$p}-tag-7, .#{$p}-tag-10 { background: var(--#{$p}-success-soft); color: var(--#{$p}-success); }
+    .#{$p}-tag-9 { background: color-mix(in srgb, var(--#{$p}-danger) 18%, var(--#{$p}-card)); color: var(--#{$p}-danger); }
+    .#{$p}-tag-list { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+
+    // ---------- priority stars ----------
+    .#{$p}-stars { display: inline-flex; align-items: center;
+        button, span { border: 0; background: none; padding: 0.125rem; line-height: 1; color: color-mix(in srgb, var(--#{$p}-muted-fg) 45%, transparent); border-radius: 0.25rem; }
+        button { cursor: pointer; &:hover { background: var(--#{$p}-muted); } }
+        .#{$p}-on { color: var(--#{$p}-warning); } }
+
+    // ---------- activity icon ----------
+    .#{$p}-act-icon {
+        display: grid; place-items: center; flex-shrink: 0; width: 2rem; height: 2rem; border-radius: var(--#{$p}-radius);
+        background: var(--#{$p}-muted); color: var(--#{$p}-fg); font-size: 0.875rem;
+        &.#{$p}-act-sm { width: 1.375rem; height: 1.375rem; font-size: 0.6875rem; border-radius: 0.375rem; }
+        &.#{$p}-tone-phonecall { background: var(--#{$p}-success-soft); color: var(--#{$p}-success); }
+        &.#{$p}-tone-meeting { background: var(--#{$p}-violet-soft); color: var(--#{$p}-violet); }
+        &.#{$p}-tone-email { background: var(--#{$p}-info-soft); color: var(--#{$p}-info); }
+        &.#{$p}-tone-upload_file { background: var(--#{$p}-warning-soft); color: var(--#{$p}-warning); }
+        &.#{$p}-tone-warning { background: var(--#{$p}-warning-soft); color: var(--#{$p}-warning); }
+        &.#{$p}-tone-danger { background: var(--#{$p}-danger-soft); color: var(--#{$p}-danger); }
+    }
+    .#{$p}-due-overdue { color: var(--#{$p}-danger); }
+    .#{$p}-due-today { color: var(--#{$p}-warning); }
+    .#{$p}-due-planned { color: var(--#{$p}-success); }
+
+    // ---------- empty / loading ----------
+    .#{$p}-empty {
+        display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 3.5rem 1.5rem; text-align: center;
+        .#{$p}-empty-icon { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 50%;
+            background: var(--#{$p}-muted); color: var(--#{$p}-muted-fg); font-size: 1.1rem; margin-bottom: 0.25rem; }
+        strong { font-size: 0.875rem; }
+        p { max-width: 20rem; font-size: 0.75rem; color: var(--#{$p}-muted-fg); margin: 0; }
+    }
+    .#{$p}-skeleton {
+        border-radius: var(--#{$p}-radius); min-height: 1rem;
+        background: linear-gradient(90deg, var(--#{$p}-muted) 25%, color-mix(in srgb, var(--#{$p}-muted) 50%, var(--#{$p}-card)) 50%, var(--#{$p}-muted) 75%);
+        background-size: 200% 100%; animation: mt-shimmer 1.2s ease-in-out infinite;
+    }
+
+    .#{$p}-divide-y > * + * { border-top: 1px solid var(--#{$p}-border); }
+    .#{$p}-link { color: var(--#{$p}-primary); text-decoration: none; cursor: pointer; &:hover { text-decoration: underline; } }
+    .#{$p}-row-link { color: inherit; text-decoration: none; cursor: pointer; &:hover { text-decoration: underline; } }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+    .o_#{$p} *, .o_#{$p}_sidebar * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+}
+
+@mixin mt-workspace-list($p) {
+// List / kanban / calendar share one full-width card: control panel + view.
+// NativeView (.#{$p}-card.#{$p}-native) is the single outer section — same shell for
+// pipeline, leads and campaigns, whether the inner view is a table or a board.
+.o_#{$p}.o_#{$p}_page.o_#{$p}_page--native {
+    background: transparent;
+    overflow: hidden;
+    .#{$p}-container--native {
+        max-width: none;
+        width: 100%;
+        height: auto;
+        flex: 1 1 auto;
+        min-height: 0;
+        padding: 0 !important;
+        gap: 0;
+        display: flex;
+        flex-direction: column;
+    }
+    > .#{$p}-container--native > .#{$p}-native {
+        flex: 1 1 auto;
+        min-height: 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        > .o_view_controller, > .o_#{$p}_native_view { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+        > .#{$p}-skeleton { margin: 1rem; }
+    }
+    .#{$p}-native {
+        .o_control_panel { padding: 0.625rem 1rem 0.75rem !important; border-bottom: 1px solid var(--or-sheet-border, var(--#{$p}-border)); }
+        .o_control_panel_breadcrumbs .o_last_breadcrumb_item { font-size: 1.125rem; font-weight: 600; color: var(--#{$p}-fg); }
+        .o_control_panel_main_buttons .btn-primary { border-radius: 0.5rem; font-weight: 600; padding-inline: 0.875rem; }
+        .o_searchview,
+        .o_searchview_input_container {
+            min-height: 2rem;
+            height: 2rem;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+        }
+        // Kill the Stitch dotted canvas so the board sits on the card, like list.
+        .o_kanban_view,
+        .o_kanban_view > .o_content,
+        .o_kanban_renderer {
+            background-image: none !important;
+            background-attachment: scroll !important;
+        }
+        .o_kanban_view,
+        .o_kanban_view > .o_content {
+            background-color: var(--#{$p}-card) !important;
+            flex: 1 1 auto;
+            min-height: 0;
+        }
+        .o_kanban_renderer {
+            background-color: color-mix(in srgb, var(--#{$p}-muted) 70%, var(--#{$p}-card)) !important;
+            flex: 1 1 auto;
+            min-height: 0;
+        }
+        .o_view_nocontent { background: transparent; }
+        .o_list_renderer {
+            flex: 1 1 auto;
+            min-height: 0;
+            margin: 0;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            overflow: auto;
+            box-shadow: none;
+        }
+        .o_list_renderer { --ListRenderer-thead-bg-color: color-mix(in srgb, var(--#{$p}-muted) 55%, var(--#{$p}-card)); }
+        .o_list_table thead th {
+            height: 2.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--#{$p}-muted-fg) !important;
+            background: color-mix(in srgb, var(--#{$p}-muted) 55%, var(--#{$p}-card)) !important;
+            border-bottom: 1px solid var(--#{$p}-border);
+        }
+        .o_list_table tbody .o_data_row:hover > td {
+            background: color-mix(in srgb, var(--#{$p}-muted) 55%, transparent);
+        }
+    }
+}
+
+
+// ============================================================================
+}
+
+@each $p in cm, ss, im, mp, mr {
+    @include mt-workspace-sidebar($p);
+    @include mt-workspace-components($p);
+    @include mt-workspace-list($p);
+}

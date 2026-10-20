@@ -26,11 +26,9 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
     'assets': {
         'web.assets_backend': [
             'inventory_modern/static/src/scss/tokens.scss',
-            'inventory_modern/static/src/scss/components.scss',
             'inventory_modern/static/src/scss/pages.scss',
             'inventory_modern/static/src/scss/list.scss',
             'inventory_modern/static/src/scss/controls.scss',
-            'inventory_modern/static/src/scss/sidebar.scss',
             'inventory_modern/static/src/scss/forms.scss',
             'inventory_modern/static/src/scss/print.scss',
             'inventory_modern/static/src/scss/dash.scss',

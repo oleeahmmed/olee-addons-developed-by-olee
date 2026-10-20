@@ -24,8 +24,8 @@
     <menuitem id="menu_dashboard" name="Dashboard" parent="menu_sales" action="action_dashboard" sequence="4"/>
 
     <menuitem id="menu_team" name="Team" parent="crm.crm_menu_root" sequence="-50" groups="sales_team.group_sale_salesman"/>
-    <menuitem id="menu_salespeople" name="Salespeople" parent="menu_team" action="action_salespeople" sequence="1"/>
-    <menuitem id="menu_teams" name="Sales Teams" parent="menu_team" action="action_teams" sequence="2"/>
+    <menuitem id="menu_teams" name="Sales Teams" parent="menu_team" action="action_teams" sequence="1"/>
+    <menuitem id="menu_salespeople" name="Salespeople" parent="menu_team" action="action_salespeople" sequence="2"/>
 
     <!-- Odoo's own CRM reports (CRM Simple hides Odoo's Reporting menu, so they are linked here) -->
     <menuitem id="menu_reporting" name="Reporting" parent="crm.crm_menu_root" sequence="-60" groups="sales_team.group_sale_salesman"/>

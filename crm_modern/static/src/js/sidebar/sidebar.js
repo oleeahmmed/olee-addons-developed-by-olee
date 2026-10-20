@@ -52,6 +52,10 @@ const GROUP_CHILD_ORDER = {
         "crm_modern.menu_customers",
         "crm_modern.menu_dashboard",
     ],
+    "crm_modern.menu_team": [
+        "crm_modern.menu_teams",
+        "crm_modern.menu_salespeople",
+    ],
 };
 // Groups shown as dropdowns in the top bar instead of the sidebar, so the sidebar
 // only lists the everyday pages. Groups other apps add are top-bar dropdowns too.
@@ -272,7 +276,22 @@ export class ModernSidebar extends Component {
     }
     /** Top bar: Reporting, Configuration and other apps' groups, as dropdowns. */
     get topSections() {
-        return this.allSections.filter((s) => this.isTop(s) && s.childrenTree.some((c) => !c.heading));
+        const rank = (xmlid, order) => {
+            const i = order.indexOf(xmlid);
+            return i === -1 ? 100 : i;
+        };
+        return this.allSections
+            .filter((s) => this.isTop(s) && s.childrenTree.some((c) => !c.heading))
+            .map((section) => {
+                const childOrder = GROUP_CHILD_ORDER[section.xmlid];
+                if (!childOrder || !section.childrenTree?.length) {
+                    return section;
+                }
+                const children = [...section.childrenTree].sort(
+                    (a, b) => rank(a.xmlid, childOrder) - rank(b.xmlid, childOrder)
+                );
+                return { ...section, childrenTree: children };
+            });
     }
     isTop(section) {
         return TOP_GROUPS.has(section.xmlid) || !section.own;

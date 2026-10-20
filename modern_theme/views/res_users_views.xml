@@ -6,7 +6,7 @@
         the post-login page without a code deploy.
     -->
     <record id="view_users_form_home_action" model="ir.ui.view">
-        <field name="name">res.users.form.crm.modern.home.action</field>
+        <field name="name">res.users.form.modern.theme.home.action</field>
         <field name="model">res.users</field>
         <field name="inherit_id" ref="base.view_users_form"/>
         <field name="arch" type="xml">
@@ -16,7 +16,7 @@
         </field>
     </record>
     <record id="view_users_preferences_home_action" model="ir.ui.view">
-        <field name="name">res.users.preferences.crm.modern.home.action</field>
+        <field name="name">res.users.preferences.modern.theme.home.action</field>
         <field name="model">res.users</field>
         <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
         <field name="arch" type="xml">
