@@ -128,8 +128,56 @@ hr { color: var(--mt-border); }
     --popover-body-color: var(--mt-foreground);
     --popover-border-color: var(--mt-border);
     --popover-header-bg: var(--mt-muted);
+    --popover-arrow-color: var(--mt-card);
+    --bs-popover-bg: var(--mt-card);
+    --bs-popover-arrow-bg: var(--mt-card);
     background-color: var(--mt-card);
     color: var(--mt-foreground);
+    border-color: var(--mt-border);
+}
+
+.o-tooltip,
+.tooltip-inner {
+    --bs-tooltip-bg: var(--mt-muted);
+    --bs-tooltip-color: var(--mt-foreground);
+    background-color: var(--mt-muted) !important;
+    color: var(--mt-foreground) !important;
+    border-color: var(--mt-border);
+}
+
+.o_popover:has(.o-tooltip) {
+    --bs-popover-bg: var(--mt-muted) !important;
+    --popover-arrow-color: var(--mt-muted) !important;
+    background-color: var(--mt-muted) !important;
+}
+
+.o-tooltip + .popover-arrow,
+.o_popover:has(.o-tooltip) > .popover-arrow {
+    --bs-popover-bg: var(--mt-muted);
+    --bs-tooltip-bg: var(--mt-muted);
+    --popover-arrow-color: var(--mt-muted);
+}
+
+.o_select_menu_menu,
+.o-autocomplete--dropdown-menu,
+.o_searchview_autocomplete,
+.o_datetime_picker,
+.toast,
+.o_colorlist {
+    background-color: var(--mt-card) !important;
+    color: var(--mt-foreground) !important;
+    border-color: var(--mt-border) !important;
+}
+
+.o_datetime_picker {
+    .o_selected {
+        background: var(--mt-primary) !important;
+        color: var(--mt-primary-foreground) !important;
+    }
+    .o_today > div {
+        background-color: color-mix(in srgb, var(--mt-primary) 22%, var(--mt-card)) !important;
+        color: var(--mt-foreground) !important;
+    }
 }
 
 .o_notification {

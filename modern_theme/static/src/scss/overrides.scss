@@ -38,6 +38,25 @@ html[data-mt-theme] {
     --bs-secondary-color: var(--mt-muted-foreground);
     --bs-secondary-bg: var(--mt-muted);
     --bs-tertiary-bg: var(--mt-muted);
+
+    // Overlays (portaled out of the web client): never invert to a white chip.
+    --bs-tooltip-bg: var(--mt-muted);
+    --bs-tooltip-color: var(--mt-foreground);
+    --bs-popover-bg: var(--mt-card);
+    --bs-popover-body-color: var(--mt-foreground);
+    --bs-popover-header-bg: var(--mt-muted);
+    --bs-popover-header-color: var(--mt-foreground);
+    --bs-popover-border-color: var(--mt-border);
+    --bs-popover-arrow-bg: var(--mt-card);
+    --bs-popover-arrow-border: var(--mt-border);
+    --popover-bg: var(--mt-card);
+    --popover-arrow-color: var(--mt-card);
+    --bs-dropdown-bg: var(--mt-card);
+    --bs-dropdown-color: var(--mt-foreground);
+    --bs-dropdown-border-color: var(--mt-border);
+    --bs-dropdown-link-color: var(--mt-foreground);
+    --bs-dropdown-link-hover-bg: var(--mt-muted);
+    --bs-dropdown-link-hover-color: var(--mt-foreground);
 }
 
 // ===========================================================================
@@ -74,6 +93,73 @@ html[data-mt-theme] {
     border: 1px solid var(--mt-border);
     box-shadow: var(--mt-shadow-lg);
     padding: 0.375rem;
+    background-color: var(--mt-card);
+    color: var(--mt-foreground);
+}
+
+.o-tooltip,
+.tooltip-inner {
+    --bs-tooltip-bg: var(--mt-muted);
+    --bs-tooltip-color: var(--mt-foreground);
+    background-color: var(--mt-muted) !important;
+    color: var(--mt-foreground) !important;
+    border: 1px solid var(--mt-border);
+    box-shadow: var(--mt-shadow-md);
+}
+
+.o_popover.popover {
+    --bs-popover-bg: var(--mt-card) !important;
+    --bs-popover-arrow-bg: var(--mt-card) !important;
+    --bs-popover-arrow-border: var(--mt-border) !important;
+    --bs-tooltip-bg: var(--mt-muted) !important;
+    --bs-tooltip-color: var(--mt-foreground) !important;
+    --popover-bg: var(--mt-card) !important;
+    --popover-arrow-color: var(--mt-muted) !important;
+}
+
+.o_popover:has(.o-tooltip),
+.popover:has(.o-tooltip) {
+    --bs-popover-bg: var(--mt-muted) !important;
+    --popover-bg: var(--mt-muted) !important;
+    --popover-arrow-color: var(--mt-muted) !important;
+    background-color: var(--mt-muted);
+    border-color: var(--mt-border);
+    padding: 0;
+    box-shadow: var(--mt-shadow-md);
+}
+
+.o-tooltip + .popover-arrow,
+.o_popover.popover > .popover-arrow {
+    --bs-popover-bg: var(--mt-muted) !important;
+    --bs-tooltip-bg: var(--mt-muted) !important;
+    --popover-arrow-color: var(--mt-muted) !important;
+}
+
+.o_popover.popover > .popover-arrow::after {
+    border-color: transparent !important;
+}
+
+.o_popover.popover[data-popper-placement^="bottom"] > .popover-arrow::after {
+    border-bottom-color: var(--mt-muted) !important;
+}
+.o_popover.popover[data-popper-placement^="top"] > .popover-arrow::after {
+    border-top-color: var(--mt-muted) !important;
+}
+.o_popover.popover[data-popper-placement^="left"] > .popover-arrow::after {
+    border-right-color: var(--mt-muted) !important;
+}
+.o_popover.popover[data-popper-placement^="right"] > .popover-arrow::after {
+    border-left-color: var(--mt-muted) !important;
+}
+
+.o_select_menu_menu,
+.o-autocomplete--dropdown-menu,
+.o_searchview_autocomplete,
+.o_record_selection_tooltip,
+.o_kanban_record:hover .o_record_selection_tooltip {
+    background-color: var(--mt-card) !important;
+    color: var(--mt-foreground) !important;
+    border-color: var(--mt-border);
 }
 
 // Thin, quiet scrollbars everywhere the web client scrolls.
