@@ -7,7 +7,6 @@
 // rules, and `:root, html[data-mt-theme]` for the derived block): same
 // specificity + later in the bundle = dark wins.
 
-:root,
 html[data-mt-theme="indigo"] {
     // OmniRouters Forest Whisper dark (live /keys, 2026-10-20):
     // canvas #1f2322, mint create #009883, filters 32px.
@@ -224,6 +223,7 @@ html[data-mt-theme="green"] {
     --mt-ring: hsl(142.4 71.8% 29.2%);
 }
 
+:root,
 html[data-mt-theme="blue"] {
     --mt-background: hsl(222.2 84% 4.9%);
     --mt-foreground: hsl(210 40% 98%);
@@ -313,8 +313,9 @@ html[data-mt-theme="teal"] {
 // ---------------------------------------------------------------------------
 :root,
 html[data-mt-theme] {
-    --mt-content-bg: color-mix(in srgb, var(--mt-primary) 6%, hsl(165 8% 12%));
-    --mt-content-bg-accent: color-mix(in srgb, var(--mt-primary) 10%, hsl(165 8% 14%));
+    // Mix against the active preset's own canvas — never a hardcoded Forest hue.
+    --mt-content-bg: color-mix(in srgb, var(--mt-primary) 6%, var(--mt-background));
+    --mt-content-bg-accent: color-mix(in srgb, var(--mt-primary) 10%, var(--mt-card));
     --mt-card-matte: color-mix(in srgb, var(--mt-card) 88%, var(--mt-muted));
 
     --mt-stitch-bg: color-mix(in srgb, var(--mt-content-bg) 70%, #050505);
@@ -324,17 +325,26 @@ html[data-mt-theme] {
     --mt-chrome-bg: color-mix(in srgb, var(--mt-card) 70%, var(--mt-content-bg));
     --mt-topbar-bg: var(--mt-chrome-bg);
     --mt-sidebar-bg: var(--mt-chrome-bg);
-    --mt-sidebar-bg-2: hsl(165 8% 11%);
+    --mt-sidebar-bg-2: color-mix(in srgb, var(--mt-background) 82%, #000);
     --mt-nav-bg: var(--mt-topbar-bg);
     --mt-nav-bg-2: var(--mt-topbar-bg);
     --mt-nav-fg: var(--mt-foreground);
     --mt-nav-muted-fg: var(--mt-muted-foreground);
     --mt-nav-hover: var(--mt-muted);
-    --mt-nav-active-bg: color-mix(in srgb, var(--mt-primary) 18%, hsl(165 10% 16%));
+    --mt-nav-active-bg: color-mix(in srgb, var(--mt-primary) 18%, var(--mt-muted));
     --mt-nav-active-fg: var(--mt-foreground);
     --mt-nav-border: var(--mt-border);
     --mt-nav-tile: var(--mt-card);
     --mt-nav-scrollbar: color-mix(in srgb, var(--mt-foreground) 28%, transparent);
+
+    --mt-success: hsl(142 70% 45%);
+    --mt-warning: hsl(38 92% 55%);
+    --mt-info: var(--mt-primary);
+
+    --settings__tab-bg: var(--mt-muted);
+    --settings__tab-bg--active: var(--mt-card);
+    --settings__tab-color: var(--mt-foreground);
+    --settings__title-bg: transparent;
 
     --mt-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
     --mt-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.25);
@@ -368,4 +378,9 @@ html[data-mt-theme] {
     --or-close-fg: var(--mt-muted-foreground);
     --or-close-hover: var(--mt-foreground);
     --or-toggle-on: var(--mt-primary);
+}
+
+html[data-mt-theme="indigo"] {
+    --mt-success: hsl(172 66% 45%);
+    --mt-info: hsl(172 100% 30%);
 }

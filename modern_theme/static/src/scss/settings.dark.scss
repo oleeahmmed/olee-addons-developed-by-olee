@@ -1,0 +1,16 @@
+// Dark bundle only — last file, same selectors as Odoo's settings_form_view.scss.
+// Custom properties here have no !important: Sass strips it on `--*` declarations.
+// Real background-color !important still beats Odoo's var(--settings__title-bg).
+
+.o_base_settings_view .o_form_renderer {
+    --settings__tab-bg: var(--mt-muted);
+    --settings__tab-bg--active: var(--mt-card);
+    --settings__tab-color: var(--mt-foreground);
+    --settings__title-bg: transparent;
+}
+
+.o_base_settings_view .o_form_renderer .o_setting_container .settings > .app_settings_block h2,
+.o_base_settings_view .o_form_renderer .o_setting_container .settings > .app_settings_block .h2 {
+    background-color: transparent !important;
+    color: var(--mt-muted-foreground) !important;
+}

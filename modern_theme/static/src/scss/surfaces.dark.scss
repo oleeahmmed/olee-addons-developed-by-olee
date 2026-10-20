@@ -14,6 +14,18 @@ html[data-mt-theme] {
     --tertiary-bg: var(--mt-muted);
     --border-color: var(--mt-border);
     --border-color-translucent: var(--mt-border);
+    --bs-body-bg: var(--mt-background);
+    --bs-body-color: var(--mt-foreground);
+    --bs-secondary-bg: var(--mt-muted);
+    --bs-tertiary-bg: var(--mt-muted);
+    --bs-border-color: var(--mt-border);
+    --bs-link-color: var(--mt-primary);
+    --bs-link-hover-color: color-mix(in srgb, var(--mt-primary) 78%, var(--mt-foreground));
+    --bs-emphasis-color: var(--mt-foreground);
+    --settings__tab-bg: var(--mt-muted);
+    --settings__tab-bg--active: var(--mt-card);
+    --settings__tab-color: var(--mt-foreground);
+    --settings__title-bg: transparent;
     color-scheme: dark;
 }
 
@@ -388,32 +400,97 @@ hr { color: var(--mt-border); }
     color: var(--mt-foreground);
 }
 
-.o_form_view.o_base_settings,
-.o_form_view.o_base_settings_view {
-    .o_form_renderer {
-        --settings__tab-bg: var(--mt-muted);
-        --settings__tab-bg--active: var(--mt-card);
-        --settings__tab-color: var(--mt-foreground);
-        --settings__title-bg: transparent;
-    }
+.app_settings_block {
+    background-color: transparent !important;
+}
 
-    .o_setting_container .settings {
-        background-color: var(--mt-background) !important;
-    }
+.o_base_settings_view .o_form_renderer {
+    --settings__title-bg: transparent;
+    --settings__tab-bg: var(--mt-muted);
+    --settings__tab-bg--active: var(--mt-card);
+    --settings__tab-color: var(--mt-foreground);
+}
 
-    .settings_tab .tab:hover,
-    .settings_tab .tab.selected {
+.o_base_settings_view .o_form_renderer .o_setting_container .settings > .app_settings_block h2,
+.o_base_settings_view .o_form_renderer .settings .app_settings_block h2,
+.o-settings-form-view .app_settings_block h2,
+.app_settings_block h2,
+.app_settings_block h3 {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: var(--mt-muted-foreground) !important;
+}
+
+.o-settings-form-view,
+.o_base_settings_view,
+.oe_form_configuration,
+.o_setting_container,
+.o_setting_container > .position-sticky,
+.settings_tab,
+.settings {
+    background-color: var(--mt-background) !important;
+    color: var(--mt-foreground) !important;
+}
+
+.o_setting_container > .position-sticky,
+.settings_tab {
+    background-color: var(--mt-muted) !important;
+    border-color: var(--mt-border) !important;
+}
+
+.settings_tab .tab {
+    color: var(--mt-muted-foreground) !important;
+    background: transparent !important;
+
+    &:hover,
+    &.selected {
         color: var(--mt-foreground) !important;
+        background: var(--mt-card) !important;
     }
+}
 
-    .settingSearchHeader {
-        background-color: var(--mt-card) !important;
-    }
+.o_setting_box {
+    background-color: var(--mt-card) !important;
+    border-color: var(--mt-border) !important;
+    color: var(--mt-foreground) !important;
 
-    .highlighter {
-        background: color-mix(in srgb, var(--mt-primary) 32%, transparent);
-        color: var(--mt-foreground);
+    a,
+    .btn-link,
+    .oe_link {
+        color: var(--mt-primary) !important;
     }
+}
+
+.settingSearchHeader {
+    background-color: var(--mt-card) !important;
+}
+
+.highlighter {
+    background: color-mix(in srgb, var(--mt-primary) 32%, transparent);
+    color: var(--mt-foreground);
+}
+
+// Inputs and menus: OmniRouters muted fill + hairline, not leftover white.
+.o_input,
+.o_field_widget input,
+.o_field_widget textarea,
+.o_field_widget select,
+.form-control,
+.form-select {
+    background-color: var(--mt-input) !important;
+    color: var(--mt-foreground) !important;
+    border-color: var(--mt-border) !important;
+}
+
+.o_input::placeholder,
+.form-control::placeholder {
+    color: var(--mt-muted-foreground) !important;
+}
+
+.o_content a:not(.btn):not(.nav-link):not(.dropdown-item):not(.cm-sb-item),
+.btn-link,
+.oe_link {
+    color: var(--mt-primary);
 }
 
 .o_dialog .modal-content,
