@@ -10,7 +10,10 @@
     <menuitem id="menu_home" name="Home" parent="crm.crm_menu_root" action="action_home" sequence="-110"/>
     <menuitem id="menu_dashboard" name="Dashboard" parent="crm.crm_menu_root" action="action_dashboard" sequence="50"/>
 
-    <menuitem id="menu_sales" name="Deals" parent="crm.crm_menu_root" sequence="-90" groups="sales_team.group_sale_salesman"/>
+    <menuitem id="menu_marketing" name="Marketing" parent="crm.crm_menu_root" sequence="-90" groups="sales_team.group_sale_salesman"/>
+    <menuitem id="menu_campaigns" name="Campaigns" parent="menu_marketing" action="action_campaigns" sequence="1"/>
+
+    <menuitem id="menu_sales" name="Deals" parent="crm.crm_menu_root" sequence="-80" groups="sales_team.group_sale_salesman"/>
     <menuitem id="menu_pipeline" name="Pipeline" parent="menu_sales" action="action_pipeline" sequence="1"/>
     <!-- Shown only when CRM ▸ Settings ▸ "Leads" is enabled, exactly like the standard CRM Leads menu. -->
     <menuitem id="menu_leads" name="Leads" parent="menu_sales" action="action_leads" sequence="2" groups="crm.group_use_lead"/>
@@ -18,9 +21,6 @@
     <!-- Only when the Sales app is installed (hidden otherwise by ir.ui.menu._load_menus_blacklist) -->
     <menuitem id="menu_quotations" name="Quotations" parent="menu_sales" action="action_quotations" sequence="4"/>
     <menuitem id="menu_sale_orders" name="Sales Orders" parent="menu_sales" action="action_sale_orders" sequence="5"/>
-
-    <menuitem id="menu_marketing" name="Marketing" parent="crm.crm_menu_root" sequence="-80" groups="sales_team.group_sale_salesman"/>
-    <menuitem id="menu_campaigns" name="Campaigns" parent="menu_marketing" action="action_campaigns" sequence="1"/>
 
     <menuitem id="menu_team" name="Team" parent="crm.crm_menu_root" sequence="-70" groups="sales_team.group_sale_salesman"/>
     <menuitem id="menu_salespeople" name="Salespeople" parent="menu_team" action="action_salespeople" sequence="1"/>

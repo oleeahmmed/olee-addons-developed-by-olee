@@ -268,6 +268,9 @@
 
 @keyframes cm-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
 
+// Right sheet chrome lives in modern_theme (sheet.scss + --or-* tokens).
+// FormDrawer adds .o_or_sheet; do not duplicate that design system here.
+
 // ---------- dialogs (Odoo Dialog with contentClass="o_cm o_cm_dialog") ----------
 .modal-content.o_cm_dialog {
     border: 1px solid var(--cm-border);

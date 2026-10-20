@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="modern_theme.OrSelectCard">
+        <div class="or-select-card-wrap" t-ref="root">
+            <button type="button" class="or-select-card"
+                    t-att-id="props.id"
+                    t-att-class="{'is-selected': hasValue, 'is-open': state.open}"
+                    t-att-aria-expanded="state.open ? 'true' : 'false'"
+                    aria-haspopup="listbox"
+                    t-on-click="toggle">
+                <div class="or-select-card-text">
+                    <div class="or-select-card-title" t-esc="title"/>
+                    <div t-if="hint" class="or-select-card-hint" t-esc="hint"/>
+                </div>
+                <span t-if="badge" class="or-select-card-badge" t-esc="badge"/>
+                <span class="or-select-card-chevron" aria-hidden="true">&#8250;</span>
+            </button>
+            <div t-if="state.open" class="or-select-card-menu" role="listbox">
+                <button t-if="props.allowEmpty" type="button" class="or-select-card-option"
+                        t-att-class="{'is-active': !hasValue}"
+                        t-on-click="() => this.pick('')">
+                    <div class="or-select-card-text">
+                        <div class="or-select-card-title" t-esc="props.placeholder or 'None'"/>
+                        <div t-if="props.emptyHint" class="or-select-card-hint" t-esc="props.emptyHint"/>
+                    </div>
+                </button>
+                <t t-foreach="props.options" t-as="opt" t-key="opt.id">
+                    <button type="button" class="or-select-card-option"
+                            t-att-class="{'is-active': isActive(opt)}"
+                            t-on-click="() => this.pick(opt.id)">
+                        <div class="or-select-card-text">
+                            <div class="or-select-card-title" t-esc="opt.title"/>
+                            <div t-if="opt.hint" class="or-select-card-hint" t-esc="opt.hint"/>
+                        </div>
+                        <span t-if="opt.badge" class="or-select-card-badge" t-esc="opt.badge"/>
+                    </button>
+                </t>
+            </div>
+        </div>
+    </t>
+
+</templates>

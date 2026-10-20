@@ -1,16 +1,14 @@
 import { Component, onWillStart, useState } from "@odoo/owl";
-import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
 import { user } from "@web/core/user";
 import { useService } from "@web/core/utils/hooks";
 import { standardWidgetProps } from "@web/views/widgets/standard_widget_props";
 import { loadFeatures } from "../core/features";
-import { QuickCreateDialog } from "./dialogs";
 import { ImportDialog } from "./import_dialog";
 
 /**
- * Upload CSV / add lead / add opportunity on a campaign kanban card or form.
- * Hidden when the user cannot create crm.lead; Leads stays hidden if Settings ▸ Leads is off.
+ * Upload CSV and jump to this campaign's leads / pipeline.
+ * Hidden when the user cannot read crm.lead; Upload stays hidden without create.
  */
 export class CampaignQuickActions extends Component {
     static template = "crm_modern.CampaignQuickActions";
@@ -20,13 +18,15 @@ export class CampaignQuickActions extends Component {
         this.dialog = useService("dialog");
         this.action = useService("action");
         this.orm = useService("orm");
-        this.state = useState({ canCreate: false, useLeads: false });
+        this.state = useState({ canCreate: false, canRead: false, useLeads: false });
         onWillStart(async () => {
-            const [canCreate, features] = await Promise.all([
+            const [canCreate, canRead, features] = await Promise.all([
                 user.checkAccessRight("crm.lead", "create").catch(() => false),
+                user.checkAccessRight("crm.lead", "read").catch(() => false),
                 loadFeatures(this.orm).catch(() => ({})),
             ]);
             this.state.canCreate = canCreate;
+            this.state.canRead = canRead;
             this.state.useLeads = Boolean(features.use_leads);
         });
     }
@@ -64,17 +64,22 @@ export class CampaignQuickActions extends Component {
         });
     }
 
-    add(type, ev) {
+    async openLeads(ev) {
         ev.stopPropagation();
-        if (!this.state.canCreate || !this.campaign.id) {
+        if (!this.campaign.id) {
             return;
         }
-        const c = this.campaign;
-        this.dialog.add(QuickCreateDialog, {
-            type,
-            defaults: { campaign_id: c.id, team_id: c.team_id, user_id: c.user_id },
-            onSaved: () => this.reload(),
-        });
+        const action = await this.orm.call("utm.campaign", "crm_modern_open_leads", [this.campaign.id]);
+        return this.action.doAction(action);
+    }
+
+    async openPipeline(ev) {
+        ev.stopPropagation();
+        if (!this.campaign.id) {
+            return;
+        }
+        const action = await this.orm.call("utm.campaign", "crm_modern_open_pipeline", [this.campaign.id]);
+        return this.action.doAction(action);
     }
 }
 

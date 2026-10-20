@@ -2,16 +2,15 @@
 <odoo>
     <!--
         Campaign board used by Modern CRM only. Standalone kanban (no inherit_id),
-        so Odoo's own UTM kanban stays untouched. Upload / add / assign only work
-        for users who can create leads or write the campaign.
+        so Odoo's own UTM kanban stays untouched. Assign / upload / jump only work
+        for users who can write the campaign or read leads.
     -->
     <record id="utm_campaign_kanban_modern" model="ir.ui.view">
         <field name="name">utm.campaign.kanban.modern</field>
         <field name="model">utm.campaign</field>
         <field name="priority">99</field>
         <field name="arch" type="xml">
-            <kanban highlight_color="color" default_group_by="stage_id" class="o_cm_campaign_kanban"
-                    on_create="quick_create" quick_create_view="utm.utm_campaign_view_form_quick_create" sample="1">
+            <kanban highlight_color="color" default_group_by="stage_id" class="o_cm_campaign_kanban" sample="1">
                 <field name="user_id"/>
                 <field name="crm_modern_team_id"/>
                 <field name="stage_id"/>
@@ -41,6 +40,19 @@
                                 <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" class="cm-cc-tags"/>
                             </div>
                         </div>
+                        <div class="cm-kc-assign oe_kanban_action">
+                            <div class="cm-kc-assign-item">
+                                <span class="cm-kc-assign-label">Team</span>
+                                <field name="crm_modern_team_id" widget="crm_modern_m2o_pick"
+                                       options="{'placeholder': 'Assign team', 'icon': 'fa-users', 'searchPlaceholder': 'Search a team…'}"/>
+                            </div>
+                            <div class="cm-kc-assign-item">
+                                <span class="cm-kc-assign-label">Person</span>
+                                <field name="user_id" widget="crm_modern_user_pick"
+                                       options="{'placeholder': 'Assign salesperson', 'searchPlaceholder': 'Search a salesperson…'}"
+                                       domain="[('share', '=', False)]"/>
+                            </div>
+                        </div>
                         <div class="cm-cc-stats">
                             <button type="object" name="crm_modern_open_leads" class="cm-cc-stat" groups="crm.group_use_lead">
                                 <strong><field name="crm_modern_lead_count"/></strong>
@@ -53,19 +65,6 @@
                             <div class="cm-cc-stat">
                                 <strong><field name="crm_modern_open_count"/></strong>
                                 <span>Open</span>
-                            </div>
-                        </div>
-                        <div class="cm-kc-assign oe_kanban_action">
-                            <div class="cm-kc-assign-item">
-                                <span class="cm-kc-assign-label">Team</span>
-                                <field name="crm_modern_team_id" widget="crm_modern_m2o_pick"
-                                       options="{'placeholder': 'Assign team', 'icon': 'fa-users', 'searchPlaceholder': 'Search a team…'}"/>
-                            </div>
-                            <div class="cm-kc-assign-item">
-                                <span class="cm-kc-assign-label">Owner</span>
-                                <field name="user_id" widget="crm_modern_user_pick"
-                                       options="{'placeholder': 'Assign salesperson', 'searchPlaceholder': 'Search a salesperson…'}"
-                                       domain="[('share', '=', False)]"/>
                             </div>
                         </div>
                         <footer class="cm-cc-foot oe_kanban_action">

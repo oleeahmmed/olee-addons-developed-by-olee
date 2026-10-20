@@ -339,4 +339,22 @@ html[data-mt-theme] {
     --mt-shadow-md: 0 1px 2px rgba(0, 0, 0, 0.35), 0 6px 18px -8px rgba(0, 0, 0, 0.55);
     --mt-shadow-lg: 0 12px 32px -8px rgba(0, 0, 0, 0.65);
     --mt-shadow-xl: 0 24px 48px -12px rgba(0, 0, 0, 0.75);
+
+    --or-sheet-bg: var(--mt-card);
+    --or-sheet-border: var(--mt-border);
+    --or-sheet-fg: var(--mt-foreground);
+    --or-sheet-muted: var(--mt-muted-foreground);
+    --or-sheet-subtle: var(--mt-muted-foreground);
+    --or-sheet-shadow: -18px 0 48px rgba(0, 0, 0, 0.45);
+    --or-overlay: rgba(15, 23, 42, 0.42);
+    --or-input-border: var(--mt-border);
+    --or-input-bg: var(--mt-card);
+    --or-input-placeholder: var(--mt-muted-foreground);
+    --or-focus-border: var(--mt-foreground);
+    --or-focus-ring: color-mix(in srgb, var(--mt-foreground) 12%, transparent);
+    --or-accent-soft: color-mix(in srgb, var(--or-accent) 14%, var(--mt-card));
+    --or-icon-bg: var(--mt-muted);
+    --or-pill-bg: var(--mt-card);
+    --or-pill-border: var(--mt-border);
+    --or-pill-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }

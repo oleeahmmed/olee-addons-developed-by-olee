@@ -27,7 +27,7 @@ class TestCrmModern(TransactionCase):
         self.assertFalse(missing, f"Views no longer found after update: {missing}")
 
     def test_client_actions_and_menus(self):
-        for xmlid in ('dashboard', 'pipeline', 'leads', 'activities', 'campaigns', 'salespeople',
+        for xmlid in ('dashboard', 'pipeline', 'leads', 'activities', 'campaigns', 'campaign', 'salespeople',
                       'teams', 'stages', 'activity_types', 'activity_plans', 'tags', 'record', 'team'):
             action = self.env.ref(f'crm_modern.action_{xmlid}')
             self.assertEqual(action.tag, f'crm_modern.{xmlid}')
@@ -256,8 +256,19 @@ class TestCrmModernCampaigns(TransactionCase):
         )
         imported = self.env['crm.lead'].browse(res['ids'])
         self.assertEqual(imported.team_id, team)
-        self.assertEqual(campaign.crm_modern_open_pipeline()['context'], {'crm_modern_campaign_id': campaign.id})
-        self.assertEqual(campaign.crm_modern_open_leads()['context'], {'crm_modern_campaign_id': campaign.id})
+        self.assertEqual(campaign.crm_modern_open_pipeline()['context']['crm_modern_campaign_id'], campaign.id)
+        self.assertEqual(campaign.crm_modern_open_leads()['context']['crm_modern_campaign_id'], campaign.id)
+        self.assertEqual(campaign.crm_modern_open_pipeline()['context']['crm_modern_team_id'], team.id)
+        opened = campaign.crm_modern_open()
+        self.assertEqual(opened['tag'], 'crm_modern.campaign')
+        self.assertEqual(opened['context']['active_id'], campaign.id)
+        detail = campaign.crm_modern_campaign_detail()
+        self.assertEqual(detail['campaign']['id'], campaign.id)
+        self.assertEqual(detail['campaign']['team_id'][0], team.id)
+        self.assertLess(
+            self.env.ref('crm_modern.menu_marketing').sequence,
+            self.env.ref('crm_modern.menu_sales').sequence,
+        )
 
         kanban = self.env.ref('crm_modern.utm_campaign_kanban_modern')
         self.assertEqual(self.env['crm.lead'].crm_modern_view_ids()['campaign_kanban'], kanban.id)

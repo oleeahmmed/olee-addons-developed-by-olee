@@ -10,6 +10,8 @@
         display: flex; flex-direction: column; gap: 1.5rem;
         @media (max-width: 767.98px) { padding: 1rem 1rem 2.5rem; gap: 1.25rem; }
     }
+    .cm-container--campaign { max-width: 40rem; }
+    &.cm-campaign-page .cm-card-body { padding-top: 1.25rem; }
     &.o_cm_page--native .cm-container--native {
         max-width: none;
         padding: 1rem 1.25rem 2rem;
@@ -591,9 +593,10 @@
 // ============================================================================
 // Dialogs opened from Modern CRM pages (activity scheduler, Odoo forms,
 // lost reason, convert, ...): rounded card, quiet header, shadcn buttons.
-// Our own dialogs (.o_cm_dialog) already carry these styles.
+// Our own dialogs (.o_cm_dialog) and the right sheet (.o_or_sheet / .o_cm_drawer)
+// already carry these styles — do not restyle them as centered Bootstrap cards.
 // ============================================================================
-.o_web_client:has(.o_cm_page) .modal .modal-content:not(.o_cm_dialog) {
+.o_web_client:has(.o_cm_page) .modal .modal-content:not(.o_cm_dialog):not(.o_cm_drawer):not(.o_or_sheet) {
     border: 1px solid var(--cm-border);
     border-radius: calc(var(--cm-radius) + 4px);
     box-shadow: var(--cm-shadow-lg);

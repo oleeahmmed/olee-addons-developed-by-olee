@@ -57,7 +57,7 @@
 
     <t t-name="crm_modern.TagInput">
         <div class="position-relative" t-ref="root">
-            <div class="cm-input d-flex flex-wrap align-items-center" style="height:auto;min-height:2.25rem;padding:0.25rem 0.5rem;gap:0.25rem;cursor:text"
+            <div class="or-input cm-input d-flex flex-wrap align-items-center" style="height:auto;min-height:2.5rem;padding:0.35rem 0.75rem;gap:0.25rem;cursor:text"
                  t-on-click="focusInput">
                 <TagChips tags="props.value" onRemove.bind="remove"/>
                 <input t-att-id="props.id" role="combobox" t-att-aria-expanded="state.open ? 'true' : 'false'" aria-autocomplete="list"

@@ -4,7 +4,10 @@ import { _t } from "@web/core/l10n/translation";
 import { useService } from "@web/core/utils/hooks";
 import { user } from "@web/core/user";
 import { TagInput } from "./tag_input";
-import { ActivityIcon } from "./ui";
+import { ActivityIcon, TagChips } from "./ui";
+import { FormDrawer } from "./form_drawer";
+import { ImportDialog } from "./import_dialog";
+import { OrSelectCard } from "@modern_theme/js/or_select_card";
 
 const EMAIL_RE = /^\S+@\S+\.\S+$/;
 
@@ -22,7 +25,7 @@ async function loadChoices(orm, { stages = false, campaigns = false } = {}) {
 /** Quick create for a lead or an opportunity (standard crm.lead fields). */
 export class QuickCreateDialog extends Component {
     static template = "crm_modern.QuickCreateDialog";
-    static components = { Dialog, TagInput };
+    static components = { FormDrawer, TagInput, OrSelectCard };
     static props = {
         close: Function,
         type: { type: String, validate: (t) => ["lead", "opportunity"].includes(t) },
@@ -50,6 +53,31 @@ export class QuickCreateDialog extends Component {
     }
     get title() {
         return this.isOpp ? _t("New opportunity") : _t("New lead");
+    }
+    get subtitle() {
+        return this.isOpp
+            ? _t("Add a deal to the pipeline. Open it afterwards for activities and notes.")
+            : _t("Capture a prospect. Qualify it later and convert it to an opportunity.");
+    }
+    get teamCardOptions() {
+        return this.state.choices.teams.map((t) => ({
+            id: t.id,
+            title: t.name,
+            hint: _t("Sales team"),
+        }));
+    }
+    get stageCardOptions() {
+        return this.state.choices.stages.map((st) => ({
+            id: st.id,
+            title: st.name,
+            hint: _t("Pipeline stage"),
+        }));
+    }
+    get teamPlaceholder() {
+        return _t("Salesperson's team");
+    }
+    get teamEmptyHint() {
+        return _t("Uses the salesperson's default team");
     }
 
     async save() {
@@ -96,18 +124,137 @@ export class QuickCreateDialog extends Component {
     }
 }
 
-/** New utm.campaign (Odoo's own model) with its responsible. */
+/** Create or edit a campaign in the right-side drawer on the campaigns list. */
 export class CampaignDialog extends Component {
     static template = "crm_modern.CampaignDialog";
-    static components = { Dialog };
-    static props = { close: Function, onSaved: { type: Function, optional: true } };
+    static components = { FormDrawer, TagChips, OrSelectCard };
+    static props = {
+        close: Function,
+        onSaved: { type: Function, optional: true },
+        resId: { type: [Number, Boolean], optional: true },
+    };
 
     setup() {
         this.orm = useService("orm");
-        this.state = useState({ choices: { users: [], teams: [] }, title: "", team_id: "", user_id: "", error: null });
-        onWillStart(async () => {
-            this.state.choices = await loadChoices(this.orm);
+        this.action = useService("action");
+        this.dialog = useService("dialog");
+        this.state = useState({
+            choices: { users: [], teams: [], stages: [], tags: [] },
+            title: "",
+            team_id: "",
+            user_id: "",
+            stage_id: "",
+            tags: [],
+            useLeads: false,
+            canCreateLead: false,
+            error: null,
+            saving: false,
         });
+        onWillStart(() => this.load());
+    }
+
+    get isEdit() {
+        return Boolean(this.props.resId);
+    }
+    get title() {
+        return this.isEdit ? _t("Campaign") : _t("New campaign");
+    }
+    get subtitle() {
+        return this.isEdit
+            ? _t("Changes save when you click Save. Leads and opportunities stay on their own pages.")
+            : _t("Name it and pick a team. Upload contacts from the campaign card afterwards.");
+    }
+    get availableTags() {
+        const taken = new Set(this.state.tags.map((t) => t.id));
+        return this.state.choices.tags.filter((t) => !taken.has(t.id));
+    }
+    get teamCardOptions() {
+        return this.state.choices.teams.map((t) => ({
+            id: t.id,
+            title: t.name,
+            hint: _t("Sales team"),
+        }));
+    }
+    get stageCardOptions() {
+        return this.state.choices.stages.map((st) => ({
+            id: st.id,
+            title: st.name,
+            hint: _t("Campaign stage"),
+            badge: st.id === this.state.choices.stages[0]?.id ? _t("Default") : "",
+        }));
+    }
+
+    async load() {
+        if (this.props.resId) {
+            const data = await this.orm.call("utm.campaign", "crm_modern_campaign_detail", [this.props.resId]);
+            const c = data.campaign;
+            Object.assign(this.state, {
+                choices: { users: data.users, teams: data.teams, stages: data.stages, tags: data.tags },
+                title: c.title || "",
+                team_id: c.team_id ? String(c.team_id[0]) : "",
+                user_id: c.user_id ? String(c.user_id[0]) : "",
+                stage_id: c.stage_id ? String(c.stage_id[0]) : "",
+                tags: c.tag_ids || [],
+                useLeads: Boolean(data.use_leads),
+                canCreateLead: Boolean(data.can_create_lead),
+            });
+            return;
+        }
+        const [choices, stages, tags] = await Promise.all([
+            loadChoices(this.orm),
+            this.orm.searchRead("utm.stage", [], ["name"], { order: "sequence, id" }),
+            this.orm.searchRead("utm.tag", [], ["name", "color"], { order: "name" }),
+        ]);
+        this.state.choices = { ...choices, stages, tags };
+        if (stages[0]) {
+            this.state.stage_id = String(stages[0].id);
+        }
+    }
+
+    addTag(ev) {
+        const id = Number(ev.target.value);
+        ev.target.value = "";
+        const tag = this.state.choices.tags.find((t) => t.id === id);
+        if (tag) {
+            this.state.tags = [...this.state.tags, tag];
+        }
+    }
+
+    removeTag(id) {
+        this.state.tags = this.state.tags.filter((t) => t.id !== id);
+    }
+
+    importPayload() {
+        const team = this.state.choices.teams.find((t) => String(t.id) === this.state.team_id);
+        return {
+            id: this.props.resId,
+            title: this.state.title,
+            team: team ? [team.id, team.name] : false,
+            team_id: this.state.team_id,
+            user_id: this.state.user_id,
+        };
+    }
+
+    upload() {
+        if (!this.state.canCreateLead || !this.props.resId) {
+            return;
+        }
+        this.dialog.add(ImportDialog, {
+            campaign: this.importPayload(),
+            onImported: () => this.props.onSaved?.(this.props.resId),
+        });
+    }
+
+    async openLeads() {
+        const action = await this.orm.call("utm.campaign", "crm_modern_open_leads", [this.props.resId]);
+        this.props.close();
+        return this.action.doAction(action);
+    }
+
+    async openPipeline() {
+        const action = await this.orm.call("utm.campaign", "crm_modern_open_pipeline", [this.props.resId]);
+        this.props.close();
+        return this.action.doAction(action);
     }
 
     async save() {
@@ -116,12 +263,29 @@ export class CampaignDialog extends Component {
             s.error = _t("Campaign name is required.");
             return;
         }
-        const [id] = await this.orm.create("utm.campaign", [{
-            title: s.title.trim(),
-            user_id: Number(s.user_id) || false,
-        }]);
-        this.props.onSaved?.(id);
-        this.props.close();
+        s.saving = true;
+        const vals = { title: s.title.trim() };
+        if (s.user_id) {
+            vals.user_id = Number(s.user_id);
+        }
+        vals.crm_modern_team_id = Number(s.team_id) || false;
+        if (s.stage_id) {
+            vals.stage_id = Number(s.stage_id);
+        }
+        vals.tag_ids = [[6, 0, s.tags.map((t) => t.id)]];
+        try {
+            let id = this.props.resId;
+            if (id) {
+                await this.orm.write("utm.campaign", [id], vals);
+            } else {
+                [id] = await this.orm.create("utm.campaign", [vals]);
+            }
+            this.props.onSaved?.(id);
+            this.props.close();
+        } catch (e) {
+            s.saving = false;
+            throw e;
+        }
     }
 }
 

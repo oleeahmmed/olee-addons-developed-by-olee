@@ -55,16 +55,57 @@ class UtmCampaign(models.Model):
             if leads:
                 leads.write({'team_id': campaign.crm_modern_team_id.id})
 
+    def _crm_modern_lead_context(self):
+        self.ensure_one()
+        ctx = {'crm_modern_campaign_id': self.id}
+        if self.crm_modern_team_id:
+            ctx['crm_modern_team_id'] = self.crm_modern_team_id.id
+        return ctx
+
+    def crm_modern_open(self):
+        self.ensure_one()
+        action = self.env['ir.actions.actions']._for_xml_id('crm_modern.action_campaign')
+        action['context'] = {'active_id': self.id, 'crm_modern_campaign_id': self.id}
+        action['display_name'] = self.display_name
+        return action
+
     def crm_modern_open_leads(self):
         self.ensure_one()
         action = self.env['ir.actions.actions']._for_xml_id('crm_modern.action_leads')
-        action['context'] = {'crm_modern_campaign_id': self.id}
+        action['context'] = self._crm_modern_lead_context()
         action['display_name'] = self.env._("Leads · %s", self.display_name)
         return action
 
     def crm_modern_open_pipeline(self):
         self.ensure_one()
         action = self.env['ir.actions.actions']._for_xml_id('crm_modern.action_pipeline')
-        action['context'] = {'crm_modern_campaign_id': self.id}
+        action['context'] = self._crm_modern_lead_context()
         action['display_name'] = self.env._("Pipeline · %s", self.display_name)
         return action
+
+    def crm_modern_campaign_detail(self):
+        """Everything the campaign page needs in one round trip."""
+        self.ensure_one()
+        Lead = self.env['crm.lead']
+        features = Lead.crm_modern_features()
+        return {
+            'campaign': {
+                'id': self.id,
+                'title': self.title,
+                'active': self.active,
+                'user_id': [self.user_id.id, self.user_id.display_name] if self.user_id else False,
+                'team_id': [self.crm_modern_team_id.id, self.crm_modern_team_id.display_name] if self.crm_modern_team_id else False,
+                'stage_id': [self.stage_id.id, self.stage_id.display_name] if self.stage_id else False,
+                'tag_ids': [{'id': tag.id, 'name': tag.name, 'color': tag.color} for tag in self.tag_ids],
+                'lead_count': self.crm_modern_lead_count,
+                'opportunity_count': self.crm_modern_opportunity_count,
+                'open_count': self.crm_modern_open_count,
+            },
+            'stages': self.env['utm.stage'].search_read([], ['name'], order='sequence, id'),
+            'users': self.env['res.users'].search_read([('share', '=', False)], ['name'], order='name'),
+            'teams': self.env['crm.team'].search_read([], ['name'], order='sequence, name'),
+            'tags': self.env['utm.tag'].search_read([], ['name', 'color'], order='name'),
+            'use_leads': bool(features.get('use_leads')),
+            'can_edit': self.has_access('write'),
+            'can_create_lead': Lead.has_access('create'),
+        }

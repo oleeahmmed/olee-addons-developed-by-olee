@@ -2,7 +2,7 @@ import { Component, onWillStart, useState } from "@odoo/owl";
 import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
 import { user } from "@web/core/user";
-import { useService } from "@web/core/utils/hooks";
+import { useBus, useService } from "@web/core/utils/hooks";
 import { session } from "@web/session";
 import { CampaignDialog, QuickCreateDialog } from "../components/dialogs";
 import { EmptyState } from "../components/ui";
@@ -85,6 +85,7 @@ export class ListPage extends Component {
                 : await user.checkAccessRight(C.resModel, "create").catch(() => false);
             Object.assign(this.state, { viewIds, canCreate, unavailable, ready: true });
         });
+        useBus(this.env.bus, "crm_modern:list-reload", () => this.refresh());
     }
 
     get page() {
@@ -208,12 +209,15 @@ class PipelinePage extends ListPage {
 
 class CampaignsPage extends ListPage {
     static title = _t("Campaigns");
-    static subtitle = _t("Your campaigns — open one to see the leads and deals it brought in");
+    static subtitle = _t("Start here — assign a team, upload contacts, then open that campaign’s leads");
     static icon = "fa-bullhorn";
     static newLabel = _t("New campaign");
     static resModel = "utm.campaign";
     static prefix = "campaign";
     static types = ["kanban", "list"];
+    open(resId) {
+        return this.dialogPromise(CampaignDialog, { resId });
+    }
     create() {
         return this.dialogPromise(CampaignDialog, {});
     }

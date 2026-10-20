@@ -6,7 +6,7 @@ import { registry } from "@web/core/registry";
 
 import { user } from "@web/core/user";
 
-import { useService } from "@web/core/utils/hooks";
+import { useBus, useService } from "@web/core/utils/hooks";
 
 import { QuickCreateDialog } from "../components/dialogs";
 
@@ -72,6 +72,9 @@ export class Leads extends Component {
         });
 
         onWillStart(() => this.load());
+        useBus(this.env.bus, "crm_modern:list-reload", () => {
+            this.state.nativeVersion++;
+        });
 
     }
 
@@ -121,7 +124,7 @@ export class Leads extends Component {
 
             viewSwitcherEntries,
 
-            displayName: _t("Leads"),
+            displayName: this.props.action?.display_name || _t("Leads"),
 
             onSwitchView: (type) => this.setView(type),
 

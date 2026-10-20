@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="crm_modern.FormDrawer">
+        <Dialog title="props.title" size="'md'" contentClass="'o_cm o_cm_drawer o_or_sheet'" bodyClass="'or-sheet-body'" header="false">
+            <div class="or-sheet-head">
+                <div class="or-sheet-head-text">
+                    <h2 class="or-sheet-title" t-esc="props.title"/>
+                    <p t-if="props.subtitle" class="or-sheet-subtitle" t-esc="props.subtitle"/>
+                </div>
+                <button type="button" class="or-sheet-close" aria-label="Close" tabindex="-1" t-on-click="props.close">
+                    <span aria-hidden="true">&#215;</span>
+                </button>
+            </div>
+            <div t-if="props.slots &amp;&amp; props.slots.actions" class="or-sheet-actions">
+                <t t-slot="actions"/>
+            </div>
+            <div class="or-sheet-stack">
+                <t t-slot="default"/>
+            </div>
+            <t t-set-slot="footer">
+                <t t-slot="footer"/>
+            </t>
+        </Dialog>
+    </t>
+
+</templates>

@@ -9,6 +9,7 @@ import { session } from "@web/session";
 import { user } from "@web/core/user";
 import { useBus, useService } from "@web/core/utils/hooks";
 import { loadFeatures } from "../core/features";
+import { CampaignDialog, QuickCreateDialog } from "../components/dialogs";
 
 /**
  * Modern CRM left sidebar.
@@ -19,7 +20,7 @@ import { loadFeatures } from "../core/features";
  * web client. The app's top-bar section menus are hidden with CSS (sidebar.scss).
  *
  * It shows the whole CRM app menu, nothing hidden: Modern CRM's own groups (Dashboard,
- * Deals, Marketing, Team, Reporting, Configuration) with Odoo's matching CRM menus
+ * Marketing, Deals, Team, Reporting, Configuration) with Odoo's matching CRM menus
  * merged into them, minus the entries Modern CRM already shows with its own page; every
  * other CRM menu (other apps' too) as its own group, named as in Odoo, with a small
  * heading per sub-section. Odoo's groups and settings decide what each user sees.
@@ -142,6 +143,7 @@ export class ModernSidebar extends Component {
         this.ui = useState(useService("ui"));
         this.orm = useService("orm");
         this.action = useService("action");
+        this.dialog = useService("dialog");
         let collapsed = false;
         try {
             collapsed = browser.localStorage.getItem(COLLAPSE_KEY) === "1";
@@ -323,6 +325,19 @@ export class ModernSidebar extends Component {
             if (types.length) {
                 context.default_picking_type_id = types[0].id;
             }
+        }
+        const reload = () => this.env.bus.trigger("crm_modern:list-reload");
+        if (spec.resModel === "utm.campaign") {
+            this.dialog.add(CampaignDialog, { onSaved: reload });
+            return;
+        }
+        if (spec.resModel === "crm.lead") {
+            this.dialog.add(QuickCreateDialog, {
+                type: context.default_type === "lead" ? "lead" : "opportunity",
+                defaults: context,
+                onSaved: reload,
+            });
+            return;
         }
         this.action.doAction({
             type: "ir.actions.act_window",

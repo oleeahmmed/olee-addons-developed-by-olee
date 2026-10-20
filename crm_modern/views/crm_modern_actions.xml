@@ -31,6 +31,12 @@
         <field name="tag">crm_modern.campaigns</field>
         <field name="path">modern-crm-campaigns</field>
     </record>
+    <!-- Campaign detail: edit, assign team/person, jump to that campaign's leads. -->
+    <record id="action_campaign" model="ir.actions.client">
+        <field name="name">Campaign</field>
+        <field name="tag">crm_modern.campaign</field>
+        <field name="path">modern-crm-campaign</field>
+    </record>
     <record id="action_salespeople" model="ir.actions.client">
         <field name="name">Salespeople</field>
         <field name="tag">crm_modern.salespeople</field>
