@@ -42,4 +42,6 @@
     <menuitem id="menu_activity_plans" name="Activity Plans" parent="menu_config" action="action_activity_plans" sequence="3"/>
     <menuitem id="menu_tags" name="Tags" parent="menu_config" action="action_tags" sequence="4"/>
     <menuitem id="menu_lost_reasons" name="Lost Reasons" parent="menu_config" action="action_lost_reasons" sequence="5"/>
+
+    <function model="res.users" name="_crm_modern_set_default_home_action"/>
 </odoo>

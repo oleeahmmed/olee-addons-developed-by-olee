@@ -11,7 +11,7 @@ No new tables: everything reads and writes the standard models
 mail.activity.type, mail.activity.plan). Campaigns store a default sales
 team (crm_modern_team_id) so empty campaigns remember who owns uploaded leads.
     """,
-    'version': '19.0.2.5.0',
+    'version': '19.0.2.5.1',
     'category': 'Sales/CRM',
     'author': 'Your Name',
     'license': 'LGPL-3',
