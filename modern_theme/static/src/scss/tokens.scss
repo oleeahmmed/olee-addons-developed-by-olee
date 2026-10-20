@@ -386,19 +386,28 @@ html[data-mt-theme] {
     --mt-stitch-dot: rgba(24, 24, 27, 0.16);
     --mt-stitch-size: 16px;
 
-    // --- navigation (light shell: white top bar, soft grey sidebar) --------
-    // Sidebar and top bar are one continuous chrome, so they share a single colour.
-    --mt-chrome-bg: hsl(0 0% 99%);
+    // --- chrome (top bar) + shadcn-style sidebar ---------------------------
+    // Content stays on --mt-content-bg; sidebar is a soft reverse surface
+    // (slightly muted vs the page), using the same global theme colours.
+    --mt-chrome-bg: var(--mt-card);
     --mt-topbar-bg: var(--mt-chrome-bg);
-    --mt-sidebar-bg: var(--mt-chrome-bg);
-    --mt-sidebar-bg-2: hsl(240 5% 96%);
+    --mt-sidebar-bg: color-mix(in srgb, var(--mt-muted) 55%, var(--mt-card));
+    --mt-sidebar-bg-2: var(--mt-muted);
+    --mt-sidebar-fg: var(--mt-foreground);
+    --mt-sidebar-muted-fg: var(--mt-muted-foreground);
+    --mt-sidebar-accent: color-mix(in srgb, var(--mt-primary) 10%, var(--mt-muted));
+    --mt-sidebar-accent-fg: var(--mt-foreground);
+    --mt-sidebar-primary: var(--mt-primary);
+    --mt-sidebar-primary-fg: var(--mt-primary-foreground);
+    --mt-sidebar-border: var(--mt-border);
+    --mt-sidebar-ring: var(--mt-ring);
     --mt-nav-bg: var(--mt-topbar-bg);
     --mt-nav-bg-2: var(--mt-topbar-bg);
     --mt-nav-fg: var(--mt-foreground);
     --mt-nav-muted-fg: var(--mt-muted-foreground);
     --mt-nav-hover: var(--mt-muted);
-    --mt-nav-active-bg: color-mix(in srgb, var(--mt-primary) 12%, var(--mt-card));
-    --mt-nav-active-fg: var(--mt-primary);
+    --mt-nav-active-bg: var(--mt-sidebar-accent);
+    --mt-nav-active-fg: var(--mt-sidebar-accent-fg);
     --mt-nav-border: var(--mt-border);
     --mt-nav-tile: var(--mt-card);
     --mt-nav-scrollbar: color-mix(in srgb, var(--mt-foreground) 22%, transparent);

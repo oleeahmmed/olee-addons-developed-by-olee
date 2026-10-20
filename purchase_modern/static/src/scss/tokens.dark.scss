@@ -30,13 +30,13 @@
     --mp-chart-3: #d97706;
     --mp-chart-4: #8b5cf6;
 
-    --mp-sidebar: #111113;
-    --mp-sidebar-fg: #cbd5e1;
-    --mp-sidebar-hover: #1a2335;
-    --mp-sidebar-accent: #27272a;
-    --mp-sidebar-accent-fg: #fafafa;
-    --mp-sidebar-muted-fg: #a1a1aa;
-    --mp-sidebar-border: #27272a;
+    --mp-sidebar: var(--mt-sidebar-bg, var(--mt-card));
+    --mp-sidebar-fg: var(--mt-sidebar-fg, var(--mt-foreground));
+    --mp-sidebar-hover: var(--mt-sidebar-accent, var(--mt-muted));
+    --mp-sidebar-accent: var(--mt-sidebar-accent, var(--mt-muted));
+    --mp-sidebar-accent-fg: var(--mt-sidebar-accent-fg, var(--mt-foreground));
+    --mp-sidebar-muted-fg: var(--mt-sidebar-muted-fg, var(--mt-muted-foreground));
+    --mp-sidebar-border: var(--mt-sidebar-border, var(--mt-border));
     --mp-card-matte: #131c2c;
     --mp-edge: rgba(0, 0, 0, 0.25);
     --mp-shadow-xs: none;

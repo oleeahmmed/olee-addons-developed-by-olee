@@ -32,10 +32,10 @@
     --cm-chart-3: var(--mt-warning);
     --cm-chart-4: var(--mt-info, var(--mt-primary));
     --cm-sidebar: var(--mt-sidebar-bg, var(--mt-card));
-    --cm-sidebar-fg: var(--mt-foreground);
-    --cm-sidebar-hover: var(--mt-nav-hover, var(--mt-muted));
-    --cm-sidebar-accent: var(--mt-nav-active-bg, var(--mt-muted));
-    --cm-sidebar-accent-fg: var(--mt-nav-active-fg, var(--mt-primary));
-    --cm-sidebar-muted-fg: var(--mt-muted-foreground);
-    --cm-sidebar-border: var(--mt-border);
+    --cm-sidebar-fg: var(--mt-sidebar-fg, var(--mt-foreground));
+    --cm-sidebar-hover: var(--mt-sidebar-accent, var(--mt-muted));
+    --cm-sidebar-accent: var(--mt-sidebar-accent, var(--mt-muted));
+    --cm-sidebar-accent-fg: var(--mt-sidebar-accent-fg, var(--mt-foreground));
+    --cm-sidebar-muted-fg: var(--mt-sidebar-muted-fg, var(--mt-muted-foreground));
+    --cm-sidebar-border: var(--mt-sidebar-border, var(--mt-border));
 }

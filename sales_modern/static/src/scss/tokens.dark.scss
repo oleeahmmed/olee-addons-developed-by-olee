@@ -30,13 +30,13 @@
     --ss-chart-3: #d97706;
     --ss-chart-4: #8b5cf6;
 
-    --ss-sidebar: #111113;
-    --ss-sidebar-fg: #cbd5e1;
-    --ss-sidebar-hover: #1a2335;
-    --ss-sidebar-accent: #27272a;
-    --ss-sidebar-accent-fg: #fafafa;
-    --ss-sidebar-muted-fg: #a1a1aa;
-    --ss-sidebar-border: #27272a;
+    --ss-sidebar: var(--mt-sidebar-bg, var(--mt-card));
+    --ss-sidebar-fg: var(--mt-sidebar-fg, var(--mt-foreground));
+    --ss-sidebar-hover: var(--mt-sidebar-accent, var(--mt-muted));
+    --ss-sidebar-accent: var(--mt-sidebar-accent, var(--mt-muted));
+    --ss-sidebar-accent-fg: var(--mt-sidebar-accent-fg, var(--mt-foreground));
+    --ss-sidebar-muted-fg: var(--mt-sidebar-muted-fg, var(--mt-muted-foreground));
+    --ss-sidebar-border: var(--mt-sidebar-border, var(--mt-border));
     --ss-card-matte: #131c2c;
     --ss-edge: rgba(0, 0, 0, 0.25);
     --ss-shadow-xs: none;

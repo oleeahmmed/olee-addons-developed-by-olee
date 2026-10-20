@@ -39,13 +39,13 @@
     --im-chart-3: #d97706;
     --im-chart-4: #7c3aed;
 
-    --im-sidebar: #fafafa;
-    --im-sidebar-fg: #3f3f46;
-    --im-sidebar-hover: #f4f4f5;
-    --im-sidebar-accent: #f0f0f2;
-    --im-sidebar-accent-fg: #18181b;
-    --im-sidebar-muted-fg: #71717a;
-    --im-sidebar-border: #e4e4e7;
+    --im-sidebar: var(--mt-sidebar-bg, var(--mt-card));
+    --im-sidebar-fg: var(--mt-sidebar-fg, var(--mt-foreground));
+    --im-sidebar-hover: var(--mt-sidebar-accent, var(--mt-muted));
+    --im-sidebar-accent: var(--mt-sidebar-accent, var(--mt-muted));
+    --im-sidebar-accent-fg: var(--mt-sidebar-accent-fg, var(--mt-foreground));
+    --im-sidebar-muted-fg: var(--mt-sidebar-muted-fg, var(--mt-muted-foreground));
+    --im-sidebar-border: var(--mt-sidebar-border, var(--mt-border));
     --im-sidebar-width: 15.5rem;
 
     --im-shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.04);
