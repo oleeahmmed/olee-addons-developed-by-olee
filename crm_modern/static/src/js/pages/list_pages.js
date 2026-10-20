@@ -368,6 +368,36 @@ class TagsPage extends ListPage {
     }
 }
 
+class CustomersPage extends ListPage {
+    static title = _t("Customers");
+    static subtitle = _t("People and companies you sell to");
+    static icon = "fa-address-book-o";
+    static newLabel = _t("New customer");
+    static resModel = "res.partner";
+    static prefix = "partner";
+    static types = ["list", "kanban"];
+    get context() {
+        return { res_partner_search_mode: "customer" };
+    }
+    openPartnerForm(resId) {
+        return this.action.doAction({
+            type: "ir.actions.act_window",
+            name: _t("Customer"),
+            res_model: "res.partner",
+            res_id: resId || false,
+            views: [[this.viewId("form"), "form"]],
+            target: "current",
+            context: this.context,
+        });
+    }
+    open(resId) {
+        return this.openPartnerForm(resId);
+    }
+    create() {
+        return this.openPartnerForm(false);
+    }
+}
+
 class LostReasonsPage extends ListPage {
     static title = _t("Lost Reasons");
     static subtitle = _t("Why a deal was lost — salespeople pick one of these");
@@ -395,3 +425,4 @@ actions.add("crm_modern.activity_types", ActivityTypesPage);
 actions.add("crm_modern.activity_plans", ActivityPlansPage);
 actions.add("crm_modern.tags", TagsPage);
 actions.add("crm_modern.lost_reasons", LostReasonsPage);
+actions.add("crm_modern.customers", CustomersPage);

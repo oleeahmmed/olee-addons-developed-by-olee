@@ -10,6 +10,13 @@ import { OrSelectCard } from "@modern_theme/js/or_select_card";
 
 const EMAIL_RE = /^\S+@\S+\.\S+$/;
 
+function rpcMessage(error) {
+    const data = error?.data;
+    const raw = data?.message || (Array.isArray(data?.arguments) && data.arguments[0]) || error?.message;
+    const text = typeof raw === "string" ? raw.replace(/\s+/g, " ").trim() : "";
+    return text || _t("Could not save.");
+}
+
 /** Load the small option lists every form needs, once per dialog. */
 async function loadChoices(orm, { stages = false, campaigns = false } = {}) {
     const [users, teams, stageList, campaignList] = await Promise.all([
@@ -34,13 +41,14 @@ export class QuickCreateDialog extends Component {
 
     setup() {
         this.orm = useService("orm");
+        this.notification = useService("notification");
         const d = this.props.defaults || {};
         this.state = useState({
             choices: { users: [], teams: [], stages: [], campaigns: [] },
             name: "", partner_name: "", contact_name: "", email_from: "", phone: "",
             expected_revenue: "", user_id: d.user_id ?? user.userId, team_id: d.team_id || "",
             campaign_id: d.campaign_id || "", stage_id: d.stage_id || "", date_deadline: "",
-            priority: "1", tags: [], error: null, saving: false,
+            priority: "1", tags: [], more: false, error: null, saving: false,
         });
         onWillStart(async () => {
             this.state.choices = await loadChoices(this.orm, { stages: this.isOpp, campaigns: true });
@@ -92,24 +100,42 @@ export class QuickCreateDialog extends Component {
             name: "", partner_name: "", contact_name: "", email_from: "", phone: "",
             expected_revenue: "", user_id: d.user_id ?? user.userId, team_id: d.team_id || "",
             campaign_id: d.campaign_id || "", stage_id: d.stage_id || "", date_deadline: "",
-            priority: "1", tags: [], error: null, saving: false,
+            priority: "1", tags: [], more: false, error: null, saving: false,
         });
+    }
+
+    titleFrom() {
+        const s = this.state;
+        return (s.name || s.contact_name || s.partner_name || s.email_from || s.phone || "").trim();
+    }
+
+    fail(message) {
+        this.state.error = message;
+        this.notification.add(message, { type: "danger" });
+    }
+
+    toggleMore() {
+        this.state.more = !this.state.more;
     }
 
     async save() {
         const s = this.state;
-        if (!s.name.trim()) {
-            s.error = this.isOpp ? _t("Give the opportunity a name.") : _t("Give the lead a name.");
+        const name = this.titleFrom();
+        if (!name) {
+            this.fail(this.isOpp
+                ? _t("Enter a deal name, company, email or phone.")
+                : _t("Enter a name, company, email or phone."));
             return;
         }
         if (s.email_from && !EMAIL_RE.test(s.email_from.trim())) {
-            s.error = _t("Enter a valid email address.");
+            this.fail(_t("Enter a valid email address."));
             return;
         }
         s.saving = true;
+        s.error = null;
         const vals = {
             type: this.props.type,
-            name: s.name.trim(),
+            name,
             partner_name: s.partner_name.trim() || false,
             contact_name: s.contact_name.trim() || false,
             email_from: s.email_from.trim() || false,
@@ -131,11 +157,12 @@ export class QuickCreateDialog extends Component {
         }
         try {
             const [id] = await this.orm.create("crm.lead", [vals]);
+            this.notification.add(this.isOpp ? _t("Opportunity created") : _t("Lead created"), { type: "success" });
             this.props.onSaved?.(id);
             this.props.close();
         } catch (e) {
             s.saving = false;
-            throw e;
+            this.fail(rpcMessage(e));
         }
     }
 }
@@ -153,6 +180,7 @@ export class CampaignDialog extends Component {
     setup() {
         this.orm = useService("orm");
         this.action = useService("action");
+        this.notification = useService("notification");
         this.state = useState({
             choices: { users: [], teams: [], stages: [], tags: [] },
             title: "",
@@ -282,6 +310,7 @@ export class CampaignDialog extends Component {
         const s = this.state;
         if (!s.title.trim()) {
             s.error = _t("Campaign name is required.");
+            this.notification.add(s.error, { type: "danger" });
             return;
         }
         s.saving = true;
@@ -302,10 +331,12 @@ export class CampaignDialog extends Component {
                 [id] = await this.orm.create("utm.campaign", [vals]);
             }
             this.props.onSaved?.(id);
+            this.notification.add(_t("Saved"), { type: "success" });
             this.props.close();
         } catch (e) {
             s.saving = false;
-            throw e;
+            s.error = rpcMessage(e);
+            this.notification.add(s.error, { type: "danger" });
         }
     }
 }

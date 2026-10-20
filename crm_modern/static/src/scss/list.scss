@@ -69,12 +69,13 @@
             overflow: auto;
             box-shadow: none;
         }
+        .o_list_renderer { --ListRenderer-thead-bg-color: color-mix(in srgb, var(--cm-muted) 55%, var(--cm-card)); }
         .o_list_table thead th {
             height: 2.5rem;
             font-size: 0.75rem;
             font-weight: 500;
-            color: var(--cm-muted-fg);
-            background: color-mix(in srgb, var(--cm-muted) 55%, transparent);
+            color: var(--cm-muted-fg) !important;
+            background: color-mix(in srgb, var(--cm-muted) 55%, var(--cm-card)) !important;
             border-bottom: 1px solid var(--cm-border);
         }
         .o_list_table tbody .o_data_row:hover > td {

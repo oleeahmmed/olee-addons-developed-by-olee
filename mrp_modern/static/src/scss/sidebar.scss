@@ -136,25 +136,26 @@
     .mr-sb-new {
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 0.5rem;
-        height: 2.375rem;
+        height: 2.15rem;
         margin: 0.75rem 0.75rem 0.25rem;
-        padding: 0 0.75rem;
+        padding: 0 1.05rem;
         flex-shrink: 0;
         border: 0;
-        border-radius: 0.625rem;
-        background: var(--mt-nav-active-bg, var(--mr-primary));
-        color: var(--mt-nav-active-fg, var(--mr-primary-fg));
+        border-radius: 999px;
+        background: var(--or-save-bg, var(--mt-primary, var(--mr-primary)));
+        color: var(--or-save-fg, var(--mt-primary-foreground, var(--mr-primary-fg)));
         font-size: 0.8125rem;
         font-weight: 600;
+        line-height: 1;
         cursor: pointer;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.14), 0 4px 12px -6px rgba(0, 0, 0, 0.35);
-        transition: filter 140ms var(--mr-ease), transform 140ms var(--mr-ease);
+        box-shadow: none;
+        transition: background-color 150ms var(--mr-ease);
 
-        > i { font-size: 0.8125rem; flex-shrink: 0; }
+        > i { font-size: 0.75rem; flex-shrink: 0; color: inherit; }
 
         .mr-sb-new-label {
-            flex: 1;
             min-width: 0;
             text-align: start;
             overflow: hidden;
@@ -162,13 +163,12 @@
             white-space: nowrap;
         }
 
-        &:hover { filter: brightness(0.95); }
-        &:active { transform: translateY(1px); }
+        &:hover { background: var(--or-save-hover, var(--mt-primary)); filter: none; }
+        &:active { transform: none; }
 
         &:focus-visible {
             outline: none;
-            box-shadow: 0 0 0 2px var(--mt-nav-bg, var(--mr-sidebar)),
-                        0 0 0 4px var(--mt-nav-fg, var(--mr-primary));
+            box-shadow: 0 0 0 4px var(--or-focus-ring, var(--mt-ring, var(--mr-ring)));
         }
     }
 
@@ -385,14 +385,14 @@
 
         .mr-sb-new {
             margin: 0.75rem auto 0.25rem;
-            width: 2.5rem;
-            height: 2.5rem;
+            width: 2.15rem;
+            height: 2.15rem;
             padding: 0;
             justify-content: center;
 
             .mr-sb-new-label { display: none; }
 
-            > i { font-size: 1rem; }
+            > i { font-size: 0.875rem; color: inherit; }
         }
 
         .mr-sb-group-label,

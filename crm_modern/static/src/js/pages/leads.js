@@ -29,7 +29,8 @@ import { useLeadActions } from "../core/hooks";
 
 
 
-const VIEW_KEY = "crm_modern.leads.view";
+const VIEW_KEY = "crm_modern.leads.view.list";
+const LEAD_VIEWS = ["list", "kanban", "calendar", "pivot", "graph", "activity"];
 
 
 
@@ -50,6 +51,7 @@ export class Leads extends Component {
         this.dialog = useService("dialog");
 
         const ctx = this.props.action?.context || {};
+        const stored = readStoredView(VIEW_KEY, "list");
 
         this.state = useState({
 
@@ -57,7 +59,7 @@ export class Leads extends Component {
 
             campaign: ctx.crm_modern_campaign_id || "",
 
-            view: readStoredView(VIEW_KEY, "list"),
+            view: LEAD_VIEWS.includes(stored) ? stored : "list",
 
             viewIds: {},
 
@@ -144,11 +146,11 @@ export class Leads extends Component {
         return _t("New lead");
     }
     setView(view) {
-
+        if (!LEAD_VIEWS.includes(view)) {
+            view = "list";
+        }
         this.state.view = view;
-
         storeView(VIEW_KEY, view);
-
     }
 
 

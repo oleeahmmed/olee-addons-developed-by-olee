@@ -45,7 +45,7 @@
                 <button type="submit" class="d-none"/>
             </form>
             <t t-set-slot="footer">
-                <button type="button" class="or-save-pill" t-att-disabled="state.saving" t-on-click="save">Save changes</button>
+                <button type="button" class="or-save-pill" t-att-disabled="state.saving" t-on-click="save">Save</button>
             </t>
         </FormDrawer>
     </t>

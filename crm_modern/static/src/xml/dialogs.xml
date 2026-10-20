@@ -17,45 +17,50 @@
                     <input id="cm_qc_email" type="email" class="or-input" t-model="state.email_from" placeholder="name@company.com" autocomplete="email"/></div>
                 <div class="or-field"><label class="or-label" for="cm_qc_phone">Phone</label>
                     <input id="cm_qc_phone" type="tel" class="or-input" t-model="state.phone" placeholder="Phone" autocomplete="tel"/></div>
-                <div class="or-field"><label class="or-label" for="cm_qc_rev">Expected revenue</label>
-                    <input id="cm_qc_rev" type="number" min="0" step="100" inputmode="numeric" class="or-input" t-model="state.expected_revenue" placeholder="0"/></div>
-                <div class="or-field">
-                    <label class="or-label" for="cm_qc_user">Salesperson</label>
-                    <OrSelectCard id="'cm_qc_user'" value="state.user_id" options="userCardOptions"
-                                  placeholder="'Unassigned'" emptyHint="'No owner yet'"
-                                  allowEmpty="true" onChange="(id) => this.state.user_id = id"/>
-                </div>
-                <div class="or-field">
-                    <label class="or-label" for="cm_qc_team">Sales team</label>
-                    <OrSelectCard id="'cm_qc_team'" value="state.team_id" options="teamCardOptions"
-                                  placeholder="teamPlaceholder" emptyHint="teamEmptyHint"
-                                  allowEmpty="true" onChange="(id) => this.state.team_id = id"/>
-                </div>
-                <div class="or-field"><label class="or-label" for="cm_qc_campaign">Campaign</label>
-                    <select id="cm_qc_campaign" class="or-select" t-model="state.campaign_id">
-                        <option value="">None</option>
-                        <t t-foreach="state.choices.campaigns" t-as="c" t-key="c.id"><option t-att-value="c.id" t-esc="c.title"/></t>
-                    </select></div>
-                <t t-if="isOpp">
+                <button type="button" class="or-more-toggle" t-on-click="toggleMore">
+                    <t t-if="state.more">Less</t><t t-else="">More details</t>
+                </button>
+                <t t-if="state.more">
+                    <div class="or-field"><label class="or-label" for="cm_qc_rev">Expected revenue</label>
+                        <input id="cm_qc_rev" type="number" min="0" step="100" inputmode="numeric" class="or-input" t-model="state.expected_revenue" placeholder="0"/></div>
                     <div class="or-field">
-                        <label class="or-label" for="cm_qc_stage">Stage</label>
-                        <OrSelectCard id="'cm_qc_stage'" value="state.stage_id" options="stageCardOptions"
-                                      placeholder="'Default'" emptyHint="'Uses the pipeline default'"
-                                      allowEmpty="true" onChange="(id) => this.state.stage_id = id"/>
+                        <label class="or-label" for="cm_qc_user">Salesperson</label>
+                        <OrSelectCard id="'cm_qc_user'" value="state.user_id" options="userCardOptions"
+                                      placeholder="'Unassigned'" emptyHint="'No owner yet'"
+                                      allowEmpty="true" onChange="(id) => this.state.user_id = id"/>
                     </div>
-                    <div class="or-field"><label class="or-label" for="cm_qc_close">Expected closing</label>
-                        <input id="cm_qc_close" type="date" class="or-input" t-model="state.date_deadline"/></div>
+                    <div class="or-field">
+                        <label class="or-label" for="cm_qc_team">Sales team</label>
+                        <OrSelectCard id="'cm_qc_team'" value="state.team_id" options="teamCardOptions"
+                                      placeholder="teamPlaceholder" emptyHint="teamEmptyHint"
+                                      allowEmpty="true" onChange="(id) => this.state.team_id = id"/>
+                    </div>
+                    <div class="or-field"><label class="or-label" for="cm_qc_campaign">Campaign</label>
+                        <select id="cm_qc_campaign" class="or-select" t-model="state.campaign_id">
+                            <option value="">None</option>
+                            <t t-foreach="state.choices.campaigns" t-as="c" t-key="c.id"><option t-att-value="c.id" t-esc="c.title"/></t>
+                        </select></div>
+                    <t t-if="isOpp">
+                        <div class="or-field">
+                            <label class="or-label" for="cm_qc_stage">Stage</label>
+                            <OrSelectCard id="'cm_qc_stage'" value="state.stage_id" options="stageCardOptions"
+                                          placeholder="'Default'" emptyHint="'Uses the pipeline default'"
+                                          allowEmpty="true" onChange="(id) => this.state.stage_id = id"/>
+                        </div>
+                        <div class="or-field"><label class="or-label" for="cm_qc_close">Expected closing</label>
+                            <input id="cm_qc_close" type="date" class="or-input" t-model="state.date_deadline"/></div>
+                    </t>
+                    <div class="or-field"><label class="or-label" for="cm_qc_prio">Priority</label>
+                        <select id="cm_qc_prio" class="or-select" t-model="state.priority">
+                            <option value="0">Low</option><option value="1">Medium</option><option value="2">High</option><option value="3">Very high</option>
+                        </select></div>
+                    <div class="or-field"><label class="or-label" for="cm_qc_tags">Tags</label>
+                        <TagInput id="'cm_qc_tags'" value="state.tags" placeholder="'Add a tag'" onChange="(tags) => this.state.tags = tags"/></div>
                 </t>
-                <div class="or-field"><label class="or-label" for="cm_qc_prio">Priority</label>
-                    <select id="cm_qc_prio" class="or-select" t-model="state.priority">
-                        <option value="0">Low</option><option value="1">Medium</option><option value="2">High</option><option value="3">Very high</option>
-                    </select></div>
-                <div class="or-field"><label class="or-label" for="cm_qc_tags">Tags</label>
-                    <TagInput id="'cm_qc_tags'" value="state.tags" placeholder="'Add a tag'" onChange="(tags) => this.state.tags = tags"/></div>
                 <button type="submit" class="d-none"/>
             </form>
             <t t-set-slot="footer">
-                <button type="button" class="or-save-pill" t-att-disabled="state.saving" t-on-click="save">Save changes</button>
+                <button type="button" class="or-save-pill" t-att-disabled="state.saving" t-on-click="save">Save</button>
             </t>
         </FormDrawer>
     </t>
@@ -103,7 +108,7 @@
                 <button type="submit" class="d-none"/>
             </form>
             <t t-set-slot="footer">
-                <button type="button" class="or-save-pill" t-att-disabled="state.saving" t-on-click="save">Save changes</button>
+                <button type="button" class="or-save-pill" t-att-disabled="state.saving" t-on-click="save">Save</button>
             </t>
         </FormDrawer>
     </t>

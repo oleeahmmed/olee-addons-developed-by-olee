@@ -79,7 +79,7 @@ html[data-mt-theme] {
 .form-select {
     border-color: var(--mt-input);
     color: var(--mt-foreground);
-    background-color: var(--mt-background);
+    background-color: var(--mt-card);
     transition: border-color 140ms var(--mt-ease), box-shadow 140ms var(--mt-ease);
 
     &::placeholder {
@@ -249,6 +249,33 @@ html[data-mt-theme] {
     }
 }
 
+// Odoo compiles --ListRenderer-thead-bg-color to the light webclient colour.
+.o_list_renderer {
+    --ListRenderer-thead-bg-color: var(--mt-muted);
+    --ListRenderer-tfoot-bg-color: var(--mt-card);
+    --ListRenderer-thead-border-end-color: var(--mt-border);
+
+    .o_list_table {
+        --table-bg: var(--mt-card);
+        --table-color: var(--mt-foreground);
+        --table-border-color: var(--mt-border);
+        --table-hover-bg: color-mix(in srgb, var(--mt-muted) 70%, transparent);
+        --table-hover-color: var(--mt-foreground);
+
+        thead th {
+            background-color: var(--mt-muted) !important;
+            color: var(--mt-muted-foreground) !important;
+            border-bottom-color: var(--mt-border);
+        }
+        tbody td { color: var(--mt-foreground); border-color: var(--mt-border); }
+        tbody .o_data_row:hover > td {
+            background-color: color-mix(in srgb, var(--mt-muted) 70%, transparent);
+        }
+    }
+
+    .o_list_sortable_icon { background: var(--mt-muted) !important; }
+}
+
 .o_kanban_view {
     background-color: transparent;
 }
@@ -266,10 +293,14 @@ html[data-mt-theme] {
 // ===========================================================================
 // 4. Buttons, links, form controls
 // ===========================================================================
+.btn .fa, .btn .oi, .btn .o_button_icon { color: inherit; }
+
 .btn-primary {
     background-color: var(--mt-primary);
     border-color: var(--mt-primary);
     color: var(--mt-primary-foreground);
+
+    .fa, .oi, .o_button_icon { color: inherit; }
 
     &:hover,
     &:focus,

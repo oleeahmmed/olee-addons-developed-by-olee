@@ -16,6 +16,25 @@ LIVE_OR_CLOSED = ['|', ('active', '=', True), ('won_status', '!=', 'pending')]
 class CrmLead(models.Model):
     _inherit = 'crm.lead'
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        """A lead / opportunity can be saved from a name, company, contact, email or phone."""
+        for vals in vals_list:
+            if (vals.get('name') or '').strip():
+                continue
+            fallback = (
+                vals.get('contact_name')
+                or vals.get('partner_name')
+                or vals.get('email_from')
+                or vals.get('phone')
+                or ''
+            )
+            fallback = (fallback or '').strip()
+            if not fallback:
+                fallback = self.env._('New opportunity') if vals.get('type') == 'opportunity' else self.env._('New lead')
+            vals['name'] = fallback
+        return super().create(vals_list)
+
     # ------------------------------------------------------------------
     # Dashboard / statistics (read-only aggregations, no stored data)
     # ------------------------------------------------------------------
@@ -260,6 +279,11 @@ class CrmLead(models.Model):
             'tag_list': ref('sales_team.sales_team_crm_tag_view_tree'),
             'lost_search': ref('crm.crm_lost_reason_view_search'),
             'lost_list': ref('crm.crm_lost_reason_view_tree'),
+            # customers (standard res.partner)
+            'partner_search': ref('base.view_res_partner_filter'),
+            'partner_list': ref('base.view_partner_tree'),
+            'partner_kanban': ref('base.res_partner_kanban_view'),
+            'partner_form': ref('base.view_partner_form'),
         }
 
     # ------------------------------------------------------------------

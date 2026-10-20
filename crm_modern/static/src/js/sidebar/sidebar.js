@@ -61,6 +61,7 @@ const REPLACED = new Set([
     "crm.crm_opportunity_report_menu_lead",
     "crm.crm_activity_report_menu",
     "sale_crm.sale_order_menu_quotations_crm",
+    "crm.res_partner_menu_customer",
 ]);
 const COLLAPSE_KEY = "crm_modern.sidebar.collapsed";
 
@@ -81,6 +82,7 @@ for (const [xmlid, icon] of Object.entries({
     "crm_modern.menu_tags": "fa-tags",
     "crm_modern.menu_settings": "fa-cog",
     "crm_modern.menu_lost_reasons": "fa-ban",
+    "crm_modern.menu_customers": "fa-address-book-o",
     "crm_modern.menu_forecast": "fa-line-chart",
     "crm_modern.menu_report_pipeline": "fa-bar-chart",
     "crm_modern.menu_report_leads": "fa-pie-chart",
@@ -128,6 +130,7 @@ for (const [xmlid, spec] of Object.entries({
     "crm_modern.menu_activity_plans": { resModel: "mail.activity.plan", label: _t("New activity plan") },
     "crm_modern.menu_tags": { resModel: "crm.tag", label: _t("New tag") },
     "crm_modern.menu_lost_reasons": { resModel: "crm.lost.reason", label: _t("New lost reason") },
+    "crm_modern.menu_customers": { resModel: "res.partner", label: _t("New customer"), context: { res_partner_search_mode: "customer" } },
 })) {
     createTargets.add(xmlid, spec);
 }

@@ -28,7 +28,8 @@ class TestCrmModern(TransactionCase):
 
     def test_client_actions_and_menus(self):
         for xmlid in ('dashboard', 'pipeline', 'leads', 'activities', 'campaigns', 'campaign', 'salespeople',
-                      'teams', 'stages', 'activity_types', 'activity_plans', 'tags', 'lost_reasons', 'record', 'team'):
+                      'teams', 'stages', 'activity_types', 'activity_plans', 'tags', 'lost_reasons', 'record',
+                      'team', 'customers'):
             action = self.env.ref(f'crm_modern.action_{xmlid}')
             self.assertEqual(action.tag, f'crm_modern.{xmlid}')
         leads_menu = self.env.ref('crm_modern.menu_leads')
@@ -82,6 +83,15 @@ class TestCrmModern(TransactionCase):
         res = self.Lead.with_user(user).crm_modern_import('lead', [{'name': 'Lead X', 'phone': '+8801700000000'}], self.campaign.id)
         self.assertEqual(self.Lead.browse(res['ids']).type, expected)
         self.assertEqual(self.Lead.with_user(user).crm_modern_features()['use_leads'], expected == 'lead')
+
+    def test_create_without_name_uses_contact(self):
+        """Quick add: company, email or phone is enough; the title is filled in."""
+        by_email = self.Lead.create({'email_from': 'only@example.com', 'type': 'lead'})
+        self.assertEqual(by_email.name, 'only@example.com')
+        by_company = self.Lead.create({'partner_name': 'Acme Ltd', 'type': 'opportunity'})
+        self.assertEqual(by_company.name, 'Acme Ltd')
+        blank = self.Lead.create({'type': 'lead'})
+        self.assertEqual(blank.name, 'New lead')
 
     def test_record_page_quick_actions(self):
         """Compact composer / scheduler of the record page and the pipeline card view."""

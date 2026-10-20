@@ -748,6 +748,23 @@ body:has(.modal-content.or-sheet) {
     font-weight: 500;
     background: color-mix(in srgb, var(--mt-destructive) 12%, var(--mt-card));
     color: var(--mt-destructive);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.or-more-toggle {
+    border: 0;
+    background: none;
+    padding: 0.125rem 0;
+    color: var(--mt-primary);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: start;
+    width: fit-content;
+
+    &:hover { text-decoration: underline; }
 }
 
 .or-save-pill,

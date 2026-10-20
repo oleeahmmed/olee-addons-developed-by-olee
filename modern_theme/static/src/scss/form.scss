@@ -721,6 +721,81 @@ $mt-bar-height: 3.5rem;
         }
     }
 
+    // Contact form identity (Odoo 19: avatar + name/email/phone, not oe_title).
+    // Keep these as text, not filled black/white slabs.
+    .o_form_sheet > .mb8,
+    .o_form_sheet .oe_avatar + div,
+    .o_form_sheet .d-flex.flex-column.flex-grow-1 {
+        h1 {
+            .o_field_widget,
+            .o_field_text,
+            .o_input,
+            textarea.o_input {
+                width: 100%;
+                min-height: 2.25rem !important;
+                height: auto !important;
+                padding: 0.25rem 0.5rem;
+                margin: 0;
+                border: 1px solid transparent !important;
+                border-radius: 0.75rem;
+                background: transparent !important;
+                box-shadow: none !important;
+                color: var(--mt-foreground);
+                font-size: 1.375rem;
+                font-weight: 650;
+                letter-spacing: -0.015em;
+                line-height: 1.3;
+                resize: none;
+                overflow: hidden;
+
+                &:hover { border-color: var(--mt-border) !important; }
+                &:focus {
+                    border-color: var(--mt-ring) !important;
+                    box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-ring) 18%, transparent) !important;
+                }
+            }
+        }
+
+        .d-flex.align-items-baseline {
+            .fa.text-primary,
+            .fa { color: var(--mt-primary) !important; }
+
+            .o_field_widget,
+            .o_input {
+                background: transparent !important;
+                border: 0 !important;
+                border-bottom: 1px solid var(--mt-border) !important;
+                border-radius: 0 !important;
+                min-height: 1.5rem;
+                padding: 0.125rem 0.25rem;
+                color: var(--mt-foreground);
+                box-shadow: none !important;
+
+                &:focus {
+                    border-bottom-color: var(--mt-primary) !important;
+                    box-shadow: 0 1px 0 0 var(--mt-primary) !important;
+                }
+            }
+        }
+    }
+
+    .o_form_sheet .text-primary { color: var(--mt-primary) !important; }
+
+    .o_notebook .o-kanban-button-new,
+    .o_field_x2many_kanban .o-kanban-button-new {
+        border: 1px dashed var(--mt-border) !important;
+        border-radius: var(--mt-radius);
+        background: color-mix(in srgb, var(--mt-muted) 55%, var(--mt-card)) !important;
+        color: var(--mt-foreground) !important;
+        font-weight: 600;
+
+        &:hover {
+            border-color: var(--mt-primary) !important;
+            color: var(--mt-primary) !important;
+            background: color-mix(in srgb, var(--mt-primary) 10%, var(--mt-card)) !important;
+        }
+    }
+
     // CRM lead/opportunity: Expected Revenue and Probability sit in an <h2> under the
     // name; show them as two normal fields instead of heading-size text.
     &.o_lead_opportunity_form .oe_title {

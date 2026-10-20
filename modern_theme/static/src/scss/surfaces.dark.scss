@@ -222,7 +222,17 @@ hr { color: var(--mt-border); }
     color: var(--mt-foreground);
 }
 
-.o_list_renderer .o_list_sortable_icon { background-color: transparent !important; }
+.o_list_renderer {
+    --ListRenderer-thead-bg-color: var(--mt-muted) !important;
+    --ListRenderer-tfoot-bg-color: var(--mt-card) !important;
+
+    .o_list_sortable_icon { background-color: var(--mt-muted) !important; }
+
+    .o_list_table thead th {
+        background-color: var(--mt-muted) !important;
+        color: var(--mt-muted-foreground) !important;
+    }
+}
 
 .o_input,
 .o_field_widget input,

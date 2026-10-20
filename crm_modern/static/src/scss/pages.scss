@@ -399,10 +399,11 @@
                 font-size: 0.875rem;
                 color: var(--cm-fg);
             }
+            --ListRenderer-thead-bg-color: color-mix(in srgb, var(--cm-muted) 60%, var(--cm-card));
             thead th {
                 height: 2.5rem;
-                background: color-mix(in srgb, var(--cm-muted) 60%, var(--cm-card));
-                color: var(--cm-muted-fg);
+                background: color-mix(in srgb, var(--cm-muted) 60%, var(--cm-card)) !important;
+                color: var(--cm-muted-fg) !important;
                 font-size: 0.75rem;
                 font-weight: 500;
                 border-bottom: 1px solid var(--cm-border);

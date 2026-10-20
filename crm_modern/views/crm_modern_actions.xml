@@ -85,6 +85,11 @@
         <field name="path">modern-crm-team</field>
     </record>
 
+    <record id="action_customers" model="ir.actions.client">
+        <field name="name">Customers</field>
+        <field name="tag">crm_modern.customers</field>
+        <field name="path">modern-crm-customers</field>
+    </record>
     <!-- Sales (shown only when the Sales app is installed, see ir.ui.menu) -->
     <record id="action_quotations" model="ir.actions.client">
         <field name="name">Quotations</field>
