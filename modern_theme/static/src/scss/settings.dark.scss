@@ -14,3 +14,46 @@
     background-color: transparent !important;
     color: var(--mt-muted-foreground) !important;
 }
+
+.o_dialog .modal-content,
+.o_technical_modal .modal-content,
+.o_dialog .o_form_sheet,
+.o_dialog .o_form_sheet_bg,
+.o_dialog .modal-body,
+.o_dialog .modal-header,
+.o_dialog .modal-footer {
+    background-color: var(--mt-card) !important;
+    color: var(--mt-foreground) !important;
+    border-color: var(--mt-border) !important;
+}
+
+.o_dialog .o_field_widget .o_input,
+.o_dialog .o_field_widget input:not([type="checkbox"]):not([type="radio"]),
+.o_dialog .o_field_domain,
+.o_dialog textarea,
+.ace_editor,
+.ace_editor.ace-tm,
+.ace_scroller,
+.ace_content {
+    background-color: var(--mt-background) !important;
+    color: var(--mt-foreground) !important;
+    border-color: var(--mt-border) !important;
+}
+
+.ace_gutter,
+.ace_gutter-layer {
+    background-color: var(--mt-muted) !important;
+    color: var(--mt-muted-foreground) !important;
+}
+
+.ace_cursor { color: var(--mt-foreground) !important; }
+
+.ace_marker-layer .ace_active-line,
+.ace_marker-layer .ace_selection {
+    background: color-mix(in srgb, var(--mt-primary) 22%, transparent) !important;
+}
+
+.o_dialog .btn-close {
+    filter: invert(1) grayscale(1);
+    opacity: 0.65;
+}

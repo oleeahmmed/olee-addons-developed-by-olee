@@ -199,3 +199,369 @@
         color: var(--mt-primary) !important;
     }
 }
+
+// ---------------------------------------------------------------------------
+// Settings app (Users, Groups, Company, Technical) + stock dialogs.
+// CRM form.scss only runs when a modern sidebar exists; the Settings app
+// and Create Rules / Groups forms do not have that sidebar.
+// ---------------------------------------------------------------------------
+
+$mt-admin: ".o_web_client:not(:has(.o_cm_sidebar)):not(:has(.o_ss_sidebar)):not(:has(.o_im_sidebar)):not(:has(.o_mp_sidebar)):not(:has(.o_mr_sidebar))";
+
+@mixin mt-settings-switch {
+    width: 2.25rem;
+    height: 1.25rem;
+    margin: 0;
+    border: 0;
+    border-radius: 999px;
+    cursor: pointer;
+    background-color: var(--mt-input, var(--mt-border));
+    background-image: radial-gradient(circle at 0.625rem 50%, var(--mt-primary-foreground, #fff) 0.4375rem, transparent 0.5rem);
+    transition: background-color 150ms ease, background-position 150ms ease;
+
+    &:checked {
+        background-color: var(--mt-primary);
+        background-image: radial-gradient(circle at 1.625rem 50%, var(--mt-primary-foreground, #fff) 0.4375rem, transparent 0.5rem);
+    }
+
+    &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-ring) 25%, transparent); }
+}
+
+@mixin mt-settings-pill {
+    height: 2.125rem;
+    padding: 0 0.875rem;
+    border-radius: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    box-shadow: none;
+}
+
+#{$mt-admin} {
+    .o_action_manager,
+    .o_view_controller,
+    .o_content {
+        background: var(--mt-background) !important;
+        color: var(--mt-foreground);
+    }
+
+    .o_control_panel,
+    .o_control_panel_main {
+        background: var(--mt-card) !important;
+        border-color: var(--mt-border) !important;
+        color: var(--mt-foreground);
+        box-shadow: none !important;
+    }
+
+    .o_searchview,
+    .o_searchview .o_searchview_input_container {
+        background: var(--mt-muted) !important;
+        border-color: var(--mt-border) !important;
+        color: var(--mt-foreground);
+        border-radius: 0.5rem;
+    }
+
+    .btn-primary {
+        @include mt-settings-pill;
+        background: var(--mt-primary) !important;
+        border-color: var(--mt-primary) !important;
+        color: var(--mt-primary-foreground) !important;
+    }
+
+    .btn-secondary,
+    .btn-light {
+        @include mt-settings-pill;
+        background: var(--mt-card) !important;
+        border: 1px solid var(--mt-border) !important;
+        color: var(--mt-foreground) !important;
+
+        &:hover { background: var(--mt-muted) !important; }
+    }
+
+    .o_list_renderer,
+    .o_list_view .o_content {
+        background: var(--mt-background) !important;
+        color: var(--mt-foreground);
+    }
+
+    .o_list_table {
+        --table-bg: transparent;
+        --bs-table-bg: transparent;
+        --bs-table-color: var(--mt-foreground);
+        --bs-table-border-color: var(--mt-border);
+        --bs-table-striped-bg: color-mix(in srgb, var(--mt-muted) 55%, transparent);
+        --bs-table-hover-bg: var(--mt-muted);
+        color: var(--mt-foreground);
+
+        thead th {
+            background: var(--mt-card) !important;
+            color: var(--mt-muted-foreground) !important;
+            border-color: var(--mt-border) !important;
+            font-weight: 600;
+            font-size: 0.75rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        td {
+            border-color: var(--mt-border) !important;
+            color: var(--mt-foreground);
+        }
+    }
+
+    .o_form_view,
+    .o_form_renderer,
+    .o_form_sheet_bg,
+    .o_form_view_container {
+        background: var(--mt-card) !important;
+        color: var(--mt-foreground);
+    }
+
+    .o_form_sheet {
+        background: var(--mt-card) !important;
+        border: 1px solid var(--mt-border) !important;
+        border-radius: 1rem !important;
+        box-shadow: none !important;
+        max-width: 72rem;
+        margin: 1.25rem auto;
+        padding: 1.5rem 1.75rem !important;
+    }
+
+    .o_form_view header,
+    .o_form_statusbar {
+        background: var(--mt-card) !important;
+        border-bottom: 1px solid var(--mt-border) !important;
+        box-shadow: none !important;
+    }
+
+    .o_horizontal_separator {
+        color: var(--mt-muted-foreground) !important;
+        font-weight: 650;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        font-size: 0.6875rem;
+        border: 0;
+        padding-top: 0.75rem;
+    }
+
+    .o_group .o_td_label,
+    .o_wrap_label,
+    .o_form_label {
+        color: var(--mt-muted-foreground) !important;
+        font-weight: 550;
+        font-size: 0.8125rem;
+    }
+
+    .o_field_widget .o_input,
+    .o_field_widget input:not([type="checkbox"]):not([type="radio"]),
+    .o_field_widget textarea,
+    .o_field_widget .o_input_dropdown,
+    .o_field_widget .form-select {
+        background: var(--mt-background) !important;
+        color: var(--mt-foreground) !important;
+        border: 1px solid var(--mt-border) !important;
+        border-radius: 0.5rem !important;
+        min-height: 2.25rem;
+    }
+
+    .o_field_boolean .form-check-input,
+    .o_field_boolean_toggle .form-check-input,
+    .form-switch .form-check-input {
+        @include mt-settings-switch;
+    }
+
+    .o_notebook {
+        .nav-tabs {
+            border-bottom: 1px solid var(--mt-border) !important;
+            background: transparent !important;
+            gap: 0 1.5rem;
+        }
+
+        .nav-link {
+            color: var(--mt-muted-foreground) !important;
+            background: transparent !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            font-weight: 500;
+
+            &:hover { color: var(--mt-foreground) !important; }
+
+            &.active {
+                color: var(--mt-foreground) !important;
+                font-weight: 600;
+                box-shadow: inset 0 -2px 0 var(--mt-primary);
+            }
+        }
+    }
+
+    .o_field_x2many_list .o_list_renderer {
+        border: 1px solid var(--mt-border);
+        border-radius: 0.875rem;
+        overflow: hidden;
+        background: var(--mt-background);
+
+        thead th {
+            background: var(--mt-muted) !important;
+        }
+    }
+
+    .oe_button_box,
+    .o-form-buttonbox {
+        background: transparent !important;
+        border-color: var(--mt-border) !important;
+    }
+
+    .o_tag,
+    .badge,
+    .o_field_badge {
+        border-radius: 999px;
+    }
+}
+
+.o_dialog .modal-content,
+.o_technical_modal .modal-content {
+    background: var(--mt-card) !important;
+    color: var(--mt-foreground) !important;
+    border: 1px solid var(--mt-border) !important;
+    border-radius: 1rem !important;
+    overflow: hidden;
+    box-shadow: var(--mt-shadow-xl);
+
+    .modal-header {
+        padding: 1rem 1.5rem;
+        background: var(--mt-card) !important;
+        border-bottom: 1px solid var(--mt-border) !important;
+
+        .modal-title {
+            font-size: 1.0625rem;
+            font-weight: 650;
+            color: var(--mt-foreground);
+        }
+
+        .btn-close {
+            filter: none;
+            opacity: 0.7;
+        }
+    }
+
+    .modal-body {
+        padding: 1.25rem 1.5rem;
+        background: var(--mt-card) !important;
+        color: var(--mt-foreground);
+    }
+
+    .modal-footer {
+        padding: 0.875rem 1.5rem;
+        gap: 0.5rem;
+        background: var(--mt-card) !important;
+        border-top: 1px solid var(--mt-border) !important;
+
+        .btn-primary {
+            @include mt-settings-pill;
+            background: var(--mt-primary) !important;
+            border-color: var(--mt-primary) !important;
+            color: var(--mt-primary-foreground) !important;
+        }
+
+        .btn-secondary,
+        .btn-light {
+            @include mt-settings-pill;
+            background: var(--mt-card) !important;
+            border: 1px solid var(--mt-border) !important;
+            color: var(--mt-foreground) !important;
+        }
+    }
+
+    .o_form_view,
+    .o_form_renderer,
+    .o_form_sheet_bg,
+    .o_form_sheet,
+    .o_form_view header,
+    .o_form_statusbar {
+        background: var(--mt-card) !important;
+        color: var(--mt-foreground);
+        box-shadow: none !important;
+        border: 0 !important;
+        margin: 0 !important;
+        max-width: none;
+        padding: 0 !important;
+    }
+
+    .o_horizontal_separator,
+    .o_inner_group .o_td_label,
+    .o_wrap_label,
+    .o_form_label {
+        color: var(--mt-muted-foreground) !important;
+        font-weight: 650;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        font-size: 0.6875rem;
+    }
+
+    .o_field_widget .o_input,
+    .o_field_widget input:not([type="checkbox"]):not([type="radio"]),
+    .o_field_widget textarea,
+    .o_field_widget .o_input_dropdown,
+    .o_field_domain,
+    .o_field_text textarea {
+        background: var(--mt-background) !important;
+        color: var(--mt-foreground) !important;
+        border: 1px solid var(--mt-border) !important;
+        border-radius: 0.5rem !important;
+    }
+
+    .o_field_boolean .form-check-input,
+    .form-switch .form-check-input {
+        @include mt-settings-switch;
+    }
+
+    .o_field_x2many_list .o_list_renderer {
+        border: 1px solid var(--mt-border);
+        border-radius: 0.75rem;
+        overflow: hidden;
+        background: var(--mt-background);
+    }
+
+    .o_notebook .nav-link.active {
+        color: var(--mt-foreground) !important;
+        box-shadow: inset 0 -2px 0 var(--mt-primary);
+    }
+}
+
+.o_field_domain,
+.o_field_domain .o_input,
+.o_domain_selector {
+    background: var(--mt-background) !important;
+    color: var(--mt-foreground) !important;
+    border-color: var(--mt-border) !important;
+    border-radius: 0.5rem;
+}
+
+.ace_editor,
+.ace_editor.ace-tm,
+.ace_scroller,
+.ace_content {
+    background-color: var(--mt-background) !important;
+    color: var(--mt-foreground) !important;
+}
+
+.ace_gutter {
+    background-color: var(--mt-muted) !important;
+    color: var(--mt-muted-foreground) !important;
+    border-color: var(--mt-border) !important;
+}
+
+.o-settings-form-view .o_control_panel .btn-primary,
+.o_base_settings_view .o_control_panel .btn-primary {
+    @include mt-settings-pill;
+    background: var(--mt-primary) !important;
+    border-color: var(--mt-primary) !important;
+    color: var(--mt-primary-foreground) !important;
+}
+
+.o-settings-form-view .o_control_panel .btn-secondary,
+.o_base_settings_view .o_control_panel .btn-secondary {
+    @include mt-settings-pill;
+    background: var(--mt-card) !important;
+    border: 1px solid var(--mt-border) !important;
+    color: var(--mt-foreground) !important;
+}
