@@ -302,6 +302,40 @@ hr { color: var(--mt-border); }
 
 .o-mail-ImStatus { background-color: var(--mt-card) !important; }
 
+// Discuss systray: keep panels on the dark card (mail's own dark mix can stay too light).
+.o_popover:has(.o-mail-MessagingMenu),
+.o_popover:has(.o-mail-ActivityMenu),
+.o-mail-MessagingMenu,
+.o-mail-MessagingMenu-list,
+.o-mail-ActivityMenu {
+    --mail-MessagingMenu-bg: var(--mt-card) !important;
+    background-color: var(--mt-card) !important;
+    color: var(--mt-foreground) !important;
+    border-color: var(--mt-border) !important;
+}
+
+.o-mail-MessagingMenu {
+    .o-mail-NotificationItem-name,
+    .o-mail-NotificationItem-text,
+    .o-mail-NotificationItem-date,
+    .list-group-item {
+        color: var(--mt-foreground) !important;
+    }
+
+    .o-mail-MessagingMenu-headerFilter {
+        color: var(--mt-muted-foreground) !important;
+
+        &.o-active,
+        &.fw-bold {
+            color: var(--mt-foreground) !important;
+        }
+    }
+
+    .o-mail-NotificationItem-markAsRead {
+        background-color: var(--mt-card) !important;
+    }
+}
+
 // Purchase / Sales "My …" KPI strip above lists.
 .purchase-dashboard-card,
 .o_sale_dashboard .btn,

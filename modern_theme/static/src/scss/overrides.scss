@@ -630,10 +630,102 @@ a:where(:not(.btn):not(.dropdown-item):not(.nav-link)) {
         border-color: var(--mt-nav-border);
     }
 
-    // The app switcher keeps a light surface: it is a panel, not the shell.
+    // Panels that open from the navbar must not keep the white nav text colour.
     .dropdown-menu,
     .o-dropdown--menu {
         color: var(--mt-foreground);
+        background-color: var(--mt-card);
+
+        a:not(.btn),
+        button:not(.btn),
+        .btn-link {
+            color: var(--mt-foreground);
+        }
+    }
+
+    // Unread pills on the bar only — not badges inside the open menus.
+    .o_menu_systray .o-dropdown--menu .badge,
+    .o_menu_systray .dropdown-menu .badge {
+        background-color: var(--mt-primary) !important;
+        color: var(--mt-primary-foreground) !important;
+    }
+}
+
+// ===========================================================================
+// 5b. Discuss / messaging + activity systray panels
+//     Odoo paints these with $o-view-background-color; in dark mode that stays
+//     light while our body text is light — white-on-white. Force theme tokens.
+// ===========================================================================
+.o_popover:has(.o-mail-MessagingMenu),
+.o_popover:has(.o-mail-ActivityMenu) {
+    --popover-bg: var(--mt-card) !important;
+    --bs-popover-bg: var(--mt-card) !important;
+    --popover-border-color: var(--mt-border);
+    background-color: var(--mt-card) !important;
+    color: var(--mt-foreground) !important;
+    border-color: var(--mt-border) !important;
+}
+
+.o-mail-MessagingMenu,
+.o-mail-ActivityMenu {
+    --mail-MessagingMenu-bg: var(--mt-card);
+    --mail-MessagingMenu-listBorderColor: color-mix(in srgb, var(--mt-border) 85%, transparent);
+    background-color: var(--mt-card) !important;
+    color: var(--mt-foreground) !important;
+}
+
+.o-mail-MessagingMenu-list {
+    background-color: var(--mt-card) !important;
+    color: var(--mt-foreground) !important;
+    --list-group-border-color: var(--mt-border);
+}
+
+.o-mail-MessagingMenu {
+    .o-mail-MessagingMenu-header,
+    .o-mail-NotificationItem,
+    .o-mail-NotificationItem-name,
+    .o-mail-NotificationItem-text,
+    .o-mail-NotificationItem-date,
+    .list-group-item {
+        color: var(--mt-foreground) !important;
+    }
+
+    .o-mail-MessagingMenu-headerFilter {
+        color: var(--mt-muted-foreground) !important;
+
+        &.o-active,
+        &.fw-bold {
+            color: var(--mt-foreground) !important;
+            background-color: color-mix(in srgb, var(--mt-primary) 12%, var(--mt-card));
+            border-color: color-mix(in srgb, var(--mt-primary) 22%, var(--mt-border));
+        }
+    }
+
+    .btn-link,
+    a.btn-link {
+        color: var(--mt-primary) !important;
+    }
+
+    .text-muted,
+    .text-600 {
+        color: var(--mt-muted-foreground) !important;
+    }
+
+    .o-mail-NotificationItem-markAsRead {
+        background-color: var(--mt-card) !important;
+    }
+
+    .o-mail-NotificationItem:hover,
+    .o-mail-NotificationItem.o-active {
+        background-color: color-mix(in srgb, var(--mt-muted) 70%, var(--mt-card));
+    }
+}
+
+.o-mail-ActivityMenu {
+    color: var(--mt-foreground) !important;
+
+    .text-muted {
+        color: var(--mt-muted-foreground) !important;
     }
 }
 
