@@ -1,4 +1,7 @@
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import AccessError, UserError
+
+from .theme_presets import THEME_PRESETS
 
 
 class ResUsers(models.Model):
@@ -18,6 +21,17 @@ class ResUsers(models.Model):
     @property
     def SELF_READABLE_FIELDS(self):
         return super().SELF_READABLE_FIELDS + ["modern_theme_dark_mode"]
+
+    @api.model
+    def modern_theme_set_preset(self, preset):
+        """Company-wide accent color. Same setting as Settings > Modern Theme."""
+        if not self.env.user.has_group("base.group_system"):
+            raise AccessError(_("Only administrators can change the company theme color."))
+        valid = {key for key, _label in THEME_PRESETS}
+        if preset not in valid:
+            raise UserError(_("Unknown theme color."))
+        self.env["ir.config_parameter"].sudo().set_param("modern_theme.preset", preset)
+        return preset
 
     def _modern_theme_login_action(self):
         """App addons override this to pick the post-login screen.

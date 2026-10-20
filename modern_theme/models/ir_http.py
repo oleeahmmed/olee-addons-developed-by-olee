@@ -25,6 +25,9 @@ class IrHttp(models.AbstractModel):
         info["modern_theme"] = {
             "preset": self._modern_theme_preset(),
             "dark_mode": bool(user and not user._is_public() and user.modern_theme_dark_mode),
+            "can_change_preset": bool(
+                user and not user._is_public() and user.has_group("base.group_system")
+            ),
         }
         return info
 

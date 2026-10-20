@@ -24,8 +24,8 @@
             <Dropdown menuClass="'o_mt_theme_menu'" position="'bottom-end'">
                 <button type="button"
                         class="btn btn-sm o_modern_theme_toggle_btn"
-                        t-att-title="isDark ? 'Dark mode' : 'Light mode'"
-                        t-att-aria-label="isDark ? 'Theme: Dark. Open to switch.' : 'Theme: Light. Open to switch.'">
+                        title="Theme"
+                        aria-label="Theme: open to switch light, dark, and color.">
                     <t t-if="isDark" t-call="modern_theme.IconMoon"/>
                     <t t-else="" t-call="modern_theme.IconSun"/>
                 </button>
@@ -41,6 +41,20 @@
                         <span class="o_mt_theme_option_icon"><t t-call="modern_theme.IconMoon"/></span>
                         <span>Dark</span>
                     </DropdownItem>
+                    <div class="o_mt_theme_menu_label">Color</div>
+                    <div class="o_modern_theme_preset_picker o_mt_theme_swatch_grid">
+                        <t t-foreach="presets" t-as="option" t-key="option[0]">
+                            <button type="button"
+                                    class="o_modern_theme_swatch"
+                                    t-att-class="{ selected: state.preset === option[0] }"
+                                    t-att-style="'background-color:' + swatchColor(option[0])"
+                                    t-att-title="option[1]"
+                                    t-att-disabled="!canChangePreset"
+                                    t-on-click.stop="() => this.setPreset(option[0])">
+                                <i t-if="state.preset === option[0]" class="fa fa-check" aria-hidden="true"/>
+                            </button>
+                        </t>
+                    </div>
                 </t>
             </Dropdown>
         </div>
