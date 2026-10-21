@@ -203,7 +203,8 @@ html[data-mt-theme] {
             &.active { @include mt-chrome-item-active; }
         }
 
-        // "+ New …": same pill as the drawer Save button (theme primary + contrast text).
+        // "+ New …" in the sidebar, and every other "add a record" button:
+        // the drawer Save pill (theme primary, contrast text, full radius).
         .#{$p}-sb-new {
             height: 2.15rem;
             gap: 0.5rem;
@@ -322,18 +323,6 @@ html[data-mt-theme] {
     }
 }
 
-// ---------------------------------------------------------------------------
-// Records are created from the sidebar "+ New" (it follows the page you are on),
-// so the control-panel "New" buttons are hidden.
-// ---------------------------------------------------------------------------
-.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_sidebar, .o_mr_sidebar) > .o_action_manager .o_control_panel {
-    .o_list_button_add,
-    .o-kanban-button-new,
-    .o_form_button_create {
-        display: none !important;
-    }
-}
-
 // Empty views: some list renderers (e.g. Purchase's dashboard list) shrink to the
 // header row, and Odoo centres its absolutely-positioned helper over that box —
 // so give the renderer room for the illustration and text below the header.
@@ -443,6 +432,30 @@ html[data-mt-theme] {
     &:hover {
         border-color: color-mix(in srgb, var(--mt-primary) 35%, var(--mt-border));
         box-shadow: var(--mt-shadow-md);
+    }
+}
+
+// List, kanban and dashboard "New …" actions use the drawer Save pill.
+.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_sidebar, .o_mr_sidebar) {
+    .o_list_button_add,
+    .o-kanban-button-new,
+    .od-btn.od-btn--primary {
+        height: 2.15rem !important;
+        padding: 0 1.05rem !important;
+        border: 0 !important;
+        border-radius: 999px !important;
+        background: var(--or-save-bg, var(--mt-primary)) !important;
+        color: var(--or-save-fg, var(--mt-primary-foreground)) !important;
+        font-size: 0.8125rem !important;
+        font-weight: 600 !important;
+        line-height: 1 !important;
+        box-shadow: none !important;
+
+        &:hover {
+            background: var(--or-save-hover, color-mix(in srgb, var(--mt-primary) 86%, var(--mt-foreground))) !important;
+            color: var(--or-save-fg, var(--mt-primary-foreground)) !important;
+        }
+        &:focus-visible { outline: none; box-shadow: 0 0 0 4px var(--or-focus-ring, var(--mt-ring)) !important; }
     }
 }
 

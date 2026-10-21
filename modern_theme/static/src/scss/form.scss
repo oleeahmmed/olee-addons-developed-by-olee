@@ -129,17 +129,32 @@ $mt-bar-height: 3.5rem;
     }
 
     .o_form_button_create {
-        @include mt-pill-btn;
-        @include mt-pill-outline;
-        height: 2rem;
-        padding: 0 0.875rem 0 0.625rem;
+        height: 2.15rem;
+        padding: 0 1.05rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        border: 0 !important;
+        border-radius: 999px !important;
+        background: var(--or-save-bg, var(--mt-primary)) !important;
+        color: var(--or-save-fg, var(--mt-primary-foreground)) !important;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        line-height: 1;
+        box-shadow: none !important;
 
         &::before {
             content: "\f067";
             font-family: FontAwesome;
             font-size: 0.6875rem;
-            color: var(--mt-primary);
+            color: inherit;
         }
+
+        &:hover {
+            background: var(--or-save-hover, color-mix(in srgb, var(--mt-primary) 86%, var(--mt-foreground))) !important;
+            color: var(--or-save-fg, var(--mt-primary-foreground)) !important;
+        }
+        &:focus-visible { outline: none; box-shadow: 0 0 0 4px var(--or-focus-ring, var(--mt-ring)) !important; }
     }
 
     .o_breadcrumb {
@@ -291,7 +306,7 @@ $mt-bar-height: 3.5rem;
         min-height: $mt-bar-height;
         margin: 0 !important;
         padding: 0.6875rem 1.5rem !important;
-        gap: 0.75rem;
+        gap: 0;
         align-items: center;
         flex-wrap: wrap;
         background: var(--mt-card) !important;
@@ -299,13 +314,18 @@ $mt-bar-height: 3.5rem;
         box-shadow: none !important;
     }
 
+    // One joined control. A real primary action (Send, Confirm once sent) sits
+    // just to the left of the group instead of inside it.
     .o_statusbar_buttons {
-        gap: 0.5rem !important;
+        gap: 0 !important;
 
         > .btn,
         > .o-dropdown > .btn,
         > .dropdown > .btn {
             @include mt-pill-btn;
+            height: 2rem;
+            position: relative;
+            border-radius: 0;
         }
 
         > .btn-secondary,
@@ -313,74 +333,123 @@ $mt-bar-height: 3.5rem;
         > .btn-link,
         > .btn-outline-primary,
         > .btn-outline-secondary,
-        > .o-dropdown > .btn {
+        > .o-dropdown > .btn,
+        > .dropdown > .btn {
             @include mt-pill-outline;
+            margin-left: -1px;
+            z-index: 0;
+
+            &:hover,
+            &:focus-visible { z-index: 1; }
         }
 
-        > .btn-primary,
-        > .btn.oe_highlight { @include mt-pill-solid; }
+        > .btn:first-child:not(.btn-primary):not(.oe_highlight),
+        > .btn-primary + .btn,
+        > .oe_highlight + .btn {
+            margin-left: 0;
+            border-top-left-radius: 0.5rem;
+            border-bottom-left-radius: 0.5rem;
+        }
 
-        > .btn .fa { font-size: 0.8125rem; color: inherit; }
+        > .btn:last-child:not(.btn-primary):not(.oe_highlight) {
+            border-top-right-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+        }
+
+        > .btn:first-child:last-child { border-radius: 0.5rem; margin-left: 0; }
+
+        > .btn-primary,
+        > .btn.oe_highlight {
+            @include mt-pill-solid;
+            order: -1;
+            margin: 0 0.75rem 0 0;
+            border-radius: 0.5rem;
+            z-index: 1;
+        }
+
+        > .btn .fa,
+        > .btn .oi { font-size: 0.8125rem; color: inherit; }
     }
 
-    // Status steps as plain text:  Quotation  ›  Quotation Sent  ›  Sales Order
-    // (no padding/border on the track: Odoo folds the steps when it grows taller)
+    // Joined steps. No padding on the track: Odoo folds the steps when the
+    // track grows taller than one step. DOM order is right to left, so
+    // .o_first is the right end and .o_last is the left end.
     .o_field_statusbar .o_statusbar_status {
         align-items: center;
-        gap: 1.25rem;
+        gap: 0;
         padding: 0 !important;
         border: 0 !important;
         background: transparent !important;
         box-shadow: none !important;
 
         > .o_arrow_button {
-            position: relative;
-            height: 1.75rem;
-            margin: 0 !important;
-            padding: 0 0.25rem !important;
-            border: 0 !important;
-            border-radius: 0.375rem !important;
-            background: transparent !important;
+            display: inline-flex !important;
+            // Odoo hides the overflow "..." buttons with .d-none. A more specific
+            // display would paint them and push the steps onto a second row.
+            &.d-none { display: none !important; }
+            align-items: center;
+            justify-content: center;
+            height: 2rem;
+            margin: 0 -1px 0 0 !important;
+            padding: 0 0.875rem !important;
+            border: 1px solid var(--mt-border) !important;
+            border-radius: 0 !important;
+            background: var(--mt-card) !important;
             color: var(--mt-muted-foreground) !important;
             font-size: 0.8125rem;
             font-weight: 500;
+            line-height: 1;
             opacity: 1 !important;
             box-shadow: none !important;
             clip-path: none !important;
 
-            &::before { display: none !important; content: none !important; }
+            &::before,
+            &::after { content: none !important; display: none !important; }
 
-            // chevron to the next step (Odoo lists steps right to left; .o_first is the last one)
-            &::after {
-                content: "\f105" !important;
-                display: block !important;
-                position: absolute !important;
-                top: 50% !important;
-                right: -0.875rem !important;
-                left: auto !important;
-                width: auto !important;
-                height: auto !important;
-                margin-top: -0.45rem;
-                border: 0 !important;
-                background: none !important;
-                font-family: FontAwesome;
-                font-size: 0.8125rem;
-                line-height: 1;
-                color: var(--mt-border) !important;
-                transform: none !important;
-                clip-path: none !important;
+            &.o_last {
+                border-top-left-radius: 0.5rem !important;
+                border-bottom-left-radius: 0.5rem !important;
             }
 
-            &.o_first::after,
-            &.dropdown-toggle::after { display: none !important; }
+            &.o_first {
+                margin-right: 0 !important;
+                border-top-right-radius: 0.5rem !important;
+                border-bottom-right-radius: 0.5rem !important;
+            }
 
-            &:not(:disabled):not(.o_arrow_button_current):hover { color: var(--mt-foreground) !important; }
+            &:not(:disabled):not(.o_arrow_button_current):hover {
+                z-index: 1;
+                background: var(--mt-muted) !important;
+                color: var(--mt-foreground) !important;
+            }
+
+            // Steps already passed sit after the current one in the DOM.
+            &.o_arrow_button_current ~ .o_arrow_button:not(.dropdown-toggle) {
+                color: var(--mt-foreground) !important;
+                background: color-mix(in srgb, var(--mt-muted) 65%, var(--mt-card)) !important;
+            }
 
             &.o_arrow_button_current {
+                z-index: 1;
                 color: var(--mt-primary) !important;
                 font-weight: 600;
-                box-shadow: inset 0 -2px 0 var(--mt-primary) !important;
-                border-radius: 0 !important;
+                background: color-mix(in srgb, var(--mt-primary) 14%, var(--mt-card)) !important;
+                border-color: color-mix(in srgb, var(--mt-primary) 45%, var(--mt-border)) !important;
+
+                &::before {
+                    content: "" !important;
+                    display: block !important;
+                    position: static !important;
+                    inset: auto !important;
+                    width: 0.4rem !important;
+                    height: 0.4rem !important;
+                    margin: 0 0.4rem 0 0 !important;
+                    border: 0 !important;
+                    border-radius: 999px !important;
+                    background: var(--mt-primary) !important;
+                    clip-path: none !important;
+                    flex: 0 0 auto;
+                }
             }
         }
     }
@@ -496,6 +565,28 @@ $mt-bar-height: 3.5rem;
             > div:empty { display: none; }
         }
 
+        // A switch that shares its row with another control (online payment + percent).
+        > .mt-row:has(.o_field_boolean):has(.o_input) {
+            > .o_wrap_label { position: static !important; }
+            > .o_cell:not(.o_wrap_label) { padding-top: 0 !important; }
+
+            #require_payment,
+            .o_row {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                min-height: 2.25rem;
+            }
+
+            .mx-3 { margin: 0 !important; color: var(--mt-muted-foreground); }
+
+            .o_field_percentage,
+            .o_field_float {
+                flex: 0 0 4.5rem;
+                width: 4.5rem !important;
+            }
+        }
+
         // Boolean rows: label on the left, switch on the right, like a settings row.
         > .mt-row:has(.o_field_boolean):not(:has(.o_input)) {
             display: flex !important;
@@ -532,23 +623,72 @@ $mt-bar-height: 3.5rem;
         color: var(--mt-foreground) !important;
     }
 
+    // Named sections (Sales, Invoicing, Delivery, Tracking…) sit in a two-column
+    // card grid, the same rounded bordered panels OmniRouters uses on profile
+    // and the dashboard.
+    .o_group.row:has(> .o_inner_group .o_horizontal_separator) {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.875rem;
+        margin: 0 !important;
+        align-items: stretch !important;
+
+        @media (max-width: 991.98px) {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        > .o_inner_group:has(.o_horizontal_separator) {
+            width: auto !important;
+            max-width: none !important;
+            min-width: 0;
+            margin: 0 !important;
+            padding: 0.875rem 1rem 0.5rem !important;
+            border: 1px solid var(--mt-border);
+            border-radius: 1rem;
+            background: var(--mt-card);
+
+            > .g-col-sm-2:has(.o_horizontal_separator) { width: 100%; }
+
+            .o_horizontal_separator {
+                margin: 0 0 0.875rem !important;
+                padding: 0 0 0.625rem;
+                border-bottom: 1px solid var(--mt-border) !important;
+            }
+
+            > .mt-row { margin-bottom: 0.5rem; }
+        }
+    }
+
+    // Quotation header (Customer, dates, pricelist, payment terms) as one input group.
+    // The group name is not kept on the rendered node, so target the sheet's first group.
+    // `&` is the form view itself, which also carries .o_sale_order.
+    &.o_sale_order .o_form_sheet > .o_group {
+        margin: 0 0 0.25rem !important;
+        padding: 1rem 1.125rem 0.5rem !important;
+        border: 1px solid var(--mt-border);
+        border-radius: 1rem;
+        background: var(--mt-card);
+    }
+
     // --- inputs (fields laid out in groups; the record title is styled below) ---
     .o_inner_group .o_input { line-height: 1.25; }
 
-    // many2one: underline the whole widget so it spans the avatar and the dropdown slot
+    // many2one: one box around the avatar and the value (OmniRouters field)
     .o_inner_group .o_field_widget[class*="o_field_many2one"] {
-        min-height: 1.375rem;
+        min-height: 2.25rem;
         display: flex;
         align-items: center;
-        border-bottom: 1px solid var(--mt-border);
-        border-radius: 0 0 0.375rem 0.375rem;
+        padding: 0.125rem 0.75rem;
+        border: 1px solid var(--mt-border);
+        border-radius: 0.5rem;
+        background: var(--mt-card);
         transition: border-color 150ms ease, box-shadow 150ms ease;
 
-        &:hover { border-bottom-color: color-mix(in srgb, var(--mt-foreground) 28%, var(--mt-border)); }
+        &:hover { border-color: color-mix(in srgb, var(--mt-foreground) 22%, var(--mt-border)); }
 
         &:focus-within {
-            border-bottom-color: var(--mt-primary);
-            box-shadow: 0 1px 0 0 var(--mt-primary);
+            border-color: var(--mt-primary);
+            box-shadow: 0 0 0 1px var(--mt-primary);
         }
 
         > *,
@@ -581,11 +721,11 @@ $mt-bar-height: 3.5rem;
         }
     }
 
-    // Salesperson / contact: avatar sits in a compact chip on the underline.
+    // Salesperson / contact: avatar sits inside the same box.
     .o_inner_group .o_field_widget:has(.o_avatar, .o_m2o_avatar, img.rounded) {
-        min-height: 1.75rem;
+        min-height: 2.25rem;
         gap: 0.5rem;
-        padding: 0.125rem 0.25rem 0.25rem 0;
+        padding: 0.25rem 0.75rem;
 
         .o_avatar,
         .o_m2o_avatar,
@@ -606,30 +746,29 @@ $mt-bar-height: 3.5rem;
         button.o_input,
         select.o_input,
         textarea.o_input {
-            min-height: 1.375rem;
-            padding: 0.1875rem 0.125rem;
-            border: 0 !important;
-            border-bottom: 1px solid var(--mt-border) !important;
-            border-radius: 0 0 0.375rem 0.375rem !important;
-            background-color: transparent;
+            min-height: 2.25rem;
+            padding: 0.375rem 0.75rem;
+            border: 1px solid var(--mt-border) !important;
+            border-radius: 0.5rem !important;
+            background-color: var(--mt-card);
             color: var(--mt-foreground);
             font-size: 0.875rem;
             box-shadow: none;
             transition: border-color 150ms ease, box-shadow 150ms ease;
 
             &::placeholder { color: color-mix(in srgb, var(--mt-muted-foreground) 70%, transparent); }
-            &:hover { border-bottom-color: color-mix(in srgb, var(--mt-foreground) 28%, var(--mt-border)) !important; }
+            &:hover { border-color: color-mix(in srgb, var(--mt-foreground) 22%, var(--mt-border)) !important; }
 
             &:focus {
-                border-bottom-color: var(--mt-primary) !important;
-                box-shadow: 0 1px 0 0 var(--mt-primary) !important;
+                border-color: var(--mt-primary) !important;
+                box-shadow: 0 0 0 1px var(--mt-primary) !important;
                 outline: none;
             }
         }
     }
 
     .o_inner_group .o_field_invalid[class*="o_field_many2one"] {
-        border-bottom-color: var(--mt-destructive, #dc2626);
+        border-color: var(--mt-destructive, #dc2626);
     }
 
     .o_field_invalid {
@@ -641,18 +780,20 @@ $mt-bar-height: 3.5rem;
         }
     }
 
-    // monetary: Odoo overlays the currency on a borderless input, so underline the wrapper
+    // monetary: currency sits inside the same box as the amount
     .o_inner_group .o_field_monetary > div {
         min-width: 8rem;
-        min-height: 1.375rem;
+        min-height: 2.25rem;
         align-items: center !important;
-        border-bottom: 1px solid var(--mt-border);
-        border-radius: 0 0 0.375rem 0.375rem;
+        padding: 0 0.75rem;
+        border: 1px solid var(--mt-border);
+        border-radius: 0.5rem;
+        background: var(--mt-card);
         transition: border-color 150ms ease, box-shadow 150ms ease;
 
         &:focus-within {
-            border-bottom-color: var(--mt-primary);
-            box-shadow: 0 1px 0 0 var(--mt-primary);
+            border-color: var(--mt-primary);
+            box-shadow: 0 0 0 1px var(--mt-primary);
         }
 
         .o_input {
@@ -664,16 +805,17 @@ $mt-bar-height: 3.5rem;
     }
 
     .o_inner_group .o_field_many2many_tags .o_field_tags {
-        min-height: 1.375rem;
-        padding: 0.125rem 0;
-        border-bottom: 1px solid var(--mt-border);
-        border-radius: 0 0 0.375rem 0.375rem;
+        min-height: 2.25rem;
+        padding: 0.25rem 0.75rem;
+        border: 1px solid var(--mt-border);
+        border-radius: 0.5rem;
+        background: var(--mt-card);
         align-items: center;
         gap: 0.25rem;
 
         &:focus-within {
-            border-bottom-color: var(--mt-primary);
-            box-shadow: 0 1px 0 0 var(--mt-primary);
+            border-color: var(--mt-primary);
+            box-shadow: 0 0 0 1px var(--mt-primary);
         }
 
         .o_input { border: 0 !important; box-shadow: none !important; background: transparent !important; }
@@ -684,8 +826,8 @@ $mt-bar-height: 3.5rem;
             font-weight: 500;
         }
     }
-    .o_field_many2many_tags,
-    .o_field_tags {
+    .o_field_x2many .o_field_many2many_tags,
+    .o_field_x2many .o_field_tags {
         background: transparent !important;
     }
 
@@ -923,59 +1065,90 @@ $mt-bar-height: 3.5rem;
         }
     }
 
-    // --- tabs: plain text tabs on one hairline, flush with the content ---------
+    // --- tabs sit on the card, with no gap between the tab and the card -----
     .o_notebook {
+        --Notebook-margin-x: 0;
+        --Notebook-padding-x: 1rem;
         margin-top: 0.75rem;
+        border: 0;
+        border-radius: 0;
+        overflow: visible;
+        background: transparent;
 
         .o_notebook_headers {
-            margin: 0 0 0.875rem !important;
+            margin: 0 !important;
             padding: 0 !important;
             border: 0 !important;
             overflow: visible;
+            background: transparent;
         }
 
         .nav-tabs {
             display: flex !important;
             flex-wrap: wrap;
-            gap: 0 1.75rem;
-            width: 100%;
+            align-items: flex-end;
+            gap: 0.125rem;
+            width: auto;
             margin: 0 !important;
             padding: 0 !important;
             border: 0 !important;
-            border-bottom: 1px solid var(--mt-border) !important;
             border-radius: 0;
-            background: transparent;
+            background: transparent !important;
+            position: relative;
+            z-index: 2;
         }
 
         .nav-item { margin: 0 !important; padding: 0 !important; border: 0 !important; }
 
         .nav-link {
-            height: 2.5rem;
+            height: 2.25rem;
             margin: 0 0 -1px !important;
-            padding: 0 !important;
+            padding: 0 1rem !important;
             display: inline-flex;
             align-items: center;
-            border: 0 !important;
-            border-radius: 0 !important;
+            border: 1px solid transparent !important;
+            border-radius: 0.75rem 0.75rem 0 0 !important;
             background: transparent !important;
             color: var(--mt-muted-foreground) !important;
             font-size: 0.8125rem;
             font-weight: 500;
             white-space: nowrap;
-            box-shadow: none;
-            transition: color 150ms ease, box-shadow 150ms ease;
+            box-shadow: none !important;
+            transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease;
 
             &:hover { color: var(--mt-foreground) !important; }
 
             &.active {
                 color: var(--mt-foreground) !important;
                 font-weight: 600;
-                box-shadow: inset 0 -2px 0 var(--mt-primary);
+                background: var(--mt-card) !important;
+                border-color: var(--mt-border) !important;
+                border-bottom-color: var(--mt-card) !important;
+                box-shadow: inset 0 2px 0 var(--mt-primary) !important;
             }
         }
 
-        .o_notebook_content,
-        .tab-content { border: 0 !important; padding: 0 !important; background: transparent; }
+        // The page is the card. The active tab covers its top border, so the
+        // two read as one piece.
+        .o_notebook_content {
+            margin: 0 !important;
+            padding: 0 !important;
+            border: 1px solid var(--mt-border);
+            border-radius: 0 1rem 1rem 1rem;
+            background: var(--mt-card);
+            overflow: hidden;
+        }
+
+        &:not(:has(.nav-item:first-child > .nav-link.active)) .o_notebook_content {
+            border-top-left-radius: 1rem;
+        }
+
+        .tab-pane { padding: 0.75rem 1rem 1rem; }
+
+        .tab-pane:has(> .o_field_x2many),
+        .tab-pane:has(> .o_field_sol_o2m) {
+            padding: 0;
+        }
     }
 
     // --- line tables (order lines, operations…) -------------------------------
@@ -1014,15 +1187,18 @@ $mt-bar-height: 3.5rem;
                 border-bottom: 0 !important;
             }
 
-            // the line being edited: underline its inputs instead of Odoo's boxes
             .o_selected_row .o_input {
-                border: 0 !important;
-                border-bottom: 1px solid var(--mt-border) !important;
-                border-radius: 0 !important;
-                background: transparent !important;
+                min-height: 2rem;
+                padding: 0.25rem 0.5rem !important;
+                border: 1px solid var(--mt-border) !important;
+                border-radius: 0.375rem !important;
+                background: var(--mt-card) !important;
                 box-shadow: none !important;
 
-                &:focus { border-bottom-color: var(--mt-primary) !important; }
+                &:focus {
+                    border-color: var(--mt-primary) !important;
+                    box-shadow: 0 0 0 1px var(--mt-primary) !important;
+                }
             }
 
             .o_field_x2many_list_row_add a {
@@ -1042,6 +1218,26 @@ $mt-bar-height: 3.5rem;
             }
 
             tfoot td { border-top: 0 !important; background: transparent; }
+        }
+    }
+
+    // The page card already frames the table. Odoo pulls embedded lists out by a
+    // negative margin; that opens a gap under the tab and clips the last column.
+    .o_notebook .o_field_x2many_list .o_list_renderer {
+        --ListRenderer-margin-x: 0;
+        margin: 0 !important;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+    }
+
+    .o_notebook .tab-pane:has(> .o_field_sol_o2m),
+    .o_notebook .tab-pane:has(> .o_field_x2many) {
+        > [name="so_button_below_order_lines"]:not(:has(.btn)) { display: none; }
+
+        > .o_group {
+            margin: 0 !important;
+            padding: 0.875rem 1rem 1rem;
         }
     }
 
@@ -1085,62 +1281,155 @@ $mt-bar-height: 3.5rem;
     color: var(--mt-foreground);
 
     .o-mail-Chatter-top {
+        margin: 0.75rem 0.75rem 0;
+        padding: 0.125rem 0.375rem 0.5rem;
+        border: 1px solid var(--mt-border) !important;
+        border-radius: 0.875rem;
         background: var(--mt-card) !important;
-        border-bottom: 1px solid var(--mt-border);
-        padding: 0 1rem;
 
-        &.shadow-sm { box-shadow: 0 6px 12px -12px rgba(15, 23, 42, 0.45) !important; }
+        &.shadow-sm { box-shadow: none !important; }
     }
 
     .o-mail-Chatter-topbar {
-        min-height: $mt-bar-height;
-        align-items: center;
-        gap: 0.375rem;
+        min-height: 2.75rem;
+        align-items: stretch;
+        gap: 0.125rem;
         overflow: visible !important;
 
+        // Same tabs as the lead composer: icon + label, green underline on the open one.
         .o-mail-Chatter-sendMessage,
         .o-mail-Chatter-logNote,
         .o-mail-Chatter-activity {
-            @include mt-pill-btn;
-            @include mt-pill-outline;
+            position: relative;
+            height: auto;
             margin: 0 !important;
-            padding: 0 0.8125rem;
+            padding: 0 0.75rem !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            border: 0 !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            color: var(--mt-muted-foreground) !important;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            box-shadow: none !important;
 
             &::before {
                 font-family: FontAwesome;
                 font-weight: normal;
                 font-size: 0.75rem;
-                color: var(--mt-muted-foreground);
+                color: inherit;
             }
 
-            &.active {
-                @include mt-pill-solid;
-                background: var(--mt-primary) !important;
-                color: var(--mt-primary-foreground) !important;
-                border-color: var(--mt-primary) !important;
-                &::before { color: inherit; }
+            &:hover { color: var(--mt-foreground) !important; background: transparent !important; }
+
+            &.active,
+            &.btn-primary {
+                background: transparent !important;
+                color: var(--mt-primary) !important;
+                font-weight: 600;
+
+                &::after {
+                    content: "";
+                    position: absolute;
+                    left: 0.5rem;
+                    right: 0.5rem;
+                    bottom: 0;
+                    height: 2px;
+                    border-radius: 2px;
+                    background: var(--mt-primary);
+                }
             }
         }
 
-        .o-mail-Chatter-sendMessage {
-            @include mt-pill-solid;
-            &::before { content: "\f0e0"; color: inherit; }
-        }
+        .o-mail-Chatter-sendMessage::before { content: "\f1d8"; }
+        .o-mail-Chatter-logNote::before { content: "\f096"; }
+        .o-mail-Chatter-activity::before { content: "\f073"; }
 
-        .o-mail-Chatter-logNote::before { content: "\f249"; }
-        .o-mail-Chatter-activity::before { content: "\f017"; }
+        // Odoo's oi-search glyph is a magnifying glass inside a rounded square.
+        // Draw the same plain FontAwesome mark the paperclip uses.
+        button[aria-label="Search Messages"] .oi-search::before,
+        .o-mail-SearchMessageInput .oi-search::before {
+            font-family: FontAwesome;
+            font-weight: normal;
+            content: "\f002";
+        }
 
         > .btn-link,
         .o-mail-Chatter-attachFiles,
         .o-mail-Followers-button {
             min-width: 1.875rem;
             height: 1.875rem;
+            margin: 0 !important;
             padding: 0 0.375rem !important;
-            border-radius: 999px;
+            border: 0 !important;
+            border-radius: 0.5rem;
+            background: transparent !important;
+            box-shadow: none !important;
             color: var(--mt-muted-foreground) !important;
             text-decoration: none;
 
-            &:hover { background: var(--mt-muted); color: var(--mt-foreground) !important; }
+            &:hover,
+            &:focus,
+            &:focus-visible {
+                background: var(--mt-muted) !important;
+                color: var(--mt-foreground) !important;
+                box-shadow: none !important;
+            }
+        }
+    }
+
+    // Message search: one quiet field, then plain icons (no boxed buttons).
+    .o-mail-SearchMessageInput {
+        align-items: center;
+        gap: 0.125rem;
+        padding-top: 0.25rem !important;
+        padding-bottom: 0.25rem !important;
+
+        .input-group { flex: 1 1 auto; min-width: 0; }
+
+        .o_searchview,
+        .o_searchview_input {
+            height: 2rem;
+            border: 0 !important;
+            border-radius: 0.5rem !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            color: var(--mt-foreground);
+        }
+
+        .o_searchview {
+            border: 1px solid var(--mt-border) !important;
+            background: var(--mt-card) !important;
+
+            &:focus-within {
+                border-color: var(--mt-primary) !important;
+                box-shadow: 0 0 0 1px var(--mt-primary) !important;
+            }
+        }
+
+        .btn {
+            width: 2rem;
+            height: 2rem;
+            margin: 0 0 0 0.125rem !important;
+            padding: 0 !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 0 !important;
+            border-radius: 0.5rem !important;
+            background: transparent !important;
+            color: var(--mt-muted-foreground) !important;
+            box-shadow: none !important;
+
+            &:hover,
+            &:focus,
+            &:focus-visible {
+                background: var(--mt-muted) !important;
+                color: var(--mt-foreground) !important;
+                box-shadow: none !important;
+            }
         }
     }
 
@@ -1159,21 +1448,29 @@ $mt-bar-height: 3.5rem;
     }
 
     .o-mail-Composer {
+        margin: 0 0.375rem 0.125rem;
+        border: 1px solid var(--mt-border);
+        border-radius: 0.75rem;
+        background: var(--mt-card);
+        overflow: hidden;
+
         .o-mail-Composer-avatar { border-radius: 999px !important; }
 
         .o-mail-Composer-inputContainer {
-            border: 1px solid var(--mt-border) !important;
-            border-radius: 0.875rem !important;
-            background: var(--mt-background, var(--mt-card)) !important;
-            overflow: hidden;
+            border: 0 !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            box-shadow: none !important;
         }
 
-        &.o-focused .o-mail-Composer-inputContainer {
-            border-color: var(--mt-ring) !important;
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-ring) 18%, transparent) !important;
+        &.o-focused {
+            border-color: var(--mt-primary);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-primary) 18%, transparent);
         }
 
         .o-mail-Composer-bg { background: transparent !important; }
+
+        .o-mail-Composer-footer { padding: 0.125rem 0.5rem 0.5rem 0.75rem; }
 
         .o-mail-Composer-input {
             font-size: 0.875rem !important;
@@ -1181,28 +1478,72 @@ $mt-bar-height: 3.5rem;
             &:focus { box-shadow: none !important; outline: none; }
         }
 
+        // Soft green pill, the same weight as the lead composer's Send.
         .o-mail-Composer-send {
-            @include mt-pill-btn;
-            @include mt-pill-solid;
+            height: 2rem;
+            margin: 0 !important;
+            padding: 0 0.875rem !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            border: 0 !important;
+            border-radius: 0.5rem !important;
+            background: color-mix(in srgb, var(--mt-primary) 16%, var(--mt-card)) !important;
+            color: var(--mt-primary) !important;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            box-shadow: none !important;
+
+            &::before {
+                content: "\f1d8";
+                font-family: FontAwesome;
+                font-weight: normal;
+                font-size: 0.75rem;
+            }
+
+            &:hover {
+                background: color-mix(in srgb, var(--mt-primary) 24%, var(--mt-card)) !important;
+                color: var(--mt-primary) !important;
+            }
         }
+    }
+
+    .o-mail-Chatter-top:has(.o-mail-Chatter-logNote.btn-primary) .o-mail-Composer {
+        background: color-mix(in srgb, #f59e0b 8%, var(--mt-card));
     }
 
     .o-mail-Chatter-content,
     .o-mail-Thread { background: var(--mt-card) !important; }
 
-    .o-mail-DateSection > span {
-        padding: 0.125rem 0.625rem !important;
-        border: 1px solid var(--mt-border);
-        border-radius: 999px;
-        background: var(--mt-card);
-        font-size: 0.6875rem !important;
-        color: var(--mt-muted-foreground) !important;
+    // Date chip matches the Member Tiers "Tier 0" pill: soft primary, no border.
+    .o-mail-DateSection {
+        padding-top: 0.75rem !important;
+
+        &::before,
+        &::after { border-color: var(--mt-border) !important; }
+
+        > span {
+            padding: 0.15rem 0.55rem !important;
+            border: 0 !important;
+            border-radius: 999px;
+            background: color-mix(in srgb, var(--mt-primary) 14%, var(--mt-card));
+            font-size: 0.6875rem !important;
+            font-weight: 600;
+            color: var(--mt-primary) !important;
+        }
     }
 
+    // Messages read as a hairline list, the same rhythm as the tier rows.
     .o-mail-Message {
-        border-radius: 0.75rem;
+        margin: 0 !important;
+        padding: 0.75rem 0.25rem !important;
+        border: 0 !important;
+        border-bottom: 1px solid var(--mt-border) !important;
+        border-radius: 0 !important;
+        background: transparent !important;
 
-        &:hover { background: color-mix(in srgb, var(--mt-muted) 60%, transparent); }
+        &:hover { background: color-mix(in srgb, var(--mt-muted) 40%, transparent) !important; }
+
         .o-mail-Message-avatar { border-radius: 999px !important; }
         .o-mail-Message-author { font-weight: 600 !important; color: var(--mt-foreground) !important; }
         .o-mail-Message-date { color: var(--mt-muted-foreground) !important; }
@@ -1215,6 +1556,24 @@ $mt-bar-height: 3.5rem;
             opacity: 1 !important;
         }
     }
+
+    .o-mail-Message:has(.o-mail-Message-body.o-note) .o-mail-Message-date::after,
+    .o-mail-Message[aria-label="System notification"] .o-mail-Message-date::after {
+        display: inline-flex;
+        align-items: center;
+        margin-left: 0.5rem;
+        padding: 0.1rem 0.45rem;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--mt-primary) 14%, var(--mt-card));
+        color: var(--mt-primary);
+        font-size: 0.6875rem;
+        font-weight: 600;
+        line-height: 1.3;
+        vertical-align: 0.05rem;
+    }
+
+    .o-mail-Message:has(.o-mail-Message-body.o-note) .o-mail-Message-date::after { content: "Note"; }
+    .o-mail-Message[aria-label="System notification"] .o-mail-Message-date::after { content: "Update" !important; }
 
     .o-mail-Activity {
         padding: 0.625rem 0.75rem !important;

@@ -438,8 +438,36 @@ $mt-admin: ".o_web_client:not(:has(.o_cm_sidebar)):not(:has(.o_ss_sidebar)):not(
         }
 
         .btn-close {
+            position: relative;
+            width: 2rem;
+            height: 2rem;
+            margin: 0;
+            padding: 0;
+            flex: 0 0 auto;
+            opacity: 1;
+            border: 1px solid var(--mt-border);
+            border-radius: 0.5rem;
+            background: transparent !important;
+            box-shadow: none;
             filter: none;
-            opacity: 0.7;
+
+            // Bootstrap's X is a black image that disappears on a dark header.
+            // Draw our own so the glyph follows the theme color inside the box.
+            background-image: none !important;
+
+            &::before {
+                content: "";
+                position: absolute;
+                inset: 0.5rem;
+                background: var(--mt-foreground);
+                -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.2 3.2l9.6 9.6M12.8 3.2L3.2 12.8' stroke='black' stroke-width='1.7' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+                mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.2 3.2l9.6 9.6M12.8 3.2L3.2 12.8' stroke='black' stroke-width='1.7' stroke-linecap='round'/%3E%3C/svg%3E") center / contain no-repeat;
+            }
+
+            &:hover {
+                background: var(--mt-muted) !important;
+                opacity: 1;
+            }
         }
     }
 
@@ -525,6 +553,71 @@ $mt-admin: ".o_web_client:not(:has(.o_cm_sidebar)):not(:has(.o_ss_sidebar)):not(
         color: var(--mt-foreground) !important;
         box-shadow: inset 0 -2px 0 var(--mt-primary);
     }
+
+    // Schedule Activity: one box per field, sentence-case labels, no sideways scroll.
+    // The shared dialog rules uppercase every label and paint .o_input_dropdown
+    // with --mt-background, which in dark mode is a black bar inside the gray field.
+    .o_mail_activity_schedule_wizard {
+        max-width: 100%;
+
+        .o_group.row {
+            width: 100%;
+            margin-inline: 0 !important;
+        }
+
+        // Due date and assignee sit in a col-lg-6. Stack them full width,
+        // same as Summary and the note. The wizard class is on the sheet bg,
+        // so this cannot be a direct-child selector.
+        .o_inner_group.col-lg-6 {
+            width: 100% !important;
+            max-width: 100% !important;
+            flex: 0 0 100% !important;
+        }
+
+        .o_inner_group,
+        .o_cell,
+        .o_field_widget {
+            max-width: 100%;
+            min-width: 0;
+        }
+
+        .o_form_label,
+        .o_wrap_label {
+            text-transform: none !important;
+            letter-spacing: 0 !important;
+            font-size: 0.75rem !important;
+            font-weight: 500 !important;
+        }
+
+        .o_field_char .o_input {
+            font-size: 0.875rem !important;
+            font-weight: 500;
+        }
+
+        .o_field_many2one_avatar .o_input_dropdown,
+        .o_field_many2one_avatar .o_input {
+            background: transparent !important;
+            border: 0 !important;
+            box-shadow: none !important;
+            min-height: 0;
+        }
+
+        .o_field_html .note-editable,
+        .o_field_html .odoo-editor-editable {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+    }
+}
+
+.o_dialog .modal-body:has(.o_mail_activity_schedule_wizard) {
+    overflow-x: hidden;
+}
+
+// Sheet padding is zeroed by the form styles. Put the type pills and fields
+// in from the dialog edge. This selector has to beat that zeroing rule.
+.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_sidebar, .o_mr_sidebar) .modal .modal-content:has(.o_form_view) .o_form_view .o_mail_activity_schedule_wizard > .o_form_sheet {
+    padding: 1rem 1.25rem 0.5rem !important;
 }
 
 .o_field_domain,

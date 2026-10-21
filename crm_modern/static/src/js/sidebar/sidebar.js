@@ -367,8 +367,21 @@ export class ModernSidebar extends Component {
                 .then((allowed) => (this.state.rights[model] = allowed));
         }
     }
+    /** Client actions (Sales Teams, Stages…) match by action tag, not only the menu highlight. */
+    get tagCreateSpec() {
+        const tag = this.action.currentController?.action?.tag;
+        if (!tag) {
+            return null;
+        }
+        for (const [xmlid, spec] of createTargets.getEntries()) {
+            if (spec.tag === tag || xmlid.replace(".menu_", ".") === tag) {
+                return spec;
+            }
+        }
+        return null;
+    }
     get createSpec() {
-        return this.pageCreateSpec || this.actionCreateSpec || createTargets.get(DEFAULT_CREATE, null);
+        return this.pageCreateSpec || this.tagCreateSpec || this.actionCreateSpec || createTargets.get(DEFAULT_CREATE, null);
     }
     get createLabel() {
         return this.createSpec?.label || _t("New");
