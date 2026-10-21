@@ -28,17 +28,6 @@
         display: grid; gap: 1rem; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
         @media (max-width: 1199.98px) { grid-template-columns: minmax(0, 1fr); }
     }
-    .cm-home-list {
-        list-style: none; margin: 0; padding: 0; display: grid;
-        .cm-home-row {
-            display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.125rem 0.75rem;
-            width: 100%; padding: 0.5rem 0.25rem; border: 0; border-bottom: 1px solid var(--cm-border);
-            background: transparent; color: var(--cm-fg); text-align: start; cursor: pointer;
-            small:last-child { grid-column: 1 / -1; }
-            &:hover { background: color-mix(in srgb, var(--cm-muted) 65%, transparent); }
-        }
-        li:last-child .cm-home-row { border-bottom: 0; }
-    }
     .cm-due-overdue { color: var(--cm-danger); font-weight: 600; }
     .cm-grid-cards {
         display: grid; gap: 1rem; grid-template-columns: repeat(3, minmax(0, 1fr));

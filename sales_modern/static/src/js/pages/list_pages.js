@@ -88,7 +88,7 @@ export class ListPage extends Component {
         this.dialog = useService("dialog");
         this.ctx = this.props.action?.context || {};
         const C = this.constructor;
-        this.storageKey = `sales_modern.view.${C.prefix || C.resModel}`;
+        this.storageKey = C.viewKey || `sales_modern.view.${C.prefix || C.resModel}`;
         let view = readStoredView(this.storageKey, C.types[0]);
         if (!C.types.includes(view)) {
             view = C.types[0];
@@ -199,6 +199,7 @@ class OrdersPage extends ListPage {
     static resModel = "sale.order";
     static prefix = "order";
     static types = ORDER_VIEWS;
+    static viewKey = "sales_modern.view.order.list";
     get domain() {
         return [["state", "=", "sale"], ...teamDomain(this.ctx)];
     }

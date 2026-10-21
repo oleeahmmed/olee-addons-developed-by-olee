@@ -361,6 +361,46 @@
     }
     .od-empty span { font-size: 0.75rem; }
 
+    // Home: one accent, quiet counts, rows with an icon and a trailing pill.
+    &.cm-home {
+        .cm-home-kpis {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 0.75rem; margin-bottom: 1rem;
+            @media (max-width: 639.98px) { grid-template-columns: 1fr; }
+        }
+        .cm-home-kpi {
+            display: flex; align-items: baseline; gap: 0.625rem; height: 3.25rem; padding: 0 1rem;
+            border: 1px solid var(--cm-border); border-radius: 0.875rem; background: var(--cm-card);
+            text-align: start; cursor: pointer; color: var(--cm-fg);
+            strong { font-size: 1.25rem; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; &.is-late { color: var(--cm-danger); } }
+            span { font-size: 0.8125rem; color: var(--cm-muted-fg); }
+            &:hover { border-color: color-mix(in srgb, var(--cm-primary) 35%, var(--cm-border)); }
+            &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--cm-ring); }
+        }
+        .cm-home-stack { display: grid; gap: 1rem; align-content: start; }
+        @media (min-width: 992px) {
+            .od-span-7 { grid-column: span 7; }
+            .od-span-5 { grid-column: span 5; }
+        }
+        .cm-home-list { list-style: none; margin: 0; padding: 0.25rem 0.5rem 0.5rem; }
+        .cm-home-item {
+            display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 0.75rem;
+            width: 100%; padding: 0.625rem 0.625rem; border: 0; border-radius: 0.75rem;
+            background: transparent; color: inherit; text-align: start; cursor: pointer;
+            &:hover { background: color-mix(in srgb, var(--cm-muted) 70%, transparent); }
+            &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--cm-ring); }
+        }
+        .cm-home-ico {
+            display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 0.5rem;
+            background: color-mix(in srgb, var(--cm-primary) 12%, var(--cm-card)); color: var(--cm-primary); font-size: 0.8125rem;
+        }
+        .cm-home-copy { display: grid; min-width: 0; strong { font-size: 0.875rem; font-weight: 600; } small { font-size: 0.75rem; color: var(--cm-muted-fg); } }
+        .cm-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .cm-home-pill {
+            font-size: 0.75rem; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--cm-muted-fg); white-space: nowrap;
+            &.is-late { color: var(--cm-danger); }
+        }
+    }
+
     // ---------- loading ----------
     .od-skel { border-radius: 1rem; background: linear-gradient(90deg, var(--cm-muted) 0%, color-mix(in srgb, var(--cm-muted) 45%, var(--cm-card)) 50%, var(--cm-muted) 100%) 0 0 / 200% 100%;
         animation: od-shimmer 1.3s ease-in-out infinite; }

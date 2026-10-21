@@ -52,6 +52,8 @@ class SaleOrdersPage extends SaleOrderPage {
     static icon = "fa-shopping-cart";
     static newLabel = _t("New order");
     static prefix = "order";
+    // Fresh key so an old remembered kanban does not override the list default.
+    static viewKey = "crm_modern.view.order.list";
     get domain() {
         return [["state", "=", "sale"]];
     }

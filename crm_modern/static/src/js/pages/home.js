@@ -27,6 +27,9 @@ export class HomePage extends Component {
             overdue: [],
             deals: [],
             leads: [],
+            overdueCount: 0,
+            dealCount: 0,
+            leadCount: 0,
             currencyId: false,
         });
         onWillStart(() => this.load());
@@ -34,36 +37,45 @@ export class HomePage extends Component {
 
     async load() {
         const today = luxon.DateTime.local().toISODate();
-        const [features, overdue, deals, company] = await Promise.all([
+        const overdueDomain = [["res_model", "=", "crm.lead"], ["date_deadline", "<", today]];
+        const dealDomain = [["type", "=", "opportunity"], ["user_id", "=", user.userId], ["won_status", "=", "pending"]];
+        const [features, overdue, deals, company, overdueCount, dealCount] = await Promise.all([
             loadFeatures(this.orm).catch(() => ({})),
             this.orm.searchRead(
-                "mail.activity",
-                [["res_model", "=", "crm.lead"], ["date_deadline", "<", today]],
+                "mail.activity", overdueDomain,
                 ["summary", "date_deadline", "res_id", "res_name", "activity_type_id"],
                 { limit: 6, order: "date_deadline asc" }
             ).catch(() => []),
             this.orm.searchRead(
-                "crm.lead",
-                [["type", "=", "opportunity"], ["user_id", "=", user.userId], ["won_status", "=", "pending"]],
+                "crm.lead", dealDomain,
                 ["name", "expected_revenue", "stage_id", "partner_name", "company_currency"],
                 { limit: 6, order: "expected_revenue desc" }
             ).catch(() => []),
             this.orm.searchRead("res.company", [["id", "=", user.activeCompany?.id || 1]], ["currency_id"], { limit: 1 }).catch(() => []),
+            this.orm.searchCount("mail.activity", overdueDomain).catch(() => 0),
+            this.orm.searchCount("crm.lead", dealDomain).catch(() => 0),
         ]);
-        const leads = features.use_leads
-            ? await this.orm.searchRead(
-                "crm.lead",
-                [["type", "=", "lead"]],
-                ["name", "email_from", "partner_name", "create_date"],
-                { limit: 6, order: "create_date desc" }
-            ).catch(() => [])
-            : [];
+        const useLeads = Boolean(features.use_leads);
+        const leadDomain = [["type", "=", "lead"]];
+        const [leads, leadCount] = useLeads
+            ? await Promise.all([
+                this.orm.searchRead(
+                    "crm.lead", leadDomain,
+                    ["name", "email_from", "partner_name", "create_date"],
+                    { limit: 6, order: "create_date desc" }
+                ).catch(() => []),
+                this.orm.searchCount("crm.lead", leadDomain).catch(() => 0),
+            ])
+            : [[], 0];
         Object.assign(this.state, {
             loading: false,
-            useLeads: Boolean(features.use_leads),
+            useLeads,
             overdue,
             deals,
             leads,
+            overdueCount,
+            dealCount,
+            leadCount,
             currencyId: deals[0]?.company_currency?.[0] || company[0]?.currency_id?.[0] || false,
         });
     }

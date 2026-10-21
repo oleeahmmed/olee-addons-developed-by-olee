@@ -86,81 +86,111 @@
     </t>
 
     <t t-name="crm_modern.Home">
-        <div class="o_cm o_cm_page cm-home">
-            <div class="cm-container">
-                <header class="cm-page-header">
-                    <div>
-                        <h1><t t-esc="greeting"/>, <t t-esc="firstName"/></h1>
-                        <p>Overdue follow-ups, your open deals, and the newest leads.</p>
-                    </div>
-                </header>
-                <div t-if="state.loading" class="cm-skeleton" style="height:14rem"/>
-                <div t-else="" class="cm-grid-cards">
-                    <section class="cm-card">
-                        <div class="cm-card-header">
+        <div class="o_cm od-page cm-home">
+            <header class="od-head">
+                <div>
+                    <div class="od-eyebrow"><span class="od-live" aria-hidden="true"/> Today</div>
+                    <h1 class="od-title"><t t-esc="greeting"/>, <t t-esc="firstName"/></h1>
+                    <p class="od-subtitle">Follow-ups that slipped, deals still open, and leads that just arrived.</p>
+                </div>
+            </header>
+
+            <div t-if="state.loading" class="cm-skeleton" style="height:16rem"/>
+            <t t-else="">
+                <section class="cm-home-kpis" aria-label="Today">
+                    <button type="button" class="cm-home-kpi" t-on-click="() => this.open('crm_modern.action_activities')">
+                        <strong t-att-class="{ 'is-late': state.overdueCount }" t-esc="state.overdueCount"/>
+                        <span>Overdue</span>
+                    </button>
+                    <button type="button" class="cm-home-kpi" t-on-click="() => this.open('crm_modern.action_pipeline')">
+                        <strong t-esc="state.dealCount"/>
+                        <span>Open deals</span>
+                    </button>
+                    <button t-if="state.useLeads" type="button" class="cm-home-kpi" t-on-click="() => this.open('crm_modern.action_leads')">
+                        <strong t-esc="state.leadCount"/>
+                        <span>New leads</span>
+                    </button>
+                </section>
+
+                <div class="od-grid">
+                    <section class="od-card od-span-7">
+                        <div class="od-card-head">
                             <div>
                                 <h3>Overdue</h3>
                                 <p>Follow-ups that already slipped</p>
                             </div>
-                            <button type="button" class="cm-btn cm-btn-ghost cm-btn-sm" t-on-click="() => this.open('crm_modern.action_activities')">Activities</button>
+                            <button type="button" class="od-link" t-on-click="() => this.open('crm_modern.action_activities')">Activities <i class="fa fa-angle-right" aria-hidden="true"/></button>
                         </div>
-                        <div class="cm-card-body">
-                            <p t-if="!state.overdue.length" class="cm-muted">Nothing overdue.</p>
+                        <div class="od-card-body od-card-body--flush">
+                            <div t-if="!state.overdue.length" class="od-empty"><i class="fa fa-check" aria-hidden="true"/><strong>Nothing overdue</strong></div>
                             <ul t-else="" class="cm-home-list">
                                 <li t-foreach="state.overdue" t-as="a" t-key="a.id">
-                                    <button type="button" class="cm-home-row" t-on-click="() => this.openDeal(a.res_id)">
-                                        <span class="cm-truncate" t-esc="a.summary or a.activity_type_id[1]"/>
-                                        <small class="cm-due-overdue" t-esc="due(a.date_deadline).label"/>
-                                        <small class="cm-muted cm-truncate" t-esc="a.res_name"/>
+                                    <button type="button" class="cm-home-item" t-on-click="() => this.openDeal(a.res_id)">
+                                        <span class="cm-home-ico" aria-hidden="true"><i class="fa fa-clock-o"/></span>
+                                        <span class="cm-home-copy">
+                                            <strong class="cm-truncate" t-esc="a.summary or a.activity_type_id[1]"/>
+                                            <small class="cm-truncate" t-esc="a.res_name"/>
+                                        </span>
+                                        <span class="cm-home-pill is-late" t-esc="due(a.date_deadline).label"/>
                                     </button>
                                 </li>
                             </ul>
                         </div>
                     </section>
-                    <section class="cm-card">
-                        <div class="cm-card-header">
-                            <div>
-                                <h3>My open deals</h3>
-                                <p>Assigned to you, still in play</p>
+
+                    <div class="od-span-5 cm-home-stack">
+                        <section class="od-card">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3>My open deals</h3>
+                                    <p>Assigned to you, still in play</p>
+                                </div>
+                                <button type="button" class="od-link" t-on-click="() => this.open('crm_modern.action_pipeline')">Pipeline <i class="fa fa-angle-right" aria-hidden="true"/></button>
                             </div>
-                            <button type="button" class="cm-btn cm-btn-ghost cm-btn-sm" t-on-click="() => this.open('crm_modern.action_pipeline')">Pipeline</button>
-                        </div>
-                        <div class="cm-card-body">
-                            <p t-if="!state.deals.length" class="cm-muted">No open deals assigned to you.</p>
-                            <ul t-else="" class="cm-home-list">
-                                <li t-foreach="state.deals" t-as="d" t-key="d.id">
-                                    <button type="button" class="cm-home-row" t-on-click="() => this.openDeal(d.id)">
-                                        <span class="cm-truncate" t-esc="d.name"/>
-                                        <small class="cm-tabular" t-esc="money(d.expected_revenue)"/>
-                                        <small class="cm-muted cm-truncate" t-esc="d.stage_id ? d.stage_id[1] : (d.partner_name or '')"/>
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                    </section>
-                    <section t-if="state.useLeads" class="cm-card">
-                        <div class="cm-card-header">
-                            <div>
-                                <h3>Newest leads</h3>
-                                <p>Just arrived, not converted yet</p>
+                            <div class="od-card-body od-card-body--flush">
+                                <div t-if="!state.deals.length" class="od-empty"><i class="fa fa-briefcase" aria-hidden="true"/><strong>No open deals</strong></div>
+                                <ul t-else="" class="cm-home-list">
+                                    <li t-foreach="state.deals" t-as="d" t-key="d.id">
+                                        <button type="button" class="cm-home-item" t-on-click="() => this.openDeal(d.id)">
+                                            <span class="cm-home-ico" aria-hidden="true"><i class="fa fa-briefcase"/></span>
+                                            <span class="cm-home-copy">
+                                                <strong class="cm-truncate" t-esc="d.name"/>
+                                                <small class="cm-truncate" t-esc="d.stage_id ? d.stage_id[1] : (d.partner_name or 'No stage')"/>
+                                            </span>
+                                            <span class="cm-home-pill" t-esc="money(d.expected_revenue)"/>
+                                        </button>
+                                    </li>
+                                </ul>
                             </div>
-                            <button type="button" class="cm-btn cm-btn-ghost cm-btn-sm" t-on-click="() => this.open('crm_modern.action_leads')">Leads</button>
-                        </div>
-                        <div class="cm-card-body">
-                            <p t-if="!state.leads.length" class="cm-muted">No leads yet.</p>
-                            <ul t-else="" class="cm-home-list">
-                                <li t-foreach="state.leads" t-as="lead" t-key="lead.id">
-                                    <button type="button" class="cm-home-row" t-on-click="() => this.openDeal(lead.id)">
-                                        <span class="cm-truncate" t-esc="lead.name"/>
-                                        <small class="cm-muted cm-truncate" t-esc="lead.email_from or lead.partner_name or ''"/>
-                                        <small class="cm-subtle" t-esc="shortDate(lead.create_date)"/>
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
-                    </section>
+                        </section>
+
+                        <section t-if="state.useLeads" class="od-card">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3>Newest leads</h3>
+                                    <p>Just arrived, not converted yet</p>
+                                </div>
+                                <button type="button" class="od-link" t-on-click="() => this.open('crm_modern.action_leads')">Leads <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body od-card-body--flush">
+                                <div t-if="!state.leads.length" class="od-empty"><i class="fa fa-user-plus" aria-hidden="true"/><strong>No leads yet</strong></div>
+                                <ul t-else="" class="cm-home-list">
+                                    <li t-foreach="state.leads" t-as="lead" t-key="lead.id">
+                                        <button type="button" class="cm-home-item" t-on-click="() => this.openDeal(lead.id)">
+                                            <span class="cm-home-ico" aria-hidden="true"><i class="fa fa-user-o"/></span>
+                                            <span class="cm-home-copy">
+                                                <strong class="cm-truncate" t-esc="lead.name"/>
+                                                <small class="cm-truncate" t-esc="lead.email_from or lead.partner_name or 'No email'"/>
+                                            </span>
+                                            <span class="cm-home-pill" t-esc="shortDate(lead.create_date)"/>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
                 </div>
-            </div>
+            </t>
         </div>
     </t>
 
