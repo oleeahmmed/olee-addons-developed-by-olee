@@ -1,0 +1,60 @@
+// Modern Theme app kit: List pages and the user picker.
+// Shared by crm/sales/inventory/purchase/mrp _modern; each app only passes its prefix:
+//     @include mt-app-list(ss);   // sales_modern -> .o_ss, --ss-*
+// Defined in web._assets_backend_helpers, so it is available in every backend bundle.
+@mixin mt-app-list($p) {
+    // List pages: page header with the primary "+ New …" action, and the sales team cards.
+
+    // List pages use Odoo's own two-part layout, full width: the control panel (New,
+    // title, search, pager, view switcher) and the view right below it, no outer card.
+    .o_#{$p}.o_#{$p}_page.o_#{$p}_page--native {
+        background: transparent;
+        overflow: hidden;
+        .#{$p}-container--native { max-width: none; flex: 1 1 auto; min-height: 0; height: auto; padding: 0 !important; gap: 0; }
+        > .#{$p}-container--native > .#{$p}-native {
+            height: 100%; display: flex; flex-direction: column;
+            border: 0; border-radius: 0; box-shadow: none; background: var(--#{$p}-card);
+            > .o_view_controller, > .o_#{$p}_native_view { flex: 1 1 auto; min-height: 0; }
+            > .#{$p}-skeleton { margin: 1rem; }
+        }
+        .#{$p}-native {
+            .o_control_panel { padding: 0.625rem 1rem 0.75rem !important; border-bottom: 1px solid var(--#{$p}-border); }
+            .o_control_panel_breadcrumbs .o_last_breadcrumb_item { font-size: 1.125rem; font-weight: 600; color: var(--#{$p}-fg); }
+            .o_control_panel_main_buttons .btn-primary { border-radius: 0.5rem; font-weight: 600; padding-inline: 0.875rem; }
+        }
+    }
+
+
+    // ---------- user picker field (team leader on the team cards) ----------
+    .o_#{$p} .#{$p}-userpick, .#{$p}-userpick {
+        display: inline-flex; align-items: center; gap: 0.5rem; max-width: 100%; min-width: 0; height: 2rem;
+        padding: 0 0.5rem 0 0.25rem; margin-left: -0.25rem;
+        border: 1px solid transparent; border-radius: 999px; background: transparent; color: var(--#{$p}-fg);
+        font-size: 0.8125rem; font-weight: 600; cursor: pointer;
+        transition: background-color 150ms var(--#{$p}-ease), border-color 150ms var(--#{$p}-ease);
+        &:hover { background: var(--#{$p}-card); border-color: var(--#{$p}-border); .#{$p}-userpick-caret { color: var(--#{$p}-primary); } }
+        &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--#{$p}-ring); }
+        &.#{$p}-userpick--ro { cursor: default; &:hover { background: transparent; border-color: transparent; } }
+        &.#{$p}-userpick--empty .#{$p}-userpick-name { color: var(--#{$p}-primary); font-weight: 500; }
+        &:disabled { opacity: 1; }
+        .#{$p}-userpick-avatar { width: 1.5rem; height: 1.5rem; flex-shrink: 0; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2px var(--#{$p}-card); }
+        .#{$p}-userpick-avatar--empty {
+            display: grid; place-items: center; font-size: 0.6875rem; color: var(--#{$p}-primary);
+            border: 1px dashed color-mix(in srgb, var(--#{$p}-primary) 55%, var(--#{$p}-border)); box-shadow: none; background: var(--#{$p}-card);
+        }
+        .#{$p}-userpick-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .#{$p}-userpick-caret { color: var(--#{$p}-subtle-fg); font-size: 0.875rem; }
+    }
+    .#{$p}-userpick-pop {
+        display: grid; gap: 0.25rem; width: 16rem; padding: 0.5rem;
+        .#{$p}-picker-menu { position: static; margin-top: 0.25rem; box-shadow: none; border: 0; padding: 0; max-height: 14rem; }
+        .#{$p}-userpick-clear {
+            display: flex; align-items: center; gap: 0.375rem; padding: 0.375rem 0.5rem; border: 0; border-top: 1px solid var(--#{$p}-border);
+            background: none; font-size: 0.8125rem; color: var(--#{$p}-danger); text-align: left; cursor: pointer; border-radius: 0 0 var(--#{$p}-radius-sm) var(--#{$p}-radius-sm);
+            &:hover { background: var(--#{$p}-danger-soft); }
+        }
+    }
+
+    // read-only form sections (rights from Odoo: e.g. salespeople can't edit teams)
+    .o_#{$p} .#{$p}-fieldset { border: 0; margin: 0; min-width: 0; &:disabled { opacity: 0.75; } }
+}

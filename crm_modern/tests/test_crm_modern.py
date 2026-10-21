@@ -164,7 +164,8 @@ class TestCrmModern(TransactionCase):
         self.assertFalse(self.env['ir.module.module'].search([('name', '=', 'crm_modern')]).application)
         self.env['res.users']._crm_modern_set_default_home_action()
         admin = self.env.ref('base.user_admin')
-        self.assertEqual(admin.action_id, self.env.ref('crm_modern.action_home'))
+        # action_id is an ir.actions.actions record: compare ids, not model classes
+        self.assertEqual(admin.action_id.id, self.env.ref('crm_modern.action_home').id)
 
     def test_rights_follow_odoo_rules(self):
         """A salesperson limited to "own documents" only sees and edits their own opportunities,

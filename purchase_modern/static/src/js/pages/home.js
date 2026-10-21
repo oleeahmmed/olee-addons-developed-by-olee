@@ -6,6 +6,7 @@ import { registerModernHome } from "@modern_theme/js/modern_home";
 registerModernHome("purchase_modern.home", {
     title: _t("Purchase"),
     subtitle: _t("Jump to your everyday purchasing screens."),
+    create: { resModel: "purchase.order", label: _t("New RFQ") },
     cards: [
         { action: "purchase_modern.action_rfqs", icon: "fa-file-text-o", label: _t("RFQs"), hint: _t("Request quotes") },
         { action: "purchase_modern.action_orders", icon: "fa-shopping-cart", label: _t("Purchase Orders"), hint: _t("Confirmed POs") },

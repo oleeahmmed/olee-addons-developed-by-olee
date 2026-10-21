@@ -1,0 +1,10 @@
+// Sales Modern: pages, lists, dashboards and controls come from Modern Theme's shared
+// app kit (modern_theme/static/src/scss/kit/). This app only passes its prefix,
+// so .o_ss pages and --ss-* tokens get the same look as every other modern app.
+@include mt-app-tokens(ss);
+@include mt-app-pages(ss);
+@include mt-app-list(ss);
+@include mt-app-controls(ss);
+@include mt-app-helpers(ss);
+@include mt-app-print(ss);
+@include mt-app-dash(ss);

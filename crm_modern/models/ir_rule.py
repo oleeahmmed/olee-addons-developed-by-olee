@@ -4,6 +4,14 @@ from odoo import api, models
 class IrRule(models.Model):
     _inherit = "ir.rule"
 
+    def _register_hook(self):
+        """Sales may be installed after CRM Modern: add the team rules then too."""
+        super()._register_hook()
+        try:
+            self._crm_modern_ensure_sale_team_rules()
+        except Exception:  # noqa: BLE001 - never block the registry for an optional rule
+            pass
+
     @api.model
     def _crm_modern_ensure_sale_team_rules(self):
         """Create Team Documents rules on sale.order when Sales is installed."""
@@ -42,7 +50,9 @@ class IrRule(models.Model):
                 "groups": [(6, 0, [team_group.id])],
             }
             if existing:
-                existing.write(vals)
+                # Only write when something changed (this also runs at every server start).
+                if existing.domain_force != domain or existing.groups != team_group or existing.model_id != model:
+                    existing.sudo().write(vals)
             else:
                 rule = Rule.create(vals)
                 self.env["ir.model.data"].sudo().create({

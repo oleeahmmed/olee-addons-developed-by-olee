@@ -116,7 +116,8 @@ registry.category("actions").add("modern_print_preview", ModernPrintPreview, { f
 registry.category("ir.actions.report handlers").add(
     "modern_print_preview",
     async (action, options, env) => {
-        if (action.report_type !== "qweb-pdf") {
+        // Only inside the modern apps: Accounting, Inventory… keep Odoo's own download.
+        if (action.report_type !== "qweb-pdf" || !document.documentElement.classList.contains("mt-app-modern")) {
             return false;
         }
         const context = action.context || {};

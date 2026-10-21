@@ -1,9 +1,1 @@
-// Sales Modern specific styles: dashboard bits. Form pages are styled by modern_theme (form.scss).
-
-.o_ss {
-    .ss-text-danger { color: var(--ss-danger); font-weight: 500; }
-    .ss-bar-link { cursor: pointer; border-radius: var(--ss-radius-sm);
-        &:hover .ss-bar-meta span:first-child { color: var(--ss-primary); }
-        &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--ss-ring); }
-    }
-}
+// Not loaded any more: replaced by app.scss (Modern Theme app kit). Safe to delete.

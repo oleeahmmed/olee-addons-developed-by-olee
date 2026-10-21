@@ -93,6 +93,11 @@
                     <h1 class="od-title"><t t-esc="greeting"/>, <t t-esc="firstName"/></h1>
                     <p class="od-subtitle">Follow-ups that slipped, deals still open, and leads that just arrived.</p>
                 </div>
+                <div t-if="state.canCreate" class="od-head-actions">
+                    <button type="button" class="od-btn od-btn--primary" data-hotkey="c" t-on-click="newOpportunity">
+                        <i class="fa fa-plus" aria-hidden="true"/> New opportunity
+                    </button>
+                </div>
             </header>
 
             <div t-if="state.loading" class="cm-skeleton" style="height:16rem"/>
@@ -108,7 +113,7 @@
                     </button>
                     <button t-if="state.useLeads" type="button" class="cm-home-kpi" t-on-click="() => this.open('crm_modern.action_leads')">
                         <strong t-esc="state.leadCount"/>
-                        <span>New leads</span>
+                        <span>New leads (30 days)</span>
                     </button>
                 </section>
 

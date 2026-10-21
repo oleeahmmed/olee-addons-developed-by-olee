@@ -127,11 +127,9 @@ body.cm-drawer-open,
 body:has(.modal-content.o_or_sheet),
 body:has(.modal-content.o_cm_drawer),
 body:has(.modal-content.or-sheet) {
-    .o_notification_manager,
-    .o_notification_manager .o_notification {
-        display: none !important;
-        visibility: hidden !important;
-        pointer-events: none !important;
+    // Validation errors must stay visible: keep toasts above the drawer.
+    .o_notification_manager {
+        z-index: 2200;
     }
 
     .modal-backdrop {
@@ -146,13 +144,23 @@ body:has(.modal-content.or-sheet) {
 .o-overlay-item:has(#{$or-sheet}) {
     z-index: 2100;
 }
+// Popovers, autocompletes and dropdowns opened from inside the drawer.
+body:has(.modal-content.o_or_sheet, .modal-content.o_cm_drawer, .modal-content.or-sheet) {
+    .o-overlay-item:not(:has(#{$or-sheet})),
+    .o-dropdown--menu,
+    .o-autocomplete--dropdown-menu,
+    .o_popover,
+    .popover {
+        z-index: 2150 !important;
+    }
+}
 
 .modal:has(#{$or-sheet}) {
     padding: 0 !important;
     margin: 0 !important;
-    --bs-modal-margin: 0;
-    --bs-modal-padding: 0;
-    --bs-modal-width: var(--or-sheet-width);
+    --modal-margin: 0;
+    --modal-padding: 0;
+    --modal-width: var(--or-sheet-width);
     background: var(--or-overlay);
     backdrop-filter: blur(var(--or-overlay-blur));
     -webkit-backdrop-filter: blur(var(--or-overlay-blur));
@@ -303,7 +311,7 @@ body:has(.modal-content.or-sheet) {
     border: 0;
     border-radius: 0.55rem;
     background: transparent;
-    color: var(--or-close-fg, #475569);
+    color: var(--or-close-fg);
     font-size: 1rem;
     line-height: 1;
     cursor: pointer;
@@ -383,7 +391,7 @@ body:has(.modal-content.or-sheet) {
     border: 0;
     border-radius: 0.5rem;
     background: transparent;
-    color: var(--or-close-fg, #475569);
+    color: var(--or-close-fg);
     font-size: 1.5rem;
     font-weight: 400;
     line-height: 1;
@@ -962,16 +970,11 @@ select.or-select-card {
     &:focus-visible {
         outline: none;
         --or-run-fill-bg: var(--or-input-bg);
-        animation: or-select-pop 220ms var(--or-ease), or-border-run var(--or-run-duration, 2.35s) linear infinite;
         @include or-running-border-input;
+        animation: or-select-pop 220ms var(--or-ease), or-border-run var(--or-run-duration, 2.35s) linear infinite;
     }
 }
 
-.o_web_client .o_kanban_group:not(.o_column_folded):hover,
-.o_web_client .o_kanban_group:not(.o_column_folded).o_kanban_hover {
-    border-color: color-mix(in srgb, var(--or-sheet-fg) 14%, var(--mt-border)) !important;
-    @include or-running-border;
-}
 
 @media (prefers-reduced-motion: reduce) {
     .modal-content.o_or_sheet,

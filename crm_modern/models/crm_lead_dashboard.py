@@ -6,6 +6,8 @@ records too (active_test=False), open figures only active ones.
 """
 from datetime import datetime, time, timedelta
 
+import pytz
+
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
@@ -49,6 +51,13 @@ class CrmLead(models.Model):
     def crm_modern_owner_dashboard(self, period='month', team_id=False):
         today = fields.Date.context_today(self)
         start, end, prev_start, prev_end = period_bounds(today, period)
+        # Period edges are local midnights; the database stores UTC datetimes.
+        tz = pytz.timezone(self.env.context.get('tz') or self.env.user.tz or 'UTC')
+
+        def as_dt(day):
+            local = tz.localize(datetime.combine(day, time.min))
+            return local.astimezone(pytz.utc).replace(tzinfo=None)
+
         Lead = self.with_context(active_test=False)
         team = [('team_id', '=', int(team_id))] if team_id else []
         opp = [('type', '=', 'opportunity')] + team
@@ -184,11 +193,12 @@ class CrmLead(models.Model):
         team_open = {t: (c, a or 0.0) for t, c, a in Lead._read_group(
             open_domain + [('team_id', '!=', False)], ['team_id'], ['__count', 'expected_revenue:sum'])}
         teams = []
-        for t in self.env['crm.team'].search([('id', '=', int(team_id))] if team_id else [], limit=8):
+        for t in self.env['crm.team'].search([('id', '=', int(team_id))] if team_id else []):
             oc, oa = team_open.get(t, (0, 0.0))
             teams.append({'id': t.id, 'name': t.name, 'leader': t.user_id.name or '', 'leader_id': t.user_id.id,
                           'members': len(t.member_ids), 'won': team_won.get(t, 0.0), 'open_count': oc, 'pipeline': oa})
         teams.sort(key=lambda r: (r['won'], r['pipeline']), reverse=True)
+        teams = teams[:8]  # best 8 teams, not 8 arbitrary ones
 
         # ---------- needs attention ----------
         stale_before = fields.Datetime.now() - timedelta(days=30)

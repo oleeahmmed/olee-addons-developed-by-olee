@@ -9,7 +9,11 @@ class ResUsers(models.Model):
     _inherit = "res.users"
 
     def _modern_theme_login_action(self):
-        return self.env.ref("crm_modern.action_home", raise_if_not_found=False)
+        """CRM Home after login, for CRM users only (others keep their apps' page)."""
+        action = self.env.ref("crm_modern.action_home", raise_if_not_found=False)
+        if action and len(self) == 1 and self.has_group("sales_team.group_sale_salesman"):
+            return action
+        return super()._modern_theme_login_action()
 
     @api.model
     def _crm_modern_set_default_home_action(self):

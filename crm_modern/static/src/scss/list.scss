@@ -1,19 +1,12 @@
-// CRM-only list extras. Shared list/kanban chrome lives in modern_theme workspace.scss.
+// CRM-only list extras. Shared list chrome lives in modern_theme workspace.scss, the
+// kanban board (lanes, cards, drag states) in modern_theme kanban.scss.
 
 // ============================================================================
 // Sales team cards (view crm_modern.crm_team_kanban_modern)
 // ============================================================================
 .o_cm .cm-native .o_cm_team_kanban {
     &.o_kanban_renderer { --KanbanRecord-width: 22rem; }
-    .o_kanban_record {
-        padding: 1rem 1rem 0.5rem;
-        border: 1px solid var(--cm-border); border-radius: calc(var(--cm-radius) + 2px);
-        background: var(--cm-card); box-shadow: var(--cm-shadow-sm);
-        transition: border-color 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease);
-        &:hover { border-color: color-mix(in srgb, var(--or-accent, var(--cm-primary)) 40%, var(--cm-border)); box-shadow: var(--cm-shadow-md); }
-    }
-
-    .o_kanban_record.o_kanban_ghost { border: 0; box-shadow: none; background: transparent; padding: 0; min-height: 0; }
+    // card shell (border, radius, shadow, hover) comes from modern_theme kanban.scss
 
     .cm-tc-head { display: flex; align-items: center; gap: 0.75rem; padding-right: 1.5rem; }
     .cm-tc-logo {
@@ -121,12 +114,6 @@
 .o_form_view .cm-cc-form-actions { padding: 0 1.5rem 1rem; }
 
 .o_cm .cm-native .o_cm_campaign_kanban {
-    .o_kanban_record {
-        padding: 0.875rem 0.875rem 0.625rem;
-        border: 1px solid var(--cm-border); border-radius: calc(var(--cm-radius) + 2px);
-        background: var(--cm-card); box-shadow: var(--cm-shadow-sm);
-        &:hover { border-color: color-mix(in srgb, var(--or-accent, var(--cm-primary)) 40%, var(--cm-border)); }
-    }
     .cm-cc-head { display: flex; align-items: flex-start; gap: 0.75rem; padding-right: 1.25rem; }
     .cm-cc-logo {
         display: grid; place-items: center; flex-shrink: 0; width: 2.25rem; height: 2.25rem; border-radius: 0.75rem;
@@ -151,5 +138,5 @@
         }
         div.cm-cc-stat { cursor: default; &:hover { background: color-mix(in srgb, var(--cm-muted) 55%, transparent); color: inherit; } }
     }
-    .cm-cc-foot { margin-top: 0.625rem; padding-top: 0.5rem; border-top: 1px dashed var(--cm-border); }
+    .cm-cc-foot { margin-top: 0.625rem; padding-top: 0.5rem; border-top: 1px solid color-mix(in srgb, var(--cm-border) 75%, transparent); }
 }

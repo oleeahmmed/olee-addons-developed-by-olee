@@ -1,0 +1,459 @@
+// Modern Theme: Odoo views (control panel, search, list, kanban, form, chatter,
+// pivot, graph, calendar, activity, settings). Every app, light and dark.
+
+$mt: 'html[data-mt-theme]';
+
+// ---------------------------------------------------------------------------
+// Control panel + search
+// ---------------------------------------------------------------------------
+#{$mt} .o_control_panel {
+    background: var(--mt-card);
+    border-bottom: 1px solid var(--mt-border);
+    padding-top: var(--mt-cp-py);
+    padding-bottom: var(--mt-cp-py);
+    gap: var(--mt-gap);
+}
+#{$mt} .o_control_panel_breadcrumbs {
+    .breadcrumb-item, .breadcrumb-item a { color: var(--mt-muted-foreground); font-weight: 500; }
+    .breadcrumb-item a:hover { color: var(--mt-foreground); }
+    .o_last_breadcrumb_item, .o_last_breadcrumb_item span {
+        color: var(--mt-foreground);
+        font-weight: 650;
+        letter-spacing: -0.01em;
+    }
+    .breadcrumb-item + .breadcrumb-item::before { color: var(--mt-placeholder); }
+}
+// Odoo 19: .o_cp_searchview (input-group) = .o_searchview (form-control) + toggler button.
+// The group is drawn as ONE control; its parts are borderless.
+#{$mt} .o_cp_searchview {
+    min-height: var(--mt-control-h);
+    border: 1px solid var(--mt-input);
+    border-radius: var(--mt-radius-control);
+    background: var(--mt-card);
+    overflow: hidden;
+    transition: border-color var(--mt-duration) var(--mt-ease), box-shadow var(--mt-duration) var(--mt-ease);
+    &:focus-within {
+        border-color: var(--mt-primary);
+        box-shadow: 0 0 0 3px var(--mt-ring);
+    }
+    .o_searchview {
+        min-height: 0;
+        align-items: center;
+        border: 0 !important;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none !important;
+    }
+    .o_searchview_dropdown_toggler {
+        border: 0;
+        border-inline-start: 1px solid var(--mt-border);
+        border-radius: 0;
+        background: transparent;
+        color: var(--mt-muted-foreground);
+        &:hover { background: var(--mt-hover); color: var(--mt-foreground); }
+    }
+    .o_searchview_icon { color: var(--mt-muted-foreground); }
+    .o_searchview_input {
+        background: transparent;
+        color: var(--mt-foreground);
+        box-shadow: none;
+        outline: none;
+    }
+}
+#{$mt} .o_searchview_facet {
+    border: 0;
+    border-radius: var(--mt-radius-badge);
+    background: var(--mt-muted);
+    color: var(--mt-foreground);
+    overflow: hidden;
+    .o_searchview_facet_label {
+        background: var(--mt-primary-soft) !important;
+        color: var(--mt-primary-text) !important;
+        border-radius: 0;
+    }
+    .o_facet_values { color: var(--mt-foreground); }
+    .o_facet_remove { color: var(--mt-muted-foreground); &:hover { color: var(--mt-destructive); } }
+}
+#{$mt} .o_search_bar_menu, #{$mt} .o-dropdown--menu.o_search_bar_menu {
+    border-radius: var(--mt-radius-lg);
+    .o_dropdown_container { border-color: var(--mt-border) !important; }
+    .o_menu_item.selected { color: var(--mt-primary-text); }
+}
+
+// Search panel (left filter column)
+#{$mt} .o_search_panel {
+    background: var(--mt-card);
+    border-inline-end: 1px solid var(--mt-border);
+    .o_search_panel_section_header { color: var(--mt-muted-foreground); }
+    .list-group-item, .o_search_panel_category_value header, .o_search_panel_filter_value {
+        border-radius: var(--mt-radius-sm);
+        background: transparent;
+    }
+    .o_search_panel_category_value header:hover,
+    .o_search_panel_filter_value:hover { background: var(--mt-hover); }
+    .active > header, header.active {
+        background: var(--mt-primary-soft) !important;
+        color: var(--mt-primary-text);
+        font-weight: 600;
+    }
+    .o_search_panel_counter { color: var(--mt-muted-foreground); }
+}
+
+// ---------------------------------------------------------------------------
+// List view
+// ---------------------------------------------------------------------------
+#{$mt} .o_list_renderer {
+    --ListRenderer-thead-bg-color: color-mix(in srgb, var(--mt-muted) 45%, var(--mt-card));
+    --ListRenderer-tfoot-bg-color: color-mix(in srgb, var(--mt-muted) 45%, var(--mt-card));
+    background: var(--mt-card);
+    .o_list_table {
+        --table-bg: var(--mt-card);
+        --table-border-color: var(--mt-border);
+        color: var(--mt-foreground);
+        thead th {
+            color: var(--mt-muted-foreground);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            border-bottom: 1px solid var(--mt-border) !important;
+            &:hover { color: var(--mt-foreground); }
+        }
+        > tbody > tr > td, > tbody > tr > th {
+            padding-top: var(--mt-row-py);
+            padding-bottom: var(--mt-row-py);
+            border-color: var(--mt-border);
+        }
+        .o_data_row:hover > td { background-color: var(--mt-hover); }
+        .o_data_row.o_data_row_selected > td,
+        .o_data_row.table-info > td {
+            background-color: var(--mt-selected) !important;
+            --table-bg-state: var(--mt-selected);
+        }
+        .o_group_header {
+            > th, > td {
+                background: color-mix(in srgb, var(--mt-muted) 55%, var(--mt-card)) !important;
+                color: var(--mt-foreground);
+                font-weight: 600;
+            }
+            &:hover > th, &:hover > td { background: var(--mt-muted) !important; }
+        }
+        tfoot { color: var(--mt-foreground); font-weight: 600; }
+    }
+    .o_field_badge, .badge { font-weight: 500; }
+}
+// List styles (option)
+html[data-mt-list-style="striped"] .o_list_renderer .o_list_table > tbody > tr.o_data_row:nth-child(even) > td {
+    background-color: color-mix(in srgb, var(--mt-muted) 45%, var(--mt-card));
+}
+html[data-mt-list-style="bordered"] .o_list_renderer .o_list_table {
+    > thead > tr > th:not(:last-child),
+    > tbody > tr > td:not(:last-child) {
+        border-inline-end: 1px solid var(--mt-border);
+    }
+}
+html[data-mt-list-style="clean"] .o_list_renderer .o_list_table > tbody > tr.o_data_row > td {
+    border-bottom-color: color-mix(in srgb, var(--mt-border) 70%, transparent);
+}
+
+// ---------------------------------------------------------------------------
+// Kanban: see kanban.scss (one board design for every app).
+// ---------------------------------------------------------------------------
+#{$mt} .progress {
+    --progress-bg: var(--mt-muted);
+    --progress-bar-bg: var(--mt-primary);
+    --progress-border-radius: 999px;
+}
+
+// ---------------------------------------------------------------------------
+// Form view
+// ---------------------------------------------------------------------------
+#{$mt} .o_form_view {
+    background: var(--mt-content-bg);
+    color: var(--mt-foreground);
+    .o_form_sheet_bg { background: transparent; }
+    .o_form_sheet {
+        background: var(--mt-card);
+        border: 1px solid var(--mt-border) !important;
+        border-radius: var(--mt-radius-card);
+        box-shadow: var(--mt-card-shadow);
+    }
+    .o_form_statusbar {
+        background: var(--mt-card);
+        border-bottom: 1px solid var(--mt-border);
+    }
+    .oe_title h1 .o_input, .oe_title h1 { font-weight: 650; letter-spacing: -0.02em; }
+    .o_form_label { color: var(--mt-foreground); font-weight: 500; }
+    .o_inner_group > .o_wrap_field, .o_inner_group .o_row { gap: var(--mt-field-gap); }
+    .o_horizontal_separator, .o_separator, .o_form_view .o_group_col_12 > .o_horizontal_separator {
+        color: var(--mt-muted-foreground);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        border-bottom: 1px solid var(--mt-border);
+    }
+    .oe_button_box .oe_stat_button,
+    .o-form-buttonbox .oe_stat_button {
+        color: var(--mt-foreground);
+        border-color: var(--mt-border) !important;
+        background: var(--mt-card);
+        &:hover { background: var(--mt-hover); }
+        .o_stat_value { color: var(--mt-foreground); font-weight: 650; }
+        .o_stat_text { color: var(--mt-muted-foreground); }
+        .fa, .oi { color: var(--mt-primary-text); }
+    }
+    .o_field_widget .o_input,
+    .o_field_widget textarea {
+        border-color: var(--mt-input);
+    }
+    .o_notebook .nav-tabs {
+        border-bottom: 1px solid var(--mt-border);
+    }
+    .o_notebook .tab-content { border: 0; }
+    .ribbon span { box-shadow: var(--mt-shadow-sm); }
+}
+// Status bar ("New › Qualified › Won")
+#{$mt} .o_field_statusbar > .o_statusbar_status {
+    --o-statusbar-border: var(--mt-card);
+    --o-statusbar-radius: var(--mt-radius-sm);
+    --o-statusbar-background-active: var(--mt-primary-soft);
+    --o-statusbar-border-active: var(--mt-primary);
+    --o-statusbar-background-hover: var(--mt-hover);
+    > .o_arrow_button {
+        --btn-bg: var(--mt-muted);
+        --btn-color: var(--mt-muted-foreground);
+        --btn-hover-bg: color-mix(in srgb, var(--mt-muted) 70%, var(--mt-foreground) 8%);
+        --btn-hover-color: var(--mt-foreground);
+        font-weight: 500;
+        &.o_arrow_button_current, &.active, &[aria-checked="true"] {
+            --btn-bg: var(--mt-primary);
+            --btn-color: var(--mt-primary-foreground);
+            --btn-hover-bg: var(--mt-primary);
+            --btn-hover-color: var(--mt-primary-foreground);
+            --btn-disabled-bg: var(--mt-primary);
+            --btn-disabled-color: var(--mt-primary-foreground);
+            opacity: 1;
+            font-weight: 600;
+        }
+    }
+}
+#{$mt} .o_statusbar_buttons .btn-secondary { --btn-bg: var(--mt-card); }
+
+// The page's one "+ New" button (list, kanban and form): the same "+" everywhere,
+// in the same place (left of the page title). The sidebar no longer repeats it.
+#{$mt} .o_control_panel_main_buttons :is(.o_list_button_add, .o-kanban-button-new, .o_form_button_create) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+    &::before {
+        content: "\f067";
+        font-family: FontAwesome;
+        font-size: 0.6875rem;
+        line-height: 1;
+    }
+}
+
+// Form style option: "Card sections" turns each group/notebook into its own card.
+html[data-mt-form-style="cards"] .o_form_view:not(.o-settings-form-view):not(.o_base_settings) .o_form_sheet_bg {
+    .o_form_sheet {
+        background: transparent;
+        border: 0 !important;
+        box-shadow: none;
+        padding-inline: 0;
+    }
+    .o_form_sheet > .oe_title,
+    .o_form_sheet > .o_group,
+    .o_form_sheet > .o_notebook,
+    .o_form_sheet > .oe_button_box + .oe_title {
+        background: var(--mt-card);
+        border: 1px solid var(--mt-border);
+        border-radius: var(--mt-radius-card);
+        box-shadow: var(--mt-card-shadow);
+        padding: var(--mt-card-pad) calc(var(--mt-card-pad) * 1.25);
+        margin-bottom: var(--mt-gap);
+    }
+    .o_form_sheet > .o_notebook > .tab-content { padding-top: var(--mt-gap); }
+}
+
+// ---------------------------------------------------------------------------
+// Chatter
+// ---------------------------------------------------------------------------
+#{$mt} .o-mail-Form-chatter, #{$mt} .o-mail-ChatterContainer {
+    background: var(--mt-content-bg);
+}
+#{$mt} .o-mail-Chatter {
+    background: transparent;
+    color: var(--mt-foreground);
+    .o-mail-Chatter-topbar .btn { border-radius: var(--mt-radius-btn); }
+}
+#{$mt} .o-mail-Message {
+    --o-message-bubble-bg: var(--mt-card);
+    --o-message-bubble-border-color: var(--mt-border-base);
+    border-radius: var(--mt-radius);
+    .o-mail-Message-author { color: var(--mt-foreground); font-weight: 600; }
+    .o-mail-Message-date { color: var(--mt-muted-foreground); }
+    &:hover { background-color: var(--mt-hover); }
+    .o-mail-Message-bubble { border-radius: var(--mt-radius-lg); }
+}
+#{$mt} .o-mail-Composer-input, #{$mt} .o-mail-Composer-bg {
+    background: var(--mt-card) !important;
+    border-color: var(--mt-input) !important;
+    border-radius: var(--mt-radius-field);
+    color: var(--mt-foreground);
+}
+#{$mt} .o-mail-Thread-newMessageLine { border-color: var(--mt-destructive); }
+#{$mt} .o-mail-Activity { border-radius: var(--mt-radius); }
+
+// ---------------------------------------------------------------------------
+// Pivot / graph / calendar / activity / other views
+// ---------------------------------------------------------------------------
+#{$mt} .o_pivot {
+    background: var(--mt-card);
+    table {
+        --table-bg: var(--mt-card);
+        color: var(--mt-foreground);
+        border-color: var(--mt-border);
+    }
+    th {
+        background: color-mix(in srgb, var(--mt-muted) 50%, var(--mt-card)) !important;
+        color: var(--mt-foreground);
+        font-weight: 500;
+        border-color: var(--mt-border) !important;
+    }
+    td { border-color: var(--mt-border) !important; }
+    .o_pivot_header_cell_opened, .o_pivot_header_cell_closed { cursor: pointer; &:hover { background: var(--mt-muted) !important; } }
+    .o_pivot_measure_row { color: var(--mt-muted-foreground); }
+    .o_pivot_cell_value:hover { background: var(--mt-hover); }
+}
+#{$mt} .o_graph_renderer, #{$mt} .o_graph_canvas_container {
+    background: var(--mt-card);
+    color: var(--mt-foreground);
+}
+#{$mt} .o_calendar_renderer, #{$mt} .o_calendar_container {
+    --fc-page-bg-color: var(--mt-card);
+    --fc-neutral-bg-color: var(--mt-muted);
+    --fc-border-color: var(--mt-border-base);
+    --fc-today-bg-color: var(--mt-primary-soft);
+    background: var(--mt-card);
+    color: var(--mt-foreground);
+    .fc-col-header-cell { color: var(--mt-muted-foreground); font-weight: 600; }
+    .fc-day-today .fc-daygrid-day-number, .o_calendar_widget .fc-day-today .fc-col-header-cell-cushion { color: var(--mt-primary-text); }
+}
+#{$mt} .o_calendar_sidepanel, #{$mt} .o_calendar_sidebar_container {
+    background: var(--mt-card);
+    border-color: var(--mt-border) !important;
+}
+#{$mt} .o_activity_view {
+    background: var(--mt-card);
+    table { --table-bg: var(--mt-card); color: var(--mt-foreground); }
+    th, td { border-color: var(--mt-border) !important; }
+}
+
+// ---------------------------------------------------------------------------
+// Settings app (Settings > …)
+// ---------------------------------------------------------------------------
+#{$mt} .o-settings-form-view, #{$mt} .o_base_settings {
+    background: var(--mt-content-bg);
+    .settings_tab {
+        background: var(--mt-card);
+        border-inline-end: 1px solid var(--mt-border);
+        .tab {
+            border-radius: var(--mt-radius-sm);
+            margin: 1px 0.5rem;
+            color: var(--mt-foreground);
+            &:hover { background: var(--mt-hover); }
+            &.selected { background: var(--mt-sidebar-active-bg); color: var(--mt-sidebar-active-fg); font-weight: 600; box-shadow: none; }
+        }
+    }
+    .settings { background: var(--mt-content-bg); }
+    .app_settings_block {
+        > h2, h2 {
+            background: transparent;
+            color: var(--mt-foreground);
+            font-size: 1rem;
+            font-weight: 650;
+            border: 0;
+        }
+    }
+    .o_settings_container {
+        margin-inline: 0;
+        padding: 0.5rem 0.25rem;
+        background: var(--mt-card);
+        border: 1px solid var(--mt-border);
+        border-radius: var(--mt-radius-card);
+        box-shadow: var(--mt-card-shadow);
+    }
+    .o_setting_box {
+        .o_form_label { color: var(--mt-foreground); font-weight: 600; }
+        .text-muted { color: var(--mt-muted-foreground) !important; }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Responsive: phones and tablets
+// ---------------------------------------------------------------------------
+@media (max-width: 767.98px) {
+    #{$mt} .o_form_view .o_form_sheet {
+        border-radius: 0;
+        border-inline: 0 !important;
+    }
+    #{$mt} .o_control_panel { padding-inline: 0.75rem; }
+}
+
+// ---------------------------------------------------------------------------
+// Surfaces Odoo compiles with fixed colours (Community has no complete dark
+// variables). Found with an automated scan of every view in dark mode.
+// ---------------------------------------------------------------------------
+#{$mt} {
+    .breadcrumb { --breadcrumb-bg: transparent; background-color: transparent; }
+    .nav-tabs { background-color: transparent; }
+    .o-mail-Chatter-top { background-color: var(--mt-content-bg); }
+    .o_list_renderer .o_list_table thead th,
+    .o_list_renderer .o_list_table thead tr { background-color: color-mix(in srgb, var(--mt-muted) 45%, var(--mt-card)); }
+    .fc-scroller-harness, .fc-scroller { background-color: transparent; }
+    .fc-scrollgrid-section-body .fc-scroller-harness { background-color: transparent !important; }
+    .o_activity_view .o_activity_view_table_footer { background-color: color-mix(in srgb, var(--mt-muted) 45%, var(--mt-card)); }
+    .o-mail-discussSidebarBgColor { background-color: var(--mt-card) !important; }
+    .o-mail-DiscussContent-core { background-color: var(--mt-content-bg); }
+    .o-mail-DiscussContent-header { background-color: var(--mt-card); }
+    .o-mail-DiscussSearch-inputContainer { background-color: var(--mt-card) !important; border-color: var(--mt-input) !important; }
+    .o-mail-DiscussSearch-inputContainer input { background-color: transparent !important; color: var(--mt-foreground); }
+}
+// Discuss paints its top bar and sidebar with its own surface variable.
+html[data-mt-theme] .o_web_client.o_mail_discuss {
+    --mail-Discuss-surface-dark: var(--mt-card);
+    --NavBar-entry-backgroundColor: transparent;
+    .o_main_navbar { background-color: var(--mt-topbar-bg); }
+}
+
+// Settings app: Odoo sets its colours as variables on the form renderer itself.
+html[data-mt-theme] .o_base_settings_view .o_form_renderer {
+    --settings__tab-bg: var(--mt-card);
+    --settings__tab-bg--active: var(--mt-sidebar-active-bg);
+    --settings__tab-color: var(--mt-foreground);
+    --settings__title-bg: transparent;
+    .o_setting_container .settings { background-color: var(--mt-content-bg); }
+    .o_setting_container .settings_tab .tab {
+        &:hover, &.selected { color: var(--mt-foreground); }
+        &.selected { color: var(--mt-sidebar-active-fg); box-shadow: inset 3px 0 0 var(--mt-sidebar-indicator); }
+    }
+}
+
+// Control panel: the buttons and the page title never get squeezed into one
+// letter ("F" for Forecast) or two lines; the search bar gives way instead
+// (its filters wrap inside it).
+#{$mt} .o_control_panel .o_control_panel_main {
+    @media (min-width: 992px) {
+        .o_control_panel_breadcrumbs { flex: 0 1 auto !important; min-width: auto !important; max-width: 50%; }
+        .o_control_panel_actions { flex: 1 1 auto !important; min-width: 16rem !important; }
+        .o_control_panel_navigation { flex: 0 0 auto !important; }
+    }
+    .o_control_panel_main_buttons .btn { white-space: nowrap; }
+    .o_breadcrumb .o_last_breadcrumb_item {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 22rem;
+    }
+}

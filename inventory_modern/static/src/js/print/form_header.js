@@ -1,7 +1,7 @@
 /** @odoo-module */
 // Form header actions (shared by CRM Modern and Sales Modern), inside their apps only:
-//   * always in view: Confirm / Post (Odoo shows them only while it is a quotation / draft),
-//     Print, Preview and Cancel;
+//   * always in view: the action Odoo highlights as the next step (Send by Email,
+//     Create Invoice, Confirm once sent…), then Confirm / Post, Print, Preview and Cancel;
 //   * every other button Odoo puts in the header goes to a "More" menu, in Odoo's order;
 //   * quotations, orders and invoices always get a Print button (Odoo hides it on confirmed
 //     orders and draft invoices).
@@ -33,7 +33,8 @@ const PRINT_MODELS_BY_NAME = {
     "account.move": "account.account_invoices",
     "stock.picking": "stock.action_report_delivery",
 };
-const APP_SELECTOR = ".o_cm_sidebar, .o_ss_sidebar, .o_im_sidebar";
+// Modern Theme sets html.mt-app-modern while a modern app (CRM, Sales…) is open.
+const isModernApp = () => document.documentElement.classList.contains("mt-app-modern");
 
 function buttonName(key) {
     return (key || "").split("|")[1] || "";
@@ -50,7 +51,10 @@ if (!StatusBarButtons.__modernHeader) {
             for (const slot of buttons ? [...buttons.children] : []) {
                 const button = slot.tagName === "ViewButton" ? slot : slot.getElementsByTagName("ViewButton")[0];
                 let key = "";
+                let primary = false;
                 if (button) {
+                    // ViewButton's className is an expression string, e.g. "'btn-primary'".
+                    primary = /\b(btn-primary|oe_highlight)\b/.test(button.getAttribute("className") || "");
                     try {
                         const click = JSON.parse(button.getAttribute("clickParams") || "{}");
                         const attrs = JSON.parse(button.getAttribute("attrs") || "{}");
@@ -60,6 +64,7 @@ if (!StatusBarButtons.__modernHeader) {
                     }
                 }
                 slot.setAttribute("buttonKey", JSON.stringify(key));
+                slot.setAttribute("buttonPrimary", primary ? "true" : "false");
             }
             return statusBar;
         },
@@ -72,14 +77,15 @@ if (!StatusBarButtons.__modernHeader) {
             this.actionService = useService("action");
         },
         get modernHeader() {
-            return !this.env.isSmall && !!document.querySelector(APP_SELECTOR);
+            return !this.env.isSmall && isModernApp();
         },
         get modernGroups() {
             const main = [];
             const more = [];
             for (const name of this.visibleSlotNames) {
-                const key = this.props.slots[name].buttonKey;
-                (MAIN_BUTTONS.has(buttonName(key)) ? main : more).push(name);
+                const slot = this.props.slots[name];
+                const keep = slot.buttonPrimary || MAIN_BUTTONS.has(buttonName(slot.buttonKey));
+                (keep ? main : more).push(name);
             }
             return { main, more };
         },

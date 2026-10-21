@@ -1,85 +1,60 @@
-// Modern Theme — brings the "modern" UI addons (crm_modern, inventory_modern,
-// purchase_modern, sales_modern) in line with the chosen theme preset and
-// light/dark mode.
+// Modern Theme: brings the modern app addons (crm_modern, sales_modern,
+// inventory_modern, purchase_modern, mrp_modern) in line with the theme.
 //
-// Those addons ship their own small design-token systems (--cm-*, --im-*,
-// --ss-*, --mp-*) with a fixed accent colour and fixed neutrals. This file
-// re-points every one of those tokens at the Modern Theme tokens, so changing
-// the preset in Settings (or switching to dark mode) restyles the addons'
-// sidebars, top bars, dashboards, lists and forms too.
-//
-// The !important declarations are needed because, in the dark asset bundle,
-// those addons' own tokens.dark.scss can legitimately load either before or
-// after this file depending on addon install order — !important makes
-// modern_theme win either way. Harmless no-op wherever one of these addons
-// isn't installed: the declarations just never get used by any rule.
+// Each addon aliases its own tokens (--cm-*, --ss-*, --im-*, --mp-*, --mr-*) on
+// :root. Re-declaring them on `html[data-mt-theme]` (higher specificity) makes
+// the theme win whatever the asset order, without !important.
 
-// Prefixes of the addon token systems this file bridges.
-$mt-addon-prefixes: cm, im, mp, ss;
+$mt-addon-prefixes: cm, im, mp, ss, mr;
 
-:root {
+html[data-mt-theme] {
     @each $p in $mt-addon-prefixes {
-        // --- surfaces ------------------------------------------------------
-        --#{$p}-bg: var(--mt-content-bg) !important;
-        --#{$p}-card: var(--mt-card) !important;
-        --#{$p}-card-matte: var(--mt-card-matte) !important;
-        --#{$p}-fg: var(--mt-foreground) !important;
-        --#{$p}-muted: var(--mt-muted) !important;
-        --#{$p}-muted-fg: var(--mt-muted-foreground) !important;
-        --#{$p}-subtle-fg: var(--mt-muted-foreground) !important;
-        --#{$p}-border: var(--mt-border) !important;
-        --#{$p}-input: var(--mt-input) !important;
-        --#{$p}-edge: color-mix(in srgb, var(--mt-foreground) 8%, transparent) !important;
-
-        // --- accent --------------------------------------------------------
-        --#{$p}-primary: var(--mt-primary) !important;
-        --#{$p}-primary-fg: var(--mt-primary-foreground) !important;
-        --#{$p}-primary-soft: color-mix(in srgb, var(--mt-primary) 13%, var(--mt-card)) !important;
-        --#{$p}-primary-soft-fg: var(--mt-primary) !important;
-        --#{$p}-ring: color-mix(in srgb, var(--mt-primary) 45%, transparent) !important;
-        --#{$p}-info: var(--mt-primary) !important;
-        --#{$p}-info-soft: color-mix(in srgb, var(--mt-primary) 12%, var(--mt-card)) !important;
-
-        --#{$p}-success: var(--mt-success) !important;
-        --#{$p}-success-soft: color-mix(in srgb, var(--mt-success) 14%, var(--mt-card)) !important;
-        --#{$p}-warning: var(--mt-warning) !important;
-        --#{$p}-warning-soft: color-mix(in srgb, var(--mt-warning) 14%, var(--mt-card)) !important;
-        --#{$p}-danger: var(--mt-destructive) !important;
-        --#{$p}-danger-soft: color-mix(in srgb, var(--mt-destructive) 14%, var(--mt-card)) !important;
-        --#{$p}-violet: var(--mt-info) !important;
-        --#{$p}-violet-soft: color-mix(in srgb, var(--mt-info) 14%, var(--mt-card)) !important;
-
-        // --- charts: follow the theme (not a second palette) ---------------
-        --#{$p}-chart-1: var(--mt-primary) !important;
-        --#{$p}-chart-2: var(--mt-success) !important;
-        --#{$p}-chart-3: var(--mt-warning) !important;
-        --#{$p}-chart-4: var(--mt-info) !important;
-
-        // --- navigation shell (sidebar + its top-bar dropdowns) -------------
-        --#{$p}-sidebar: var(--mt-sidebar-bg) !important;
-        --#{$p}-sidebar-fg: var(--mt-foreground) !important;
-        --#{$p}-sidebar-hover: var(--mt-nav-hover) !important;
-        --#{$p}-sidebar-accent: var(--mt-nav-active-bg) !important;
-        --#{$p}-sidebar-accent-fg: var(--mt-nav-active-fg) !important;
-        --#{$p}-sidebar-muted-fg: var(--mt-muted-foreground) !important;
-        --#{$p}-sidebar-border: var(--mt-border) !important;
-        --#{$p}-sidebar-tile: var(--mt-nav-tile) !important;
-        --#{$p}-sidebar-active-bg: var(--mt-nav-active-bg) !important;
-        --#{$p}-sidebar-active-fg: var(--mt-nav-active-fg) !important;
-
-        // --- shape & elevation ---------------------------------------------
-        --#{$p}-radius: var(--mt-radius) !important;
-        --#{$p}-radius-sm: var(--mt-radius-sm) !important;
-        --#{$p}-ease: var(--mt-ease) !important;
-        --#{$p}-shadow-xs: var(--mt-shadow-xs) !important;
-        --#{$p}-shadow-sm: var(--mt-shadow-sm) !important;
-        --#{$p}-shadow-md: var(--mt-shadow-md) !important;
-        --#{$p}-shadow-lg: var(--mt-shadow-lg) !important;
+        --#{$p}-radius: var(--mt-radius);
+        --#{$p}-radius-sm: var(--mt-radius-sm);
+        --#{$p}-ease: var(--mt-ease);
+        // surfaces
+        --#{$p}-bg: var(--mt-content-bg);
+        --#{$p}-card: var(--mt-card);
+        --#{$p}-card-matte: var(--mt-card-matte);
+        --#{$p}-fg: var(--mt-foreground);
+        --#{$p}-muted: var(--mt-muted);
+        --#{$p}-muted-fg: var(--mt-muted-foreground);
+        --#{$p}-subtle-fg: var(--mt-muted-foreground);
+        --#{$p}-border: var(--mt-border);
+        --#{$p}-input: var(--mt-input);
+        --#{$p}-edge: color-mix(in srgb, var(--mt-foreground) 8%, transparent);
+        // accent
+        --#{$p}-primary: var(--mt-primary);
+        --#{$p}-primary-fg: var(--mt-primary-foreground);
+        --#{$p}-primary-soft: var(--mt-primary-soft);
+        --#{$p}-primary-soft-fg: var(--mt-primary-text);
+        --#{$p}-ring: var(--mt-ring);
+        // status
+        --#{$p}-success: var(--mt-success);
+        --#{$p}-success-soft: var(--mt-success-soft);
+        --#{$p}-warning: var(--mt-warning);
+        --#{$p}-warning-soft: var(--mt-warning-soft);
+        --#{$p}-danger: var(--mt-destructive);
+        --#{$p}-danger-soft: var(--mt-destructive-soft);
+        --#{$p}-info: var(--mt-info);
+        --#{$p}-info-soft: var(--mt-info-soft);
+        --#{$p}-violet: color-mix(in oklab, var(--mt-primary) 55%, #8b5cf6);
+        --#{$p}-violet-soft: color-mix(in srgb, var(--#{$p}-violet) 12%, var(--mt-card));
+        // charts
+        --#{$p}-chart-1: var(--mt-primary);
+        --#{$p}-chart-2: var(--mt-success);
+        --#{$p}-chart-3: var(--mt-warning);
+        --#{$p}-chart-4: var(--mt-info);
+        // elevation
+        --#{$p}-shadow-xs: var(--mt-shadow-xs);
+        --#{$p}-shadow-sm: var(--mt-card-shadow);
+        --#{$p}-shadow-md: var(--mt-shadow-md);
+        --#{$p}-shadow-lg: var(--mt-shadow-lg);
     }
 }
 
 // Native Odoo tags (color index 0–11) inside modern apps: theme tokens only.
-.o_web_client:has(.o_cm_sidebar, .o_ss_sidebar, .o_im_sidebar, .o_mp_sidebar, .o_mr_sidebar) {
+html.mt-app-modern .o_web_client {
     .o_tag {
         &, &::after {
             --Tag__badge-background-color: transparent !important;
@@ -88,11 +63,11 @@ $mt-addon-prefixes: cm, im, mp, ss;
         &.o_tag_color_1, &.o_tag_color_1::after { background-color: color-mix(in srgb, var(--mt-destructive) 16%, var(--mt-card)) !important; color: var(--mt-destructive) !important; }
         &.o_tag_color_2, &.o_tag_color_2::after { background-color: color-mix(in srgb, var(--mt-warning) 16%, var(--mt-card)) !important; color: var(--mt-warning) !important; }
         &.o_tag_color_3, &.o_tag_color_3::after { background-color: color-mix(in srgb, var(--mt-warning) 12%, var(--mt-card)) !important; color: var(--mt-warning) !important; }
-        &.o_tag_color_4, &.o_tag_color_4::after { background-color: color-mix(in srgb, var(--mt-primary) 16%, var(--mt-card)) !important; color: var(--mt-primary) !important; }
+        &.o_tag_color_4, &.o_tag_color_4::after { background-color: color-mix(in srgb, var(--mt-primary) 16%, var(--mt-card)) !important; color: var(--mt-primary-text) !important; }
         &.o_tag_color_5, &.o_tag_color_5::after { background-color: color-mix(in srgb, var(--mt-info, var(--mt-primary)) 16%, var(--mt-card)) !important; color: var(--mt-info, var(--mt-primary)) !important; }
         &.o_tag_color_6, &.o_tag_color_6::after { background-color: color-mix(in srgb, var(--mt-warning) 22%, var(--mt-card)) !important; color: var(--mt-warning) !important; }
         &.o_tag_color_7, &.o_tag_color_7::after { background-color: color-mix(in srgb, var(--mt-success) 16%, var(--mt-card)) !important; color: var(--mt-success) !important; }
-        &.o_tag_color_8, &.o_tag_color_8::after { background-color: color-mix(in srgb, var(--mt-primary) 22%, var(--mt-card)) !important; color: var(--mt-primary) !important; }
+        &.o_tag_color_8, &.o_tag_color_8::after { background-color: color-mix(in srgb, var(--mt-primary) 22%, var(--mt-card)) !important; color: var(--mt-primary-text) !important; }
         &.o_tag_color_9, &.o_tag_color_9::after { background-color: color-mix(in srgb, var(--mt-destructive) 22%, var(--mt-card)) !important; color: var(--mt-destructive) !important; }
         &.o_tag_color_10, &.o_tag_color_10::after { background-color: color-mix(in srgb, var(--mt-success) 22%, var(--mt-card)) !important; color: var(--mt-success) !important; }
         &.o_tag_color_11, &.o_tag_color_11::after { background-color: color-mix(in srgb, var(--mt-info, var(--mt-primary)) 22%, var(--mt-card)) !important; color: var(--mt-info, var(--mt-primary)) !important; }

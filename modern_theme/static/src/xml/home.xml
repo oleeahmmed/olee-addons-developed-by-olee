@@ -3,8 +3,13 @@
     <t t-name="modern_theme.Home">
         <div class="mt-home">
             <div class="mt-home-head">
-                <h1 t-esc="title"/>
-                <p t-if="subtitle" t-esc="subtitle"/>
+                <div class="mt-home-head-text">
+                    <h1 t-esc="title"/>
+                    <p t-if="subtitle" t-esc="subtitle"/>
+                </div>
+                <button t-if="create" type="button" class="btn btn-primary mt-page-new" data-hotkey="c" t-on-click="onCreate">
+                    <i class="fa fa-plus" aria-hidden="true"/> <span t-esc="create.label"/>
+                </button>
             </div>
             <div class="mt-home-grid">
                 <t t-foreach="cards" t-as="card" t-key="card.action">

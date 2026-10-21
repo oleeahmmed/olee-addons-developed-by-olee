@@ -1,0 +1,190 @@
+// Modern Theme: bridge between the design tokens and Bootstrap / Odoo.
+//
+// Odoo compiles Bootstrap with an EMPTY variable prefix, so its runtime custom
+// properties are `--body-bg`, `--btn-bg`, `--dropdown-bg`… (not `--bs-*`).
+// Re-pointing those at --mt-* tokens restyles most of Odoo without !important.
+// `html[data-mt-theme]` (0,1,1) out-ranks Bootstrap's `:root` (0,1,0).
+
+$mt: 'html[data-mt-theme]';
+
+#{$mt} {
+    --body-font-family: var(--mt-font-family);
+    --font-sans-serif: var(--mt-font-family);
+    --font-monospace: var(--mt-font-mono);
+    --body-bg: var(--mt-content-bg);
+    --body-color: var(--mt-foreground);
+    --emphasis-color: var(--mt-foreground);
+    --heading-color: var(--mt-foreground);
+    --secondary-color: var(--mt-muted-foreground);
+    --tertiary-color: var(--mt-placeholder);
+    --secondary-bg: var(--mt-muted);
+    --tertiary-bg: var(--mt-content-bg);
+    --border-color: var(--mt-border-base);
+    --border-color-translucent: color-mix(in srgb, var(--mt-border-base) 80%, transparent);
+    --border-radius: var(--mt-radius);
+    --border-radius-sm: var(--mt-radius-sm);
+    --border-radius-lg: var(--mt-radius-lg);
+    --border-radius-xl: var(--mt-radius-card);
+    --border-radius-xxl: var(--mt-radius-card);
+    --link-color: var(--mt-primary-text);
+    --link-color-rgb: var(--mt-primary-text-rgb, var(--mt-primary-rgb));
+    --link-hover-color: var(--mt-primary-hover);
+    --link-hover-color-rgb: var(--mt-primary-text-rgb, var(--mt-primary-rgb));
+    --primary: var(--mt-primary);
+    --primary-rgb: var(--mt-primary-rgb);
+    --focus-ring-color: var(--mt-ring);
+    --highlight-bg: color-mix(in srgb, var(--mt-warning) 22%, var(--mt-card));
+    --highlight-color: var(--mt-foreground);
+    --box-shadow: var(--mt-shadow-md);
+    --box-shadow-sm: var(--mt-shadow-xs);
+    --box-shadow-lg: var(--mt-shadow-lg);
+    --form-invalid-color: var(--mt-destructive);
+    --form-invalid-border-color: var(--mt-destructive);
+    --form-valid-color: var(--mt-success);
+    --form-valid-border-color: var(--mt-success);
+
+    // Odoo's own runtime properties
+    --o-input-border-color: var(--mt-input);
+    --o-input-background-color: transparent;
+    --o-caret-color: var(--mt-primary);
+    --ControlPanel-border-bottom: 1px solid var(--mt-border);
+    --ListRenderer-thead-bg-color: var(--mt-card);
+    --ListRenderer-tfoot-bg-color: var(--mt-card);
+    --Kanban-background: var(--mt-content-bg);
+    --KanbanGroup-background: transparent;
+    --button-box-border-color: var(--mt-border);
+    --Notebook__link-border-color: var(--mt-border);
+    --Notebook__link-border-color--hover: var(--mt-border);
+    --Notebook__link-border-top-color--active: var(--mt-primary);
+    --fc-page-bg-color: var(--mt-card);
+    --fc-neutral-bg-color: var(--mt-muted);
+    --fc-border-color: var(--mt-border-base);
+    --fc-today-bg-color: var(--mt-primary-soft);
+    --settings__tab-bg: transparent;
+    --settings__tab-bg--active: var(--mt-sidebar-active-bg);
+    --settings__tab-color: var(--mt-foreground);
+    --settings__title-bg: transparent;
+
+    font-family: var(--mt-font-family);
+    accent-color: var(--mt-primary);
+    -webkit-tap-highlight-color: transparent;
+}
+
+#{$mt} body {
+    font-family: var(--mt-font-family);
+    color: var(--mt-foreground);
+    background-color: var(--mt-content-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+// The web client root and every view surface.
+#{$mt} .o_web_client {
+    background-color: var(--mt-content-bg);
+    color: var(--mt-foreground);
+}
+
+// Text utilities that Odoo hard-codes with !important (Bootstrap utilities).
+#{$mt} {
+    .text-muted { color: var(--mt-muted-foreground) !important; }
+    .text-primary { color: var(--mt-primary-text) !important; }
+    .text-danger { color: var(--mt-destructive) !important; }
+    .text-success { color: var(--mt-success) !important; }
+    .text-warning { color: var(--mt-warning) !important; }
+    .text-info { color: var(--mt-info) !important; }
+    .text-900, .text-body, .text-dark { color: var(--mt-foreground) !important; }
+    .text-700, .text-800 { color: color-mix(in srgb, var(--mt-foreground) 82%, var(--mt-card)) !important; }
+    .text-500, .text-600, .text-secondary { color: var(--mt-muted-foreground) !important; }
+    .bg-view, .bg-white, .bg-body { background-color: var(--mt-card) !important; }
+    .bg-100, .bg-light, .bg-body-tertiary { background-color: var(--mt-content-bg) !important; }
+    .bg-200, .bg-body-secondary { background-color: var(--mt-muted) !important; }
+    .bg-primary, .text-bg-primary { background-color: var(--mt-primary) !important; color: var(--mt-primary-foreground) !important; }
+    .border, .border-top, .border-bottom, .border-start, .border-end { border-color: var(--mt-border-base) !important; }
+    .border-primary { border-color: var(--mt-primary) !important; }
+    .link-primary, a.text-primary { color: var(--mt-primary-text) !important; }
+    .text-bg-success { background-color: var(--mt-success) !important; color: #ffffff !important; }
+    .text-bg-danger { background-color: var(--mt-destructive) !important; color: var(--mt-destructive-foreground) !important; }
+    .text-bg-warning { background-color: var(--mt-warning-soft) !important; color: var(--mt-warning) !important; }
+    .text-bg-info { background-color: var(--mt-info-soft) !important; color: var(--mt-info) !important; }
+    .text-bg-light, .text-bg-secondary { background-color: var(--mt-muted) !important; color: var(--mt-foreground) !important; }
+}
+
+// Element defaults stay at low specificity (:where) so components can restyle them.
+:where(html[data-mt-theme]) a { color: var(--mt-primary-text); }
+:where(html[data-mt-theme]) a:hover { color: var(--mt-primary-hover); }
+:where(html[data-mt-theme]) hr { border-color: var(--mt-border-base); opacity: 1; }
+:where(html[data-mt-theme]) code { color: var(--mt-primary-text); }
+#{$mt} kbd {
+    background: var(--mt-muted);
+    color: var(--mt-foreground);
+    border: 1px solid var(--mt-border-base);
+    border-radius: var(--mt-radius-xs);
+    box-shadow: inset 0 -1px 0 var(--mt-border-base);
+    font-family: var(--mt-font-mono);
+    font-size: 0.75em;
+}
+
+// Selection, focus, scrollbars
+#{$mt} ::selection {
+    background: color-mix(in srgb, var(--mt-primary) 24%, transparent);
+    color: inherit;
+}
+// Keyboard focus ring for controls without their own (text fields draw theirs).
+#{$mt} :focus-visible:not(input):not(textarea):not(select):not([contenteditable="true"]):not(.o_input) {
+    outline: 2px solid var(--mt-ring);
+    outline-offset: 1px;
+}
+#{$mt} * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--mt-scrollbar) transparent;
+}
+#{$mt} ::-webkit-scrollbar { width: 10px; height: 10px; }
+#{$mt} ::-webkit-scrollbar-track { background: transparent; }
+#{$mt} ::-webkit-scrollbar-thumb {
+    background: var(--mt-scrollbar);
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background-clip: padding-box;
+}
+#{$mt} ::-webkit-scrollbar-thumb:hover { background-color: var(--mt-scrollbar-hover); }
+
+// Headings use a tighter tracking for a crisper, modern look.
+:where(html[data-mt-theme]) {
+    h1, .h1, h2, .h2, h3, .h3 { letter-spacing: -0.015em; color: var(--mt-foreground); }
+    h4, .h4, h5, .h5, h6, .h6 { color: var(--mt-foreground); }
+}
+
+// Bootstrap "subtle" colours (bg-*-subtle / text-*-emphasis / border-*-subtle) used by
+// Odoo dashboards (Purchase, Sales, Inventory overviews…): theme status colours, so
+// they follow the palette and stay readable in dark mode.
+html[data-mt-theme] {
+    --primary-bg-subtle: var(--mt-primary-soft);
+    --primary-text-emphasis: var(--mt-primary-text);
+    --primary-border-subtle: color-mix(in srgb, var(--mt-primary) 30%, var(--mt-border));
+    --secondary-bg-subtle: var(--mt-muted);
+    --secondary-text-emphasis: var(--mt-muted-foreground);
+    --secondary-border-subtle: var(--mt-border);
+    --success-bg-subtle: var(--mt-success-soft);
+    --success-text-emphasis: var(--mt-success);
+    --success-border-subtle: color-mix(in srgb, var(--mt-success) 30%, var(--mt-border));
+    --info-bg-subtle: var(--mt-info-soft);
+    --info-text-emphasis: var(--mt-info);
+    --info-border-subtle: color-mix(in srgb, var(--mt-info) 30%, var(--mt-border));
+    --warning-bg-subtle: var(--mt-warning-soft);
+    --warning-text-emphasis: var(--mt-warning);
+    --warning-border-subtle: color-mix(in srgb, var(--mt-warning) 30%, var(--mt-border));
+    --danger-bg-subtle: var(--mt-destructive-soft);
+    --danger-text-emphasis: var(--mt-destructive);
+    --danger-border-subtle: color-mix(in srgb, var(--mt-destructive) 30%, var(--mt-border));
+    --light-bg-subtle: var(--mt-muted);
+    --light-text-emphasis: var(--mt-foreground);
+    --dark-bg-subtle: color-mix(in srgb, var(--mt-foreground) 14%, var(--mt-card));
+    --dark-text-emphasis: var(--mt-foreground);
+}
+// Neutral badges ("RFQ", "Draft"…) printed as text-bg-default: visible in both modes
+html[data-mt-theme] .badge.text-bg-default {
+    background-color: var(--mt-muted) !important;
+    color: var(--mt-foreground) !important;
+    border: 1px solid var(--mt-border);
+}

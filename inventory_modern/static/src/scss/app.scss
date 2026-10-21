@@ -1,0 +1,10 @@
+// Inventory Modern: pages, lists, dashboards and controls come from Modern Theme's shared
+// app kit (modern_theme/static/src/scss/kit/). This app only passes its prefix,
+// so .o_im pages and --im-* tokens get the same look as every other modern app.
+@include mt-app-tokens(im);
+@include mt-app-pages(im);
+@include mt-app-list(im);
+@include mt-app-controls(im);
+@include mt-app-helpers(im);
+@include mt-app-print(im);
+@include mt-app-dash(im);

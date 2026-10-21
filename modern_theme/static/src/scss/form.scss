@@ -8,7 +8,9 @@
 // dividers between sections, switches for booleans. Odoo's own form markup is
 // only restyled, so every field widget and button keeps working.
 
-$mt-apps: '.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_sidebar, .o_mr_sidebar)';
+// Scoped to the modern app addons: the sidebar sets html.mt-app-modern while one
+// of them is the current app (cheaper and more reliable than a root :has()).
+$mt-apps: 'html.mt-app-modern .o_web_client';
 // Settings is a two-pane app form — keep Odoo's layout and restyle it in settings.scss.
 $mt-form: '#{$mt-apps} > .o_action_manager > .o_form_view:not(.o_base_settings):not(.o_base_settings_view)';
 $mt-any-form: '#{$mt-form}, #{$mt-apps} .modal .o_form_view';
@@ -302,7 +304,8 @@ $mt-bar-height: 3.5rem;
     .o_form_statusbar {
         position: sticky;
         top: 0;
-        z-index: 2;
+        // above the notebook tabs and list headers that scroll underneath it
+        z-index: 10;
         min-height: $mt-bar-height;
         margin: 0 !important;
         padding: 0.6875rem 1.5rem !important;
@@ -370,6 +373,16 @@ $mt-bar-height: 3.5rem;
         > .btn .fa,
         > .btn .oi { font-size: 0.8125rem; color: inherit; }
     }
+
+    // Buttons on the left, steps on the right. When both don't fit on one line the
+    // steps wrap to their own line (right aligned) instead of folding into "...".
+    .o_form_statusbar > .o_statusbar_buttons { flex: 0 1 auto; max-width: 100%; flex-wrap: wrap; row-gap: 0.375rem; }
+    .o_form_statusbar > .o_field_statusbar {
+        flex: 0 0 auto;
+        max-width: 100%;
+        margin-left: auto;
+    }
+    .o_form_statusbar:has(> .o_statusbar_buttons) { row-gap: 0.5rem; }
 
     // Joined steps. No padding on the track: Odoo folds the steps when the
     // track grows taller than one step. DOM order is right to left, so
@@ -454,6 +467,64 @@ $mt-bar-height: 3.5rem;
         }
     }
 
+    // Very narrow screens: Odoo shows the current step alone in a dropdown. Make it
+    // read as the current step (it used to look like a disabled button).
+    .o_field_statusbar .o_statusbar_status > .dropdown-toggle:not(.o_arrow_button) {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        height: 2rem;
+        padding: 0 0.875rem !important;
+        border: 1px solid color-mix(in srgb, var(--mt-primary) 45%, var(--mt-border)) !important;
+        border-radius: 0.5rem !important;
+        background: color-mix(in srgb, var(--mt-primary) 14%, var(--mt-card)) !important;
+        color: var(--mt-primary) !important;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        opacity: 1 !important;
+        box-shadow: none !important;
+    }
+
+    // Order / invoice lines: columns size to their content (Odoo gives every number
+    // column ~100px), so Amount stays in view next to the chatter. The product
+    // column takes what is left and wraps its description.
+    .o_field_x2many .o_list_renderer > .o_list_table {
+        table-layout: auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+
+        > thead > tr > th:not(.o_list_record_selector):not(.o_handle_cell):not(.o_list_actions_header) {
+            width: auto !important;
+            min-width: 0 !important;
+        }
+        > thead > tr > th:is([data-name="product_id"], [data-name="product_template_id"], [data-name="name"], .o_sol_product_many2one_cell) {
+            width: 100% !important;
+            min-width: 11rem !important;
+        }
+        // Long product names wrap (no "[FURN_6667] A…"), so the column can give room
+        // to the numbers instead of pushing Amount out of view.
+        > tbody > tr > td:is([name="product_id"], [name="product_template_id"], [name="name"]) {
+            white-space: normal !important;
+            :is(.text-truncate, .o_field_widget, .o_field_many2one, span, a, div) {
+                white-space: normal !important;
+                text-overflow: clip !important;
+                overflow-wrap: anywhere;
+            }
+            // Odoo fixes this box's height for a one-line name; a wrapped name needs more.
+            .o_field_product_label_section_and_note_cell { height: auto !important; }
+        }
+        .o_list_number, td.o_list_number, th.o_list_number_th { white-space: nowrap; }
+    }
+
+    // Record links (customer, salesperson…) and the line delete icon stay readable
+    // in both modes.
+    .o_form_sheet a.o_form_uri,
+    .o_form_sheet .o_field_many2one a.o_form_uri span { color: var(--mt-primary-text, var(--mt-primary)) !important; }
+    .o_field_x2many .o_list_record_remove,
+    .o_field_x2many .o_list_record_remove button { color: var(--mt-muted-foreground) !important; opacity: 1 !important; }
+    .o_field_x2many tr:hover .o_list_record_remove,
+    .o_field_x2many .o_list_record_remove:hover { color: var(--mt-destructive) !important; }
+
     .o_form_sheet {
         max-width: none !important;
         width: auto !important;
@@ -477,7 +548,7 @@ $mt-bar-height: 3.5rem;
 #{$mt-apps} .modal .o_form_view {
     .o_form_label {
         margin: 0;
-        font-size: 0.8125rem;
+        font-size: 0.75rem;
         font-weight: 500 !important;
         color: var(--mt-muted-foreground);
 
@@ -543,7 +614,7 @@ $mt-bar-height: 3.5rem;
                 pointer-events: none;
 
                 .o_form_label {
-                    font-size: 0.6875rem;
+                    font-size: 0.75rem;
                     line-height: 1rem;
                     font-weight: 500 !important;
                     letter-spacing: 0.01em;
@@ -552,7 +623,7 @@ $mt-bar-height: 3.5rem;
                 sup { pointer-events: auto; }
             }
 
-            > .o_cell:not(.o_wrap_label) { padding-top: 1rem !important; }
+            > .o_cell:not(.o_wrap_label) { padding-top: 1.25rem !important; }
 
             &:focus-within > .o_wrap_label .o_form_label { color: var(--mt-primary); }
 
@@ -839,13 +910,14 @@ $mt-bar-height: 3.5rem;
         border: 0;
         border-radius: 999px;
         cursor: pointer;
-        background-color: var(--mt-input, var(--mt-border));
-        background-image: radial-gradient(circle at 0.625rem 50%, #fff 0.4375rem, transparent 0.5rem);
+        // Off track: dark enough for the white knob to stand out (≥3:1 in both modes).
+        background-color: color-mix(in srgb, var(--mt-muted-foreground) 55%, var(--mt-card));
+        background-image: radial-gradient(circle at 0.625rem 50%, #ffffff 0.4375rem, transparent 0.5rem);
         transition: background-color 150ms ease, background-position 150ms ease;
 
         &:checked {
             background-color: var(--mt-primary);
-            background-image: radial-gradient(circle at 1.625rem 50%, #fff 0.4375rem, transparent 0.5rem);
+            background-image: radial-gradient(circle at 1.625rem 50%, var(--mt-primary-foreground) 0.4375rem, transparent 0.5rem);
         }
 
         &:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-ring) 25%, transparent); }
@@ -1267,8 +1339,8 @@ $mt-bar-height: 3.5rem;
     background: var(--mt-card);
 
     &.o-aside {
-        flex: 0 0 24rem;
-        width: 24rem;
+        flex: 0 0 clamp(20rem, 24vw, 26rem);
+        width: clamp(20rem, 24vw, 26rem);
         max-width: 40%;
         border-left: 1px solid var(--mt-border);
     }
@@ -1349,7 +1421,6 @@ $mt-bar-height: 3.5rem;
 
         // Odoo's oi-search glyph is a magnifying glass inside a rounded square.
         // Draw the same plain FontAwesome mark the paperclip uses.
-        button[aria-label="Search Messages"] .oi-search::before,
         .o-mail-SearchMessageInput .oi-search::before {
             font-family: FontAwesome;
             font-weight: normal;
@@ -1433,19 +1504,7 @@ $mt-bar-height: 3.5rem;
         }
     }
 
-    // On a record that isn't saved yet, Odoo saves it first when you click
-    // Send message / Log note / Activity — say so, instead of looking broken.
-    &.o-chatter-disabled .o-mail-Chatter-top::after {
-        content: "Fill in the required fields: the record is saved automatically when you send a message, log a note or plan an activity.";
-        display: block;
-        margin: 0 0 0.75rem;
-        padding: 0.5rem 0.75rem;
-        border-radius: 0.625rem;
-        background: var(--mt-muted);
-        color: var(--mt-muted-foreground);
-        font-size: 0.75rem;
-        line-height: 1.45;
-    }
+
 
     .o-mail-Composer {
         margin: 0 0.375rem 0.125rem;
@@ -1509,7 +1568,7 @@ $mt-bar-height: 3.5rem;
     }
 
     .o-mail-Chatter-top:has(.o-mail-Chatter-logNote.btn-primary) .o-mail-Composer {
-        background: color-mix(in srgb, #f59e0b 8%, var(--mt-card));
+        background: var(--mt-warning-soft);
     }
 
     .o-mail-Chatter-content,
@@ -1557,23 +1616,10 @@ $mt-bar-height: 3.5rem;
         }
     }
 
-    .o-mail-Message:has(.o-mail-Message-body.o-note) .o-mail-Message-date::after,
-    .o-mail-Message[aria-label="System notification"] .o-mail-Message-date::after {
-        display: inline-flex;
-        align-items: center;
-        margin-left: 0.5rem;
-        padding: 0.1rem 0.45rem;
-        border-radius: 999px;
-        background: color-mix(in srgb, var(--mt-primary) 14%, var(--mt-card));
-        color: var(--mt-primary);
-        font-size: 0.6875rem;
-        font-weight: 600;
-        line-height: 1.3;
-        vertical-align: 0.05rem;
+    // Log notes get a soft tint so they stand apart from messages (no English text in CSS).
+    .o-mail-Message:has(.o-mail-Message-body.o-note) .o-mail-Message-bubble {
+        background: var(--mt-warning-soft) !important;
     }
-
-    .o-mail-Message:has(.o-mail-Message-body.o-note) .o-mail-Message-date::after { content: "Note"; }
-    .o-mail-Message[aria-label="System notification"] .o-mail-Message-date::after { content: "Update" !important; }
 
     .o-mail-Activity {
         padding: 0.625rem 0.75rem !important;

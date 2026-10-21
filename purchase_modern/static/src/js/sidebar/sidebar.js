@@ -344,4 +344,46 @@ export class ModernPurchaseSidebar extends Component {
     }
 }
 
-registry.category("main_components").add("purchase_modern.Sidebar", { Component: ModernPurchaseSidebar });
+// Modern Theme 3.x draws ONE global sidebar for every app (classic / rail /
+// floating styles, Ctrl+K search, pinned menus). This addon no longer mounts its
+// own sidebar: it only tells the theme how to organise this app's menu.
+// The component above is kept for reference / backward compatibility.
+registry.category("modern_theme.sidebar_apps").add(APP_XMLID, {
+    legacyPrefix: "mp",
+    ownPrefixes: OWN_PREFIXES,
+    mergeInto: MERGE_INTO,
+    replaced: REPLACED,
+    secondary: TOP_GROUPS,
+    icons: menuIcons,
+    createTargets,
+    defaultCreate: DEFAULT_CREATE,
+    noCreate: NO_CREATE,
+    async onCreate(spec, env) {
+        if (!spec.pickingTypeCode) {
+            return false; // the theme opens Odoo's own form
+        }
+        // Transfers need an operation type: take the one of the current company.
+        const context = { ...(spec.context || {}) };
+        const companyId = user.activeCompany?.id;
+        const types = await env.services.orm
+            .searchRead(
+                "stock.picking.type",
+                [["code", "=", spec.pickingTypeCode], ["company_id", "=", companyId]],
+                ["id"],
+                { limit: 1 }
+            )
+            .catch(() => []);
+        if (types.length) {
+            context.default_picking_type_id = types[0].id;
+        }
+        await env.services.action.doAction({
+            type: "ir.actions.act_window",
+            name: spec.label,
+            res_model: spec.resModel,
+            views: [[false, "form"]],
+            target: "current",
+            context,
+        });
+        return true;
+    },
+});

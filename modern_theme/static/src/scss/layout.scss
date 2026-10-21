@@ -1,0 +1,346 @@
+// Modern Theme: application shell. Sidebar offset, top bar, content frame.
+//
+// The offset is computed from attributes the SERVER renders on <html>
+// (style, width, collapsed, pinned), so the layout is right before any JS runs:
+// no jump on load. JS only updates the same attributes afterwards.
+
+$mt: 'html[data-mt-theme]';
+$mt-desktop: 768px; // Odoo's ui.isSmall boundary
+
+// ---------------------------------------------------------------------------
+// Sidebar offset per style
+// ---------------------------------------------------------------------------
+html[data-mt-sidebar-style] {
+    --mt-sb-offset: 0px;
+}
+@media (min-width: $mt-desktop) {
+    html[data-mt-sidebar-style="classic"] { --mt-sb-offset: var(--mt-sb-w); }
+    html[data-mt-sidebar-style="classic"][data-mt-sidebar-collapsed="1"] { --mt-sb-offset: var(--mt-sb-collapsed-w); }
+
+    html[data-mt-sidebar-style="rail"] { --mt-sb-offset: calc(var(--mt-sb-rail-w) + var(--mt-sb-panel-w)); }
+    html[data-mt-sidebar-style="rail"][data-mt-sb-pinned="0"],
+    html[data-mt-sidebar-style="rail"][data-mt-sb-panel="0"] { --mt-sb-offset: var(--mt-sb-rail-w); }
+
+    html[data-mt-sidebar-style="floating"] { --mt-sb-offset: calc(var(--mt-sb-w) + var(--mt-sb-float-gap)); }
+    html[data-mt-sidebar-style="floating"][data-mt-sidebar-collapsed="1"] { --mt-sb-offset: calc(var(--mt-sb-collapsed-w) + var(--mt-sb-float-gap)); }
+
+    #{$mt}[data-mt-sidebar-style] .o_web_client {
+        padding-inline-start: var(--mt-sb-offset);
+        transition: padding-inline-start 220ms var(--mt-ease);
+    }
+}
+html.mt-fullscreen { --mt-sb-offset: 0px !important; }
+@media print {
+    html[data-mt-sidebar-style] { --mt-sb-offset: 0px; }
+}
+
+// ---------------------------------------------------------------------------
+// Top bar (Odoo's navbar, restyled; its systray / user menu / badges are kept)
+// ---------------------------------------------------------------------------
+#{$mt} .o_main_navbar {
+    --NavBar-entry-color: var(--mt-muted-foreground);
+    --NavBar-entry-color--hover: var(--mt-foreground);
+    --NavBar-entry-color--active: var(--mt-foreground);
+    --NavBar-entry-backgroundColor: transparent;
+    --NavBar-entry-backgroundColor--hover: var(--mt-hover);
+    --NavBar-entry-backgroundColor--focus: var(--mt-hover);
+    --NavBar-entry-backgroundColor--active: var(--mt-muted);
+    --NavBar-entry-borderColor-active: transparent;
+    --NavBar-brand-color: var(--mt-foreground);
+    --o-navbar-badge-bg: var(--mt-destructive);
+    --o-navbar-badge-color: var(--mt-destructive-foreground);
+    --o-navbar-badge-text-shadow: none;
+    height: var(--mt-topbar-h);
+    min-height: var(--mt-topbar-h);
+    padding-inline: calc(var(--mt-gap) * 0.75);
+    gap: 0.25rem;
+    align-items: center;
+    background: var(--mt-topbar-bg);
+    color: var(--mt-topbar-fg);
+    border-bottom: 1px solid var(--mt-topbar-border);
+    box-shadow: none;
+
+    .o_menu_systray {
+        gap: 0.125rem;
+        align-items: center;
+        > div > .dropdown-toggle,
+        > div > button,
+        .o-dropdown > .dropdown-toggle,
+        .o_nav_entry {
+            border-radius: var(--mt-radius-sm);
+            color: var(--mt-muted-foreground);
+            &:hover, &.show, &[aria-expanded="true"] {
+                background: var(--mt-hover);
+                color: var(--mt-foreground);
+            }
+        }
+        .o_user_avatar, .o_avatar { border-radius: 999px !important; }
+    }
+    .badge, .o-mail-MessagingMenu-counter, .o-mail-ActivityMenu-counter {
+        background: var(--mt-destructive) !important;
+        color: var(--mt-destructive-foreground) !important;
+        border-radius: 999px;
+        font-weight: 600;
+        box-shadow: 0 0 0 2px var(--mt-topbar-bg);
+    }
+}
+html[data-mt-topbar-style="floating"] .o_navbar {
+    padding: var(--mt-shell-gap) var(--mt-shell-gap) 0;
+    background: var(--mt-content-bg);
+    .o_main_navbar {
+        border: 1px solid var(--mt-border);
+        border-radius: var(--mt-radius-card);
+        box-shadow: var(--mt-card-shadow);
+    }
+}
+html[data-mt-topbar-style="blend"] .o_main_navbar { border-bottom-color: transparent; }
+
+// The sidebar replaces Odoo's app switcher, app name and section menus.
+html[data-mt-sidebar-style] .o_main_navbar {
+    .o_navbar_apps_menu,
+    .o_menu_toggle,
+    .o_menu_brand,
+    .o_menu_sections {
+        display: none !important;
+    }
+}
+
+// Start area: burger (phones), current app, search pill
+.mt-topbar-start {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+    flex: 1 1 auto;
+}
+.mt-topbar-burger {
+    display: none;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 0;
+    border-radius: var(--mt-radius-sm);
+    background: transparent;
+    color: var(--mt-foreground);
+    font-size: 1.05rem;
+    &:hover { background: var(--mt-hover); }
+}
+.mt-topbar-app {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    color: var(--mt-foreground);
+    .mt-app-icon { --mt-app-icon-size: 1.5rem; }
+}
+.mt-topbar-app-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mt-topbar-search {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: #{"min(26rem, 38vw)"};
+    height: calc(var(--mt-control-h) - 0.125rem);
+    margin-inline-start: 0.75rem;
+    padding: 0 0.5rem 0 0.75rem;
+    border: 1px solid var(--mt-border-base);
+    border-radius: var(--mt-radius-control);
+    background: var(--mt-content-bg);
+    color: var(--mt-muted-foreground);
+    font-size: 0.8125rem;
+    transition: border-color var(--mt-duration) var(--mt-ease), background var(--mt-duration) var(--mt-ease);
+    &:hover { border-color: var(--mt-input); background: var(--mt-card); color: var(--mt-foreground); }
+    &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--mt-ring); }
+    .mt-topbar-search-text { flex: 1 1 auto; text-align: start; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    kbd { font-size: 0.6875rem; padding: 0.05rem 0.35rem; }
+}
+// The sidebar already shows the app name in the classic/floating styles.
+@media (min-width: $mt-desktop) {
+    html[data-mt-sidebar-style="classic"]:not([data-mt-sidebar-collapsed="1"]) .mt-topbar-app,
+    html[data-mt-sidebar-style="rail"][data-mt-sb-panel="1"] .mt-topbar-app {
+        display: none;
+    }
+    html[data-mt-sidebar-style="classic"]:not([data-mt-sidebar-collapsed="1"]) .mt-topbar-search,
+    html[data-mt-sidebar-style="rail"][data-mt-sb-panel="1"] .mt-topbar-search {
+        margin-inline-start: 0;
+    }
+}
+@media (max-width: $mt-desktop - 0.02px) {
+    .mt-topbar-burger { display: grid; }
+    .mt-topbar-search {
+        width: 2.25rem;
+        padding: 0;
+        justify-content: center;
+        margin-inline-start: auto;
+        border-color: transparent;
+        background: transparent;
+        .mt-topbar-search-text, kbd { display: none; }
+    }
+}
+
+// Systray theme switcher
+.mt-sys-btn {
+    display: grid;
+    place-items: center;
+    width: 2.125rem;
+    height: 2.125rem;
+    border: 0;
+    border-radius: var(--mt-radius-sm);
+    background: transparent;
+    color: var(--mt-muted-foreground);
+    &:hover, &.show { background: var(--mt-hover); color: var(--mt-foreground); }
+}
+
+// ---------------------------------------------------------------------------
+// Content frame: rounded card on a soft canvas (option), boxed width (option)
+// ---------------------------------------------------------------------------
+#{$mt} .o_action_manager {
+    background: var(--mt-content-bg);
+}
+@media (min-width: $mt-desktop) {
+    html[data-mt-content-frame="card"] .o_web_client > .o_action_manager {
+        padding: var(--mt-shell-gap);
+        > .o_action {
+            background: var(--mt-card);
+            border: 1px solid var(--mt-border);
+            border-radius: var(--mt-shell-radius);
+            box-shadow: var(--mt-shell-shadow);
+            overflow: hidden;
+        }
+        // Views whose own background is the canvas keep it inside the card.
+        > .o_action > .o_content,
+        > .o_action .o_form_view_container { background: var(--mt-content-bg); }
+        > .o_action > .o_control_panel { border-radius: var(--mt-shell-radius) var(--mt-shell-radius) 0 0; }
+    }
+    html[data-mt-content-frame="card"][data-mt-topbar-style="floating"] .o_web_client > .o_action_manager {
+        padding-top: calc(var(--mt-shell-gap) * 0.75);
+    }
+    html[data-mt-content-width="boxed"] .o_web_client > .o_action_manager > .o_action {
+        width: 100%;
+        max-width: 90rem;
+        margin-inline: auto;
+    }
+}
+// Fullscreen actions (kiosks, POS…) keep Odoo's own full-bleed layout.
+html.mt-fullscreen .o_web_client > .o_action_manager { padding: 0 !important; }
+html.mt-fullscreen .o_web_client > .o_action_manager > .o_action { border-radius: 0 !important; border: 0 !important; }
+
+// Notifications stay clear of the top bar.
+#{$mt} .o_notification_manager {
+    top: calc(var(--mt-topbar-h) + 0.75rem);
+}
+
+// While light/dark swaps its stylesheet, avoid a flash of transitions.
+html.mt-scheme-switching * { transition: none !important; }
+
+// ---------------------------------------------------------------------------
+// Shared bits used by the modern app addons (were in shell.scss)
+// ---------------------------------------------------------------------------
+.mt-shell-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    background: var(--mt-card);
+    border: 1px solid var(--mt-border);
+    border-radius: var(--mt-shell-radius);
+    box-shadow: var(--mt-shell-shadow);
+    overflow: hidden;
+}
+.mt-page-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    padding: 0.5rem 0.75rem 0;
+}
+.mt-btn-create {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--mt-btn-h);
+    height: var(--mt-btn-h);
+    padding: 0;
+    border: none;
+    border-radius: var(--mt-radius-btn);
+    background: var(--mt-primary);
+    color: var(--mt-primary-foreground);
+    cursor: pointer;
+}
+.mt-home {
+    box-sizing: border-box;
+    padding: calc(var(--mt-pad) * 1.25) calc(var(--mt-pad) * 1.5);
+    min-height: 100%;
+    background: var(--mt-card);
+}
+.mt-home-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+    margin-bottom: 1.25rem;
+    .mt-home-head-text { min-width: 0; }
+    .mt-page-new { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 0.4rem; }
+    h1 { margin: 0; font-size: 1.25rem; font-weight: 650; color: var(--mt-foreground); }
+    p { margin: 0.375rem 0 0; font-size: 0.875rem; color: var(--mt-muted-foreground); }
+}
+.mt-home-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    gap: var(--mt-gap);
+}
+.mt-home-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.375rem;
+    padding: var(--mt-card-pad) calc(var(--mt-card-pad) * 1.1);
+    text-align: start;
+    border: 1px solid var(--mt-border);
+    border-radius: var(--mt-radius-card);
+    background: var(--mt-card);
+    color: var(--mt-foreground);
+    box-shadow: var(--mt-card-shadow);
+    cursor: pointer;
+    transition: border-color var(--mt-duration) var(--mt-ease), box-shadow var(--mt-duration) var(--mt-ease), transform var(--mt-duration) var(--mt-ease);
+    strong { font-size: 0.875rem; font-weight: 600; }
+    small { font-size: 0.75rem; color: var(--mt-muted-foreground); }
+    &:hover {
+        border-color: color-mix(in srgb, var(--mt-primary) 35%, var(--mt-border-base));
+        box-shadow: var(--mt-card-shadow-hover);
+        transform: translateY(-1px);
+    }
+    &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--mt-ring); }
+}
+.mt-home-card-icon {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--mt-radius);
+    background: var(--mt-primary-soft);
+    color: var(--mt-primary-text);
+    font-size: 1rem;
+}
+
+// Placeholder painted under the sidebar until the JS component mounts (no white strip).
+@media (min-width: $mt-desktop) {
+    html[data-mt-sidebar-style] body::before {
+        content: "";
+        position: fixed;
+        z-index: -1;
+        inset-block: 0;
+        inset-inline-start: 0;
+        width: var(--mt-sb-offset);
+        background-color: var(--mt-sidebar-bg);
+        background-image: var(--mt-sidebar-bg-image);
+        pointer-events: none;
+    }
+    html[data-mt-sidebar-style="floating"] body::before { background: var(--mt-content-bg); }
+    // The web client paints only the content area, so the placeholder shows through.
+    html[data-mt-sidebar-style] .o_web_client { background-clip: content-box; }
+    html.mt-fullscreen body::before { display: none; }
+}

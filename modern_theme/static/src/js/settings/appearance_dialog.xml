@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Small visual of each sidebar style, reused by the settings page. -->
+    <t t-name="modern_theme.SidebarStylePreview">
+        <span t-attf-class="mt-sbp mt-sbp-{{ variant }}" aria-hidden="true">
+            <span class="mt-sbp-side">
+                <i/><i/><i/><i/>
+            </span>
+            <span t-if="variant === 'rail'" class="mt-sbp-panel"><i/><i/><i/></span>
+            <span class="mt-sbp-main"><b/><i/><i/></span>
+        </span>
+    </t>
+
+    <t t-name="modern_theme.ChoiceRow">
+        <!-- variables: option, value, onPick, companyText, overridden, onReset -->
+        <div class="mt-opt" t-att-class="{ 'is-overridden': overridden }">
+            <div class="mt-opt-head">
+                <label class="mt-opt-label" t-esc="option.label"/>
+                <span t-if="overridden" class="mt-opt-reset">
+                    <button type="button" class="btn btn-link btn-sm p-0" t-on-click="onReset"
+                            t-att-title="'Company default: ' + companyText">Use default</button>
+                </span>
+                <span t-elif="companyText" class="mt-opt-default">Company default</span>
+            </div>
+            <t t-if="option.kind === 'select'">
+                <select class="form-select mt-opt-select" t-on-change="(ev) => onPick(ev.target.value)">
+                    <t t-foreach="option.choices" t-as="choice" t-key="choice[0]">
+                        <option t-att-value="choice[0]" t-att-selected="value === choice[0]" t-esc="choice[1]"/>
+                    </t>
+                </select>
+            </t>
+            <t t-elif="option.kind === 'cards'">
+                <div class="mt-cards" role="radiogroup" t-att-aria-label="option.label">
+                    <t t-foreach="option.choices" t-as="choice" t-key="choice[0]">
+                        <button type="button" class="mt-card-choice" role="radio"
+                                t-att-aria-checked="value === choice[0] ? 'true' : 'false'"
+                                t-on-click="() => onPick(choice[0])">
+                            <t t-call="modern_theme.SidebarStylePreview"><t t-set="variant" t-value="choice[2]"/></t>
+                            <span t-esc="choice[1]"/>
+                        </button>
+                    </t>
+                </div>
+            </t>
+            <t t-elif="option.kind === 'bool'">
+                <div class="form-check form-switch mt-opt-switch">
+                    <input class="form-check-input" type="checkbox" role="switch"
+                           t-att-id="'mt_opt_' + option.key" t-att-checked="value"
+                           t-on-change="(ev) => onPick(ev.target.checked)"/>
+                    <label class="form-check-label" t-att-for="'mt_opt_' + option.key" t-esc="value ? 'On' : 'Off'"/>
+                </div>
+            </t>
+            <t t-else="">
+                <div class="mt-segmented" role="radiogroup" t-att-aria-label="option.label">
+                    <t t-foreach="option.choices" t-as="choice" t-key="choice[0]">
+                        <button type="button" role="radio"
+                                t-att-aria-checked="value === choice[0] ? 'true' : 'false'"
+                                t-on-click="() => onPick(choice[0])">
+                            <i t-if="choice[2]" t-attf-class="fa {{ choice[2] }}" aria-hidden="true"/>
+                            <t t-esc="choice[1]"/>
+                        </button>
+                    </t>
+                </div>
+            </t>
+        </div>
+    </t>
+
+    <t t-name="modern_theme.AppearanceDialog">
+        <Dialog title.translate="Appearance" size="'lg'" contentClass="'mt-appearance'">
+            <div class="mt-appearance-body">
+                <nav class="mt-appearance-tabs" role="tablist" aria-label="Appearance sections">
+                    <button type="button" role="tab" t-att-aria-selected="state.tab === 'colors' ? 'true' : 'false'"
+                            t-on-click="() => this.setTab('colors')"><i class="fa fa-paint-brush" aria-hidden="true"/> Colors</button>
+                    <t t-foreach="groups" t-as="group" t-key="group.key">
+                        <button t-if="group.key !== 'colors'" type="button" role="tab"
+                                t-att-aria-selected="state.tab === group.key ? 'true' : 'false'"
+                                t-on-click="() => this.setTab(group.key)" t-esc="group.title"/>
+                    </t>
+                </nav>
+                <div class="mt-appearance-panel" role="tabpanel">
+                    <t t-if="state.tab === 'colors'">
+                        <t t-call="modern_theme.ChoiceRow">
+                            <t t-set="option" t-value="groups[0].options[0]"/>
+                            <t t-set="value" t-value="values.color_mode"/>
+                            <t t-set="overridden" t-value="isOverridden('color_mode')"/>
+                            <t t-set="companyText" t-value="companyLabel(groups[0].options[0])"/>
+                            <t t-set="onPick" t-value="(v) => this.set('color_mode', v)"/>
+                            <t t-set="onReset" t-value="() => this.resetKey('color_mode')"/>
+                        </t>
+                        <div class="mt-opt" t-att-class="{ 'is-overridden': isOverridden('preset') }">
+                            <div class="mt-opt-head">
+                                <label class="mt-opt-label">Brand color</label>
+                                <button t-if="isOverridden('preset')" type="button" class="btn btn-link btn-sm p-0"
+                                        t-on-click="() => this.resetKey('preset')"
+                                        t-att-title="'Company default: ' + presetCompanyLabel">Use default</button>
+                                <span t-else="" class="mt-opt-default">Company default</span>
+                            </div>
+                            <div class="mt-swatches" role="radiogroup" aria-label="Brand color">
+                                <t t-foreach="presets" t-as="preset" t-key="preset[0]">
+                                    <button type="button" class="mt-swatch" role="radio"
+                                            t-att-aria-checked="values.preset === preset[0] ? 'true' : 'false'"
+                                            t-att-style="'--mt-swatch:' + swatches[preset[0]]"
+                                            t-att-title="preset[1]" t-att-aria-label="preset[1]"
+                                            t-on-click="() => this.setPreset(preset[0])">
+                                        <i class="fa fa-check" aria-hidden="true"/>
+                                    </button>
+                                </t>
+                                <label class="mt-swatch mt-swatch-custom" title="Custom color"
+                                       t-att-aria-checked="values.preset === 'custom' ? 'true' : 'false'"
+                                       t-att-style="'--mt-swatch:' + customColor">
+                                    <input type="color" t-att-value="customColor" aria-label="Custom color"
+                                           t-on-input="onCustomColor" t-on-change="saveCustomColor"/>
+                                    <i class="fa fa-eyedropper" aria-hidden="true"/>
+                                </label>
+                            </div>
+                        </div>
+                    </t>
+                    <t t-foreach="groups" t-as="group" t-key="group.key">
+                        <t t-if="state.tab === group.key and group.key !== 'colors'">
+                            <t t-foreach="group.options" t-as="option" t-key="option.key">
+                                <t t-call="modern_theme.ChoiceRow">
+                                    <t t-set="value" t-value="values[option.key]"/>
+                                    <t t-set="overridden" t-value="isOverridden(option.key)"/>
+                                    <t t-set="companyText" t-value="companyLabel(option)"/>
+                                    <t t-set="onPick" t-value="(v) => this.set(option.key, v)"/>
+                                    <t t-set="onReset" t-value="() => this.resetKey(option.key)"/>
+                                </t>
+                            </t>
+                        </t>
+                    </t>
+                </div>
+            </div>
+            <t t-set-slot="footer">
+                <button type="button" class="btn btn-primary" t-on-click="() => this.props.close()">Done</button>
+                <button type="button" class="btn btn-secondary" t-on-click="resetAll">Use company defaults</button>
+                <span t-if="state.saving" class="text-muted small ms-auto"><i class="fa fa-circle-o-notch fa-spin me-1" aria-hidden="true"/>Saving…</span>
+                <span t-else="" class="text-muted small ms-auto"><i class="fa fa-check me-1" aria-hidden="true"/>Saved automatically</span>
+            </t>
+        </Dialog>
+    </t>
+
+</templates>

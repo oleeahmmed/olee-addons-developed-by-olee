@@ -36,6 +36,7 @@
                         <field name="color" widget="kanban_color_picker"/>
                     </t>
                     <t t-name="card">
+                        <t t-set="won_status_open" t-value="record.won_status.raw_value === 'pending'"/>
                         <widget name="web_ribbon" title="Won" bg_color="text-bg-success" invisible="won_status != 'won'"/>
                         <widget name="web_ribbon" title="Lost" bg_color="text-bg-danger" invisible="won_status != 'lost'"/>
                         <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active or won_status in ['lost', 'won']"/>
@@ -91,7 +92,10 @@
                             <div class="d-flex align-items-center cm-kc-foot-left">
                                 <field name="priority" widget="priority" groups="base.group_user"/>
                                 <field name="activity_ids" widget="kanban_activity"/>
-                                <span class="cm-kc-date" invisible="not date_deadline" title="Expected closing">
+                                <t t-set="cm_deadline" t-value="record.date_deadline.raw_value"/>
+                                <t t-set="cm_today" t-value="luxon.DateTime.now().startOf('day')"/>
+                                <span invisible="not date_deadline" title="Expected closing"
+                                      t-attf-class="cm-kc-date {{ cm_deadline and won_status_open and cm_deadline &lt; cm_today ? 'cm-kc-date--late' : (cm_deadline and won_status_open and cm_deadline &lt;= cm_today.plus({ days: 7 }) ? 'cm-kc-date--soon' : '') }}">
                                     <i class="fa fa-calendar-o" aria-hidden="true"/>
                                     <field name="date_deadline" widget="date"/>
                                 </span>
@@ -109,10 +113,13 @@
     <!--
         New lead / opportunity: only the 7 fields you actually fill in.
         After save, Odoo's full form (stages, notes, extra info…) comes back.
+        mode="primary": a separate view used by the Modern CRM pages only, so the
+        standard CRM form (and any other addon using it) is left untouched.
     -->
     <record id="crm_lead_view_form_simple_create" model="ir.ui.view">
         <field name="name">crm.lead.form.simple.create</field>
         <field name="model">crm.lead</field>
+        <field name="mode">primary</field>
         <field name="inherit_id" ref="crm.crm_lead_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//header" position="attributes">

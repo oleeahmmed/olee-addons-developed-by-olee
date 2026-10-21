@@ -5,6 +5,7 @@ import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
 import { user } from "@web/core/user";
 import { useService } from "@web/core/utils/hooks";
+import { QuickCreateDialog } from "../components/dialogs";
 import { loadFeatures } from "../core/features";
 import { dueInfo, greeting, money, openRecord, shortDate } from "../core/utils";
 
@@ -31,8 +32,25 @@ export class HomePage extends Component {
             dealCount: 0,
             leadCount: 0,
             currencyId: false,
+            canCreate: false,
         });
-        onWillStart(() => this.load());
+        this.dialog = useService("dialog");
+        onWillStart(async () => {
+            const [canCreate] = await Promise.all([
+                user.checkAccessRight("crm.lead", "create").catch(() => false),
+                this.load(),
+            ]);
+            this.state.canCreate = canCreate;
+        });
+    }
+
+    /** The page's one "+ New": the same quick form as the pipeline. */
+    newOpportunity() {
+        this.dialog.add(QuickCreateDialog, {
+            type: "opportunity",
+            defaults: {},
+            onSaved: () => this.load(),
+        });
     }
 
     async load() {
@@ -57,6 +75,9 @@ export class HomePage extends Component {
         ]);
         const useLeads = Boolean(features.use_leads);
         const leadDomain = [["type", "=", "lead"]];
+        // "New leads" = created in the last 30 days (it used to count every lead ever).
+        const since = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 19).replace("T", " ");
+        const newLeadDomain = [...leadDomain, ["create_date", ">=", since]];
         const [leads, leadCount] = useLeads
             ? await Promise.all([
                 this.orm.searchRead(
@@ -64,7 +85,7 @@ export class HomePage extends Component {
                     ["name", "email_from", "partner_name", "create_date"],
                     { limit: 6, order: "create_date desc" }
                 ).catch(() => []),
-                this.orm.searchCount("crm.lead", leadDomain).catch(() => 0),
+                this.orm.searchCount("crm.lead", newLeadDomain).catch(() => 0),
             ])
             : [[], 0];
         Object.assign(this.state, {

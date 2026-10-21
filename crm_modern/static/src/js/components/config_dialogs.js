@@ -276,8 +276,12 @@ export class ActivityTypeDialog extends Component {
             category: s.category || "default",
             default_user_id: Number(s.default_user_id) || false,
             default_note: textToHtml(s.note),
-            res_model: CRM_MODEL,
         };
+        // New types belong to CRM. Editing keeps the model they had: generic types
+        // (Call, Email, To-Do…) must stay usable by every other app.
+        if (!this.isEdit) {
+            vals.res_model = CRM_MODEL;
+        }
         try {
             let id = this.isEdit ? this.props.resId : false;
             if (id) {

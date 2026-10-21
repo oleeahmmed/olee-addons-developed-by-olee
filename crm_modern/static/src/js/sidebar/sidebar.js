@@ -1,31 +1,18 @@
-import { Component, onWillStart, useState } from "@odoo/owl";
-import { browser } from "@web/core/browser/browser";
-import { Dropdown } from "@web/core/dropdown/dropdown";
-import { DropdownItem } from "@web/core/dropdown/dropdown_item";
-import { routerBus } from "@web/core/browser/router";
 import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
-import { session } from "@web/session";
 import { user } from "@web/core/user";
-import { useBus, useService } from "@web/core/utils/hooks";
-import { loadFeatures } from "../core/features";
 import { CampaignDialog, QuickCreateDialog } from "../components/dialogs";
 import { ActivityPlanDialog, ActivityTypeDialog, LostReasonDialog, MemberDialog, StageDialog, TagDialog, UserDialog } from "../components/config_dialogs";
 import { TeamDialog } from "../pages/team_pages";
 
 /**
- * Modern CRM left sidebar.
+ * Modern CRM inside the global Modern Theme sidebar.
  *
- * Upgrade-safe by design: it is a standalone main component that only uses the
- * public `menu`, `ui` and `action` services. It does not patch or xpath Odoo's
- * NavBar template, so changes to the navbar in an Odoo update cannot break the
- * web client. The app's top-bar section menus are hidden with CSS (sidebar.scss).
- *
- * Home is a top-level item. Everyday pages sit in two sidebar groups:
- * CRM (Campaigns, Leads, Pipeline, Activities) and Sales (Quotations,
- * Sales Orders, Customers, Dashboard). Team, Reporting and Configuration
- * stay as top-bar dropdowns. Odoo's matching CRM menus are merged into
- * those groups, minus pages Modern CRM already shows.
+ * Modern Theme 3.x draws one sidebar for every app (classic tree, icon rail +
+ * panel, floating glass). CRM only describes how its menu is organised: group
+ * order, which Odoo CRM menus are replaced by a modern page, icons, what the
+ * "+ New" button creates on each page, counters and the records Ctrl+K finds.
+ * Menus still come from ir.ui.menu, so Odoo's groups decide what each user sees.
  */
 const APP_XMLID = "crm.crm_menu_root";
 const OWN_PREFIXES = ["crm_modern."];
@@ -68,10 +55,9 @@ const GROUP_CHILD_ORDER = {
         "crm_modern.menu_lost_reasons",
     ],
 };
-// Groups shown as dropdowns in the top bar instead of the sidebar, so the sidebar
-// only lists the everyday pages. Groups other apps add are top-bar dropdowns too.
+// Secondary groups (Team, Reporting, Configuration): bottom of the sidebar, closed
+// by default, so the everyday pages come first.
 const TOP_GROUPS = new Set(["crm_modern.menu_team", "crm_modern.menu_reporting", "crm_modern.menu_config"]);
-const TOP_ICONS = { reporting: "fa-bar-chart", config: "fa-cog", team: "fa-users" };
 // Odoo entries replaced by a Modern CRM page / menu on the same records
 const REPLACED = new Set([
     "crm.menu_crm_opportunities",
@@ -93,7 +79,6 @@ const REPLACED = new Set([
     "sale_crm.sale_order_menu_quotations_crm",
     "crm.res_partner_menu_customer",
 ]);
-const COLLAPSE_KEY = "crm_modern.sidebar.collapsed";
 
 /** Font Awesome icon per menu xmlid (Odoo ships FA 4.7). Other addons may add entries. */
 export const menuIcons = registry.category("crm_modern.menu_icons");
@@ -174,361 +159,96 @@ const DEFAULT_CREATE = "crm_modern.menu_pipeline";
 /** Models a page shows but that are not created on their own (e.g. activities need a record). */
 const NO_CREATE = new Set(["mail.activity"]);
 
-export class ModernSidebar extends Component {
-    static template = "crm_modern.Sidebar";
-    static components = { Dropdown, DropdownItem };
-    static props = {};
 
-    setup() {
-        this.menu = useService("menu");
-        this.ui = useState(useService("ui"));
-        this.orm = useService("orm");
-        this.action = useService("action");
-        this.dialog = useService("dialog");
-        let collapsed = false;
-        try {
-            collapsed = browser.localStorage.getItem(COLLAPSE_KEY) === "1";
-        } catch {
-            // storage unavailable: keep the default
-        }
-        this.state = useState({ rev: 0, menuId: false, closed: {}, collapsed, rights: {} });
-        this.cmUser = { id: user.userId, name: user.name, login: user.login };
-        const refresh = () => this.state.rev++;
-        useBus(this.env.bus, "MENUS:APP-CHANGED", refresh);
-        useBus(this.env.bus, "ACTION_MANAGER:UPDATE", refresh);
-        // the current controller is only switched once the new page is mounted
-        useBus(this.env.bus, "ACTION_MANAGER:UI-UPDATED", () => {
-            refresh();
-            this.checkActionRights();
-        });
-        useBus(routerBus, "ROUTE_CHANGE", () => {
-            this.state.menuId = false;
-            refresh();
-        });
-        onWillStart(async () => {
-            // The "+" button only offers what the user is actually allowed to create.
-            const models = [...new Set(createTargets.getEntries().map(([, spec]) => spec.resModel))];
-            const [allowed, features] = await Promise.all([
-                Promise.all(models.map((m) => user.checkAccessRight(m, "create").catch(() => false))),
-                loadFeatures(this.orm).catch(() => ({})),
-            ]);
-            this.state.rights = Object.fromEntries(models.map((m, i) => [m, allowed[i]]));
-            if (!features.sale) {
-                this.state.rights["sale.order"] = false;
-            }
-        });
-    }
+/** Custom create dialogs per model (anything else opens Odoo's own form). */
+const CREATE_DIALOGS = {
+    "utm.campaign": CampaignDialog,
+    "crm.stage": StageDialog,
+    "mail.activity.type": ActivityTypeDialog,
+    "mail.activity.plan": ActivityPlanDialog,
+    "crm.tag": TagDialog,
+    "crm.team.member": MemberDialog,
+    "crm.lost.reason": LostReasonDialog,
+    "crm.team": TeamDialog,
+    "res.users": UserDialog,
+};
 
-    get app() {
-        this.state.rev; // re-evaluate on navigation / app change
-        const app = this.menu.getCurrentApp?.();
-        return app && app.xmlid === APP_XMLID ? app : null;
+async function onCreate(spec, env) {
+    const reload = () => env.bus.trigger("crm_modern:list-reload");
+    const context = { ...(spec.context || {}) };
+    if (spec.schedule) {
+        await env.services.action.doAction(
+            {
+                type: "ir.actions.act_window",
+                name: _t("Schedule Activity"),
+                res_model: "mail.activity.schedule",
+                views: [[false, "form"]],
+                target: "new",
+                context: { active_model: "crm.lead", dialog_size: "large" },
+            },
+            { onClose: reload }
+        );
+        return true;
     }
-    get allSections() {
-        const app = this.app;
-        if (!app) {
-            return [];
-        }
-        const top = this.menu.getMenuAsTree(app.id).childrenTree || [];
-        const isOwn = (m) => OWN_PREFIXES.some((p) => (m.xmlid || "").startsWith(p));
-        const own = top.filter(isOwn).map((m) => ({ ...m, own: true, childrenTree: [...(m.childrenTree || [])] }));
-        const byXmlid = Object.fromEntries(own.map((m) => [m.xmlid, m]));
-        const odoo = [];
-        for (const menu of top.filter((m) => !isOwn(m))) {
-            const target = byXmlid[MERGE_INTO[menu.xmlid]];
-            const entries = this.entries(menu).filter((e) => e.heading || !REPLACED.has(e.xmlid));
-            if (target) {
-                target.childrenTree.push(...entries);
-            } else if (entries.some((e) => !e.heading)) {
-                odoo.push({ ...menu, childrenTree: entries });
-            }
-        }
-        for (const section of [...own, ...odoo]) {
-            // drop headings left without items after the merge
-            section.childrenTree = section.childrenTree.filter(
-                (e, i, all) => !e.heading || (all[i + 1] && !all[i + 1].heading)
-            );
-        }
-        return [...own, ...odoo].filter((s) => s.childrenTree.length || s.actionID || s.actionPath);
-    }
-    /** Leaves of an Odoo menu, with a small heading before each nested sub-group. */
-    entries(menu) {
-        const children = menu.childrenTree || [];
-        if (!children.length) {
-            return menu.actionID || menu.actionPath ? [menu] : [];
-        }
-        const result = [];
-        for (const child of children) {
-            if (child.childrenTree?.length) {
-                const sub = this.entries(child);
-                if (sub.some((e) => !e.heading)) {
-                    result.push({ id: `h_${child.id}`, name: child.name, heading: true }, ...sub);
-                }
-            } else if (child.actionID || child.actionPath) {
-                result.push(child);
-            }
-        }
-        return result;
-    }
-    /** Sidebar: Home, then CRM and Sales groups. */
-    get sections() {
-        const rank = (xmlid, order) => {
-            const i = order.indexOf(xmlid);
-            return i === -1 ? 100 : i;
-        };
-        return this.allSections
-            .filter((s) => !this.isTop(s))
-            .map((section) => {
-                const childOrder = GROUP_CHILD_ORDER[section.xmlid];
-                if (!childOrder || !section.childrenTree?.length) {
-                    return section;
-                }
-                const children = [...section.childrenTree].sort(
-                    (a, b) => rank(a.xmlid, childOrder) - rank(b.xmlid, childOrder)
-                );
-                return { ...section, childrenTree: children };
-            })
-            .sort((a, b) => rank(a.xmlid, SIDEBAR_ORDER) - rank(b.xmlid, SIDEBAR_ORDER));
-    }
-    /** Top bar: Reporting, Configuration and other apps' groups, as dropdowns. */
-    get topSections() {
-        const rank = (xmlid, order) => {
-            const i = order.indexOf(xmlid);
-            return i === -1 ? 100 : i;
-        };
-        return this.allSections
-            .filter((s) => this.isTop(s) && s.childrenTree.some((c) => !c.heading))
-            .map((section) => {
-                const childOrder = GROUP_CHILD_ORDER[section.xmlid];
-                if (!childOrder || !section.childrenTree?.length) {
-                    return section;
-                }
-                const children = [...section.childrenTree].sort(
-                    (a, b) => rank(a.xmlid, childOrder) - rank(b.xmlid, childOrder)
-                );
-                return { ...section, childrenTree: children };
-            });
-    }
-    isTop(section) {
-        return TOP_GROUPS.has(section.xmlid) || !section.own;
-    }
-    topIcon(section) {
-        const xmlid = section.xmlid || "";
-        const key = /report/i.test(xmlid) ? "reporting" : /config/i.test(xmlid) ? "config" : /team/i.test(xmlid) ? "team" : "";
-        return TOP_ICONS[key] || "fa-th-large";
-    }
-    isSectionActive(section) {
-        return section.childrenTree.some((c) => !c.heading && this.isActive(c));
-    }
-    get brand() {
-        return this.app?.name || _t("CRM");
-    }
-    get visible() {
-        return Boolean(this.app && !this.ui.isSmall && this.sections.length);
-    }
-
-    /** The record the "+" button creates: the one of the page you are on. */
-    get pageCreateSpec() {
-        this.state.rev; // re-evaluate on navigation / app change
-        const match = (item) =>
-            item && !item.heading && this.isActive(item) && createTargets.contains(item.xmlid);
-        for (const section of this.allSections) {
-            if (match(section)) {
-                return createTargets.get(section.xmlid);
-            }
-            for (const child of section.childrenTree || []) {
-                if (match(child)) {
-                    return createTargets.get(child.xmlid);
-                }
-            }
-        }
-        return null;
-    }
-    /** Pages without their own entry (Configuration...): create the record the page shows. */
-    get actionCreateSpec() {
-        this.state.rev; // re-evaluate on navigation / app change
-        const action = this.action.currentController?.action;
-        const model = action?.res_model;
-        const context = action?.context || {};
-        if (!model || NO_CREATE.has(model) || context.create === false) {
-            return null;
-        }
-        const known = createTargets.getAll().find((spec) => spec.resModel === model);
-        if (known) {
-            return known;
-        }
-        const defaults = Object.entries(context).filter(([key]) => key.startsWith("default_"));
-        return { resModel: model, label: _t("New"), context: Object.fromEntries(defaults) };
-    }
-    checkActionRights() {
-        const model = this.action.currentController?.action?.res_model;
-        if (model && !(model in this.state.rights)) {
-            user.checkAccessRight(model, "create")
-                .catch(() => false)
-                .then((allowed) => (this.state.rights[model] = allowed));
-        }
-    }
-    /** Client actions (Sales Teams, Stages…) match by action tag, not only the menu highlight. */
-    get tagCreateSpec() {
-        const tag = this.action.currentController?.action?.tag;
-        if (!tag) {
-            return null;
-        }
-        for (const [xmlid, spec] of createTargets.getEntries()) {
-            if (spec.tag === tag || xmlid.replace(".menu_", ".") === tag) {
-                return spec;
-            }
-        }
-        return null;
-    }
-    get createSpec() {
-        return this.pageCreateSpec || this.tagCreateSpec || this.actionCreateSpec || createTargets.get(DEFAULT_CREATE, null);
-    }
-    get createLabel() {
-        return this.createSpec?.label || _t("New");
-    }
-    get canCreate() {
-        const model = this.createSpec?.resModel;
-        return Boolean(model) && this.state.rights[model] !== false;
-    }
-    /**
-     * "+" button: open Odoo's own form, empty, for the page you are on — so
-     * creating is exactly the same screen as viewing and editing.
-     */
-    async onNew() {
-        const spec = this.createSpec;
-        if (!spec) {
-            return;
-        }
-        const context = { ...(spec.context || {}) };
-        if (spec.pickingTypeCode) {
-            // Transfers need an operation type; take the one of the current company.
-            const companyId = user.context?.allowed_company_ids?.[0] || session.company_id;
-            const types = await this.orm
-                .searchRead(
-                    "stock.picking.type",
-                    [["code", "=", spec.pickingTypeCode], ["company_id", "=", companyId]],
-                    ["id"],
-                    { limit: 1 }
-                )
-                .catch(() => []);
-            if (types.length) {
-                context.default_picking_type_id = types[0].id;
-            }
-        }
-        const reload = () => this.env.bus.trigger("crm_modern:list-reload");
-        if (spec.schedule) {
-            this.action.doAction(
-                {
-                    type: "ir.actions.act_window",
-                    name: _t("Schedule Activity"),
-                    res_model: "mail.activity.schedule",
-                    views: [[false, "form"]],
-                    target: "new",
-                    context: { active_model: "crm.lead", dialog_size: "large" },
-                },
-                { onClose: reload }
-            );
-            return;
-        }
-        if (spec.resModel === "utm.campaign") {
-            this.dialog.add(CampaignDialog, { onSaved: reload });
-            return;
-        }
-        if (spec.resModel === "crm.lead") {
-            this.dialog.add(QuickCreateDialog, {
-                type: context.default_type === "lead" ? "lead" : "opportunity",
-                defaults: context,
-                onSaved: reload,
-            });
-            return;
-        }
-        if (spec.resModel === "crm.stage") {
-            this.dialog.add(StageDialog, { onSaved: reload });
-            return;
-        }
-        if (spec.resModel === "mail.activity.type") {
-            this.dialog.add(ActivityTypeDialog, { onSaved: reload });
-            return;
-        }
-        if (spec.resModel === "mail.activity.plan") {
-            this.dialog.add(ActivityPlanDialog, { onSaved: reload });
-            return;
-        }
-        if (spec.resModel === "crm.tag") {
-            this.dialog.add(TagDialog, { onSaved: reload });
-            return;
-        }
-        if (spec.resModel === "crm.team.member") {
-            this.dialog.add(MemberDialog, { onSaved: reload });
-            return;
-        }
-        if (spec.resModel === "crm.lost.reason") {
-            this.dialog.add(LostReasonDialog, { onSaved: reload });
-            return;
-        }
-        if (spec.resModel === "crm.team") {
-            this.dialog.add(TeamDialog, { onSaved: reload });
-            return;
-        }
-        if (spec.resModel === "res.users") {
-            this.dialog.add(UserDialog, { onSaved: reload });
-            return;
-        }
-        this.action.doAction({
-            type: "ir.actions.act_window",
-            name: spec.label,
-            res_model: spec.resModel,
-            views: [[false, "form"]],
-            target: "current",
-            context,
+    if (spec.resModel === "crm.lead") {
+        env.services.dialog.add(QuickCreateDialog, {
+            type: context.default_type === "lead" ? "lead" : "opportunity",
+            defaults: context,
+            onSaved: reload,
         });
+        return true;
     }
-
-    icon(item) {
-        return menuIcons.get(item.xmlid, "fa-circle-o");
+    const Dialog = CREATE_DIALOGS[spec.resModel];
+    if (Dialog) {
+        env.services.dialog.add(Dialog, { onSaved: reload });
+        return true;
     }
-    href(item) {
-        return `/odoo/${item.actionPath || "action-" + item.actionID}`;
-    }
-    open(item) {
-        this.state.menuId = item.id;
-        this.menu.selectMenu(item);
-    }
-    isGroupOpen(section) {
-        if (this.state.collapsed) {
-            return true;
-        }
-        const closed = this.state.closed[section.id];
-        if (closed === undefined) {
-            // a closed-by-default group opens by itself when the current page is in it
-            return !section.closedByDefault || section.childrenTree.some((c) => this.isActive(c));
-        }
-        return !closed;
-    }
-    toggleGroup(section) {
-        this.state.closed[section.id] = this.isGroupOpen(section);
-    }
-    toggleCollapse() {
-        this.state.collapsed = !this.state.collapsed;
-        try {
-            browser.localStorage.setItem(COLLAPSE_KEY, this.state.collapsed ? "1" : "0");
-        } catch {
-            // ignore
-        }
-    }
-    isActive(item) {
-        this.state.rev;
-        if (!item || (!item.actionID && !item.actionPath)) {
-            return false;
-        }
-        if (this.state.menuId) {
-            return item.id === this.state.menuId;
-        }
-        const path = browser.location.pathname.replace(/\/$/, "");
-        const href = this.href(item);
-        return path === href || path.startsWith(`${href}/`);
-    }
+    return false;
 }
 
-registry.category("main_components").add("crm_modern.Sidebar", { Component: ModernSidebar });
+registry.category("modern_theme.sidebar_apps").add(APP_XMLID, {
+    legacyPrefix: "cm",
+    ownPrefixes: OWN_PREFIXES,
+    mergeInto: MERGE_INTO,
+    replaced: REPLACED,
+    secondary: TOP_GROUPS,
+    order: SIDEBAR_ORDER,
+    childOrder: GROUP_CHILD_ORDER,
+    icons: menuIcons,
+    createTargets,
+    defaultCreate: DEFAULT_CREATE,
+    noCreate: NO_CREATE,
+    onCreate,
+});
+
+// ---------------------------------------------------------------------------
+// Counters next to menus (refreshed when the CRM app opens, at most every minute)
+// ---------------------------------------------------------------------------
+const badges = registry.category("modern_theme.menu_badges");
+function todayEnd() {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+// My activities that are late or due today.
+badges.add("crm_modern.menu_activities", (env) =>
+    env.services.orm.searchCount("mail.activity", [
+        ["res_model", "=", "crm.lead"],
+        ["user_id", "=", user.userId],
+        ["date_deadline", "<=", todayEnd()],
+    ])
+);
+// Leads nobody owns yet.
+badges.add("crm_modern.menu_leads", (env) =>
+    env.services.orm.searchCount("crm.lead", [
+        ["type", "=", "lead"],
+        ["user_id", "=", false],
+    ])
+);
+
+// ---------------------------------------------------------------------------
+// Records the Ctrl+K palette can find
+// ---------------------------------------------------------------------------
+const paletteModels = registry.category("modern_theme.palette_models");
+paletteModels.add("crm.lead", { label: _t("Opportunity / lead"), icon: "fa-handshake-o", limit: 5 });
+paletteModels.add("utm.campaign", { label: _t("Campaign"), icon: "fa-bullhorn", limit: 3 });
+paletteModels.add("sale.order", { label: _t("Quotation / order"), icon: "fa-file-text-o", limit: 4 });

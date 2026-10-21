@@ -13,29 +13,28 @@
         <field name="comment">the user will have access to documents of their own sales team(s), plus their own.</field>
     </record>
 
-    <data noupdate="1">
-        <!-- With Own Documents also implied, Odoo ORs these rules with the personal ones. -->
-        <record id="crm_rule_team_lead" model="ir.rule">
-            <field name="name">Team Leads</field>
-            <field name="model_id" ref="crm.model_crm_lead"/>
-            <field name="domain_force">['|', ('team_id.member_ids', 'in', [user.id]), ('team_id.user_id', '=', user.id)]</field>
-            <field name="groups" eval="[(4, ref('group_sale_team_documents'))]"/>
-        </record>
+    <!--
+        Not noupdate: fixes to these rules must reach existing databases on upgrade
+        (migrations/19.0.3.0.0 lifts the old noupdate flag).
+    -->
+    <!-- With Own Documents also implied, Odoo ORs these rules with the personal ones. -->
+    <record id="crm_rule_team_lead" model="ir.rule">
+        <field name="name">Team Leads</field>
+        <field name="model_id" ref="crm.model_crm_lead"/>
+        <field name="domain_force">['|', ('team_id.member_ids', 'in', [user.id]), ('team_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_sale_team_documents'))]"/>
+    </record>
 
-        <record id="crm_activity_report_rule_team_activities" model="ir.rule">
-            <field name="name">Team Activities</field>
-            <field name="model_id" ref="crm.model_crm_activity_report"/>
-            <field name="domain_force">['|', ('team_id.member_ids', 'in', [user.id]), ('team_id.user_id', '=', user.id)]</field>
-            <field name="groups" eval="[(4, ref('group_sale_team_documents'))]"/>
-        </record>
-
-        <record id="crm_rule_team_salesteam" model="ir.rule">
-            <field name="name">Own Salesteam</field>
-            <field name="model_id" ref="sales_team.model_crm_team"/>
-            <field name="domain_force">['|', ('member_ids', 'in', [user.id]), ('user_id', '=', user.id)]</field>
-            <field name="groups" eval="[(4, ref('group_sale_team_documents'))]"/>
-        </record>
-    </data>
+    <record id="crm_activity_report_rule_team_activities" model="ir.rule">
+        <field name="name">Team Activities</field>
+        <field name="model_id" ref="crm.model_crm_activity_report"/>
+        <field name="domain_force">['|', ('team_id.member_ids', 'in', [user.id]), ('team_id.user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_sale_team_documents'))]"/>
+    </record>
+    <!--
+        The former "Own Salesteam" rule on crm.team was removed: it let Own-Documents
+        users see MORE teams than Team-Documents users. Team visibility is Odoo's own.
+    -->
 
     <!-- Sale rules only when the Sale app is installed (see ir.rule helper). -->
     <function model="ir.rule" name="_crm_modern_ensure_sale_team_rules"/>

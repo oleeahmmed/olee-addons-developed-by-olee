@@ -8,22 +8,123 @@
         <field name="arch" type="xml">
             <xpath expr="//form" position="inside">
                 <app data-string="Modern Theme" string="Modern Theme" name="modern_theme"
-                     logo="/modern_theme/static/description/icon.png">
-                    <block title="Appearance" name="modern_theme_appearance">
-                        <setting id="modern_theme_preset_setting"
-                                 string="Theme Color"
-                                 help="Accent color used across the whole interface, for every user.">
-                            <field name="modern_theme_preset" widget="modern_theme_preset_picker"/>
+                     logo="/modern_theme/static/description/icon.png" groups="base.group_system">
+
+                    <block title="Live preview" name="mt_preview_block">
+                        <div class="col-12 mt-preview-col">
+                            <widget name="mt_theme_preview"/>
+                        </div>
+                    </block>
+
+                    <block title="Colors" name="mt_colors">
+                        <setting id="mt_color_mode" string="Color mode"
+                                 help="Light, dark, or follow each computer's system setting. Users can change it for themselves from the top bar.">
+                            <field name="mt_color_mode" widget="mt_segmented"/>
                         </setting>
-                        <setting id="modern_theme_dark_mode_setting"
-                                 string="Dark Mode"
-                                 help="Switch your own interface to dark mode. Every user can also flip this instantly from the toggle next to their profile picture.">
-                            <field name="modern_theme_dark_mode"/>
+                        <setting id="mt_preset" string="Brand color"
+                                 help="17 contrast-checked palettes (WCAG AA in light and dark) or your own color.">
+                            <field name="mt_preset" widget="mt_swatches"/>
+                            <div class="mt-setting-row" invisible="mt_preset != 'custom'">
+                                <span class="o_form_label">Custom primary</span>
+                                <field name="mt_primary_color" widget="color" class="mt-color-field"/>
+                            </div>
+                        </setting>
+                        <setting id="mt_accent_color" string="Accent color"
+                                 help="Optional second color for active markers and highlights. Leave empty to use the brand color.">
+                            <field name="mt_accent_color" widget="color" class="mt-color-field"/>
+                        </setting>
+                    </block>
+
+                    <block title="Typography" name="mt_typography">
+                        <setting id="mt_font" string="Font"
+                                 help="Bengali text always uses a Bengali font (Hind Siliguri / Noto Sans Bengali), whatever Latin font you pick. Fonts are bundled: no internet needed.">
+                            <field name="mt_font"/>
+                        </setting>
+                        <setting id="mt_font_scale" string="Text size" help="Scales text, spacing and controls together.">
+                            <field name="mt_font_scale" widget="mt_segmented"/>
+                        </setting>
+                    </block>
+
+                    <block title="Shape &amp; spacing" name="mt_shape">
+                        <setting id="mt_radius" string="Corner radius" help="Buttons, inputs, cards, dialogs, kanban cards and badges.">
+                            <field name="mt_radius" widget="mt_segmented"/>
+                        </setting>
+                        <setting id="mt_density" string="Density" help="Row height, padding and field spacing everywhere.">
+                            <field name="mt_density" widget="mt_segmented"/>
+                        </setting>
+                        <setting id="mt_border" string="Borders">
+                            <field name="mt_border" widget="mt_segmented"/>
+                        </setting>
+                        <setting id="mt_shadow" string="Card shadow">
+                            <field name="mt_shadow" widget="mt_segmented"/>
+                        </setting>
+                    </block>
+
+                    <block title="Navigation" name="mt_navigation">
+                        <setting id="mt_sidebar_style" string="Sidebar style"
+                                 help="Classic tree, icon rail with a menu panel, or a floating glass card. Ctrl+K search, pinned and recent menus work in all three.">
+                            <field name="mt_sidebar_style" widget="mt_sidebar_cards"/>
+                        </setting>
+                        <setting id="mt_sidebar_bg" string="Sidebar background">
+                            <field name="mt_sidebar_bg" widget="mt_segmented"/>
+                        </setting>
+                        <setting id="mt_sidebar_width" string="Sidebar width">
+                            <field name="mt_sidebar_width" widget="mt_segmented"/>
+                        </setting>
+                        <setting id="mt_sidebar_collapsed" string="Start collapsed"
+                                 help="New browsers open with the sidebar collapsed to icons. Each user's own choice is remembered.">
+                            <field name="mt_sidebar_collapsed"/>
+                        </setting>
+                        <setting id="mt_topbar_style" string="Top bar"
+                                 help="The top bar always stays visible while the page scrolls.">
+                            <field name="mt_topbar_style" widget="mt_segmented"/>
+                        </setting>
+                        <setting id="mt_topbar_height" string="Top bar height">
+                            <field name="mt_topbar_height" widget="mt_segmented"/>
+                        </setting>
+                    </block>
+
+                    <block title="Content" name="mt_content">
+                        <setting id="mt_content_width" string="Content width" help="Boxed keeps very wide screens readable (max 1440px).">
+                            <field name="mt_content_width" widget="mt_segmented"/>
+                        </setting>
+                        <setting id="mt_content_frame" string="Content frame" help="Show each page in a rounded card on a soft canvas, or edge to edge.">
+                            <field name="mt_content_frame" widget="mt_segmented"/>
+                        </setting>
+                        <setting id="mt_list_style" string="List views">
+                            <field name="mt_list_style" widget="mt_segmented"/>
+                        </setting>
+                        <setting id="mt_form_style" string="Form views" help="Card sections puts each group and the notebook in its own card.">
+                            <field name="mt_form_style" widget="mt_segmented"/>
+                        </setting>
+                        <setting id="mt_animations" string="Animations"
+                                 help="Turn off for slower computers. Users who ask their system to reduce motion never get animations.">
+                            <field name="mt_animations"/>
+                        </setting>
+                    </block>
+
+                    <block title="Login page" name="mt_login">
+                        <setting id="mt_login_style" string="Login style">
+                            <field name="mt_login_style" widget="mt_segmented"/>
+                        </setting>
+                        <setting id="mt_login_background" string="Background picture"
+                                 help="Shown by the split-screen and centered styles. The company logo is used automatically.">
+                            <field name="mt_login_background" widget="image" class="mt-login-bg-field"/>
+                        </setting>
+                        <setting id="mt_login_tagline" string="Tagline">
+                            <field name="mt_login_tagline" placeholder="e.g. Your business, one place."/>
                         </setting>
                     </block>
                 </app>
             </xpath>
         </field>
+    </record>
+
+    <!-- Personal appearance from Preferences (also available from the top bar). -->
+    <record id="action_my_appearance" model="ir.actions.client">
+        <field name="name">Appearance</field>
+        <field name="tag">modern_theme.my_appearance</field>
+        <field name="target">new</field>
     </record>
 
 </odoo>

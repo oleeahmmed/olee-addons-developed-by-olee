@@ -3,15 +3,7 @@
 // ============================================================================
 .o_ss .ss-native .o_ss_team_kanban {
     &.o_kanban_renderer { --KanbanRecord-width: 22rem; }
-    .o_kanban_record {
-        padding: 1rem 1rem 0.5rem;
-        border: 1px solid var(--ss-border); border-radius: calc(var(--ss-radius) + 2px);
-        background: var(--ss-card); box-shadow: var(--ss-shadow-sm);
-        transition: border-color 150ms var(--ss-ease), box-shadow 150ms var(--ss-ease);
-        &:hover { border-color: color-mix(in srgb, var(--ss-primary) 35%, var(--ss-border)); box-shadow: 0 8px 20px -8px rgba(15, 23, 42, 0.18); }
-    }
-
-    .o_kanban_record.o_kanban_ghost { border: 0; box-shadow: none; background: transparent; padding: 0; min-height: 0; }
+    // card shell (border, radius, shadow, hover) comes from modern_theme kanban.scss
 
     .ss-tc-head { display: flex; align-items: center; gap: 0.75rem; padding-right: 1.5rem; }
     .ss-tc-logo {

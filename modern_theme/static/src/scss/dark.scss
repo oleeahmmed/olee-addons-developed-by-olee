@@ -1,0 +1,20 @@
+// Modern Theme: dark-only touches (web.assets_web_dark). Most dark styling comes
+// from the dark tokens alone; this file only covers what Odoo compiles with fixed
+// SCSS colours in its own dark bundle.
+
+html[data-mt-theme] {
+    // Native widgets (scrollbars, date inputs, selects) render dark.
+    color-scheme: dark;
+
+    .o_field_html .note-editable,
+    .o_field_html .odoo-editor-editable,
+    .o_readonly .o_field_html {
+        color: var(--mt-foreground);
+    }
+    .o-mail-Message.o-card { background-color: var(--mt-muted); }
+    .o_kanban_record .o_kanban_image_fill_left,
+    .o_kanban_record img.o_avatar { box-shadow: 0 0 0 1px var(--mt-border-base); }
+    .o_calendar_renderer .fc-event:not(.o_event_dot) { filter: saturate(0.9) brightness(0.95); }
+    .table-light, .table-light > th, .table-light > td { --table-bg: var(--mt-muted); --table-color: var(--mt-foreground); }
+    .o_pivot .o_pivot_cell_value.bg-100, .o_pivot th.bg-100 { background: var(--mt-muted) !important; }
+}

@@ -4,17 +4,18 @@
 // metric, tabular figures, generous line-height. Light and dark through the tokens.
 // ============================================================================
 .o_cm {
+    // Seven distinct, theme-aware tones (they used to collapse to five colours).
     .od-tone-blue   { --od-c: var(--cm-primary); }
-    .od-tone-teal   { --od-c: var(--cm-success); }
-    .od-tone-green  { --od-c: var(--cm-success); }
-    .od-tone-violet { --od-c: var(--cm-info); }
+    .od-tone-teal   { --od-c: color-mix(in oklab, var(--cm-success) 55%, var(--cm-info)); }
+    .od-tone-green, .od-tone-success { --od-c: var(--cm-success); }
+    .od-tone-violet { --od-c: var(--cm-violet, color-mix(in oklab, var(--cm-primary) 55%, #8b5cf6)); }
     .od-tone-amber, .od-tone-warning { --od-c: var(--cm-warning); }
-    .od-tone-orange { --od-c: var(--cm-warning); }
-    .od-tone-rose, .od-tone-danger { --od-c: var(--cm-danger); }
-    .od-tone-red    { --od-c: var(--cm-danger); }
+    .od-tone-orange { --od-c: color-mix(in oklab, var(--cm-warning) 60%, var(--cm-danger)); }
+    .od-tone-rose   { --od-c: color-mix(in oklab, var(--cm-danger) 70%, var(--cm-violet, #8b5cf6)); }
+    .od-tone-red, .od-tone-danger { --od-c: var(--cm-danger); }
     .od-tone-sky, .od-tone-info { --od-c: var(--cm-info); }
     .od-tone-slate, .od-tone-muted { --od-c: var(--cm-muted-fg); }
-    [class*="od-tone-"] { --od-soft: color-mix(in srgb, var(--od-c) 10%, var(--cm-card)); }
+    [class*="od-tone-"] { --od-soft: color-mix(in srgb, var(--od-c) 12%, var(--cm-card)); }
 
     .od-num { font-variant-numeric: tabular-nums; }
     .od-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }

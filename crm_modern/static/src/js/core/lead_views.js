@@ -47,14 +47,14 @@ export function leadEmbeddedViews(viewIds, kind = "lead") {
 
 export function leadNativeProps({ kind, view, viewIds, domain, campaignId, userId, onOpen, onCreate }) {
     const context = { default_type: kind };
-    if (!domain) {
-        domain = [["type", "=", kind]];
-        if (campaignId) {
-            domain.push(["campaign_id", "=", Number(campaignId)]);
-        }
-        if (userId) {
-            domain.push(["user_id", "=", Number(userId)]);
-        }
+    // Campaign / salesperson filters always apply, also on top of a page's own domain
+    // ("Open leads" from a campaign used to show every lead).
+    domain = domain ? [...domain] : [["type", "=", kind]];
+    if (campaignId) {
+        domain.push(["campaign_id", "=", Number(campaignId)]);
+    }
+    if (userId) {
+        domain.push(["user_id", "=", Number(userId)]);
     }
     if (campaignId) {
         context.default_campaign_id = Number(campaignId);

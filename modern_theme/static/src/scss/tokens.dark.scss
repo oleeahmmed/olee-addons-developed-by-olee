@@ -1,395 +1,80 @@
-// Modern Theme — dark design tokens.
-//
-// Only loaded in the "web.assets_web_dark" bundle, which always includes
-// tokens.scss first (through "web.assets_web"), so these declarations win
-// for every selector they share with it. Selector specificity is kept
-// identical to tokens.scss on purpose (per-preset `html[data-mt-theme="…"]`
-// rules, and `:root, html[data-mt-theme]` for the derived block): same
-// specificity + later in the bundle = dark wins.
+// Modern Theme: design tokens (dark). Loaded only in web.assets_web_dark, after
+// tokens.scss, with identical selectors, so these values win in dark mode.
 
-html[data-mt-theme="indigo"] {
-    // OmniRouters Forest Whisper dark (live /keys, 2026-10-20):
-    // canvas #1f2322, mint create #009883, filters 32px.
-    --mt-background: hsl(165 8% 13%);
-    --mt-foreground: hsl(0 0% 95%);
-    --mt-card: hsl(165 6% 14%);
-    --mt-card-foreground: hsl(0 0% 95%);
-    --mt-primary: hsl(172 100% 30%);
-    --mt-primary-rgb: 0, 152, 131;
-    --mt-primary-foreground: hsl(0 0% 100%);
-    --mt-secondary: hsl(165 8% 18%);
-    --mt-secondary-foreground: hsl(0 0% 95%);
-    --mt-muted: hsl(165 10% 18%);
-    --mt-muted-foreground: hsl(0 0% 74%);
-    --mt-accent: hsl(165 12% 20%);
-    --mt-accent-foreground: hsl(0 0% 95%);
-    --mt-destructive: hsl(0 62.8% 45%);
-    --mt-destructive-foreground: hsl(0 0% 98%);
-    --mt-border: hsl(165 16% 20%);
-    --mt-input: hsl(165 16% 22%);
-    --mt-ring: hsl(172 100% 30%);
-
-    --mt-success: hsl(172 66% 45%);
-    --mt-warning: hsl(38 92% 55%);
-    --mt-info: hsl(172 100% 30%);
+:root {
+    @include mt-preset-vars(indigo, dark);
+}
+@each $key, $preset in $mt-presets {
+    html[data-mt-theme="#{$key}"] {
+        @include mt-preset-vars($key, dark);
+    }
+}
+html[data-mt-theme="custom"] {
+    // A lighter tone of the brand colour reads well on dark surfaces.
+    --mt-primary: color-mix(in oklab, var(--mt-custom-primary, #4f46e5) 72%, #ffffff);
+    --mt-primary-foreground: #0b0f17;
+    --mt-primary-text: color-mix(in oklab, var(--mt-custom-primary, #4f46e5) 55%, #ffffff);
 }
 
-html[data-mt-theme="zinc"] {
-    --mt-background: hsl(240 10% 3.9%);
-    --mt-foreground: hsl(0 0% 98%);
-    --mt-card: hsl(240 10% 3.9%);
-    --mt-card-foreground: hsl(0 0% 98%);
-    --mt-primary: hsl(0 0% 98%);
-    --mt-primary-rgb: 250, 250, 250;
-    --mt-primary-foreground: hsl(240 5.9% 10%);
-    --mt-secondary: hsl(240 3.7% 15.9%);
-    --mt-secondary-foreground: hsl(0 0% 98%);
-    --mt-muted: hsl(240 3.7% 15.9%);
-    --mt-muted-foreground: hsl(240 5% 64.9%);
-    --mt-accent: hsl(240 3.7% 15.9%);
-    --mt-accent-foreground: hsl(0 0% 98%);
-    --mt-destructive: hsl(0 62.8% 30.6%);
-    --mt-destructive-foreground: hsl(0 0% 98%);
-    --mt-border: hsl(240 3.7% 15.9%);
-    --mt-input: hsl(240 3.7% 15.9%);
-    --mt-ring: hsl(240 4.9% 83.9%);
-}
-
-html[data-mt-theme="slate"] {
-    --mt-background: hsl(222.2 84% 4.9%);
-    --mt-foreground: hsl(210 40% 98%);
-    --mt-card: hsl(222.2 84% 4.9%);
-    --mt-card-foreground: hsl(210 40% 98%);
-    --mt-primary: hsl(210 40% 98%);
-    --mt-primary-rgb: 248, 250, 252;
-    --mt-primary-foreground: hsl(222.2 47.4% 11.2%);
-    --mt-secondary: hsl(217.2 32.6% 17.5%);
-    --mt-secondary-foreground: hsl(210 40% 98%);
-    --mt-muted: hsl(217.2 32.6% 17.5%);
-    --mt-muted-foreground: hsl(215 20.2% 65.1%);
-    --mt-accent: hsl(217.2 32.6% 17.5%);
-    --mt-accent-foreground: hsl(210 40% 98%);
-    --mt-destructive: hsl(0 62.8% 30.6%);
-    --mt-destructive-foreground: hsl(210 40% 98%);
-    --mt-border: hsl(217.2 32.6% 17.5%);
-    --mt-input: hsl(217.2 32.6% 17.5%);
-    --mt-ring: hsl(212.7 26.8% 83.9%);
-}
-
-html[data-mt-theme="stone"] {
-    --mt-background: hsl(20 14.3% 4.1%);
-    --mt-foreground: hsl(60 9.1% 97.8%);
-    --mt-card: hsl(20 14.3% 4.1%);
-    --mt-card-foreground: hsl(60 9.1% 97.8%);
-    --mt-primary: hsl(60 9.1% 97.8%);
-    --mt-primary-rgb: 250, 250, 249;
-    --mt-primary-foreground: hsl(24 9.8% 10%);
-    --mt-secondary: hsl(12 6.5% 15.1%);
-    --mt-secondary-foreground: hsl(60 9.1% 97.8%);
-    --mt-muted: hsl(12 6.5% 15.1%);
-    --mt-muted-foreground: hsl(24 5.4% 63.9%);
-    --mt-accent: hsl(12 6.5% 15.1%);
-    --mt-accent-foreground: hsl(60 9.1% 97.8%);
-    --mt-destructive: hsl(0 62.8% 30.6%);
-    --mt-destructive-foreground: hsl(60 9.1% 97.8%);
-    --mt-border: hsl(12 6.5% 15.1%);
-    --mt-input: hsl(12 6.5% 15.1%);
-    --mt-ring: hsl(24 5.7% 82.9%);
-}
-
-html[data-mt-theme="gray"] {
-    --mt-background: hsl(224 71.4% 4.1%);
-    --mt-foreground: hsl(210 20% 98%);
-    --mt-card: hsl(224 71.4% 4.1%);
-    --mt-card-foreground: hsl(210 20% 98%);
-    --mt-primary: hsl(210 20% 98%);
-    --mt-primary-rgb: 249, 250, 251;
-    --mt-primary-foreground: hsl(220.9 39.3% 11%);
-    --mt-secondary: hsl(215 27.9% 16.9%);
-    --mt-secondary-foreground: hsl(210 20% 98%);
-    --mt-muted: hsl(215 27.9% 16.9%);
-    --mt-muted-foreground: hsl(217.9 10.6% 64.9%);
-    --mt-accent: hsl(215 27.9% 16.9%);
-    --mt-accent-foreground: hsl(210 20% 98%);
-    --mt-destructive: hsl(0 62.8% 30.6%);
-    --mt-destructive-foreground: hsl(210 20% 98%);
-    --mt-border: hsl(215 27.9% 16.9%);
-    --mt-input: hsl(215 27.9% 16.9%);
-    --mt-ring: hsl(216 12.2% 83.9%);
-}
-
-html[data-mt-theme="neutral"] {
-    --mt-background: hsl(0 0% 3.9%);
-    --mt-foreground: hsl(0 0% 98%);
-    --mt-card: hsl(0 0% 3.9%);
-    --mt-card-foreground: hsl(0 0% 98%);
-    --mt-primary: hsl(0 0% 98%);
-    --mt-primary-rgb: 250, 250, 250;
-    --mt-primary-foreground: hsl(0 0% 9%);
-    --mt-secondary: hsl(0 0% 14.9%);
-    --mt-secondary-foreground: hsl(0 0% 98%);
-    --mt-muted: hsl(0 0% 14.9%);
-    --mt-muted-foreground: hsl(0 0% 63.9%);
-    --mt-accent: hsl(0 0% 14.9%);
-    --mt-accent-foreground: hsl(0 0% 98%);
-    --mt-destructive: hsl(0 62.8% 30.6%);
-    --mt-destructive-foreground: hsl(0 0% 98%);
-    --mt-border: hsl(0 0% 14.9%);
-    --mt-input: hsl(0 0% 14.9%);
-    --mt-ring: hsl(0 0% 83.1%);
-}
-
-html[data-mt-theme="red"] {
-    --mt-background: hsl(0 0% 3.9%);
-    --mt-foreground: hsl(0 0% 98%);
-    --mt-card: hsl(0 0% 3.9%);
-    --mt-card-foreground: hsl(0 0% 98%);
-    --mt-primary: hsl(0 72.2% 50.6%);
-    --mt-primary-rgb: 220, 38, 38;
-    --mt-primary-foreground: hsl(0 85.7% 97.3%);
-    --mt-secondary: hsl(0 0% 14.9%);
-    --mt-secondary-foreground: hsl(0 0% 98%);
-    --mt-muted: hsl(0 0% 14.9%);
-    --mt-muted-foreground: hsl(0 0% 63.9%);
-    --mt-accent: hsl(0 0% 14.9%);
-    --mt-accent-foreground: hsl(0 0% 98%);
-    --mt-destructive: hsl(0 62.8% 30.6%);
-    --mt-destructive-foreground: hsl(0 0% 98%);
-    --mt-border: hsl(0 0% 14.9%);
-    --mt-input: hsl(0 0% 14.9%);
-    --mt-ring: hsl(0 72.2% 50.6%);
-}
-
-html[data-mt-theme="rose"] {
-    --mt-background: hsl(20 14.3% 4.1%);
-    --mt-foreground: hsl(0 0% 95%);
-    --mt-card: hsl(24 9.8% 10%);
-    --mt-card-foreground: hsl(0 0% 95%);
-    --mt-primary: hsl(346.8 77.2% 49.8%);
-    --mt-primary-rgb: 225, 29, 72;
-    --mt-primary-foreground: hsl(355.7 100% 97.3%);
-    --mt-secondary: hsl(240 3.7% 15.9%);
-    --mt-secondary-foreground: hsl(0 0% 98%);
-    --mt-muted: hsl(0 0% 15%);
-    --mt-muted-foreground: hsl(240 5% 64.9%);
-    --mt-accent: hsl(12 6.5% 15.1%);
-    --mt-accent-foreground: hsl(0 0% 98%);
-    --mt-destructive: hsl(0 62.8% 30.6%);
-    --mt-destructive-foreground: hsl(0 85.7% 97.3%);
-    --mt-border: hsl(240 3.7% 15.9%);
-    --mt-input: hsl(240 3.7% 15.9%);
-    --mt-ring: hsl(346.8 77.2% 49.8%);
-}
-
-html[data-mt-theme="orange"] {
-    --mt-background: hsl(20 14.3% 4.1%);
-    --mt-foreground: hsl(60 9.1% 97.8%);
-    --mt-card: hsl(20 14.3% 4.1%);
-    --mt-card-foreground: hsl(60 9.1% 97.8%);
-    --mt-primary: hsl(20.5 90.2% 48.2%);
-    --mt-primary-rgb: 234, 88, 12;
-    --mt-primary-foreground: hsl(60 9.1% 97.8%);
-    --mt-secondary: hsl(12 6.5% 15.1%);
-    --mt-secondary-foreground: hsl(60 9.1% 97.8%);
-    --mt-muted: hsl(12 6.5% 15.1%);
-    --mt-muted-foreground: hsl(24 5.4% 63.9%);
-    --mt-accent: hsl(12 6.5% 15.1%);
-    --mt-accent-foreground: hsl(60 9.1% 97.8%);
-    --mt-destructive: hsl(0 62.8% 30.6%);
-    --mt-destructive-foreground: hsl(60 9.1% 97.8%);
-    --mt-border: hsl(12 6.5% 15.1%);
-    --mt-input: hsl(12 6.5% 15.1%);
-    --mt-ring: hsl(20.5 90.2% 48.2%);
-}
-
-html[data-mt-theme="green"] {
-    --mt-background: hsl(20 14.3% 4.1%);
-    --mt-foreground: hsl(0 0% 95%);
-    --mt-card: hsl(24 9.8% 10%);
-    --mt-card-foreground: hsl(0 0% 95%);
-    --mt-primary: hsl(142.1 70.6% 45.3%);
-    --mt-primary-rgb: 34, 197, 94;
-    --mt-primary-foreground: hsl(144.9 80.4% 10%);
-    --mt-secondary: hsl(240 3.7% 15.9%);
-    --mt-secondary-foreground: hsl(0 0% 98%);
-    --mt-muted: hsl(0 0% 15%);
-    --mt-muted-foreground: hsl(240 5% 64.9%);
-    --mt-accent: hsl(12 6.5% 15.1%);
-    --mt-accent-foreground: hsl(0 0% 98%);
-    --mt-destructive: hsl(0 62.8% 30.6%);
-    --mt-destructive-foreground: hsl(0 85.7% 97.3%);
-    --mt-border: hsl(240 3.7% 15.9%);
-    --mt-input: hsl(240 3.7% 15.9%);
-    --mt-ring: hsl(142.4 71.8% 29.2%);
-}
-
-:root,
-html[data-mt-theme="blue"] {
-    --mt-background: hsl(222.2 84% 4.9%);
-    --mt-foreground: hsl(210 40% 98%);
-    --mt-card: hsl(222.2 84% 4.9%);
-    --mt-card-foreground: hsl(210 40% 98%);
-    --mt-primary: hsl(217.2 91.2% 59.8%);
-    --mt-primary-rgb: 59, 130, 246;
-    --mt-primary-foreground: hsl(222.2 47.4% 11.2%);
-    --mt-secondary: hsl(217.2 32.6% 17.5%);
-    --mt-secondary-foreground: hsl(210 40% 98%);
-    --mt-muted: hsl(217.2 32.6% 17.5%);
-    --mt-muted-foreground: hsl(215 20.2% 65.1%);
-    --mt-accent: hsl(217.2 32.6% 17.5%);
-    --mt-accent-foreground: hsl(210 40% 98%);
-    --mt-destructive: hsl(0 62.8% 30.6%);
-    --mt-destructive-foreground: hsl(210 40% 98%);
-    --mt-border: hsl(217.2 32.6% 17.5%);
-    --mt-input: hsl(217.2 32.6% 17.5%);
-    --mt-ring: hsl(224.3 76.3% 48%);
-}
-
-html[data-mt-theme="yellow"] {
-    --mt-background: hsl(20 14.3% 4.1%);
-    --mt-foreground: hsl(60 9.1% 97.8%);
-    --mt-card: hsl(20 14.3% 4.1%);
-    --mt-card-foreground: hsl(60 9.1% 97.8%);
-    --mt-primary: hsl(47.9 95.8% 53.1%);
-    --mt-primary-rgb: 250, 204, 21;
-    --mt-primary-foreground: hsl(26 83.3% 14.1%);
-    --mt-secondary: hsl(12 6.5% 15.1%);
-    --mt-secondary-foreground: hsl(60 9.1% 97.8%);
-    --mt-muted: hsl(12 6.5% 15.1%);
-    --mt-muted-foreground: hsl(24 5.4% 63.9%);
-    --mt-accent: hsl(12 6.5% 15.1%);
-    --mt-accent-foreground: hsl(60 9.1% 97.8%);
-    --mt-destructive: hsl(0 62.8% 30.6%);
-    --mt-destructive-foreground: hsl(60 9.1% 97.8%);
-    --mt-border: hsl(12 6.5% 15.1%);
-    --mt-input: hsl(12 6.5% 15.1%);
-    --mt-ring: hsl(35.5 91.7% 32.9%);
-}
-
-html[data-mt-theme="violet"] {
-    --mt-background: hsl(224 71.4% 4.1%);
-    --mt-foreground: hsl(210 20% 98%);
-    --mt-card: hsl(224 71.4% 4.1%);
-    --mt-card-foreground: hsl(210 20% 98%);
-    --mt-primary: hsl(263.4 70% 50.4%);
-    --mt-primary-rgb: 109, 40, 217;
-    --mt-primary-foreground: hsl(210 20% 98%);
-    --mt-secondary: hsl(215 27.9% 16.9%);
-    --mt-secondary-foreground: hsl(210 20% 98%);
-    --mt-muted: hsl(215 27.9% 16.9%);
-    --mt-muted-foreground: hsl(217.9 10.6% 64.9%);
-    --mt-accent: hsl(215 27.9% 16.9%);
-    --mt-accent-foreground: hsl(210 20% 98%);
-    --mt-destructive: hsl(0 62.8% 30.6%);
-    --mt-destructive-foreground: hsl(210 20% 98%);
-    --mt-border: hsl(215 27.9% 16.9%);
-    --mt-input: hsl(215 27.9% 16.9%);
-    --mt-ring: hsl(263.4 70% 50.4%);
-}
-
-html[data-mt-theme="teal"] {
-    --mt-background: hsl(180 30% 5%);
-    --mt-foreground: hsl(170 30% 97%);
-    --mt-card: hsl(180 26% 8%);
-    --mt-card-foreground: hsl(170 30% 97%);
-    --mt-primary: hsl(172 66% 50%);
-    --mt-primary-rgb: 43, 212, 189;
-    --mt-primary-foreground: hsl(174 80% 8%);
-    --mt-secondary: hsl(180 22% 15%);
-    --mt-secondary-foreground: hsl(170 30% 97%);
-    --mt-muted: hsl(180 22% 15%);
-    --mt-muted-foreground: hsl(180 12% 62%);
-    --mt-accent: hsl(180 22% 15%);
-    --mt-accent-foreground: hsl(170 30% 97%);
-    --mt-destructive: hsl(0 62.8% 45%);
-    --mt-destructive-foreground: hsl(0 0% 98%);
-    --mt-border: hsl(180 20% 17%);
-    --mt-input: hsl(180 20% 17%);
-    --mt-ring: hsl(172 66% 50%);
-}
-
-// ---------------------------------------------------------------------------
-// Derived tokens (dark) — same selectors as tokens.scss, loaded later.
-// ---------------------------------------------------------------------------
-:root,
 html[data-mt-theme] {
-    // Mix against the active preset's own canvas — never a hardcoded Forest hue.
-    --mt-content-bg: color-mix(in srgb, var(--mt-primary) 6%, var(--mt-background));
-    --mt-content-bg-accent: color-mix(in srgb, var(--mt-primary) 10%, var(--mt-card));
+    color-scheme: dark;
+    --mt-ring: color-mix(in srgb, var(--mt-primary) 50%, transparent);
+    --mt-primary-soft: color-mix(in srgb, var(--mt-primary) 16%, var(--mt-card));
+    --mt-primary-hover: color-mix(in oklab, var(--mt-primary) 86%, #ffffff);
+    --mt-primary-active: color-mix(in oklab, var(--mt-primary) 76%, #ffffff);
+    --mt-success-soft: color-mix(in srgb, var(--mt-success) 16%, var(--mt-card));
+    --mt-warning-soft: color-mix(in srgb, var(--mt-warning) 16%, var(--mt-card));
+    --mt-destructive-soft: color-mix(in srgb, var(--mt-destructive) 16%, var(--mt-card));
+    --mt-info-soft: color-mix(in srgb, var(--mt-info) 16%, var(--mt-card));
+    --mt-placeholder: color-mix(in srgb, var(--mt-muted-foreground) 80%, var(--mt-card));
+    --mt-hover: color-mix(in srgb, var(--mt-foreground) 7%, transparent);
+    --mt-selected: color-mix(in srgb, var(--mt-primary) 16%, var(--mt-card));
+
+    --mt-content-bg: color-mix(in srgb, var(--mt-canvas-base) 96%, var(--mt-primary));
+    --mt-content-bg-accent: color-mix(in srgb, var(--mt-content-bg) 90%, var(--mt-foreground));
     --mt-card-matte: color-mix(in srgb, var(--mt-card) 88%, var(--mt-muted));
+    --mt-popover: color-mix(in srgb, var(--mt-card) 92%, var(--mt-foreground));
+    --mt-overlay: color-mix(in srgb, #000000 60%, transparent);
+    --mt-stitch-dot: color-mix(in srgb, var(--mt-foreground) 12%, transparent);
+    --mt-scrollbar: color-mix(in srgb, var(--mt-foreground) 22%, transparent);
+    --mt-scrollbar-hover: color-mix(in srgb, var(--mt-foreground) 38%, transparent);
 
-    --mt-stitch-bg: color-mix(in srgb, var(--mt-content-bg) 70%, #050505);
-    --mt-stitch-dot: rgba(255, 255, 255, 0.12);
-    --mt-stitch-size: 16px;
+    --mt-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.35);
+    --mt-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.3);
+    --mt-shadow-md: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 20px -8px rgba(0, 0, 0, 0.6);
+    --mt-shadow-lg: 0 16px 36px -10px rgba(0, 0, 0, 0.7);
+    --mt-shadow-xl: 0 28px 60px -14px rgba(0, 0, 0, 0.8);
 
-    --mt-chrome-bg: color-mix(in srgb, var(--mt-card) 80%, var(--mt-content-bg));
-    --mt-topbar-bg: var(--mt-chrome-bg);
-    // Soft reverse of the content canvas — same idea as shadcn --sidebar.
-    --mt-sidebar-bg: color-mix(in srgb, var(--mt-muted) 70%, var(--mt-card));
-    --mt-sidebar-bg-2: var(--mt-muted);
+    --mt-chrome-bg: var(--mt-card);
+    --mt-topbar-bg: var(--mt-card);
+    --mt-sidebar-bg: var(--mt-card);
+    --mt-sidebar-active-bg: var(--mt-primary-soft);
+}
+// Option blocks re-declared so they still win over the derived block above.
+html[data-mt-border="subtle"] { --mt-border: color-mix(in srgb, var(--mt-border-base) 80%, transparent); }
+html[data-mt-sidebar-bg="tinted"] {
+    --mt-sidebar-bg: color-mix(in srgb, var(--mt-primary) 7%, var(--mt-card));
+    --mt-sidebar-active-bg: color-mix(in srgb, var(--mt-primary) 20%, var(--mt-card));
+}
+html[data-mt-sidebar-bg="gradient"] {
+    // Dark mode: a deep, low-glare brand gradient with light text.
+    --mt-sidebar-bg: color-mix(in oklab, var(--mt-primary) 22%, var(--mt-card));
+    --mt-sidebar-bg-image: linear-gradient(165deg,
+        color-mix(in oklab, var(--mt-primary) 30%, var(--mt-card)) 0%,
+        color-mix(in oklab, var(--mt-primary) 14%, var(--mt-card)) 100%);
     --mt-sidebar-fg: var(--mt-foreground);
     --mt-sidebar-muted-fg: var(--mt-muted-foreground);
-    --mt-sidebar-accent: color-mix(in srgb, var(--mt-primary) 16%, var(--mt-muted));
+    --mt-sidebar-accent: color-mix(in srgb, var(--mt-foreground) 8%, transparent);
     --mt-sidebar-accent-fg: var(--mt-foreground);
-    --mt-sidebar-primary: var(--mt-primary);
-    --mt-sidebar-primary-fg: var(--mt-primary-foreground);
-    --mt-sidebar-border: var(--mt-border);
-    --mt-sidebar-ring: var(--mt-ring);
-    --mt-nav-bg: var(--mt-topbar-bg);
-    --mt-nav-bg-2: var(--mt-topbar-bg);
-    --mt-nav-fg: var(--mt-foreground);
-    --mt-nav-muted-fg: var(--mt-muted-foreground);
-    --mt-nav-hover: var(--mt-muted);
-    --mt-nav-active-bg: var(--mt-sidebar-accent);
-    --mt-nav-active-fg: var(--mt-sidebar-accent-fg);
-    --mt-nav-border: var(--mt-border);
-    --mt-nav-tile: var(--mt-card);
-    --mt-nav-scrollbar: color-mix(in srgb, var(--mt-foreground) 28%, transparent);
-
-    --mt-success: hsl(142 70% 45%);
-    --mt-warning: hsl(38 92% 55%);
-    --mt-info: var(--mt-primary);
-
-    --settings__tab-bg: var(--mt-muted);
-    --settings__tab-bg--active: var(--mt-card);
-    --settings__tab-color: var(--mt-foreground);
-    --settings__title-bg: transparent;
-
-    --mt-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
-    --mt-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.25);
-    --mt-shadow-md: 0 1px 2px rgba(0, 0, 0, 0.35), 0 6px 18px -8px rgba(0, 0, 0, 0.55);
-    --mt-shadow-lg: 0 12px 32px -8px rgba(0, 0, 0, 0.65);
-    --mt-shadow-xl: 0 24px 48px -12px rgba(0, 0, 0, 0.75);
-
-    --or-sheet-bg: var(--mt-card);
-    --or-sheet-border: var(--mt-border);
-    --or-sheet-fg: var(--mt-foreground);
-    --or-sheet-muted: var(--mt-muted-foreground);
-    --or-sheet-subtle: var(--mt-muted-foreground);
-    --or-sheet-shadow: var(--mt-shadow-xl);
-    --or-overlay: color-mix(in srgb, var(--mt-background) 42%, transparent);
-    --or-input-border: var(--mt-border);
-    --or-input-bg: var(--mt-card);
-    --or-input-placeholder: var(--mt-muted-foreground);
-    --or-focus-border: var(--mt-foreground);
-    --or-focus-ring: color-mix(in srgb, var(--mt-foreground) 12%, transparent);
-    --or-accent: var(--mt-primary);
-    --or-accent-border: color-mix(in srgb, var(--mt-primary) 55%, var(--mt-border));
-    --or-accent-soft: color-mix(in srgb, var(--mt-primary) 16%, var(--mt-card));
-    --or-accent-ring: color-mix(in srgb, var(--mt-primary) 28%, transparent);
-    --or-icon-bg: var(--mt-muted);
-    --or-save-bg: var(--mt-primary);
-    --or-save-fg: var(--mt-primary-foreground);
-    --or-save-hover: color-mix(in srgb, var(--mt-primary) 82%, var(--mt-foreground));
-    --or-pill-bg: var(--mt-card);
-    --or-pill-border: var(--mt-border);
-    --or-pill-shadow: var(--mt-shadow-lg);
-    --or-close-fg: var(--mt-muted-foreground);
-    --or-close-hover: var(--mt-foreground);
-    --or-toggle-on: var(--mt-primary);
+    --mt-sidebar-active-bg: color-mix(in srgb, var(--mt-primary) 28%, transparent);
+    --mt-sidebar-active-fg: var(--mt-foreground);
+    --mt-sidebar-indicator: var(--mt-primary);
+    --mt-sidebar-guide: color-mix(in srgb, var(--mt-foreground) 14%, transparent);
 }
-
-html[data-mt-theme="indigo"] {
-    --mt-success: hsl(172 66% 45%);
-    --mt-info: hsl(172 100% 30%);
+html[data-mt-sidebar-bg="glass"] {
+    --mt-sidebar-bg: color-mix(in srgb, var(--mt-card) 62%, transparent);
+}
+html[data-mt-topbar-style="blend"] { --mt-topbar-bg: var(--mt-content-bg); }
+html[data-mt-theme] {
+    --or-overlay: var(--mt-overlay);
 }

@@ -23,12 +23,7 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
     ],
     'assets': {
         'web.assets_backend': [
-            'purchase_modern/static/src/scss/tokens.scss',
-            'purchase_modern/static/src/scss/pages.scss',
-            'purchase_modern/static/src/scss/list.scss',
-            'purchase_modern/static/src/scss/controls.scss',
-            'purchase_modern/static/src/scss/purchase.scss',
-            'purchase_modern/static/src/scss/dash.scss',
+            'purchase_modern/static/src/scss/app.scss',
             'purchase_modern/static/src/js/core/*.js',
             'purchase_modern/static/src/js/components/*.js',
             'purchase_modern/static/src/js/sidebar/*.js',
@@ -37,7 +32,7 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
             'purchase_modern/static/src/xml/*.xml',
         ],
         'web.assets_web_dark': [
-            'purchase_modern/static/src/scss/tokens.dark.scss',
+            'purchase_modern/static/src/scss/app.dark.scss',
         ],
     },
     'installable': True,

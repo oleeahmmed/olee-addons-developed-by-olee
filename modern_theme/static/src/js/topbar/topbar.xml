@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Odoo's navbar keeps its systray, user menu, company switcher and badges:
+         we only add a start area after the apps menu. -->
+    <t t-inherit="web.NavBar" t-inherit-mode="extension">
+        <xpath expr="//nav[hasclass('o_main_navbar')]/t[@t-call='web.NavBar.AppsMenu']" position="after">
+            <MtTopbarStart/>
+        </xpath>
+    </t>
+
+    <t t-name="modern_theme.TopbarStart">
+        <div class="mt-topbar-start">
+            <button type="button" class="mt-topbar-burger" t-on-click="toggleSidebar" aria-label="Open menu" title="Menu">
+                <i class="fa fa-bars" aria-hidden="true"/>
+            </button>
+            <div t-if="app" class="mt-topbar-app">
+                <t t-call="modern_theme.AppIcon"/>
+                <span class="mt-topbar-app-name" t-esc="app.name"/>
+            </div>
+            <button type="button" class="mt-topbar-search" t-on-click="openSearch"
+                    title="Search (Ctrl+K)" aria-label="Search apps, menus and records">
+                <i class="fa fa-search" aria-hidden="true"/>
+                <span class="mt-topbar-search-text">Search apps, menus, records…</span>
+                <kbd>Ctrl K</kbd>
+            </button>
+        </div>
+    </t>
+
+    <t t-name="modern_theme.ThemeSwitcher">
+        <div class="o_mt_theme_switcher d-flex align-items-center">
+            <button type="button" class="mt-sys-btn" t-on-click="toggleDark"
+                    t-att-title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+                    t-att-aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'">
+                <i t-attf-class="fa {{ isDark ? 'fa-sun-o' : 'fa-moon-o' }}" aria-hidden="true"/>
+            </button>
+            <Dropdown position="'bottom-end'" menuClass="'mt-switcher-menu'">
+                <button type="button" class="mt-sys-btn" title="Appearance" aria-label="Appearance">
+                    <i class="fa fa-paint-brush" aria-hidden="true"/>
+                </button>
+                <t t-set-slot="content">
+                    <div class="mt-switcher">
+                        <div class="mt-switcher-label">Mode</div>
+                        <div class="mt-segmented" role="radiogroup" aria-label="Color mode">
+                            <button type="button" role="radio" t-att-aria-checked="state.values.color_mode === 'light' ? 'true' : 'false'" t-on-click="() => this.set('color_mode', 'light')"><i class="fa fa-sun-o" aria-hidden="true"/> Light</button>
+                            <button type="button" role="radio" t-att-aria-checked="state.values.color_mode === 'dark' ? 'true' : 'false'" t-on-click="() => this.set('color_mode', 'dark')"><i class="fa fa-moon-o" aria-hidden="true"/> Dark</button>
+                            <button type="button" role="radio" t-att-aria-checked="state.values.color_mode === 'auto' ? 'true' : 'false'" t-on-click="() => this.set('color_mode', 'auto')"><i class="fa fa-desktop" aria-hidden="true"/> Auto</button>
+                        </div>
+                        <div class="mt-switcher-label">Brand color</div>
+                        <div class="mt-swatches mt-swatches-sm" role="radiogroup" aria-label="Brand color">
+                            <t t-foreach="presets" t-as="preset" t-key="preset[0]">
+                                <button type="button" class="mt-swatch" role="radio"
+                                        t-att-aria-checked="state.values.preset === preset[0] ? 'true' : 'false'"
+                                        t-att-style="'--mt-swatch:' + swatches[preset[0]]"
+                                        t-att-title="preset[1]" t-att-aria-label="preset[1]"
+                                        t-on-click="() => this.set('preset', preset[0])">
+                                    <i class="fa fa-check" aria-hidden="true"/>
+                                </button>
+                            </t>
+                        </div>
+                        <div class="mt-switcher-label">Sidebar</div>
+                        <div class="mt-cards mt-cards-sm" role="radiogroup" aria-label="Sidebar style">
+                            <t t-foreach="styles" t-as="style" t-key="style[0]">
+                                <button type="button" class="mt-card-choice" role="radio"
+                                        t-att-aria-checked="state.values.sidebar_style === style[0] ? 'true' : 'false'"
+                                        t-on-click="() => this.set('sidebar_style', style[0])">
+                                    <t t-call="modern_theme.SidebarStylePreview"><t t-set="variant" t-value="style[0]"/></t>
+                                    <span t-esc="style[1]"/>
+                                </button>
+                            </t>
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-sm w-100 mt-2" t-on-click="openMore">
+                            <i class="fa fa-sliders me-1" aria-hidden="true"/> All appearance options…
+                        </button>
+                    </div>
+                </t>
+            </Dropdown>
+        </div>
+    </t>
+
+</templates>

@@ -6,6 +6,7 @@ from dateutil.relativedelta import relativedelta
 from odoo import api, fields, models
 from odoo.exceptions import UserError
 from odoo.tools import date_utils, plaintext2html
+from odoo.tools.sql import escape_psql
 
 
 # Won / lost deals are archived or not depending on settings; open ("pending") deals
@@ -246,6 +247,7 @@ class CrmLead(models.Model):
             'lead_pivot': ref('crm.crm_lead_view_pivot'),
             'lead_graph': ref('crm.crm_lead_view_graph'),
             'lead_activity': ref('crm.crm_lead_view_activity'),
+            'lead_form': ref('crm_modern.crm_lead_view_form_simple_create'),
             # crm.lead — opportunities
             'opportunity_search': ref('crm.view_crm_case_opportunities_filter'),
             'opportunity_list': ref('crm.crm_case_tree_view_oppor'),
@@ -254,6 +256,7 @@ class CrmLead(models.Model):
             'opportunity_pivot': ref('crm.crm_lead_view_pivot'),
             'opportunity_graph': ref('crm.crm_lead_view_graph'),
             'opportunity_activity': ref('crm.crm_lead_view_activity'),
+            'opportunity_form': ref('crm_modern.crm_lead_view_form_simple_create'),
             # sales teams / members (standard views)
             'team_search': ref('sales_team.crm_team_view_search'),
             'team_list': ref('sales_team.crm_team_view_tree'),
@@ -374,7 +377,7 @@ class CrmLead(models.Model):
                     continue
                 key = name.lower()
                 if key not in tag_cache:
-                    tag = Tag.search([('name', '=ilike', name)], limit=1) or Tag.create({'name': name})
+                    tag = Tag.search([('name', '=ilike', escape_psql(name))], limit=1) or Tag.create({'name': name})
                     tag_cache[key] = tag.id
                 ids.append(tag_cache[key])
             return [(6, 0, ids)] if ids else False
@@ -397,7 +400,7 @@ class CrmLead(models.Model):
             if raw not in user_cache:
                 user = Users.search([
                     ('share', '=', False),
-                    '|', '|', ('name', '=ilike', raw), ('login', '=ilike', raw), ('email', '=ilike', raw),
+                    '|', '|', ('name', '=ilike', escape_psql(raw)), ('login', '=ilike', escape_psql(raw)), ('email', '=ilike', escape_psql(raw)),
                 ], limit=1)
                 user_cache[raw] = user.id
             return user_cache[raw]
@@ -447,7 +450,7 @@ class CrmLead(models.Model):
             if user_id:
                 vals['user_id'] = user_id
             if row.get('source'):
-                source = Source.search([('name', '=ilike', row['source'])], limit=1) or Source.create({'name': row['source']})
+                source = Source.search([('name', '=ilike', escape_psql(row['source']))], limit=1) or Source.create({'name': row['source']})
                 vals['source_id'] = source.id
             if row.get('priority', '') in ('0', '1', '2', '3'):
                 vals['priority'] = row['priority']

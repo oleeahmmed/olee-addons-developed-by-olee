@@ -1,0 +1,121 @@
+// Legacy page shell for the modern app addons (crm_modern, sales_modern,
+// inventory_modern, purchase_modern, mrp_modern). Their client actions render
+// .o_<prefix>_page roots that must fill the content card. Scoped to those apps
+// with html.mt-app-modern (set by the sidebar), instead of a root :has().
+
+html.mt-app-modern .o_web_client > .o_action_manager {
+        .o_cm_page,
+        .o_ss_page,
+        .o_im_page,
+        .o_mp_page,
+        .o_mr_page,
+        .od-page,
+        .o_view_controller,
+        .o_form_view_container {
+            flex: 1 1 auto;
+            min-height: 0;
+        }
+
+        .o_cm_page,
+        .o_ss_page,
+        .o_im_page,
+        .o_mp_page,
+        .o_mr_page,
+        .od-page {
+            height: auto;
+        }
+
+        > .od-page,
+        > .o_cm.od-page,
+        > .o_ss.od-page,
+        > .o_im.od-page,
+        > .o_mp.od-page,
+        > .o_mr.od-page {
+            overflow-y: auto;
+        }
+
+        .o_cm_page--native,
+        .o_ss_page--native,
+        .o_im_page--native,
+        .o_mp_page--native,
+        .o_mr_page--native {
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+
+            [class*="-container--native"] {
+                flex: 1 1 auto;
+                min-height: 0;
+                width: 100%;
+                max-width: none;
+                padding: 0 !important;
+                gap: 0;
+            }
+
+            [class*="-native"] {
+                flex: 1 1 auto;
+                min-height: 0;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+                border: 0;
+                border-radius: 0;
+                box-shadow: none;
+                background: transparent;
+            }
+
+            .o_view_controller,
+            [class*="_native_view"] {
+                flex: 1 1 auto;
+                min-height: 0;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .o_content {
+                flex: 1 1 auto;
+                min-height: 0;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+                background: transparent;
+            }
+
+            .o_list_view,
+            .o_kanban_view,
+            .o_list_renderer,
+            .o_kanban_renderer {
+                flex: 1 1 auto;
+                min-height: 0;
+            }
+
+            .o_list_renderer {
+                margin: 0;
+                border: 0;
+                border-radius: 0;
+                box-shadow: none;
+                overflow: auto;
+                background: transparent;
+            }
+        }
+}
+
+html.mt-app-modern .o_web_client {
+    .o_cp_searchview {
+        min-height: var(--mt-control-h);
+    }
+    // List, kanban and dashboard "New" buttons use the primary pill.
+    .o_list_button_add,
+    .o-kanban-button-new,
+    .od-btn.od-btn--primary {
+        border-radius: var(--mt-radius-btn);
+        font-weight: 600;
+    }
+}
+
+// Empty views: some list renderers shrink to the header row; give the helper room.
+.o_list_renderer:has(> .o_view_nocontent),
+.o_kanban_renderer:has(> .o_view_nocontent) {
+    position: relative;
+    min-height: 26rem;
+}

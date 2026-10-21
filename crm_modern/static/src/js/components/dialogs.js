@@ -385,19 +385,27 @@ export class MarkDoneDialog extends Component {
             return;
         }
         s.busy = true;
+        s.error = "";
         const a = this.props.activity;
         const kwargs = { feedback: s.feedback.trim() || false };
-        if (s.file) {
-            const [attId] = await this.orm.create("ir.attachment", [{
-                name: s.file.name,
-                datas: await this.readFile(s.file),
-                res_model: a.res_model,
-                res_id: a.res_id,
-            }]);
-            kwargs.attachment_ids = [attId];
+        let result;
+        try {
+            if (s.file) {
+                const [attId] = await this.orm.create("ir.attachment", [{
+                    name: s.file.name,
+                    datas: await this.readFile(s.file),
+                    res_model: a.res_model,
+                    res_id: a.res_id,
+                }]);
+                kwargs.attachment_ids = [attId];
+            }
+            const method = scheduleNext ? "action_feedback_schedule_next" : "action_feedback";
+            result = await this.orm.call("mail.activity", method, [[a.id]], kwargs);
+        } catch (error) {
+            // Keep the dialog usable after a server error (buttons used to stay disabled).
+            s.busy = false;
+            throw error;
         }
-        const method = scheduleNext ? "action_feedback_schedule_next" : "action_feedback";
-        const result = await this.orm.call("mail.activity", method, [[a.id]], kwargs);
         this.props.close();
         this.props.onDone(scheduleNext && result && typeof result === "object" ? result : false);
     }

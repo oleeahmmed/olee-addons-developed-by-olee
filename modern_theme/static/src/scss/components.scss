@@ -1,0 +1,485 @@
+// Modern Theme: shared components (every Odoo app).
+// Only tokens are used here: no hard-coded colours. Sizes follow the density,
+// radius and border options through --mt-control-h, --mt-radius-*, --mt-border.
+
+$mt: 'html[data-mt-theme]';
+
+// ---------------------------------------------------------------------------
+// Buttons
+// ---------------------------------------------------------------------------
+#{$mt} .btn {
+    --btn-font-weight: 500;
+    --btn-border-radius: var(--mt-radius-btn);
+    --btn-border-width: 1px;
+    --btn-box-shadow: none;
+    --btn-focus-box-shadow: 0 0 0 3px var(--mt-ring);
+    --btn-disabled-opacity: 0.5;
+    border-radius: var(--btn-border-radius);
+    transition: background-color var(--mt-duration) var(--mt-ease), border-color var(--mt-duration) var(--mt-ease),
+        color var(--mt-duration) var(--mt-ease), box-shadow var(--mt-duration) var(--mt-ease);
+}
+#{$mt} .btn-primary {
+    --btn-color: var(--mt-primary-foreground);
+    --btn-bg: var(--mt-primary);
+    --btn-border-color: var(--mt-primary);
+    --btn-hover-color: var(--mt-primary-foreground);
+    --btn-hover-bg: var(--mt-primary-hover);
+    --btn-hover-border-color: var(--mt-primary-hover);
+    --btn-active-color: var(--mt-primary-foreground);
+    --btn-active-bg: var(--mt-primary-active);
+    --btn-active-border-color: var(--mt-primary-active);
+    --btn-disabled-color: var(--mt-primary-foreground);
+    --btn-disabled-bg: var(--mt-primary);
+    --btn-disabled-border-color: var(--mt-primary);
+    box-shadow: 0 1px 2px color-mix(in srgb, var(--mt-primary) 30%, transparent);
+}
+#{$mt} .btn-secondary,
+#{$mt} .btn-light,
+#{$mt} .btn-outline-secondary {
+    --btn-color: var(--mt-foreground);
+    --btn-bg: var(--mt-card);
+    --btn-border-color: var(--mt-input);
+    --btn-hover-color: var(--mt-foreground);
+    --btn-hover-bg: var(--mt-muted);
+    --btn-hover-border-color: var(--mt-input);
+    --btn-active-color: var(--mt-foreground);
+    --btn-active-bg: color-mix(in srgb, var(--mt-muted) 70%, var(--mt-foreground) 6%);
+    --btn-active-border-color: var(--mt-input);
+    --btn-disabled-color: var(--mt-muted-foreground);
+    --btn-disabled-bg: var(--mt-card);
+    --btn-disabled-border-color: var(--mt-border-base);
+}
+#{$mt} .btn-outline-primary {
+    --btn-color: var(--mt-primary-text);
+    --btn-bg: transparent;
+    --btn-border-color: color-mix(in srgb, var(--mt-primary) 55%, var(--mt-border-base));
+    --btn-hover-color: var(--mt-primary-text);
+    --btn-hover-bg: var(--mt-primary-soft);
+    --btn-hover-border-color: var(--mt-primary);
+    --btn-active-color: var(--mt-primary-foreground);
+    --btn-active-bg: var(--mt-primary);
+    --btn-active-border-color: var(--mt-primary);
+}
+#{$mt} .btn-link {
+    --btn-color: var(--mt-primary-text);
+    --btn-hover-color: var(--mt-primary-hover);
+    --btn-active-color: var(--mt-primary-active);
+    --btn-disabled-color: var(--mt-muted-foreground);
+}
+#{$mt} .btn-danger {
+    --btn-color: var(--mt-destructive-foreground);
+    --btn-bg: var(--mt-destructive);
+    --btn-border-color: var(--mt-destructive);
+    --btn-hover-color: var(--mt-destructive-foreground);
+    --btn-hover-bg: color-mix(in oklab, var(--mt-destructive) 88%, var(--mt-foreground));
+    --btn-hover-border-color: transparent;
+}
+#{$mt} .btn-outline-danger {
+    --btn-color: var(--mt-destructive);
+    --btn-border-color: color-mix(in srgb, var(--mt-destructive) 50%, var(--mt-border-base));
+    --btn-hover-color: var(--mt-destructive);
+    --btn-hover-bg: var(--mt-destructive-soft);
+    --btn-hover-border-color: var(--mt-destructive);
+}
+#{$mt} .btn-success {
+    --btn-color: #ffffff;
+    --btn-bg: var(--mt-success);
+    --btn-border-color: var(--mt-success);
+    --btn-hover-bg: color-mix(in oklab, var(--mt-success) 88%, var(--mt-foreground));
+    --btn-hover-border-color: transparent;
+}
+#{$mt} .btn-warning {
+    --btn-color: #ffffff;
+    --btn-bg: var(--mt-warning);
+    --btn-border-color: var(--mt-warning);
+}
+// Plain icon buttons used everywhere in Odoo (pager, view switcher, cog menu…)
+#{$mt} .o_control_panel .btn:not(.btn-primary):not(.btn-secondary):not(.btn-link),
+#{$mt} .o_cp_switch_buttons .btn,
+#{$mt} .o_pager .btn {
+    --btn-hover-bg: var(--mt-hover);
+    --btn-active-bg: var(--mt-muted);
+}
+#{$mt} .o_cp_switch_buttons {
+    padding: 2px;
+    gap: 2px;
+    border-radius: calc(var(--mt-radius-btn) + 2px);
+    background: var(--mt-muted);
+    .btn {
+        border: 0;
+        border-radius: var(--mt-radius-btn);
+        color: var(--mt-muted-foreground);
+        &.active {
+            background: var(--mt-card);
+            color: var(--mt-foreground);
+            box-shadow: var(--mt-shadow-xs);
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Inputs
+// ---------------------------------------------------------------------------
+#{$mt} .form-control,
+#{$mt} .form-select {
+    min-height: var(--mt-control-h);
+    color: var(--mt-foreground);
+    background-color: var(--mt-card);
+    border: 1px solid var(--mt-input);
+    border-radius: var(--mt-radius-control);
+    transition: border-color var(--mt-duration) var(--mt-ease), box-shadow var(--mt-duration) var(--mt-ease);
+    &::placeholder { color: var(--mt-placeholder); }
+    &:focus {
+        color: var(--mt-foreground);
+        background-color: var(--mt-card);
+        border-color: var(--mt-primary);
+        box-shadow: 0 0 0 3px var(--mt-ring);
+    }
+    &:disabled { background-color: var(--mt-muted); color: var(--mt-muted-foreground); }
+}
+#{$mt} textarea.form-control { border-radius: var(--mt-radius-field); }
+#{$mt} .input-group-text {
+    background: var(--mt-muted);
+    color: var(--mt-muted-foreground);
+    border-color: var(--mt-input);
+}
+#{$mt} .o_input {
+    color: var(--mt-foreground);
+    border-color: var(--mt-input);
+    &::placeholder { color: var(--mt-placeholder); }
+    &:focus, &:focus-within { border-color: var(--mt-primary); }
+}
+
+// Checkbox, radio, switch
+#{$mt} .form-check-input {
+    background-color: var(--mt-card);
+    border: 1px solid var(--mt-input);
+    &:checked {
+        background-color: var(--mt-primary);
+        border-color: var(--mt-primary);
+    }
+    &:indeterminate {
+        background-color: var(--mt-primary);
+        border-color: var(--mt-primary);
+    }
+    &:focus {
+        border-color: var(--mt-primary);
+        box-shadow: 0 0 0 3px var(--mt-ring);
+    }
+    &[type="checkbox"] { border-radius: calc(var(--mt-radius-xs) + 1px); }
+}
+#{$mt} .form-switch .form-check-input {
+    border-radius: 999px;
+    background-color: var(--mt-input);
+    border-color: transparent;
+    // Knob drawn in the card colour so it is visible in both modes.
+    --mt-knob: var(--mt-card);
+    &:checked { background-color: var(--mt-primary); }
+}
+#{$mt} .o_field_boolean_toggle .form-check-input,
+#{$mt} .o_boolean_toggle .form-check-input {
+    background-color: color-mix(in srgb, var(--mt-muted-foreground) 45%, var(--mt-card));
+    border-color: transparent;
+    &:checked { background-color: var(--mt-primary); }
+}
+
+// ---------------------------------------------------------------------------
+// Dropdowns, autocomplete, popovers, tooltips
+// ---------------------------------------------------------------------------
+#{$mt} .dropdown-menu {
+    --dropdown-bg: var(--mt-popover);
+    --dropdown-color: var(--mt-foreground);
+    --dropdown-border-color: var(--mt-border-base);
+    --dropdown-border-radius: var(--mt-radius-lg);
+    --dropdown-inner-border-radius: calc(var(--mt-radius-lg) - 1px);
+    --dropdown-box-shadow: var(--mt-shadow-lg);
+    --dropdown-link-color: var(--mt-foreground);
+    --dropdown-link-hover-color: var(--mt-foreground);
+    --dropdown-link-hover-bg: var(--mt-hover);
+    --dropdown-link-active-color: var(--mt-primary-text);
+    --dropdown-link-active-bg: var(--mt-primary-soft);
+    --dropdown-link-disabled-color: var(--mt-placeholder);
+    --dropdown-header-color: var(--mt-muted-foreground);
+    --dropdown-divider-bg: var(--mt-border-base);
+    --dropdown-padding-y: 0.3125rem;
+    --dropdown-item-padding-x: 0.75rem;
+    --dropdown-item-padding-y: 0.4375rem;
+    padding-inline: 0.3125rem;
+    box-shadow: var(--mt-shadow-lg);
+    animation: mt-pop-in 140ms var(--mt-ease);
+    .dropdown-item {
+        border-radius: var(--mt-radius-sm);
+        font-size: 0.875rem;
+        &.focus, &:focus { background: var(--mt-hover); color: var(--mt-foreground); }
+        &.active, &.selected, &:active { background: var(--mt-primary-soft); color: var(--mt-primary-text); }
+    }
+    .dropdown-header {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+}
+#{$mt} .o-autocomplete--dropdown-menu {
+    --dropdown-bg: var(--mt-popover);
+    border-color: var(--mt-border-base);
+    .o-autocomplete--dropdown-item > a,
+    .dropdown-item {
+        border-radius: var(--mt-radius-sm);
+        &.ui-state-active, &.o-autocomplete--dropdown-item--active, &:hover {
+            background: var(--mt-hover);
+            color: var(--mt-foreground);
+        }
+    }
+}
+#{$mt} .popover {
+    --popover-bg: var(--mt-popover);
+    --popover-body-color: var(--mt-foreground);
+    --popover-border-color: var(--mt-border-base);
+    --popover-border-radius: var(--mt-radius-lg);
+    --popover-inner-border-radius: calc(var(--mt-radius-lg) - 1px);
+    --popover-header-bg: var(--mt-muted);
+    --popover-header-color: var(--mt-foreground);
+    --popover-arrow-border: var(--mt-border-base);
+    --popover-box-shadow: var(--mt-shadow-lg);
+    box-shadow: var(--mt-shadow-lg);
+}
+#{$mt} .o_popover {
+    background: var(--mt-popover);
+    color: var(--mt-foreground);
+}
+#{$mt} .tooltip {
+    --tooltip-bg: var(--mt-foreground);
+    --tooltip-color: var(--mt-card);
+    --tooltip-border-radius: var(--mt-radius-sm);
+    --tooltip-opacity: 1;
+}
+#{$mt} .o-tooltip {
+    font-size: 0.75rem;
+    line-height: 1.45;
+}
+#{$mt} .o_popover:has(.o-tooltip),
+#{$mt} .popover:has(.o-tooltip) {
+    --popover-bg: var(--mt-foreground);
+    --popover-body-color: var(--mt-card);
+    --popover-border-color: transparent;
+    .o-tooltip, .tooltip-inner { color: var(--mt-card); background: transparent; }
+}
+
+// ---------------------------------------------------------------------------
+// Modals
+// ---------------------------------------------------------------------------
+#{$mt} .modal {
+    --modal-bg: var(--mt-card);
+    --modal-color: var(--mt-foreground);
+    --modal-border-color: var(--mt-border-base);
+    --modal-border-radius: var(--mt-radius-card);
+    --modal-inner-border-radius: calc(var(--mt-radius-card) - 1px);
+    --modal-header-border-color: var(--mt-border);
+    --modal-footer-border-color: var(--mt-border);
+    --modal-box-shadow: var(--mt-shadow-xl);
+    --modal-header-padding: 1rem 1.25rem;
+    --modal-padding: 1.25rem;
+}
+#{$mt} .modal-backdrop {
+    --backdrop-bg: #0b0f17;
+    --backdrop-opacity: 0.45;
+}
+#{$mt} .modal-content {
+    box-shadow: var(--mt-shadow-xl);
+    overflow: hidden;
+    animation: mt-pop-in 180ms var(--mt-ease);
+}
+#{$mt} .modal-header .modal-title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+#{$mt} .modal-footer {
+    background: color-mix(in srgb, var(--mt-muted) 45%, var(--mt-card));
+    gap: 0.5rem;
+    > * { margin: 0; }
+}
+#{$mt} .btn-close {
+    border-radius: var(--mt-radius-sm);
+    opacity: 0.6;
+    &:hover { opacity: 1; background-color: var(--mt-hover); }
+}
+
+// ---------------------------------------------------------------------------
+// Badges, tags, alerts, cards, list groups, tables
+// ---------------------------------------------------------------------------
+#{$mt} .badge {
+    --badge-border-radius: var(--mt-radius-badge);
+    --badge-font-weight: 500;
+    border-radius: var(--badge-border-radius);
+}
+#{$mt} .o_tag {
+    border-radius: var(--mt-radius-badge);
+    font-weight: 500;
+}
+#{$mt} .alert {
+    --alert-border-radius: var(--mt-radius-lg);
+    border-width: 1px;
+}
+#{$mt} .alert-info { --alert-bg: var(--mt-info-soft); --alert-color: var(--mt-foreground); --alert-border-color: color-mix(in srgb, var(--mt-info) 30%, transparent); --alert-link-color: var(--mt-info); }
+#{$mt} .alert-success { --alert-bg: var(--mt-success-soft); --alert-color: var(--mt-foreground); --alert-border-color: color-mix(in srgb, var(--mt-success) 30%, transparent); --alert-link-color: var(--mt-success); }
+#{$mt} .alert-warning { --alert-bg: var(--mt-warning-soft); --alert-color: var(--mt-foreground); --alert-border-color: color-mix(in srgb, var(--mt-warning) 30%, transparent); --alert-link-color: var(--mt-warning); }
+#{$mt} .alert-danger { --alert-bg: var(--mt-destructive-soft); --alert-color: var(--mt-foreground); --alert-border-color: color-mix(in srgb, var(--mt-destructive) 30%, transparent); --alert-link-color: var(--mt-destructive); }
+#{$mt} .alert-secondary, #{$mt} .alert-light { --alert-bg: var(--mt-muted); --alert-color: var(--mt-foreground); --alert-border-color: var(--mt-border); }
+#{$mt} .card {
+    --card-bg: var(--mt-card);
+    --card-color: var(--mt-foreground);
+    --card-border-color: var(--mt-border);
+    --card-border-radius: var(--mt-radius-card);
+    --card-inner-border-radius: calc(var(--mt-radius-card) - 1px);
+    --card-cap-bg: color-mix(in srgb, var(--mt-muted) 50%, var(--mt-card));
+    box-shadow: var(--mt-card-shadow);
+}
+#{$mt} .list-group {
+    --list-group-bg: var(--mt-card);
+    --list-group-color: var(--mt-foreground);
+    --list-group-border-color: var(--mt-border);
+    --list-group-border-radius: var(--mt-radius);
+    --list-group-action-color: var(--mt-foreground);
+    --list-group-action-hover-color: var(--mt-foreground);
+    --list-group-action-hover-bg: var(--mt-hover);
+    --list-group-active-bg: var(--mt-primary-soft);
+    --list-group-active-color: var(--mt-primary-text);
+    --list-group-active-border-color: transparent;
+}
+#{$mt} .table {
+    --table-color: var(--mt-foreground);
+    --table-bg: transparent;
+    --table-border-color: var(--mt-border);
+    --table-striped-bg: color-mix(in srgb, var(--mt-muted) 55%, transparent);
+    --table-striped-color: var(--mt-foreground);
+    --table-hover-bg: var(--mt-hover);
+    --table-hover-color: var(--mt-foreground);
+    --table-active-bg: var(--mt-selected);
+    --table-active-color: var(--mt-foreground);
+}
+
+// Notebook tabs (Odoo forms + Bootstrap .nav-tabs)
+#{$mt} .nav-tabs {
+    --nav-tabs-border-color: var(--mt-border);
+    --nav-tabs-border-radius: 0;
+    --nav-tabs-link-hover-border-color: transparent;
+    --nav-tabs-link-active-color: var(--mt-foreground);
+    --nav-tabs-link-active-bg: transparent;
+    --nav-tabs-link-active-border-color: transparent;
+    --nav-link-color: var(--mt-muted-foreground);
+    --nav-link-hover-color: var(--mt-foreground);
+    gap: 0.25rem;
+    .nav-link {
+        position: relative;
+        border: 0;
+        font-weight: 500;
+        background: transparent;
+        &:hover { color: var(--mt-foreground); }
+        &.active {
+            color: var(--mt-foreground);
+            background: transparent;
+            box-shadow: inset 0 -2px 0 var(--mt-primary);
+        }
+    }
+}
+#{$mt} .nav-pills {
+    --nav-pills-border-radius: var(--mt-radius-btn);
+    --nav-pills-link-active-bg: var(--mt-primary-soft);
+    --nav-pills-link-active-color: var(--mt-primary-text);
+}
+
+// ---------------------------------------------------------------------------
+// Notifications / toasts
+// ---------------------------------------------------------------------------
+#{$mt} .o_notification {
+    --Notification__background-color: var(--mt-popover);
+    background-color: var(--mt-popover);
+    color: var(--mt-foreground);
+    border: 1px solid var(--mt-border-base);
+    border-radius: var(--mt-radius-lg) !important;
+    box-shadow: var(--mt-shadow-lg) !important;
+    overflow: hidden;
+    animation: mt-pop-in 200ms var(--mt-ease);
+    .o_notification_title { font-weight: 600; }
+    .o_notification_content { color: var(--mt-muted-foreground); }
+}
+#{$mt} .o_notification_bar.bg-success { background-color: var(--mt-success) !important; }
+#{$mt} .o_notification_bar.bg-danger { background-color: var(--mt-destructive) !important; }
+#{$mt} .o_notification_bar.bg-warning { background-color: var(--mt-warning) !important; }
+#{$mt} .o_notification_bar.bg-info { background-color: var(--mt-info) !important; }
+
+// ---------------------------------------------------------------------------
+// Date picker
+// ---------------------------------------------------------------------------
+#{$mt} .o_datetime_picker {
+    color: var(--mt-foreground);
+    .o_date_item_cell {
+        border-radius: var(--mt-radius-sm);
+        &:hover { background: var(--mt-hover); }
+    }
+    .o_selected,
+    .o_select_start,
+    .o_select_end {
+        background: var(--mt-primary) !important;
+        color: var(--mt-primary-foreground) !important;
+    }
+    .o_selected:not(.o_select_start):not(.o_select_end) { border-radius: var(--mt-radius-sm); }
+    .o_highlighted, .o_select_range {
+        background: var(--mt-primary-soft);
+        color: var(--mt-primary-text);
+    }
+    .o_today > div {
+        background-color: transparent !important;
+        box-shadow: inset 0 0 0 1px var(--mt-primary);
+        color: var(--mt-primary-text);
+        border-radius: 50%;
+    }
+    .o_week_number_cell, .o_day_of_week_cell { color: var(--mt-muted-foreground); }
+}
+
+// ---------------------------------------------------------------------------
+// Loading states, empty states
+// ---------------------------------------------------------------------------
+#{$mt} .o_loading_indicator {
+    background: var(--mt-primary);
+    color: var(--mt-primary-foreground);
+    border-radius: var(--mt-radius-btn);
+    box-shadow: var(--mt-shadow-md);
+}
+#{$mt} .o_blockUI { background: color-mix(in srgb, var(--mt-card) 60%, transparent) !important; }
+#{$mt} .o_view_nocontent {
+    .o_nocontent_help {
+        color: var(--mt-muted-foreground);
+        > p:first-of-type, .o_view_nocontent_smiling_face, .o_view_nocontent_empty_folder {
+            color: var(--mt-foreground);
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+    }
+}
+.mt-skeleton {
+    border-radius: var(--mt-radius);
+    min-height: 1rem;
+    background: linear-gradient(90deg, var(--mt-muted) 25%, color-mix(in srgb, var(--mt-muted) 40%, var(--mt-card)) 50%, var(--mt-muted) 75%);
+    background-size: 200% 100%;
+    animation: mt-shimmer 1.2s ease-in-out infinite;
+}
+
+// Command palette (Odoo's own, opened from "Advanced commands")
+#{$mt} .o_command_palette {
+    .o_command { border-radius: var(--mt-radius-sm); }
+    .o_command.focused { background: var(--mt-primary-soft); color: var(--mt-primary-text); }
+    .o_command_palette_search { border-bottom-color: var(--mt-border); }
+}
+
+// Browser autofill keeps the theme colours.
+html[data-mt-theme] input:-webkit-autofill,
+html[data-mt-theme] input:-webkit-autofill:hover,
+html[data-mt-theme] input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--mt-foreground);
+    box-shadow: inset 0 0 0 1000px var(--mt-card);
+    caret-color: var(--mt-foreground);
+    transition: background-color 9999s ease-out 0s;
+}

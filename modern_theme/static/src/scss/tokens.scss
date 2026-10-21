@@ -1,457 +1,294 @@
-// Modern Theme — design tokens
+// Modern Theme: design tokens (light). See README.md for the full token list.
 //
-// Each preset below mirrors one of shadcn/ui's built-in color themes
-// (https://ui.shadcn.com/themes), plus two Olee originals (Indigo — the default —
-// and Teal). Values are HSL tokens, indigo being tuned for a deep, calm
-// "app workspace" look: a saturated indigo navigation shell (top bar + sidebars)
-// with white text over a soft cool-grey content area.
+// <html> carries one data attribute per design option (rendered on the server,
+// updated live by theme_service.js). Every component reads --mt-* custom
+// properties only, so changing an option restyles the whole client at once.
 //
-// The active preset is selected server-side (Settings > General Settings)
-// through the `data-mt-theme` attribute rendered on <html>; this file only
-// ever carries LIGHT values. static/src/scss/tokens.dark.scss carries the
-// dark values for the exact same selectors and is loaded after this file
-// in the dark asset bundle, so it always wins when dark mode is active.
-//
-// The "derived" block at the bottom computes the surfaces and the navigation
-// chrome from whichever preset is active, so every preset — including any
-// preset added later — gets the same polished look for free.
+// Specificity: every rule here uses `html[data-mt-…]` (0,1,1) so it wins over
+// Bootstrap's own `:root` rules without !important. tokens.dark.scss re-declares
+// the palette with the same selectors and loads later in the dark bundle.
 
-:root,
+// ---------------------------------------------------------------------------
+// 1. Palette: one block per preset
+// ---------------------------------------------------------------------------
+:root {
+    @include mt-preset-vars(indigo, light);
+}
+@each $key, $preset in $mt-presets {
+    html[data-mt-theme="#{$key}"] {
+        @include mt-preset-vars($key, light);
+    }
+}
+
+// Custom brand colour (Settings > Modern Theme > Custom color). The server
+// writes --mt-custom-primary and a contrast-safe --mt-custom-primary-fg inline.
+html[data-mt-theme="custom"] {
+    --mt-primary: var(--mt-custom-primary, #4f46e5);
+    --mt-primary-foreground: var(--mt-custom-primary-fg, #ffffff);
+    --mt-primary-text: color-mix(in oklab, var(--mt-primary) 78%, var(--mt-foreground));
+    --mt-primary-rgb: var(--mt-custom-primary-rgb, 79, 70, 229);
+    --mt-primary-text-rgb: var(--mt-custom-primary-rgb, 79, 70, 229);
+}
+
+// ---------------------------------------------------------------------------
+// 2. Design options (the :root block is the fallback when an attribute is missing)
+// ---------------------------------------------------------------------------
+:root {
+    --mt-radius-xs: 0.25rem; --mt-radius-sm: 0.375rem; --mt-radius: 0.5rem; --mt-radius-lg: 0.75rem;
+    --mt-radius-card: 0.75rem; --mt-radius-control: 0.5rem; --mt-radius-btn: 0.5rem; --mt-radius-badge: 0.375rem; --mt-radius-field: 0.5rem;
+    --mt-control-h: 2.25rem; --mt-btn-h: 2.25rem; --mt-row-py: 0.5rem; --mt-pad: 1rem; --mt-gap: 0.75rem;
+    --mt-sb-item-h: 2.125rem; --mt-field-gap: 0.5rem; --mt-card-pad: 1rem; --mt-cp-py: 0.75rem;
+    --mt-border: var(--mt-border-base); --mt-border-w: 1px;
+    --mt-card-shadow: var(--mt-shadow-xs); --mt-card-shadow-hover: var(--mt-shadow-md);
+    --mt-sb-w: 16rem; --mt-sb-panel-w: 15rem; --mt-topbar-h: 3.25rem;
+}
 html[data-mt-theme] {
-    --mt-radius: 0.625rem;
-    --mt-radius-sm: 0.375rem;
-    --mt-radius-xs: 0.25rem;
+    --mt-font-family: "Inter", "Hind Siliguri", "Noto Sans Bengali", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mt-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
     --mt-ease: cubic-bezier(0.2, 0, 0, 1);
+    --mt-duration: 180ms;
+}
+// Bengali glyphs always come from a Bengali font, whatever Latin font is picked.
+$mt-bn: '"Hind Siliguri", "Noto Sans Bengali"';
+$mt-sys: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+$mt-fonts: (
+    inter: '"Inter", #{$mt-bn}, #{$mt-sys}',
+    poppins: '"Poppins", #{$mt-bn}, #{$mt-sys}',
+    roboto: '"Roboto", #{$mt-bn}, #{$mt-sys}',
+    nunito: '"Nunito", #{$mt-bn}, #{$mt-sys}',
+    dm_sans: '"DM Sans", #{$mt-bn}, #{$mt-sys}',
+    jakarta: '"Plus Jakarta Sans", #{$mt-bn}, #{$mt-sys}',
+    hind: '"Hind Siliguri", "Noto Sans Bengali", #{$mt-sys}',
+    noto_bn: '"Noto Sans Bengali", "Inter", #{$mt-sys}',
+    system: '#{$mt-sys}, #{$mt-bn}',
+);
+@each $key, $stack in $mt-fonts {
+    html[data-mt-font="#{$key}"] { --mt-font-family: #{unquote($stack)}; }
 }
 
-// ---------------------------------------------------------------------------
-// Indigo (default)
-// ---------------------------------------------------------------------------
-:root,
-html[data-mt-theme="indigo"] {
-    --mt-background: hsl(0 0% 100%);
-    --mt-foreground: hsl(224 71% 4%);
-    --mt-card: hsl(0 0% 100%);
-    --mt-card-foreground: hsl(224 71% 4%);
-    --mt-primary: hsl(226 71% 40%);
-    --mt-primary-rgb: 30, 63, 174;
-    --mt-primary-foreground: hsl(210 40% 98%);
-    --mt-secondary: hsl(220 20% 95%);
-    --mt-secondary-foreground: hsl(224 71% 12%);
-    --mt-muted: hsl(220 20% 95%);
-    --mt-muted-foreground: hsl(220 9% 46%);
-    --mt-accent: hsl(220 20% 95%);
-    --mt-accent-foreground: hsl(224 71% 12%);
-    --mt-destructive: hsl(0 72% 51%);
-    --mt-destructive-foreground: hsl(0 0% 98%);
-    --mt-border: hsl(220 16% 90%);
-    --mt-input: hsl(220 16% 90%);
-    --mt-ring: hsl(226 71% 40%);
+// Font size: scales every rem-based size in Odoo (text, spacing, controls).
+html[data-mt-font-scale="sm"] { font-size: 93.75%; }
+html[data-mt-font-scale="md"] { font-size: 100%; }
+html[data-mt-font-scale="lg"] { font-size: 106.25%; }
 
-    --mt-success: hsl(160 84% 30%);
-    --mt-warning: hsl(32 95% 40%);
-    --mt-info: hsl(226 71% 40%);
+// Corner radius: xs < sm < base < lg; card/control/button are what components use.
+$mt-radii: (
+    none: (xs: 0, sm: 0, base: 0, lg: 0, card: 0, control: 0, btn: 0, badge: 0.125rem),
+    sm: (xs: 0.125rem, sm: 0.25rem, base: 0.375rem, lg: 0.5rem, card: 0.5rem, control: 0.3125rem, btn: 0.3125rem, badge: 0.25rem),
+    md: (xs: 0.25rem, sm: 0.375rem, base: 0.5rem, lg: 0.75rem, card: 0.75rem, control: 0.5rem, btn: 0.5rem, badge: 0.375rem),
+    lg: (xs: 0.375rem, sm: 0.5rem, base: 0.75rem, lg: 1rem, card: 1rem, control: 0.625rem, btn: 0.625rem, badge: 0.5rem),
+    pill: (xs: 0.5rem, sm: 0.625rem, base: 0.875rem, lg: 1.25rem, card: 1.25rem, control: 999px, btn: 999px, badge: 999px),
+);
+@each $key, $r in $mt-radii {
+    html[data-mt-radius="#{$key}"] {
+        --mt-radius-xs: #{map-get($r, xs)};
+        --mt-radius-sm: #{map-get($r, sm)};
+        --mt-radius: #{map-get($r, base)};
+        --mt-radius-lg: #{map-get($r, lg)};
+        --mt-radius-card: #{map-get($r, card)};
+        --mt-radius-control: #{map-get($r, control)};
+        --mt-radius-btn: #{map-get($r, btn)};
+        --mt-radius-badge: #{map-get($r, badge)};
+        // Multi-line inputs never become pills.
+        --mt-radius-field: #{if(map-get($r, control) == 999px, map-get($r, base), map-get($r, control))};
+    }
 }
 
-// ---------------------------------------------------------------------------
-// Zinc
-// ---------------------------------------------------------------------------
-html[data-mt-theme="zinc"] {
-    --mt-background: hsl(0 0% 100%);
-    --mt-foreground: hsl(240 10% 3.9%);
-    --mt-card: hsl(0 0% 100%);
-    --mt-card-foreground: hsl(240 10% 3.9%);
-    --mt-primary: hsl(240 5.9% 10%);
-    --mt-primary-rgb: 24, 24, 27;
-    --mt-primary-foreground: hsl(0 0% 98%);
-    --mt-secondary: hsl(240 4.8% 95.9%);
-    --mt-secondary-foreground: hsl(240 5.9% 10%);
-    --mt-muted: hsl(240 4.8% 95.9%);
-    --mt-muted-foreground: hsl(240 3.8% 46.1%);
-    --mt-accent: hsl(240 4.8% 95.9%);
-    --mt-accent-foreground: hsl(240 5.9% 10%);
-    --mt-destructive: hsl(0 84.2% 60.2%);
-    --mt-destructive-foreground: hsl(0 0% 98%);
-    --mt-border: hsl(240 5.9% 90%);
-    --mt-input: hsl(240 5.9% 90%);
-    --mt-ring: hsl(240 5.9% 10%);
+// Density: one set of sizes per level (4px grid).
+$mt-densities: (
+    compact: (control-h: 2rem, btn-h: 2rem, row-py: 0.3125rem, pad: 0.75rem, gap: 0.5rem, sb-item-h: 1.875rem, field-gap: 0.25rem, card-pad: 0.75rem, cp-py: 0.5rem),
+    comfortable: (control-h: 2.25rem, btn-h: 2.25rem, row-py: 0.5rem, pad: 1rem, gap: 0.75rem, sb-item-h: 2.125rem, field-gap: 0.5rem, card-pad: 1rem, cp-py: 0.75rem),
+    spacious: (control-h: 2.5rem, btn-h: 2.5rem, row-py: 0.75rem, pad: 1.25rem, gap: 1rem, sb-item-h: 2.5rem, field-gap: 0.75rem, card-pad: 1.25rem, cp-py: 1rem),
+);
+@each $key, $d in $mt-densities {
+    html[data-mt-density="#{$key}"] {
+        @each $name, $value in $d {
+            --mt-#{$name}: #{$value};
+        }
+    }
 }
 
-// ---------------------------------------------------------------------------
-// Slate
-// ---------------------------------------------------------------------------
-html[data-mt-theme="slate"] {
-    --mt-background: hsl(0 0% 100%);
-    --mt-foreground: hsl(222.2 84% 4.9%);
-    --mt-card: hsl(0 0% 100%);
-    --mt-card-foreground: hsl(222.2 84% 4.9%);
-    --mt-primary: hsl(222.2 47.4% 11.2%);
-    --mt-primary-rgb: 15, 23, 42;
-    --mt-primary-foreground: hsl(210 40% 98%);
-    --mt-secondary: hsl(210 40% 96.1%);
-    --mt-secondary-foreground: hsl(222.2 47.4% 11.2%);
-    --mt-muted: hsl(210 40% 96.1%);
-    --mt-muted-foreground: hsl(215.4 16.3% 46.9%);
-    --mt-accent: hsl(210 40% 96.1%);
-    --mt-accent-foreground: hsl(222.2 47.4% 11.2%);
-    --mt-destructive: hsl(0 84.2% 60.2%);
-    --mt-destructive-foreground: hsl(210 40% 98%);
-    --mt-border: hsl(214.3 31.8% 91.4%);
-    --mt-input: hsl(214.3 31.8% 91.4%);
-    --mt-ring: hsl(222.2 84% 4.9%);
-}
+// Border strength: everything that draws a hairline uses --mt-border.
+html[data-mt-border="none"] { --mt-border: transparent; --mt-border-w: 0px; }
+html[data-mt-border="subtle"] { --mt-border: color-mix(in srgb, var(--mt-border-base) 70%, transparent); --mt-border-w: 1px; }
+html[data-mt-border="normal"] { --mt-border: var(--mt-border-base); --mt-border-w: 1px; }
+html[data-mt-border="strong"] { --mt-border: color-mix(in srgb, var(--mt-border-base), var(--mt-foreground) 16%); --mt-border-w: 1px; }
+
+// Card shadow
+html[data-mt-shadow="none"] { --mt-card-shadow: none; --mt-card-shadow-hover: 0 0 0 1px var(--mt-border-base); }
+html[data-mt-shadow="sm"] { --mt-card-shadow: var(--mt-shadow-xs); --mt-card-shadow-hover: var(--mt-shadow-md); }
+html[data-mt-shadow="md"] { --mt-card-shadow: var(--mt-shadow-sm); --mt-card-shadow-hover: var(--mt-shadow-lg); }
+html[data-mt-shadow="lg"] { --mt-card-shadow: var(--mt-shadow-md); --mt-card-shadow-hover: var(--mt-shadow-xl); }
+
+// Sidebar width
+html[data-mt-sidebar-width="narrow"] { --mt-sb-w: 14rem; --mt-sb-panel-w: 13.5rem; }
+html[data-mt-sidebar-width="normal"] { --mt-sb-w: 16rem; --mt-sb-panel-w: 15rem; }
+html[data-mt-sidebar-width="wide"] { --mt-sb-w: 18rem; --mt-sb-panel-w: 17rem; }
+
+// Top bar height
+html[data-mt-topbar-height="compact"] { --mt-topbar-h: 2.75rem; }
+html[data-mt-topbar-height="normal"] { --mt-topbar-h: 3.25rem; }
+html[data-mt-topbar-height="tall"] { --mt-topbar-h: 3.75rem; }
 
 // ---------------------------------------------------------------------------
-// Stone
+// 3. Derived tokens: computed from the palette + options
 // ---------------------------------------------------------------------------
-html[data-mt-theme="stone"] {
-    --mt-background: hsl(0 0% 100%);
-    --mt-foreground: hsl(20 14.3% 4.1%);
-    --mt-card: hsl(0 0% 100%);
-    --mt-card-foreground: hsl(20 14.3% 4.1%);
-    --mt-primary: hsl(24 9.8% 10%);
-    --mt-primary-rgb: 28, 25, 23;
-    --mt-primary-foreground: hsl(60 9.1% 97.8%);
-    --mt-secondary: hsl(60 4.8% 95.9%);
-    --mt-secondary-foreground: hsl(24 9.8% 10%);
-    --mt-muted: hsl(60 4.8% 95.9%);
-    --mt-muted-foreground: hsl(25 5.3% 44.7%);
-    --mt-accent: hsl(60 4.8% 95.9%);
-    --mt-accent-foreground: hsl(24 9.8% 10%);
-    --mt-destructive: hsl(0 84.2% 60.2%);
-    --mt-destructive-foreground: hsl(60 9.1% 97.8%);
-    --mt-border: hsl(20 5.9% 90%);
-    --mt-input: hsl(20 5.9% 90%);
-    --mt-ring: hsl(24 9.8% 10%);
-}
-
-// ---------------------------------------------------------------------------
-// Gray
-// ---------------------------------------------------------------------------
-html[data-mt-theme="gray"] {
-    --mt-background: hsl(0 0% 100%);
-    --mt-foreground: hsl(224 71.4% 4.1%);
-    --mt-card: hsl(0 0% 100%);
-    --mt-card-foreground: hsl(224 71.4% 4.1%);
-    --mt-primary: hsl(220.9 39.3% 11%);
-    --mt-primary-rgb: 17, 24, 39;
-    --mt-primary-foreground: hsl(210 20% 98%);
-    --mt-secondary: hsl(220 14.3% 95.9%);
-    --mt-secondary-foreground: hsl(220.9 39.3% 11%);
-    --mt-muted: hsl(220 14.3% 95.9%);
-    --mt-muted-foreground: hsl(220 8.9% 46.1%);
-    --mt-accent: hsl(220 14.3% 95.9%);
-    --mt-accent-foreground: hsl(220.9 39.3% 11%);
-    --mt-destructive: hsl(0 84.2% 60.2%);
-    --mt-destructive-foreground: hsl(210 20% 98%);
-    --mt-border: hsl(220 13% 91%);
-    --mt-input: hsl(220 13% 91%);
-    --mt-ring: hsl(224 71.4% 4.1%);
-}
-
-// ---------------------------------------------------------------------------
-// Neutral
-// ---------------------------------------------------------------------------
-html[data-mt-theme="neutral"] {
-    --mt-background: hsl(0 0% 100%);
-    --mt-foreground: hsl(0 0% 3.9%);
-    --mt-card: hsl(0 0% 100%);
-    --mt-card-foreground: hsl(0 0% 3.9%);
-    --mt-primary: hsl(0 0% 9%);
-    --mt-primary-rgb: 23, 23, 23;
-    --mt-primary-foreground: hsl(0 0% 98%);
-    --mt-secondary: hsl(0 0% 96.1%);
-    --mt-secondary-foreground: hsl(0 0% 9%);
-    --mt-muted: hsl(0 0% 96.1%);
-    --mt-muted-foreground: hsl(0 0% 45.1%);
-    --mt-accent: hsl(0 0% 96.1%);
-    --mt-accent-foreground: hsl(0 0% 9%);
-    --mt-destructive: hsl(0 84.2% 60.2%);
-    --mt-destructive-foreground: hsl(0 0% 98%);
-    --mt-border: hsl(0 0% 89.8%);
-    --mt-input: hsl(0 0% 89.8%);
-    --mt-ring: hsl(0 0% 3.9%);
-}
-
-// ---------------------------------------------------------------------------
-// Red
-// ---------------------------------------------------------------------------
-html[data-mt-theme="red"] {
-    --mt-background: hsl(0 0% 100%);
-    --mt-foreground: hsl(0 0% 3.9%);
-    --mt-card: hsl(0 0% 100%);
-    --mt-card-foreground: hsl(0 0% 3.9%);
-    --mt-primary: hsl(0 72.2% 50.6%);
-    --mt-primary-rgb: 220, 38, 38;
-    --mt-primary-foreground: hsl(0 85.7% 97.3%);
-    --mt-secondary: hsl(0 0% 96.1%);
-    --mt-secondary-foreground: hsl(0 0% 9%);
-    --mt-muted: hsl(0 0% 96.1%);
-    --mt-muted-foreground: hsl(0 0% 45.1%);
-    --mt-accent: hsl(0 0% 96.1%);
-    --mt-accent-foreground: hsl(0 0% 9%);
-    --mt-destructive: hsl(0 84.2% 60.2%);
-    --mt-destructive-foreground: hsl(0 0% 98%);
-    --mt-border: hsl(0 0% 89.8%);
-    --mt-input: hsl(0 0% 89.8%);
-    --mt-ring: hsl(0 72.2% 50.6%);
-}
-
-// ---------------------------------------------------------------------------
-// Rose
-// ---------------------------------------------------------------------------
-html[data-mt-theme="rose"] {
-    --mt-background: hsl(0 0% 100%);
-    --mt-foreground: hsl(240 10% 3.9%);
-    --mt-card: hsl(0 0% 100%);
-    --mt-card-foreground: hsl(240 10% 3.9%);
-    --mt-primary: hsl(346.8 77.2% 49.8%);
-    --mt-primary-rgb: 225, 29, 72;
-    --mt-primary-foreground: hsl(355.7 100% 97.3%);
-    --mt-secondary: hsl(240 4.8% 95.9%);
-    --mt-secondary-foreground: hsl(240 5.9% 10%);
-    --mt-muted: hsl(240 4.8% 95.9%);
-    --mt-muted-foreground: hsl(240 3.8% 46.1%);
-    --mt-accent: hsl(240 4.8% 95.9%);
-    --mt-accent-foreground: hsl(240 5.9% 10%);
-    --mt-destructive: hsl(0 84.2% 60.2%);
-    --mt-destructive-foreground: hsl(0 0% 98%);
-    --mt-border: hsl(240 5.9% 90%);
-    --mt-input: hsl(240 5.9% 90%);
-    --mt-ring: hsl(346.8 77.2% 49.8%);
-}
-
-// ---------------------------------------------------------------------------
-// Orange
-// ---------------------------------------------------------------------------
-html[data-mt-theme="orange"] {
-    --mt-background: hsl(0 0% 100%);
-    --mt-foreground: hsl(20 14.3% 4.1%);
-    --mt-card: hsl(0 0% 100%);
-    --mt-card-foreground: hsl(20 14.3% 4.1%);
-    --mt-primary: hsl(24.6 95% 53.1%);
-    --mt-primary-rgb: 249, 115, 22;
-    --mt-primary-foreground: hsl(60 9.1% 97.8%);
-    --mt-secondary: hsl(60 4.8% 95.9%);
-    --mt-secondary-foreground: hsl(24 9.8% 10%);
-    --mt-muted: hsl(60 4.8% 95.9%);
-    --mt-muted-foreground: hsl(25 5.3% 44.7%);
-    --mt-accent: hsl(60 4.8% 95.9%);
-    --mt-accent-foreground: hsl(24 9.8% 10%);
-    --mt-destructive: hsl(0 84.2% 60.2%);
-    --mt-destructive-foreground: hsl(60 9.1% 97.8%);
-    --mt-border: hsl(20 5.9% 90%);
-    --mt-input: hsl(20 5.9% 90%);
-    --mt-ring: hsl(24.6 95% 53.1%);
-}
-
-// ---------------------------------------------------------------------------
-// Green
-// ---------------------------------------------------------------------------
-html[data-mt-theme="green"] {
-    --mt-background: hsl(0 0% 100%);
-    --mt-foreground: hsl(240 10% 3.9%);
-    --mt-card: hsl(0 0% 100%);
-    --mt-card-foreground: hsl(240 10% 3.9%);
-    --mt-primary: hsl(142.1 76.2% 36.3%);
-    --mt-primary-rgb: 22, 163, 74;
-    --mt-primary-foreground: hsl(355.7 100% 97.3%);
-    --mt-secondary: hsl(240 4.8% 95.9%);
-    --mt-secondary-foreground: hsl(240 5.9% 10%);
-    --mt-muted: hsl(240 4.8% 95.9%);
-    --mt-muted-foreground: hsl(240 3.8% 46.1%);
-    --mt-accent: hsl(240 4.8% 95.9%);
-    --mt-accent-foreground: hsl(240 5.9% 10%);
-    --mt-destructive: hsl(0 84.2% 60.2%);
-    --mt-destructive-foreground: hsl(0 0% 98%);
-    --mt-border: hsl(240 5.9% 90%);
-    --mt-input: hsl(240 5.9% 90%);
-    --mt-ring: hsl(142.1 76.2% 36.3%);
-}
-
-// ---------------------------------------------------------------------------
-// Blue
-// ---------------------------------------------------------------------------
-html[data-mt-theme="blue"] {
-    --mt-background: hsl(0 0% 100%);
-    --mt-foreground: hsl(222.2 84% 4.9%);
-    --mt-card: hsl(0 0% 100%);
-    --mt-card-foreground: hsl(222.2 84% 4.9%);
-    --mt-primary: hsl(221.2 83.2% 53.3%);
-    --mt-primary-rgb: 37, 99, 235;
-    --mt-primary-foreground: hsl(210 40% 98%);
-    --mt-secondary: hsl(210 40% 96.1%);
-    --mt-secondary-foreground: hsl(222.2 47.4% 11.2%);
-    --mt-muted: hsl(210 40% 96.1%);
-    --mt-muted-foreground: hsl(215.4 16.3% 46.9%);
-    --mt-accent: hsl(210 40% 96.1%);
-    --mt-accent-foreground: hsl(222.2 47.4% 11.2%);
-    --mt-destructive: hsl(0 84.2% 60.2%);
-    --mt-destructive-foreground: hsl(210 40% 98%);
-    --mt-border: hsl(214.3 31.8% 91.4%);
-    --mt-input: hsl(214.3 31.8% 91.4%);
-    --mt-ring: hsl(221.2 83.2% 53.3%);
-}
-
-// ---------------------------------------------------------------------------
-// Yellow
-// ---------------------------------------------------------------------------
-html[data-mt-theme="yellow"] {
-    --mt-background: hsl(0 0% 100%);
-    --mt-foreground: hsl(20 14.3% 4.1%);
-    --mt-card: hsl(0 0% 100%);
-    --mt-card-foreground: hsl(20 14.3% 4.1%);
-    --mt-primary: hsl(47.9 95.8% 53.1%);
-    --mt-primary-rgb: 250, 204, 21;
-    --mt-primary-foreground: hsl(26 83.3% 14.1%);
-    --mt-secondary: hsl(60 4.8% 95.9%);
-    --mt-secondary-foreground: hsl(24 9.8% 10%);
-    --mt-muted: hsl(60 4.8% 95.9%);
-    --mt-muted-foreground: hsl(25 5.3% 44.7%);
-    --mt-accent: hsl(60 4.8% 95.9%);
-    --mt-accent-foreground: hsl(24 9.8% 10%);
-    --mt-destructive: hsl(0 84.2% 60.2%);
-    --mt-destructive-foreground: hsl(60 9.1% 97.8%);
-    --mt-border: hsl(20 5.9% 90%);
-    --mt-input: hsl(20 5.9% 90%);
-    --mt-ring: hsl(20 14.3% 4.1%);
-}
-
-// ---------------------------------------------------------------------------
-// Violet
-// ---------------------------------------------------------------------------
-html[data-mt-theme="violet"] {
-    --mt-background: hsl(0 0% 100%);
-    --mt-foreground: hsl(224 71.4% 4.1%);
-    --mt-card: hsl(0 0% 100%);
-    --mt-card-foreground: hsl(224 71.4% 4.1%);
-    --mt-primary: hsl(262.1 83.3% 57.8%);
-    --mt-primary-rgb: 124, 58, 237;
-    --mt-primary-foreground: hsl(210 20% 98%);
-    --mt-secondary: hsl(220 14.3% 95.9%);
-    --mt-secondary-foreground: hsl(220.9 39.3% 11%);
-    --mt-muted: hsl(220 14.3% 95.9%);
-    --mt-muted-foreground: hsl(220 8.9% 46.1%);
-    --mt-accent: hsl(220 14.3% 95.9%);
-    --mt-accent-foreground: hsl(220.9 39.3% 11%);
-    --mt-destructive: hsl(0 84.2% 60.2%);
-    --mt-destructive-foreground: hsl(210 20% 98%);
-    --mt-border: hsl(220 13% 91%);
-    --mt-input: hsl(220 13% 91%);
-    --mt-ring: hsl(262.1 83.3% 57.8%);
-}
-
-// ---------------------------------------------------------------------------
-// Teal
-// ---------------------------------------------------------------------------
-html[data-mt-theme="teal"] {
-    --mt-background: hsl(0 0% 100%);
-    --mt-foreground: hsl(180 25% 6%);
-    --mt-card: hsl(0 0% 100%);
-    --mt-card-foreground: hsl(180 25% 6%);
-    --mt-primary: hsl(173 80% 32%);
-    --mt-primary-rgb: 16, 147, 132;
-    --mt-primary-foreground: hsl(170 60% 97%);
-    --mt-secondary: hsl(180 20% 95%);
-    --mt-secondary-foreground: hsl(180 40% 12%);
-    --mt-muted: hsl(180 20% 95%);
-    --mt-muted-foreground: hsl(180 8% 42%);
-    --mt-accent: hsl(180 20% 95%);
-    --mt-accent-foreground: hsl(180 40% 12%);
-    --mt-destructive: hsl(0 84.2% 60.2%);
-    --mt-destructive-foreground: hsl(0 0% 98%);
-    --mt-border: hsl(180 16% 89%);
-    --mt-input: hsl(180 16% 89%);
-    --mt-ring: hsl(173 80% 32%);
-}
-
-// ---------------------------------------------------------------------------
-// Derived tokens — shared by every preset
-//
-// Everything below is computed from the preset's own `--mt-primary`, so adding a
-// preset never means repeating the shell / elevation values. It lives in a
-// `:root, html[data-mt-theme]` rule (same specificity as the per-preset rules
-// above) and is re-declared in tokens.dark.scss, which loads later in the dark
-// asset bundle and therefore wins there.
-// ---------------------------------------------------------------------------
-:root,
 html[data-mt-theme] {
-    // --- surfaces ---------------------------------------------------------
-    --mt-content-bg: #f4f4f5;
-    --mt-content-bg-accent: #ececee;
+    // Brand
+    --mt-ring: color-mix(in srgb, var(--mt-primary) 40%, transparent);
+    --mt-primary-soft: color-mix(in srgb, var(--mt-primary) 10%, var(--mt-card));
+    --mt-primary-soft-fg: var(--mt-primary-text);
+    --mt-primary-hover: color-mix(in oklab, var(--mt-primary) 88%, var(--mt-foreground));
+    --mt-primary-active: color-mix(in oklab, var(--mt-primary) 78%, var(--mt-foreground));
+    --mt-brand-accent: var(--mt-custom-accent, var(--mt-primary));
+    --mt-brand-accent-fg: var(--mt-custom-accent-fg, var(--mt-primary-foreground));
+    --mt-success-soft: color-mix(in srgb, var(--mt-success) 12%, var(--mt-card));
+    --mt-warning-soft: color-mix(in srgb, var(--mt-warning) 12%, var(--mt-card));
+    --mt-destructive-soft: color-mix(in srgb, var(--mt-destructive) 10%, var(--mt-card));
+    --mt-info-soft: color-mix(in srgb, var(--mt-info) 12%, var(--mt-card));
+    --mt-placeholder: color-mix(in srgb, var(--mt-muted-foreground) 82%, var(--mt-card));
+    --mt-hover: color-mix(in srgb, var(--mt-foreground) 5%, transparent);
+    --mt-selected: color-mix(in srgb, var(--mt-primary) 9%, var(--mt-card));
+
+    // Surfaces
+    --mt-content-bg: color-mix(in srgb, var(--mt-canvas-base) 97%, var(--mt-primary));
+    --mt-canvas: var(--mt-content-bg);
+    --mt-content-bg-accent: color-mix(in srgb, var(--mt-content-bg) 92%, var(--mt-foreground));
     --mt-card-matte: color-mix(in srgb, var(--mt-card) 92%, var(--mt-muted));
-
-    // Stitch-style dotted canvas (CSS dots, not a picture). Light editor paper.
-    --mt-stitch-bg: #f4f4f5;
-    --mt-stitch-dot: rgba(24, 24, 27, 0.16);
+    --mt-popover: var(--mt-card);
+    --mt-overlay: color-mix(in srgb, #0b0f17 45%, transparent);
+    --mt-stitch-bg: var(--mt-content-bg);
+    --mt-stitch-dot: color-mix(in srgb, var(--mt-foreground) 14%, transparent);
     --mt-stitch-size: 16px;
+    --mt-scrollbar: color-mix(in srgb, var(--mt-foreground) 20%, transparent);
+    --mt-scrollbar-hover: color-mix(in srgb, var(--mt-foreground) 36%, transparent);
 
-    // --- chrome (top bar) + shadcn-style sidebar ---------------------------
-    // Content stays on --mt-content-bg; sidebar is a soft reverse surface
-    // (slightly muted vs the page), using the same global theme colours.
+    // Elevation
+    --mt-shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.05);
+    --mt-shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05), 0 1px 3px rgba(16, 24, 40, 0.06);
+    --mt-shadow-md: 0 1px 2px rgba(16, 24, 40, 0.04), 0 6px 16px -6px rgba(16, 24, 40, 0.14);
+    --mt-shadow-lg: 0 14px 34px -10px rgba(15, 23, 42, 0.22);
+    --mt-shadow-xl: 0 24px 56px -14px rgba(15, 23, 42, 0.30);
+
+    // Top bar (style option below may override)
     --mt-chrome-bg: var(--mt-card);
-    --mt-topbar-bg: var(--mt-chrome-bg);
-    --mt-sidebar-bg: color-mix(in srgb, var(--mt-muted) 55%, var(--mt-card));
+    --mt-topbar-bg: var(--mt-card);
+    --mt-topbar-fg: var(--mt-foreground);
+    --mt-topbar-border: var(--mt-border);
+
+    // Sidebar (background option below may override)
+    --mt-sidebar-bg: var(--mt-card);
+    --mt-sidebar-bg-image: none;
     --mt-sidebar-bg-2: var(--mt-muted);
     --mt-sidebar-fg: var(--mt-foreground);
     --mt-sidebar-muted-fg: var(--mt-muted-foreground);
-    --mt-sidebar-accent: color-mix(in srgb, var(--mt-primary) 10%, var(--mt-muted));
+    --mt-sidebar-accent: var(--mt-hover);
     --mt-sidebar-accent-fg: var(--mt-foreground);
+    --mt-sidebar-active-bg: var(--mt-primary-soft);
+    --mt-sidebar-active-fg: var(--mt-primary-text);
+    --mt-sidebar-indicator: var(--mt-brand-accent);
     --mt-sidebar-primary: var(--mt-primary);
     --mt-sidebar-primary-fg: var(--mt-primary-foreground);
     --mt-sidebar-border: var(--mt-border);
     --mt-sidebar-ring: var(--mt-ring);
+    --mt-sidebar-blur: none;
+    --mt-sidebar-guide: color-mix(in srgb, var(--mt-sidebar-fg) 12%, transparent);
+
+    // Legacy navigation aliases (CRM / Sales / Inventory / Purchase / MRP addons)
     --mt-nav-bg: var(--mt-topbar-bg);
     --mt-nav-bg-2: var(--mt-topbar-bg);
-    --mt-nav-fg: var(--mt-foreground);
+    --mt-nav-fg: var(--mt-topbar-fg);
     --mt-nav-muted-fg: var(--mt-muted-foreground);
-    --mt-nav-hover: var(--mt-muted);
-    --mt-nav-active-bg: var(--mt-sidebar-accent);
-    --mt-nav-active-fg: var(--mt-sidebar-accent-fg);
+    --mt-nav-hover: var(--mt-hover);
+    --mt-nav-active-bg: var(--mt-sidebar-active-bg);
+    --mt-nav-active-fg: var(--mt-sidebar-active-fg);
     --mt-nav-border: var(--mt-border);
     --mt-nav-tile: var(--mt-card);
-    --mt-nav-scrollbar: color-mix(in srgb, var(--mt-foreground) 22%, transparent);
+    --mt-nav-scrollbar: var(--mt-scrollbar);
 
-    // --- elevation --------------------------------------------------------
-    --mt-shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.04);
-    --mt-shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.05);
-    --mt-shadow-md: 0 1px 2px rgba(16, 24, 40, 0.04), 0 6px 18px -8px rgba(16, 24, 40, 0.12);
-    --mt-shadow-lg: 0 12px 32px -8px rgba(15, 23, 42, 0.18);
-    --mt-shadow-xl: 0 24px 48px -12px rgba(15, 23, 42, 0.22);
+    // Layout
+    --mt-shell-gap: calc(var(--mt-gap) * 0.875);
+    --mt-shell-radius: var(--mt-radius-card);
+    --mt-shell-shadow: var(--mt-card-shadow);
+    --mt-sb-collapsed-w: 4.25rem;
+    --mt-sb-rail-w: 4.5rem;
+    --mt-sb-float-gap: 0.625rem;
+}
 
-    // --- OmniRouters right sheet (simple forms; not order-line pages) ------
-    // All colours come from the active --mt-* preset (never a second palette).
+// Sidebar background styles
+html[data-mt-sidebar-bg="tinted"] {
+    --mt-sidebar-bg: color-mix(in srgb, var(--mt-primary) 6%, var(--mt-card));
+    --mt-sidebar-accent: color-mix(in srgb, var(--mt-primary) 8%, transparent);
+    --mt-sidebar-active-bg: color-mix(in srgb, var(--mt-primary) 16%, var(--mt-card));
+}
+html[data-mt-sidebar-bg="gradient"] {
+    --mt-sidebar-bg: var(--mt-primary);
+    --mt-sidebar-bg-image: linear-gradient(165deg,
+        color-mix(in oklab, var(--mt-primary) 94%, #ffffff) 0%,
+        var(--mt-primary) 40%,
+        color-mix(in oklab, var(--mt-primary) 78%, #000000) 100%);
+    --mt-sidebar-fg: var(--mt-primary-foreground);
+    --mt-sidebar-muted-fg: color-mix(in srgb, var(--mt-primary-foreground) 78%, transparent);
+    --mt-sidebar-accent: color-mix(in srgb, var(--mt-primary-foreground) 12%, transparent);
+    --mt-sidebar-accent-fg: var(--mt-primary-foreground);
+    --mt-sidebar-active-bg: color-mix(in srgb, var(--mt-primary-foreground) 20%, transparent);
+    --mt-sidebar-active-fg: var(--mt-primary-foreground);
+    --mt-sidebar-indicator: var(--mt-primary-foreground);
+    --mt-sidebar-border: transparent;
+    --mt-sidebar-ring: color-mix(in srgb, var(--mt-primary-foreground) 60%, transparent);
+    --mt-sidebar-guide: color-mix(in srgb, var(--mt-primary-foreground) 22%, transparent);
+}
+html[data-mt-sidebar-bg="glass"] {
+    --mt-sidebar-bg: color-mix(in srgb, var(--mt-card) 68%, transparent);
+    --mt-sidebar-blur: blur(18px) saturate(1.4);
+    --mt-sidebar-border: color-mix(in srgb, var(--mt-border-base) 70%, transparent);
+}
+
+// Top bar styles
+html[data-mt-topbar-style="blend"] {
+    --mt-topbar-bg: var(--mt-content-bg);
+    --mt-topbar-border: transparent;
+}
+html[data-mt-topbar-style="floating"] {
+    --mt-topbar-bg: var(--mt-card);
+    --mt-topbar-border: var(--mt-border);
+}
+
+// ---------------------------------------------------------------------------
+// 4. Right-hand drawer ("sheet") tokens used by the modern app addons.
+// ---------------------------------------------------------------------------
+html[data-mt-theme] {
     --or-sheet-width: 32rem;
     --or-sheet-bg: var(--mt-card);
-    --or-sheet-border: var(--mt-border);
+    --or-sheet-border: var(--mt-border-base);
     --or-sheet-fg: var(--mt-foreground);
     --or-sheet-muted: var(--mt-muted-foreground);
     --or-sheet-subtle: var(--mt-muted-foreground);
     --or-sheet-shadow: var(--mt-shadow-xl);
     --or-sheet-safe-bottom: 2.75rem;
-    --or-overlay: color-mix(in srgb, var(--mt-background) 62%, transparent);
-    --or-overlay-blur: 12px;
-    --or-input-height: 2.5rem;
-    --or-input-radius: var(--mt-radius);
-    --or-input-border: var(--mt-border);
+    --or-overlay: var(--mt-overlay);
+    --or-overlay-blur: 6px;
+    --or-input-height: calc(var(--mt-control-h) + 0.25rem);
+    --or-input-radius: var(--mt-radius-control);
+    --or-input-border: var(--mt-input);
     --or-input-bg: var(--mt-card);
-    --or-input-placeholder: var(--mt-muted-foreground);
-    --or-field-gap: 1.25rem;
+    --or-input-placeholder: var(--mt-placeholder);
+    --or-field-gap: calc(var(--mt-gap) + 0.5rem);
     --or-label-size: 0.875rem;
-    --or-focus-duration: 180ms;
-    --or-focus-border: var(--mt-foreground);
-    --or-focus-ring: color-mix(in srgb, var(--mt-foreground) 8%, transparent);
+    --or-focus-duration: var(--mt-duration);
+    --or-focus-border: var(--mt-primary);
+    --or-focus-ring: var(--mt-ring);
     --or-accent: var(--mt-primary);
-    --or-accent-border: color-mix(in srgb, var(--mt-primary) 55%, var(--mt-border));
-    --or-accent-soft: color-mix(in srgb, var(--mt-primary) 12%, var(--mt-card));
-    --or-accent-ring: color-mix(in srgb, var(--mt-primary) 22%, transparent);
+    --or-accent-border: color-mix(in srgb, var(--mt-primary) 55%, var(--mt-border-base));
+    --or-accent-soft: var(--mt-primary-soft);
+    --or-accent-ring: var(--mt-ring);
     --or-icon-bg: var(--mt-muted);
     --or-save-bg: var(--mt-primary);
     --or-save-fg: var(--mt-primary-foreground);
-    --or-save-hover: color-mix(in srgb, var(--mt-primary) 86%, var(--mt-foreground));
+    --or-save-hover: var(--mt-primary-hover);
     --or-rail-width: 3.25rem;
     --or-pill-bg: var(--mt-card);
-    --or-pill-border: var(--mt-border);
+    --or-pill-border: var(--mt-border-base);
     --or-pill-shadow: var(--mt-shadow-md);
     --or-close-fg: var(--mt-muted-foreground);
     --or-close-hover: var(--mt-foreground);
@@ -466,8 +303,29 @@ html[data-mt-theme] {
     inherits: false;
     initial-value: 0deg;
 }
-
 @keyframes or-border-run {
     from { --or-run: 0deg; }
     to { --or-run: 360deg; }
+}
+@keyframes mt-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@keyframes mt-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes mt-pop-in { from { opacity: 0; transform: translateY(4px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes mt-slide-in { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: none; } }
+
+// Animations off (option) and the OS "reduce motion" setting.
+html[data-mt-animations="off"] *,
+html[data-mt-animations="off"] *::before,
+html[data-mt-animations="off"] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+}
+@media (prefers-reduced-motion: reduce) {
+    html[data-mt-theme] *,
+    html[data-mt-theme] *::before,
+    html[data-mt-theme] *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }

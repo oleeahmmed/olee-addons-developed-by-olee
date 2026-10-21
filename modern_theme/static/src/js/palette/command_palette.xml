@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="modern_theme.CommandPalette">
+        <div class="mt-cp-backdrop" t-on-click.self="() => this.props.close()">
+            <div class="mt-cp" role="dialog" aria-modal="true" aria-label="Search">
+                <div class="mt-cp-search">
+                    <i class="fa fa-search" aria-hidden="true"/>
+                    <input t-ref="input" type="text" class="mt-cp-input"
+                           placeholder="Search apps, menus, records or actions…"
+                           aria-label="Search apps, menus, records or actions"
+                           role="combobox" aria-expanded="true" aria-controls="mt-cp-list"
+                           t-att-aria-activedescendant="flat[state.active] ? 'mt-cp-' + flat[state.active].id : undefined"
+                           t-att-value="state.query"
+                           t-on-input="onInput" t-on-keydown="onKeydown"/>
+                    <kbd>Esc</kbd>
+                </div>
+                <div class="mt-cp-list" id="mt-cp-list" role="listbox" t-ref="list">
+                    <t t-foreach="groups" t-as="group" t-key="group.title">
+                        <div class="mt-cp-group" role="group" t-att-aria-label="group.title">
+                            <div class="mt-cp-group-title">
+                                <t t-esc="group.title"/>
+                                <i t-if="group.loading" class="fa fa-circle-o-notch fa-spin ms-2" aria-hidden="true"/>
+                            </div>
+                            <t t-foreach="group.items" t-as="item" t-key="item.id">
+                                <div class="mt-cp-item" role="option"
+                                     t-att-id="'mt-cp-' + item.id"
+                                     t-att-class="{ active: isActive(item) }"
+                                     t-att-aria-selected="isActive(item) ? 'true' : 'false'"
+                                     t-on-mousemove="() => this.hover(item)"
+                                     t-on-click="() => this.execute(item)">
+                                    <t t-if="item.app and item.type === 'app'">
+                                        <t t-set="app" t-value="item.app"/>
+                                        <t t-call="modern_theme.AppIcon"/>
+                                    </t>
+                                    <span t-else="" class="mt-cp-icon"><i t-attf-class="fa {{ item.icon or 'fa-circle-o' }}" aria-hidden="true"/></span>
+                                    <span class="mt-cp-text">
+                                        <span class="mt-cp-label" t-esc="item.label"/>
+                                        <small t-if="item.hint" class="mt-cp-hint" t-esc="item.hint"/>
+                                    </span>
+                                    <i t-if="item.on" class="fa fa-check mt-cp-check" aria-hidden="true"/>
+                                    <i class="fa fa-level-down fa-rotate-90 mt-cp-enter" aria-hidden="true"/>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                    <div t-if="!groups.length" class="mt-cp-empty">
+                        <i class="fa fa-search" aria-hidden="true"/>
+                        <p>Nothing found for “<t t-esc="state.query"/>”.</p>
+                    </div>
+                </div>
+                <div class="mt-cp-foot">
+                    <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+                    <span><kbd>Enter</kbd> open</span>
+                    <span><kbd>Esc</kbd> close</span>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

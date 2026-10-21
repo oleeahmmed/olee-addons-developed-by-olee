@@ -1,9 +1,1 @@
-// Inventory Modern: small shared text helpers. Form pages are styled by modern_theme (form.scss).
-
-.o_ss {
-    .im-text-danger { color: var(--im-danger); font-weight: 500; }
-    .im-bar-link { cursor: pointer; border-radius: var(--im-radius-sm);
-        &:hover .im-bar-meta span:first-child { color: var(--im-primary); }
-        &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--im-ring); }
-    }
-}
+// Not loaded any more: replaced by app.scss (Modern Theme app kit). Safe to delete.

@@ -25,13 +25,7 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
     ],
     'assets': {
         'web.assets_backend': [
-            'inventory_modern/static/src/scss/tokens.scss',
-            'inventory_modern/static/src/scss/pages.scss',
-            'inventory_modern/static/src/scss/list.scss',
-            'inventory_modern/static/src/scss/controls.scss',
-            'inventory_modern/static/src/scss/forms.scss',
-            'inventory_modern/static/src/scss/print.scss',
-            'inventory_modern/static/src/scss/dash.scss',
+            'inventory_modern/static/src/scss/app.scss',
             'inventory_modern/static/src/scss/inventory.scss',
             'inventory_modern/static/src/js/core/*.js',
             'inventory_modern/static/src/js/components/*.js',
@@ -41,11 +35,8 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
             'inventory_modern/static/src/js/print/*.js',
             'inventory_modern/static/src/xml/*.xml',
         ],
-        'web.report_assets_common': [
-            'inventory_modern/static/src/scss/report_modern.scss',
-        ],
         'web.assets_web_dark': [
-            'inventory_modern/static/src/scss/tokens.dark.scss',
+            'inventory_modern/static/src/scss/app.dark.scss',
         ],
     },
     'post_init_hook': 'post_init_hook',

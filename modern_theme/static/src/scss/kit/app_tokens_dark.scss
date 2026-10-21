@@ -1,0 +1,52 @@
+// Modern Theme app kit: Dark-mode values of the app tokens.
+// Shared by crm/sales/inventory/purchase/mrp _modern; each app only passes its prefix:
+//     @include mt-app-tokens-dark(ss);   // sales_modern -> .o_ss, --ss-*
+// Defined in web._assets_backend_helpers, so it is available in every backend bundle.
+@mixin mt-app-tokens-dark($p) {
+    // Dark mode values (loaded in web.assets_web_dark only).
+    :root {
+        --#{$p}-bg: #0b1120;
+        --#{$p}-fg: #e2e8f0;
+        --#{$p}-card: #111827;
+        --#{$p}-muted: #1e293b;
+        --#{$p}-muted-fg: #94a3b8;
+        --#{$p}-subtle-fg: #8b9ab0;
+        --#{$p}-border: #1f2a3d;
+        --#{$p}-input: #263247;
+
+        --#{$p}-primary: #3b82f6;
+        --#{$p}-primary-soft: #172554;
+        --#{$p}-primary-soft-fg: #bfdbfe;
+        --#{$p}-ring: rgba(96, 165, 250, 0.45);
+
+        --#{$p}-success: #34d399;
+        --#{$p}-success-soft: rgba(16, 185, 129, 0.12);
+        --#{$p}-warning: #fbbf24;
+        --#{$p}-warning-soft: rgba(245, 158, 11, 0.12);
+        --#{$p}-danger: #f87171;
+        --#{$p}-danger-soft: rgba(239, 68, 68, 0.12);
+        --#{$p}-info: #60a5fa;
+        --#{$p}-info-soft: rgba(59, 130, 246, 0.14);
+        --#{$p}-violet: #a78bfa;
+        --#{$p}-violet-soft: rgba(139, 92, 246, 0.14);
+
+        --#{$p}-chart-1: #3b82f6;
+        --#{$p}-chart-2: #0ea371;
+        --#{$p}-chart-3: #d97706;
+        --#{$p}-chart-4: #8b5cf6;
+
+        --#{$p}-sidebar: var(--mt-sidebar-bg, var(--mt-card));
+        --#{$p}-sidebar-fg: var(--mt-sidebar-fg, var(--mt-foreground));
+        --#{$p}-sidebar-hover: var(--mt-sidebar-accent, var(--mt-muted));
+        --#{$p}-sidebar-accent: var(--mt-sidebar-accent, var(--mt-muted));
+        --#{$p}-sidebar-accent-fg: var(--mt-sidebar-accent-fg, var(--mt-foreground));
+        --#{$p}-sidebar-muted-fg: var(--mt-sidebar-muted-fg, var(--mt-muted-foreground));
+        --#{$p}-sidebar-border: var(--mt-sidebar-border, var(--mt-border));
+        --#{$p}-card-matte: #131c2c;
+        --#{$p}-edge: rgba(0, 0, 0, 0.25);
+        --#{$p}-shadow-xs: none;
+        --#{$p}-shadow-sm: none;
+        --#{$p}-shadow-md: 0 1px 2px rgba(0, 0, 0, 0.3);
+        --#{$p}-shadow-lg: 0 12px 32px -8px rgba(0, 0, 0, 0.6);
+    }
+}

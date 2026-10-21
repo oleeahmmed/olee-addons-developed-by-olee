@@ -1,0 +1,15 @@
+// Modern Theme app kit: Small text helpers.
+// Shared by crm/sales/inventory/purchase/mrp _modern; each app only passes its prefix:
+//     @include mt-app-helpers(ss);   // sales_modern -> .o_ss, --ss-*
+// Defined in web._assets_backend_helpers, so it is available in every backend bundle.
+@mixin mt-app-helpers($p) {
+    // modern app specific styles: dashboard bits. Form pages are styled by modern_theme (form.scss).
+
+    .o_#{$p} {
+        .#{$p}-text-danger { color: var(--#{$p}-danger); font-weight: 500; }
+        .#{$p}-bar-link { cursor: pointer; border-radius: var(--#{$p}-radius-sm);
+            &:hover .#{$p}-bar-meta span:first-child { color: var(--#{$p}-primary); }
+            &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--#{$p}-ring); }
+        }
+    }
+}

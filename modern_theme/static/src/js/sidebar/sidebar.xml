@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!--
+        Modern Theme sidebar: one component, three styles (data-style):
+          classic  - expanded tree: apps as accordion rows, nested menus with guide lines
+          rail     - icon rail of apps + a docked (pinned) or flyout panel with the app menu
+          floating - floating glass card: app switcher, titled sections, pill items
+        It is a main component (no NavBar template override) and only uses the public
+        menu / action / ui services, so it follows Odoo's own menus and access rights.
+    -->
+    <t t-name="modern_theme.Sidebar">
+        <aside t-if="themeState.enabled and !state.fullscreen"
+               t-ref="root"
+               class="o_mt_sidebar d-print-none"
+               t-att-class="{
+                    'mt-sb-collapsed': collapsed,
+                    'mt-sb-mobile-open': state.mobileOpen and ui.isSmall,
+                    'mt-sb-is-small': ui.isSmall,
+               }"
+               t-att-data-style="ui.isSmall ? 'classic' : style"
+               role="navigation"
+               aria-label="Main menu"
+               t-on-keydown="onNavKeydown"
+               t-on-mouseleave="() => this.closeFlyout()">
+            <span t-if="legacyClass" t-att-class="legacyClass" hidden="hidden"/>
+            <t t-if="style === 'rail' and !ui.isSmall" t-call="modern_theme.Sidebar.Rail"/>
+            <t t-elif="style === 'floating' and !ui.isSmall" t-call="modern_theme.Sidebar.Floating"/>
+            <t t-else="" t-call="modern_theme.Sidebar.Classic"/>
+            <t t-call="modern_theme.Sidebar.Flyout"/>
+        </aside>
+        <div t-if="state.mobileOpen and ui.isSmall" class="o_mt_sidebar_backdrop" t-on-click="toggleMobile"/>
+    </t>
+
+    <!-- ============================== shared parts ============================== -->
+
+    <t t-name="modern_theme.AppIcon">
+        <t t-set="ic" t-value="appIcon(app)"/>
+        <span class="mt-app-icon"
+              t-att-class="{ 'is-generated': ic.generated, 'is-font': ic.iconClass }"
+              t-att-style="ic.generated ? '--mt-app-hue:' + ic.generated.hue : (ic.iconClass ? 'background:' + ic.backgroundColor + ';color:' + ic.color : '')"
+              aria-hidden="true">
+            <img t-if="ic.src" t-att-src="ic.src" alt="" loading="lazy"/>
+            <i t-elif="ic.iconClass" t-att-class="ic.iconClass"/>
+            <t t-else="" t-esc="ic.generated.initials"/>
+        </span>
+    </t>
+
+    <t t-name="modern_theme.Sidebar.Brand">
+        <div class="mt-sb-brand">
+            <span class="mt-sb-logo"><img t-att-src="brandLogo" alt=""/></span>
+            <div class="mt-sb-brand-text">
+                <strong t-esc="brandName"/>
+                <small t-if="currentApp" t-esc="currentApp.name"/>
+            </div>
+            <button t-if="!ui.isSmall" type="button" class="mt-sb-iconbtn mt-sb-collapse mt-sb-focusable"
+                    t-on-click="toggleCollapse"
+                    t-att-title="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+                    t-att-aria-label="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+                    t-att-aria-expanded="collapsed ? 'false' : 'true'">
+                <i t-attf-class="fa {{ collapsed ? 'fa-angle-double-right' : 'fa-angle-double-left' }}" aria-hidden="true"/>
+            </button>
+            <button t-else="" type="button" class="mt-sb-iconbtn mt-sb-focusable" t-on-click="toggleMobile" aria-label="Close menu" title="Close menu">
+                <i class="fa fa-times" aria-hidden="true"/>
+            </button>
+        </div>
+    </t>
+
+    <t t-name="modern_theme.Sidebar.Search">
+        <button type="button" class="mt-sb-search mt-sb-focusable" t-on-click="openSearch"
+                title="Search menus and records (Ctrl+K)" aria-label="Search menus and records">
+            <i class="fa fa-search" aria-hidden="true"/>
+            <span class="mt-sb-label">Search…</span>
+            <kbd class="mt-sb-kbd">Ctrl K</kbd>
+        </button>
+    </t>
+
+    <t t-name="modern_theme.Sidebar.Create">
+        <button t-if="createSpec and canCreate" type="button" class="mt-sb-new mt-sb-focusable"
+                t-att-title="createSpec.label" t-att-aria-label="createSpec.label" t-on-click="onCreate">
+            <i class="fa fa-plus" aria-hidden="true"/>
+            <span class="mt-sb-label" t-esc="createSpec.label"/>
+        </button>
+    </t>
+
+    <!-- Pinned + recent menus -->
+    <t t-name="modern_theme.Sidebar.Quick">
+        <div t-if="favorites.length" class="mt-sb-block mt-sb-quick">
+            <div class="mt-sb-heading"><i class="fa fa-star" aria-hidden="true"/><span class="mt-sb-label">Pinned</span></div>
+            <ul class="mt-sb-tree" role="list">
+                <t t-foreach="favorites" t-as="fav" t-key="fav.id">
+                    <li class="mt-sb-leaf">
+                        <a class="mt-sb-link mt-sb-item mt-sb-focusable" t-att-class="{ active: fav.id === activeId }"
+                           t-att-href="fav.href" t-att-title="fav.name" t-on-click="(ev) => this.openNode(fav, ev)">
+                            <t t-if="fav.app" t-set="app" t-value="fav.app"/>
+                            <t t-if="fav.app" t-call="modern_theme.AppIcon"/>
+                            <span class="mt-sb-label">
+                                <t t-esc="fav.name"/>
+                                <small t-if="fav.appName" class="mt-sb-sub" t-esc="fav.appName"/>
+                            </span>
+                            <span class="mt-sb-pin is-on" role="button" tabindex="-1" title="Unpin" aria-label="Unpin"
+                                  t-on-click="(ev) => this.toggleFavorite(fav, ev)"><i class="fa fa-star" aria-hidden="true"/></span>
+                        </a>
+                    </li>
+                </t>
+            </ul>
+        </div>
+        <div t-if="recent.length and !collapsed" class="mt-sb-block mt-sb-recent">
+            <button type="button" class="mt-sb-heading mt-sb-heading-btn mt-sb-focusable"
+                    t-att-aria-expanded="state.open.recent ? 'true' : 'false'"
+                    t-on-click="toggleRecent">
+                <i class="fa fa-history" aria-hidden="true"/><span class="mt-sb-label">Recent</span>
+                <i t-attf-class="fa fa-angle-{{ state.open.recent ? 'up' : 'down' }} ms-auto" aria-hidden="true"/>
+            </button>
+            <ul t-if="state.open.recent" class="mt-sb-tree" role="list">
+                <t t-foreach="recent" t-as="item" t-key="item.id">
+                    <li class="mt-sb-leaf">
+                        <a class="mt-sb-link mt-sb-item mt-sb-focusable" t-att-href="item.href" t-att-title="item.name"
+                           t-on-click="(ev) => this.openNode(item, ev)">
+                            <t t-if="item.app" t-set="app" t-value="item.app"/>
+                            <t t-if="item.app" t-call="modern_theme.AppIcon"/>
+                            <span class="mt-sb-label"><t t-esc="item.name"/><small t-if="item.appName" class="mt-sb-sub" t-esc="item.appName"/></span>
+                        </a>
+                    </li>
+                </t>
+            </ul>
+        </div>
+    </t>
+
+    <!-- Recursive menu tree. Variables: nodes, level -->
+    <t t-name="modern_theme.Sidebar.Tree">
+        <ul class="mt-sb-tree" t-att-class="{ 'mt-sb-tree-nested': level > 0 }" t-att-role="level ? 'group' : 'list'">
+            <t t-foreach="nodes" t-as="node" t-key="node.id">
+                <li t-if="node.children.length" class="mt-sb-group"
+                    t-att-class="{ 'is-open': isOpen(node), 'has-active': containsActive(node), 'is-secondary': node.secondary }">
+                    <button type="button" class="mt-sb-link mt-sb-group-toggle mt-sb-focusable"
+                            t-att-data-group-id="node.id"
+                            t-att-aria-expanded="isOpen(node) ? 'true' : 'false'"
+                            t-att-title="node.name"
+                            t-on-click="(ev) => this.toggleGroup(node, ev)"
+                            t-on-mouseenter="(ev) => (this.collapsed and !level) and this.openFlyout(ev, { node })">
+                        <i t-if="node.icon" t-attf-class="mt-sb-icon fa {{ node.icon }}" aria-hidden="true"/>
+                        <span t-else="" class="mt-sb-icon mt-sb-dot" aria-hidden="true"/>
+                        <span class="mt-sb-label" t-esc="node.name"/>
+                        <i class="mt-sb-caret fa fa-angle-down" aria-hidden="true"/>
+                    </button>
+                    <t t-if="isOpen(node)" t-call="modern_theme.Sidebar.Tree">
+                        <t t-set="nodes" t-value="node.children"/>
+                        <t t-set="level" t-value="level + 1"/>
+                    </t>
+                </li>
+                <li t-else="" class="mt-sb-leaf">
+                    <a class="mt-sb-link mt-sb-item mt-sb-focusable"
+                       t-att-class="{ active: isActive(node) }"
+                       t-att-href="node.href"
+                       t-att-title="node.name"
+                       t-att-aria-current="isActive(node) ? 'page' : undefined"
+                       t-att-data-menu-xmlid="node.xmlid"
+                       t-on-click="(ev) => this.openNode(node, ev)"
+                       t-on-mouseenter="(ev) => (this.collapsed and !level and !this.state.flyout) and this.closeFlyout()">
+                        <i t-if="node.icon" t-attf-class="mt-sb-icon fa {{ node.icon }}" aria-hidden="true"/>
+                        <span t-else="" class="mt-sb-icon mt-sb-dot" aria-hidden="true"/>
+                        <span class="mt-sb-label" t-esc="node.name"/>
+                        <span t-if="badge(node)" class="mt-sb-badge" t-esc="badge(node)"/>
+                        <span class="mt-sb-pin" t-att-class="{ 'is-on': isFavorite(node) }" role="button" tabindex="-1"
+                              t-att-title="isFavorite(node) ? 'Unpin' : 'Pin to sidebar'"
+                              t-att-aria-label="isFavorite(node) ? 'Unpin' : 'Pin to sidebar'"
+                              t-on-click="(ev) => this.toggleFavorite(node, ev)">
+                            <i t-attf-class="fa {{ isFavorite(node) ? 'fa-star' : 'fa-star-o' }}" aria-hidden="true"/>
+                        </span>
+                    </a>
+                </li>
+            </t>
+        </ul>
+    </t>
+
+    <t t-name="modern_theme.Sidebar.User">
+        <div class="mt-sb-user">
+            <Dropdown position="'top-start'" menuClass="'mt-sb-user-menu'">
+                <button type="button" class="mt-sb-user-btn mt-sb-focusable" t-att-title="user.name" aria-label="Account menu">
+                    <img class="mt-sb-avatar" t-att-src="avatar" alt=""/>
+                    <span class="mt-sb-user-text">
+                        <strong t-esc="user.name"/>
+                        <small t-esc="user.login"/>
+                    </span>
+                    <i class="fa fa-ellipsis-v mt-sb-user-more" aria-hidden="true"/>
+                </button>
+                <t t-set-slot="content">
+                    <div class="mt-sb-menu-head">
+                        <img class="mt-sb-avatar" t-att-src="avatar" alt=""/>
+                        <div><strong t-esc="user.name"/><small t-esc="brandName"/></div>
+                    </div>
+                    <div class="mt-segmented mt-sb-mode" role="radiogroup" aria-label="Color mode">
+                        <button type="button" role="radio" t-att-aria-checked="themeState.values.color_mode === 'light' ? 'true' : 'false'" t-on-click="() => this.setMode('light')" title="Light"><i class="fa fa-sun-o" aria-hidden="true"/> Light</button>
+                        <button type="button" role="radio" t-att-aria-checked="themeState.values.color_mode === 'dark' ? 'true' : 'false'" t-on-click="() => this.setMode('dark')" title="Dark"><i class="fa fa-moon-o" aria-hidden="true"/> Dark</button>
+                        <button type="button" role="radio" t-att-aria-checked="themeState.values.color_mode === 'auto' ? 'true' : 'false'" t-on-click="() => this.setMode('auto')" title="Follow system"><i class="fa fa-desktop" aria-hidden="true"/> Auto</button>
+                    </div>
+                    <div class="dropdown-divider"/>
+                    <t t-foreach="userMenuItems" t-as="element" t-key="element_index">
+                        <div t-if="element.type === 'separator'" role="separator" class="dropdown-divider"/>
+                        <DropdownItem t-else="" onSelected="() => this.onUserItem(element)" attrs="{ href: element.href, 'data-menu': element.id }">
+                            <t t-out="element.description"/>
+                        </DropdownItem>
+                    </t>
+                </t>
+            </Dropdown>
+        </div>
+    </t>
+
+    <!-- ============================== style A: classic ============================== -->
+
+    <t t-name="modern_theme.Sidebar.Classic">
+        <div class="mt-sb-shell">
+            <t t-call="modern_theme.Sidebar.Brand"/>
+            <div class="mt-sb-tools">
+                <t t-call="modern_theme.Sidebar.Search"/>
+            </div>
+            <nav class="mt-sb-nav" t-ref="nav" aria-label="Apps and menus">
+                <t t-call="modern_theme.Sidebar.Quick"/>
+                <div class="mt-sb-block">
+                    <div class="mt-sb-heading"><i class="fa fa-th" aria-hidden="true"/><span class="mt-sb-label">Apps</span></div>
+                    <t t-foreach="apps" t-as="app" t-key="app.id">
+                        <div class="mt-sb-app" t-att-class="{ 'is-current': app.id === currentApp?.id, 'is-open': !collapsed and isAppExpanded(app) }">
+                            <div class="mt-sb-app-row">
+                                <a class="mt-sb-link mt-sb-app-link mt-sb-focusable"
+                                   t-att-class="{ active: collapsed and app.id === currentApp?.id }"
+                                   t-attf-href="/odoo/{{ app.actionPath or ('action-' + app.actionID) }}"
+                                   t-att-title="app.name"
+                                   t-att-data-menu-xmlid="app.xmlid"
+                                   t-on-click="(ev) => this.openApp(app, ev)"
+                                   t-on-mouseenter="(ev) => this.collapsed and this.openFlyout(ev, { app })">
+                                    <t t-call="modern_theme.AppIcon"/>
+                                    <span class="mt-sb-label" t-esc="app.name"/>
+                                </a>
+                                <button t-if="!collapsed" type="button" class="mt-sb-chevron mt-sb-focusable"
+                                        t-att-aria-expanded="isAppExpanded(app) ? 'true' : 'false'"
+                                        t-att-aria-label="(isAppExpanded(app) ? 'Collapse ' : 'Expand ') + app.name"
+                                        t-on-click="(ev) => this.toggleApp(app, ev)">
+                                    <i class="fa fa-angle-down" aria-hidden="true"/>
+                                </button>
+                            </div>
+                            <div t-if="!collapsed and isAppExpanded(app)" class="mt-sb-app-tree">
+                                <t t-call="modern_theme.Sidebar.Tree">
+                                    <t t-set="nodes" t-value="treeFor(app)"/>
+                                    <t t-set="level" t-value="1"/>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </nav>
+            <t t-call="modern_theme.Sidebar.User"/>
+        </div>
+    </t>
+
+    <!-- ============================== style B: rail + panel ============================== -->
+
+    <t t-name="modern_theme.Sidebar.Rail">
+        <div class="mt-sb-rail">
+            <div class="mt-sb-rail-top">
+                <span class="mt-sb-logo"><img t-att-src="brandLogo" alt=""/></span>
+                <button type="button" class="mt-sb-rail-btn mt-sb-focusable" t-on-click="openSearch" title="Search (Ctrl+K)" aria-label="Search">
+                    <i class="fa fa-search" aria-hidden="true"/>
+                </button>
+            </div>
+            <nav class="mt-sb-rail-apps" aria-label="Apps">
+                <t t-foreach="apps" t-as="app" t-key="app.id">
+                    <a class="mt-sb-rail-app mt-sb-focusable"
+                       t-att-class="{ active: app.id === currentApp?.id, 'is-flyout': state.flyout?.key === 'a' + app.id }"
+                       t-attf-href="/odoo/{{ app.actionPath or ('action-' + app.actionID) }}"
+                       t-att-title="app.name"
+                       t-att-aria-current="app.id === currentApp?.id ? 'page' : undefined"
+                       t-on-click="(ev) => this.openApp(app, ev)"
+                       t-on-mouseenter="(ev) => this.openFlyout(ev, { app })">
+                        <t t-call="modern_theme.AppIcon"/>
+                        <span class="mt-sb-rail-label" t-esc="app.name"/>
+                    </a>
+                </t>
+            </nav>
+            <div class="mt-sb-rail-foot">
+                <button type="button" class="mt-sb-rail-btn mt-sb-focusable" t-on-click="togglePin"
+                        t-att-title="state.pinned ? 'Hide menu panel' : 'Keep menu panel open'"
+                        t-att-aria-pressed="state.pinned ? 'true' : 'false'" aria-label="Pin menu panel">
+                    <i t-attf-class="fa {{ state.pinned ? 'fa-angle-double-left' : 'fa-angle-double-right' }}" aria-hidden="true"/>
+                </button>
+                <t t-call="modern_theme.Sidebar.User"/>
+            </div>
+        </div>
+        <div t-if="showPanel" class="mt-sb-panel">
+            <div class="mt-sb-panel-head">
+                <t t-if="currentApp" t-set="app" t-value="currentApp"/>
+                <t t-if="currentApp" t-call="modern_theme.AppIcon"/>
+                <div class="mt-sb-brand-text"><strong t-esc="currentApp?.name"/><small t-esc="brandName"/></div>
+            </div>
+            <nav class="mt-sb-nav" t-ref="nav" aria-label="App menu">
+                <t t-call="modern_theme.Sidebar.Quick"/>
+                <div class="mt-sb-block">
+                    <t t-call="modern_theme.Sidebar.Tree">
+                        <t t-set="nodes" t-value="tree"/>
+                        <t t-set="level" t-value="0"/>
+                    </t>
+                </div>
+            </nav>
+        </div>
+    </t>
+
+    <!-- ============================== style C: floating glass ============================== -->
+
+    <t t-name="modern_theme.Sidebar.Floating">
+        <div class="mt-sb-float">
+            <div class="mt-sb-brand">
+                <Dropdown position="'right-start'" menuClass="'mt-sb-appgrid-menu'">
+                    <button type="button" class="mt-sb-appswitch mt-sb-focusable" title="Switch app" aria-label="Switch app">
+                        <t t-if="currentApp" t-set="app" t-value="currentApp"/>
+                        <t t-if="currentApp" t-call="modern_theme.AppIcon"/>
+                        <span t-else="" class="mt-app-icon"><i class="fa fa-th" aria-hidden="true"/></span>
+                        <span class="mt-sb-brand-text">
+                            <strong t-esc="currentApp?.name or brandName"/>
+                            <small t-esc="brandName"/>
+                        </span>
+                        <i class="fa fa-angle-down mt-sb-label" aria-hidden="true"/>
+                    </button>
+                    <t t-set-slot="content">
+                        <div class="mt-sb-appgrid">
+                            <t t-foreach="apps" t-as="app" t-key="app.id">
+                                <DropdownItem class="'mt-sb-appgrid-item' + (app.id === currentApp?.id ? ' active' : '')" onSelected="() => this.openApp(app)">
+                                    <t t-call="modern_theme.AppIcon"/>
+                                    <span t-esc="app.name"/>
+                                </DropdownItem>
+                            </t>
+                        </div>
+                    </t>
+                </Dropdown>
+                <button type="button" class="mt-sb-iconbtn mt-sb-collapse mt-sb-focusable" t-on-click="toggleCollapse"
+                        t-att-title="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+                        t-att-aria-label="collapsed ? 'Expand sidebar' : 'Collapse sidebar'">
+                    <i t-attf-class="fa {{ collapsed ? 'fa-angle-double-right' : 'fa-angle-double-left' }}" aria-hidden="true"/>
+                </button>
+            </div>
+            <div class="mt-sb-tools">
+                <t t-call="modern_theme.Sidebar.Search"/>
+            </div>
+            <nav class="mt-sb-nav" t-ref="nav" aria-label="App menu">
+                <t t-call="modern_theme.Sidebar.Quick"/>
+                <t t-foreach="sections" t-as="section" t-key="section.key">
+                    <div class="mt-sb-block mt-sb-section" t-att-class="{ 'is-secondary': section.node?.secondary }">
+                        <button t-if="section.title and !collapsed" type="button"
+                                class="mt-sb-heading mt-sb-heading-btn mt-sb-focusable"
+                                t-att-data-group-id="section.node.id"
+                                t-att-aria-expanded="isOpen(section.node) ? 'true' : 'false'"
+                                t-on-click="(ev) => this.toggleGroup(section.node, ev)">
+                            <span class="mt-sb-label" t-esc="section.title"/>
+                            <i t-attf-class="fa fa-angle-{{ isOpen(section.node) ? 'up' : 'down' }} ms-auto" aria-hidden="true"/>
+                        </button>
+                        <t t-if="collapsed and section.node">
+                            <ul class="mt-sb-tree" role="list">
+                                <li class="mt-sb-group">
+                                    <button type="button" class="mt-sb-link mt-sb-group-toggle mt-sb-focusable"
+                                            t-att-class="{ active: containsActive(section.node) }"
+                                            t-att-title="section.title"
+                                            t-on-mouseenter="(ev) => this.openFlyout(ev, { node: section.node })"
+                                            t-on-focus="(ev) => this.openFlyout(ev, { node: section.node })">
+                                        <i t-if="section.node.icon" t-attf-class="mt-sb-icon fa {{ section.node.icon }}" aria-hidden="true"/>
+                                        <span t-else="" class="mt-sb-icon mt-sb-dot" aria-hidden="true"/>
+                                        <span class="mt-sb-label" t-esc="section.title"/>
+                                    </button>
+                                </li>
+                            </ul>
+                        </t>
+                        <t t-elif="!section.node or isOpen(section.node)" t-call="modern_theme.Sidebar.Tree">
+                            <t t-set="nodes" t-value="section.nodes"/>
+                            <t t-set="level" t-value="0"/>
+                        </t>
+                    </div>
+                </t>
+            </nav>
+            <t t-call="modern_theme.Sidebar.User"/>
+        </div>
+    </t>
+
+    <!-- ============================== flyout ============================== -->
+
+    <t t-name="modern_theme.Sidebar.Flyout">
+        <div t-if="state.flyout" class="mt-sb-flyout" role="menu"
+             t-att-style="'top:' + state.flyout.top + 'px;left:' + state.flyout.left + 'px'"
+             t-on-mouseenter="keepFlyout" t-on-mouseleave="() => this.closeFlyout()">
+            <div class="mt-sb-flyout-head">
+                <t t-if="state.flyout.app" t-set="app" t-value="state.flyout.app"/>
+                <t t-if="state.flyout.app" t-call="modern_theme.AppIcon"/>
+                <strong t-esc="state.flyout.title"/>
+            </div>
+            <div class="mt-sb-flyout-body">
+                <t t-call="modern_theme.Sidebar.Tree">
+                    <t t-set="nodes" t-value="state.flyout.nodes"/>
+                    <t t-set="level" t-value="1"/>
+                </t>
+            </div>
+        </div>
+    </t>
+
+</templates>
