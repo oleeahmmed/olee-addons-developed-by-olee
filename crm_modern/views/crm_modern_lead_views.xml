@@ -178,4 +178,23 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Customers: name and email stay readable. The standard list spends
+         most of its width on a statistics column and clips the name. -->
+    <record id="res_partner_list_modern" model="ir.ui.view">
+        <field name="name">res.partner.list.modern</field>
+        <field name="model">res.partner</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <list string="Customers">
+                <field name="avatar_128" widget="image" options="{'size': [24, 24], 'img_class': 'o_avatar rounded'}" width="40" nolabel="1"/>
+                <field name="display_name" string="Name"/>
+                <field name="email"/>
+                <field name="phone" class="o_force_ltr"/>
+                <field name="city"/>
+                <field name="country_id"/>
+                <field name="activity_ids" optional="show" widget="list_activity"/>
+            </list>
+        </field>
+    </record>
 </odoo>

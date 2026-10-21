@@ -281,7 +281,7 @@ class CrmLead(models.Model):
             'lost_list': ref('crm.crm_lost_reason_view_tree'),
             # customers (standard res.partner)
             'partner_search': ref('base.view_res_partner_filter'),
-            'partner_list': ref('base.view_partner_tree'),
+            'partner_list': ref('crm_modern.res_partner_list_modern') or ref('base.view_partner_tree'),
             'partner_kanban': ref('base.res_partner_kanban_view'),
             'partner_form': ref('base.view_partner_form'),
             # internal users (Odoo's views; create/edit uses the CRM drawer)

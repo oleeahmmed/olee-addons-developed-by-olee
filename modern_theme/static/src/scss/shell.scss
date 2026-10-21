@@ -435,6 +435,15 @@ html[data-mt-theme] {
     }
 }
 
+// Push registration fails in a normal browser tab. Keep the warning, but
+// dock it so it does not cover search and the page actions.
+.o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_sidebar, .o_mr_sidebar) .o_notification_manager {
+    top: auto;
+    bottom: 1rem;
+    left: auto;
+    right: 1rem;
+}
+
 // List, kanban and dashboard "New …" actions use the drawer Save pill.
 .o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_sidebar, .o_mr_sidebar) {
     .o_list_button_add,

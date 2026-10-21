@@ -28,6 +28,7 @@ export class NativeView extends Component {
         onSwitchView: { type: Function, optional: true },
         displayName: { type: String, optional: true },
         formViewId: { type: [Number, Boolean], optional: true },
+        noContentHelp: { type: [String, Object], optional: true },
     };
 
     setup() {
@@ -96,6 +97,7 @@ export class NativeView extends Component {
             loadActionMenus: true,
             useSampleModel: false,
             className: "o_cm_native_view",
+            noContentHelp: p.noContentHelp,
             selectRecord: (resId) => (p.onOpen ? p.onOpen(resId) : this.openFormDialog(resId)),
             createRecord: async () => {
                 if (p.onCreate) {

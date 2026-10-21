@@ -134,22 +134,22 @@
         }
     }
 
-    // Quick Create — solid primary, rounded-md (not pill)
+    // Quick Create — the drawer Save pill (theme primary, full radius).
     .#{$p}-sb-new {
         display: flex;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: center;
         gap: 0.5rem;
-        height: 2rem;
+        height: 2.15rem;
         margin: 0 0.75rem 0.5rem;
-        padding: 0 0.75rem;
+        padding: 0 1.05rem;
         flex-shrink: 0;
         border: 0;
-        border-radius: var(--mt-radius-sm, 0.5rem);
-        background: var(--mt-sidebar-primary, var(--mt-primary, var(--#{$p}-primary)));
-        color: var(--mt-sidebar-primary-fg, var(--mt-primary-foreground, var(--#{$p}-primary-fg)));
+        border-radius: 999px;
+        background: var(--or-save-bg, var(--mt-primary, var(--#{$p}-primary)));
+        color: var(--or-save-fg, var(--mt-primary-foreground, var(--#{$p}-primary-fg)));
         font-size: 0.8125rem;
-        font-weight: 500;
+        font-weight: 600;
         line-height: 1;
         cursor: pointer;
         box-shadow: none;
@@ -166,7 +166,7 @@
         }
 
         &:hover {
-            background: color-mix(in srgb, var(--mt-sidebar-primary, var(--mt-primary)) 88%, var(--mt-sidebar-fg, #000));
+            background: var(--or-save-hover, color-mix(in srgb, var(--mt-primary, var(--#{$p}-primary)) 86%, var(--mt-foreground, #000)));
             filter: none;
         }
         &:active { opacity: 0.92; }

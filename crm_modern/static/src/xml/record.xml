@@ -85,8 +85,11 @@
                                 <div class="cm-rec-kpis">
                                     <label class="cm-kpi">
                                         <span>Expected revenue</span>
-                                        <input type="number" min="0" step="100" class="cm-inline-input cm-tabular cm-kpi-big"
-                                               t-att-value="rec.expected_revenue" t-on-change="(ev) => this.onNumber('expected_revenue', ev)"/>
+                                        <span class="cm-kpi-money">
+                                            <span class="cm-kpi-currency" t-esc="currencyLabel"/>
+                                            <input type="number" min="0" step="100" class="cm-inline-input cm-tabular cm-kpi-big"
+                                                   t-att-value="rec.expected_revenue" t-on-change="(ev) => this.onNumber('expected_revenue', ev)"/>
+                                        </span>
                                     </label>
                                     <div t-if="isOpp" class="cm-kpi">
                                         <span>Probability</span>
@@ -117,8 +120,24 @@
                                             </t>
                                         </select>
                                     </div>
-                                    <div class="cm-prop"><span>Campaign</span><span class="cm-prop-val" t-esc="rec.campaign_id ? rec.campaign_id[1] : '—'"/></div>
-                                    <div class="cm-prop"><span>Source</span><span class="cm-prop-val" t-esc="rec.source_id ? rec.source_id[1] : '—'"/></div>
+                                    <div class="cm-prop">
+                                        <label for="cm_r_campaign">Campaign</label>
+                                        <select id="cm_r_campaign" class="cm-inline-input" t-on-change="(ev) => this.onMany2one('campaign_id', ev)">
+                                            <option value="">No campaign</option>
+                                            <t t-foreach="state.campaigns" t-as="c" t-key="c.id">
+                                                <option t-att-value="c.id" t-att-selected="rec.campaign_id and rec.campaign_id[0] === c.id" t-esc="c.title"/>
+                                            </t>
+                                        </select>
+                                    </div>
+                                    <div class="cm-prop">
+                                        <label for="cm_r_source">Source</label>
+                                        <select id="cm_r_source" class="cm-inline-input" t-on-change="(ev) => this.onMany2one('source_id', ev)">
+                                            <option value="">No source</option>
+                                            <t t-foreach="state.sources" t-as="s" t-key="s.id">
+                                                <option t-att-value="s.id" t-att-selected="rec.source_id and rec.source_id[0] === s.id" t-esc="s.name"/>
+                                            </t>
+                                        </select>
+                                    </div>
                                     <div class="cm-prop cm-prop--block">
                                         <label for="cm_r_tags">Tags</label>
                                         <TagInput id="'cm_r_tags'" value="state.tags" onChange.bind="setTags"/>

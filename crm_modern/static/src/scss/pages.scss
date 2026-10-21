@@ -28,6 +28,18 @@
         display: grid; gap: 1rem; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
         @media (max-width: 1199.98px) { grid-template-columns: minmax(0, 1fr); }
     }
+    .cm-home-list {
+        list-style: none; margin: 0; padding: 0; display: grid;
+        .cm-home-row {
+            display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.125rem 0.75rem;
+            width: 100%; padding: 0.5rem 0.25rem; border: 0; border-bottom: 1px solid var(--cm-border);
+            background: transparent; color: var(--cm-fg); text-align: start; cursor: pointer;
+            small:last-child { grid-column: 1 / -1; }
+            &:hover { background: color-mix(in srgb, var(--cm-muted) 65%, transparent); }
+        }
+        li:last-child .cm-home-row { border-bottom: 0; }
+    }
+    .cm-due-overdue { color: var(--cm-danger); font-weight: 600; }
     .cm-grid-cards {
         display: grid; gap: 1rem; grid-template-columns: repeat(3, minmax(0, 1fr));
         @media (max-width: 1399.98px) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -249,6 +261,42 @@
             width: 1.5rem; height: 1.5rem; border-radius: 50%; border: 0; cursor: pointer; transition: transform 120ms var(--cm-ease);
             &:hover { transform: scale(1.1); }
             &[aria-checked="true"] { box-shadow: 0 0 0 2px var(--cm-card), 0 0 0 4px var(--cm-fg); }
+        }
+    }
+}
+
+// Embedded native Odoo views. The card hugs its rows instead of painting a
+// full-height void under a short list, and the toolbar keeps one line.
+.o_cm.o_cm_page.o_cm_page--native {
+    overflow: auto;
+    .cm-native {
+        flex: 0 1 auto;
+        overflow: visible;
+        > .o_view_controller, > .o_cm_native_view { flex: 0 1 auto; min-height: 12rem; overflow: visible; }
+        .o_list_view, .o_list_view > .o_content, .o_list_renderer,
+        .o_kanban_view, .o_kanban_view > .o_content, .o_kanban_renderer {
+            flex: 0 1 auto;
+            height: auto;
+            min-height: 12rem;
+        }
+        .o_kanban_renderer { align-items: flex-start; align-content: flex-start; }
+        .o_kanban_group { height: auto; align-self: flex-start; }
+        .o_control_panel_main { flex-wrap: wrap !important; }
+        .o_control_panel_navigation { flex-shrink: 0; min-width: max-content; }
+        .o_cp_switch_buttons { flex: 0 0 auto; }
+        .o_control_panel_main_buttons .btn { white-space: nowrap; }
+        // The sidebar already creates the record.
+        .o_list_button_add, .o-kanban-button-new { display: none !important; }
+        img.o_avatar {
+            width: 1.5rem; height: 1.5rem; object-fit: cover; font-size: 0; color: transparent;
+            background: var(--cm-muted); border-radius: 50%;
+        }
+        .o_view_nocontent .o_nocontent_help :is(.o_view_nocontent_smiling_face, .o_view_nocontent_neutral_face, .o_view_nocontent_empty_folder)::before {
+            display: none;
+            content: none;
+            width: 0;
+            height: 0;
+            background: none;
         }
     }
 }

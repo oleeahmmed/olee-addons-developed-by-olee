@@ -35,7 +35,8 @@ export class RecordPage extends Component {
         this.notification = useService("notification");
         this.dialog = useService("dialog");
         this.state = useState({
-            loading: true, rec: null, canWrite: false, canUnlink: false, stages: [], activities: [], types: {}, users: [], teams: [], tags: [], features: {}, chatterKey: 1,
+            loading: true, rec: null, canWrite: false, canUnlink: false, stages: [], activities: [], types: {},
+            users: [], teams: [], campaigns: [], sources: [], tags: [], features: {}, chatterKey: 1,
         });
         this.activityActions = useActivityActions(() => this.reload());
         this.leadActions = useLeadActions(() => this.reload());
@@ -53,14 +54,16 @@ export class RecordPage extends Component {
             this.state.loading = false;
             return;
         }
-        const [[rec], users, teams, types, features] = await Promise.all([
+        const [[rec], users, teams, campaigns, sources, types, features] = await Promise.all([
             this.orm.read("crm.lead", [id], FIELDS, { context: { active_test: false } }),
             this.orm.searchRead("res.users", [["share", "=", false]], ["name"], { order: "name" }),
             this.orm.searchRead("crm.team", [], ["name"], { order: "sequence, name" }),
+            this.orm.searchRead("utm.campaign", [], ["title"], { order: "title", limit: 200 }).catch(() => []),
+            this.orm.searchRead("utm.source", [], ["name"], { order: "name", limit: 200 }).catch(() => []),
             loadActivityTypes(this.orm),
             loadFeatures(this.orm).catch(() => ({})),
         ]);
-        Object.assign(this.state, { users, teams, types, features });
+        Object.assign(this.state, { users, teams, campaigns, sources, types, features });
         await this.applyRecord(rec);
     }
 
@@ -82,7 +85,9 @@ export class RecordPage extends Component {
                   user.checkAccessRight("crm.lead", "unlink", [rec.id]).catch(() => false),
               ])
             : [false, false];
-        Object.assign(this.state, { rec, stages, activities, tags, canWrite, canUnlink, loading: false });
+        const campaigns = this.withCurrent(this.state.campaigns, rec?.campaign_id, "title");
+        const sources = this.withCurrent(this.state.sources, rec?.source_id, "name");
+        Object.assign(this.state, { rec, stages, activities, tags, campaigns, sources, canWrite, canUnlink, loading: false });
     }
 
     async reload() {
@@ -100,6 +105,16 @@ export class RecordPage extends Component {
     }
     m(v) {
         return money(v, this.state.rec.company_currency?.[0]);
+    }
+    get currencyLabel() {
+        return this.state.rec?.company_currency?.[1] || "";
+    }
+    /** Keep the record's current campaign or source selectable even past the search limit. */
+    withCurrent(rows, current, labelField) {
+        if (!current || rows.some((row) => row.id === current[0])) {
+            return rows;
+        }
+        return [{ id: current[0], [labelField]: current[1] }, ...rows];
     }
     shortDate(v) {
         return shortDate(v);

@@ -152,6 +152,7 @@ for (const [xmlid, icon] of Object.entries({
 export const createTargets = registry.category("crm_modern.create_targets");
 for (const [xmlid, spec] of Object.entries({
     "crm_modern.menu_pipeline": { resModel: "crm.lead", label: _t("New opportunity"), context: { default_type: "opportunity" } },
+    "crm_modern.menu_activities": { resModel: "mail.activity", label: _t("Schedule activity"), schedule: true },
     "crm_modern.menu_leads": { resModel: "crm.lead", label: _t("New lead"), context: { default_type: "lead" } },
     "crm_modern.menu_campaigns": { resModel: "utm.campaign", label: _t("New campaign") },
     "crm_modern.menu_quotations": { resModel: "sale.order", label: _t("New quotation") },
@@ -416,6 +417,20 @@ export class ModernSidebar extends Component {
             }
         }
         const reload = () => this.env.bus.trigger("crm_modern:list-reload");
+        if (spec.schedule) {
+            this.action.doAction(
+                {
+                    type: "ir.actions.act_window",
+                    name: _t("Schedule Activity"),
+                    res_model: "mail.activity.schedule",
+                    views: [[false, "form"]],
+                    target: "new",
+                    context: { active_model: "crm.lead", dialog_size: "large" },
+                },
+                { onClose: reload }
+            );
+            return;
+        }
         if (spec.resModel === "utm.campaign") {
             this.dialog.add(CampaignDialog, { onSaved: reload });
             return;

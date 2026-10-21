@@ -57,7 +57,12 @@
                                 <div class="od-card-total"><strong class="od-num" t-esc="ms(ytd)"/><span>year to date</span></div>
                             </div>
                             <div class="od-card-body">
-                                <OdComboChart data="d.months" format="m" formatAxis="axis" currentLabel="'' + d.year" previousLabel="'' + (d.year - 1)"
+                                <div t-if="!yearHasRevenue" class="od-empty">
+                                    <i class="fa fa-bar-chart" aria-hidden="true"/>
+                                    <strong>No won revenue in <t t-esc="d.year"/> yet</strong>
+                                    <span>Won deals will show here, month by month.</span>
+                                </div>
+                                <OdComboChart t-else="" data="d.months" format="m" formatAxis="axis" currentLabel="'' + d.year" previousLabel="'' + (d.year - 1)"
                                               label="'Won revenue per month in ' + d.year"/>
                             </div>
                         </section>

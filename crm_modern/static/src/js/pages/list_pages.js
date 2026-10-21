@@ -1,4 +1,4 @@
-import { Component, onWillStart, useState } from "@odoo/owl";
+import { Component, markup, onWillStart, useState } from "@odoo/owl";
 import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
 import { user } from "@web/core/user";
@@ -127,6 +127,7 @@ export class ListPage extends Component {
             domain: this.domain,
             context: this.context,
             formViewId: this.viewId("form"),
+            noContentHelp: C.noContentHelp,
             onSwitchView: (type) => this.setView(type),
             onOpen: (resId) => this.open(resId) || this.openForm(resId),
             onCreate: () => this.onNew(),
@@ -257,6 +258,7 @@ class SalespeoplePage extends ListPage {
 }
 
 class ActivitiesPage extends ListPage {
+    static noContentHelp = markup("<p>Nothing is due</p><p>Calls, meetings and to-dos on your leads show up here.</p>");
     static title = _t("Activities");
     static subtitle = _t("Calls, meetings and to-dos on your leads and opportunities");
     static icon = "fa-clock-o";

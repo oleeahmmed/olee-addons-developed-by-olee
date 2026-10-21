@@ -99,6 +99,9 @@ export class Dashboard extends Component {
     get ytd() {
         return this.state.data.months.filter((m) => !m.future).reduce((s, m) => s + m.value, 0);
     }
+    get yearHasRevenue() {
+        return (this.state.data.months || []).some((m) => m.value || m.previous);
+    }
     get forecastMax() {
         return Math.max(1, ...this.state.data.forecast.map((f) => f.value));
     }

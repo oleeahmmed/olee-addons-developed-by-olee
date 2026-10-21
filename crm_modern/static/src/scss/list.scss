@@ -83,11 +83,11 @@
     &:hover { background: var(--cm-card); border-color: var(--cm-border); .cm-userpick-caret { color: var(--cm-primary); } }
     &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--cm-ring); }
     &.cm-userpick--ro { cursor: default; &:hover { background: transparent; border-color: transparent; } }
-    &.cm-userpick--empty .cm-userpick-name { color: var(--cm-primary); font-weight: 500; }
+    &.cm-userpick--empty .cm-userpick-name { color: var(--cm-muted-fg); font-weight: 500; }
     &:disabled { opacity: 1; }
     .cm-userpick-avatar { width: 1.5rem; height: 1.5rem; flex-shrink: 0; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2px var(--cm-card); }
     .cm-userpick-avatar--empty {
-        display: grid; place-items: center; font-size: 0.6875rem; color: var(--cm-primary);
+        display: grid; place-items: center; font-size: 0.6875rem; color: var(--cm-muted-fg);
         border: 1px dashed color-mix(in srgb, var(--cm-primary) 55%, var(--cm-border)); box-shadow: none; background: var(--cm-card);
         &.cm-userpick-avatar--filled {
             color: var(--cm-muted-fg); border-style: solid; border-color: var(--cm-border); background: var(--cm-muted);

@@ -1,21 +1,88 @@
 /** @odoo-module **/
 
+import { Component, onWillStart, useState } from "@odoo/owl";
 import { _t } from "@web/core/l10n/translation";
-import { registerModernHome } from "@modern_theme/js/modern_home";
+import { registry } from "@web/core/registry";
+import { user } from "@web/core/user";
+import { useService } from "@web/core/utils/hooks";
 import { loadFeatures } from "../core/features";
+import { dueInfo, greeting, money, openRecord, shortDate } from "../core/utils";
 
-registerModernHome("crm_modern.home", {
-    title: _t("CRM"),
-    subtitle: _t("Jump to your everyday CRM screens."),
-    cards: [
-        { action: "crm_modern.action_campaigns", icon: "fa-bullhorn", label: _t("Campaigns"), hint: _t("Start from marketing") },
-        { action: "crm_modern.action_pipeline", icon: "fa-filter", label: _t("Pipeline"), hint: _t("Board by stage") },
-        { action: "crm_modern.action_leads", icon: "fa-user-plus", label: _t("Leads"), hint: _t("Qualify new contacts"), feature: "use_leads" },
-        { action: "crm_modern.action_activities", icon: "fa-calendar-check-o", label: _t("Activities"), hint: _t("Calls and tasks") },
-        { action: "crm_modern.action_dashboard", icon: "fa-th-large", label: _t("Dashboard"), hint: _t("KPIs and charts") },
-    ],
-    async filterCards(orm, cards) {
-        const features = await loadFeatures(orm).catch(() => ({}));
-        return cards.filter((card) => !card.feature || features[card.feature]);
-    },
-});
+/**
+ * Working start: what is late, the deals assigned to you, and the newest leads.
+ * The sidebar already lists the same screens, so Home does not repeat them.
+ */
+export class HomePage extends Component {
+    static template = "crm_modern.Home";
+    static props = ["*"];
+
+    setup() {
+        this.orm = useService("orm");
+        this.action = useService("action");
+        this.greeting = greeting();
+        this.firstName = (user.name || "").split(" ")[0];
+        this.state = useState({
+            loading: true,
+            useLeads: false,
+            overdue: [],
+            deals: [],
+            leads: [],
+            currencyId: false,
+        });
+        onWillStart(() => this.load());
+    }
+
+    async load() {
+        const today = luxon.DateTime.local().toISODate();
+        const [features, overdue, deals, company] = await Promise.all([
+            loadFeatures(this.orm).catch(() => ({})),
+            this.orm.searchRead(
+                "mail.activity",
+                [["res_model", "=", "crm.lead"], ["date_deadline", "<", today]],
+                ["summary", "date_deadline", "res_id", "res_name", "activity_type_id"],
+                { limit: 6, order: "date_deadline asc" }
+            ).catch(() => []),
+            this.orm.searchRead(
+                "crm.lead",
+                [["type", "=", "opportunity"], ["user_id", "=", user.userId], ["won_status", "=", "pending"]],
+                ["name", "expected_revenue", "stage_id", "partner_name", "company_currency"],
+                { limit: 6, order: "expected_revenue desc" }
+            ).catch(() => []),
+            this.orm.searchRead("res.company", [["id", "=", user.activeCompany?.id || 1]], ["currency_id"], { limit: 1 }).catch(() => []),
+        ]);
+        const leads = features.use_leads
+            ? await this.orm.searchRead(
+                "crm.lead",
+                [["type", "=", "lead"]],
+                ["name", "email_from", "partner_name", "create_date"],
+                { limit: 6, order: "create_date desc" }
+            ).catch(() => [])
+            : [];
+        Object.assign(this.state, {
+            loading: false,
+            useLeads: Boolean(features.use_leads),
+            overdue,
+            deals,
+            leads,
+            currencyId: deals[0]?.company_currency?.[0] || company[0]?.currency_id?.[0] || false,
+        });
+    }
+
+    due(value) {
+        return dueInfo(value);
+    }
+    money(amount) {
+        return money(amount, this.state.currencyId);
+    }
+    shortDate(value) {
+        return shortDate(value);
+    }
+    openDeal(id) {
+        return openRecord(this.action, id);
+    }
+    open(xmlid) {
+        return this.action.doAction(xmlid);
+    }
+}
+
+registry.category("actions").add("crm_modern.home", HomePage);
