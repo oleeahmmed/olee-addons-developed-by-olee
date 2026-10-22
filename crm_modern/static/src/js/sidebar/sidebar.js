@@ -55,9 +55,8 @@ const GROUP_CHILD_ORDER = {
         "crm_modern.menu_lost_reasons",
     ],
 };
-// Secondary groups (Team, Reporting, Configuration): bottom of the sidebar, closed
-// by default, so the everyday pages come first.
-const TOP_GROUPS = new Set(["crm_modern.menu_team", "crm_modern.menu_reporting", "crm_modern.menu_config"]);
+// In the top bar, not the sidebar: Team and Users (under "More"), Reporting, Configuration.
+const TOP_GROUPS = new Set(["crm_modern.menu_team", "crm_modern.menu_users", "crm_modern.menu_reporting", "crm_modern.menu_config"]);
 // Odoo entries replaced by a Modern CRM page / menu on the same records
 const REPLACED = new Set([
     "crm.menu_crm_opportunities",
@@ -83,7 +82,7 @@ const REPLACED = new Set([
 /** Font Awesome icon per menu xmlid (Odoo ships FA 4.7). Other addons may add entries. */
 export const menuIcons = registry.category("crm_modern.menu_icons");
 for (const [xmlid, icon] of Object.entries({
-    "crm_modern.menu_home": "fa-home",
+    "crm_modern.menu_home": "fa-sun-o",
     "crm_modern.menu_dashboard": "fa-th-large",
     "crm_modern.menu_pipeline": "fa-columns",
     "crm_modern.menu_leads": "fa-user-plus",

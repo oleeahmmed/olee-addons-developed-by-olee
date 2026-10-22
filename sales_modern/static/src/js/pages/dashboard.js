@@ -3,8 +3,8 @@ import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
 import { user } from "@web/core/user";
 import { useService } from "@web/core/utils/hooks";
-import { OD_COMPONENTS, compareWord, moneyFormatters, number, pct, periodCaption } from "../dash/kit";
-import { greeting, shortDate } from "../core/utils";
+import { OD_COMPONENTS, compareWord, moneyFormatters, number, pct, periodCaption, loadDashboard, dayStart } from "@modern_theme/js/app_kit/dash_kit";
+import { greeting, shortDate } from "@modern_theme/js/app_kit/utils";
 import { openFullForm } from "./list_pages";
 
 const STORE_KEY = "sales_modern.dashboard";
@@ -34,6 +34,7 @@ export class SalesDashboard extends Component {
         this.state = useState({
             loading: true,
             busy: false,
+            error: false,
             data: null,
             canCreate: false,
             period: saved.period || "month",
@@ -45,6 +46,9 @@ export class SalesDashboard extends Component {
         this.number = number;
         this.m = (v) => this.fmt.full(v);
         this.ms = (v) => this.fmt.short(v);
+        // one record's amount, in its own currency
+        this.mr = (o, v) => this.fmt.record(v, o.currency_id);
+        this.msr = (o, v) => this.fmt.record(v, o.currency_id, true);
         this.axis = (v) => this.fmt.axis(v);
         onWillStart(async () => {
             const [canCreate] = await Promise.all([
@@ -56,18 +60,15 @@ export class SalesDashboard extends Component {
     }
 
     async load() {
-        this.state.busy = true;
-        try {
-            const data = await this.orm.call("sale.order", "sales_modern_owner_dashboard", [this.state.period, this.state.teamId || false]);
-            if (this.state.teamId && !data.team_options.some((t) => t.id === this.state.teamId)) {
-                this.state.teamId = false;
-            }
-            this.fmt = moneyFormatters(data.currency_id, data.lakh);
-            this.state.data = data;
-        } finally {
-            this.state.loading = false;
-            this.state.busy = false;
+        const data = await loadDashboard(this, () => this.orm.call("sale.order", "sales_modern_owner_dashboard", [this.state.period, this.state.teamId || false]));
+        if (!data) {
+            return;
         }
+        if (this.state.teamId && !data.team_options.some((t) => t.id === this.state.teamId)) {
+            this.state.teamId = false;
+        }
+        this.fmt = moneyFormatters(data.currency_id, data.lakh);
+        this.state.data = data;
     }
 
     onFilters(change) {
@@ -129,7 +130,7 @@ export class SalesDashboard extends Component {
     periodDomain(field = "date_order") {
         const [start] = this.state.data.range;
         const team = this.state.teamId ? [["team_id", "=", this.state.teamId]] : [];
-        return [[field, ">=", `${start} 00:00:00`], ...team];
+        return [[field, ">=", dayStart(start)], ...team];
     }
     openOrders(name, domain) {
         return this.action.doAction({
@@ -164,7 +165,7 @@ export class SalesDashboard extends Component {
     }
     openTeam(team) {
         const [start] = this.state.data.range;
-        return this.openOrders(team.name, [["state", "=", "sale"], ["team_id", "=", team.id], ["date_order", ">=", `${start} 00:00:00`]]);
+        return this.openOrders(team.name, [["state", "=", "sale"], ["team_id", "=", team.id], ["date_order", ">=", dayStart(start)]]);
     }
     openSold() {
         return this.openOrders(_t("Sales this period"), [["state", "=", "sale"], ...this.periodDomain()]);
@@ -178,7 +179,7 @@ export class SalesDashboard extends Component {
             case "expiring":
                 return this.openOrders(item.label, [["state", "in", ["draft", "sent"]], ["validity_date", ">=", today], ["validity_date", "<=", week], ...team]);
             case "waiting":
-                return this.openOrders(item.label, [["state", "=", "sent"], ["date_order", "<", `${weekAgo} 00:00:00`], ...team]);
+                return this.openOrders(item.label, [["state", "=", "sent"], ["date_order", "<", dayStart(weekAgo)], ...team]);
             case "expired":
                 return this.openOrders(item.label, [["state", "in", ["draft", "sent"]], ["validity_date", "<", today], ...team]);
             case "to_invoice":
@@ -186,7 +187,7 @@ export class SalesDashboard extends Component {
             case "delivery":
                 return this.openOrders(item.label, [["state", "=", "sale"], ["delivery_status", "in", ["pending", "partial", "started"]], ...team]);
             case "overdue":
-                return this.openInvoices(item.label, [["invoice_date_due", "<", today]]);
+                return this.openInvoices(item.label, [["invoice_date_due", "<", today], ...team]);
         }
     }
     openInvoices(name, extra = []) {

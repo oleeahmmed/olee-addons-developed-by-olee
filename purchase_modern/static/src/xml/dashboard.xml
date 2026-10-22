@@ -8,6 +8,9 @@
                 <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel" style="height:8.5rem"/></t></div>
                 <div class="od-grid"><div class="od-skel od-span-8" style="height:22rem"/><div class="od-skel od-span-4" style="height:22rem"/></div>
             </t>
+            <t t-elif="state.error and !state.data">
+                <OdError message="state.error" onRetry.bind="load"/>
+            </t>
             <t t-elif="state.data">
                 <t t-set="d" t-value="state.data"/>
 
@@ -165,7 +168,7 @@
                                                 <span class="od-att-label"><t t-esc="o.name"/> · <t t-esc="o.partner_id ? o.partner_id[1] : ''"/></span>
                                                 <span class="od-att-sub">Sent <t t-esc="shortDate(o.date_order)"/></span>
                                             </div>
-                                            <span class="od-num" style="font-weight:650;font-size:0.8125rem" t-esc="ms(o.amount_untaxed)"/>
+                                            <span class="od-num" style="font-weight:650;font-size:0.8125rem" t-esc="msr(o, o.amount_untaxed)"/>
                                         </li>
                                     </t>
                                 </ul>
@@ -239,8 +242,8 @@
                                                     <span t-elif="o.invoice_status === 'to invoice'" class="od-pill od-tone-violet">To bill</span>
                                                     <span t-else="" class="od-pill od-tone-slate">Nothing to bill</span>
                                                 </td>
-                                                <td class="od-r od-num" t-esc="m(o.amount_untaxed)"/>
-                                                <td class="od-r od-num" style="font-weight:650" t-esc="m(o.amount_total)"/>
+                                                <td class="od-r od-num" t-esc="mr(o, o.amount_untaxed)"/>
+                                                <td class="od-r od-num" style="font-weight:650" t-esc="mr(o, o.amount_total)"/>
                                             </tr>
                                         </t>
                                     </tbody>

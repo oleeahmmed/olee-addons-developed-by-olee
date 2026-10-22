@@ -5,7 +5,7 @@
 // :root. Re-declaring them on `html[data-mt-theme]` (higher specificity) makes
 // the theme win whatever the asset order, without !important.
 
-$mt-addon-prefixes: cm, im, mp, ss, mr;
+$mt-addon-prefixes: cm, im, mp, ss, mr, cu, iv, ac;
 
 html[data-mt-theme] {
     @each $p in $mt-addon-prefixes {
@@ -53,8 +53,8 @@ html[data-mt-theme] {
     }
 }
 
-// Native Odoo tags (color index 0–11) inside modern apps: theme tokens only.
-html.mt-app-modern .o_web_client {
+// Native Odoo tags (color index 0–11) in every app: theme tokens only.
+html[data-mt-theme] .o_web_client {
     .o_tag {
         &, &::after {
             --Tag__badge-background-color: transparent !important;

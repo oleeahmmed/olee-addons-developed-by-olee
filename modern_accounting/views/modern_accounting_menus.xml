@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        The Accounting app. Everyday pages in the sidebar (Dashboard, Daily Work, Ledgers);
+        Reporting and Configuration go to the top bar (Modern Theme does that by itself).
+        Every entry opens Odoo's own records, views and wizards, with Odoo's own groups:
+        an accountant sees what Odoo lets them see, nothing more.
+    -->
+    <menuitem id="menu_root" name="Accounting" sequence="26"
+              web_icon="modern_accounting,static/description/icon.png"
+              groups="account.group_account_readonly"/>
+
+    <menuitem id="menu_dashboard" name="Dashboard" parent="menu_root" action="action_dashboard" sequence="1"/>
+
+    <menuitem id="menu_daily" name="Daily Work" parent="menu_root" sequence="10">
+        <menuitem id="menu_entries" name="Journal Entries" action="action_entries" sequence="1"/>
+        <menuitem id="menu_items" name="Journal Items" action="action_items" sequence="2"/>
+        <menuitem id="menu_payments" name="Payments" action="action_payments" sequence="3"/>
+        <menuitem id="menu_analytic_items" name="Analytic Items" action="analytic.account_analytic_line_action_entries"
+                  sequence="5" groups="analytic.group_analytic_accounting"/>
+        <menuitem id="menu_journals" name="Journals Overview" action="account.open_account_journal_dashboard_kanban"
+                  sequence="4" groups="account.group_account_basic"/>
+    </menuitem>
+
+    <menuitem id="menu_ledgers" name="Ledgers" parent="menu_root" sequence="20">
+        <menuitem id="menu_accounts" name="Chart of Accounts" action="action_accounts" sequence="1"/>
+        <menuitem id="menu_general_ledger" name="General Ledger" action="action_general_ledger" sequence="2"/>
+        <menuitem id="menu_partner_ledger" name="Partner Ledger" action="action_partner_ledger" sequence="3"/>
+        <menuitem id="menu_cash_book" name="Cash &amp; Bank Book" action="action_cash_book" sequence="4"/>
+        <menuitem id="menu_trial_balance" name="Trial Balance" action="action_trial_balance" sequence="5"/>
+    </menuitem>
+
+    <menuitem id="menu_reporting" name="Reporting" parent="menu_root" sequence="80">
+        <menuitem id="menu_profit_loss" name="Profit &amp; Loss" action="action_profit_loss" sequence="1"/>
+        <menuitem id="menu_balance_sheet" name="Balance Sheet" action="action_balance_sheet" sequence="2"/>
+        <menuitem id="menu_tax_report" name="Tax Report" action="action_tax_report" sequence="3"/>
+        <menuitem id="menu_invoice_analysis" name="Invoice Analysis" action="account.action_account_invoice_report_all" sequence="10"/>
+        <menuitem id="menu_analytic_report" name="Analytic Report" action="account.action_analytic_reporting" sequence="11"
+                  groups="analytic.group_analytic_accounting"/>
+        <menuitem id="menu_audit_trail" name="Audit Trail" action="account.action_account_audit_trail_report" sequence="20"/>
+    </menuitem>
+
+    <menuitem id="menu_configuration" name="Configuration" parent="menu_root" sequence="90"
+              groups="account.group_account_manager">
+        <menuitem id="menu_settings" name="Settings" action="account.action_account_config" sequence="1" groups="base.group_system"/>
+        <menuitem id="menu_config_journals" name="Journals" action="account.action_account_journal_form" sequence="10"/>
+        <menuitem id="menu_config_taxes" name="Taxes" action="account.action_tax_form" sequence="11"/>
+        <menuitem id="menu_config_fiscal_positions" name="Fiscal Positions" action="account.action_account_fiscal_position_form" sequence="12"/>
+        <menuitem id="menu_config_currencies" name="Currencies" action="base.action_currency_form" sequence="13"/>
+        <menuitem id="menu_config_payment_terms" name="Payment Terms" action="account.action_payment_term_form" sequence="14"/>
+        <menuitem id="menu_config_reconcile_models" name="Reconciliation Models" action="account.action_account_reconcile_model" sequence="15"/>
+        <menuitem id="menu_config_journal_groups" name="Multi-Ledger" action="account.action_account_journal_group_list" sequence="16"
+                  groups="base.group_no_one"/>
+        <menuitem id="menu_config_analytic_accounts" name="Analytic Accounts" action="analytic.action_account_analytic_account_form" sequence="30"
+                  groups="analytic.group_analytic_accounting"/>
+        <menuitem id="menu_config_analytic_plans" name="Analytic Plans" action="analytic.account_analytic_plan_action" sequence="31"
+                  groups="analytic.group_analytic_accounting"/>
+        <menuitem id="menu_config_analytic_models" name="Analytic Distribution Models" action="analytic.action_analytic_distribution_model" sequence="32"
+                  groups="analytic.group_analytic_accounting"/>
+        <menuitem id="menu_config_secure_entries" name="Secure Entries" action="account.action_view_account_secure_entries_wizard" sequence="50"
+                  groups="base.group_no_one,account.group_account_secured"/>
+    </menuitem>
+</odoo>

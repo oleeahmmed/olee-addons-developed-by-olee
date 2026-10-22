@@ -3,8 +3,8 @@ import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
 import { user } from "@web/core/user";
 import { useService } from "@web/core/utils/hooks";
-import { OD_COMPONENTS, compareWord, moneyFormatters, number, pct, periodCaption } from "../dash/kit";
-import { greeting, shortDate } from "../core/utils";
+import { OD_COMPONENTS, compareWord, moneyFormatters, number, pct, periodCaption, loadDashboard, dayStart } from "@modern_theme/js/app_kit/dash_kit";
+import { greeting, shortDate } from "@modern_theme/js/app_kit/utils";
 import { openFullForm } from "./list_pages";
 
 const STORE_KEY = "purchase_modern.dashboard";
@@ -34,6 +34,7 @@ export class PurchaseDashboard extends Component {
         this.state = useState({
             loading: true,
             busy: false,
+            error: false,
             data: null,
             canCreate: false,
             period: saved.period || "month",
@@ -44,6 +45,9 @@ export class PurchaseDashboard extends Component {
         this.number = number;
         this.m = (v) => this.fmt.full(v);
         this.ms = (v) => this.fmt.short(v);
+        // one record's amount, in its own currency
+        this.mr = (o, v) => this.fmt.record(v, o.currency_id);
+        this.msr = (o, v) => this.fmt.record(v, o.currency_id, true);
         this.axis = (v) => this.fmt.axis(v);
         onWillStart(async () => {
             const [canCreate] = await Promise.all([
@@ -55,15 +59,12 @@ export class PurchaseDashboard extends Component {
     }
 
     async load() {
-        this.state.busy = true;
-        try {
-            const data = await this.orm.call("purchase.order", "purchase_modern_owner_dashboard", [this.state.period]);
-            this.fmt = moneyFormatters(data.currency_id, data.lakh);
-            this.state.data = data;
-        } finally {
-            this.state.loading = false;
-            this.state.busy = false;
+        const data = await loadDashboard(this, () => this.orm.call("purchase.order", "purchase_modern_owner_dashboard", [this.state.period]));
+        if (!data) {
+            return;
         }
+        this.fmt = moneyFormatters(data.currency_id, data.lakh);
+        this.state.data = data;
     }
 
     onFilters(change) {
@@ -114,7 +115,7 @@ export class PurchaseDashboard extends Component {
     // ---------- navigation: Odoo's own lists and forms ----------
     periodDomain(field = "date_order") {
         const [start] = this.state.data.range;
-        return [[field, ">=", `${start} 00:00:00`]];
+        return [[field, ">=", dayStart(start)]];
     }
     openOrders(name, domain) {
         return this.action.doAction({
@@ -155,7 +156,7 @@ export class PurchaseDashboard extends Component {
         const weekAgo = luxon.DateTime.fromISO(today).minus({ days: 7 }).toISODate();
         switch (item.key) {
             case "waiting":
-                return this.openOrders(item.label, [["state", "=", "sent"], ["date_order", "<", `${weekAgo} 00:00:00`]]);
+                return this.openOrders(item.label, [["state", "=", "sent"], ["date_order", "<", dayStart(weekAgo)]]);
             case "to_bill":
                 return this.openOrders(item.label, [["invoice_status", "=", "to invoice"]]);
             case "late":

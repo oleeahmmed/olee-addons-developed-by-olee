@@ -6,11 +6,13 @@ purchasing, account.move / account.payment for vendor bills and cash out (only w
 the user may read them). Amounts are untaxed and in the company currency
 (purchase.report converts them).
 """
+import functools
 from datetime import datetime, time, timedelta
 
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
+from odoo.addons.modern_theme.tools import local_midnight
 from odoo.tools import date_utils
 
 PERIODS = ('month', 'quarter', 'year')
@@ -34,8 +36,12 @@ def period_bounds(today, period):
     return start, end, prev_start, prev_end
 
 
-def as_dt(day):
-    return datetime.combine(day, time.min)
+def as_dt_tz(day, tz=None):
+    """Local midnight of `day` (user's timezone) as the naive UTC datetime Odoo stores."""
+    return local_midnight(day, tz)
+
+
+as_dt = as_dt_tz  # UTC fallback; dashboard methods bind the user's timezone (see below)
 
 
 def delta(current, previous):
@@ -49,7 +55,24 @@ class PurchaseOrder(models.Model):
     _inherit = 'purchase.order'
 
     @api.model
+    def _purchase_modern_to_bill_amount(self, today):
+        """Untaxed value still to be billed, in the company currency: only the quantity
+        left to bill on each line (a half-billed line counts for its other half)."""
+        company = self.env.company
+        lines = self.env['purchase.order.line'].search([
+            ('order_id.state', '=', 'purchase'), ('qty_to_invoice', '>', 0), ('display_type', '=', False),
+        ])
+        total = 0.0
+        for line in lines:
+            if not line.product_qty:
+                continue
+            amount = line.price_subtotal * line.qty_to_invoice / line.product_qty
+            total += line.currency_id._convert(amount, company.currency_id, line.company_id or company, today)
+        return total
+
+    @api.model
     def purchase_modern_owner_dashboard(self, period='month'):
+        as_dt = functools.partial(as_dt_tz, tz=self.env.tz)
         today = fields.Date.context_today(self)
         start, end, prev_start, prev_end = period_bounds(today, period)
         Report = self.env['purchase.report']
@@ -79,7 +102,7 @@ class PurchaseOrder(models.Model):
         open_rfqs = order_count([('state', 'in', RFQ_STATES)])
         open_amount = report_sum([('state', 'in', RFQ_STATES)])
         to_bill_count = order_count([('invoice_status', '=', 'to invoice')])
-        to_bill_amount = report_sum([('state', '=', 'purchase'), ('qty_to_be_billed', '>', 0)])
+        to_bill_amount = self._purchase_modern_to_bill_amount(today)
 
         kpis = {
             'spend': spend, 'spend_prev': spend_prev, 'spend_delta': delta(spend, spend_prev),
@@ -158,15 +181,18 @@ class PurchaseOrder(models.Model):
 
         # ---------- needs attention ----------
         waiting_count = order_count([('state', '=', 'sent'), ('date_order', '<', as_dt(today - timedelta(days=7)))])
-        late_count = order_count([('state', '=', 'purchase'), ('is_late', '=', True)])
+        # "late for receipt" only means something when receipts exist (purchase_stock installed)
+        has_receipts = 'picking_ids' in self._fields
+        late_count = order_count([('state', '=', 'purchase'), ('is_late', '=', True)]) if has_receipts else 0
         attention = [
             {'key': 'waiting', 'count': waiting_count, 'tone': 'info', 'icon': 'fa-paper-plane-o',
              'label': self.env._('RFQs sent over 7 days ago, no answer')},
             {'key': 'to_bill', 'count': to_bill_count, 'tone': 'violet', 'icon': 'fa-file-text-o',
              'label': self.env._('Orders waiting for a vendor bill')},
-            {'key': 'late', 'count': late_count, 'tone': 'warning', 'icon': 'fa-truck',
-             'label': self.env._('Orders late for receipt')},
         ]
+        if has_receipts:
+            attention.append({'key': 'late', 'count': late_count, 'tone': 'warning', 'icon': 'fa-truck',
+                              'label': self.env._('Orders late for receipt')})
 
         # ---------- money out: bills, payables, cash (accounting rights only) ----------
         finance = self._purchase_modern_finance(start, end, prev_start, prev_end, today)
@@ -223,8 +249,9 @@ class PurchaseOrder(models.Model):
             {'id': p.id, 'label': p.display_name, 'value': -(amount or 0.0), 'count': count}
             for p, amount, count in Move._read_group(
                 open_domain + [('invoice_date_due', '<', today)], ['partner_id'],
-                ['amount_residual_signed:sum', '__count'], order='amount_residual_signed:sum asc', limit=5)
+                ['amount_residual_signed:sum', '__count'], order='amount_residual_signed:sum asc', limit=10)
         ]
+        creditors = [r for r in creditors if r['value'] > 0][:5]  # credit notes can net a balance out
         # ageing of what's owed to vendors (days past the due date)
         ageing = []
         for label, low, high in (('Not due', None, 0), ('1–30 d', 1, 30), ('31–60 d', 31, 60), ('61–90 d', 61, 90), ('90+ d', 91, None)):

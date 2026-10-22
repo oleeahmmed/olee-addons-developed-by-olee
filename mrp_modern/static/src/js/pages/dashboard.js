@@ -3,8 +3,8 @@ import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
 import { user } from "@web/core/user";
 import { useService } from "@web/core/utils/hooks";
-import { OD_COMPONENTS, compareWord, number, pct, periodCaption } from "../dash/kit";
-import { greeting, shortDate } from "../core/utils";
+import { OD_COMPONENTS, compareWord, number, pct, periodCaption, loadDashboard, dayStart } from "@modern_theme/js/app_kit/dash_kit";
+import { greeting, shortDate } from "@modern_theme/js/app_kit/utils";
 import { openFullForm } from "./list_pages";
 
 const STORE_KEY = "mrp_modern.dashboard";
@@ -37,6 +37,7 @@ export class MrpDashboard extends Component {
         this.state = useState({
             loading: true,
             busy: false,
+            error: false,
             data: null,
             canCreate: false,
             period: saved.period || "month",
@@ -58,12 +59,9 @@ export class MrpDashboard extends Component {
     }
 
     async load() {
-        this.state.busy = true;
-        try {
-            this.state.data = await this.orm.call("mrp.production", "mrp_modern_owner_dashboard", [this.state.period]);
-        } finally {
-            this.state.loading = false;
-            this.state.busy = false;
+        const data = await loadDashboard(this, () => this.orm.call("mrp.production", "mrp_modern_owner_dashboard", [this.state.period]));
+        if (data) {
+            this.state.data = data;
         }
     }
 
@@ -101,7 +99,7 @@ export class MrpDashboard extends Component {
 
     periodDomain(field = "date_finished") {
         const [start] = this.state.data.range;
-        return [[field, ">=", `${start} 00:00:00`]];
+        return [[field, ">=", dayStart(start)]];
     }
     openMos(name, domain) {
         return this.action.doAction({
@@ -140,7 +138,7 @@ export class MrpDashboard extends Component {
             case "late":
                 return this.openMos(item.label, [
                     ["state", "in", ["confirmed", "progress", "to_close"]],
-                    ["date_deadline", "<", `${today} 00:00:00`],
+                    ["date_deadline", "<", dayStart(today)],
                 ]);
             case "waiting":
                 return this.openMos(item.label, [

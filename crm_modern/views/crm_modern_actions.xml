@@ -2,7 +2,7 @@
 <odoo>
     <!-- One client action per page. Each page is an OWL component registered under the same tag. -->
     <record id="action_home" model="ir.actions.client">
-        <field name="name">Home</field>
+        <field name="name">My Day</field>
         <field name="tag">crm_modern.home</field>
         <field name="path">modern-crm-home</field>
     </record>

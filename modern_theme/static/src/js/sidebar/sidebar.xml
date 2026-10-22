@@ -241,7 +241,7 @@
                             </div>
                             <div t-if="!collapsed and isAppExpanded(app)" class="mt-sb-app-tree">
                                 <t t-call="modern_theme.Sidebar.Tree">
-                                    <t t-set="nodes" t-value="treeFor(app)"/>
+                                    <t t-set="nodes" t-value="sideTreeFor(app)"/>
                                     <t t-set="level" t-value="1"/>
                                 </t>
                             </div>
@@ -296,7 +296,7 @@
                 <t t-call="modern_theme.Sidebar.Quick"/>
                 <div class="mt-sb-block">
                     <t t-call="modern_theme.Sidebar.Tree">
-                        <t t-set="nodes" t-value="tree"/>
+                        <t t-set="nodes" t-value="sideTree"/>
                         <t t-set="level" t-value="0"/>
                     </t>
                 </div>

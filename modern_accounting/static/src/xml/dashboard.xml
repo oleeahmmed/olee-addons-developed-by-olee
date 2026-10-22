@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="modern_accounting.Dashboard">
+        <div class="o_ac od-page">
+            <t t-if="state.loading">
+                <div class="od-head"><div class="od-skel" style="height:3.75rem;width:22rem"/><div class="od-skel" style="height:2.25rem;width:20rem"/></div>
+                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel" style="height:8.5rem"/></t></div>
+                <div class="od-grid"><div class="od-skel od-span-8" style="height:22rem"/><div class="od-skel od-span-4" style="height:22rem"/></div>
+            </t>
+            <t t-elif="state.error and !state.data">
+                <OdError message="state.error" onRetry.bind="load"/>
+            </t>
+            <t t-elif="state.data">
+                <t t-set="d" t-value="state.data"/>
+
+                <!-- header: who, when, filters -->
+                <header class="od-head">
+                    <div>
+                        <div class="od-eyebrow"><span class="od-live" aria-hidden="true"/> <t t-esc="d.company"/> · Accounting overview</div>
+                        <h1 class="od-title"><t t-esc="greeting"/>, <t t-esc="firstName"/></h1>
+                        <p class="od-subtitle">
+                            <strong t-esc="caption.current"/>, compared with <t t-esc="caption.previous"/> · posted entries only
+                        </p>
+                    </div>
+                    <div class="od-head-actions">
+                        <OdFilters period="state.period" teams="[]" onChange.bind="onFilters" busy="state.busy"/>
+                        <button type="button" class="od-btn od-btn--icon" title="Refresh" aria-label="Refresh" t-on-click="() => this.load()">
+                            <i t-attf-class="fa fa-refresh {{ state.busy ? 'fa-spin' : '' }}" aria-hidden="true"/>
+                        </button>
+                        <button type="button" class="od-btn" t-on-click="() => this.go('trial_balance')">
+                            <i class="fa fa-balance-scale" aria-hidden="true"/> Trial balance
+                        </button>
+                        <button t-if="state.canCreate" type="button" class="od-btn od-btn--primary" data-hotkey="c" t-on-click="newEntry">
+                            <i class="fa fa-plus" aria-hidden="true"/> New entry
+                        </button>
+                    </div>
+                </header>
+
+                <div t-att-class="{ 'od-busy': state.busy }">
+                    <!-- key figures: the result, then where the money is -->
+                    <section class="od-kpis" aria-label="Key figures">
+                        <OdKpi featured="true" tone="'green'" icon="'fa-arrow-down'" label="'Income'" value="ms(k.income)"
+                               delta="k.income_delta" compareLabel="compare" spark="d.sparks.income"
+                               hint="k.income_prev ? 'Previous period ' + ms(k.income_prev) : 'No income in the previous period'" onClick.bind="openIncome"/>
+                        <OdKpi tone="'amber'" icon="'fa-arrow-up'" label="'Expenses'" value="ms(k.expense)"
+                               delta="k.expense_delta" compareLabel="compare" spark="d.sparks.expense" invert="true"
+                               hint="k.expense_prev ? 'Previous period ' + ms(k.expense_prev) : 'No expense in the previous period'" onClick.bind="openExpense"/>
+                        <OdKpi tone="k.profit &lt; 0 ? 'rose' : 'blue'" icon="'fa-line-chart'"
+                               label="k.profit &lt; 0 ? 'Net loss' : 'Net profit'" value="ms(k.profit)"
+                               delta="k.profit_delta" compareLabel="compare" spark="d.sparks.profit" hint="profitHint" onClick.bind="openProfit"/>
+                        <OdKpi tone="'teal'" icon="'fa-university'" label="'Cash &amp; bank'" value="ms(k.cash)"
+                               hint="'balance today, all bank and cash accounts'" onClick.bind="openCash"/>
+                        <OdKpi tone="'violet'" icon="'fa-hourglass-half'" label="'Receivable'" value="ms(k.receivable)"
+                               hint="'customers owe you, today'" onClick="() => this.openAccountType('Receivable', 'asset_receivable')"/>
+                        <OdKpi tone="'rose'" icon="'fa-credit-card'" label="'Payable'" value="ms(k.payable)"
+                               hint="'you owe vendors, today'" onClick="() => this.openAccountType('Payable', 'liability_payable')"/>
+                    </section>
+
+                    <!-- the year, and what to check now -->
+                    <div class="od-grid">
+                        <section class="od-card od-span-8">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-green"><i class="fa fa-bar-chart" aria-hidden="true"/></span> Income in <t t-esc="d.year"/></h3>
+                                    <p>Posted income per month, with last year for comparison</p>
+                                </div>
+                                <div class="od-card-total"><strong class="od-num" t-esc="ms(ytd)"/><span>year to date · expenses <t t-esc="ms(ytdExpense)"/></span></div>
+                            </div>
+                            <div class="od-card-body">
+                                <OdComboChart data="d.months" format="m" formatAxis="axis" currentLabel="'' + d.year" previousLabel="'' + (d.year - 1)"
+                                              label="'Income per month in ' + d.year + ' compared with ' + (d.year - 1)"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-rose"><i class="fa fa-bell-o" aria-hidden="true"/></span> To check</h3>
+                                    <p>Click a line to see the entries</p>
+                                </div>
+                            </div>
+                            <div class="od-card-body">
+                                <OdAttention items="d.attention" format="ms" onClick.bind="openAttention"/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- where the money is, where it went -->
+                    <div class="od-grid">
+                        <section class="od-card od-span-6">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-university" aria-hidden="true"/></span> Bank &amp; cash</h3>
+                                    <p>Balance of each bank and cash account today</p>
+                                </div>
+                                <button type="button" class="od-link" t-on-click="openCash">Cash &amp; bank book <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body od-card-body--flush">
+                                <div t-if="!d.liquidity.length" class="od-empty"><i class="fa fa-university" aria-hidden="true"/><strong>No bank or cash journal</strong></div>
+                                <div t-else="" class="od-table-wrap">
+                                    <table class="od-table">
+                                        <thead><tr><th>Account</th><th class="od-r">Balance</th></tr></thead>
+                                        <tbody>
+                                            <tr t-foreach="d.liquidity" t-as="j" t-key="j.id" class="od-clickable" t-on-click="() => this.openJournal(j)">
+                                                <td class="od-cell-main">
+                                                    <span t-attf-class="ac-journal-icon od-tone-{{ j.type === 'cash' ? 'green' : j.type === 'credit' ? 'violet' : 'blue' }}">
+                                                        <i t-attf-class="fa {{ journalIcon(j.type) }}" aria-hidden="true"/>
+                                                    </span>
+                                                    <t t-esc="j.label"/> <span class="text-muted ms-1" t-esc="j.code"/>
+                                                </td>
+                                                <td t-attf-class="od-r od-num {{ j.value &lt; 0 ? 'ac-negative' : '' }}" style="font-weight:650" t-esc="m(j.value)"/>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot><tr><td>Total</td><td class="od-r od-num" t-esc="m(liquidityTotal)"/></tr></tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-6">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-amber"><i class="fa fa-pie-chart" aria-hidden="true"/></span> Where the money went</h3>
+                                    <p>Expenses of the period by account</p>
+                                </div>
+                                <button type="button" class="od-link" t-on-click="openExpense">All expenses <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body">
+                                <OdDonut t-if="d.expenses.length" items="d.expenses" format="ms" centerLabel="'Expenses'" onClick.bind="openExpenseAccount"/>
+                                <div t-else="" class="od-empty"><i class="fa fa-check-circle-o" aria-hidden="true"/><strong>No expense this period</strong></div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- the books, one click away -->
+                    <section class="od-card">
+                        <div class="od-card-head">
+                            <div>
+                                <h3><span class="od-card-icon od-tone-blue"><i class="fa fa-folder-open-o" aria-hidden="true"/></span> Books &amp; statements</h3>
+                                <p>Odoo's journal items, grouped and totalled — filter by date, journal or partner as usual</p>
+                            </div>
+                        </div>
+                        <div class="od-card-body">
+                            <div class="ac-books">
+                                <button t-foreach="statements" t-as="s" t-key="s.key" type="button" class="ac-book" t-on-click="() => this.go(s.key)">
+                                    <span t-attf-class="od-card-icon od-tone-{{ s.tone }}"><i t-attf-class="fa {{ s.icon }}" aria-hidden="true"/></span>
+                                    <span class="ac-book-text"><strong t-esc="s.label"/><small t-esc="s.sub"/></span>
+                                    <i class="fa fa-angle-right ac-book-go" aria-hidden="true"/>
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- latest entries -->
+                    <section class="od-card">
+                        <div class="od-card-head">
+                            <div>
+                                <h3><span class="od-card-icon od-tone-slate"><i class="fa fa-list-ul" aria-hidden="true"/></span> Latest entries</h3>
+                                <p>The most recent posted journal entries, of every journal</p>
+                            </div>
+                            <button type="button" class="od-link" t-on-click="() => this.go('entries')">All entries <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                        </div>
+                        <div class="od-card-body od-card-body--flush">
+                            <div t-if="!d.recent.length" class="od-empty"><i class="fa fa-book" aria-hidden="true"/><strong>No posted entry yet</strong></div>
+                            <div t-else="" class="od-table-wrap">
+                                <table class="od-table">
+                                    <thead><tr><th>Number</th><th>Date</th><th>Journal</th><th>Partner</th><th>Reference</th><th class="od-r">Amount</th></tr></thead>
+                                    <tbody>
+                                        <tr t-foreach="d.recent" t-as="o" t-key="o.id" class="od-clickable" t-on-click="() => this.openMove(o)">
+                                            <td class="od-cell-main"><t t-esc="o.name"/> <span class="od-pill od-tone-slate" t-esc="entryLabel(o)"/></td>
+                                            <td class="text-muted" t-esc="shortDate(o.date)"/>
+                                            <td t-esc="o.journal_id ? o.journal_id[1] : '—'"/>
+                                            <td t-esc="o.partner_id ? o.partner_id[1] : '—'"/>
+                                            <td class="text-muted od-truncate" style="max-width:14rem" t-esc="o.ref || '—'"/>
+                                            <td class="od-r od-num" style="font-weight:650" t-esc="m(o.amount_total_signed)"/>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

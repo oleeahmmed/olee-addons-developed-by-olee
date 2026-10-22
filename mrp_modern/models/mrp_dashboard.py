@@ -3,11 +3,13 @@
 Figures use the user's own rights (record rules apply) on Odoo's standard models:
 mrp.production, mrp.bom, mrp.workorder (only when Work Orders are enabled).
 """
+import functools
 from datetime import datetime, time, timedelta
 
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
+from odoo.addons.modern_theme.tools import local_midnight
 from odoo.tools import date_utils
 
 PERIODS = ('month', 'quarter', 'year')
@@ -27,8 +29,12 @@ def period_bounds(today, period):
     return start, end, prev_start, prev_end
 
 
-def as_dt(day):
-    return datetime.combine(day, time.min)
+def as_dt_tz(day, tz=None):
+    """Local midnight of `day` (user's timezone) as the naive UTC datetime Odoo stores."""
+    return local_midnight(day, tz)
+
+
+as_dt = as_dt_tz  # UTC fallback; dashboard methods bind the user's timezone (see below)
 
 
 def delta(current, previous):
@@ -47,6 +53,7 @@ class MrpProduction(models.Model):
 
     @api.model
     def mrp_modern_owner_dashboard(self, period='month'):
+        as_dt = functools.partial(as_dt_tz, tz=self.env.tz)
         today = fields.Date.context_today(self)
         start, end, prev_start, prev_end = period_bounds(today, period)
 
@@ -57,7 +64,8 @@ class MrpProduction(models.Model):
             return [('state', '=', 'done'), ('date_finished', '>=', as_dt(a)), ('date_finished', '<', as_dt(b))]
 
         def qty_sum(domain):
-            [(amount,)] = self._read_group(domain, aggregates=['product_qty:sum'])
+            # product_uom_qty: in each product's own unit (product_qty is in the order's unit)
+            [(amount,)] = self._read_group(domain, aggregates=['product_uom_qty:sum'])
             return amount or 0.0
 
         done_count, done_prev = count(done(start, end)), count(done(prev_start, prev_end))
@@ -66,7 +74,7 @@ class MrpProduction(models.Model):
         in_progress = count([('state', '=', 'progress')])
         to_close = count([('state', '=', 'to_close')])
         draft = count([('state', '=', 'draft')])
-        late = count([('state', 'in', LIVE_STATES), ('date_deadline', '<', as_dt(today))])
+        late = count([('state', 'in', LIVE_STATES), ('date_deadline', '<', fields.Datetime.now())])
         waiting = count([('state', 'in', LIVE_STATES), ('components_availability_state', 'in', ('unavailable', 'late'))])
         created = [('create_date', '>=', as_dt(start)), ('create_date', '<', as_dt(end))]
         started = count(created + [('state', '!=', 'cancel')])
@@ -84,9 +92,9 @@ class MrpProduction(models.Model):
         year_start = date_utils.start_of(today, 'year')
         last_year_start = year_start - relativedelta(years=1)
 
-        def monthly(a, b):
+        def monthly(a, b, aggregate='__count'):
             out = {}
-            for month, c in self._read_group(done(a, b), ['date_finished:month'], ['__count']):
+            for month, c in self._read_group(done(a, b), ['date_finished:month'], [aggregate]):
                 out[month_key(month)] = c or 0
             return out
 
@@ -111,20 +119,20 @@ class MrpProduction(models.Model):
                 points.append(mapping.get(month, 0) or 0)
             return points
 
-        sparks = {'done': sparkline(spark), 'qty': sparkline(spark)}
+        sparks = {'done': sparkline(spark), 'qty': sparkline(monthly(spark_start, end, 'product_uom_qty:sum'))}
 
         products = [
             {'id': p.id, 'label': p.display_name, 'value': qty or 0.0, 'qty': qty or 0.0, 'orders': c}
             for p, qty, c in self._read_group(
-                done(start, end), ['product_id'], ['product_qty:sum', '__count'],
-                order='product_qty:sum desc', limit=8)
+                done(start, end), ['product_id'], ['product_uom_qty:sum', '__count'],
+                order='product_uom_qty:sum desc', limit=8)
         ]
         boms = self.env['mrp.bom'].search_count([]) if 'mrp.bom' in self.env else 0
 
         has_wo = 'mrp.workorder' in self.env and self.env.user.has_group('mrp.group_mrp_routings')
         workorders = 0
         if has_wo and self.env['mrp.workorder'].browse().has_access('read'):
-            workorders = self.env['mrp.workorder'].search_count([('state', 'in', ('ready', 'progress', 'waiting'))])
+            workorders = self.env['mrp.workorder'].search_count([('state', 'in', ('blocked', 'ready', 'progress'))])
 
         attention = [
             {'key': 'late', 'count': late, 'tone': 'danger', 'icon': 'fa-clock-o',
@@ -139,7 +147,7 @@ class MrpProduction(models.Model):
         if has_wo:
             attention.append({
                 'key': 'workorders', 'count': workorders, 'tone': 'info', 'icon': 'fa-cogs',
-                'label': self.env._('Work orders waiting or in progress'),
+                'label': self.env._('Open work orders'),
             })
 
         recent = self.search_read(

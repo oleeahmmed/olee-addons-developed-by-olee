@@ -16,6 +16,7 @@ import {
     findActiveLeaf,
     flattenLeaves,
     menuBadges,
+    sideNodes,
     registryGet,
     sidebarApps,
 } from "./menu_model";
@@ -170,6 +171,14 @@ export class MtSidebar extends Component {
     get tree() {
         return this.treeFor(this.currentApp);
     }
+    /** What the sidebar lists for an app: its everyday pages (the rest is in the top bar). */
+    sideTreeFor(app) {
+        // On phones the top bar has no room: everything stays in the (drawer) sidebar.
+        return this.ui.isSmall ? this.treeFor(app) : sideNodes(this.treeFor(app));
+    }
+    get sideTree() {
+        return this.sideTreeFor(this.currentApp);
+    }
     get activeLeaf() {
         this.state.rev;
         const app = this.currentApp;
@@ -222,8 +231,8 @@ export class MtSidebar extends Component {
     }
     /** Floating style: top-level groups become titled sections; loose items go first. */
     get sections() {
-        const loose = this.tree.filter((n) => !n.children.length);
-        const groups = this.tree.filter((n) => n.children.length);
+        const loose = this.sideTree.filter((n) => !n.children.length);
+        const groups = this.sideTree.filter((n) => n.children.length);
         const result = [];
         if (loose.length) {
             result.push({ key: "main", title: "", nodes: loose, node: null });
@@ -335,7 +344,7 @@ export class MtSidebar extends Component {
     }
     get showPanel() {
         // Rail style: the second panel is docked when pinned, else it is a flyout.
-        return this.style === "rail" && this.state.pinned && this.tree.length > 0;
+        return this.style === "rail" && this.state.pinned && this.sideTree.length > 0;
     }
 
     // ------------------------------------------------------------------
@@ -352,7 +361,7 @@ export class MtSidebar extends Component {
         const rect = ev.currentTarget.getBoundingClientRect();
         const sideRect = this.root.el?.getBoundingClientRect();
         const title = app ? app.name : node.name;
-        const nodes = app ? this.treeFor(app) : node.children;
+        const nodes = app ? this.sideTreeFor(app) : node.children;
         browser.clearTimeout(this.flyoutTimer);
         this.flyoutTimer = browser.setTimeout(() => {
             const maxTop = browser.innerHeight - Math.min(480, 60 + nodes.length * 34);

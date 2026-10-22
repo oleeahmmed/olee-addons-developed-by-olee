@@ -8,7 +8,8 @@
         stay grouped for the top-bar dropdowns.
         Visibility comes from Odoo's groups (CRM app rights, CRM Settings).
     -->
-    <menuitem id="menu_home" name="Home" parent="crm.crm_menu_root" action="action_home" sequence="-110"/>
+    <!-- "My Day": the salesperson's own follow-ups and open deals (the owner dashboard is under Sales) -->
+    <menuitem id="menu_home" name="My Day" parent="crm.crm_menu_root" action="action_home" sequence="-110"/>
 
     <menuitem id="menu_marketing" name="CRM" parent="crm.crm_menu_root" sequence="-100" groups="sales_team.group_sale_salesman" active="True"/>
     <menuitem id="menu_campaigns" name="Campaigns" parent="menu_marketing" action="action_campaigns" sequence="1" groups="sales_team.group_sale_salesman"/>

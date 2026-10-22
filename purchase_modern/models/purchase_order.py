@@ -21,7 +21,9 @@ class PurchaseOrder(models.Model):
             'form': ref('purchase.purchase_order_form'),
         }
         ids = {
+            # RFQs: exactly Odoo's own RFQ views (list and kanban both with Odoo's small RFQ summary)
             'rfq_list': ref('purchase.purchase_order_kpis_tree'),
+            'rfq_kanban': ref('purchase.view_purchase_order_kanban'),
             'rfq_search': ref('purchase.view_purchase_order_filter'),
             'order_list': ref('purchase.purchase_order_view_tree'),
             'order_search': ref('purchase.purchase_order_view_search'),

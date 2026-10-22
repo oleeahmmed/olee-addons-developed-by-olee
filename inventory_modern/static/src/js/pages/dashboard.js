@@ -3,8 +3,8 @@ import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
 import { user } from "@web/core/user";
 import { useService } from "@web/core/utils/hooks";
-import { OD_COMPONENTS, compareWord, moneyFormatters, number, pct, periodCaption } from "../dash/kit";
-import { greeting, shortDate, shortDateTime } from "../core/utils";
+import { OD_COMPONENTS, compareWord, moneyFormatters, number, pct, periodCaption, loadDashboard } from "@modern_theme/js/app_kit/dash_kit";
+import { greeting, shortDate, shortDateTime } from "@modern_theme/js/app_kit/utils";
 import { openFullForm } from "./list_pages";
 
 const STORE_KEY = "inventory_modern.dashboard";
@@ -37,7 +37,7 @@ export class InventoryDashboard extends Component {
         this.action = useService("action");
         const saved = remembered();
         this.state = useState({
-            loading: true, busy: false, data: null, canCreate: false,
+            loading: true, busy: false, error: false, data: null, canCreate: false,
             period: saved.period || "month",
             warehouseId: saved.warehouseId || false,
         });
@@ -60,18 +60,15 @@ export class InventoryDashboard extends Component {
     }
 
     async load() {
-        this.state.busy = true;
-        try {
-            const data = await this.orm.call("stock.picking", "inventory_modern_dashboard", [this.state.period, this.state.warehouseId || false]);
-            if (this.state.warehouseId && !data.warehouse_options.some((w) => w.id === this.state.warehouseId)) {
-                this.state.warehouseId = false;
-            }
-            this.fmt = moneyFormatters(data.currency_id, data.lakh);
-            this.state.data = data;
-        } finally {
-            this.state.loading = false;
-            this.state.busy = false;
+        const data = await loadDashboard(this, () => this.orm.call("stock.picking", "inventory_modern_dashboard", [this.state.period, this.state.warehouseId || false]));
+        if (!data) {
+            return;
         }
+        if (this.state.warehouseId && !data.warehouse_options.some((w) => w.id === this.state.warehouseId)) {
+            this.state.warehouseId = false;
+        }
+        this.fmt = moneyFormatters(data.currency_id, data.lakh);
+        this.state.data = data;
     }
 
     onFilters(change) {
@@ -202,13 +199,18 @@ export class InventoryDashboard extends Component {
                     type: "ir.actions.act_window", name: item.label, res_model: "product.product",
                     views: [[false, "list"], [false, "form"]],
                     domain: [["is_storable", "=", true], ["qty_available", "<=", 0]],
+                    // qty_available is computed for the warehouse in the context (Odoo standard)
+                    context: this.state.warehouseId ? { warehouse_id: this.state.warehouseId } : {},
                     target: "current",
                 });
             case "negative":
                 return this.action.doAction({
                     type: "ir.actions.act_window", name: item.label, res_model: "stock.quant",
                     views: [[false, "list"]],
-                    domain: [["location_id.usage", "=", "internal"], ["quantity", "<", 0]],
+                    domain: [
+                        ["location_id.usage", "=", "internal"], ["quantity", "<", 0],
+                        ...(this.state.warehouseId ? [["location_id.warehouse_id", "=", this.state.warehouseId]] : []),
+                    ],
                     context: { create: false },
                     target: "current",
                 });

@@ -1,0 +1,8 @@
+// Modern Contacts: pages, lists, dashboards and controls come from Modern Theme's shared
+// app kit (modern_theme/static/src/scss/kit/). This app only passes its prefix.
+@include mt-app-tokens(cu);
+@include mt-app-pages(cu);
+@include mt-app-list(cu);
+@include mt-app-controls(cu);
+@include mt-app-helpers(cu);
+@include mt-app-dash(cu);

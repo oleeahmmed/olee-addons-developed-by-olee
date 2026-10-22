@@ -1,3 +1,4 @@
+import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
 
 /**
@@ -14,6 +15,12 @@ export const sidebarApps = registry.category("modern_theme.sidebar_apps");
 export const menuBadges = registry.category("modern_theme.menu_badges");
 /** Models the command palette searches records in: { model, label, icon, domain? }. */
 export const paletteModels = registry.category("modern_theme.palette_models");
+/**
+ * xmlid -> app root xmlid: an Odoo menu another app now shows (e.g. Invoicing's
+ * Accounting / Review groups, shown by Modern Accounting). The menu is hidden from
+ * every other app, but only while that app is visible to the user.
+ */
+export const movedMenus = registry.category("modern_theme.moved_menus");
 
 const DEFAULT_APP_ICON = "/web/static/img/default_icon_app.png";
 
@@ -135,7 +142,13 @@ function rank(order, xmlid) {
  */
 export function buildAppTree(menuService, app, config = null) {
     const root = menuService.getMenuAsTree(app.id);
-    const replaced = asSet(config?.replaced);
+    const replaced = new Set(asSet(config?.replaced)); // a copy: moved menus are added below
+    const appXmlids = new Set((menuService.getApps?.() || []).map((a) => a.xmlid));
+    for (const [xmlid, target] of movedMenus.getEntries()) {
+        if (target !== app.xmlid && appXmlids.has(target)) {
+            replaced.add(xmlid);
+        }
+    }
     const secondary = asSet(config?.secondary);
     const own = config?.ownPrefixes || [];
     const isOwn = (m) => own.some((p) => (m.xmlid || "").startsWith(p));
@@ -199,12 +212,103 @@ export function buildAppTree(menuService, app, config = null) {
         top.sort((a, b) => rank(config.order, a.xmlid) - rank(config.order, b.xmlid));
     }
     sortChildren(top);
+    // Odoo entries an app wants among its everyday pages (e.g. Replenishment in Operations)
+    if (config?.promote) {
+        const byXmlid = Object.fromEntries(top.map((n) => [n.xmlid, n]));
+        for (const [xmlid, targetXmlid] of Object.entries(config.promote)) {
+            const target = byXmlid[targetXmlid];
+            const found = target && takeNode(top, xmlid, target);
+            if (found) {
+                target.children.push({ ...found, depth: target.depth + 1, children: [] });
+            }
+        }
+        top = top.filter((n) => n.children.length || n.href);
+    }
     for (const node of top) {
-        // "Secondary" groups (Reporting, Configuration…) sit at the bottom, closed by default.
-        node.secondary = secondary.has(node.xmlid) || (config && own.length && !node.own && node.children.length > 0);
+        node.kind = topKind(node);
+        // "Secondary" menus (Reporting, Configuration, rarely used Odoo groups) go to the
+        // top bar, so the sidebar only lists the everyday pages.
+        node.secondary =
+            secondary.has(node.xmlid) ||
+            node.kind !== "main" ||
+            Boolean(config && own.length && !node.own);
+    }
+    if (!top.some((n) => !n.secondary)) {
+        // Nothing would be left in the sidebar (e.g. the Settings app): keep everything there.
+        for (const node of top) {
+            node.secondary = false;
+        }
     }
     top.sort((a, b) => Number(Boolean(a.secondary)) - Number(Boolean(b.secondary)));
     return top;
+}
+
+const REPORT_RE = /report|analys/i;
+const CONFIG_RE = /config|setting/i;
+
+/** "report" / "config" for an app's Reporting and Configuration menus, "main" otherwise. */
+export function topKind(node) {
+    const key = (node.xmlid || "").split(".").pop();
+    if (REPORT_RE.test(key) || /^reporting$/i.test(node.name)) {
+        return "report";
+    }
+    if (CONFIG_RE.test(key) || /^configuration$/i.test(node.name)) {
+        return "config";
+    }
+    return "main";
+}
+
+/** Remove the node with this xmlid from the (non-target) tree and return it. */
+function takeNode(nodes, xmlid, skip) {
+    for (let i = 0; i < nodes.length; i++) {
+        const node = nodes[i];
+        if (node === skip) {
+            continue;
+        }
+        if (node.xmlid === xmlid && !node.children.length) {
+            nodes.splice(i, 1);
+            return node;
+        }
+        const found = takeNode(node.children, xmlid, skip);
+        if (found) {
+            if (!node.children.length && !node.href) {
+                nodes.splice(i, 1); // the group is now empty
+            }
+            return found;
+        }
+    }
+    return null;
+}
+
+/** The sidebar part of an app tree: its everyday pages. */
+export function sideNodes(tree) {
+    return tree.filter((n) => !n.secondary);
+}
+
+/** The top bar part: other Odoo groups first, then Reporting, then Configuration. */
+export function topNodes(tree) {
+    const top = tree.filter((n) => n.secondary);
+    const main = top.filter((n) => (n.kind || "main") === "main");
+    const result = [];
+    if (main.length > 1) {
+        // Several small groups (Orders, Products, Team…): one "More" menu, one heading each.
+        const leaves = main.filter((n) => !n.children.length);
+        const groups = main.filter((n) => n.children.length);
+        result.push({
+            id: `more_${main[0].appID || main[0].id}`,
+            name: _t("More"),
+            xmlid: "",
+            kind: "main",
+            icon: "fa-th-large",
+            secondary: true,
+            depth: 0,
+            children: [...leaves, ...groups],
+        });
+    } else {
+        result.push(...main);
+    }
+    result.push(...top.filter((n) => n.kind === "report"), ...top.filter((n) => n.kind === "config"));
+    return result;
 }
 
 /** Depth-first list of leaves (items that open something). */

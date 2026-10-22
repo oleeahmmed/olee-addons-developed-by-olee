@@ -15,7 +15,7 @@ Modern Theme turns the Odoo 19 backend into a clean admin dashboard:
 * Company defaults in Settings > Modern Theme (live preview, JSON export/import, reset)
   and a personal override for every user (Appearance menu).
     """,
-    "version": "19.0.3.0.0",
+    "version": "19.0.3.3.0",
     "category": "Themes/Backend",
     "author": "Olee",
     "license": "LGPL-3",
@@ -45,6 +45,7 @@ Modern Theme turns the Odoo 19 backend into a clean admin dashboard:
             "modern_theme/static/src/scss/form.scss",
             "modern_theme/static/src/scss/kanban.scss",
             "modern_theme/static/src/scss/sheet.scss",
+            "modern_theme/static/src/scss/print.scss",
             "modern_theme/static/src/js/**/*",
             "modern_theme/static/src/xml/**/*",
             ("remove", "modern_theme/static/src/js/graph_colors.js"),

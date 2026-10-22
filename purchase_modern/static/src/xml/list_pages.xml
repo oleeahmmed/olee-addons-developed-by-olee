@@ -1,17 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
-
-    <!-- Odoo's own layout, full width: control panel (+, title, search, pager, views) then the view. -->
-    <t t-name="purchase_modern.ListPage">
-        <div class="o_mp o_mp_page o_mp_page--native">
-            <div class="mp-container mp-container--native">
-                <div t-if="!state.ready" class="mp-card mp-native">
-                    <div class="mp-skeleton" style="height:3.5rem;margin:1rem 1.25rem"/>
-                    <div class="mp-skeleton" style="height:16rem;margin:0 1.25rem 1.25rem"/>
-                </div>
-                <NativeView t-else="" t-key="state.version" t-props="nativeProps"/>
-            </div>
-        </div>
-    </t>
-
-</templates>
+<!-- Not loaded any more: moved to modern_theme. Safe to delete. -->
+<templates/>

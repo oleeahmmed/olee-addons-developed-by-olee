@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- One client action per page; the pages are Odoo's own views (see static/src/js/pages). -->
+    <record id="action_dashboard" model="ir.actions.client">
+        <field name="name">Accounting Dashboard</field>
+        <field name="tag">modern_accounting.dashboard</field>
+        <field name="path">modern-accounting</field>
+    </record>
+    <record id="action_entries" model="ir.actions.client">
+        <field name="name">Journal Entries</field>
+        <field name="tag">modern_accounting.entries</field>
+        <field name="path">modern-accounting-entries</field>
+    </record>
+    <record id="action_items" model="ir.actions.client">
+        <field name="name">Journal Items</field>
+        <field name="tag">modern_accounting.items</field>
+        <field name="path">modern-accounting-items</field>
+    </record>
+    <record id="action_payments" model="ir.actions.client">
+        <field name="name">Payments</field>
+        <field name="tag">modern_accounting.payments</field>
+        <field name="path">modern-accounting-payments</field>
+    </record>
+    <record id="action_accounts" model="ir.actions.client">
+        <field name="name">Chart of Accounts</field>
+        <field name="tag">modern_accounting.accounts</field>
+        <field name="path">modern-accounting-accounts</field>
+    </record>
+    <record id="action_general_ledger" model="ir.actions.client">
+        <field name="name">General Ledger</field>
+        <field name="tag">modern_accounting.general_ledger</field>
+        <field name="path">modern-accounting-general-ledger</field>
+    </record>
+    <record id="action_partner_ledger" model="ir.actions.client">
+        <field name="name">Partner Ledger</field>
+        <field name="tag">modern_accounting.partner_ledger</field>
+        <field name="path">modern-accounting-partner-ledger</field>
+    </record>
+    <record id="action_cash_book" model="ir.actions.client">
+        <field name="name">Cash &amp; Bank Book</field>
+        <field name="tag">modern_accounting.cash_book</field>
+        <field name="path">modern-accounting-cash-bank-book</field>
+    </record>
+    <record id="action_trial_balance" model="ir.actions.client">
+        <field name="name">Trial Balance</field>
+        <field name="tag">modern_accounting.trial_balance</field>
+        <field name="path">modern-accounting-trial-balance</field>
+    </record>
+    <record id="action_profit_loss" model="ir.actions.client">
+        <field name="name">Profit &amp; Loss</field>
+        <field name="tag">modern_accounting.profit_loss</field>
+        <field name="path">modern-accounting-profit-loss</field>
+    </record>
+    <record id="action_balance_sheet" model="ir.actions.client">
+        <field name="name">Balance Sheet</field>
+        <field name="tag">modern_accounting.balance_sheet</field>
+        <field name="path">modern-accounting-balance-sheet</field>
+    </record>
+    <record id="action_tax_report" model="ir.actions.client">
+        <field name="name">Tax Report</field>
+        <field name="tag">modern_accounting.tax_report</field>
+        <field name="path">modern-accounting-tax-report</field>
+    </record>
+</odoo>

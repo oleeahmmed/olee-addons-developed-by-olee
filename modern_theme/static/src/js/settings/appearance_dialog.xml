@@ -13,18 +13,22 @@
     </t>
 
     <t t-name="modern_theme.ChoiceRow">
-        <!-- variables: option, value, onPick, companyText, overridden, onReset -->
+        <!-- MtChoiceRow component: one option, its value and the company default -->
+        <t t-set="option" t-value="props.option"/>
+        <t t-set="value" t-value="props.value"/>
+        <t t-set="overridden" t-value="props.overridden"/>
+        <t t-set="companyText" t-value="props.companyText"/>
         <div class="mt-opt" t-att-class="{ 'is-overridden': overridden }">
             <div class="mt-opt-head">
                 <label class="mt-opt-label" t-esc="option.label"/>
                 <span t-if="overridden" class="mt-opt-reset">
-                    <button type="button" class="btn btn-link btn-sm p-0" t-on-click="onReset"
+                    <button type="button" class="btn btn-link btn-sm p-0" t-on-click="() => this.reset()"
                             t-att-title="'Company default: ' + companyText">Use default</button>
                 </span>
                 <span t-elif="companyText" class="mt-opt-default">Company default</span>
             </div>
             <t t-if="option.kind === 'select'">
-                <select class="form-select mt-opt-select" t-on-change="(ev) => onPick(ev.target.value)">
+                <select class="form-select mt-opt-select" t-on-change="(ev) => this.pick(ev.target.value)">
                     <t t-foreach="option.choices" t-as="choice" t-key="choice[0]">
                         <option t-att-value="choice[0]" t-att-selected="value === choice[0]" t-esc="choice[1]"/>
                     </t>
@@ -35,7 +39,7 @@
                     <t t-foreach="option.choices" t-as="choice" t-key="choice[0]">
                         <button type="button" class="mt-card-choice" role="radio"
                                 t-att-aria-checked="value === choice[0] ? 'true' : 'false'"
-                                t-on-click="() => onPick(choice[0])">
+                                t-on-click="() => this.pick(choice[0])">
                             <t t-call="modern_theme.SidebarStylePreview"><t t-set="variant" t-value="choice[2]"/></t>
                             <span t-esc="choice[1]"/>
                         </button>
@@ -46,7 +50,7 @@
                 <div class="form-check form-switch mt-opt-switch">
                     <input class="form-check-input" type="checkbox" role="switch"
                            t-att-id="'mt_opt_' + option.key" t-att-checked="value"
-                           t-on-change="(ev) => onPick(ev.target.checked)"/>
+                           t-on-change="(ev) => this.pick(ev.target.checked)"/>
                     <label class="form-check-label" t-att-for="'mt_opt_' + option.key" t-esc="value ? 'On' : 'Off'"/>
                 </div>
             </t>
@@ -55,7 +59,7 @@
                     <t t-foreach="option.choices" t-as="choice" t-key="choice[0]">
                         <button type="button" role="radio"
                                 t-att-aria-checked="value === choice[0] ? 'true' : 'false'"
-                                t-on-click="() => onPick(choice[0])">
+                                t-on-click="() => this.pick(choice[0])">
                             <i t-if="choice[2]" t-attf-class="fa {{ choice[2] }}" aria-hidden="true"/>
                             <t t-esc="choice[1]"/>
                         </button>
@@ -79,14 +83,9 @@
                 </nav>
                 <div class="mt-appearance-panel" role="tabpanel">
                     <t t-if="state.tab === 'colors'">
-                        <t t-call="modern_theme.ChoiceRow">
-                            <t t-set="option" t-value="groups[0].options[0]"/>
-                            <t t-set="value" t-value="values.color_mode"/>
-                            <t t-set="overridden" t-value="isOverridden('color_mode')"/>
-                            <t t-set="companyText" t-value="companyLabel(groups[0].options[0])"/>
-                            <t t-set="onPick" t-value="(v) => this.set('color_mode', v)"/>
-                            <t t-set="onReset" t-value="() => this.resetKey('color_mode')"/>
-                        </t>
+                        <MtChoiceRow option="groups[0].options[0]" value="values.color_mode"
+                                     overridden="isOverridden('color_mode')" companyText="companyLabel(groups[0].options[0])"
+                                     onPick.bind="set" onReset.bind="resetKey"/>
                         <div class="mt-opt" t-att-class="{ 'is-overridden': isOverridden('preset') }">
                             <div class="mt-opt-head">
                                 <label class="mt-opt-label">Brand color</label>
@@ -118,13 +117,9 @@
                     <t t-foreach="groups" t-as="group" t-key="group.key">
                         <t t-if="state.tab === group.key and group.key !== 'colors'">
                             <t t-foreach="group.options" t-as="option" t-key="option.key">
-                                <t t-call="modern_theme.ChoiceRow">
-                                    <t t-set="value" t-value="values[option.key]"/>
-                                    <t t-set="overridden" t-value="isOverridden(option.key)"/>
-                                    <t t-set="companyText" t-value="companyLabel(option)"/>
-                                    <t t-set="onPick" t-value="(v) => this.set(option.key, v)"/>
-                                    <t t-set="onReset" t-value="() => this.resetKey(option.key)"/>
-                                </t>
+                                <MtChoiceRow option="option" value="values[option.key]"
+                                             overridden="isOverridden(option.key)" companyText="companyLabel(option)"
+                                             onPick.bind="set" onReset.bind="resetKey"/>
                             </t>
                         </t>
                     </t>

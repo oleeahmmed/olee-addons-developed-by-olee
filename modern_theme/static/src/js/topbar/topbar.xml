@@ -18,6 +18,32 @@
                 <t t-call="modern_theme.AppIcon"/>
                 <span class="mt-topbar-app-name" t-esc="app.name"/>
             </div>
+            <nav t-if="topMenus.length" class="mt-topbar-menus" aria-label="More menus of this app">
+                <t t-foreach="topMenus" t-as="node" t-key="node.id">
+                    <a t-if="!node.children.length" class="mt-topbar-menu" t-att-title="node.name" t-att-class="{ 'is-active': isActive(node) }"
+                       t-att-href="node.href" t-att-data-menu-xmlid="node.xmlid" t-on-click="(ev) => this.openNode(node, ev)">
+                        <i t-attf-class="fa {{ topIcon(node) }}" aria-hidden="true"/><span t-esc="node.name"/>
+                    </a>
+                    <Dropdown t-else="" position="'bottom-start'" menuClass="'mt-topbar-dropdown'">
+                        <button type="button" class="mt-topbar-menu" t-att-title="node.name" t-att-class="{ 'is-active': isActive(node) }"
+                                t-att-data-menu-xmlid="node.xmlid">
+                            <i t-attf-class="fa {{ topIcon(node) }}" aria-hidden="true"/><span t-esc="node.name"/>
+                            <i class="fa fa-angle-down mt-topbar-caret" aria-hidden="true"/>
+                        </button>
+                        <t t-set-slot="content">
+                            <t t-foreach="entries(node)" t-as="entry" t-key="entry.id">
+                                <div t-if="entry.heading" class="mt-topbar-dd-heading" t-esc="entry.name"/>
+                                <DropdownItem t-else="" class="'mt-topbar-dd-item' + (isActive(entry) ? ' is-active' : '')"
+                                              onSelected="() => this.openNode(entry)"
+                                              attrs="{ href: entry.href, 'data-menu-xmlid': entry.xmlid }">
+                                    <i t-if="entry.icon" t-attf-class="fa fa-fw {{ entry.icon }}" aria-hidden="true"/>
+                                    <span t-esc="entry.name"/>
+                                </DropdownItem>
+                            </t>
+                        </t>
+                    </Dropdown>
+                </t>
+            </nav>
             <button type="button" class="mt-topbar-search" t-on-click="openSearch"
                     title="Search (Ctrl+K)" aria-label="Search apps, menus and records">
                 <i class="fa fa-search" aria-hidden="true"/>

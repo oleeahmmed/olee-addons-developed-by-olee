@@ -3,12 +3,17 @@
 // .o_<prefix>_page roots that must fill the content card. Scoped to those apps
 // with html.mt-app-modern (set by the sidebar), instead of a root :has().
 
+// ".o_cm_page, .o_ss_page, …" for every modern app prefix (addon_bridges.scss)
+@function mt-prefixed-selectors($before, $after) {
+    $list: ();
+    @each $p in $mt-addon-prefixes {
+        $list: append($list, "#{$before}#{$p}#{$after}", comma);
+    }
+    @return $list;
+}
+
 html.mt-app-modern .o_web_client > .o_action_manager {
-        .o_cm_page,
-        .o_ss_page,
-        .o_im_page,
-        .o_mp_page,
-        .o_mr_page,
+        #{mt-prefixed-selectors(".o_", "_page")},
         .od-page,
         .o_view_controller,
         .o_form_view_container {
@@ -16,29 +21,18 @@ html.mt-app-modern .o_web_client > .o_action_manager {
             min-height: 0;
         }
 
-        .o_cm_page,
-        .o_ss_page,
-        .o_im_page,
-        .o_mp_page,
-        .o_mr_page,
+        #{mt-prefixed-selectors(".o_", "_page")},
         .od-page {
             height: auto;
         }
 
-        > .od-page,
-        > .o_cm.od-page,
-        > .o_ss.od-page,
-        > .o_im.od-page,
-        > .o_mp.od-page,
-        > .o_mr.od-page {
+        > .od-page {
+            height: 100%; // the dashboard scrolls inside the content card (the action manager does not)
             overflow-y: auto;
         }
 
-        .o_cm_page--native,
-        .o_ss_page--native,
-        .o_im_page--native,
-        .o_mp_page--native,
-        .o_mr_page--native {
+        #{mt-prefixed-selectors(".o_", "_page--native")} {
+            min-height: 100%; // the white card reaches the bottom even with a few rows
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -79,6 +73,13 @@ html.mt-app-modern .o_web_client > .o_action_manager {
                 flex-direction: column;
                 overflow: hidden;
                 background: transparent;
+
+                // Odoo's search panel (e.g. account groups on journal items) stays on the left
+                &.o_component_with_search_panel {
+                    flex-direction: row;
+                    > .o_search_panel { flex: 0 0 auto; border-right: 1px solid var(--mt-border-base, rgba(0, 0, 0, 0.08)); }
+                    > :not(.o_search_panel) { flex: 1 1 auto; min-width: 0; }
+                }
             }
 
             .o_list_view,
@@ -100,7 +101,7 @@ html.mt-app-modern .o_web_client > .o_action_manager {
         }
 }
 
-html.mt-app-modern .o_web_client {
+html[data-mt-theme] .o_web_client {
     .o_cp_searchview {
         min-height: var(--mt-control-h);
     }

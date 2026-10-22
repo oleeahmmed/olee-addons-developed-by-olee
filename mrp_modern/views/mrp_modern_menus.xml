@@ -2,14 +2,12 @@
 <odoo>
     <!--
         No app of its own: everything lives inside Odoo's Manufacturing app (mrp.menu_mrp_root).
-        Home comes first, so opening Manufacturing from the home screen opens Manufacturing Modern.
-        Sidebar: everyday pages only (Home, Dashboard, Operations, Products) — same idea as CRM/Sales.
+        The Dashboard comes first, so opening Manufacturing from the home screen opens Manufacturing Modern.
+        Sidebar: everyday pages only (Dashboard, Operations, Products) — same idea as CRM/Sales.
         Top bar: Reporting and Configuration dropdowns. Visibility comes from Odoo's groups.
     -->
-    <menuitem id="menu_home" name="Home" parent="mrp.menu_mrp_root" action="action_home"
-              sequence="-110" groups="mrp.group_mrp_user"/>
     <menuitem id="menu_dashboard" name="Dashboard" parent="mrp.menu_mrp_root" action="action_dashboard"
-              sequence="50" groups="mrp.group_mrp_user"/>
+              sequence="-110" groups="mrp.group_mrp_user"/>
 
     <record id="menu_operations" model="ir.ui.menu">
         <field name="name">Operations</field>

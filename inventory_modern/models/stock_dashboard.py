@@ -4,11 +4,13 @@ Read-only, with the user's own rights (record rules and multi-company apply), fr
 Odoo's standard models only: stock.quant, stock.picking, stock.move(.line),
 stock.warehouse(.orderpoint), product.product. No stored data of its own.
 """
+import functools
 from datetime import datetime, time, timedelta
 
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
+from odoo.addons.modern_theme.tools import local_midnight
 from odoo.tools import date_utils
 
 PERIODS = ('month', 'quarter', 'year')
@@ -29,8 +31,12 @@ def period_bounds(today, period):
     return start, end, prev_start, prev_end
 
 
-def as_dt(day):
-    return datetime.combine(day, time.min)
+def as_dt_tz(day, tz=None):
+    """Local midnight of `day` (user's timezone) as the naive UTC datetime Odoo stores."""
+    return local_midnight(day, tz)
+
+
+as_dt = as_dt_tz  # UTC fallback; dashboard methods bind the user's timezone (see below)
 
 
 def delta(current, previous):
@@ -53,6 +59,7 @@ class StockPicking(models.Model):
 
     @api.model
     def inventory_modern_dashboard(self, period='month', warehouse_id=False):
+        as_dt = functools.partial(as_dt_tz, tz=self.env.tz)
         today = fields.Date.context_today(self)
         now = fields.Datetime.now()
         start, end, prev_start, prev_end = period_bounds(today, period)
@@ -67,9 +74,21 @@ class StockPicking(models.Model):
         pick_wh = [('picking_type_id.warehouse_id', '=', warehouse.id)] if warehouse else []
 
         # ---------- what is on the shelves: quantity and value (cost × quantity) ----------
-        on_hand = {p: q or 0.0 for p, q in Quant._read_group(internal, ['product_id'], ['quantity:sum'])}
-        cost = {p.id: p.standard_price for p in Product.browse([p.id for p in on_hand])}
-        stock_value = sum(q * cost.get(p.id, 0.0) for p, q in on_hand.items() if q > 0)
+        # Cost is per company (standard_price is company dependent) and in that company's
+        # currency: value each company's quants with its own cost, then convert.
+        company = self.env.company
+        on_hand, value_by_product = {}, {}
+        for p, c, q in Quant._read_group(internal, ['product_id', 'company_id'], ['quantity:sum']):
+            q = q or 0.0
+            on_hand[p] = on_hand.get(p, 0.0) + q
+            src = c or company
+            unit = p.with_company(src).standard_price
+            if src.currency_id != company.currency_id:
+                unit = src.currency_id._convert(unit, company.currency_id, company, today)
+            value_by_product[p.id] = value_by_product.get(p.id, 0.0) + (q * unit if q > 0 else 0.0)
+        # average unit cost of what is on hand, used for the per-product figures below
+        cost = {p.id: (value_by_product.get(p.id, 0.0) / q) if q > 0 else p.standard_price for p, q in on_hand.items()}
+        stock_value = sum(value_by_product.values())
         in_stock = sum(1 for q in on_hand.values() if q > 0)
         negative = sum(1 for q in on_hand.values() if q < 0)
         storable = Product.search_count([('is_storable', '=', True)])
@@ -79,11 +98,16 @@ class StockPicking(models.Model):
 
         # ---------- replenishment (Odoo's reordering rules) ----------
         Orderpoint = self.env['stock.warehouse.orderpoint']
-        op_domain = [('trigger', '=', 'auto')] + ([('warehouse_id', '=', warehouse.id)] if warehouse else [])
+        # Same rules as Odoo's Replenishment screen: automatic and manual rules with
+        # something to order, minus the snoozed ones.
+        op_domain = [
+            ('qty_to_order', '>', 0),
+            '|', ('snoozed_until', '=', False), ('snoozed_until', '<=', today),
+        ] + ([('warehouse_id', '=', warehouse.id)] if warehouse else [])
         to_reorder = 0
         low_stock = []
         if Orderpoint.browse().has_access('read'):
-            ops = Orderpoint.search(op_domain + [('qty_to_order', '>', 0)], limit=80)
+            ops = Orderpoint.search(op_domain)
             to_reorder = len(ops)
             for op in ops.sorted(lambda o: (o.qty_forecast - o.product_min_qty))[:6]:
                 low_stock.append({
@@ -97,7 +121,9 @@ class StockPicking(models.Model):
             return self.search_count(domain + pick_wh)
 
         ops = []
-        for code in CODES:
+        # Internal transfers only exist with several locations (same setting as Odoo's menu)
+        codes = CODES if self.env.user.has_group('stock.group_stock_multi_locations') else CODES[:2]
+        for code in codes:
             base = [('picking_type_code', '=', code)]
             ops.append({
                 'code': code,
@@ -122,7 +148,7 @@ class StockPicking(models.Model):
 
         def units(code, a, b):
             [(qty,)] = Line._read_group(done_lines + [('picking_code', '=', code), ('date', '>=', as_dt(a)), ('date', '<', as_dt(b))],
-                                        aggregates=['quantity:sum'])
+                                        aggregates=['quantity_product_uom:sum'])
             return qty or 0.0
 
         units_out, units_out_prev = units('outgoing', start, end), units('outgoing', prev_start, prev_end)
@@ -133,7 +159,7 @@ class StockPicking(models.Model):
         def monthly(code, a, b):
             return {month_key(m): q or 0.0 for m, q in Line._read_group(
                 done_lines + [('picking_code', '=', code), ('date', '>=', as_dt(a)), ('date', '<', as_dt(b))],
-                ['date:month'], ['quantity:sum'])}
+                ['date:month'], ['quantity_product_uom:sum'])}
 
         out_this = monthly('outgoing', year_start, year_start + relativedelta(years=1))
         out_last = monthly('outgoing', year_start - relativedelta(years=1), year_start)
@@ -157,7 +183,7 @@ class StockPicking(models.Model):
         movers = []
         for product, qty in Line._read_group(
                 done_lines + [('picking_code', '=', 'outgoing'), ('date', '>=', as_dt(start)), ('date', '<', as_dt(end))],
-                ['product_id'], ['quantity:sum'], order='quantity:sum desc', limit=6):
+                ['product_id'], ['quantity_product_uom:sum'], order='quantity_product_uom:sum desc', limit=6):
             movers.append({'id': product.id, 'label': product.display_name, 'value': qty or 0.0,
                            'uom': product.uom_id.name, 'on_hand': on_hand.get(product, 0.0)})
         since_90 = now - timedelta(days=90)
@@ -181,7 +207,7 @@ class StockPicking(models.Model):
             rest = sum(c['value'] for c in categories[6:])
             categories = categories[:6] + [{'id': 0, 'label': self.env._('Other'), 'value': rest}]
         warehouses = []
-        for wh in self.env['stock.warehouse'].search([('id', '=', warehouse.id)] if warehouse else [], limit=8):
+        for wh in self.env['stock.warehouse'].search([('id', '=', warehouse.id)] if warehouse else []):
             wh_quants = {p: q or 0.0 for p, q in Quant._read_group(
                 [('location_id.usage', '=', 'internal'), ('location_id', 'child_of', wh.view_location_id.id)],
                 ['product_id'], ['quantity:sum'])}
@@ -191,6 +217,7 @@ class StockPicking(models.Model):
                 'products': sum(1 for q in wh_quants.values() if q > 0),
             })
         warehouses.sort(key=lambda r: r['value'], reverse=True)
+        warehouses = warehouses[:8]  # the biggest ones, after sorting
 
         # ---------- needs attention ----------
         late_receipts, late_deliveries = by_code['incoming']['late'], by_code['outgoing']['late']

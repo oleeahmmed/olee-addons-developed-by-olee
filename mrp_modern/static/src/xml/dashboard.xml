@@ -8,6 +8,9 @@
                 <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel" style="height:8.5rem"/></t></div>
                 <div class="od-grid"><div class="od-skel od-span-8" style="height:22rem"/><div class="od-skel od-span-4" style="height:22rem"/></div>
             </t>
+            <t t-elif="state.error and !state.data">
+                <OdError message="state.error" onRetry.bind="load"/>
+            </t>
             <t t-elif="state.data">
                 <t t-set="d" t-value="state.data"/>
 
@@ -35,7 +38,7 @@
                         <OdKpi featured="true" tone="'blue'" icon="'fa-check-circle'" label="'Finished orders'" value="number(k.done)"
                                delta="k.done_delta" compareLabel="compare" spark="d.sparks.done"
                                hint="k.done_prev ? number(k.done_prev) + ' in the previous period' : 'No finished orders last period'" onClick.bind="openDone"/>
-                        <OdKpi tone="'teal'" icon="'fa-cubes'" label="'Units produced'" value="units(k.qty)"
+                        <OdKpi tone="'teal'" icon="'fa-cubes'" label="'Quantity produced'" value="units(k.qty)"
                                delta="k.qty_delta" compareLabel="compare" spark="d.sparks.qty"
                                hint="'finished quantity this period'" onClick.bind="openDone"/>
                         <OdKpi tone="'sky'" icon="'fa-list'" label="'Open orders'" value="number(k.open)"
@@ -95,7 +98,7 @@
                             </div>
                             <div class="od-card-body">
                                 <div class="od-money">
-                                    <div class="od-tone-teal"><span>Active BoMs</span><strong class="od-num" t-esc="number(d.boms)"/><small>used by manufacturing orders</small></div>
+                                    <div class="od-tone-teal"><span>Bills of materials</span><strong class="od-num" t-esc="number(d.boms)"/><small>recipes ready to manufacture</small></div>
                                 </div>
                             </div>
                         </section>
@@ -119,7 +122,7 @@
                                             <tr class="od-clickable" t-on-click="() => this.openMo(o)">
                                                 <td class="od-cell-main" t-esc="o.name"/>
                                                 <td t-esc="o.product_id ? o.product_id[1] : '—'"/>
-                                                <td class="od-num" t-esc="units(o.product_qty)"/>
+                                                <td class="od-num"><t t-esc="units(o.product_qty)"/> <small class="text-muted" t-esc="o.product_uom_id ? o.product_uom_id[1] : ''"/></td>
                                                 <td>
                                                     <span t-if="o.user_id" class="od-person"><img t-attf-src="/web/image/res.users/{{ o.user_id[0] }}/avatar_128" alt="" loading="lazy"/><t t-esc="o.user_id[1]"/></span>
                                                 </td>

@@ -52,6 +52,13 @@ Then hard-refresh the browser (Ctrl+Shift+R) once.
 
 ## The sidebar
 
+The sidebar lists only each app's everyday pages. The current app's less used menus go
+to the **top bar**: Odoo's other groups under **More**, then **Reporting** and
+**Configuration** (detected from the menu xml ids, so it works for any app). On phones
+everything stays in the sidebar drawer. App icons drawn as a single white or black glyph
+(Odoo 19's Discuss, Apps, Settings) get a brand-coloured tile so they read in light and
+dark mode.
+
 * **Classic tree**: every app is an accordion row; the current app is open, with
   nested menus, indent guide lines and an active bar. Collapsed, it becomes an
   icon rail with hover flyouts.
@@ -96,6 +103,9 @@ registry.category("modern_theme.sidebar_apps").add("crm.crm_menu_root", {
 registry.category("modern_theme.menu_badges").add("crm_modern.menu_activities",
     (env) => env.services.orm.searchCount("mail.activity", [/* … */]));
 
+// An Odoo menu another app now shows: hidden from every other app while that app is visible
+registry.category("modern_theme.moved_menus").add("account.menu_finance_entries", "modern_accounting.menu_root");
+
 // Records the Ctrl+K palette searches (name_search, read access checked first)
 registry.category("modern_theme.palette_models").add("crm.lead", { label: "Opportunity", icon: "fa-handshake-o" });
 ```
@@ -134,15 +144,39 @@ addon passes its prefix and gets the full page kit:
 @include mt-app-list(ss);
 @include mt-app-controls(ss);
 @include mt-app-helpers(ss);
-@include mt-app-print(ss);
 @include mt-app-dash(ss);      // dashboards: KPI tiles, chart cards, ranked lists
 // app.dark.scss (web.assets_web_dark)
 @include mt-app-tokens-dark(ss);
 ```
 
-Sales (`ss`), Inventory (`im`), Purchase (`mp`) and Manufacturing (`mr`) use it; CRM keeps
-its own richer page styles but shares the kanban, forms, lists and tokens. Printed
-documents of all modern apps use one stylesheet: `scss/report_modern.scss`.
+Sales (`ss`), Inventory (`im`), Purchase (`mp`), Manufacturing (`mr`), Contacts (`cu`)
+and Invoicing (`iv`) use it; CRM keeps its own richer page styles but shares the kanban,
+forms, lists and tokens. A new app prefix is added once to `$mt-addon-prefixes`
+(`addon_bridges.scss`) and to the `@each` list of `workspace.scss`. Printed documents of all
+modern apps use one stylesheet: `scss/report_modern.scss`.
+
+**JS kit** (`js/app_kit/`): `ListPage` (one page = Odoo's own control panel and views,
+subclasses only give model, view ids, domain and context), `loadViewIds`, `openFullForm`,
+the dashboard components `OD_COMPONENTS` (KPI tile, combo chart, donut, ranked list,
+attention list, ageing bar, period filter, error card), `loadDashboard` (latest request
+wins, error card instead of a crash), `moneyFormatters` (৳ lakh / crore for BDT; `record()`
+formats one document in its own currency) and `dayStart` (local midnight in UTC for
+datetime domains).
+
+**Print** (`js/print/`): the form header "Print / Preview" menu and the print preview of
+quotations, orders, purchase orders, invoices, transfers and manufacturing orders, for all
+modern apps.
+
+**Python** (`tools.py`): `local_midnight`, `period_bounds`, `growth`, `month_key` for the
+dashboards. `ir.ui.menu._mt_menu_requirements()` hides a menu when the optional app it needs
+is not installed:
+
+```python
+def _mt_menu_requirements(self):
+    res = super()._mt_menu_requirements()
+    res['customer_modern.menu_customers'] = 'customer_rank' in self.env['res.partner']._fields
+    return res
+```
 
 ## Design tokens
 

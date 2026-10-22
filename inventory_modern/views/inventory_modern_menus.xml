@@ -7,10 +7,8 @@
         (Operations, Products) and shows Reporting / Configuration in the top bar.
         Visibility comes from Odoo's own groups.
     -->
-    <menuitem id="menu_home" name="Home" parent="stock.menu_stock_root" action="action_home"
-              sequence="-110" groups="stock.group_stock_user"/>
     <menuitem id="menu_dashboard" name="Dashboard" parent="stock.menu_stock_root" action="action_dashboard"
-              sequence="50" groups="stock.group_stock_user"/>
+              sequence="-110" groups="stock.group_stock_user"/>
 
     <menuitem id="menu_operations" name="Operations" parent="stock.menu_stock_root" sequence="-90" groups="stock.group_stock_user"/>
     <menuitem id="menu_receipts" name="Receipts" parent="menu_operations" action="action_receipts" sequence="1"/>

@@ -11,7 +11,7 @@ No new tables: everything reads and writes the standard models
 mail.activity.type, mail.activity.plan). Campaigns store a default sales
 team (crm_modern_team_id) so empty campaigns remember who owns uploaded leads.
     """,
-    'version': '19.0.3.0.0',
+    'version': '19.0.3.0.2',
     'category': 'Sales/CRM',
     'author': 'Your Name',
     'license': 'LGPL-3',
@@ -32,7 +32,6 @@ team (crm_modern_team_id) so empty campaigns remember who owns uploaded leads.
             'crm_modern/static/src/scss/record.scss',
             'crm_modern/static/src/scss/list.scss',
             'crm_modern/static/src/scss/sale.scss',
-            'crm_modern/static/src/scss/print.scss',
             'crm_modern/static/src/scss/dash.scss',
             'crm_modern/static/src/js/core/*.js',
             'crm_modern/static/src/js/components/*.js',
@@ -40,7 +39,6 @@ team (crm_modern_team_id) so empty campaigns remember who owns uploaded leads.
             'crm_modern/static/src/js/dash/*.js',
             'crm_modern/static/src/js/pages/*.js',
             'crm_modern/static/src/js/sale/*.js',
-            'crm_modern/static/src/js/print/*.js',
             'crm_modern/static/src/xml/*.xml',
         ],
         'web.assets_web_dark': [

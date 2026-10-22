@@ -6,10 +6,8 @@
         Odoo's own Sales menus are left untouched and all shown in the sidebar (Reporting,
         Configuration, menus of other apps...). Visibility comes from Odoo's groups.
     -->
-    <menuitem id="menu_home" name="Home" parent="sale.sale_menu_root" action="action_home"
-              sequence="-110" groups="sales_team.group_sale_salesman"/>
     <menuitem id="menu_dashboard" name="Dashboard" parent="sale.sale_menu_root" action="action_dashboard"
-              sequence="50" groups="sales_team.group_sale_salesman"/>
+              sequence="-110" groups="sales_team.group_sale_salesman"/>
 
     <menuitem id="menu_sell" name="Sell" parent="sale.sale_menu_root" sequence="-90" groups="sales_team.group_sale_salesman"/>
     <menuitem id="menu_quotations" name="Quotations" parent="menu_sell" action="action_quotations" sequence="1"/>
@@ -23,7 +21,8 @@
     <menuitem id="menu_pricelists" name="Pricelists" parent="menu_catalog" action="product.product_pricelist_action2"
               sequence="2" groups="product.group_product_pricelist"/>
 
-    <menuitem id="menu_team" name="Team" parent="sale.sale_menu_root" sequence="-70" groups="sales_team.group_sale_salesman"/>
+    <!-- Teams are managed by sales managers, as in Odoo (Configuration ▸ Sales Teams) -->
+    <menuitem id="menu_team" name="Team" parent="sale.sale_menu_root" sequence="-70" groups="-sales_team.group_sale_salesman,sales_team.group_sale_manager"/>
     <menuitem id="menu_teams" name="Sales Teams" parent="menu_team" action="action_teams" sequence="1"/>
     <menuitem id="menu_salespeople" name="Salespeople" parent="menu_team" action="action_salespeople" sequence="2"/>
 

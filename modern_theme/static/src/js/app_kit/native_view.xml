@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- One card holding an Odoo view (list, kanban, calendar, pivot, graph, activity). -->
+    <t t-name="modern_theme.AppNativeView">
+        <div t-attf-class="{{ props.cssPrefix }}-card {{ props.cssPrefix }}-native">
+            <t t-foreach="[state.version + '_' + props.type]" t-as="version" t-key="version">
+                <View t-props="viewProps"/>
+            </t>
+        </div>
+    </t>
+</templates>

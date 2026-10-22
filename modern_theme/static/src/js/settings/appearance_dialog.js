@@ -7,13 +7,32 @@ import { useService } from "@web/core/utils/hooks";
 import { PRESET_SWATCHES } from "../theme/theme_service";
 import { OPTION_GROUPS, PRESET_LABELS } from "./options";
 
+/** One option row: the buttons always know their own option (no closures in loops). */
+export class MtChoiceRow extends Component {
+    static template = "modern_theme.ChoiceRow";
+    static props = {
+        option: Object,
+        value: { optional: true },
+        overridden: { type: Boolean, optional: true },
+        companyText: { optional: true },
+        onPick: Function, // (key, value)
+        onReset: Function, // (key)
+    };
+    pick(value) {
+        return this.props.onPick(this.props.option.key, value);
+    }
+    reset() {
+        return this.props.onReset(this.props.option.key);
+    }
+}
+
 /**
  * "My appearance": every design option for the current user, applied and saved
  * instantly. Empty = follow the company default (set by an administrator).
  */
 export class MtAppearanceDialog extends Component {
     static template = "modern_theme.AppearanceDialog";
-    static components = { Dialog };
+    static components = { Dialog, MtChoiceRow };
     static props = { close: Function };
 
     setup() {

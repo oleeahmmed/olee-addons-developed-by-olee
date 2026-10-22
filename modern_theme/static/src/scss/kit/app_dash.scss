@@ -99,6 +99,11 @@
         .od-kpis {
             display: grid; gap: 1rem; margin-bottom: 1rem;
             grid-template-columns: repeat(6, minmax(0, 1fr));
+            // fewer tiles (an optional app is not installed): they share the full row
+            @media (min-width: 1280px) {
+                &:has(> :last-child:nth-child(4)) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+                &:has(> :last-child:nth-child(5)) { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+            }
             @media (max-width: 1279.98px) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
             @media (max-width: 639.98px) { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.625rem; }
         }
@@ -138,6 +143,11 @@
         }
         .od-card-body { padding: 0.75rem 1.125rem 1.125rem; flex: 1; min-width: 0; }
         .od-card-body--flush { padding: 0.25rem 0 0.5rem; }
+        // small heading inside a card body (e.g. "Most overdue customers" under the ageing bar)
+        .od-subhead {
+            margin: 1.25rem 0 0.625rem; font-size: 0.6875rem; font-weight: 650; letter-spacing: 0.04em;
+            text-transform: uppercase; color: var(--#{$p}-muted-fg);
+        }
         .od-link {
             display: inline-flex; align-items: center; gap: 0.3rem; flex-shrink: 0; padding: 0.25rem 0.5rem; margin: -0.25rem -0.5rem 0 0;
             border: 0; border-radius: 0.5rem; background: transparent; font-size: 0.75rem; font-weight: 600; color: var(--#{$p}-primary); cursor: pointer;
@@ -363,6 +373,21 @@
             animation: od-shimmer 1.3s ease-in-out infinite; }
         @media (prefers-reduced-motion: reduce) { .od-skel { animation: none; } .od-kpi, .od-btn { transition: none; } }
         .od-busy { opacity: 0.55; transition: opacity 150ms ease; pointer-events: none; }
+        .od-error {
+            display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; padding: 1.25rem;
+            .od-error-text { flex: 1 1 16rem; min-width: 0; }
+            h3 { margin: 0 0 0.25rem; font-size: 1rem; font-weight: 650; }
+            p { margin: 0; font-size: 0.8125rem; color: var(--mt-muted-foreground); overflow-wrap: anywhere; }
+        }
     }
     @keyframes od-shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+    // Donut in a narrow card (a third of the row): donut on top, full-width legend below,
+    // so the legend keeps room for the names.
+    .o_#{$p}.od-page .od-card-body { container-type: inline-size; }
+    @container (max-width: 26rem) {
+        .o_#{$p}.od-page .od-donut { grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 0.75rem; }
+        .o_#{$p}.od-page .od-donut-svg { max-width: 9.5rem; }
+        .o_#{$p}.od-page .od-legend { width: 100%; }
+        .o_#{$p}.od-page .od-legend .od-legend-value { min-width: 0; }
+    }
 }

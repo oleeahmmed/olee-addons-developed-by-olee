@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="customer_modern.Dashboard">
+        <div class="o_cu od-page">
+            <t t-if="state.loading">
+                <div class="od-head"><div class="od-skel" style="height:3.75rem;width:22rem"/><div class="od-skel" style="height:2.25rem;width:20rem"/></div>
+                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel" style="height:8.5rem"/></t></div>
+                <div class="od-grid"><div class="od-skel od-span-8" style="height:22rem"/><div class="od-skel od-span-4" style="height:22rem"/></div>
+            </t>
+            <t t-elif="state.error and !state.data">
+                <OdError message="state.error" onRetry.bind="load"/>
+            </t>
+            <t t-elif="state.data">
+                <t t-set="d" t-value="state.data"/>
+
+                <!-- header: who, when, filters -->
+                <header class="od-head">
+                    <div>
+                        <div class="od-eyebrow"><span class="od-live" aria-hidden="true"/> <t t-esc="d.company"/> · Contacts overview</div>
+                        <h1 class="od-title"><t t-esc="greeting"/>, <t t-esc="firstName"/></h1>
+                        <p class="od-subtitle">
+                            Your address book today · new contacts <strong t-esc="caption.current"/>, compared with <t t-esc="caption.previous"/>
+                        </p>
+                    </div>
+                    <div class="od-head-actions">
+                        <OdFilters period="state.period" teams="[]" onChange.bind="onFilters" busy="state.busy"/>
+                        <button type="button" class="od-btn od-btn--icon" title="Refresh" aria-label="Refresh" t-on-click="() => this.load()">
+                            <i t-attf-class="fa fa-refresh {{ state.busy ? 'fa-spin' : '' }}" aria-hidden="true"/>
+                        </button>
+                        <button t-if="state.canCreate" type="button" class="od-btn od-btn--primary" data-hotkey="c" t-on-click="newContact">
+                            <i class="fa fa-plus" aria-hidden="true"/> New contact
+                        </button>
+                    </div>
+                </header>
+
+                <div t-att-class="{ 'od-busy': state.busy }">
+                    <!-- key figures -->
+                    <section class="od-kpis" aria-label="Key figures">
+                        <OdKpi featured="true" tone="'blue'" icon="'fa-address-book-o'" label="'Contacts'" value="count(k.contacts)"
+                               hint="count(k.companies) + ' companies · ' + count(k.people) + ' people'" onClick="() => this.go('customer_modern.action_contacts')"/>
+                        <OdKpi tone="'teal'" icon="'fa-user-plus'" label="'New contacts'" value="count(k.new)"
+                               delta="k.new_delta" compareLabel="compare" spark="d.spark"
+                               hint="count(k.new_prev) + ' in the previous period'" onClick.bind="openNew"/>
+                        <OdKpi tone="'violet'" icon="'fa-building-o'" label="'Companies'" value="count(k.companies)"
+                               hint="'businesses you work with'" onClick="() => this.go('customer_modern.action_companies')"/>
+                        <OdKpi t-if="k.customers !== null" tone="'sky'" icon="'fa-handshake-o'" label="'Customers'" value="count(k.customers)"
+                               hint="d.sales ? count(d.sales.buying) + ' bought this period' : 'invoiced at least once'"
+                               onClick="() => this.go('customer_modern.action_customers')"/>
+                        <OdKpi t-else="" tone="'sky'" icon="'fa-user-o'" label="'People'" value="count(k.people)"
+                               hint="'individual contacts'" onClick="() => this.go('customer_modern.action_people')"/>
+                        <OdKpi t-if="k.vendors !== null" tone="'amber'" icon="'fa-truck'" label="'Vendors'" value="count(k.vendors)"
+                               hint="'billed us at least once'" onClick="() => this.go('customer_modern.action_vendors')"/>
+                        <OdKpi t-if="f" tone="'rose'" icon="'fa-money'" label="'Customers owe'" value="ms(f.receivable)"
+                               hint="f.overdue ? ms(f.overdue) + ' overdue' : 'nothing overdue'" invert="true"
+                               onClick="() => this.openOverdue('Overdue invoices')"/>
+                    </section>
+
+                    <!-- growth, and what to tidy up -->
+                    <div class="od-grid">
+                        <section class="od-card od-span-8">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-blue"><i class="fa fa-bar-chart" aria-hidden="true"/></span> New contacts in <t t-esc="d.year"/></h3>
+                                    <p>Contacts added per month, with last year for comparison</p>
+                                </div>
+                                <div class="od-card-total"><strong class="od-num" t-esc="count(ytd)"/><span>year to date</span></div>
+                            </div>
+                            <div class="od-card-body">
+                                <OdComboChart data="d.months" format="count" formatAxis="count" currentLabel="'' + d.year" previousLabel="'' + (d.year - 1)"
+                                              label="'New contacts per month in ' + d.year + ' compared with ' + (d.year - 1)"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-rose"><i class="fa fa-bell-o" aria-hidden="true"/></span> Needs your attention</h3>
+                                    <p>Click a line to see the contacts</p>
+                                </div>
+                            </div>
+                            <div class="od-card-body">
+                                <OdAttention items="d.attention" format="ms" onClick.bind="openAttention"/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- where they are, how they are tagged -->
+                    <div class="od-grid">
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-globe" aria-hidden="true"/></span> By country</h3>
+                                <p>Where your contacts are</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.countries.length" class="od-empty"><i class="fa fa-map-o" aria-hidden="true"/><strong>No country on the contacts yet</strong><span>Fill the address to see this.</span></div>
+                                <OdRank t-else="" items="d.countries" format="count" tone="'teal'" onClick.bind="openCountry"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-sky"><i class="fa fa-map-marker" aria-hidden="true"/></span> By city</h3>
+                                <p>Cities with the most contacts</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.cities.length" class="od-empty"><i class="fa fa-map-marker" aria-hidden="true"/><strong>No city on the contacts yet</strong></div>
+                                <OdRank t-else="" items="d.cities" format="count" tone="'sky'" onClick.bind="openCity"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-violet"><i class="fa fa-tags" aria-hidden="true"/></span> By tag</h3>
+                                <p>How your contacts are grouped</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.tags.length" class="od-empty"><i class="fa fa-tags" aria-hidden="true"/><strong>No tags yet</strong><span>Tag contacts (VIP, wholesale…) to see this.</span></div>
+                                <OdDonut t-else="" items="d.tags" format="count" centerLabel="'Tagged'" onClick.bind="openTag"/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- business: only with Sales / Purchase / Invoicing -->
+                    <div t-if="d.sales or d.purchases or f" class="od-grid">
+                        <section t-if="d.sales" class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-amber"><i class="fa fa-trophy" aria-hidden="true"/></span> Best customers</h3>
+                                <p>Sales this period, untaxed</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!topCustomers.length" class="od-empty"><i class="fa fa-shopping-cart" aria-hidden="true"/><strong>No sales in this period</strong></div>
+                                <OdRank t-else="" items="topCustomers" format="ms" tone="'amber'" numbered="true" onClick.bind="openPartner"/>
+                            </div>
+                        </section>
+                        <section t-if="d.purchases" class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-blue"><i class="fa fa-shopping-bag" aria-hidden="true"/></span> Main vendors</h3>
+                                <p>Purchases this period, untaxed</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!topVendors.length" class="od-empty"><i class="fa fa-shopping-bag" aria-hidden="true"/><strong>No purchases in this period</strong></div>
+                                <OdRank t-else="" items="topVendors" format="ms" tone="'blue'" onClick.bind="openPartner"/>
+                            </div>
+                        </section>
+                        <section t-if="f" class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-rose"><i class="fa fa-exclamation-circle" aria-hidden="true"/></span> Overdue customers</h3>
+                                <p>Who owes the most, past the due date</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <OdRank t-if="debtors.length" items="debtors" format="ms" tone="'rose'" onClick.bind="openPartner"/>
+                                <div t-else="" class="od-empty"><i class="fa fa-check-circle-o" aria-hidden="true"/><strong>Nothing overdue</strong></div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- latest contacts -->
+                    <section class="od-card">
+                        <div class="od-card-head">
+                            <div>
+                                <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-list-ul" aria-hidden="true"/></span> Latest contacts</h3>
+                                <p>The most recently added</p>
+                            </div>
+                            <button type="button" class="od-link" t-on-click="() => this.go('customer_modern.action_contacts')">All contacts <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                        </div>
+                        <div class="od-card-body od-card-body--flush">
+                            <div t-if="!d.recent.length" class="od-empty"><i class="fa fa-address-book-o" aria-hidden="true"/><strong>No contact yet</strong></div>
+                            <div t-else="" class="od-table-wrap">
+                                <table class="od-table">
+                                    <thead><tr><th>Name</th><th>Company</th><th>Email</th><th>Phone</th><th>Location</th><th>Added</th></tr></thead>
+                                    <tbody>
+                                        <t t-foreach="d.recent" t-as="p" t-key="p.id">
+                                            <tr class="od-clickable" t-on-click="() => this.openPartner(p)">
+                                                <td class="od-cell-main">
+                                                    <span class="od-person"><img t-attf-src="/web/image/res.partner/{{ p.id }}/avatar_128" alt="" loading="lazy"/><t t-esc="p.name"/></span>
+                                                </td>
+                                                <td t-esc="p.is_company ? 'Company' : (p.parent_id ? p.parent_id[1] : '—')"/>
+                                                <td t-esc="p.email or '—'"/>
+                                                <td class="od-num" t-esc="p.phone or '—'"/>
+                                                <td t-esc="location(p)"/>
+                                                <td class="text-muted" t-esc="shortDate(p.create_date)"/>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

@@ -1,17 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<templates xml:space="preserve">
-
-    <!-- Odoo's own layout, full width: control panel (+, title, search, pager, views) then the view. -->
-    <t t-name="inventory_modern.ListPage">
-        <div class="o_im o_im_page o_im_page--native">
-            <div class="im-container im-container--native">
-                <div t-if="!state.ready" class="im-card im-native">
-                    <div class="im-skeleton" style="height:3.5rem;margin:1rem 1.25rem"/>
-                    <div class="im-skeleton" style="height:16rem;margin:0 1.25rem 1.25rem"/>
-                </div>
-                <NativeView t-else="" t-key="state.version" t-props="nativeProps"/>
-            </div>
-        </div>
-    </t>
-
-</templates>
+<!-- Not loaded any more: moved to modern_theme. Safe to delete. -->
+<templates/>

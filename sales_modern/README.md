@@ -12,10 +12,10 @@ wizards and methods.
 | Dashboard | `sale.order` counts, `sale.report` amounts (company currency): open quotations, sold this month, to invoice, quote → order rate, 6-month trend, best-selling products, top customers, quotations to follow up, orders ready to invoice |
 | Quotations / Sales Orders | Odoo's sale.order list, kanban, calendar, pivot, graph and activity views with search, filters, export and actions; records open in Odoo's full quotation form |
 | To Invoice | orders with `invoice_status = to invoice`; select them, then Actions ▸ Create invoices (Odoo's invoice wizard) |
-| Customers | Odoo's `res.partner` kanban, list, pivot, graph and activity views, search and filters; details in Odoo's customer form |
+| Customers | Odoo's `res.partner` kanban, list and activity views, search and filters; details in Odoo's customer form |
 | Products | Odoo's `product.template` kanban and list views and form |
-| Sales Teams | team cards (view `sales_modern.crm_team_kanban_sales_modern`): leader, salespeople (managers add / remove on the card), open quotations, quoted amount, sold this month, invoiced vs target; list, pivot, graph; Odoo's team form |
-| Salespeople | Odoo's `crm.team.member` kanban, list, pivot and graph views and form |
+| Sales Teams | team cards (view `sales_modern.crm_team_kanban_sales_modern`): leader, salespeople (managers add / remove on the card), open quotations, quoted amount, sold this month, invoiced vs target; list; Odoo's team form (Sales managers only, as in Odoo) |
+| Salespeople | Odoo's `crm.team.member` kanban and list views and form |
 | Every other Sales menu | shown in the sidebar exactly as Odoo defines it: Orders to Upsell, Sales Teams, Reporting, the whole Configuration (Settings, Quotation Templates, Tags, Products, UoM, Online Payments, Activities...), and menus other apps add to Sales (e.g. Inventory). Odoo's groups and Settings decide what each user sees |
 
 **List pages use Odoo's own layout**, full width: the control panel (New, title, search,
@@ -29,18 +29,15 @@ Those forms get a modern skin (CSS classes and variables only, no template chang
 white rounded sheet, outlined action buttons, the status steps as a segmented control,
 underline tabs, a clean order-lines table, a totals card and a fixed-width chatter.
 
-The sidebar (shadcn style) keeps the everyday pages; Team, Reporting, Configuration and groups other apps add
-to Sales are compact dropdowns in the top bar.
+## Sidebar
+Modern Theme draws one sidebar for every app, from Odoo's own menus. Sales opens on
+**Dashboard**, then **Sell** (Quotations, Sales Orders, To Invoice, Customers and Odoo's
+Orders to Upsell), **Catalog** (Products, Product Variants, Pricelists when enabled), and
+at the bottom, closed: **Team** (managers), **Reporting** and **Configuration**. Odoo
+entries that a modern page already shows are not listed twice. Menus of apps that are not
+installed do not exist, so they never appear; Odoo's groups and Settings decide the rest.
 
-## The "+" button in the sidebar
-Right under the app name, the sidebar shows a single **+ New …** button. It always
-creates the record of the page you are on: **New quotation** on Quotations, **New
-sales order** on Sales Orders / To Invoice, **New customer** on Customers, **New
-product** on Products, **New sales team** on Sales Teams and so on. It opens
-Odoo's own form, empty — the very same screen used to view and edit a record, so
-nothing is lost. The button only appears when you are allowed to create
-(`checkAccessRight`), and it collapses to a plain **+** square when the sidebar is
-folded to icons.
+Each list page has a single **New** button, top left next to the page title.
 
 ## Theme
 Colours come from the `modern_theme` addon: install it and the sidebar, the top

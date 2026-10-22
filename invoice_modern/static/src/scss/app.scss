@@ -1,0 +1,8 @@
+// Modern Invoicing: pages, lists, dashboards and controls come from Modern Theme's shared
+// app kit (modern_theme/static/src/scss/kit/). This app only passes its prefix.
+@include mt-app-tokens(iv);
+@include mt-app-pages(iv);
+@include mt-app-list(iv);
+@include mt-app-controls(iv);
+@include mt-app-helpers(iv);
+@include mt-app-dash(iv);

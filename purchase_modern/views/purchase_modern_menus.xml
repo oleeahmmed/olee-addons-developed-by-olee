@@ -7,10 +7,8 @@
         "Reporting" and "Configuration", so every standard screen stays one click away.
         Visibility comes from Odoo's groups (Purchase app rights).
     -->
-    <menuitem id="menu_home" name="Home" parent="purchase.menu_purchase_root" action="action_home"
-              sequence="-110" groups="purchase.group_purchase_user"/>
     <menuitem id="menu_dashboard" name="Dashboard" parent="purchase.menu_purchase_root" action="action_dashboard"
-              sequence="50" groups="purchase.group_purchase_user"/>
+              sequence="-110" groups="purchase.group_purchase_user"/>
 
     <menuitem id="menu_buy" name="Buy" parent="purchase.menu_purchase_root" sequence="-90" groups="purchase.group_purchase_user"/>
     <menuitem id="menu_rfqs" name="Requests for Quotation" parent="menu_buy" action="action_rfqs" sequence="1"/>

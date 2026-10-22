@@ -1,0 +1,50 @@
+// Modern Accounting: pages, lists, dashboards and controls come from Modern Theme's shared
+// app kit (modern_theme/static/src/scss/kit/). This app only passes its prefix.
+@include mt-app-tokens(ac);
+@include mt-app-pages(ac);
+@include mt-app-list(ac);
+@include mt-app-controls(ac);
+@include mt-app-helpers(ac);
+@include mt-app-dash(ac);
+
+// ---------- Accounting dashboard: the few things the kit does not have ----------
+.o_ac.od-page {
+    .ac-journal-icon {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 1.75rem; height: 1.75rem; margin-right: 0.625rem; border-radius: 0.5rem;
+        background: var(--od-soft); color: var(--od-c); font-size: 0.8125rem; vertical-align: middle;
+    }
+    .ac-negative { color: #e11d48; }
+    .od-table tfoot td {
+        padding-top: 0.75rem; padding-bottom: 0.75rem;
+        border-top: 1px solid var(--ac-border); font-weight: 700; color: var(--ac-fg);
+    }
+    .ac-books {
+        display: grid; gap: 0.75rem;
+        grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    }
+    .ac-book {
+        display: flex; align-items: center; gap: 0.75rem; min-width: 0; padding: 0.875rem 1rem;
+        border: 1px solid var(--ac-border); border-radius: 0.875rem; background: var(--ac-card);
+        color: var(--ac-fg); text-align: left; cursor: pointer;
+        transition: border-color 150ms ease, box-shadow 150ms ease, transform 100ms ease;
+        .od-card-icon {
+            flex: none; display: inline-grid; place-items: center; width: 2.25rem; height: 2.25rem;
+            border-radius: 0.625rem; background: var(--od-soft); color: var(--od-c); font-size: 0.9375rem;
+        }
+        .ac-book-text { display: flex; flex-direction: column; min-width: 0; flex: 1 1 auto; }
+        strong { font-size: 0.875rem; font-weight: 650; }
+        small { font-size: 0.75rem; color: var(--ac-muted-fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ac-book-go { color: var(--ac-muted-fg); transition: transform 150ms ease; }
+        &:hover {
+            border-color: color-mix(in srgb, var(--ac-primary) 40%, var(--ac-border));
+            box-shadow: 0 4px 14px -6px color-mix(in srgb, var(--ac-primary) 35%, transparent);
+            .ac-book-go { transform: translateX(2px); color: var(--ac-primary); }
+        }
+        &:active { transform: translateY(1px); }
+        &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--ac-ring); }
+    }
+}
+
+// full-width cards stacked one after another keep the grid's rhythm
+.o_ac.od-page .od-card + .od-card { margin-top: 1rem; }

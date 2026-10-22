@@ -4,159 +4,25 @@ import { registry } from "@web/core/registry";
 import { user } from "@web/core/user";
 import { useService } from "@web/core/utils/hooks";
 import { session } from "@web/session";
-import { NativeView } from "../components/native_view";
-let viewIdsPromise = null;
-/** View ids are the same for every page and every user: fetch them once per page load. */
+import { ListPage as KitListPage, loadViewIds as kitLoadViewIds, openFullForm } from "@modern_theme/js/app_kit/list_page";
+
+export { openFullForm };
+
+const VIEW_IDS = { model: "sale.order", method: "sales_modern_view_ids" };
+/** View ids of this app's pages (fetched once per page load). */
 export function loadViewIds(orm) {
-    viewIdsPromise ||= orm.call("sale.order", "sales_modern_view_ids", []).catch((e) => {
-        viewIdsPromise = null;
-        throw e;
-    });
-    return viewIdsPromise;
-}
-
-function readStoredView(key, fallback) {
-    try {
-        return window.localStorage.getItem(key) || fallback;
-    } catch {
-        return fallback;
-    }
-}
-function storeView(key, value) {
-    try {
-        window.localStorage.setItem(key, value);
-    } catch {
-        // storage unavailable (private window...)
-    }
-}
-
-/** Open a record in Odoo's own full form (all buttons, smart buttons, chatter...). */
-export function openFullForm(action, resModel, resId, { viewId = false, context = {} } = {}) {
-    return action.doAction({
-        type: "ir.actions.act_window",
-        res_model: resModel,
-        res_id: resId || false,
-        views: [[viewId, "form"]],
-        target: "current",
-        context,
-    });
+    return kitLoadViewIds(orm, VIEW_IDS);
 }
 
 /**
- * One list page = page header (title, purpose, "+ New …") and one card holding
- * Odoo's own views: control panel with search (filters / group by / favorites),
- * pager, action menu / export and the view switcher, then the view itself.
- * Subclasses only describe the model, its views, domain, context and what
- * "open" / "new" do.
+ * Pages of this app: Odoo's own views (search, filters, group by, pager, export,
+ * view switcher) in the shared modern page of modern_theme (js/app_kit/list_page.js).
+ * Subclasses only describe the model, views, domain, context and open / new.
  */
-export class ListPage extends Component {
-    static template = "sales_modern.ListPage";
-    static components = { NativeView };
-    static props = ["*"];
-
-    static title = "";
-    static subtitle = "";
-    static icon = "";
-    static newLabel = _t("New");
-    static resModel = "";
-    static types = ["list"];
-    static prefix = ""; // key prefix in sales_modern_view_ids, e.g. "order" → order_list
-    static allowCreate = true;
-    static emptyTitle = ""; // empty-list help, as in Odoo's own actions
-    static emptyText = "";
-
-    get domain() {
-        return [];
-    }
-    get context() {
-        return {};
-    }
-    open(resId) {
-        return openFullForm(this.action, this.constructor.resModel, resId, { viewId: this.viewId("form") });
-    }
-    /** Add, view and edit all use the same full Odoo form, so they look the same. */
-    create() {
-        return openFullForm(this.action, this.constructor.resModel, false, {
-            viewId: this.viewId("form"),
-            context: this.context,
-        });
-    }
-
-    setup() {
-        this.orm = useService("orm");
-        this.action = useService("action");
-        this.dialog = useService("dialog");
-        this.ctx = this.props.action?.context || {};
-        const C = this.constructor;
-        this.storageKey = C.viewKey || `sales_modern.view.${C.prefix || C.resModel}`;
-        let view = readStoredView(this.storageKey, C.types[0]);
-        if (!C.types.includes(view)) {
-            view = C.types[0];
-        }
-        this.state = useState({ ready: false, view, viewIds: {}, version: 0, canCreate: false });
-        onWillStart(async () => {
-            const [viewIds, canCreate] = await Promise.all([
-                loadViewIds(this.orm),
-                C.allowCreate ? user.checkAccessRight(C.resModel, "create").catch(() => false) : false,
-            ]);
-            Object.assign(this.state, { viewIds, canCreate, ready: true });
-        });
-    }
-
-    get page() {
-        return this.constructor;
-    }
-    get pageTitle() {
-        return this.props.action?.display_name || this.constructor.title;
-    }
-    get canCreate() {
-        return this.state.canCreate;
-    }
-    onNew() {
-        return this.create();
-    }
-    viewId(type) {
-        const p = this.constructor.prefix;
-        return (p && this.state.viewIds[`${p}_${type}`]) || false;
-    }
-
-    get nativeProps() {
-        const C = this.constructor;
-        const views = C.types.map((type) => [this.viewId(type), type]);
-        views.push([this.viewId("search"), "search"]);
-        const viewSwitcherEntries = C.types.map((type) => {
-            const info = session.view_info?.[type] || {};
-            return { type, icon: info.icon || "oi-view-list", name: info.display_name || type, multiRecord: true };
-        });
-        return {
-            resModel: C.resModel,
-            type: this.state.view,
-            viewId: this.viewId(this.state.view),
-            searchViewId: this.viewId("search"),
-            views,
-            viewSwitcherEntries,
-            displayName: String(this.pageTitle),
-            domain: this.domain,
-            context: this.context,
-            formViewId: this.viewId("form"),
-            onSwitchView: (type) => this.setView(type),
-            onOpen: (resId) => this.open(resId),
-            onCreate: () => this.onNew(),
-            noContentHelp: C.emptyTitle ? this.emptyHelp(C.emptyTitle, C.emptyText) : undefined,
-        };
-    }
-
-    emptyHelp(title, text) {
-        const esc = (t) => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        return `<p class="o_view_nocontent_smiling_face">${esc(title)}</p><p>${esc(text)}</p>`;
-    }
-    setView(view) {
-        this.state.view = view;
-        storeView(this.storageKey, view);
-    }
-    refresh() {
-        this.state.version++;
-    }
+export class ListPage extends KitListPage {
+    static cssPrefix = "ss";
+    static storagePrefix = "sales_modern";
+    static viewIds = VIEW_IDS;
 }
 
 // --------------------------------------------------------------------------- pages
@@ -219,10 +85,10 @@ class ToInvoicePage extends ListPage {
     static types = ["list", "kanban", "pivot", "graph"];
     static allowCreate = false;
     get domain() {
-        return [["invoice_status", "=", "to invoice"]];
+        return [["invoice_status", "=", "to invoice"], ...teamDomain(this.ctx)];
     }
     get context() {
-        return { create: false };
+        return { ...teamContext(this.ctx), create: false };
     }
 }
 
@@ -235,7 +101,7 @@ class CustomersPage extends ListPage {
     static newLabel = _t("New customer");
     static resModel = "res.partner";
     static prefix = "customer";
-    static types = ["kanban", "list", "pivot", "graph", "activity"];
+    static types = ["kanban", "list", "activity"];
     get context() {
         // Odoo's Sales ▸ Customers defaults, without the "Customer Invoices" filter (customer_rank
         // only grows once an invoice is posted, which would hide customers you just quoted)
@@ -267,7 +133,7 @@ class TeamsPage extends ListPage {
     static emptyText = _t("Group your salespeople into teams to follow their quotations and orders.");
     static resModel = "crm.team";
     static prefix = "team";
-    static types = ["kanban", "list", "pivot", "graph"];
+    static types = ["kanban", "list"];
 }
 
 class SalespeoplePage extends ListPage {
@@ -279,7 +145,7 @@ class SalespeoplePage extends ListPage {
     static emptyText = _t("Add users to a sales team to make them salespeople.");
     static resModel = "crm.team.member";
     static prefix = "member";
-    static types = ["kanban", "list", "pivot", "graph"];
+    static types = ["kanban", "list"];
 }
 
 const actions = registry.category("actions");

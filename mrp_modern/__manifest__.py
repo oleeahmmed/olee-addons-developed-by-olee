@@ -13,7 +13,7 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
 * Rights, record rules, work orders, settings and reports are Odoo's own.
   Odoo's original Manufacturing menus stay available (sidebar groups and top-bar menus).
     """,
-    'version': '19.0.1.1.0',
+    'version': '19.0.1.2.0',
     'category': 'Manufacturing/Manufacturing',
     'author': 'Olee',
     'license': 'LGPL-3',
@@ -25,12 +25,9 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
     'assets': {
         'web.assets_backend': [
             'mrp_modern/static/src/scss/app.scss',
-            'mrp_modern/static/src/js/core/*.js',
-            'mrp_modern/static/src/js/components/*.js',
             'mrp_modern/static/src/js/sidebar/*.js',
-            'mrp_modern/static/src/js/dash/*.js',
             'mrp_modern/static/src/js/pages/*.js',
-            'mrp_modern/static/src/xml/*.xml',
+            'mrp_modern/static/src/xml/dashboard.xml',
         ],
         'web.assets_web_dark': [
             'mrp_modern/static/src/scss/app.dark.scss',
