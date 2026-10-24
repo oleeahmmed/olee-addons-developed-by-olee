@@ -351,3 +351,280 @@ html[data-mt-scheme="dark"] {
 @media (prefers-reduced-motion: reduce) {
     #{$mt-kb} .o_kanban_record { transition: none !important; transform: none !important; }
 }
+
+
+// ===========================================================================
+// shadcn/ui kanban (overrides the design above)
+// ===========================================================================
+// Modern Theme: kanban boards in the shadcn/ui style (shadcnuikit.com/dashboard/apps/kanban),
+// for every kanban in every app. Loaded after kanban.scss and wins over it (and over the
+// app addons' card rules) through :not(#mt-kb), which adds id-level weight.
+//
+//   board : plain page background, 16px between lanes
+//   lane  : muted surface, 10px radius, 10px padding, 8px between cards, no border
+//   header: 14px semibold title + count in an outline pill, buttons on the right
+//   card  : card surface, 12px radius, hairline ring, 16px padding, 16px semibold
+//           title, muted 14px text, footer under a hairline, outline pill badges
+//
+// Only the look changes: drag and drop, quick create, folding, progress bars,
+// colour tags and ribbons keep Odoo's behaviour.
+
+$kb: 'html[data-mt-theme]:not(#mt-kb) .o_web_client';
+
+// ---------------------------------------------------------------------------
+// Tokens: the shadcn neutrals in every style (the brand colour is only an accent)
+// ---------------------------------------------------------------------------
+html[data-mt-theme] {
+    --kb-lane: var(--mt-muted);
+    --kb-card: var(--mt-card);
+    --kb-fg: var(--mt-foreground);
+    --kb-muted-fg: var(--mt-muted-foreground);
+    --kb-border: var(--mt-border);
+    --kb-ring: color-mix(in srgb, var(--mt-foreground) 10%, transparent);
+    --kb-ring-hover: color-mix(in srgb, var(--mt-foreground) 20%, transparent);
+}
+html[data-mt-theme]:not(#mt-kb) {
+    --kb-lane: #f5f5f5;
+    --kb-card: #ffffff;
+    --kb-fg: #0a0a0a;
+    --kb-muted-fg: #737373;
+    --kb-border: #e5e5e5;
+    --kb-ring: rgba(10, 10, 10, 0.1);
+    --kb-ring-hover: rgba(10, 10, 10, 0.2);
+}
+html[data-mt-theme][data-mt-scheme="dark"]:not(#mt-kb) {
+    --kb-lane: #262626;
+    --kb-card: #171717;
+    --kb-fg: #fafafa;
+    --kb-muted-fg: #a1a1a1;
+    --kb-border: rgba(255, 255, 255, 0.1);
+    --kb-ring: rgba(255, 255, 255, 0.1);
+    --kb-ring-hover: rgba(255, 255, 255, 0.2);
+}
+
+#{$kb} {
+    // ---------------------------------------------------------------- board
+    .o_kanban_renderer {
+        --Kanban-background: transparent;
+        --KanbanGroup-background: var(--kb-lane);
+        --KanbanGroup-padding-h: 0.625rem;
+        --KanbanGroup-padding-bottom: 0.625rem;
+        --KanbanRecord-padding-v: 1rem;
+        --KanbanRecord-padding-h: 1rem;
+        --KanbanRecord-margin-v: 0.5rem;
+        --KanbanRecord-margin-h: 0;
+        background: var(--mt-content-bg) !important;
+        background-image: none !important;
+    }
+    .o_kanban_renderer.o_kanban_grouped {
+        --Kanban-gap: 1rem;
+        --Kanban-padding: 1rem 1rem 1rem;
+        gap: 1rem;
+        align-items: flex-start;   // lanes end after their last card, like shadcn
+    }
+    .o_kanban_renderer.o_kanban_grouped > .o_kanban_group {
+        align-self: flex-start;
+        height: auto !important;
+        min-height: 5rem;          // an empty lane stays a comfortable drop target
+    }
+    .o_kanban_renderer.o_kanban_ungrouped {
+        --Kanban-gap: 1rem;
+        gap: 1rem;
+    }
+
+    // ---------------------------------------------------------------- lanes
+    .o_kanban_group:not(.o_column_folded) {
+        padding: 0.625rem !important;
+        border: 0 !important;
+        border-radius: 0.625rem !important;
+        background: var(--kb-lane) !important;
+        box-shadow: none !important;
+        &.o_kanban_hover {
+            background: color-mix(in srgb, var(--mt-primary) 8%, var(--kb-lane)) !important;
+            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mt-primary) 40%, transparent) !important;
+        }
+    }
+    .o_kanban_group .o_kanban_header {
+        background: inherit !important;
+        margin: 0 0 0.5rem !important;
+        padding: 0 !important;
+        border-radius: 0.625rem 0.625rem 0 0;
+        .o_kanban_header_title { align-items: center; min-height: 2rem; line-height: 1.25rem !important; }
+        .o_column_title {
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--kb-fg) !important;
+            font-size: 0.875rem !important;
+            font-weight: 600 !important;
+            letter-spacing: normal;
+            // the count after the name: an outline pill (h-5, px-2, 12px medium)
+            > span:not(.text-truncate) {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                height: 1.25rem;
+                padding: 0.125rem 0.5rem;
+                border: 1px solid var(--kb-border);
+                border-radius: 999px;
+                background: transparent;
+                color: var(--kb-fg);
+                font-size: 0.75rem;
+                font-weight: 500;
+                line-height: 1rem;
+            }
+        }
+        :is(.o_kanban_quick_add, .o_group_config .btn, .o_kanban_config .btn) {
+            display: inline-grid;
+            place-items: center;
+            width: 1.75rem;
+            height: 1.75rem;
+            padding: 0 !important;
+            margin: 0 !important;
+            border-radius: 0.5rem;
+            color: var(--kb-fg);
+            opacity: 1;
+            &:hover { background: color-mix(in srgb, var(--kb-fg) 8%, transparent); color: var(--kb-fg); }
+        }
+        .o_kanban_counter {
+            margin-top: 0.25rem;
+            .o_column_progress { height: 0.1875rem !important; background: color-mix(in srgb, var(--kb-fg) 8%, transparent) !important; }
+            &.opacity-25 { display: none !important; }   // empty lane: no bar, no "0" (the shadcn header stays clean)
+            .o_kanban_counter_side, .o_animated_number { color: var(--kb-fg) !important; font-size: 0.75rem; font-weight: 500; }
+        }
+    }
+    .o_kanban_group.o_column_folded {
+        border: 0 !important;
+        border-radius: 0.625rem !important;
+        background: var(--kb-lane) !important;
+        .o_column_title { color: var(--kb-muted-fg) !important; font-size: 0.875rem !important; font-weight: 600; }
+    }
+
+    // ---------------------------------------------------------------- cards
+    .o_kanban_record:not(.o_kanban_ghost):not(.o_kanban_quick_create):not(.o-kanban-button-new) {
+        border: 0 !important;
+        border-radius: 0.75rem !important;
+        background-color: var(--kb-card) !important;
+        color: var(--kb-fg);
+        box-shadow: 0 0 0 1px var(--kb-ring), 0 1px 0 rgba(0, 0, 0, 0.05) !important;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        transform: none;
+        &:hover { box-shadow: 0 0 0 1px var(--kb-ring-hover), 0 1px 0 rgba(0, 0, 0, 0.05) !important; }
+        &.o_kanban_global_click:hover { transform: none; }
+        &:focus-visible { outline: none; box-shadow: 0 0 0 1px var(--kb-ring-hover), 0 0 0 4px var(--mt-focus-ring) !important; }
+        &.o_record_selected {
+            background-color: var(--kb-card) !important;
+            box-shadow: 0 0 0 2px var(--mt-primary) !important;
+        }
+
+        // title 16px semibold, muted 14px text
+        :is(.o_kanban_record_title, .oe_kanban_details strong:first-child),
+        > main > :is(.fw-bold, .fw-bolder):first-child,
+        > :is(.fw-bold, .fw-bolder):first-child {
+            color: var(--kb-fg);
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+            letter-spacing: normal;
+            line-height: 1.5rem;
+        }
+        :is(.text-muted, .o_kanban_record_subtitle, .o_text_overflow.text-muted) {
+            color: var(--kb-muted-fg) !important;
+            font-size: 0.875rem;
+        }
+
+        // footer under a hairline (shadcn Separator), muted 12px meta
+        > footer, > main > footer, .o_kanban_record_bottom {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem !important;
+            border-top: 1px solid var(--kb-border) !important;
+            color: var(--kb-muted-fg);
+            font-size: 0.75rem;
+        }
+        > main > footer:first-child, > footer:first-child { margin-top: 0; border-top: 0 !important; padding-top: 0 !important; }
+
+        // tags / badges: outline pills (h-5, px-2, 12px medium)
+        .o_field_many2many_tags .o_tag, .o_tag, .badge {
+            display: inline-flex;
+            align-items: center;
+            height: 1.25rem;
+            padding: 0.125rem 0.5rem !important;
+            border-radius: 999px !important;
+            font-size: 0.75rem !important;
+            font-weight: 500 !important;
+            line-height: 1rem;
+            box-shadow: inset 0 0 0 1px var(--kb-border);
+        }
+
+        // avatars: 28px circles with a ring in the card colour, overlapping
+        :is(.o_avatar, .o_m2o_avatar) img, img.o_avatar, img.rounded-circle {
+            border-radius: 999px !important;
+            box-shadow: 0 0 0 2px var(--kb-card);
+        }
+        .o_field_many2many_avatar_user .o_tag + .o_tag,
+        .o_field_many2many_avatar_user img + img { margin-inline-start: -0.5rem; }
+
+        .o_dropdown_kanban .dropdown-toggle {
+            border-radius: 0.5rem !important;
+            color: var(--kb-muted-fg);
+            &:hover { background: color-mix(in srgb, var(--kb-fg) 8%, transparent); color: var(--kb-fg); }
+        }
+    }
+
+    // the same 8px between cards, none after the last one
+    .o_kanban_grouped .o_kanban_group .o_kanban_record:not(.o_kanban_ghost):not(.o_kanban_quick_create) {
+        margin: 0 0 0.5rem !important;
+    }
+    .o_kanban_grouped .o_kanban_group .o_kanban_record:not(.o_kanban_ghost):not(.o_kanban_quick_create):last-of-type { margin-bottom: 0 !important; }
+
+    // drop placeholder and the dragged card
+    .o_kanban_record.opacity-50 {
+        background: transparent !important;
+        border: 1px dashed var(--kb-ring-hover) !important;
+        box-shadow: none !important;
+    }
+    .o_kanban_record.o_dragged {
+        transform: rotate(-1deg) !important;
+        box-shadow: 0 0 0 1px var(--kb-ring-hover), var(--mt-shadow-lg) !important;
+        cursor: grabbing;
+    }
+
+    // quick create inside a lane, "add a column"
+    .o_kanban_group .o_kanban_quick_create {
+        margin: 0 0 0.5rem !important;
+        padding: 1rem !important;
+        border: 0 !important;
+        border-radius: 0.75rem !important;
+        background: var(--kb-card) !important;
+        box-shadow: 0 0 0 1px var(--kb-ring-hover), var(--mt-shadow-md) !important;
+    }
+    .o_column_quick_create {
+        .o_quick_create_folded {
+            border: 1px dashed var(--kb-ring-hover);
+            border-radius: 0.625rem;
+            background: transparent;
+            color: var(--kb-muted-fg);
+            &:hover { background: var(--kb-lane); color: var(--kb-fg); }
+        }
+        .o_quick_create_unfolded {
+            border: 0;
+            border-radius: 0.625rem;
+            background: var(--kb-lane);
+            box-shadow: none;
+            padding: 0.625rem;
+        }
+    }
+    .o_kanban_load_more .btn {
+        border: 1px solid var(--kb-border);
+        border-radius: 0.5rem;
+        background: var(--kb-card);
+        color: var(--kb-fg);
+        font-size: 0.875rem;
+        font-weight: 500;
+        &:hover { background: var(--kb-lane); color: var(--kb-fg); }
+    }
+}
+
+// Kanbans inside forms (one2many cards) keep a transparent background.
+#{$kb} .o_form_view .o_field_x2many_kanban .o_kanban_renderer {
+    background: transparent !important;
+}

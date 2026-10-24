@@ -9,8 +9,8 @@ class ResUsers(models.Model):
     _inherit = "res.users"
 
     def _modern_theme_login_action(self):
-        """CRM Home after login, for CRM users only (others keep their apps' page)."""
-        action = self.env.ref("crm_modern.action_home", raise_if_not_found=False)
+        """CRM Dashboard after login, for CRM users only (others keep their apps' page)."""
+        action = self.env.ref("crm_modern.action_dashboard", raise_if_not_found=False)
         if action and len(self) == 1 and self.has_group("sales_team.group_sale_salesman"):
             return action
         return super()._modern_theme_login_action()
@@ -141,7 +141,7 @@ class ResUsers(models.Model):
             team = self.env["crm.team"].browse(team_id)
             if team.exists():
                 team.write({"member_ids": [(4, user.id)]})
-        home = self.env.ref("crm_modern.action_home", raise_if_not_found=False)
+        home = self.env.ref("crm_modern.action_dashboard", raise_if_not_found=False)
         if home:
             user.action_id = home.id
         return user.id

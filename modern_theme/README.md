@@ -1,6 +1,6 @@
 # Modern Theme (Odoo 19 Community)
 
-A token-based backend theme: one global sidebar in three styles, Ctrl+K search,
+A token-based backend theme: one global sidebar in four styles, Ctrl+K search,
 light / dark / auto modes, and more than 20 design options. Every option can be set
 company-wide in Settings and overridden by each user.
 
@@ -36,7 +36,7 @@ Then hard-refresh the browser (Ctrl+Shift+R) once.
 | | Density | Compact, Comfortable, Spacious |
 | | Borders | None, Subtle, Normal, Strong |
 | | Card shadow | None, Soft, Medium, Strong |
-| Navigation | Sidebar style | Classic tree, Icon rail + panel, Floating glass |
+| Navigation | Sidebar style | Classic (shadcn/ui, default), Tree, Icon rail + panel, Floating glass |
 | | Sidebar background | Solid, Brand tint, Gradient, Glass |
 | | Sidebar width | Narrow, Normal, Wide |
 | | Start collapsed | On / Off (each browser remembers the user's own choice) |
@@ -59,7 +59,18 @@ everything stays in the sidebar drawer. App icons drawn as a single white or bla
 (Odoo 19's Discuss, Apps, Settings) get a brand-coloured tile so they read in light and
 dark mode.
 
-* **Classic tree**: every app is an accordion row; the current app is open, with
+An **apps menu** (grid icon) is always at the start of the top bar, in every style and on
+phones: it opens any app.
+
+* **Classic** (default): a copy of the shadcn/ui sidebar. Workspace header (company logo
+  and name), a search field with its Ctrl K shortcut, the current app's everyday menus as
+  one labelled group of 32px rows (16px Lucide icon + label), collapsible items whose
+  sub-items have no icons and hang on a hairline, counters on the right, the user card in
+  the footer. The toggle button sits in the top bar (like shadcn's SidebarTrigger);
+  collapsed, it becomes a 64px icon rail and groups open as flyouts. With the "Solid"
+  sidebar background it uses shadcn's neutral colours in light and dark
+  (`scss/sidebar_shadcn.scss`).
+* **Tree**: every app is an accordion row; the current app is open, with
   nested menus, indent guide lines and an active bar. Collapsed, it becomes an
   icon rail with hover flyouts.
 * **Icon rail + panel**: apps as a rail of icons (with labels); the current app's menu
@@ -67,7 +78,7 @@ dark mode.
 * **Floating glass**: a floating rounded card with an app switcher (grid), titled
   sections and pill-shaped items. Collapsed, it shows mini icons with popovers.
 
-All three share:
+All four share:
 * **Ctrl+K** (or the search button): apps, menus with their path, pinned and recent
   menus, records (contacts, and whatever apps register), plus theme actions. Odoo's
   own command palette is the "Odoo commands…" entry.

@@ -22,7 +22,7 @@ const MERGE_INTO = {
     "crm.crm_menu_config": "crm_modern.menu_config",
 };
 const SIDEBAR_ORDER = [
-    "crm_modern.menu_home",
+    "crm_modern.menu_dashboard",
     "crm_modern.menu_marketing",
     "crm_modern.menu_sales",
     "crm_modern.menu_users",
@@ -38,7 +38,6 @@ const GROUP_CHILD_ORDER = {
         "crm_modern.menu_quotations",
         "crm_modern.menu_sale_orders",
         "crm_modern.menu_customers",
-        "crm_modern.menu_dashboard",
     ],
     "crm_modern.menu_team": [
         "crm_modern.menu_teams",
@@ -82,7 +81,6 @@ const REPLACED = new Set([
 /** Font Awesome icon per menu xmlid (Odoo ships FA 4.7). Other addons may add entries. */
 export const menuIcons = registry.category("crm_modern.menu_icons");
 for (const [xmlid, icon] of Object.entries({
-    "crm_modern.menu_home": "fa-sun-o",
     "crm_modern.menu_dashboard": "fa-th-large",
     "crm_modern.menu_pipeline": "fa-columns",
     "crm_modern.menu_leads": "fa-user-plus",
@@ -206,10 +204,9 @@ async function onCreate(spec, env) {
 }
 
 // Less used pages: in the top bar ("More"), so the sidebar keeps the everyday ones.
+// Campaigns stay in the sidebar, first item of the CRM group.
 const TOPBAR = new Set([
-    "crm_modern.menu_campaigns",
     "crm_modern.menu_sale_orders",
-    "crm_modern.menu_dashboard",
 ]);
 
 registry.category("modern_theme.sidebar_apps").add(APP_XMLID, {

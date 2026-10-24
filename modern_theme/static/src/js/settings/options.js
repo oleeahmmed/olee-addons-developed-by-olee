@@ -103,7 +103,8 @@ export const OPTION_GROUPS = [
                 label: _t("Sidebar style"),
                 kind: "cards",
                 choices: [
-                    ["classic", _t("Classic tree"), "classic"],
+                    ["classic", _t("Classic"), "classic"],
+                    ["tree", _t("Tree"), "tree"],
                     ["rail", _t("Icon rail + panel"), "rail"],
                     ["floating", _t("Floating glass"), "floating"],
                 ],

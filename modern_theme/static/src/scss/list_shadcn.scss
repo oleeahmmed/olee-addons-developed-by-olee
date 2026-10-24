@@ -1,0 +1,249 @@
+// Modern Theme: list tables and the "+ New" button of the modern app addons
+// (CRM, Sales, Inventory, Purchase, Manufacturing, Contacts, Invoicing, Accounting),
+// copied from the shadcn/ui table (shadcnuikit.com "Products" page).
+//
+// Only the look changes: these are still Odoo's own list views, so record selection
+// (and its action buttons), sorting, grouping, search filters, inline edit, the pager
+// and the view switcher all keep working. Scoped to html.mt-app-modern (set while a
+// modern app is open), loaded last so it wins over the older per-app list rules.
+
+// :not(#mt-lt) adds id-level weight, so these rules beat the per-app list rules
+// (some use !important with long class chains) without more !important here.
+$lt: 'html.mt-app-modern[data-mt-theme]:not(#mt-lt)';
+
+// Lucide "plus", painted with the text colour
+$lt-plus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='M12 5v14'/%3E%3C/svg%3E");
+$lt-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+$lt-check-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23171717' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+
+// ---------------------------------------------------------------------------
+// Tokens (shadcn neutral)
+// ---------------------------------------------------------------------------
+#{$lt} {
+    --lt-fg: #0a0a0a;
+    --lt-muted-fg: #737373;
+    --lt-border: #e5e5e5;
+    --lt-ring: rgba(10, 10, 10, 0.1);
+    --lt-hover: rgba(245, 245, 245, 0.5);   // hover:bg-muted/50
+    --lt-selected: #f5f5f5;                 // data-[state=selected]:bg-muted
+    --lt-card: var(--mt-card);
+    // "+ New" follows the colour theme (preset / custom colour), like shadcnuikit's presets
+    --lt-primary: var(--mt-primary);
+    --lt-primary-fg: var(--mt-primary-foreground);
+    --lt-primary-hover: var(--mt-primary-hover);
+    --lt-check: #{$lt-check};
+}
+html.mt-app-modern[data-mt-theme][data-mt-scheme="dark"]:not(#mt-lt) {
+    --lt-fg: #fafafa;
+    --lt-muted-fg: #a1a1a1;
+    --lt-border: rgba(255, 255, 255, 0.1);
+    --lt-ring: rgba(255, 255, 255, 0.1);
+    --lt-hover: rgba(38, 38, 38, 0.5);
+    --lt-selected: #262626;
+
+    --lt-check: #{$lt-check-dark};
+}
+
+// ---------------------------------------------------------------------------
+// Table: a rounded card, 40px header with 14px medium dark labels, 12px row padding,
+// hairline row borders, muted hover / selected rows.
+// ---------------------------------------------------------------------------
+#{$lt} .o_action_manager .o_list_renderer {
+    --ListRenderer-thead-bg-color: var(--lt-card);
+    --ListRenderer-tfoot-bg-color: var(--lt-card);
+    flex: 0 1 auto !important;    // the card ends after the last row; long lists scroll inside
+    height: auto !important;
+    min-height: 0;
+    margin: 0.75rem 1rem 1rem !important;
+    border: 0 !important;
+    border-radius: 0.75rem !important;
+    background: var(--lt-card) !important;
+    box-shadow: 0 0 0 1px var(--lt-ring), 0 1px 0 rgba(0, 0, 0, 0.05) !important;
+
+    .o_list_table {
+        --table-bg: var(--lt-card);
+        --table-border-color: var(--lt-border);
+        --table-hover-bg: var(--lt-hover);
+        --table-striped-bg: transparent;
+        --table-accent-bg: transparent;
+        margin: 0;
+        color: var(--lt-fg);
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+
+        // ----- header -----
+        > thead > tr > th,
+        > thead > tr {
+            background-color: var(--lt-card) !important;
+        }
+        > thead > tr > th {
+            height: 2.5rem;
+            padding: 0 0.5rem !important;
+            border-top: 0 !important;
+            border-bottom: 1px solid var(--lt-border) !important;
+            color: var(--lt-fg) !important;
+            font-size: 0.875rem !important;
+            font-weight: 500 !important;
+            letter-spacing: normal !important;
+            text-transform: none !important;
+            vertical-align: middle;
+            white-space: nowrap;
+            &:hover { background-color: var(--lt-hover) !important; }
+            .o_list_sortable_caret, .fa-angle-up, .fa-angle-down { color: var(--lt-muted-fg); }
+        }
+
+        // ----- rows -----
+        > tbody > tr > td,
+        > tbody > tr > th {
+            padding: 0.75rem 0.5rem !important;
+            border-top: 0 !important;
+            border-bottom: 1px solid var(--lt-border) !important;
+            border-inline: 0;
+            background-color: var(--lt-card);
+            color: var(--lt-fg);
+            vertical-align: middle;
+            transition: background-color 150ms;
+        }
+        > tbody > tr.o_data_row:hover > td,
+        > tbody > tr.o_data_row:hover > th {
+            background-color: var(--lt-hover) !important;
+            --table-bg-state: var(--lt-hover);
+        }
+        > tbody > tr.o_data_row.o_data_row_selected > td,
+        > tbody > tr.o_data_row.table-info > td,
+        > tbody > tr.o_data_row.o_data_row_selected > th {
+            background-color: var(--lt-selected) !important;
+            --table-bg-state: var(--lt-selected);
+            color: var(--lt-fg) !important;
+            box-shadow: none !important;
+        }
+        // Odoo's empty filler rows under short lists: no lines
+        > tbody > tr:not(.o_data_row):not(.o_group_header) > td { border-bottom-color: transparent !important; background: transparent; }
+        > tbody > tr.o_data_row:last-of-type > td { border-bottom-color: transparent !important; }
+
+        // first / last column: 16px from the card edge
+        > thead > tr > th:first-child,
+        > tbody > tr > td:first-child,
+        > tfoot > tr > td:first-child { padding-inline-start: 1rem !important; }
+        > thead > tr > th:last-child,
+        > tbody > tr > td:last-child,
+        > tfoot > tr > td:last-child { padding-inline-end: 1rem !important; }
+        // the selector column hugs its checkbox ([&:has([role=checkbox])]:pr-0)
+        .o_list_record_selector { width: 2.5rem; padding-inline-end: 0 !important; }
+
+        // ----- groups -----
+        .o_group_header {
+            > th, > td {
+                background-color: var(--lt-card) !important;
+                color: var(--lt-fg);
+                font-weight: 500;
+                border-bottom: 1px solid var(--lt-border) !important;
+            }
+            &:hover > th, &:hover > td { background-color: var(--lt-hover) !important; }
+        }
+
+        // ----- footer (totals) -----
+        > tfoot > tr > td {
+            padding: 0.75rem 0.5rem;
+            border-top: 1px solid var(--lt-border);
+            background-color: var(--lt-card);
+            color: var(--lt-fg);
+            font-weight: 500;
+        }
+    }
+
+    // Checkbox: 16px, 4px radius, input border; checked = primary
+    .o_list_record_selector .o-checkbox {
+        display: flex;
+        align-items: center;
+        min-height: 0;
+        margin: 0 !important;
+        padding: 0 !important;
+        .form-check-input { float: none; flex: 0 0 auto; margin: 0 !important; }
+    }
+    .o_list_record_selector .form-check-input,
+    thead .form-check-input {
+        width: 1rem;
+        height: 1rem;
+        border: 1px solid var(--lt-border) !important;
+        border-radius: 4px !important;
+        background-color: transparent;
+        box-shadow: none;
+        cursor: pointer;
+        &:focus { box-shadow: 0 0 0 3px var(--lt-ring); }
+        &:checked, &:indeterminate {
+            border-color: var(--lt-primary) !important;
+            background-color: var(--lt-primary) !important;
+        }
+        &:checked { background-image: var(--lt-check) !important; background-size: 0.75rem; background-position: center; background-repeat: no-repeat; }
+    }
+
+    // Tags and badges: pill, h-5, 12px medium
+    .o_field_many2many_tags .o_tag,
+    .o_field_badge .badge,
+    .o_field_widget > .badge {
+        height: 1.25rem;
+        padding: 0.125rem 0.5rem;
+        border-radius: 999px !important;
+        font-size: 0.75rem;
+        font-weight: 500;
+        line-height: 1rem;
+    }
+}
+// Bordered list option: keep its column lines in the new colour
+html.mt-app-modern[data-mt-theme][data-mt-list-style="bordered"]:not(#mt-lt) .o_list_renderer .o_list_table {
+    > thead > tr > th:not(:last-child),
+    > tbody > tr > td:not(:last-child) { border-inline-end: 1px solid var(--lt-border) !important; }
+}
+// Phones: full width, no side margins
+@media (max-width: 767.98px) {
+    #{$lt} .o_action_manager .o_list_renderer { margin: 0.5rem !important; }
+}
+
+// ---------------------------------------------------------------------------
+// "+ New": the shadcn primary button (h-8, px-2.5, rounded-lg, 14px medium,
+// a 16px plus icon) in the brand colour of the chosen theme.
+// ---------------------------------------------------------------------------
+#{$lt} {
+    .o_control_panel_main_buttons :is(.o_list_button_add, .o-kanban-button-new, .o_form_button_create),
+    .mt-page-new,
+    .mt-btn-create {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        gap: 0.375rem;
+        height: 2rem !important;
+        min-height: 2rem;
+        padding: 0 0.625rem !important;
+        border: 1px solid transparent !important;
+        border-radius: 0.625rem !important;
+        background: var(--lt-primary) !important;
+        color: var(--lt-primary-fg) !important;
+        box-shadow: none !important;
+        font-size: 0.875rem !important;
+        font-weight: 500 !important;
+        line-height: 1.25rem;
+        white-space: nowrap;
+        transition: background-color 150ms, transform 150ms;
+        &:hover, &:focus { background: var(--lt-primary-hover) !important; color: var(--lt-primary-fg) !important; }
+        &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--lt-ring) !important; }
+        &:active { transform: translateY(1px); }
+        > .fa-plus, > .fa.fa-plus { display: none; }   // the icon comes from ::before
+    }
+    .o_control_panel_main_buttons :is(.o_list_button_add, .o-kanban-button-new, .o_form_button_create),
+    .mt-page-new {
+        &::before {
+            content: "" !important;
+            display: inline-block;
+            flex: 0 0 auto;
+            width: 1rem;
+            height: 1rem;
+            font-family: inherit !important;
+            background-color: currentColor;
+            -webkit-mask: #{$lt-plus} center / contain no-repeat;
+            mask: #{$lt-plus} center / contain no-repeat;
+        }
+    }
+    // icon-only create button: keep it square
+    .mt-btn-create { width: 2rem; padding: 0 !important; }
+}

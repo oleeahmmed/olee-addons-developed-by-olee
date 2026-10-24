@@ -136,6 +136,11 @@ export class MtSidebar extends Component {
     get style() {
         return this.themeState.values.sidebar_style || "classic";
     }
+    /** Style drawn: on phones the rail and floating styles become the classic drawer. */
+    get dataStyle() {
+        const style = this.style;
+        return this.ui.isSmall && (style === "rail" || style === "floating") ? "classic" : style;
+    }
     get collapsed() {
         // The rail is always icon-sized; its panel uses "pinned" instead.
         return this.state.collapsed && !this.ui.isSmall && this.style !== "rail";
@@ -186,6 +191,13 @@ export class MtSidebar extends Component {
             return null;
         }
         const leaves = flattenLeaves(this.tree);
+        // The URL is updated a moment after the action is shown: the menu just clicked
+        // wins while its action is the one on screen (else the previous page stays lit).
+        const clicked = this.state.lastClicked && leaves.find((l) => l.node.id === this.state.lastClicked);
+        const actionId = this.action.currentController?.action?.id;
+        if (clicked && actionId && clicked.node.actionID === actionId) {
+            return clicked;
+        }
         return findActiveLeaf(leaves, browser.location.pathname, this.state.lastClicked);
     }
     get activeId() {
@@ -301,11 +313,24 @@ export class MtSidebar extends Component {
     }
     async openApp(app, ev) {
         ev?.preventDefault();
-        if (this.style === "classic" && !this.collapsed) {
+        if (this.style === "tree" && !this.collapsed) {
             this.state.expandedApps[app.id] = true;
         }
         this.closeFlyout(true);
         await this.menu.selectMenu(app);
+    }
+    /** Workspace header (classic style): back to the home screen / first app. */
+    async openHome(ev) {
+        if (ev && (ev.ctrlKey || ev.metaKey || ev.button === 1)) {
+            return;
+        }
+        ev?.preventDefault();
+        this.closeFlyout(true);
+        this.state.mobileOpen = false;
+        const app = this.currentApp || this.apps[0];
+        if (app) {
+            await this.menu.selectMenu(app);
+        }
     }
     rememberRecent() {
         const id = this.activeId;

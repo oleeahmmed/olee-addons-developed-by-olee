@@ -1,0 +1,593 @@
+// Modern Theme: the "Classic" sidebar, a copy of the shadcn/ui sidebar
+// (shadcnuikit.com dashboard): workspace header, search field with its shortcut,
+// a labelled group of 32px rows (16px icon + 14px label), collapsible items whose
+// sub-items have no icons and hang on a hairline, the user card in the footer.
+// Collapsed, it becomes a 64px icon rail (groups open as flyouts).
+// With the "Solid" sidebar background it uses the exact shadcn neutral colours,
+// light and dark; the other backgrounds (tint, gradient, glass) keep their tokens.
+
+$mt-sc-desktop: 768px;
+
+// Inline Lucide icons (sidebar + top bar)
+.mt-lucide {
+    flex: 0 0 auto;
+    width: 1rem;
+    height: 1rem;
+    pointer-events: none;
+}
+
+// ---------------------------------------------------------------------------
+// Tokens
+// ---------------------------------------------------------------------------
+html[data-mt-sidebar-style="classic"] {
+    --mt-sb-collapsed-w: 4rem;   // 3rem icon column + 0.5rem padding on each side
+}
+html[data-mt-sidebar-style="classic"][data-mt-sidebar-width="normal"] { --mt-sb-w: 16rem; }
+
+.o_mt_sidebar[data-style="classic"] {
+    --sc-bg: var(--mt-sidebar-bg);
+    --sc-bg-image: var(--mt-sidebar-bg-image);
+    --sc-fg: var(--mt-sidebar-fg);
+    --sc-strong: var(--mt-sidebar-fg);
+    --sc-label: color-mix(in srgb, var(--mt-sidebar-fg) 70%, transparent);
+    --sc-accent: var(--mt-sidebar-accent);
+    --sc-accent-fg: var(--mt-sidebar-fg);
+    --sc-border: var(--mt-sidebar-border);
+    --sc-input-bg: color-mix(in srgb, var(--mt-sidebar-fg) 6%, transparent);
+    --sc-input-border: var(--mt-sidebar-border);
+    --sc-kbd-bg: color-mix(in srgb, var(--mt-sidebar-fg) 8%, transparent);
+    --sc-muted-fg: var(--mt-sidebar-muted-fg);
+    --sc-ring: var(--mt-ring);
+    // Active menu: a tint of the brand colour (shadcnuikit's theme presets do the
+    // same), so it never looks like the neutral hover.
+    --sc-active-bg: color-mix(in srgb, var(--mt-primary) 14%, var(--sc-bg));
+    --sc-active-fg: var(--sc-strong);
+    --sc-radius: 0.5rem;     // rounded-md (radius 0.625rem - 2px)
+    --sc-radius-lg: 0.625rem;
+}
+// Solid background (every sidebar style): the shadcn neutral sidebar colour.
+html[data-mt-sidebar-bg="solid"]:not(#mt-np) {
+    --mt-sidebar-bg: #f7f6f6;   // also paints the placeholder under the sidebar on load
+    --mt-sidebar-bg-image: none;
+}
+html[data-mt-sidebar-bg="solid"] .o_mt_sidebar[data-style="classic"] {
+    --sc-bg: #f7f6f6;
+    --sc-fg: #646464;
+    --sc-strong: #0a0a0a;
+    --sc-label: rgba(100, 100, 100, 0.7);
+    --sc-accent: #e1e1e1;
+    --sc-accent-fg: #000000;
+    --sc-border: #e5e5e5;
+    --sc-input-bg: #ffffff;
+    --sc-input-border: #e5e5e5;
+    --sc-kbd-bg: #f5f5f5;
+    --sc-muted-fg: #737373;
+    --sc-ring: rgba(161, 161, 161, 0.5);
+}
+html[data-mt-scheme="dark"][data-mt-sidebar-bg="solid"]:not(#mt-np) {
+    --mt-sidebar-bg: #171717;
+}
+html[data-mt-scheme="dark"] .o_mt_sidebar[data-style="classic"] {
+    --sc-active-bg: color-mix(in srgb, var(--mt-primary) 24%, var(--sc-bg));
+}
+html[data-mt-scheme="dark"][data-mt-sidebar-bg="solid"] .o_mt_sidebar[data-style="classic"] {
+    --sc-bg: #171717;
+    --sc-fg: #b0b0b0;
+    --sc-strong: #fafafa;
+    --sc-label: rgba(176, 176, 176, 0.7);
+    --sc-accent: #2c2c2c;
+    --sc-accent-fg: #ffffff;
+    --sc-border: rgba(255, 255, 255, 0.1);
+    --sc-input-bg: rgba(255, 255, 255, 0.045);
+    --sc-input-border: rgba(255, 255, 255, 0.15);
+    --sc-kbd-bg: #262626;
+    --sc-muted-fg: #a1a1a1;
+    --sc-ring: rgba(115, 115, 115, 0.5);
+}
+
+// ---------------------------------------------------------------------------
+// Frame
+// ---------------------------------------------------------------------------
+.o_mt_sidebar[data-style="classic"] {
+    width: var(--mt-sb-w);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: var(--sc-fg);
+
+    .mt-sc {
+        width: 100%;
+        height: 100%;
+        background-color: var(--sc-bg);
+        background-image: var(--sc-bg-image);
+        backdrop-filter: var(--mt-sidebar-blur);
+        -webkit-backdrop-filter: var(--mt-sidebar-blur);
+        border-inline-end: 1px solid var(--sc-border);
+    }
+
+    // ---------- header ----------
+    .mt-sc-header {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        flex: 0 0 auto;
+    }
+    .mt-sc-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        > .mt-sc-btn { flex: 1 1 auto; min-width: 0; }
+    }
+    .mt-sc-logo {
+        display: grid;
+        place-items: center;
+        flex: 0 0 auto;
+        width: 2rem;
+        height: 2rem;
+        margin-inline-end: 0.25rem;
+        border-radius: 5px;
+        overflow: hidden;
+        background: #ffffff;
+        img { width: 100%; height: 100%; object-fit: contain; }
+    }
+    .mt-sc-brand-name {
+        flex: 1 1 auto;
+        min-width: 0;
+        color: var(--sc-strong);
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .mt-sc-close {
+        display: grid;
+        place-items: center;
+        flex: 0 0 auto;
+        width: 2rem;
+        height: 2rem;
+        border: 0;
+        border-radius: var(--sc-radius);
+        background: transparent;
+        color: var(--sc-fg);
+        &:hover { background: var(--sc-accent); color: var(--sc-accent-fg); }
+    }
+    .mt-sc-search {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 2rem;
+        padding: 0.25rem 0.625rem 0.25rem 2rem;
+        border: 1px solid var(--sc-input-border);
+        border-radius: var(--sc-radius-lg);
+        background: var(--sc-input-bg);
+        color: var(--sc-muted-fg);
+        font-size: 0.875rem;
+        text-align: start;
+        cursor: pointer;
+        transition: border-color 150ms, box-shadow 150ms;
+        &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--sc-ring); }
+    }
+    .mt-sc-search-icon {
+        position: absolute;
+        top: 50%;
+        inset-inline-start: 0.5rem;
+        transform: translateY(-50%);
+        opacity: 0.5;
+        color: var(--sc-strong);
+    }
+    .mt-sc-search-text { flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; }
+    .mt-sc-kbd {
+        position: absolute;
+        top: 50%;
+        inset-inline-end: 0.5rem;
+        transform: translateY(-50%);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 1.25rem;
+        min-width: 1.25rem;
+        padding: 0 0.25rem;
+        border: 0;
+        border-radius: 0.25rem;
+        background: var(--sc-kbd-bg);
+        color: var(--sc-muted-fg);
+        box-shadow: none;
+        font-family: var(--mt-font-family);
+        font-size: 0.75rem;
+        font-weight: 500;
+        line-height: 1;
+    }
+
+    // ---------- content ----------
+    .mt-sc-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        padding: 0;
+        scrollbar-width: none;
+        scrollbar-gutter: auto;
+        &::-webkit-scrollbar { display: none; }
+    }
+    .mt-sc-group {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        min-width: 0;
+        padding: 0.5rem;
+    }
+    .mt-sc-label {
+        display: flex;
+        align-items: center;
+        flex: 0 0 auto;
+        height: 2rem;
+        padding: 0 0.5rem;
+        border-radius: var(--sc-radius);
+        color: var(--sc-label);
+        font-size: 0.75rem;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: margin 200ms linear, opacity 200ms linear;
+    }
+    .mt-sc-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        width: 100%;
+        min-width: 0;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .mt-sc-item { position: relative; }
+
+    // Menu button: h-8, p-2, gap-2, rounded-md, text-sm, 16px icons
+    .mt-sc-btn {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        height: 2rem;
+        padding: 0.5rem;
+        overflow: hidden;
+        border: 0;
+        border-radius: var(--sc-radius);
+        background: transparent;
+        color: var(--sc-fg);
+        font-size: 0.875rem;
+        font-weight: 400;
+        line-height: 1.25rem;
+        text-align: start;
+        text-decoration: none;
+        outline: none;
+        cursor: pointer;
+        transition: width 200ms linear, height 200ms linear, padding 200ms linear;
+        &:hover {
+            background: var(--sc-accent);
+            color: var(--sc-accent-fg);
+            .mt-sc-pin { opacity: 1; }
+        }
+        &:active { background: var(--sc-accent); color: var(--sc-accent-fg); }
+        &:focus-visible { box-shadow: 0 0 0 2px var(--sc-ring); .mt-sc-pin { opacity: 1; } }
+        &[data-active="true"] {
+            background: var(--sc-active-bg);
+            color: var(--sc-active-fg);
+            font-weight: 500;
+        }
+        > .mt-sc-text:last-child, .mt-sc-text { flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mt-app-icon { --mt-app-icon-size: 1rem; border-radius: 4px; }
+    }
+    .mt-sc-btn-lg { height: 2.5rem; }
+    .mt-sc-brand .mt-sc-btn-lg:hover { background: var(--sc-accent); color: var(--sc-strong); }
+    .mt-sc-icon {
+        flex: 0 0 1rem;
+        width: 1rem;
+        height: 1rem;
+        font-size: 1rem;
+        line-height: 1rem;
+        text-align: center;
+        color: inherit;
+        &.fa::before { vertical-align: top; }
+    }
+    .mt-sc-icon.mt-sb-dot::after { width: 0.3125rem; height: 0.3125rem; }
+    .mt-sc-chevron {
+        margin-inline-start: auto;
+        transition: transform 200ms;
+    }
+    .mt-sc-item.is-open > .mt-sc-btn > .mt-sc-chevron,
+    .mt-sc-sub-item.is-open > .mt-sc-sub-btn > .mt-sc-chevron { transform: rotate(90deg); }
+
+    // Sub menu: mx-3.5, border-l, px-2.5, py-0.5, gap-1. No icons.
+    .mt-sc-sub {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        min-width: 0;
+        margin: 0 0.875rem;
+        padding: 0.125rem 0.625rem;
+        border-inline-start: 1px solid var(--sc-border);
+        list-style: none;
+        transform: translateX(1px);
+        animation: mt-fade-in 160ms var(--mt-ease);
+        .mt-sc-sub { margin-inline: 0.5rem 0; padding-inline-end: 0; }
+    }
+    .mt-sc-sub-item { position: relative; }
+    .mt-sc-sub-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        height: 1.75rem;
+        min-width: 0;
+        padding: 0 0.5rem;
+        overflow: hidden;
+        border: 0;
+        border-radius: var(--sc-radius);
+        background: transparent;
+        color: var(--sc-fg);
+        font-size: 0.875rem;
+        text-align: start;
+        text-decoration: none;
+        outline: none;
+        transform: translateX(-1px);
+        cursor: pointer;
+        &:hover {
+            background: var(--sc-accent);
+            color: var(--sc-accent-fg);
+            .mt-sc-pin { opacity: 1; }
+        }
+        &:active { background: var(--sc-accent); color: var(--sc-accent-fg); }
+        &:focus-visible { box-shadow: 0 0 0 2px var(--sc-ring); .mt-sc-pin { opacity: 1; } }
+        &[data-active="true"] { background: var(--sc-active-bg); color: var(--sc-active-fg); font-weight: 500; }
+        .fa, .mt-sb-dot, .mt-sc-icon { display: none; } // never an icon inside a dropdown
+    }
+
+    // Counter badge: h-5, min-w-5, rounded-md, text-xs, tabular numbers
+    .mt-sc-badge {
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 1.25rem;
+        min-width: 1.25rem;
+        margin-inline-end: -0.25rem;
+        padding: 0 0.25rem;
+        border-radius: 0.375rem;
+        color: var(--sc-strong);
+        font-size: 0.75rem;
+        font-weight: 500;
+        font-variant-numeric: tabular-nums;
+        pointer-events: none;
+        user-select: none;
+    }
+    // Pin to the "Pinned" group (shown on hover)
+    .mt-sc-pin {
+        display: grid;
+        place-items: center;
+        flex: 0 0 auto;
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-inline-end: -0.25rem;
+        border-radius: 0.375rem;
+        color: var(--sc-muted-fg);
+        opacity: 0;
+        transition: opacity 150ms;
+        .mt-lucide { width: 0.8125rem; height: 0.8125rem; }
+        &:hover { color: var(--mt-warning); }
+        &.is-on { opacity: 1; color: var(--mt-warning); .mt-lucide { fill: currentColor; } }
+    }
+
+    // ---------- footer: user ----------
+    .mt-sc-footer {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        flex: 0 0 auto;
+        > .o-dropdown, > div { width: 100%; }
+    }
+    .mt-sc-user {
+        height: 3rem;
+        &.show, &[aria-expanded="true"] { background: var(--sc-accent); color: var(--sc-accent-fg); }
+    }
+    .mt-sc-avatar {
+        flex: 0 0 auto;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 0.5rem;
+        object-fit: cover;
+    }
+    .mt-sc-user-text {
+        display: grid;
+        flex: 1 1 auto;
+        min-width: 0;
+        text-align: start;
+        font-size: 0.875rem;
+        line-height: 1.25;
+    }
+    .mt-sc-user-name { color: var(--sc-strong); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mt-sc-user-mail { font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .mt-sc-user-caret { margin-inline-start: auto; }
+}
+
+// ---------------------------------------------------------------------------
+// Collapsed: icon rail (size-8 buttons, labels hidden, groups as flyouts)
+// ---------------------------------------------------------------------------
+@media (min-width: $mt-sc-desktop) {
+    .o_mt_sidebar.mt-sb-collapsed[data-style="classic"] {
+        width: var(--mt-sb-collapsed-w);
+        .mt-sc-header, .mt-sc-group, .mt-sc-footer { padding: 0.5rem 1rem; align-items: center; }
+        .mt-sc-brand { justify-content: center; }
+        .mt-sc-brand .mt-sc-btn-lg { width: 2rem; height: 2rem; padding: 0; flex: 0 0 auto; }
+        .mt-sc-logo { margin: 0; }
+        .mt-sc-brand-name, .mt-sc-text, .mt-sc-chevron, .mt-sc-badge, .mt-sc-pin,
+        .mt-sc-search-text, .mt-sc-kbd, .mt-sc-user-text, .mt-sc-user-caret { display: none; }
+        .mt-sc-label { margin-top: -2rem; opacity: 0; pointer-events: none; }
+        .mt-sc-search {
+            width: 2rem;
+            padding: 0;
+            justify-content: center;
+            border-color: transparent;
+            background: transparent;
+            color: var(--sc-fg);
+            &:hover { background: var(--sc-accent); color: var(--sc-accent-fg); }
+        }
+        .mt-sc-search-icon { position: static; transform: none; opacity: 1; color: inherit; }
+        .mt-sc-menu { align-items: center; }
+        .mt-sc-btn { width: 2rem; height: 2rem; padding: 0.5rem; justify-content: center; }
+        .mt-sc-user { width: 2rem; height: 2rem; padding: 0; }
+        .mt-sc-sub { display: none; }
+    }
+}
+
+// Flyout opened from a collapsed group: plain sub-items, no icons either.
+.o_mt_sidebar[data-style="classic"] .mt-sb-flyout .mt-sb-icon { display: none; }
+
+// Phones: the drawer keeps the full width of its labels.
+@media (max-width: $mt-sc-desktop - 0.02px) {
+    .o_mt_sidebar[data-style="classic"] .mt-sc { border-inline-end: 0; }
+    .o_mt_sidebar[data-style="classic"] .mt-sc-pin { opacity: 1; }
+}
+
+// ---------------------------------------------------------------------------
+// One neutral palette for EVERY sidebar style and EVERY colour preset (the shadcn
+// neutrals): page, top bar, cards, popovers, fields, text and borders never take a
+// tint of the brand colour. The brand colour stays for accents only: buttons, links,
+// focus, active menu, badges, progress. Derived tokens (hover, soft colours, field
+// backgrounds, app-addon --xx-* tokens, border / top bar options) follow on their own.
+// :not(#mt-np) adds id-level weight, so this wins over every preset block, light
+// and dark, whatever the asset order. The Classic style adds the inset frame below.
+// ---------------------------------------------------------------------------
+html[data-mt-theme]:not(#mt-np) {
+    --mt-background: #ffffff;
+    --mt-foreground: #0a0a0a;
+    --mt-card: #ffffff;
+    --mt-card-foreground: #0a0a0a;
+    --mt-canvas-base: #ffffff;
+    --mt-muted: #f5f5f5;
+    --mt-muted-foreground: #737373;
+    --mt-secondary: #f5f5f5;
+    --mt-secondary-foreground: #171717;
+    --mt-accent: #f5f5f5;
+    --mt-accent-foreground: #171717;
+    --mt-border-base: #e5e5e5;
+    --mt-input: #e5e5e5;
+    --mt-content-bg: #ffffff;
+    --mt-canvas: #ffffff;
+    --mt-content-bg-accent: #f5f5f5;
+    --mt-card-matte: #fafafa;
+    --mt-popover: #ffffff;
+    --mt-hover: #f5f5f5;
+    --mt-selected: #f5f5f5;
+    --mt-topbar-fg: #0a0a0a;
+    --mt-field-bg: transparent;
+    --mt-focus-border: #a1a1a1;
+    --mt-focus-ring: rgba(161, 161, 161, 0.5);
+    --mt-placeholder: #737373;
+    --mt-stitch-bg: #ffffff;
+    // inset frame
+    --sc-inset-gap: 0.5rem;
+    --sc-inset-radius: 0.875rem;
+    --sc-inset-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+}
+html[data-mt-theme][data-mt-scheme="dark"]:not(#mt-np) {
+    --mt-background: #0a0a0a;
+    --mt-foreground: #fafafa;
+    --mt-card: #0a0a0a;           // the page and its panels share one surface; hairlines separate them
+    --mt-card-foreground: #fafafa;
+    --mt-canvas-base: #0a0a0a;
+    --mt-muted: #262626;
+    --mt-muted-foreground: #a1a1a1;
+    --mt-secondary: #262626;
+    --mt-secondary-foreground: #fafafa;
+    --mt-accent: #262626;
+    --mt-accent-foreground: #fafafa;
+    --mt-border-base: rgba(255, 255, 255, 0.1);
+    --mt-input: rgba(255, 255, 255, 0.15);
+    --mt-content-bg: #0a0a0a;
+    --mt-canvas: #0a0a0a;
+    --mt-content-bg-accent: #171717;
+    --mt-card-matte: #121212;
+    --mt-popover: #171717;
+    --mt-hover: #262626;
+    --mt-selected: #262626;
+    --mt-topbar-fg: #fafafa;
+    --mt-field-bg: rgba(255, 255, 255, 0.045);
+    --mt-focus-border: #737373;
+    --mt-focus-ring: rgba(115, 115, 115, 0.5);
+    --mt-placeholder: #a1a1a1;
+    --mt-stitch-bg: #0a0a0a;
+    --sc-inset-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+// Inset frame (desktop): the client sits in a rounded card on the sidebar colour.
+@media (min-width: $mt-sc-desktop) {
+    html[data-mt-theme][data-mt-sidebar-style="classic"]:not(.mt-fullscreen) {
+        .o_mt_sidebar[data-style="classic"] .mt-sc { border-inline-end: 0; }
+        .o_web_client {
+            padding: var(--sc-inset-gap) var(--sc-inset-gap) var(--sc-inset-gap) calc(var(--mt-sb-offset)) !important;
+            background-color: var(--mt-sidebar-bg) !important;
+            background-image: none !important;
+            background-clip: border-box !important;
+        }
+        // the header: top of the card, hairline under it
+        .o_web_client > .o_navbar {
+            position: relative;
+            z-index: 1;
+            padding: 0 !important;
+            border-radius: var(--sc-inset-radius) var(--sc-inset-radius) 0 0;
+            background: var(--mt-content-bg) !important;
+            box-shadow: var(--sc-inset-shadow);
+            clip-path: inset(-6px -6px 0 -6px round var(--sc-inset-radius) var(--sc-inset-radius) 0 0);
+            .o_main_navbar {
+                border: 0 !important;
+                border-bottom: 1px solid var(--mt-border) !important;
+                border-radius: var(--sc-inset-radius) var(--sc-inset-radius) 0 0;
+                background: var(--mt-content-bg) !important;
+                box-shadow: none !important;
+            }
+        }
+        // the page: rest of the card
+        .o_web_client > .o_action_manager {
+            min-height: 0;
+            border-radius: 0 0 var(--sc-inset-radius) var(--sc-inset-radius);
+            background: var(--mt-content-bg) !important;
+            box-shadow: var(--sc-inset-shadow);
+            clip-path: inset(0 -6px -6px -6px round 0 0 var(--sc-inset-radius) var(--sc-inset-radius));
+            overflow: hidden;
+        }
+        // no second frame inside the card (the "Content frame: card" option)
+        &[data-mt-content-frame="card"] .o_web_client > .o_action_manager {
+            padding: 0 !important;
+            > .o_action {
+                border: 0 !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                background: var(--mt-content-bg) !important;
+            }
+            > .o_action > .o_control_panel { border-radius: 0 !important; }
+        }
+        // floating top bar option does not apply inside the card
+        &[data-mt-topbar-style="floating"] .o_navbar { padding: 0 !important; }
+    }
+    // placeholder under the sidebar before it mounts: the sidebar colour
+    html[data-mt-theme][data-mt-sidebar-style="classic"] body::before { background: var(--mt-sidebar-bg); }
+}
+
+// Internal-note composers (CRM and the other modern apps): the same neutral field as
+// "Send message", no warning tint; the "Internal" hint under it already says it.
+html[data-mt-theme]:not(#mt-np) [class*="-compose--note"] {
+    background: var(--mt-card);
+    border-color: var(--mt-input);
+}
+
+// Dashboards of the modern apps: no brand glow behind the page and no tinted
+// "featured" KPI card; the brand colour stays on its icon, border, charts and bars.
+html[data-mt-theme]:not(#mt-np) {
+    .od-page { background-image: none !important; }
+    .od-kpi--featured { background-image: none !important; background-color: var(--mt-card) !important; }
+}

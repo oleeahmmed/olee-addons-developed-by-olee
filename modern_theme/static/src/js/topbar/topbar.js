@@ -34,7 +34,8 @@ export class MtTopbarStart extends Component {
     setup() {
         this.menu = useService("menu");
         this.ui = useState(useService("ui"));
-        this.theme = useState(useService("mt_theme").state);
+        this.themeService = useService("mt_theme");
+        this.theme = useState(this.themeService.state);
         this.state = useState({ rev: 0 });
         const refresh = () => this.state.rev++;
         useBus(this.env.bus, "MENUS:APP-CHANGED", refresh);
@@ -103,6 +104,33 @@ export class MtTopbarStart extends Component {
     toggleSidebar() {
         this.env.bus.trigger("MT_SIDEBAR:TOGGLE");
     }
+    /** All apps, for the apps menu that is always in the top bar. */
+    get apps() {
+        this.state.rev;
+        return this.menu.getApps();
+    }
+    isCurrentApp(item) {
+        return item.id === this.app?.id;
+    }
+    appHref(app) {
+        return `/odoo/${app.actionPath || "action-" + app.actionID}`;
+    }
+    async openApp(app, ev) {
+        if (ev && (ev.ctrlKey || ev.metaKey)) {
+            return;
+        }
+        ev?.preventDefault();
+        await this.menu.selectMenu(app);
+    }
+    /** Classic (shadcn) style: the collapse button sits in the top bar, like shadcn's SidebarTrigger. */
+    get showCollapse() {
+        return !this.ui.isSmall && (this.theme.values.sidebar_style || "classic") === "classic";
+    }
+    toggleCollapse() {
+        const collapsed = !this.themeService.isCollapsed();
+        this.env.bus.trigger("MT_SIDEBAR:COLLAPSE", { collapsed });
+        this.state.rev++;
+    }
     openSearch() {
         openCommandPalette(this.env);
     }
@@ -126,6 +154,7 @@ export class MtThemeSwitcher extends Component {
         this.swatches = PRESET_SWATCHES;
         this.styles = [
             ["classic", _t("Classic")],
+            ["tree", _t("Tree")],
             ["rail", _t("Rail")],
             ["floating", _t("Floating")],
         ];

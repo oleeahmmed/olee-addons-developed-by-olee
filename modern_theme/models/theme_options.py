@@ -62,7 +62,8 @@ BORDERS = [("none", "None"), ("subtle", "Subtle"), ("normal", "Normal"), ("stron
 SHADOWS = [("none", "None"), ("sm", "Soft"), ("md", "Medium"), ("lg", "Strong")]
 DENSITIES = [("compact", "Compact"), ("comfortable", "Comfortable"), ("spacious", "Spacious")]
 SIDEBAR_STYLES = [
-    ("classic", "Classic tree"),
+    ("classic", "Classic"),
+    ("tree", "Tree"),
     ("rail", "Icon rail + panel"),
     ("floating", "Floating glass"),
 ]

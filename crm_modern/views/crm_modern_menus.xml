@@ -2,14 +2,14 @@
 <odoo>
     <!--
         No app of its own: everything lives inside Odoo's CRM app (crm.crm_menu_root).
-        Home is a top-level page. Everyday work is two sidebar groups:
-        CRM (Campaigns, Leads, Pipeline, Activities) and Sales (Quotations,
-        Sales Orders, Customers, Dashboard). Team, Reporting and Configuration
+        The Dashboard is the first top-level page (the app opens on it). Everyday work
+        is two sidebar groups: CRM (Campaigns first, Leads, Pipeline, Activities) and
+        Sales (Quotations, Sales Orders, Customers). Team, Reporting and Configuration
         stay grouped for the top-bar dropdowns.
         Visibility comes from Odoo's groups (CRM app rights, CRM Settings).
     -->
-    <!-- "My Day": the salesperson's own follow-ups and open deals (the owner dashboard is under Sales) -->
-    <menuitem id="menu_home" name="My Day" parent="crm.crm_menu_root" action="action_home" sequence="-110"/>
+    <!-- Dashboard first: opening the CRM app goes straight to it, like the other modern apps. -->
+    <menuitem id="menu_dashboard" name="Dashboard" parent="crm.crm_menu_root" action="action_dashboard" sequence="-120"/>
 
     <menuitem id="menu_marketing" name="CRM" parent="crm.crm_menu_root" sequence="-100" groups="sales_team.group_sale_salesman" active="True"/>
     <menuitem id="menu_campaigns" name="Campaigns" parent="menu_marketing" action="action_campaigns" sequence="1" groups="sales_team.group_sale_salesman"/>
@@ -22,7 +22,6 @@
     <menuitem id="menu_quotations" name="Quotations" parent="menu_sales" action="action_quotations" sequence="1" groups="sales_team.group_sale_salesman"/>
     <menuitem id="menu_sale_orders" name="Sales Orders" parent="menu_sales" action="action_sale_orders" sequence="2" groups="sales_team.group_sale_salesman"/>
     <menuitem id="menu_customers" name="Customers" parent="menu_sales" action="action_customers" sequence="3" groups="sales_team.group_sale_salesman"/>
-    <menuitem id="menu_dashboard" name="Dashboard" parent="menu_sales" action="action_dashboard" sequence="4"/>
 
     <menuitem id="menu_users" name="Users" parent="crm.crm_menu_root" action="action_users" sequence="-80" groups="base.group_erp_manager"/>
 

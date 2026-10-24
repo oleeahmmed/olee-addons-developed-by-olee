@@ -14,8 +14,10 @@ html[data-mt-sidebar-style] {
     --mt-sb-offset: 0px;
 }
 @media (min-width: $mt-desktop) {
-    html[data-mt-sidebar-style="classic"] { --mt-sb-offset: var(--mt-sb-w); }
-    html[data-mt-sidebar-style="classic"][data-mt-sidebar-collapsed="1"] { --mt-sb-offset: var(--mt-sb-collapsed-w); }
+    html[data-mt-sidebar-style="classic"],
+    html[data-mt-sidebar-style="tree"] { --mt-sb-offset: var(--mt-sb-w); }
+    html[data-mt-sidebar-style="classic"][data-mt-sidebar-collapsed="1"],
+    html[data-mt-sidebar-style="tree"][data-mt-sidebar-collapsed="1"] { --mt-sb-offset: var(--mt-sb-collapsed-w); }
 
     html[data-mt-sidebar-style="rail"] { --mt-sb-offset: calc(var(--mt-sb-rail-w) + var(--mt-sb-panel-w)); }
     html[data-mt-sidebar-style="rail"][data-mt-sb-pinned="0"],
@@ -233,10 +235,12 @@ html[data-mt-sidebar-style] .o_main_navbar {
 // The sidebar already shows the app name in the classic/floating styles.
 @media (min-width: $mt-desktop) {
     html[data-mt-sidebar-style="classic"]:not([data-mt-sidebar-collapsed="1"]) .mt-topbar-app,
+    html[data-mt-sidebar-style="tree"]:not([data-mt-sidebar-collapsed="1"]) .mt-topbar-app,
     html[data-mt-sidebar-style="rail"][data-mt-sb-panel="1"] .mt-topbar-app {
         display: none;
     }
     html[data-mt-sidebar-style="classic"]:not([data-mt-sidebar-collapsed="1"]) .mt-topbar-search,
+    html[data-mt-sidebar-style="tree"]:not([data-mt-sidebar-collapsed="1"]) .mt-topbar-search,
     html[data-mt-sidebar-style="rail"][data-mt-sb-panel="1"] .mt-topbar-search {
         margin-inline-start: 0;
     }
@@ -251,6 +255,71 @@ html[data-mt-sidebar-style] .o_main_navbar {
         border-color: transparent;
         background: transparent;
         .mt-topbar-search-text, kbd { display: none; }
+    }
+}
+
+// Icon buttons at the start of the top bar: sidebar toggle (classic style) and the
+// apps menu, which is always there whatever the sidebar style.
+.mt-topbar-iconbtn {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: 0;
+    border-radius: calc(var(--mt-radius-control, 0.5rem) - 2px);
+    background: transparent;
+    color: var(--mt-foreground);
+    transition: background var(--mt-duration) var(--mt-ease);
+    .mt-lucide { width: 1rem; height: 1rem; }
+    &:hover, &.show, &[aria-expanded="true"] { background: var(--mt-hover); }
+    &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--mt-ring); }
+}
+.mt-topbar-start > .o-dropdown { flex: 0 0 auto; }
+.mt-topbar-collapse + .o-dropdown, .mt-topbar-collapse + .mt-topbar-apps { margin-inline-start: -0.25rem; }
+.mt-topbar-apps-menu {
+    width: #{"min(26rem, calc(100vw - 1rem))"};
+    padding: 0.375rem !important;
+    border: 1px solid var(--mt-border-base) !important;
+    border-radius: var(--mt-radius-lg) !important;
+    background: var(--mt-popover) !important;
+    box-shadow: var(--mt-shadow-lg) !important;
+    .mt-apps-head {
+        padding: 0.375rem 0.5rem 0.25rem;
+        color: var(--mt-muted-foreground);
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+    .mt-apps-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.125rem;
+        max-height: #{"min(28rem, calc(100vh - 6rem))"};
+        overflow-y: auto;
+    }
+    .mt-apps-item {
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4375rem;
+        padding: 0.75rem 0.25rem 0.625rem !important;
+        border-radius: calc(var(--mt-radius-lg) - 4px);
+        color: var(--mt-foreground);
+        font-size: 0.75rem;
+        text-align: center;
+        white-space: normal;
+        .mt-app-icon { --mt-app-icon-size: 2.25rem; }
+        .mt-apps-name {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            line-height: 1.25;
+            max-width: 100%;
+        }
+        &:hover, &.focus { background: var(--mt-hover); color: var(--mt-foreground); }
+        &.is-active { background: var(--mt-selected); font-weight: 600; }
     }
 }
 

@@ -14,6 +14,37 @@
             <button type="button" class="mt-topbar-burger" t-on-click="toggleSidebar" aria-label="Open menu" title="Menu">
                 <i class="fa fa-bars" aria-hidden="true"/>
             </button>
+            <button t-if="showCollapse" type="button" class="mt-topbar-iconbtn mt-topbar-collapse" t-on-click="toggleCollapse"
+                    aria-label="Toggle sidebar" title="Toggle sidebar">
+                <t t-call="modern_theme.Lucide"><t t-set="name" t-value="'panel-left'"/></t>
+            </button>
+            <!-- Apps menu: always in the top bar, opens any app -->
+            <Dropdown position="'bottom-start'" menuClass="'mt-topbar-apps-menu'">
+                <button type="button" class="mt-topbar-iconbtn mt-topbar-apps" aria-label="Apps" title="Apps">
+                    <t t-call="modern_theme.Lucide"><t t-set="name" t-value="'layout-grid'"/></t>
+                </button>
+                <t t-set-slot="content">
+                    <div class="mt-apps-head">Apps</div>
+                    <div class="mt-apps-grid">
+                        <t t-foreach="apps" t-as="item" t-key="item.id">
+                            <DropdownItem class="'mt-apps-item' + (isCurrentApp(item) ? ' is-active' : '')"
+                                          onSelected="() => this.openApp(item)"
+                                          attrs="{ href: appHref(item), title: item.name, 'data-menu-xmlid': item.xmlid }">
+                                <t t-set="ic" t-value="appIcon(item)"/>
+                                <span class="mt-app-icon"
+                                      t-att-class="{ 'is-generated': ic.generated, 'is-font': ic.iconClass }"
+                                      t-att-style="ic.generated ? '--mt-app-hue:' + ic.generated.hue : (ic.iconClass ? 'background:' + ic.backgroundColor + ';color:' + ic.color : '')"
+                                      aria-hidden="true">
+                                    <img t-if="ic.src" t-att-src="ic.src" alt="" loading="lazy"/>
+                                    <i t-elif="ic.iconClass" t-att-class="ic.iconClass"/>
+                                    <t t-else="" t-esc="ic.generated.initials"/>
+                                </span>
+                                <span class="mt-apps-name" t-esc="item.name"/>
+                            </DropdownItem>
+                        </t>
+                    </div>
+                </t>
+            </Dropdown>
             <div t-if="app" class="mt-topbar-app">
                 <t t-call="modern_theme.AppIcon"/>
                 <span class="mt-topbar-app-name" t-esc="app.name"/>

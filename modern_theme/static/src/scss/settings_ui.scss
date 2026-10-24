@@ -151,6 +151,16 @@
         i { height: 4px; background: var(--mt-muted); }
     }
 }
+// classic (shadcn): neutral grey sidebar, grey active row
+.mt-sbp-classic .mt-sbp-side {
+    background: #f7f6f6;
+    i:nth-child(2) { background: #d4d4d4; opacity: 1; }
+}
+html[data-mt-scheme="dark"] .mt-sbp-classic .mt-sbp-side { background: #171717; i:nth-child(2) { background: #404040; } }
+// tree: nested rows on a guide line
+.mt-sbp-tree .mt-sbp-side {
+    i:nth-child(n+3) { margin-inline-start: 5px; box-shadow: -3px 0 0 -2px var(--mt-border-base); }
+}
 .mt-sbp-rail .mt-sbp-side { width: 12%; align-items: center; i { width: 6px; height: 6px; border-radius: 2px; } }
 .mt-sbp-floating {
     .mt-sbp-side { margin: 2px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12), 0 0 0 1px var(--mt-border-base); i { border-radius: 999px; } }
