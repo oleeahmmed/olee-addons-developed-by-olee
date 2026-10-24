@@ -191,6 +191,29 @@ export class AccountingDashboard extends Component {
         }
         return this.openLines(item.label, [["account_id", "=", item.id], ...this.periodDomain]);
     }
+    // ---------- shadcn block: the latest entries table ----------
+    get entryColumns() {
+        return [
+            { key: "number", label: _t("Entry"), type: "person" },
+            { key: "date", label: _t("Date"), type: "muted" },
+            { key: "partner", label: _t("Partner") },
+            { key: "ref", label: _t("Reference"), type: "muted" },
+            { key: "kind", label: _t("Type"), type: "badge" },
+            { key: "amount", label: _t("Amount"), type: "num", align: "end" },
+        ];
+    }
+    get entryRows() {
+        return this.state.data.recent.map((o) => ({
+            id: o.id,
+            number: o.name,
+            number_sub: o.journal_id ? o.journal_id[1] : "",
+            date: shortDate(o.date),
+            partner: o.partner_id ? o.partner_id[1] : "",
+            ref: o.ref || "",
+            kind: this.entryLabel(o), kind_tone: "slate",
+            amount: this.m(o.amount_total_signed),
+        }));
+    }
     openMove(o) {
         return openFullForm(this.action, "account.move", o.id);
     }

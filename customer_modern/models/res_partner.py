@@ -130,7 +130,7 @@ class ResPartner(models.Model):
                                  'icon': 'fa-exclamation-circle', 'label': self.env._('Customers with overdue invoices'),
                                  'amount': finance['overdue']})
 
-        recent = self.search_read([], LIST_FIELDS, order='create_date desc, id desc', limit=8)
+        recent = self.search_read([], LIST_FIELDS, order='create_date desc, id desc', limit=50)
         currency = self.env.company.currency_id
         return {
             'currency_id': currency.id,

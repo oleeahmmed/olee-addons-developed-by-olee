@@ -103,7 +103,19 @@ export function generatedIcon(name) {
     return { initials, hue: hash };
 }
 
+// Odoo's system apps ship single-colour glyph icons (grey tiles in dark mode): the theme
+// shows its own colour icons instead, matching the other apps. Nothing is written to Odoo.
+const APP_ICON_OVERRIDES = {
+    "mail.menu_root_discuss": "discuss",
+    "base.menu_management": "apps",
+    "base.menu_administration": "settings",
+};
+
 export function appIcon(app) {
+    const own = APP_ICON_OVERRIDES[app.xmlid];
+    if (own) {
+        return { src: `/modern_theme/static/src/img/apps/${own}.svg` };
+    }
     const data = app.webIconData;
     if (data && !data.endsWith(DEFAULT_APP_ICON)) {
         return { src: data };

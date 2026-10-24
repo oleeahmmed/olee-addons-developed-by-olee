@@ -156,32 +156,13 @@
                     <section class="od-card">
                         <div class="od-card-head">
                             <div>
-                                <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-list-ul" aria-hidden="true"/></span> Latest contacts</h3>
-                                <p>The most recently added</p>
+                                <h3>Latest contacts</h3>
+                                <p>The most recently added · click one to open it</p>
                             </div>
                             <button type="button" class="od-link" t-on-click="() => this.go('customer_modern.action_contacts')">All contacts <i class="fa fa-angle-right" aria-hidden="true"/></button>
                         </div>
                         <div class="od-card-body od-card-body--flush">
-                            <div t-if="!d.recent.length" class="od-empty"><i class="fa fa-address-book-o" aria-hidden="true"/><strong>No contact yet</strong></div>
-                            <div t-else="" class="od-table-wrap">
-                                <table class="od-table">
-                                    <thead><tr><th>Name</th><th>Company</th><th>Email</th><th>Phone</th><th>Location</th><th>Added</th></tr></thead>
-                                    <tbody>
-                                        <t t-foreach="d.recent" t-as="p" t-key="p.id">
-                                            <tr class="od-clickable" t-on-click="() => this.openPartner(p)">
-                                                <td class="od-cell-main">
-                                                    <span class="od-person"><img t-attf-src="/web/image/res.partner/{{ p.id }}/avatar_128" alt="" loading="lazy"/><t t-esc="p.name"/></span>
-                                                </td>
-                                                <td t-esc="p.is_company ? 'Company' : (p.parent_id ? p.parent_id[1] : '—')"/>
-                                                <td t-esc="p.email or '—'"/>
-                                                <td class="od-num" t-esc="p.phone or '—'"/>
-                                                <td t-esc="location(p)"/>
-                                                <td class="text-muted" t-esc="shortDate(p.create_date)"/>
-                                            </tr>
-                                        </t>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <OdTable columns="contactColumns" rows="contactRows" pageSize="7" unit="'contacts'" onRowClick.bind="openPartner" emptyText="'No contact yet'"/>
                         </div>
                     </section>
                 </div>

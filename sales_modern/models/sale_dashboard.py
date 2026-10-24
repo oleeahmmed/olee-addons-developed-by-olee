@@ -217,7 +217,15 @@ class SaleOrder(models.Model):
                               'icon': 'fa-exclamation-circle', 'label': self.env._('Overdue customer invoices'),
                               'amount': finance['overdue']})
 
-        recent = self.search_read([('state', '=', 'sale')] + team, LIST_FIELDS, order='date_order desc, id desc', limit=7)
+        recent = self.search_read([('state', '=', 'sale')] + team, LIST_FIELDS, order='date_order desc, id desc', limit=50)
+        # order status tiles (shadcn "Track order status"): standard sale.order states
+        status = {
+            'draft': order_count([('state', '=', 'draft')]),
+            'sent': order_count([('state', '=', 'sent')]),
+            'sale': orders,
+            'to_invoice': to_invoice_count,
+            'cancel': order_count([('state', '=', 'cancel'), ('write_date', '>=', as_dt(start))]),
+        }
         teams = self.env['crm.team'].search_read([], ['name'], order='sequence, name')
         currency = self.env.company.currency_id
         return {
@@ -242,6 +250,7 @@ class SaleOrder(models.Model):
             'expiring': expiring,
             'finance': finance,
             'recent': recent,
+            'status': status,
             'company': self.env.company.name,
         }
 

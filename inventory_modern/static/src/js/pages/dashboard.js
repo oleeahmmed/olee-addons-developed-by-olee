@@ -155,6 +155,28 @@ export class InventoryDashboard extends Component {
             target: "current",
         });
     }
+    // ---------- shadcn block: the recently done transfers table ----------
+    get doneColumns() {
+        return [
+            { key: "ref", label: _t("Reference"), type: "person" },
+            { key: "type", label: _t("Type"), type: "badge" },
+            { key: "source", label: _t("Source"), type: "muted" },
+            { key: "date", label: _t("Done on"), type: "muted" },
+            { key: "status", label: _t("Status"), type: "badge" },
+        ];
+    }
+    get doneRows() {
+        return this.state.data.recent.map((p) => ({
+            id: p.id,
+            ref: p.name,
+            ref_sub: p.partner_id ? p.partner_id[1] : "",
+            type: p.picking_type_id ? p.picking_type_id[1] : "",
+            type_tone: this.codeInfo[p.picking_type_code] ? this.codeInfo[p.picking_type_code].tone : "slate",
+            source: p.origin || "",
+            date: this.shortDateTime(p.date_done),
+            status: this.stateLabel(p), status_tone: this.stateTone(p),
+        }));
+    }
     openPicking(p) {
         return openFullForm(this.action, "stock.picking", p.id);
     }

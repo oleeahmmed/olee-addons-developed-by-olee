@@ -217,16 +217,13 @@
                     <section class="od-card">
                         <div class="od-card-head">
                             <div>
-                                <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-check" aria-hidden="true"/></span> Recently done</h3>
-                                <p>The latest validated transfers</p>
+                                <h3>Recently done</h3>
+                                <p>The latest validated transfers · click one to open it</p>
                             </div>
                             <button type="button" class="od-link" t-on-click="() => this.go('inventory_modern.action_moves')">Moves history <i class="fa fa-angle-right" aria-hidden="true"/></button>
                         </div>
                         <div class="od-card-body od-card-body--flush">
-                            <div t-if="!d.recent.length" class="od-empty"><i class="fa fa-history" aria-hidden="true"/><strong>No transfer validated yet</strong></div>
-                            <div t-else="" class="od-table-wrap">
-                                <t t-call="inventory_modern.PickingTable"><t t-set="rows" t-value="d.recent"/><t t-set="dateField" t-value="'date_done'"/></t>
-                            </div>
+                            <OdTable columns="doneColumns" rows="doneRows" pageSize="7" unit="'transfers'" onRowClick.bind="openPicking" emptyText="'No transfer validated yet'"/>
                         </div>
                     </section>
                 </div>

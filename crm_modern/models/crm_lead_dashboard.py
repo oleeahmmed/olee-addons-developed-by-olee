@@ -228,9 +228,69 @@ class CrmLead(models.Model):
 
         campaigns = self._crm_modern_campaign_stats(team_id, limit=6)
 
+        # ---------- goal: won revenue against the team target (Sales' monthly target) ----------
+        goal = None
+        Team = self.env['crm.team']
+        if 'invoiced_target' in Team._fields:
+            teams_for_target = Team.search([('id', '=', int(team_id))] if team_id else [])
+            months_in = {'month': 1, 'quarter': 3, 'year': 12}.get(period, 1)
+            target = sum(teams_for_target.mapped('invoiced_target')) * months_in
+            if target:
+                goal = {'kind': 'target', 'target': target, 'value': won, 'pct': round(won * 100 / target, 1)}
+        if goal is None and won_prev:
+            goal = {'kind': 'previous', 'target': won_prev, 'value': won, 'pct': round(won * 100 / won_prev, 1)}
+
+        # ---------- my tasks: my planned activities on leads & deals ----------
+        my_acts = Activity.search_read(
+            act + [('user_id', '=', self.env.uid)],
+            ['summary', 'activity_type_id', 'res_id', 'res_name', 'date_deadline', 'note'],
+            order='date_deadline asc', limit=6)
+        lead_priority = {r['id']: r['priority'] for r in Lead.browse(
+            [a['res_id'] for a in my_acts]).exists().read(['priority'])}
+        tasks = []
+        for a in my_acts:
+            prio = int(lead_priority.get(a['res_id']) or 0)
+            tasks.append({
+                'id': a['id'], 'lead_id': a['res_id'],
+                'title': a['summary'] or (a['activity_type_id'] and a['activity_type_id'][1]) or a['res_name'],
+                'sub': a['res_name'] or '',
+                'priority': 'high' if prio >= 2 else ('medium' if prio == 1 else 'low'),
+                'date_deadline': fields.Date.to_string(a['date_deadline']),
+            })
+
+        # ---------- latest leads & deals (the table) ----------
+        recent = self.with_context(active_test=True).search_read(
+            team, ['name', 'partner_name', 'contact_name', 'email_from', 'partner_id', 'source_id', 'stage_id',
+                   'won_status', 'type', 'expected_revenue', 'create_date', 'user_id'],
+            order='create_date desc, id desc', limit=50)
+        leads = []
+        for r in recent:
+            if r['type'] == 'lead':
+                status, tone = self.env._('Lead'), 'sky'
+            elif r['won_status'] == 'won':
+                status, tone = self.env._('Won'), 'green'
+            elif r['won_status'] == 'lost':
+                status, tone = self.env._('Lost'), 'rose'
+            else:
+                status, tone = (r['stage_id'] and r['stage_id'][1]) or self.env._('Open'), 'blue'
+            leads.append({
+                'id': r['id'],
+                'name': r['name'],
+                'name_sub': r['email_from'] or r['contact_name'] or '',
+                'company': r['partner_name'] or (r['partner_id'] and r['partner_id'][1]) or '',
+                'source': r['source_id'] and r['source_id'][1] or '',
+                'status': status, 'status_tone': tone,
+                'amount': r['expected_revenue'] or 0.0,
+                'date': fields.Date.to_string(r['create_date'].date()) if r['create_date'] else '',
+                'user': r['user_id'] and r['user_id'][1] or '',
+            })
+
         currency = self.env.company.currency_id
         return {
             'campaigns': campaigns,
+            'goal': goal,
+            'tasks': tasks,
+            'leads': leads,
             'currency_id': currency.id,
             'lakh': currency.name == 'BDT',
             'period': period if period in PERIODS else 'month',

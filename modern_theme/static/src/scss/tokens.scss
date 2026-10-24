@@ -159,7 +159,8 @@ html[data-mt-theme] {
     --mt-selected: color-mix(in srgb, var(--mt-primary) 9%, var(--mt-card));
 
     // Surfaces
-    --mt-content-bg: color-mix(in srgb, var(--mt-canvas-base) 97%, var(--mt-primary));
+    // shadcn: the page is --background itself, never tinted by the preset colour
+    --mt-content-bg: var(--mt-canvas-base);
     --mt-canvas: var(--mt-content-bg);
     --mt-content-bg-accent: color-mix(in srgb, var(--mt-content-bg) 92%, var(--mt-foreground));
     --mt-card-matte: color-mix(in srgb, var(--mt-card) 92%, var(--mt-muted));
@@ -178,22 +179,24 @@ html[data-mt-theme] {
     --mt-shadow-lg: 0 14px 34px -10px rgba(15, 23, 42, 0.22);
     --mt-shadow-xl: 0 24px 56px -14px rgba(15, 23, 42, 0.30);
 
-    // Top bar (style option below may override)
+    // Top bar (style option below may override): shadcn header = the page colour + hairline
     --mt-chrome-bg: var(--mt-card);
-    --mt-topbar-bg: var(--mt-card);
+    --mt-topbar-bg: var(--mt-background);
     --mt-topbar-fg: var(--mt-foreground);
     --mt-topbar-border: var(--mt-border);
 
     // Sidebar (background option below may override)
-    --mt-sidebar-bg: var(--mt-card);
+    // shadcn sidebar tokens: --sidebar #f7f6f6 / #171717, --sidebar-foreground #646464 / #b0b0b0,
+    // hover = --sidebar-accent, active = the preset colour at 15% (shadcnuikit presets)
+    --mt-sidebar-bg: var(--mt-sidebar-base, var(--mt-card));
     --mt-sidebar-bg-image: none;
     --mt-sidebar-bg-2: var(--mt-muted);
-    --mt-sidebar-fg: var(--mt-foreground);
+    --mt-sidebar-fg: var(--mt-sidebar-fg-base, var(--mt-foreground));
     --mt-sidebar-muted-fg: var(--mt-muted-foreground);
-    --mt-sidebar-accent: var(--mt-hover);
+    --mt-sidebar-accent: var(--mt-sidebar-accent-base, var(--mt-hover));
     --mt-sidebar-accent-fg: var(--mt-foreground);
-    --mt-sidebar-active-bg: var(--mt-primary-soft);
-    --mt-sidebar-active-fg: var(--mt-primary-text);
+    --mt-sidebar-active-bg: color-mix(in srgb, var(--mt-primary) 15%, transparent);
+    --mt-sidebar-active-fg: var(--mt-foreground);
     --mt-sidebar-indicator: var(--mt-brand-accent);
     --mt-sidebar-primary: var(--mt-primary);
     --mt-sidebar-primary-fg: var(--mt-primary-foreground);
@@ -269,10 +272,10 @@ html[data-mt-theme="once"] {
     --mt-canvas: var(--mt-canvas-base);
     --mt-hover: color-mix(in srgb, var(--mt-foreground) 4.5%, transparent);
     --mt-selected: color-mix(in srgb, var(--mt-foreground) 6%, var(--mt-card));
-    --mt-sidebar-active-bg: color-mix(in srgb, var(--mt-foreground) 6.5%, transparent);
+    --mt-sidebar-active-bg: var(--mt-sidebar-accent-base);   // shadcn --sidebar-accent
     --mt-sidebar-active-fg: var(--mt-foreground);
     --mt-sidebar-indicator: var(--mt-primary);
-    --mt-ring: color-mix(in srgb, var(--mt-primary) 35%, transparent);
+    --mt-ring: color-mix(in srgb, var(--mt-ring-base) 50%, transparent);
     // shadcn: neutral focus (grey border + soft grey ring), the brand stays for actions
     --mt-focus-border: color-mix(in srgb, var(--mt-foreground) 45%, var(--mt-card));
     --mt-focus-ring: color-mix(in srgb, var(--mt-foreground) 12%, transparent);

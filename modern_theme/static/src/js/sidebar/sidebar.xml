@@ -321,6 +321,38 @@
                         </t>
                     </ul>
                 </div>
+                <!-- Every other app: collapsible items, their everyday pages as sub-items -->
+                <div t-if="currentApp and otherApps.length" class="mt-sc-group mt-sc-apps">
+                    <div class="mt-sc-label">Apps</div>
+                    <ul class="mt-sc-menu" role="list">
+                        <t t-foreach="otherApps" t-as="app" t-key="app.id">
+                            <li class="mt-sc-item" t-att-class="{ 'is-open': !collapsed and isAppOpen(app) }">
+                                <a class="mt-sc-btn mt-sb-focusable"
+                                   t-attf-href="/odoo/{{ app.actionPath or ('action-' + app.actionID) }}"
+                                   t-att-title="app.name"
+                                   t-att-data-menu-xmlid="app.xmlid"
+                                   t-att-aria-expanded="appHasMenus(app) ? (isAppOpen(app) ? 'true' : 'false') : undefined"
+                                   t-on-click="(ev) => this.onAppItem(app, ev)"
+                                   t-on-mouseenter="(ev) => this.collapsed and this.openFlyout(ev, { app })">
+                                    <t t-call="modern_theme.AppIcon"/>
+                                    <span class="mt-sc-text" t-esc="app.name"/>
+                                    <t t-if="appHasMenus(app)" t-call="modern_theme.Lucide"><t t-set="name" t-value="'chevron-right'"/><t t-set="cls" t-value="'mt-sc-chevron'"/></t>
+                                </a>
+                                <ul t-if="!collapsed and isAppOpen(app)" class="mt-sc-sub" role="group">
+                                    <t t-foreach="appLeaves(app)" t-as="sub" t-key="sub.id">
+                                        <li class="mt-sc-sub-item">
+                                            <a class="mt-sc-sub-btn mt-sb-focusable" t-att-href="sub.href" t-att-title="sub.name"
+                                               t-att-data-menu-xmlid="sub.xmlid"
+                                               t-on-click="(ev) => this.openNode(sub, ev)">
+                                                <span class="mt-sc-text" t-esc="sub.name"/>
+                                            </a>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </li>
+                        </t>
+                    </ul>
+                </div>
                 <!-- No app open (home screen): the apps themselves -->
                 <div t-if="!currentApp" class="mt-sc-group">
                     <div class="mt-sc-label">Apps</div>

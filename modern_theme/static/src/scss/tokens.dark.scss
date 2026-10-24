@@ -18,12 +18,13 @@ html[data-mt-theme="custom"] {
 
 html[data-mt-theme] {
     color-scheme: dark;
-    --mt-field-bg: color-mix(in srgb, var(--mt-input) 30%, var(--mt-card));
+    --mt-field-bg: color-mix(in srgb, #ffffff 4.5%, var(--mt-card));   // shadcn dark:bg-input/30
     --mt-field-shadow: none;
     --mt-ring: color-mix(in srgb, var(--mt-primary) 50%, transparent);
     --mt-primary-soft: color-mix(in srgb, var(--mt-primary) 16%, var(--mt-card));
-    --mt-primary-hover: color-mix(in oklab, var(--mt-primary) 86%, #ffffff);
-    --mt-primary-active: color-mix(in oklab, var(--mt-primary) 76%, #ffffff);
+    // shadcn dark: hover = primary/90 over the page (a shade deeper, no glow)
+    --mt-primary-hover: color-mix(in srgb, var(--mt-primary) 90%, var(--mt-background));
+    --mt-primary-active: color-mix(in srgb, var(--mt-primary) 80%, var(--mt-background));
     --mt-success-soft: color-mix(in srgb, var(--mt-success) 16%, var(--mt-card));
     --mt-warning-soft: color-mix(in srgb, var(--mt-warning) 16%, var(--mt-card));
     --mt-destructive-soft: color-mix(in srgb, var(--mt-destructive) 16%, var(--mt-card));
@@ -32,10 +33,12 @@ html[data-mt-theme] {
     --mt-hover: color-mix(in srgb, var(--mt-foreground) 7%, transparent);
     --mt-selected: color-mix(in srgb, var(--mt-primary) 16%, var(--mt-card));
 
-    --mt-content-bg: color-mix(in srgb, var(--mt-canvas-base) 96%, var(--mt-primary));
-    --mt-content-bg-accent: color-mix(in srgb, var(--mt-content-bg) 90%, var(--mt-foreground));
-    --mt-card-matte: color-mix(in srgb, var(--mt-card) 88%, var(--mt-muted));
-    --mt-popover: color-mix(in srgb, var(--mt-card) 92%, var(--mt-foreground));
+    // shadcn dark surfaces, the same for every preset: page #0a0a0a, card / popover #171717
+    --mt-content-bg: var(--mt-canvas-base);
+    --mt-canvas: var(--mt-canvas-base);
+    --mt-content-bg-accent: var(--mt-card);
+    --mt-card-matte: #141414;
+    --mt-popover: var(--mt-card);
     --mt-overlay: color-mix(in srgb, #000000 60%, transparent);
     --mt-stitch-dot: color-mix(in srgb, var(--mt-foreground) 12%, transparent);
     --mt-scrollbar: color-mix(in srgb, var(--mt-foreground) 22%, transparent);
@@ -48,9 +51,14 @@ html[data-mt-theme] {
     --mt-shadow-xl: 0 28px 60px -14px rgba(0, 0, 0, 0.8);
 
     --mt-chrome-bg: var(--mt-card);
-    --mt-topbar-bg: var(--mt-card);
-    --mt-sidebar-bg: var(--mt-card);
-    --mt-sidebar-active-bg: var(--mt-primary-soft);
+    --mt-topbar-bg: var(--mt-background);
+    --mt-topbar-border: rgba(255, 255, 255, 0.1);
+    --mt-sidebar-bg: var(--mt-sidebar-base, var(--mt-card));
+    --mt-sidebar-fg: var(--mt-sidebar-fg-base, var(--mt-foreground));
+    --mt-sidebar-accent: var(--mt-sidebar-accent-base, var(--mt-hover));
+    --mt-sidebar-active-bg: color-mix(in srgb, var(--mt-primary) 15%, transparent);
+    --mt-sidebar-active-fg: #ffffff;
+    --mt-sidebar-border: rgba(255, 255, 255, 0.1);
 }
 // Option blocks re-declared so they still win over the derived block above.
 html[data-mt-border="subtle"] { --mt-border: color-mix(in srgb, var(--mt-border-base) 80%, transparent); }
@@ -85,22 +93,22 @@ html[data-mt-theme="custom"] {
     --mt-solid-fg: var(--mt-primary-foreground);
     --mt-solid-hover: var(--mt-primary-hover);
 }
-// Once UI preset, dark: near-black canvas, #151515 surfaces, hairline borders, no glow.
+// Default preset, dark: shadcn neutral (#0a0a0a page, #171717 cards, white/10% hairlines).
 html[data-mt-theme="once"] {
     --mt-content-bg: var(--mt-canvas-base);
     --mt-canvas: var(--mt-canvas-base);
-    --mt-popover: #1a1a1a;
-    --mt-card-matte: #121212;
+    --mt-popover: var(--mt-card);
+    --mt-card-matte: #141414;
     --mt-hover: color-mix(in srgb, var(--mt-foreground) 6%, transparent);
-    --mt-selected: color-mix(in srgb, var(--mt-foreground) 8%, var(--mt-card));
+    --mt-selected: var(--mt-muted);
     --mt-primary-soft: color-mix(in srgb, var(--mt-primary) 14%, var(--mt-card));
-    --mt-sidebar-active-bg: color-mix(in srgb, var(--mt-foreground) 8%, transparent);
+    --mt-sidebar-active-bg: var(--mt-sidebar-accent-base);   // shadcn --sidebar-accent #2c2c2c
     --mt-sidebar-active-fg: #ffffff;
     --mt-sidebar-indicator: var(--mt-primary);
-    --mt-ring: color-mix(in srgb, var(--mt-primary) 45%, transparent);
+    --mt-ring: color-mix(in srgb, var(--mt-ring-base) 50%, transparent);
     --mt-overlay: color-mix(in srgb, #000000 65%, transparent);
-    --mt-focus-border: color-mix(in srgb, var(--mt-foreground) 40%, var(--mt-card));
-    --mt-focus-ring: color-mix(in srgb, var(--mt-foreground) 14%, transparent);
-    --mt-field-bg: color-mix(in srgb, var(--mt-input) 30%, var(--mt-card));
+    --mt-focus-border: var(--mt-ring-base);
+    --mt-focus-ring: color-mix(in srgb, var(--mt-ring-base) 50%, transparent);
+    --mt-field-bg: color-mix(in srgb, #ffffff 4.5%, var(--mt-card));   // shadcn dark:bg-input/30
     --mt-field-shadow: none;
 }

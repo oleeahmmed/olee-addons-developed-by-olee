@@ -53,6 +53,17 @@
                                hint="k.open_quotes + ' waiting for the customer'" onClick="() => this.go('sales_modern.action_quotations')"/>
                     </section>
 
+                    <!-- order status (shadcn "Track order status") -->
+                    <section class="od-card od-status-card">
+                        <div class="od-card-head"><div>
+                            <h3>Track order status</h3>
+                            <p>Where your quotations and orders stand · click a tile to open them</p>
+                        </div></div>
+                        <div class="od-card-body">
+                            <OdStatusTiles items="statusTiles" onClick.bind="openStatus"/>
+                        </div>
+                    </section>
+
                     <!-- the year, and what needs attention -->
                     <div class="od-grid">
                         <section class="od-card od-span-8">
@@ -246,37 +257,13 @@
                     <section class="od-card">
                         <div class="od-card-head">
                             <div>
-                                <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-list-ul" aria-hidden="true"/></span> Latest orders</h3>
-                                <p>The most recent confirmed sales orders</p>
+                                <h3>Orders</h3>
+                                <p>The latest confirmed sales orders · click one to open it</p>
                             </div>
                             <button type="button" class="od-link" t-on-click="() => this.go('sales_modern.action_orders')">All orders <i class="fa fa-angle-right" aria-hidden="true"/></button>
                         </div>
                         <div class="od-card-body od-card-body--flush">
-                            <div t-if="!d.recent.length" class="od-empty"><i class="fa fa-shopping-cart" aria-hidden="true"/><strong>No confirmed orders yet</strong></div>
-                            <div t-else="" class="od-table-wrap">
-                                <table class="od-table">
-                                    <thead><tr><th>Order</th><th>Customer</th><th>Salesperson</th><th>Date</th><th>Invoice</th><th class="od-r">Untaxed</th><th class="od-r">Total</th></tr></thead>
-                                    <tbody>
-                                        <t t-foreach="d.recent" t-as="o" t-key="o.id">
-                                            <tr class="od-clickable" t-on-click="() => this.openOrder(o)">
-                                                <td class="od-cell-main" t-esc="o.name"/>
-                                                <td t-esc="o.partner_id ? o.partner_id[1] : '—'"/>
-                                                <td>
-                                                    <span t-if="o.user_id" class="od-person"><img t-attf-src="/web/image/res.users/{{ o.user_id[0] }}/avatar_128" alt="" loading="lazy"/><t t-esc="o.user_id[1]"/></span>
-                                                </td>
-                                                <td class="text-muted" t-esc="shortDate(o.date_order)"/>
-                                                <td>
-                                                    <span t-if="o.invoice_status === 'invoiced'" class="od-pill od-tone-green"><i class="fa fa-check" aria-hidden="true"/> Invoiced</span>
-                                                    <span t-elif="o.invoice_status === 'to invoice'" class="od-pill od-tone-violet">To invoice</span>
-                                                    <span t-else="" class="od-pill od-tone-slate">Nothing to invoice</span>
-                                                </td>
-                                                <td class="od-r od-num" t-esc="mr(o, o.amount_untaxed)"/>
-                                                <td class="od-r od-num" style="font-weight:650" t-esc="mr(o, o.amount_total)"/>
-                                            </tr>
-                                        </t>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <OdTable columns="orderColumns" rows="orderRows" pageSize="7" unit="'orders'" onRowClick.bind="openOrder" emptyText="'No confirmed orders yet'"/>
                         </div>
                     </section>
                 </div>

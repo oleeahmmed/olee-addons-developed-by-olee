@@ -119,6 +119,55 @@ export class InvoicingDashboard extends Component {
         return { tone: o.payment_state === "partial" ? "amber" : "violet", label: o.payment_state === "partial" ? _t("Partly paid") : _t("Not paid") };
     }
 
+    // ---------- shadcn blocks: invoice status tiles and the invoices table ----------
+    get statusTiles() {
+        const st = this.state.data.status || {};
+        return [
+            { key: "draft", label: _t("Drafts"), count: number(st.draft), sub: _t("to confirm"), tone: "slate", icon: "fa-pencil" },
+            { key: "not_paid", label: _t("Not paid"), count: number(st.not_paid), sub: _t("confirmed, nothing received"), tone: "violet", icon: "fa-file-text-o" },
+            { key: "partial", label: _t("Partly paid"), count: number(st.partial), sub: _t("something still due"), tone: "amber", icon: "fa-adjust" },
+            { key: "overdue", label: _t("Overdue"), count: number(st.overdue), sub: _t("past their due date"), tone: "rose", icon: "fa-exclamation-circle" },
+            { key: "paid", label: _t("Paid"), count: number(st.paid), sub: _t("invoiced this period"), tone: "green", icon: "fa-check" },
+        ];
+    }
+    openStatus(tile) {
+        const posted = [["move_type", "=", "out_invoice"], ["state", "=", "posted"]];
+        const [start] = this.state.data.range;
+        const domains = {
+            draft: [["move_type", "=", "out_invoice"], ["state", "=", "draft"]],
+            not_paid: [...posted, ["payment_state", "=", "not_paid"]],
+            partial: [...posted, ["payment_state", "=", "partial"]],
+            overdue: [...posted, ["payment_state", "in", ["not_paid", "partial"]], ["invoice_date_due", "<", this.state.data.today]],
+            paid: [...posted, ["payment_state", "in", ["paid", "in_payment"]], ["invoice_date", ">=", start]],
+        };
+        return this.openMoves(tile.label, domains[tile.key]);
+    }
+    get invoiceColumns() {
+        return [
+            { key: "customer", label: _t("Customer"), type: "person" },
+            { key: "date", label: _t("Date"), type: "muted" },
+            { key: "due", label: _t("Due"), type: "muted" },
+            { key: "status", label: _t("Status"), type: "badge" },
+            { key: "total", label: _t("Total"), type: "num", align: "end" },
+            { key: "residual", label: _t("Still due"), type: "num", align: "end" },
+        ];
+    }
+    get invoiceRows() {
+        return this.state.data.recent.map((o) => {
+            const pill = this.paymentPill(o);
+            return {
+                id: o.id, move_type: o.move_type,
+                customer: o.partner_id ? o.partner_id[1] : "—",
+                customer_sub: o.move_type === "out_refund" ? `${o.name} · ${_t("Credit note")}` : o.name,
+                date: shortDate(o.invoice_date),
+                due: shortDate(o.invoice_date_due),
+                status: pill.label, status_tone: pill.tone,
+                total: this.mr(o, o.amount_total),
+                residual: o.amount_residual ? this.mr(o, o.amount_residual) : "—",
+            };
+        });
+    }
+
     // ---------- navigation: Odoo's own lists and forms ----------
     openMoves(name, domain, moveType = "out_invoice") {
         return this.action.doAction({

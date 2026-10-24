@@ -184,7 +184,16 @@ class AccountMove(models.Model):
              'tone': 'danger', 'icon': 'fa-clock-o', 'label': self.env._('Overdue vendor bills')},
         ]
 
-        recent = self.search_read(posted(OUT_TYPES), LIST_FIELDS, order='invoice_date desc, id desc', limit=8)
+        recent = self.search_read(posted(OUT_TYPES), LIST_FIELDS, order='invoice_date desc, id desc', limit=50)
+        # invoice status tiles (shadcn "Track order status"): standard account.move states
+        status = {
+            'draft': count([('move_type', '=', 'out_invoice'), ('state', '=', 'draft')]),
+            'not_paid': count(posted(('out_invoice',)) + [('payment_state', '=', 'not_paid')]),
+            'partial': count(posted(('out_invoice',)) + [('payment_state', '=', 'partial')]),
+            'overdue': overdue_out_count,
+            'paid': count(posted(('out_invoice',)) + [('payment_state', 'in', ('paid', 'in_payment')),
+                                                     ('invoice_date', '>=', start), ('invoice_date', '<', end)]),
+        }
         currency = self.env.company.currency_id
         return {
             'currency_id': currency.id,
@@ -204,6 +213,7 @@ class AccountMove(models.Model):
             'creditors': top_partners(open_in, -1),
             'attention': attention,
             'recent': recent,
+            'status': status,
         }
 
     @api.model

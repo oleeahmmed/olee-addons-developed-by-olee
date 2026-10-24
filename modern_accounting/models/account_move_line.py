@@ -157,7 +157,7 @@ class AccountMoveLine(models.Model):
             'liquidity': self._modern_accounting_liquidity(today),
             'attention': self._modern_accounting_attention(today),
             'recent': self.env['account.move'].search_read(
-                [('state', '=', 'posted')], RECENT_FIELDS, order='date desc, id desc', limit=8),
+                [('state', '=', 'posted')], RECENT_FIELDS, order='date desc, id desc', limit=50),
         }
 
     @api.model

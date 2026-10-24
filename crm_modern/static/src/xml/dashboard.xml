@@ -31,6 +31,7 @@
                 </header>
 
                 <div t-att-class="{ 'od-busy': state.busy }">
+                    <OdGoal t-if="goal" title="goal.title" text="goal.text" pct="goal.pct" icon="'fa-bullseye'" actionLabel="'Open pipeline'" onAction="() => this.go('crm_modern.action_pipeline')"/>
                     <section class="od-kpis" aria-label="Key figures">
                         <OdKpi featured="true" tone="'blue'" icon="'fa-briefcase'" label="'Open pipeline'" value="ms(k.pipeline)"
                                hint="number(k.open_count) + ' open deals · weighted ' + ms(k.weighted)"
@@ -46,6 +47,37 @@
                         <OdKpi tone="'teal'" icon="'fa-user-plus'" label="useLeads ? 'New leads &amp; deals' : 'New deals'" value="number(k.new)"
                                delta="k.new_delta" compareLabel="compare" spark="d.sparks.new" hint="'created in this period'"/>
                     </section>
+
+                    <div class="od-grid">
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3>Leads by source</h3>
+                                <p>Leads &amp; deals created <t t-esc="caption.current"/></p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!sourceShares.length" class="od-empty"><i class="fa fa-pie-chart" aria-hidden="true"/><strong>No new leads in this period</strong></div>
+                                <OdDonut t-else="" items="sourceShares" format="number" centerLabel="'Leads'"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head">
+                                <div><h3>Tasks</h3><p>Your next activities on leads &amp; deals</p></div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('crm_modern.action_activities')">All <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body">
+                                <OdTasks items="taskItems" onToggle.bind="doneTask" onClick="(t) => this.openLead(t.lead_id)" emptyText="'Nothing planned for you'"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head">
+                                <div><h3>Sales pipeline</h3><p>Open deals per stage, and won this period</p></div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('crm_modern.action_pipeline')">Pipeline <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body">
+                                <OdProgressList items="pipelineRows" onClick="(r) => this.openStage(r.stage)"/>
+                            </div>
+                        </section>
+                    </div>
 
                     <div class="od-grid">
                         <section class="od-card od-span-8">
@@ -78,54 +110,13 @@
                     </div>
 
                     <div class="od-grid">
-                        <section class="od-card od-span-5">
+                        <section class="od-card od-span-12">
                             <div class="od-card-head">
-                                <div>
-                                    <h3><span class="od-card-icon od-tone-blue"><i class="fa fa-filter" aria-hidden="true"/></span> Pipeline by stage</h3>
-                                    <p>Open deals per stage, and what was won this period</p>
-                                </div>
-                                <button type="button" class="od-link" t-on-click="() => this.go('crm_modern.action_pipeline')">Pipeline <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                                <div><h3>Leads</h3><p>The latest leads &amp; deals · click one to open it</p></div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('crm_modern.action_pipeline')">View all <i class="fa fa-angle-right" aria-hidden="true"/></button>
                             </div>
-                            <div class="od-card-body">
-                                <OdFunnel stages="d.funnel" format="ms" onClick.bind="openStage"/>
-                            </div>
-                        </section>
-                        <section class="od-card od-span-4">
-                            <div class="od-card-head"><div>
-                                <h3><span class="od-card-icon od-tone-violet"><i class="fa fa-calendar" aria-hidden="true"/></span> Expected to close</h3>
-                                <p>Open deals by expected closing month · weighted by probability</p>
-                            </div></div>
-                            <div class="od-card-body">
-                                <ol class="od-funnel">
-                                    <t t-foreach="d.forecast" t-as="f" t-key="f.label">
-                                        <li>
-                                            <div class="od-funnel-meta">
-                                                <span class="od-funnel-name" t-esc="f.label"/>
-                                                <span class="od-funnel-count od-num"><t t-esc="f.count"/> <small>deals</small></span>
-                                                <span class="od-funnel-value od-num" t-esc="ms(f.value)"/>
-                                            </div>
-                                            <div class="od-funnel-track od-forecast-track">
-                                                <span t-attf-style="width: {{ Math.max(f.value ? 3 : 0, f.value / forecastMax * 100) }}%; opacity: 0.35"/>
-                                                <span class="od-forecast-weighted" t-attf-style="width: {{ Math.max(f.weighted ? 2 : 0, f.weighted / forecastMax * 100) }}%"/>
-                                            </div>
-                                            <span class="od-cell-sub od-num">Weighted <t t-esc="ms(f.weighted)"/></span>
-                                        </li>
-                                    </t>
-                                </ol>
-                                <div t-if="d.no_date.count" class="od-note">
-                                    <i class="fa fa-info-circle" aria-hidden="true"/>
-                                    <span><t t-esc="d.no_date.count"/> open deals (<t t-esc="ms(d.no_date.value)"/>) have no expected closing date.</span>
-                                </div>
-                            </div>
-                        </section>
-                        <section class="od-card od-span-3">
-                            <div class="od-card-head"><div>
-                                <h3><span class="od-card-icon od-tone-rose"><i class="fa fa-thumbs-o-down" aria-hidden="true"/></span> Why we lose</h3>
-                                <p>Lost reasons, this period</p>
-                            </div></div>
-                            <div class="od-card-body">
-                                <div t-if="!lostReasons.length" class="od-empty"><i class="fa fa-smile-o" aria-hidden="true"/><strong>No lost deals with a reason</strong></div>
-                                <OdRank t-else="" items="lostReasons" format="number" tone="'rose'"/>
+                            <div class="od-card-body od-card-body--flush">
+                                <OdTable columns="leadColumns" rows="leadRows" pageSize="7" unit="'leads'" onRowClick="(r) => this.openLead(r.id)" emptyText="'No leads yet'"/>
                             </div>
                         </section>
                     </div>
@@ -172,16 +163,30 @@
                         </section>
                         <section class="od-card od-span-5">
                             <div class="od-card-head"><div>
-                                <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-sign-in" aria-hidden="true"/></span> Where deals come from</h3>
-                                <p>Leads &amp; deals created this period by source · won · won revenue</p>
+                                <h3><span class="od-card-icon od-tone-violet"><i class="fa fa-calendar" aria-hidden="true"/></span> Expected to close</h3>
+                                <p>Open deals by expected closing month · weighted by probability</p>
                             </div></div>
                             <div class="od-card-body">
-                                <div t-if="!sources.length" class="od-empty"><i class="fa fa-sign-in" aria-hidden="true"/><strong>No source recorded in this period</strong>
-                                    <span t-if="d.no_source"><t t-esc="d.no_source"/> leads have no source set.</span></div>
-                                <t t-else="">
-                                    <OdRank items="sources" format="number" tone="'teal'"/>
-                                    <div t-if="d.no_source" class="od-note"><i class="fa fa-info-circle" aria-hidden="true"/> <span><t t-esc="d.no_source"/> more without a source.</span></div>
-                                </t>
+                                <ol class="od-funnel">
+                                    <t t-foreach="d.forecast" t-as="f" t-key="f.label">
+                                        <li>
+                                            <div class="od-funnel-meta">
+                                                <span class="od-funnel-name" t-esc="f.label"/>
+                                                <span class="od-funnel-count od-num"><t t-esc="f.count"/> <small>deals</small></span>
+                                                <span class="od-funnel-value od-num" t-esc="ms(f.value)"/>
+                                            </div>
+                                            <div class="od-funnel-track od-forecast-track">
+                                                <span t-attf-style="width: {{ Math.max(f.value ? 3 : 0, f.value / forecastMax * 100) }}%; opacity: 0.35"/>
+                                                <span class="od-forecast-weighted" t-attf-style="width: {{ Math.max(f.weighted ? 2 : 0, f.weighted / forecastMax * 100) }}%"/>
+                                            </div>
+                                            <span class="od-cell-sub od-num">Weighted <t t-esc="ms(f.weighted)"/></span>
+                                        </li>
+                                    </t>
+                                </ol>
+                                <div t-if="d.no_date.count" class="od-note">
+                                    <i class="fa fa-info-circle" aria-hidden="true"/>
+                                    <span><t t-esc="d.no_date.count"/> open deals (<t t-esc="ms(d.no_date.value)"/>) have no expected closing date.</span>
+                                </div>
                             </div>
                         </section>
                     </div>
@@ -248,7 +253,17 @@
                     </div>
 
                     <div class="od-grid">
-                        <section class="od-card od-span-6">
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-rose"><i class="fa fa-thumbs-o-down" aria-hidden="true"/></span> Why we lose</h3>
+                                <p>Lost reasons, this period</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!lostReasons.length" class="od-empty"><i class="fa fa-smile-o" aria-hidden="true"/><strong>No lost deals with a reason</strong></div>
+                                <OdRank t-else="" items="lostReasons" format="number" tone="'rose'"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
                             <div class="od-card-head"><div>
                                 <h3><span class="od-card-icon od-tone-amber"><i class="fa fa-hourglass-half" aria-hidden="true"/></span> Stuck deals</h3>
                                 <p>The biggest open deals with no stage change for 30+ days</p>
@@ -269,7 +284,7 @@
                                 </ul>
                             </div>
                         </section>
-                        <section class="od-card od-span-6">
+                        <section class="od-card od-span-4">
                             <div class="od-card-head">
                                 <div>
                                     <h3><span class="od-card-icon od-tone-rose"><i class="fa fa-clock-o" aria-hidden="true"/></span> Late &amp; due today</h3>

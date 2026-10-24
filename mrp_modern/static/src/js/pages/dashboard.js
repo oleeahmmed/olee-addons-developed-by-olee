@@ -117,6 +117,46 @@ export class MrpDashboard extends Component {
     newMo() {
         return openFullForm(this.action, "mrp.production", false);
     }
+    // ---------- shadcn blocks: order status tiles and the orders table ----------
+    get statusTiles() {
+        const st = this.state.data.status || {};
+        return [
+            { key: "draft", label: _t("Draft"), count: number(st.draft), sub: _t("not confirmed yet"), tone: "slate", icon: "fa-file-o" },
+            { key: "confirmed", label: _t("Confirmed"), count: number(st.confirmed), sub: _t("planned, not started"), tone: "sky", icon: "fa-calendar" },
+            { key: "progress", label: _t("In progress"), count: number(st.progress), sub: _t("being made now"), tone: "amber", icon: "fa-cogs" },
+            { key: "to_close", label: _t("To close"), count: number(st.to_close), sub: _t("made, to close"), tone: "violet", icon: "fa-flag-checkered" },
+            { key: "done", label: _t("Done"), count: number(st.done), sub: _t("finished this period"), tone: "green", icon: "fa-check" },
+        ];
+    }
+    openStatus(tile) {
+        if (tile.key === "done") {
+            return this.openDone();
+        }
+        return this.openMos(tile.label, [["state", "=", tile.key]]);
+    }
+    get moColumns() {
+        return [
+            { key: "product", label: _t("Product"), type: "person" },
+            { key: "qty", label: _t("Quantity"), type: "num" },
+            { key: "user", label: _t("Responsible"), type: "muted" },
+            { key: "start", label: _t("Start"), type: "muted" },
+            { key: "status", label: _t("Status"), type: "badge" },
+        ];
+    }
+    get moRows() {
+        return this.state.data.recent.map((o) => {
+            const pill = this.statePill[o.state] || { label: o.state, tone: "slate" };
+            return {
+                id: o.id,
+                product: o.product_id ? o.product_id[1] : "—",
+                product_sub: o.name,
+                qty: `${this.units(o.product_qty)} ${o.product_uom_id ? o.product_uom_id[1] : ""}`,
+                user: o.user_id ? o.user_id[1] : "",
+                start: shortDate(o.date_start),
+                status: pill.label, status_tone: pill.tone,
+            };
+        });
+    }
     openMo(order) {
         return openFullForm(this.action, "mrp.production", order.id);
     }

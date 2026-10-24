@@ -352,7 +352,161 @@ export class OdError extends Component {
     static props = { message: { type: String, optional: true }, onRetry: Function };
 }
 
-export const OD_COMPONENTS = { OdKpi, OdSparkline, OdComboChart, OdDonut, OdFunnel, OdRank, OdAttention, OdStack, OdFilters, OdError };
+
+// ---------------------------------------------------------------------------
+// shadcn-style blocks (shadcnuikit dashboards): goal banner, progress list, tasks,
+// data table with pagination, activity feed, status tiles
+// ---------------------------------------------------------------------------
+
+/** Initials and a stable tone for a name (avatars without a picture). */
+export function initialsOf(label) {
+    const words = String(label || "?").replace(/[^\p{L}\p{N} ]/gu, " ").trim().split(/\s+/);
+    return ((words[0] || "?")[0] + (words.length > 1 ? words[words.length - 1][0] : "")).toUpperCase();
+}
+export function toneOf(seed) {
+    let h = 0;
+    for (const ch of String(seed || "")) {
+        h = (h * 31 + ch.charCodeAt(0)) % 997;
+    }
+    return TONES[h % TONES.length];
+}
+
+/** "Your target is 48% complete": banner with a progress bar and one action. */
+export class OdGoal extends Component {
+    static template = "modern_theme.OdGoal";
+    static props = {
+        title: String,
+        text: { type: String, optional: true },
+        pct: Number,
+        actionLabel: { type: String, optional: true },
+        onAction: { type: Function, optional: true },
+        icon: { type: String, optional: true },
+    };
+    get width() {
+        return Math.max(0, Math.min(100, this.props.pct || 0));
+    }
+    get rounded() {
+        return Math.round(this.props.pct || 0);
+    }
+}
+
+/** Rows of label · value with a thin progress bar (pipeline stages, locations, products). */
+export class OdProgressList extends Component {
+    static template = "modern_theme.OdProgressList";
+    static props = {
+        items: Array, // [{ id, label, value (text), sub?, pct (0-100), tone?, delta? }]
+        onClick: { type: Function, optional: true },
+        tone: { type: String, optional: true },
+    };
+    barWidth(item) {
+        const pct = Math.max(0, Math.min(100, item.pct || 0));
+        return pct && pct < 2 ? 2 : pct;
+    }
+}
+
+/** Task list: checkbox, title, description, priority and due badges. */
+export class OdTasks extends Component {
+    static template = "modern_theme.OdTasks";
+    static props = {
+        items: Array, // [{ id, title, sub?, priority?: "high"|"medium"|"low", due?, dueTone? }]
+        onToggle: { type: Function, optional: true },
+        onClick: { type: Function, optional: true },
+        emptyText: { type: String, optional: true },
+    };
+    setup() {
+        this.state = useState({ done: {} });
+    }
+    priorityLabel(p) {
+        return { high: _t("High"), medium: _t("Medium"), low: _t("Low") }[p] || "";
+    }
+    async toggle(item, ev) {
+        ev.stopPropagation();
+        if (!this.props.onToggle || this.state.done[item.id]) {
+            return;
+        }
+        this.state.done[item.id] = true;
+        try {
+            await this.props.onToggle(item);
+        } catch (e) {
+            this.state.done[item.id] = false;
+            throw e;
+        }
+    }
+}
+
+/**
+ * Data table (shadcn): header, rows with person / badge / money cells, row click and a
+ * pager "1 - 7 of 24 leads" with previous / next. Columns:
+ *   { key, label, type?: "text"|"person"|"badge"|"num"|"muted", align?: "end" }
+ * A person cell reads row[key] (name) and row[key + "_sub"]; a badge reads row[key + "_tone"].
+ */
+export class OdTable extends Component {
+    static template = "modern_theme.OdTable";
+    static props = {
+        columns: Array,
+        rows: Array,
+        pageSize: { type: Number, optional: true },
+        unit: { type: String, optional: true },
+        onRowClick: { type: Function, optional: true },
+        emptyText: { type: String, optional: true },
+    };
+    setup() {
+        this.state = useState({ page: 0 });
+        this.initials = initialsOf;
+        this.toneOf = toneOf;
+    }
+    get size() {
+        return this.props.pageSize || 7;
+    }
+    get pages() {
+        return Math.max(1, Math.ceil(this.props.rows.length / this.size));
+    }
+    get page() {
+        return Math.min(this.state.page, this.pages - 1);
+    }
+    get visible() {
+        const start = this.page * this.size;
+        return this.props.rows.slice(start, start + this.size);
+    }
+    get range() {
+        const total = this.props.rows.length;
+        if (!total) {
+            return "0";
+        }
+        const start = this.page * this.size + 1;
+        return `${start} - ${Math.min(total, start + this.size - 1)} ${_t("of")} ${total}`;
+    }
+    go(step) {
+        this.state.page = Math.max(0, Math.min(this.pages - 1, this.page + step));
+    }
+}
+
+/** Recent activity: avatar initials, who, what, when. */
+export class OdFeed extends Component {
+    static template = "modern_theme.OdFeed";
+    static props = {
+        items: Array, // [{ id, name, text, time, avatar? (url) }]
+        onClick: { type: Function, optional: true },
+    };
+    setup() {
+        this.initials = initialsOf;
+        this.toneOf = toneOf;
+    }
+}
+
+/** A row of status tiles: count, label, change (order status, check-ins…). */
+export class OdStatusTiles extends Component {
+    static template = "modern_theme.OdStatusTiles";
+    static props = {
+        items: Array, // [{ key, label, count, sub?, tone?, icon? }]
+        onClick: { type: Function, optional: true },
+    };
+}
+
+export const OD_COMPONENTS = {
+    OdKpi, OdSparkline, OdComboChart, OdDonut, OdFunnel, OdRank, OdAttention, OdStack, OdFilters, OdError,
+    OdGoal, OdProgressList, OdTasks, OdTable, OdFeed, OdStatusTiles,
+};
 
 /**
  * Load a dashboard safely: only the latest request counts (quick filter clicks), and a

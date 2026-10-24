@@ -1,43 +1,68 @@
 // Modern Theme: palette data (no CSS output). Shared by the light, dark and login bundles.
-// Every value below was checked for WCAG AA (4.5:1) text contrast: tools/contrast.py.
+//
+// Surfaces follow shadcn/ui "neutral" exactly as shadcnuikit.com renders it, in light AND
+// dark mode, for EVERY colour preset. A preset only changes the accent (primary, ring,
+// sidebar active tint): page, cards, sidebar, top bar, borders and text never move —
+// shadcnuikit's `[data-theme-color=…]` presets set --primary / --ring / --sidebar-primary /
+// --sidebar-accent and nothing else.
+//
+//   light: background/card/popover #fff, muted/secondary/accent #f5f5f5, muted-fg #737373,
+//          border/input #e5e5e5, ring #a1a1a1, sidebar #f7f6f6 / fg #646464 / accent #e1e1e1
+//   dark:  background #0a0a0a, card/popover/sidebar #171717, muted/secondary/accent #262626,
+//          muted-fg #a1a1a1, border #fff/10%, input #fff/15%, ring #737373,
+//          sidebar-fg #b0b0b0, sidebar-accent #2c2c2c, destructive #ff6568
 
 $mt-neutrals: (
-    slate: (light: (fg: #0f172a, card: #ffffff, canvas: #f3f5f9, muted: #eef2f7, mfg: #526071, border: #e2e8f0, input: #c5cedb), dark: (fg: #e7ebf3, card: #121925, canvas: #0a0e15, muted: #1b2331, mfg: #9ba7ba, border: #242e3e, input: #33405a)),
-    zinc: (light: (fg: #18181b, card: #ffffff, canvas: #f4f4f5, muted: #f1f1f3, mfg: #52525b, border: #e4e4e7, input: #c9c9cf), dark: (fg: #f4f4f5, card: #131316, canvas: #09090b, muted: #1d1d21, mfg: #a1a1aa, border: #27272a, input: #3a3a40)),
-    stone: (light: (fg: #1c1917, card: #ffffff, canvas: #f5f5f4, muted: #f2f1ef, mfg: #57534e, border: #e7e5e4, input: #cdc9c5), dark: (fg: #f5f5f4, card: #151311, canvas: #0c0a09, muted: #201d1a, mfg: #a8a29e, border: #2c2825, input: #433e39)),
-    gray: (light: (fg: #111827, card: #ffffff, canvas: #f3f4f6, muted: #f0f1f4, mfg: #4b5563, border: #e5e7eb, input: #c8ccd3), dark: (fg: #f3f4f6, card: #111827, canvas: #0a0f1a, muted: #1c2433, mfg: #9ca3af, border: #263041, input: #374151)),
-    // Once UI "gray": pure neutral greys, no blue tint (docs.once-ui.com)
-    once: (light: (fg: #0a0a0a, card: #ffffff, canvas: #f6f6f6, muted: #f0f0f0, mfg: #595959, border: #e0e0e0, input: #d2d2d2), dark: (fg: #ededed, card: #151515, canvas: #0a0a0a, muted: #202020, mfg: #b2b2b2, border: #2a2a2a, input: #3f3f3f)),
-    neutral: (light: (fg: #171717, card: #ffffff, canvas: #f5f5f5, muted: #f2f2f2, mfg: #525252, border: #e5e5e5, input: #cacaca), dark: (fg: #f5f5f5, card: #141414, canvas: #0a0a0a, muted: #1f1f1f, mfg: #a3a3a3, border: #2a2a2a, input: #404040)),
+    // The one surface set every preset uses (kept under the old keys too, so a preset's
+    // `neutral:` key and any addon reading the map keep working).
+    shadcn: (light: (fg: #0a0a0a, card: #ffffff, canvas: #ffffff, muted: #f5f5f5, mfg: #737373, border: #e5e5e5, input: #e5e5e5,
+                     sidebar: #f7f6f6, sidebar-fg: #646464, sidebar-accent: #e1e1e1, ring: #a1a1a1),
+             dark:  (fg: #fafafa, card: #171717, canvas: #0a0a0a, muted: #262626, mfg: #a1a1a1, border: rgba(255, 255, 255, 0.10), input: rgba(255, 255, 255, 0.15),
+                     sidebar: #171717, sidebar-fg: #b0b0b0, sidebar-accent: #2c2c2c, ring: #737373)),
 );
+$mt-neutrals: map-merge($mt-neutrals, (
+    once: map-get($mt-neutrals, shadcn),
+    neutral: map-get($mt-neutrals, shadcn),
+    slate: map-get($mt-neutrals, shadcn),
+    zinc: map-get($mt-neutrals, shadcn),
+    stone: map-get($mt-neutrals, shadcn),
+    gray: map-get($mt-neutrals, shadcn),
+));
 
+// Accent colours = Tailwind v4 `<colour>-600` as shadcnuikit ships them (same value in light
+// and dark, white text on it). `text` is the colour used for links / active text: the 600
+// tone on white, a lighter tone on dark surfaces so it stays readable (WCAG AA).
 $mt-presets: (
-    // Once UI: neutral greys, emerald brand, high-contrast (black / white) solid buttons.
-    once: (neutral: once, light: (primary: #0a8466, text: #0c6551, fg: #ffffff, solid: #0a0a0a, solid-fg: #ffffff, solid-hover: #2b2b2b),
-           dark: (primary: #10b981, text: #34d399, fg: #0a0a0a, solid: #ededed, solid-fg: #0a0a0a, solid-hover: #ffffff)),
-    indigo: (neutral: slate, light: (primary: #4f46e5, text: #4338ca, fg: #ffffff), dark: (primary: #818cf8, text: #a5b4fc, fg: #0b0f17)),
-    blue: (neutral: slate, light: (primary: #2563eb, text: #1d4ed8, fg: #ffffff), dark: (primary: #60a5fa, text: #93c5fd, fg: #0b0f17)),
-    sky: (neutral: slate, light: (primary: #0369a1, text: #0369a1, fg: #ffffff), dark: (primary: #38bdf8, text: #7dd3fc, fg: #0b0f17)),
-    teal: (neutral: slate, light: (primary: #0f766e, text: #0f766e, fg: #ffffff), dark: (primary: #2dd4bf, text: #5eead4, fg: #0b0f17)),
-    emerald: (neutral: slate, light: (primary: #047857, text: #047857, fg: #ffffff), dark: (primary: #34d399, text: #6ee7b7, fg: #0b0f17)),
-    green: (neutral: gray, light: (primary: #15803d, text: #15803d, fg: #ffffff), dark: (primary: #4ade80, text: #86efac, fg: #0b0f17)),
-    amber: (neutral: stone, light: (primary: #b45309, text: #b45309, fg: #ffffff), dark: (primary: #fbbf24, text: #fcd34d, fg: #0b0f17)),
-    yellow: (neutral: stone, light: (primary: #facc15, text: #a16207, fg: #1c1917), dark: (primary: #facc15, text: #fde047, fg: #0b0f17)),
-    orange: (neutral: stone, light: (primary: #c2410c, text: #c2410c, fg: #ffffff), dark: (primary: #fb923c, text: #fdba74, fg: #0b0f17)),
-    red: (neutral: zinc, light: (primary: #dc2626, text: #b91c1c, fg: #ffffff), dark: (primary: #f87171, text: #fca5a5, fg: #0b0f17)),
-    rose: (neutral: zinc, light: (primary: #e11d48, text: #be123c, fg: #ffffff), dark: (primary: #fb7185, text: #fda4af, fg: #0b0f17)),
-    violet: (neutral: slate, light: (primary: #7c3aed, text: #6d28d9, fg: #ffffff), dark: (primary: #a78bfa, text: #c4b5fd, fg: #0b0f17)),
-    slate: (neutral: slate, light: (primary: #1e293b, text: #1e293b, fg: #ffffff), dark: (primary: #cbd5e1, text: #e2e8f0, fg: #0b0f17)),
-    zinc: (neutral: zinc, light: (primary: #18181b, text: #18181b, fg: #ffffff), dark: (primary: #e4e4e7, text: #f4f4f5, fg: #0b0f17)),
-    stone: (neutral: stone, light: (primary: #1c1917, text: #1c1917, fg: #ffffff), dark: (primary: #e7e5e4, text: #f5f5f4, fg: #0b0f17)),
-    gray: (neutral: gray, light: (primary: #111827, text: #111827, fg: #ffffff), dark: (primary: #e5e7eb, text: #f3f4f6, fg: #0b0f17)),
-    neutral: (neutral: neutral, light: (primary: #171717, text: #171717, fg: #ffffff), dark: (primary: #e5e5e5, text: #f5f5f5, fg: #0b0f17)),
-    custom: (neutral: slate, light: null, dark: null),
+    // Default = shadcn neutral: near-black primary in light, near-white primary in dark
+    // (shadcn --primary #171717 / #e5e5e5), the same colour on the solid "+ New" button.
+    once: (neutral: shadcn,
+           light: (primary: #171717, text: #171717, fg: #fafafa, solid: #171717, solid-fg: #fafafa, solid-hover: #2e2e2e),
+           dark:  (primary: #e5e5e5, text: #fafafa, fg: #171717, solid: #e5e5e5, solid-fg: #171717, solid-hover: #ffffff)),
+    indigo:  (neutral: shadcn, light: (primary: #4f39f6, text: #4f39f6, fg: #ffffff), dark: (primary: #4f39f6, text: #a3b3ff, fg: #ffffff)),
+    blue:    (neutral: shadcn, light: (primary: #155dfc, text: #155dfc, fg: #ffffff), dark: (primary: #155dfc, text: #8ec5ff, fg: #ffffff)),
+    sky:     (neutral: shadcn, light: (primary: #0084cc, text: #0084cc, fg: #ffffff), dark: (primary: #0084cc, text: #74d4ff, fg: #ffffff)),
+    teal:    (neutral: shadcn, light: (primary: #009588, text: #009588, fg: #ffffff), dark: (primary: #009588, text: #46ecd5, fg: #ffffff)),
+    emerald: (neutral: shadcn, light: (primary: #009767, text: #009767, fg: #ffffff), dark: (primary: #009767, text: #5ee9b5, fg: #ffffff)),
+    green:   (neutral: shadcn, light: (primary: #00a544, text: #00a544, fg: #ffffff), dark: (primary: #00a544, text: #7bf1a8, fg: #ffffff)),
+    amber:   (neutral: shadcn, light: (primary: #dd7400, text: #bb4d00, fg: #ffffff), dark: (primary: #dd7400, text: #ffd230, fg: #ffffff)),
+    yellow:  (neutral: shadcn, light: (primary: #cd8900, text: #a65f00, fg: #ffffff), dark: (primary: #cd8900, text: #ffdf20, fg: #ffffff)),
+    orange:  (neutral: shadcn, light: (primary: #f05100, text: #ca3500, fg: #ffffff), dark: (primary: #f05100, text: #ffb86a, fg: #ffffff)),
+    red:     (neutral: shadcn, light: (primary: #e40014, text: #e40014, fg: #ffffff), dark: (primary: #e40014, text: #ffa2a2, fg: #ffffff)),
+    rose:    (neutral: shadcn, light: (primary: #e70044, text: #e70044, fg: #ffffff), dark: (primary: #e70044, text: #ffa1ad, fg: #ffffff)),
+    violet:  (neutral: shadcn, light: (primary: #7f22fe, text: #7f22fe, fg: #ffffff), dark: (primary: #7f22fe, text: #c4b4ff, fg: #ffffff)),
+    // Mono presets: a dark / light grey accent (shadcn "default" look with another grey).
+    slate:   (neutral: shadcn, light: (primary: #314158, text: #314158, fg: #ffffff), dark: (primary: #cad5e2, text: #e2e8f0, fg: #0f172b)),
+    zinc:    (neutral: shadcn, light: (primary: #27272a, text: #27272a, fg: #ffffff), dark: (primary: #d4d4d8, text: #e4e4e7, fg: #18181b)),
+    stone:   (neutral: shadcn, light: (primary: #292524, text: #292524, fg: #ffffff), dark: (primary: #d6d3d1, text: #e7e5e4, fg: #1c1917)),
+    gray:    (neutral: shadcn, light: (primary: #1e2939, text: #1e2939, fg: #ffffff), dark: (primary: #d1d5dc, text: #e5e7eb, fg: #101828)),
+    neutral: (neutral: shadcn, light: (primary: #171717, text: #171717, fg: #fafafa), dark: (primary: #e5e5e5, text: #fafafa, fg: #171717)),
+    custom:  (neutral: shadcn, light: null, dark: null),
 );
 
 $mt-status: (
-    light: (success: #15803d, warning: #b45309, danger: #dc2626, info: #0369a1),
-    dark: (success: #4ade80, warning: #fbbf24, danger: #f87171, info: #38bdf8),
+    // 700 tones for text on white (WCAG AA); danger = shadcn --destructive
+    light: (success: #008236, warning: #bb4d00, danger: #e40014, info: #0069a8),
+    dark: (success: #05df72, warning: #ffb900, danger: #ff6568, info: #00bcff),
 );
 
 // Emit the palette custom properties of one preset in one mode.
@@ -46,7 +71,7 @@ $mt-status: (
     $n: map-get(map-get($mt-neutrals, map-get($preset, neutral)), $mode);
     $p: map-get($preset, $mode);
     $s: map-get($mt-status, $mode);
-    --mt-background: #{map-get($n, card)};
+    --mt-background: #{map-get($n, canvas)};
     --mt-foreground: #{map-get($n, fg)};
     --mt-card: #{map-get($n, card)};
     --mt-card-foreground: #{map-get($n, fg)};
@@ -59,6 +84,11 @@ $mt-status: (
     --mt-accent-foreground: #{map-get($n, fg)};
     --mt-border-base: #{map-get($n, border)};
     --mt-input: #{map-get($n, input)};
+    // shadcn sidebar + ring neutrals (tokens.scss / tokens.dark.scss build on them)
+    --mt-sidebar-base: #{map-get($n, sidebar)};
+    --mt-sidebar-fg-base: #{map-get($n, sidebar-fg)};
+    --mt-sidebar-accent-base: #{map-get($n, sidebar-accent)};
+    --mt-ring-base: #{map-get($n, ring)};
     @if $p {
         --mt-primary: #{map-get($p, primary)};
         --mt-primary-rgb: #{red(map-get($p, primary))}, #{green(map-get($p, primary))}, #{blue(map-get($p, primary))};
@@ -79,6 +109,6 @@ $mt-status: (
     --mt-success: #{map-get($s, success)};
     --mt-warning: #{map-get($s, warning)};
     --mt-destructive: #{map-get($s, danger)};
-    --mt-destructive-foreground: #{if($mode == light, #ffffff, #0b0f17)};
+    --mt-destructive-foreground: #ffffff;
     --mt-info: #{map-get($s, info)};
 }

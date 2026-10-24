@@ -151,7 +151,12 @@ class MrpProduction(models.Model):
             })
 
         recent = self.search_read(
-            [('state', '!=', 'cancel')], LIST_FIELDS, order='date_start desc, id desc', limit=8)
+            [('state', '!=', 'cancel')], LIST_FIELDS, order='date_start desc, id desc', limit=50)
+        # order status tiles (shadcn "Track order status"): standard mrp.production states
+        by_state = dict(self._read_group([('state', 'in', ('draft', 'confirmed', 'progress', 'to_close'))],
+                                         ['state'], ['__count']))
+        status = {key: by_state.get(key, 0) for key in ('draft', 'confirmed', 'progress', 'to_close')}
+        status['done'] = done_count
 
         currency = self.env.company.currency_id
         return {
@@ -169,5 +174,6 @@ class MrpProduction(models.Model):
             'has_wo': has_wo,
             'attention': attention,
             'recent': recent,
+            'status': status,
             'company': self.env.company.name,
         }

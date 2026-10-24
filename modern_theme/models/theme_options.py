@@ -14,7 +14,7 @@ client-side theme service updates the very same attributes live.
 COLOR_MODES = [("light", "Light"), ("dark", "Dark"), ("auto", "Auto")]
 
 THEME_PRESETS = [
-    ("once", "Once (neutral + emerald)"),
+    ("once", "Default (shadcn neutral)"),
     ("indigo", "Indigo"),
     ("blue", "Blue"),
     ("sky", "Sky"),
@@ -36,12 +36,12 @@ THEME_PRESETS = [
 ]
 DEFAULT_PRESET = "once"
 
-# Swatches for pickers (the light-mode primary of each preset, see tokens.scss).
+# Swatches for pickers (the primary of each preset = shadcnuikit theme colours, see mt_maps.scss).
 PRESET_SWATCHES = {
-    "once": "#0a8466", "indigo": "#4f46e5", "blue": "#2563eb", "sky": "#0369a1", "teal": "#0f766e",
-    "emerald": "#047857", "green": "#15803d", "amber": "#b45309", "yellow": "#facc15",
-    "orange": "#c2410c", "red": "#dc2626", "rose": "#e11d48", "violet": "#7c3aed",
-    "slate": "#1e293b", "zinc": "#18181b", "stone": "#1c1917", "gray": "#111827",
+    "once": "#171717", "indigo": "#4f39f6", "blue": "#155dfc", "sky": "#0084cc", "teal": "#009588",
+    "emerald": "#009767", "green": "#00a544", "amber": "#dd7400", "yellow": "#cd8900",
+    "orange": "#f05100", "red": "#e40014", "rose": "#e70044", "violet": "#7f22fe",
+    "slate": "#314158", "zinc": "#27272a", "stone": "#292524", "gray": "#1e2939",
     "neutral": "#171717",
 }
 
@@ -81,7 +81,7 @@ LOGIN_STYLES = [("split", "Split screen"), ("centered", "Centered card"), ("mini
 OPTIONS = {
     "color_mode": (COLOR_MODES, "light", True),
     "preset": (THEME_PRESETS, DEFAULT_PRESET, True),
-    "font": (FONTS, "inter", True),
+    "font": (FONTS, "dm_sans", True),
     "font_scale": (FONT_SCALES, "md", True),
     "radius": (RADII, "md", True),
     "border": (BORDERS, "subtle", True),

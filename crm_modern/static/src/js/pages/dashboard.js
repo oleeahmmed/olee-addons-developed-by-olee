@@ -6,6 +6,7 @@ import { useService } from "@web/core/utils/hooks";
 import { OD_COMPONENTS, compareWord, moneyFormatters, number, pct, periodCaption } from "../dash/kit";
 import { greeting, openRecord, shortDate, dueInfo } from "../core/utils";
 import { loadFeatures } from "../core/features";
+import { OdDonut, OdFeed, OdGoal, OdProgressList, OdStatusTiles, OdTable, OdTasks } from "@modern_theme/js/app_kit/dash_kit";
 
 /** Extra dashboard sections other addons register (e.g. quotations & orders with Sales). */
 export const dashboardSections = registry.category("crm_modern.dashboard_sections");
@@ -27,7 +28,7 @@ function remembered() {
  */
 export class Dashboard extends Component {
     static template = "crm_modern.Dashboard";
-    static components = { ...OD_COMPONENTS };
+    static components = { ...OD_COMPONENTS, OdDonut, OdGoal, OdProgressList, OdTasks, OdTable, OdFeed, OdStatusTiles };
     static props = ["*"];
 
     setup() {
@@ -110,6 +111,64 @@ export class Dashboard extends Component {
             id: s.id, label: s.label, value: s.count,
             sub: `${s.won_count} ${_t("won")} · ${s.rate}% · ${this.ms(s.value)}`,
         }));
+    }
+    // ---------- shadcn blocks ----------
+    get goal() {
+        const g = this.state.data.goal;
+        if (!g) {
+            return null;
+        }
+        const period = { month: _t("this month"), quarter: _t("this quarter"), year: _t("this year") }[this.state.data.period];
+        return {
+            title: g.kind === "target"
+                ? _t("Your target is %s% complete", Math.round(g.pct))
+                : _t("You have won %s% of last period's revenue", Math.round(g.pct)),
+            text: g.kind === "target"
+                ? _t("%s won of a %s target %s.", this.ms(g.value), this.ms(g.target), period)
+                : _t("%s won %s against %s before.", this.ms(g.value), period, this.ms(g.target)),
+            pct: g.pct,
+        };
+    }
+    get sourceShares() {
+        const items = this.state.data.sources.map((s) => ({ id: s.id, label: s.label, value: s.count }));
+        if (this.state.data.no_source) {
+            items.push({ id: false, label: _t("No source"), value: this.state.data.no_source });
+        }
+        return items;
+    }
+    get pipelineRows() {
+        const stages = this.state.data.funnel;
+        const total = stages.reduce((s, st) => s + (st.value || 0), 0) || 1;
+        const tones = ["blue", "violet", "amber", "teal", "sky", "rose"];
+        return stages.map((st, i) => ({
+            id: st.id, label: st.label, stage: st,
+            value: this.ms(st.value),
+            sub: `${st.count} ${st.won ? _t("won") : _t("deals")} · ${Math.round(((st.value || 0) * 100) / total)}%`,
+            pct: ((st.value || 0) * 100) / total,
+            tone: st.won ? "green" : tones[i % tones.length],
+        }));
+    }
+    get taskItems() {
+        return this.state.data.tasks.map((t) => {
+            const dd = dueInfo(t.date_deadline);
+            return { ...t, due: dd.label, dueTone: dd.state === "overdue" ? "rose" : (dd.state === "today" ? "amber" : "") };
+        });
+    }
+    get leadColumns() {
+        return [
+            { key: "name", label: _t("Lead"), type: "person" },
+            { key: "company", label: _t("Company") },
+            { key: "source", label: _t("Source"), type: "muted" },
+            { key: "status", label: _t("Status"), type: "badge" },
+            { key: "amountText", label: _t("Expected"), type: "num", align: "end" },
+            { key: "dateText", label: _t("Created"), type: "muted", align: "end" },
+        ];
+    }
+    get leadRows() {
+        return this.state.data.leads.map((l) => ({ ...l, amountText: this.ms(l.amount), dateText: shortDate(l.date) }));
+    }
+    async doneTask(task) {
+        await this.orm.call("mail.activity", "action_feedback", [[task.id]]);
     }
     get lostReasons() {
         return this.state.data.lost_reasons.map((r) => ({ id: r.id, label: r.label, value: r.count, sub: this.ms(r.value) }));

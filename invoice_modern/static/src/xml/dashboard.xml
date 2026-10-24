@@ -58,6 +58,17 @@
                                hint="k.overdue_in ? ms(k.overdue_in) + ' overdue' : k.payable_count + ' open bills'" onClick.bind="openPayable"/>
                     </section>
 
+                    <!-- invoice status (shadcn "Track order status") -->
+                    <section class="od-card od-status-card">
+                        <div class="od-card-head"><div>
+                            <h3>Track invoice status</h3>
+                            <p>Where your customer invoices stand · click a tile to open them</p>
+                        </div></div>
+                        <div class="od-card-body">
+                            <OdStatusTiles items="statusTiles" onClick.bind="openStatus"/>
+                        </div>
+                    </section>
+
                     <!-- the year, and what to do now -->
                     <div class="od-grid">
                         <section class="od-card od-span-8">
@@ -132,32 +143,13 @@
                     <section class="od-card">
                         <div class="od-card-head">
                             <div>
-                                <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-list-ul" aria-hidden="true"/></span> Latest invoices</h3>
-                                <p>The most recent confirmed customer invoices and credit notes</p>
+                                <h3>Invoices</h3>
+                                <p>The latest confirmed customer invoices and credit notes · click one to open it</p>
                             </div>
                             <button type="button" class="od-link" t-on-click="() => this.go('invoice_modern.action_invoices')">All invoices <i class="fa fa-angle-right" aria-hidden="true"/></button>
                         </div>
                         <div class="od-card-body od-card-body--flush">
-                            <div t-if="!d.recent.length" class="od-empty"><i class="fa fa-file-text-o" aria-hidden="true"/><strong>No confirmed invoice yet</strong></div>
-                            <div t-else="" class="od-table-wrap">
-                                <table class="od-table">
-                                    <thead><tr><th>Number</th><th>Customer</th><th>Date</th><th>Due</th><th>Status</th><th class="od-r">Total</th><th class="od-r">Still due</th></tr></thead>
-                                    <tbody>
-                                        <t t-foreach="d.recent" t-as="o" t-key="o.id">
-                                            <t t-set="pill" t-value="paymentPill(o)"/>
-                                            <tr class="od-clickable" t-on-click="() => this.openMove(o)">
-                                                <td class="od-cell-main"><t t-esc="o.name"/> <span t-if="o.move_type === 'out_refund'" class="od-pill od-tone-slate">Credit note</span></td>
-                                                <td t-esc="o.partner_id ? o.partner_id[1] : '—'"/>
-                                                <td class="text-muted" t-esc="shortDate(o.invoice_date)"/>
-                                                <td class="text-muted" t-esc="shortDate(o.invoice_date_due)"/>
-                                                <td><span t-attf-class="od-pill od-tone-{{ pill.tone }}"><i t-if="pill.icon" t-attf-class="fa {{ pill.icon }}" aria-hidden="true"/> <t t-esc="pill.label"/></span></td>
-                                                <td class="od-r od-num" t-esc="mr(o, o.amount_total)"/>
-                                                <td class="od-r od-num" style="font-weight:650" t-esc="o.amount_residual ? mr(o, o.amount_residual) : '—'"/>
-                                            </tr>
-                                        </t>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <OdTable columns="invoiceColumns" rows="invoiceRows" pageSize="7" unit="'invoices'" onRowClick.bind="openMove" emptyText="'No confirmed invoice yet'"/>
                         </div>
                     </section>
                 </div>

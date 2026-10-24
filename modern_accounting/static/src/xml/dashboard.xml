@@ -154,28 +154,13 @@
                     <section class="od-card">
                         <div class="od-card-head">
                             <div>
-                                <h3><span class="od-card-icon od-tone-slate"><i class="fa fa-list-ul" aria-hidden="true"/></span> Latest entries</h3>
-                                <p>The most recent posted journal entries, of every journal</p>
+                                <h3>Latest entries</h3>
+                                <p>The most recent posted journal entries, of every journal · click one to open it</p>
                             </div>
                             <button type="button" class="od-link" t-on-click="() => this.go('entries')">All entries <i class="fa fa-angle-right" aria-hidden="true"/></button>
                         </div>
                         <div class="od-card-body od-card-body--flush">
-                            <div t-if="!d.recent.length" class="od-empty"><i class="fa fa-book" aria-hidden="true"/><strong>No posted entry yet</strong></div>
-                            <div t-else="" class="od-table-wrap">
-                                <table class="od-table">
-                                    <thead><tr><th>Number</th><th>Date</th><th>Journal</th><th>Partner</th><th>Reference</th><th class="od-r">Amount</th></tr></thead>
-                                    <tbody>
-                                        <tr t-foreach="d.recent" t-as="o" t-key="o.id" class="od-clickable" t-on-click="() => this.openMove(o)">
-                                            <td class="od-cell-main"><t t-esc="o.name"/> <span class="od-pill od-tone-slate" t-esc="entryLabel(o)"/></td>
-                                            <td class="text-muted" t-esc="shortDate(o.date)"/>
-                                            <td t-esc="o.journal_id ? o.journal_id[1] : '—'"/>
-                                            <td t-esc="o.partner_id ? o.partner_id[1] : '—'"/>
-                                            <td class="text-muted od-truncate" style="max-width:14rem" t-esc="o.ref || '—'"/>
-                                            <td class="od-r od-num" style="font-weight:650" t-esc="m(o.amount_total_signed)"/>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <OdTable columns="entryColumns" rows="entryRows" pageSize="7" unit="'entries'" onRowClick.bind="openMove" emptyText="'No posted entry yet'"/>
                         </div>
                     </section>
                 </div>

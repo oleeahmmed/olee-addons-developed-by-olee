@@ -89,7 +89,7 @@
             <svg viewBox="0 0 100 100" class="od-donut-svg" role="img" t-att-aria-label="props.centerLabel">
                 <circle cx="50" cy="50" r="42" class="od-donut-track"/>
                 <t t-foreach="arcs" t-as="a" t-key="a.i">
-                    <circle cx="50" cy="50" r="42" t-attf-class="od-donut-arc od-tone-{{ a.tone }} {{ state.hover !== null and state.hover !== a.i ? 'is-dim' : '' }}"
+                    <circle cx="50" cy="50" r="42" t-attf-class="od-donut-arc od-tone-{{ a.tone }} od-chart-{{ a.i % 5 + 1 }} {{ state.hover !== null and state.hover !== a.i ? 'is-dim' : '' }}"
                             t-att-stroke-dasharray="a.dash" t-att-stroke-dashoffset="a.offset" transform="rotate(-90 50 50)"
                             t-on-pointerenter="() => this.state.hover = a.i" t-on-pointerleave="() => this.state.hover = null"/>
                 </t>
@@ -101,7 +101,7 @@
                     <li t-attf-class="{{ state.hover === a.i ? 'is-active' : '' }} {{ props.onClick and a.id ? 'od-clickable' : '' }}"
                         t-on-pointerenter="() => this.state.hover = a.i" t-on-pointerleave="() => this.state.hover = null"
                         t-on-click="() => props.onClick and a.id and props.onClick(a)">
-                        <i t-attf-class="od-dot od-tone-{{ a.tone }}"/>
+                        <i t-attf-class="od-dot od-tone-{{ a.tone }} od-chart-{{ a.i % 5 + 1 }}"/>
                         <span class="od-truncate od-legend-label" t-esc="a.label"/>
                         <span class="od-legend-share od-num" t-esc="Math.round(a.share * 100) + '%'"/>
                         <span class="od-legend-value od-num" t-esc="props.format(a.value)"/>
@@ -212,6 +212,153 @@
                 </select>
                 <i class="fa fa-angle-down od-select-caret" aria-hidden="true"/>
             </label>
+        </div>
+    </t>
+
+
+    <t t-name="modern_theme.OdGoal">
+        <div class="od-goal" role="status">
+            <span class="od-goal-icon"><i t-attf-class="fa {{ props.icon or 'fa-bullseye' }}" aria-hidden="true"/></span>
+            <div class="od-goal-body">
+                <strong t-esc="props.title"/>
+                <p t-if="props.text" t-esc="props.text"/>
+                <div class="od-goal-track" role="progressbar" t-att-aria-valuenow="width" aria-valuemin="0" aria-valuemax="100">
+                    <span t-attf-style="width: {{ width }}%"/>
+                </div>
+            </div>
+            <span class="od-goal-pct od-num"><t t-esc="rounded"/>%</span>
+            <button t-if="props.actionLabel and props.onAction" type="button" class="od-btn" t-on-click="() => props.onAction()">
+                <t t-esc="props.actionLabel"/> <i class="fa fa-angle-right" aria-hidden="true"/>
+            </button>
+        </div>
+    </t>
+
+    <t t-name="modern_theme.OdProgressList">
+        <ul t-attf-class="od-plist od-tone-{{ props.tone or 'blue' }}">
+            <t t-foreach="props.items" t-as="item" t-key="item.id or item_index">
+                <li t-att-class="{ 'od-clickable': props.onClick }" t-att-tabindex="props.onClick ? 0 : undefined"
+                    t-on-click="() => props.onClick and props.onClick(item)"
+                    t-on-keydown="(ev) => ev.key === 'Enter' and props.onClick and props.onClick(item)">
+                    <div class="od-plist-meta">
+                        <span class="od-plist-label od-truncate" t-esc="item.label"/>
+                        <span t-if="item.delta !== undefined and item.delta !== null"
+                              t-attf-class="od-plist-delta od-num {{ item.delta >= 0 ? 'is-good' : 'is-bad' }}"
+                              t-esc="(item.delta >= 0 ? '+' : '') + item.delta + '%'"/>
+                        <span class="od-plist-value od-num" t-esc="item.value"/>
+                    </div>
+                    <div class="od-plist-track"><span t-attf-class="{{ item.tone ? 'od-tone-' + item.tone : '' }}" t-attf-style="width: {{ barWidth(item) }}%"/></div>
+                    <div t-if="item.sub" class="od-plist-sub od-truncate" t-esc="item.sub"/>
+                </li>
+            </t>
+        </ul>
+    </t>
+
+    <t t-name="modern_theme.OdTasks">
+        <div t-if="!props.items.length" class="od-empty"><i class="fa fa-check-circle-o" aria-hidden="true"/><strong t-esc="props.emptyText or 'Nothing to do'"/></div>
+        <ul t-else="" class="od-tasks">
+            <t t-foreach="props.items" t-as="item" t-key="item.id">
+                <li t-att-class="{ 'is-done': state.done[item.id], 'od-clickable': props.onClick }"
+                    t-on-click="() => props.onClick and props.onClick(item)">
+                    <button t-if="props.onToggle" type="button" class="od-task-check" t-att-aria-pressed="state.done[item.id] ? 'true' : 'false'"
+                            title="Mark as done" aria-label="Mark as done" t-on-click="(ev) => this.toggle(item, ev)">
+                        <i t-if="state.done[item.id]" class="fa fa-check" aria-hidden="true"/>
+                    </button>
+                    <div class="od-task-body">
+                        <span class="od-task-title" t-esc="item.title"/>
+                        <span t-if="item.sub" class="od-task-sub od-truncate" t-esc="item.sub"/>
+                        <div class="od-task-tags">
+                            <span t-if="item.priority" t-attf-class="od-badge od-badge--{{ item.priority }}" t-esc="priorityLabel(item.priority)"/>
+                            <span t-if="item.due" t-attf-class="od-badge od-badge--outline {{ item.dueTone ? 'od-tone-' + item.dueTone : '' }}">
+                                <i class="fa fa-clock-o" aria-hidden="true"/> <t t-esc="item.due"/>
+                            </span>
+                        </div>
+                    </div>
+                </li>
+            </t>
+        </ul>
+    </t>
+
+    <t t-name="modern_theme.OdTable">
+        <div class="od-dtable">
+            <div class="od-table-wrap">
+                <table class="od-table">
+                    <thead>
+                        <tr>
+                            <t t-foreach="props.columns" t-as="c" t-key="c.key">
+                                <th t-att-class="{ 'od-r': c.align === 'end' }" t-esc="c.label"/>
+                            </t>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-if="!props.rows.length"><td t-att-colspan="props.columns.length" class="od-dtable-empty" t-esc="props.emptyText or 'No records yet'"/></tr>
+                        <t t-foreach="visible" t-as="row" t-key="row.id or row_index">
+                            <tr t-att-class="{ 'od-clickable': props.onRowClick }" t-on-click="() => props.onRowClick and props.onRowClick(row)">
+                                <t t-foreach="props.columns" t-as="c" t-key="c.key">
+                                    <td t-att-class="{ 'od-r': c.align === 'end', 'od-num': c.type === 'num', 'text-muted': c.type === 'muted' }">
+                                        <t t-if="c.type === 'person'">
+                                            <div class="od-person">
+                                                <img t-if="row[c.key + '_avatar']" class="od-person-avatar" t-att-src="row[c.key + '_avatar']" alt="" loading="lazy"/>
+                                                <span t-else="" t-attf-class="od-person-avatar od-tone-{{ toneOf(row[c.key]) }}" aria-hidden="true" t-esc="initials(row[c.key])"/>
+                                                <div class="od-person-text">
+                                                    <span class="od-person-name od-truncate" t-esc="row[c.key] or '—'"/>
+                                                    <span t-if="row[c.key + '_sub']" class="od-person-sub od-truncate" t-esc="row[c.key + '_sub']"/>
+                                                </div>
+                                            </div>
+                                        </t>
+                                        <t t-elif="c.type === 'badge'"><span t-if="row[c.key]" t-attf-class="od-badge od-badge--soft od-tone-{{ row[c.key + '_tone'] or 'slate' }}" t-esc="row[c.key]"/></t>
+                                        <t t-else="" t-esc="row[c.key] === false or row[c.key] === undefined or row[c.key] === '' ? '—' : row[c.key]"/>
+                                    </td>
+                                </t>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+            <div t-if="props.rows.length > size" class="od-dtable-foot">
+                <span class="od-dtable-range"><t t-esc="range"/> <t t-esc="props.unit or ''"/></span>
+                <div class="od-dtable-pager">
+                    <button type="button" class="od-btn od-btn--sm" t-att-disabled="page === 0" t-on-click="() => this.go(-1)" aria-label="Previous page">
+                        <i class="fa fa-angle-left" aria-hidden="true"/> Previous
+                    </button>
+                    <button type="button" class="od-btn od-btn--sm" t-att-disabled="page >= pages - 1" t-on-click="() => this.go(1)" aria-label="Next page">
+                        Next <i class="fa fa-angle-right" aria-hidden="true"/>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="modern_theme.OdFeed">
+        <ul class="od-feed">
+            <t t-foreach="props.items" t-as="item" t-key="item.id or item_index">
+                <li t-att-class="{ 'od-clickable': props.onClick }" t-on-click="() => props.onClick and props.onClick(item)">
+                    <img t-if="item.avatar" class="od-person-avatar" t-att-src="item.avatar" alt="" loading="lazy"/>
+                    <span t-else="" t-attf-class="od-person-avatar od-tone-{{ toneOf(item.name) }}" aria-hidden="true" t-esc="initials(item.name)"/>
+                    <div class="od-feed-body">
+                        <span class="od-feed-name od-truncate" t-esc="item.name"/>
+                        <span class="od-feed-text od-truncate" t-esc="item.text"/>
+                    </div>
+                    <span class="od-feed-time" t-esc="item.time"/>
+                </li>
+            </t>
+        </ul>
+    </t>
+
+    <t t-name="modern_theme.OdStatusTiles">
+        <div class="od-tiles">
+            <t t-foreach="props.items" t-as="item" t-key="item.key">
+                <div t-attf-class="od-tile od-tone-{{ item.tone or 'slate' }} {{ props.onClick ? 'od-clickable' : '' }}"
+                     t-att-tabindex="props.onClick ? 0 : undefined"
+                     t-on-click="() => props.onClick and props.onClick(item)"
+                     t-on-keydown="(ev) => ev.key === 'Enter' and props.onClick and props.onClick(item)">
+                    <div class="od-tile-top">
+                        <span class="od-tile-label" t-esc="item.label"/>
+                        <i t-if="item.icon" t-attf-class="fa {{ item.icon }}" aria-hidden="true"/>
+                    </div>
+                    <strong class="od-tile-count od-num" t-esc="item.count"/>
+                    <span t-if="item.sub" class="od-tile-sub" t-esc="item.sub"/>
+                </div>
+            </t>
         </div>
     </t>
 

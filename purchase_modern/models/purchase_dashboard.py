@@ -201,7 +201,15 @@ class PurchaseOrder(models.Model):
                               'icon': 'fa-exclamation-circle', 'label': self.env._('Overdue vendor bills'),
                               'amount': finance['overdue']})
 
-        recent = self.search_read([('state', '=', 'purchase')], LIST_FIELDS, order='date_order desc, id desc', limit=7)
+        recent = self.search_read([('state', '=', 'purchase')], LIST_FIELDS, order='date_order desc, id desc', limit=50)
+        # order status tiles (shadcn "Track order status"): standard purchase.order states
+        status = {
+            'draft': order_count([('state', '=', 'draft')]),
+            'sent': order_count([('state', '=', 'sent')]),
+            'to_approve': order_count([('state', '=', 'to approve')]),
+            'purchase': orders,
+            'to_bill': to_bill_count,
+        }
         waiting_rfqs = self.search_read(
             [('state', '=', 'sent'), ('date_order', '<', as_dt(today - timedelta(days=7)))],
             LIST_FIELDS, order='date_order asc', limit=5)
@@ -224,6 +232,7 @@ class PurchaseOrder(models.Model):
             'attention': attention,
             'finance': finance,
             'recent': recent,
+            'status': status,
             'waiting_rfqs': waiting_rfqs,
             'company': self.env.company.name,
         }

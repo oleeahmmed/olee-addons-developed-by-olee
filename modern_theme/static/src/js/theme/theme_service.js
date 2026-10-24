@@ -21,10 +21,10 @@ export const ATTRIBUTE_OPTIONS = [
 ];
 
 export const PRESET_SWATCHES = {
-    once: "#0a8466", indigo: "#4f46e5", blue: "#2563eb", sky: "#0369a1", teal: "#0f766e", emerald: "#047857",
-    green: "#15803d", amber: "#b45309", yellow: "#facc15", orange: "#c2410c", red: "#dc2626",
-    rose: "#e11d48", violet: "#7c3aed", slate: "#1e293b", zinc: "#18181b", stone: "#1c1917",
-    gray: "#111827", neutral: "#171717",
+    once: "#171717", indigo: "#4f39f6", blue: "#155dfc", sky: "#0084cc", teal: "#009588", emerald: "#009767",
+    green: "#00a544", amber: "#dd7400", yellow: "#cd8900", orange: "#f05100", red: "#e40014",
+    rose: "#e70044", violet: "#7f22fe", slate: "#314158", zinc: "#27272a", stone: "#292524",
+    gray: "#1e2939", neutral: "#171717",
 };
 
 const DARK_QUERY = "(prefers-color-scheme: dark)";

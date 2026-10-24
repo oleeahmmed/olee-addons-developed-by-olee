@@ -244,7 +244,7 @@ class StockPicking(models.Model):
         upcoming = self.search_read(
             [('state', 'in', ('confirmed', 'waiting', 'assigned'))] + pick_wh, PICKING_FIELDS,
             order='scheduled_date asc', limit=8)
-        recent = self.search_read([('state', '=', 'done')] + pick_wh, PICKING_FIELDS, order='date_done desc', limit=7)
+        recent = self.search_read([('state', '=', 'done')] + pick_wh, PICKING_FIELDS, order='date_done desc', limit=50)
 
         currency = self.env.company.currency_id
         return {

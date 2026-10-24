@@ -1,0 +1,200 @@
+// Modern Theme: light mode of the default preset = the shadcn/ui "neutral" theme, exactly
+// as the shadcnuikit dashboards use it (CRM, Ecommerce, Sales, HR, Hotel):
+//
+//   background / card / popover  #ffffff        foreground        #0a0a0a  (oklch .145)
+//   primary                      #171717        primary-foreground #fafafa (oklch .985)
+//   secondary / muted / accent   #f5f5f5        muted-foreground  #737373  (oklch .556)
+//   border / input               #e5e5e5        ring              #a1a1a1  (oklch .708)
+//   destructive                  #e7000b        sidebar           #fafafa
+//   chart-1..5   #d4d4d4 #737373 #525252 #404040 #262626
+//
+// Only light mode of the default preset: dark mode and the other presets are untouched.
+// Theme-side CSS only (no database write), so an Odoo update cannot break it.
+
+$sl: 'html[data-mt-theme="once"]:not([data-mt-scheme="dark"])';
+
+// ---------------------------------------------------------------------------
+// 1. Tokens
+// ---------------------------------------------------------------------------
+#{$sl} {
+    --mt-destructive: #e7000b;
+    --mt-destructive-foreground: #ffffff;
+    --mt-chart-1: #d4d4d4;
+    --mt-chart-2: #737373;
+    --mt-chart-3: #525252;
+    --mt-chart-4: #404040;
+    --mt-chart-5: #262626;
+
+    // surfaces: white page, white cards with #e5e5e5 hairlines (no tinted canvas)
+    --mt-content-bg: #ffffff;
+    --mt-canvas: #ffffff;
+    --mt-content-bg-accent: #f5f5f5;
+    --mt-card-matte: #ffffff;
+    --mt-popover: #ffffff;
+    --mt-stitch-bg: #ffffff;
+
+    // interaction: accent #f5f5f5 for hover / selected, ring #a1a1a1 for focus
+    --mt-hover: #f5f5f5;
+    --mt-selected: #f5f5f5;
+    --mt-primary-soft: #f5f5f5;
+    --mt-primary-soft-fg: #171717;
+    --mt-primary-hover: #2e2e2e;
+    --mt-primary-active: #2e2e2e;
+    --mt-ring: color-mix(in srgb, #a1a1a1 50%, transparent);
+    --mt-focus-border: #a1a1a1;
+    --mt-focus-ring: color-mix(in srgb, #a1a1a1 50%, transparent);
+    --mt-placeholder: #737373;
+    --mt-overlay: color-mix(in srgb, #000000 50%, transparent);
+    --mt-scrollbar: #e5e5e5;
+    --mt-scrollbar-hover: #d4d4d4;
+
+    // shadcn shadows (shadow-xs / shadow-sm / shadow-md / shadow-lg)
+    --mt-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --mt-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    --mt-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --mt-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --mt-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+    // top bar = background
+    --mt-chrome-bg: #ffffff;
+    --mt-topbar-bg: #ffffff;
+    --mt-topbar-fg: #0a0a0a;
+    --mt-topbar-border: #e5e5e5;
+
+    // sidebar = shadcn sidebar tokens as shadcnuikit renders them (light):
+    // --sidebar #f7f6f6, --sidebar-foreground #646464, --sidebar-accent #e1e1e1
+    --mt-sidebar-bg: #f7f6f6;
+    --mt-sidebar-fg: #646464;
+    --mt-sidebar-muted-fg: #737373;
+    --mt-sidebar-accent: #e1e1e1;
+    --mt-sidebar-accent-fg: #000000;
+    --mt-sidebar-active-bg: #e1e1e1;
+    --mt-sidebar-active-fg: #000000;
+    --mt-sidebar-indicator: #242424;
+    --mt-sidebar-primary: #242424;
+    --mt-sidebar-primary-fg: #fafafa;
+    --mt-sidebar-border: #e5e5e5;
+    --mt-sidebar-ring: #a1a1a1;
+    --mt-sidebar-guide: #e5e5e5;
+
+    // right-hand drawer
+    --or-focus-border: #a1a1a1;
+    --or-focus-ring: color-mix(in srgb, #a1a1a1 50%, transparent);
+    --or-accent-soft: #f5f5f5;
+    --or-accent-border: #a1a1a1;
+    --or-icon-bg: #f5f5f5;
+}
+
+// ---------------------------------------------------------------------------
+// 2. Dashboards: neutral chart colours, colour only where it means something
+//    (green = good, red = bad / overdue), like the shadcnuikit dashboards.
+// ---------------------------------------------------------------------------
+#{$sl} .od-page {
+    .od-tone-blue   { --od-c: #262626; }
+    .od-tone-teal   { --od-c: #737373; }
+    .od-tone-violet { --od-c: #525252; }
+    .od-tone-sky, .od-tone-info { --od-c: #404040; }
+    .od-tone-slate, .od-tone-muted { --od-c: #737373; }
+    .od-tone-amber, .od-tone-warning, .od-tone-orange { --od-c: #525252; }
+    .od-tone-green, .od-tone-success { --od-c: #16a34a; }
+    .od-tone-rose, .od-tone-red, .od-tone-danger { --od-c: #e7000b; }
+    [class*="od-tone-"] { --od-soft: color-mix(in srgb, var(--od-c) 9%, #ffffff); }
+
+    // donut / pie: shadcn chart-5 … chart-1, one per slice
+    .od-chart-1 { --od-c: #262626; }
+    .od-chart-2 { --od-c: #737373; }
+    .od-chart-3 { --od-c: #d4d4d4; }
+    .od-chart-4 { --od-c: #404040; }
+    .od-chart-5 { --od-c: #a1a1a1; }
+
+    // stat cards: plain white, no tinted "featured" card, neutral sparkline
+    .od-kpi, .od-kpi.od-kpi--featured { background: #ffffff; border-color: #e5e5e5; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+    .od-kpi .od-spark { color: #171717; opacity: 0.85; }
+    .od-delta.od-delta--good { color: #16a34a; }
+    .od-delta.od-delta--bad { color: #e7000b; }
+    .od-card { background: #ffffff; border-color: #e5e5e5; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+    .od-card-icon, .od-kpi-icon, .od-att-icon { background: #f5f5f5 !important; color: #171717 !important; }
+    .od-eyebrow .od-live { background: #16a34a; box-shadow: 0 0 0 3px color-mix(in srgb, #16a34a 20%, transparent); }
+
+    // charts
+    .od-bar { fill: #262626; &.od-bar--active { fill: #171717; } &.od-bar--future { fill: #f5f5f5; } }
+    .od-hover-band { fill: #f5f5f5; }
+    .od-swatch--bar { background: #171717; }
+    .od-swatch--line { border-top-color: #a1a1a1; }
+    .od-prev-line { stroke: #a1a1a1; }
+    .od-prev-dot { stroke: #a1a1a1; fill: #ffffff; }
+    .od-grid-line { stroke: #e5e5e5; }
+    .od-axis { fill: #737373; }
+    .od-tooltip { background: #ffffff; color: #0a0a0a; border: 1px solid #e5e5e5;
+        .od-tooltip-row { color: #737373; strong { color: #0a0a0a; } }
+        .od-tooltip-growth.is-good { color: #16a34a; } .od-tooltip-growth.is-bad { color: #e7000b; }
+    }
+    .od-donut-track { stroke: #f5f5f5; }
+    .od-funnel-track, .od-rank-bar, .od-plist-track, .od-goal-track, .od-meter-track, .od-stack-bar { background: #f5f5f5; }
+    .od-funnel-track span { background: #171717; }
+    li.is-won .od-funnel-track span { background: #16a34a; }
+    .od-funnel-name .fa-trophy { color: #171717; }
+    .od-forecast-weighted { background: #171717 !important; }
+    .od-rank-no.is-first { background: #171717; color: #fafafa; }
+    .od-allclear { background: #f5f5f5;
+        .od-allclear-icon { background: #171717; color: #fafafa; }
+    }
+
+    // buttons, filters, links: shadcn outline / secondary / ghost
+    .od-btn { background: #ffffff; border-color: #e5e5e5; color: #0a0a0a; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        &:hover { background: #f5f5f5; border-color: #e5e5e5; }
+        &.od-btn--primary { background: #171717; border-color: #171717; color: #fafafa; &:hover { background: #2e2e2e; } }
+    }
+    .od-seg { background: #f5f5f5; border-color: transparent;
+        button { color: #737373; &.is-active { background: #ffffff; color: #0a0a0a; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); } }
+    }
+    .od-select { background: #ffffff; border-color: #e5e5e5; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+    .od-link { color: #0a0a0a; &:hover { background: #f5f5f5; } }
+    .od-pill { background: #f5f5f5; color: #171717; }
+    .od-pill[class*="od-tone-green"], .od-pill.od-tone-success { background: color-mix(in srgb, #16a34a 10%, #ffffff); color: #15803d; }
+    .od-pill:is(.od-tone-rose, .od-tone-red, .od-tone-danger) { background: color-mix(in srgb, #e7000b 9%, #ffffff); color: #e7000b; }
+    .od-note { background: #f5f5f5; color: #737373; }
+    .od-table th { background: transparent; color: #737373; }
+    .od-table tbody tr.od-clickable:hover td { background: color-mix(in srgb, #f5f5f5 50%, #ffffff); }
+    .od-skel { background: linear-gradient(90deg, #f5f5f5 0%, #fafafa 50%, #f5f5f5 100%) 0 0 / 200% 100%; }
+
+    // shadcn badges: default (primary), secondary, destructive, outline
+    .od-badge { background: #f5f5f5; color: #171717; }
+    .od-badge.od-badge--medium { background: #171717; color: #fafafa; }
+    .od-badge.od-badge--high { background: #e7000b; color: #ffffff; }
+    .od-badge.od-badge--low { background: #f5f5f5; color: #171717; }
+    .od-badge.od-badge--outline { background: transparent; border-color: #e5e5e5; color: #0a0a0a; }
+    .od-badge.od-badge--outline:is(.od-tone-rose, .od-tone-red, .od-tone-danger) { color: #e7000b; border-color: color-mix(in srgb, #e7000b 30%, #e5e5e5); }
+    .od-badge.od-badge--soft { background: #f5f5f5; color: #171717; }
+    .od-badge.od-badge--soft:is(.od-tone-green, .od-tone-success) { background: color-mix(in srgb, #16a34a 10%, #ffffff); color: #15803d; }
+    .od-badge.od-badge--soft:is(.od-tone-rose, .od-tone-red, .od-tone-danger) { background: color-mix(in srgb, #e7000b 9%, #ffffff); color: #e7000b; }
+
+    // avatars without a photo: muted circle
+    span.od-person-avatar, .od-rank-mono { background: #f5f5f5 !important; color: #171717 !important; }
+
+    // status tiles: a neutral marker, colour only for good / bad
+    .od-tile::before { background: var(--od-c, #171717); }
+    .od-tile .od-tile-top .fa { color: #737373; }
+    .od-tile.od-clickable:hover { background: #fafafa; border-color: #d4d4d4; }
+    .od-goal .od-goal-icon { background: #f5f5f5; color: #171717; }
+    .od-goal .od-goal-track span, .od-plist-track span { background: #171717; }
+    .od-plist-track span.od-tone-green { background: #16a34a; }
+    .od-task-check[aria-pressed="true"] { background: #171717; border-color: #171717; color: #fafafa; }
+}
+
+// ---------------------------------------------------------------------------
+// 3. Plain white surfaces: no brand glow behind dashboards, no dotted boards
+// ---------------------------------------------------------------------------
+#{$sl} {
+    --mt-board-dot: transparent;
+    .od-page { background-image: none; background-color: #ffffff; }
+}
+
+// ---------------------------------------------------------------------------
+// 4. Odoo bits that used extra colours: Discuss unread counters (green) and the
+//    log-note edge (amber) become shadcn primary / border colours.
+// ---------------------------------------------------------------------------
+#{$sl} .o_web_client {
+    .o-discuss-badge:not(.o-muted), .o-discuss-badge:not(.o-muted) .o-innerBadge { --o-discuss-badge-bg: #171717; }
+    .o-mail-Message:has(.o-mail-Message-body.o-note) { border-left-color: #d4d4d4 !important; }
+}

@@ -85,6 +85,26 @@ html[data-mt-scheme="dark"][data-mt-sidebar-bg="solid"] .o_mt_sidebar[data-style
     --sc-ring: rgba(115, 115, 115, 0.5);
 }
 
+// Hover / active, exactly as shadcnuikit's colour presets do it: the default (neutral)
+// preset uses --sidebar-accent (#e1e1e1 / #2c2c2c) for both; a colour preset sets
+// --sidebar-accent to its colour at 15% (hover and active alike), text black / white.
+html[data-mt-sidebar-bg="solid"]:not(#mt-np) .o_mt_sidebar[data-style="classic"] {
+    --sc-active-bg: var(--sc-accent);
+    --sc-active-fg: var(--sc-accent-fg);
+}
+html[data-mt-sidebar-bg="solid"]:not([data-mt-theme="once"]):not([data-mt-theme="neutral"]):not(#mt-np) .o_mt_sidebar[data-style="classic"] {
+    --sc-accent: color-mix(in srgb, var(--mt-primary) 15%, transparent);
+    --sc-accent-fg: #000000;
+    --sc-active-bg: var(--sc-accent);
+    --sc-active-fg: #000000;
+}
+html[data-mt-scheme="dark"][data-mt-sidebar-bg="solid"]:not([data-mt-theme="once"]):not([data-mt-theme="neutral"]):not(#mt-np) .o_mt_sidebar[data-style="classic"] {
+    --sc-accent-fg: #ffffff;
+    --sc-active-fg: #ffffff;
+}
+// shadcn header: h-14 (56px)
+html[data-mt-sidebar-style="classic"][data-mt-topbar-height="normal"] { --mt-topbar-h: 3.5rem; }
+
 // ---------------------------------------------------------------------------
 // Frame
 // ---------------------------------------------------------------------------
@@ -97,6 +117,7 @@ html[data-mt-scheme="dark"][data-mt-sidebar-bg="solid"] .o_mt_sidebar[data-style
     .mt-sc {
         width: 100%;
         height: 100%;
+        padding: 0.5rem;            // shadcn sidebar-container p-2: rows sit 16px from the edge
         background-color: var(--sc-bg);
         background-image: var(--sc-bg-image);
         backdrop-filter: var(--mt-sidebar-blur);
@@ -155,7 +176,8 @@ html[data-mt-scheme="dark"][data-mt-sidebar-bg="solid"] .o_mt_sidebar[data-style
         position: relative;
         display: flex;
         align-items: center;
-        width: 100%;
+        width: calc(100% - 1rem);
+        margin-inline: 0.5rem;
         height: 2rem;
         padding: 0.25rem 0.625rem 0.25rem 2rem;
         border: 1px solid var(--sc-input-border);
@@ -190,12 +212,12 @@ html[data-mt-scheme="dark"][data-mt-sidebar-bg="solid"] .o_mt_sidebar[data-style
         padding: 0 0.25rem;
         border: 0;
         border-radius: 0.25rem;
-        background: var(--sc-kbd-bg);
-        color: var(--sc-muted-fg);
+        background: transparent;    // shadcnuikit: the shortcut is plain muted text
+        color: var(--sc-fg);
         box-shadow: none;
         font-family: var(--mt-font-family);
-        font-size: 0.75rem;
-        font-weight: 500;
+        font-size: 0.8125rem;
+        font-weight: 400;
         line-height: 1;
     }
 
@@ -215,7 +237,7 @@ html[data-mt-scheme="dark"][data-mt-sidebar-bg="solid"] .o_mt_sidebar[data-style
         flex-direction: column;
         width: 100%;
         min-width: 0;
-        padding: 0.5rem;
+        padding: 0 0.5rem;          // shadcn SidebarGroup: p-2 py-0
     }
     .mt-sc-label {
         display: flex;
@@ -420,7 +442,9 @@ html[data-mt-scheme="dark"][data-mt-sidebar-bg="solid"] .o_mt_sidebar[data-style
 @media (min-width: $mt-sc-desktop) {
     .o_mt_sidebar.mt-sb-collapsed[data-style="classic"] {
         width: var(--mt-sb-collapsed-w);
+        .mt-sc { padding-inline: 0; }
         .mt-sc-header, .mt-sc-group, .mt-sc-footer { padding: 0.5rem 1rem; align-items: center; }
+        .mt-sc-search { margin-inline: 0; }
         .mt-sc-brand { justify-content: center; }
         .mt-sc-brand .mt-sc-btn-lg { width: 2rem; height: 2rem; padding: 0; flex: 0 0 auto; }
         .mt-sc-logo { margin: 0; }
@@ -481,7 +505,7 @@ html[data-mt-theme]:not(#mt-np) {
     --mt-content-bg-accent: #f5f5f5;
     --mt-card-matte: #fafafa;
     --mt-popover: #ffffff;
-    --mt-hover: #f5f5f5;
+    --mt-hover: rgba(10, 10, 10, 0.04);
     --mt-selected: #f5f5f5;
     --mt-topbar-fg: #0a0a0a;
     --mt-field-bg: transparent;
@@ -497,7 +521,7 @@ html[data-mt-theme]:not(#mt-np) {
 html[data-mt-theme][data-mt-scheme="dark"]:not(#mt-np) {
     --mt-background: #0a0a0a;
     --mt-foreground: #fafafa;
-    --mt-card: #0a0a0a;           // the page and its panels share one surface; hairlines separate them
+    --mt-card: #171717;           // shadcn --card (cards, popovers, sidebar: one surface)
     --mt-card-foreground: #fafafa;
     --mt-canvas-base: #0a0a0a;
     --mt-muted: #262626;
@@ -511,9 +535,9 @@ html[data-mt-theme][data-mt-scheme="dark"]:not(#mt-np) {
     --mt-content-bg: #0a0a0a;
     --mt-canvas: #0a0a0a;
     --mt-content-bg-accent: #171717;
-    --mt-card-matte: #121212;
+    --mt-card-matte: #141414;
     --mt-popover: #171717;
-    --mt-hover: #262626;
+    --mt-hover: rgba(255, 255, 255, 0.06);
     --mt-selected: #262626;
     --mt-topbar-fg: #fafafa;
     --mt-field-bg: rgba(255, 255, 255, 0.045);
@@ -573,6 +597,20 @@ html[data-mt-theme][data-mt-scheme="dark"]:not(#mt-np) {
         }
         // floating top bar option does not apply inside the card
         &[data-mt-topbar-style="floating"] .o_navbar { padding: 0 !important; }
+    }
+    // Scrolled (shadcn inset): the top gap and the card's rounded top corners scroll
+    // away, the header stays flush with the top of the window.
+    html[data-mt-theme][data-mt-sidebar-style="classic"]:not(.mt-fullscreen) {
+        .o_web_client { transition: padding-top 160ms var(--mt-ease); }
+        .o_web_client > .o_navbar, .o_web_client > .o_navbar .o_main_navbar { transition: border-radius 160ms var(--mt-ease); }
+    }
+    html[data-mt-theme][data-mt-sidebar-style="classic"].mt-scrolled:not(.mt-fullscreen) {
+        .o_web_client { padding-top: 0 !important; }
+        .o_web_client > .o_navbar {
+            border-radius: 0;
+            clip-path: inset(0 -6px 0 -6px);
+            .o_main_navbar { border-radius: 0; }
+        }
     }
     // placeholder under the sidebar before it mounts: the sidebar colour
     html[data-mt-theme][data-mt-sidebar-style="classic"] body::before { background: var(--mt-sidebar-bg); }

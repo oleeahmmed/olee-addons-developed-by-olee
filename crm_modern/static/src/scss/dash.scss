@@ -409,3 +409,11 @@
     .od-busy { opacity: 0.55; transition: opacity 150ms ease; pointer-events: none; }
 }
 @keyframes od-shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+// Donut in a narrow card (a third of the row): donut on top, full-width legend below.
+.o_cm.od-page .od-card-body { container-type: inline-size; }
+@container (max-width: 26rem) {
+    .o_cm.od-page .od-donut { grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 0.75rem; }
+    .o_cm.od-page .od-donut-svg { max-width: 9.5rem; }
+    .o_cm.od-page .od-legend { width: 100%; }
+    .o_cm.od-page .od-legend .od-legend-value { min-width: 0; }
+}

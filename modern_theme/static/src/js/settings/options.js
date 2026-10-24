@@ -192,7 +192,7 @@ export const OPTION_GROUPS = [
 ];
 
 export const PRESET_LABELS = [
-    ["once", _t("Once (neutral + emerald)")],
+    ["once", _t("Default (shadcn neutral)")],
     ["indigo", _t("Indigo")],
     ["blue", _t("Blue")],
     ["sky", _t("Sky")],

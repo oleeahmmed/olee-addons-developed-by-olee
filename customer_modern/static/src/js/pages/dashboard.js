@@ -99,6 +99,31 @@ export class ContactsDashboard extends Component {
     get topVendors() {
         return (this.state.data.purchases?.top || []).map((v) => ({ ...v, partner: v.id }));
     }
+    // ---------- shadcn block: the latest contacts table ----------
+    get contactColumns() {
+        return [
+            { key: "name", label: _t("Name"), type: "person" },
+            { key: "company", label: _t("Company") },
+            { key: "phone", label: _t("Phone"), type: "muted" },
+            { key: "place", label: _t("Location"), type: "muted" },
+            { key: "kind", label: _t("Type"), type: "badge" },
+            { key: "added", label: _t("Added"), type: "muted", align: "end" },
+        ];
+    }
+    get contactRows() {
+        return this.state.data.recent.map((p) => ({
+            id: p.id,
+            name: p.name || p.display_name,
+            name_sub: p.email || "",
+            name_avatar: `/web/image/res.partner/${p.id}/avatar_128`,
+            company: p.is_company ? "" : (p.parent_id ? p.parent_id[1] : ""),
+            phone: p.phone || "",
+            place: this.location(p),
+            kind: p.is_company ? _t("Company") : _t("Person"),
+            kind_tone: p.is_company ? "violet" : "sky",
+            added: shortDate(p.create_date),
+        }));
+    }
     location(p) {
         return [p.city, p.country_id && p.country_id[1]].filter(Boolean).join(", ") || "—";
     }

@@ -91,13 +91,28 @@ All four share:
   page title (lists, kanban, forms), or top right on home pages and dashboards.
 * Menus come from `ir.ui.menu`: Odoo's groups and installed modules decide what shows.
 
-## Look: the "Once" preset (default)
+## Look: shadcn/ui neutral (every preset, light and dark)
 
-Inspired by Once UI: pure neutral greys (light `#f6f6f6` canvas / white cards, dark
-`#0a0a0a` canvas / `#151515` cards), emerald brand for accents and links, and
-high-contrast solid buttons (black in light mode, white in dark mode) through the
-`--mt-solid`, `--mt-solid-fg`, `--mt-solid-hover` tokens. Menu and chrome icons are
-Lucide line icons drawn over the Font Awesome names (`scss/icons.scss`).
+Surfaces are the shadcn/ui "neutral" theme exactly as shadcnuikit.com renders it, and
+they are the same for every colour preset, so switching the preset only changes the
+accent (buttons, links, focus ring, active menu tint), never the page, sidebar, top bar
+or cards (`scss/mt_maps.scss`):
+
+| Token | Light | Dark |
+|---|---|---|
+| page (`--mt-background`) | `#ffffff` | `#0a0a0a` |
+| card / popover / sidebar | `#ffffff` / `#ffffff` / `#f7f6f6` | `#171717` |
+| muted / secondary / accent | `#f5f5f5` | `#262626` |
+| text / muted text | `#0a0a0a` / `#737373` | `#fafafa` / `#a1a1a1` |
+| border / input | `#e5e5e5` | white 10% / white 15% |
+| sidebar text / hover | `#646464` / `#e1e1e1` | `#b0b0b0` / `#2c2c2c` |
+| top bar | page colour + hairline | page colour + hairline |
+
+The default preset is shadcn's own: near-black primary in light (`#171717`), near-white
+in dark (`#e5e5e5`). The colour presets are shadcnuikit's theme colours (Tailwind
+`*-600`: red `#e40014`, blue `#155dfc`, …), the same value in light and dark, with white
+text; links use a lighter tone in dark mode so they stay readable. Menu and chrome icons
+are Lucide line icons drawn over the Font Awesome names (`scss/icons.scss`).
 
 ## Sidebar API (for app addons)
 

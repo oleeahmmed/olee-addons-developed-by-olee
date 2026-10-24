@@ -101,13 +101,33 @@ export class MtSidebar extends Component {
             this.theme.setCollapsed(this.state.collapsed);
         });
 
+        // shadcn inset layout: once the page is scrolled, html.mt-scrolled lets the
+        // content card's top gap and rounded corners go (layout scss: sidebar_shadcn).
+        const lastTop = new WeakMap();
+        const onScroll = (ev) => {
+            const el = ev.target;
+            if (!(el instanceof Element) || !el.closest(".o_action_manager")) {
+                return;
+            }
+            if (lastTop.get(el) === el.scrollTop) {
+                return; // horizontal scroll (kanban columns): not a page scroll
+            }
+            lastTop.set(el, el.scrollTop);
+            document.documentElement.classList.toggle("mt-scrolled", el.scrollTop > 4);
+        };
+        useBus(this.env.bus, "ACTION_MANAGER:UI-UPDATED", () => {
+            document.documentElement.classList.remove("mt-scrolled");
+        });
+
         onMounted(() => {
             this.syncAppClass();
             this.loadBadges();
             document.documentElement.classList.add("mt-has-sidebar");
+            document.addEventListener("scroll", onScroll, { capture: true, passive: true });
         });
         onWillUnmount(() => {
-            document.documentElement.classList.remove("mt-has-sidebar");
+            document.documentElement.classList.remove("mt-has-sidebar", "mt-scrolled");
+            document.removeEventListener("scroll", onScroll, { capture: true });
             browser.clearTimeout(this.flyoutTimer);
         });
         // Layout flags on <html>, read by layout.scss (offset, overlay…).
@@ -286,6 +306,33 @@ export class MtSidebar extends Component {
         this.state.open.recent = !this.state.open.recent;
         writeJSON(OPEN_KEY, this.state.open);
     }
+    // ------------------------------------------------------------------
+    // Classic style: every other installed app, as collapsible items (shadcn
+    // "E-commerce ›" rows) whose sub-items are that app's everyday pages.
+    // ------------------------------------------------------------------
+    get otherApps() {
+        const current = this.currentApp;
+        return this.apps.filter((app) => app.id !== current?.id);
+    }
+    appHasMenus(app) {
+        return Boolean(this.menu.getMenu(app.id)?.children?.length);
+    }
+    appLeaves(app) {
+        return flattenLeaves(this.sideTreeFor(app)).map((leaf) => leaf.node);
+    }
+    isAppOpen(app) {
+        return this.state.open[`app${app.id}`] === true;
+    }
+    onAppItem(app, ev) {
+        if (this.collapsed || !this.appHasMenus(app)) {
+            return this.openApp(app, ev);
+        }
+        ev?.preventDefault();
+        ev?.stopPropagation();
+        this.state.open[`app${app.id}`] = !this.isAppOpen(app);
+        writeJSON(OPEN_KEY, this.state.open);
+    }
+
     isAppExpanded(app) {
         const v = this.state.expandedApps[app.id];
         return v === undefined ? app.id === this.currentApp?.id : v;

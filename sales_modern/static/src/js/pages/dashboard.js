@@ -148,6 +148,58 @@ export class SalesDashboard extends Component {
     newQuotation() {
         return openFullForm(this.action, "sale.order", false);
     }
+    // ---------- shadcn blocks: order status tiles and the orders table ----------
+    get statusTiles() {
+        const st = this.state.data.status || {};
+        return [
+            { key: "draft", label: _t("Quotations"), count: number(st.draft), sub: _t("not sent yet"), tone: "slate", icon: "fa-file-o" },
+            { key: "sent", label: _t("Sent"), count: number(st.sent), sub: _t("waiting for the customer"), tone: "sky", icon: "fa-paper-plane-o" },
+            { key: "sale", label: _t("Confirmed"), count: number(st.sale), sub: _t("orders this period"), tone: "green", icon: "fa-check" },
+            { key: "to_invoice", label: _t("To invoice"), count: number(st.to_invoice), sub: _t("ready to invoice"), tone: "violet", icon: "fa-file-text-o" },
+            { key: "cancel", label: _t("Cancelled"), count: number(st.cancel), sub: _t("this period"), tone: "rose", icon: "fa-times" },
+        ];
+    }
+    openStatus(tile) {
+        const domains = {
+            draft: [["state", "=", "draft"]],
+            sent: [["state", "=", "sent"]],
+            sale: [["state", "=", "sale"], ...this.periodDomain()],
+            to_invoice: [["invoice_status", "=", "to invoice"]],
+            cancel: [["state", "=", "cancel"]],
+        };
+        const team = this.state.teamId ? [["team_id", "=", this.state.teamId]] : [];
+        return this.openOrders(tile.label, [...domains[tile.key], ...team]);
+    }
+    get orderColumns() {
+        return [
+            { key: "customer", label: _t("Customer"), type: "person" },
+            { key: "user", label: _t("Salesperson"), type: "muted" },
+            { key: "date", label: _t("Date"), type: "muted" },
+            { key: "invoice", label: _t("Invoice"), type: "badge" },
+            { key: "untaxed", label: _t("Untaxed"), type: "num", align: "end" },
+            { key: "total", label: _t("Total"), type: "num", align: "end" },
+        ];
+    }
+    get orderRows() {
+        const inv = {
+            invoiced: [_t("Invoiced"), "green"],
+            "to invoice": [_t("To invoice"), "violet"],
+            upselling: [_t("Upselling"), "amber"],
+        };
+        return this.state.data.recent.map((o) => {
+            const [label, tone] = inv[o.invoice_status] || [_t("Nothing to invoice"), "slate"];
+            return {
+                id: o.id,
+                customer: o.partner_id ? o.partner_id[1] : "—",
+                customer_sub: o.name,
+                user: o.user_id ? o.user_id[1] : "",
+                date: shortDate(o.date_order),
+                invoice: label, invoice_tone: tone,
+                untaxed: this.mr(o, o.amount_untaxed),
+                total: this.mr(o, o.amount_total),
+            };
+        });
+    }
     openOrder(order) {
         return openFullForm(this.action, "sale.order", order.id);
     }
