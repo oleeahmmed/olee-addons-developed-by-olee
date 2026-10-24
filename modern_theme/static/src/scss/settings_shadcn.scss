@@ -1,0 +1,284 @@
+// Modern Theme: the Settings app (Settings > General Settings and every app tab),
+// redesigned after the shadcnuikit "Settings" page, light and dark, every preset.
+//
+//   left   a nav card: 32px rows, 14px medium labels, muted active row (no inset bar)
+//   right  one card per section: muted/40 frame with the section title as its header,
+//          the settings on a card panel inside (10px corners, hairline ring), rows
+//          separated by hairlines; checkbox settings become shadcn switches on the right
+//
+// Update-safe: CSS only, no template override. It targets only the class names Odoo
+// has used for its settings page for many versions (o_base_settings_view, settings_tab,
+// tab, app_settings_block, o_settings_container, o_setting_box, o_setting_left_pane,
+// o_setting_right_pane, o_form_label, text-muted, content-group). If Odoo adds or
+// renames something, that part simply falls back to Odoo's own look.
+// :not(#mt-st) adds id weight so it wins over Odoo and the older theme rules.
+
+$st: 'html[data-mt-theme]:not(#mt-st) .o_base_settings_view';
+$st-ring: 'color-mix(in srgb, var(--mt-foreground) 10%, transparent)';
+$st-ring-soft: 'color-mix(in srgb, var(--mt-foreground) 5%, transparent)';
+$st-frame: 'color-mix(in srgb, var(--mt-muted) 40%, var(--mt-background))';
+
+#{$st} .o_form_renderer {
+    --settings__tab-bg: transparent;
+    --settings__tab-bg--active: var(--mt-muted);
+    --settings__tab-color: var(--mt-foreground);
+    --settings__title-bg: transparent;
+    background: var(--mt-background);
+}
+
+#{$st} .o_setting_container {
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: var(--mt-background);
+
+    // ------------------------------------------------------------------
+    // Left: the app list as a nav card
+    // ------------------------------------------------------------------
+    > div:has(> .settings_tab) {
+        flex: 0 0 15rem !important;
+        height: fit-content;
+        max-height: 100%;
+        overflow: visible;
+    }
+    .settings_tab {
+        gap: 0.125rem;
+        height: auto !important;
+        max-height: calc(100vh - 12rem);
+        padding: 0.5rem;
+        border: 0 !important;
+        border-radius: 0.625rem;
+        background: var(--mt-card);
+        box-shadow: 0 0 0 1px #{$st-ring}, 0 1px 0 0 rgba(0, 0, 0, 0.05);
+        overflow: auto;
+        scrollbar-width: thin;
+
+        .tab {
+            align-items: center;
+            gap: 0.5rem;
+            height: 2rem;
+            margin: 0;
+            padding: 0 0.625rem;
+            border-radius: 0.5rem;
+            color: var(--mt-foreground);
+            font-size: 0.875rem;
+            font-weight: 500;
+            line-height: 1.25rem;
+            box-shadow: none !important;
+            transition: background-color 120ms ease;
+            .icon {
+                width: 1.125rem;
+                min-width: 1.125rem;
+                height: 1.125rem;
+                margin: 0;
+                object-fit: contain;
+            }
+            .app_name { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+            &:hover { background: color-mix(in srgb, var(--mt-muted) 60%, transparent); color: var(--mt-foreground); }
+            &.selected {
+                background: var(--mt-muted);
+                color: var(--mt-foreground);
+                font-weight: 500;
+            }
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // Right: sections as cards
+    // ------------------------------------------------------------------
+    .settings {
+        padding: 0 0.25rem 2rem 0;
+        background: transparent;
+        overflow: auto;
+
+        > .app_settings_block {
+            max-width: 64rem;
+        }
+        // one section = title (card header) + its settings (card panel)
+        > .app_settings_block > div:has(> .o_settings_container),
+        > .app_settings_block > div:has(> h2) {
+            margin-bottom: 1.25rem;
+            border-radius: 0.875rem;
+            background: #{$st-frame};
+            box-shadow: 0 0 0 1px #{$st-ring};
+            overflow: hidden;
+        }
+        > .app_settings_block h2 {
+            margin: 0 !important;
+            padding: 0.875rem 1rem 0.75rem;
+            border: 0;
+            background: transparent;
+            color: var(--mt-foreground);
+            font-size: 0.875rem;
+            font-weight: 600;
+            line-height: 1.25rem;
+            letter-spacing: 0;
+        }
+        > .app_settings_block h3 {
+            padding: 0.5rem 1rem;
+            color: var(--mt-muted-foreground);
+            font-size: 0.8125rem;
+            font-weight: 500;
+        }
+        // section of a search result (app name above its matches)
+        .settingSearchHeader {
+            margin: 0 0 0.75rem;
+            padding: 0;
+            background: transparent;
+            color: var(--mt-foreground);
+            font-size: 0.875rem;
+            font-weight: 600;
+            .icon { width: 1.125rem; height: 1.125rem; margin-right: 0.5rem; }
+        }
+        .highlighter {
+            border-radius: 0.25rem;
+            background: color-mix(in srgb, var(--mt-primary) 22%, transparent);
+            color: inherit;
+            font-weight: inherit;
+        }
+    }
+
+    // the settings panel inside a section card
+    .o_settings_container {
+        --gutter-x: 0;
+        --gutter-y: 0;
+        max-width: none;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: 0.625rem;
+        background: var(--mt-card);
+        box-shadow: 0 0 0 1px #{$st-ring-soft}, 0 1px 0 0 rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+
+    // one setting: text on the left, its switch (checkbox) on the right
+    .o_setting_box {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin: 0 0 -1px !important;   // the last row's hairline falls outside the panel
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--mt-border-base);
+        background: transparent;
+    }
+    .o_setting_left_pane {
+        order: 2;
+        flex: 0 0 auto;
+        width: auto;
+        float: none;
+        margin-inline-start: auto;
+        padding-top: 0.125rem;
+        &:empty { display: none; }
+        .o_field_boolean, .form-check { margin: 0; padding: 0; min-height: 0; }
+    }
+    .o_setting_right_pane {
+        order: 1;
+        flex: 1 1 auto;
+        min-width: 0;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        color: var(--mt-muted-foreground);
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+
+        > .o_form_label,
+        .o_form_label {
+            color: var(--mt-foreground);
+            font-size: 0.875rem;
+            font-weight: 500;
+            line-height: 1.25rem;
+        }
+        .text-muted { color: var(--mt-muted-foreground) !important; font-size: 0.875rem; }
+        > .text-muted { margin-top: 0.25rem; }
+        .mt16 { margin-top: 0.75rem !important; }
+        .mt8 { margin-top: 0.5rem !important; }
+        > .mt16:empty { display: none; }
+        .content-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            .row { --gutter-x: 0.75rem; align-items: center; row-gap: 0.5rem; margin-top: 0 !important; }
+            .o_light_label, .o_form_label { font-weight: 400; color: var(--mt-foreground); }
+        }
+        .fa-info-circle, .o_doc_link, .fa-building-o { color: var(--mt-muted-foreground); opacity: 0.8; }
+        .fw-bold, strong { color: var(--mt-foreground); font-weight: 600; }
+
+        // "→ Manage Users" style links: shadcn link buttons
+        .btn-link, a.oe_link, a.o_form_uri {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            height: auto;
+            padding: 0;
+            border: 0;
+            color: var(--mt-primary-text);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            &:hover { text-decoration: underline; text-underline-offset: 4px; }
+            .fa-arrow-right, .oi-arrow-right { font-size: 0.75rem; }
+        }
+        // ordinary buttons (Invite, Add Languages…) keep the theme's shadcn buttons
+        .btn:not(.btn-link) { height: 2rem; padding: 0 0.75rem; border-radius: 0.625rem; font-size: 0.875rem; font-weight: 500; }
+        .o_field_widget:not(.o_field_boolean) .o_input,
+        .o_field_widget:not(.o_field_boolean) select { min-height: 2rem; border-radius: 0.625rem; }
+    }
+
+    // checkbox settings as shadcn switches (2rem × 1.15rem, solid colour when on)
+    .o_setting_left_pane .form-check-input[type="checkbox"] {
+        appearance: none;
+        -webkit-appearance: none;
+        float: none;
+        width: 2rem !important;
+        height: 1.15rem !important;
+        margin: 0 !important;
+        border: 1px solid transparent !important;
+        border-radius: 999px !important;
+        background-color: var(--mt-input) !important;
+        background-image: radial-gradient(circle at calc(0.5rem + 1px) 50%, var(--mt-background) 0 0.5rem, transparent calc(0.5rem + 0.5px)) !important;
+        background-size: auto !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+        cursor: pointer;
+        transition: background-color 150ms ease, background-image 150ms ease;
+        &:checked {
+            background-color: var(--mt-solid, var(--mt-primary)) !important;
+            background-image: radial-gradient(circle at calc(100% - 0.5rem - 1px) 50%, var(--mt-solid-fg, #fff) 0 0.5rem, transparent calc(0.5rem + 0.5px)) !important;
+        }
+        &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--mt-focus-ring) !important; }
+        &:disabled { opacity: 0.5; cursor: not-allowed; }
+    }
+
+    // Enterprise-only marker: a small outline badge
+    .o_enterprise_label {
+        top: 1rem;
+        right: 1.25rem;
+        padding: 0.0625rem 0.5rem;
+        border: 1px solid var(--mt-border-base);
+        border-radius: 0.375rem;
+        background: var(--mt-card);
+        color: var(--mt-muted-foreground);
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+}
+html[data-mt-theme][data-mt-scheme="dark"]:not(#mt-st) .o_base_settings_view .o_setting_container {
+    .settings_tab, .o_settings_container { box-shadow: 0 0 0 1px #{$st-ring}; }
+    .o_setting_left_pane .form-check-input[type="checkbox"]:not(:checked) {
+        background-image: radial-gradient(circle at calc(0.5rem + 1px) 50%, var(--mt-foreground) 0 0.5rem, transparent calc(0.5rem + 0.5px)) !important;
+    }
+}
+
+// Phones / narrow: Odoo turns the app list into a horizontal strip; keep it plain.
+@media (max-width: 767.98px) {
+    #{$st} .o_setting_container {
+        padding: 0.75rem;
+        gap: 0.75rem;
+        > div:has(> .settings_tab) { flex: 0 0 auto !important; }
+        .settings_tab { max-height: none; }
+        .o_setting_box { padding: 0.875rem 1rem; }
+    }
+}
+
+// The Settings app's own lists and forms (Users, Companies, Languages…) use the
+// shadcn table of the modern apps: see list_shadcn.scss ($lt includes data-mt-app="base").

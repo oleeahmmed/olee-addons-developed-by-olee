@@ -128,6 +128,15 @@ export const OPTION_GROUPS = [
                     ["wide", _t("Wide")],
                 ],
             },
+            {
+                key: "sidebar_app_menu",
+                label: _t("Current app menu"),
+                choices: [
+                    ["top", _t("Top")],
+                    ["bottom", _t("Bottom")],
+                    ["hidden", _t("Hidden")],
+                ],
+            },
             { key: "sidebar_collapsed", label: _t("Start collapsed"), kind: "bool" },
             {
                 key: "topbar_style",
@@ -216,7 +225,7 @@ export const PRESET_LABELS = [
 export const FACTORY_DEFAULTS = {
     color_mode: "light",
     preset: "once",
-    font: "inter",
+    font: "dm_sans",
     font_scale: "md",
     radius: "md",
     border: "subtle",
@@ -225,6 +234,7 @@ export const FACTORY_DEFAULTS = {
     sidebar_style: "classic",
     sidebar_bg: "solid",
     sidebar_width: "normal",
+    sidebar_app_menu: "top",
     topbar_style: "solid",
     topbar_height: "normal",
     content_width: "full",

@@ -62,7 +62,7 @@
 
                     <block title="Navigation" name="mt_navigation">
                         <setting id="mt_sidebar_style" string="Sidebar style"
-                                 help="Classic tree, icon rail with a menu panel, or a floating glass card. Ctrl+K search, pinned and recent menus work in all three.">
+                                 help="Classic (shadcn/ui sidebar), tree, icon rail with a menu panel, or a floating glass card. Ctrl+K search and pinned menus work in all four.">
                             <field name="mt_sidebar_style" widget="mt_sidebar_cards"/>
                         </setting>
                         <setting id="mt_sidebar_bg" string="Sidebar background">
@@ -70,6 +70,10 @@
                         </setting>
                         <setting id="mt_sidebar_width" string="Sidebar width">
                             <field name="mt_sidebar_width" widget="mt_segmented"/>
+                        </setting>
+                        <setting id="mt_sidebar_app_menu" string="Current app menu"
+                                 help="Classic sidebar: show the open app's own menus above the Apps list, below it, or hide them (the app then opens in the Apps list).">
+                            <field name="mt_sidebar_app_menu" widget="mt_segmented"/>
                         </setting>
                         <setting id="mt_sidebar_collapsed" string="Start collapsed"
                                  help="New browsers open with the sidebar collapsed to icons. Each user's own choice is remembered.">

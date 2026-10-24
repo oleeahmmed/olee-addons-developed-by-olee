@@ -6,7 +6,7 @@ from odoo.exceptions import ValidationError
 from .theme_options import (
     BOOL_OPTIONS, BORDERS, COLOR_MODES, COLOR_OPTIONS, CONTENT_FRAMES, CONTENT_WIDTHS,
     DENSITIES, FONT_SCALES, FONTS, FORM_STYLES, HEX_RE, LIST_STYLES, LOGIN_STYLES, OPTIONS,
-    RADII, SHADOWS, SIDEBAR_BGS, SIDEBAR_STYLES, SIDEBAR_WIDTHS, THEME_PRESETS,
+    RADII, SHADOWS, SIDEBAR_APP_MENUS, SIDEBAR_BGS, SIDEBAR_STYLES, SIDEBAR_WIDTHS, THEME_PRESETS,
     TOPBAR_HEIGHTS, TOPBAR_STYLES,
 )
 
@@ -17,7 +17,7 @@ class ResCompany(models.Model):
     # ---- Modern Theme: company defaults (Settings > Modern Theme) ----------
     mt_color_mode = fields.Selection(COLOR_MODES, string="Color Mode", default="light", required=True)
     mt_preset = fields.Selection(THEME_PRESETS, string="Theme Color", default="once", required=True)
-    mt_font = fields.Selection(FONTS, string="Theme Font", default="inter", required=True)
+    mt_font = fields.Selection(FONTS, string="Theme Font", default="dm_sans", required=True)
     mt_font_scale = fields.Selection(FONT_SCALES, string="Font Size", default="md", required=True)
     mt_radius = fields.Selection(RADII, string="Corner Radius", default="md", required=True)
     mt_border = fields.Selection(BORDERS, string="Borders", default="subtle", required=True)
@@ -26,6 +26,10 @@ class ResCompany(models.Model):
     mt_sidebar_style = fields.Selection(SIDEBAR_STYLES, string="Sidebar Style", default="classic", required=True)
     mt_sidebar_bg = fields.Selection(SIDEBAR_BGS, string="Sidebar Background", default="solid", required=True)
     mt_sidebar_width = fields.Selection(SIDEBAR_WIDTHS, string="Sidebar Width", default="normal", required=True)
+    mt_sidebar_app_menu = fields.Selection(
+        SIDEBAR_APP_MENUS, string="Current App Menu", default="top", required=True,
+        help="Classic sidebar: where the open app's own menu group sits, or hide it.",
+    )
     mt_topbar_style = fields.Selection(TOPBAR_STYLES, string="Top Bar Style", default="solid", required=True)
     mt_topbar_height = fields.Selection(TOPBAR_HEIGHTS, string="Top Bar Height", default="normal", required=True)
     mt_content_width = fields.Selection(CONTENT_WIDTHS, string="Content Width", default="full", required=True)

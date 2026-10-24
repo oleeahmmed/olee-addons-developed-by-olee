@@ -7,7 +7,7 @@ from odoo.exceptions import AccessError, UserError
 from .theme_options import (
     BOOL_OPTIONS, BORDERS, COLOR_MODES, COLOR_OPTIONS, CONTENT_FRAMES, CONTENT_WIDTHS,
     DENSITIES, FONT_SCALES, FONTS, FORM_STYLES, HEX_RE, LIST_STYLES, OPTIONS, PRESET_SWATCHES,
-    RADII, SHADOWS, SIDEBAR_BGS, SIDEBAR_STYLES, SIDEBAR_WIDTHS, THEME_PRESETS,
+    RADII, SHADOWS, SIDEBAR_APP_MENUS, SIDEBAR_BGS, SIDEBAR_STYLES, SIDEBAR_WIDTHS, THEME_PRESETS,
     TOPBAR_HEIGHTS, TOPBAR_STYLES, contrast_foreground, selection_keys,
 )
 
@@ -29,6 +29,7 @@ class ResUsers(models.Model):
     mt_sidebar_style = fields.Selection(SIDEBAR_STYLES, string="Sidebar Style", help="Empty = company default.")
     mt_sidebar_bg = fields.Selection(SIDEBAR_BGS, string="Sidebar Background", help="Empty = company default.")
     mt_sidebar_width = fields.Selection(SIDEBAR_WIDTHS, string="Sidebar Width", help="Empty = company default.")
+    mt_sidebar_app_menu = fields.Selection(SIDEBAR_APP_MENUS, string="Current App Menu", help="Empty = company default.")
     mt_topbar_style = fields.Selection(TOPBAR_STYLES, string="Top Bar Style", help="Empty = company default.")
     mt_topbar_height = fields.Selection(TOPBAR_HEIGHTS, string="Top Bar Height", help="Empty = company default.")
     mt_content_width = fields.Selection(CONTENT_WIDTHS, string="Content Width", help="Empty = company default.")

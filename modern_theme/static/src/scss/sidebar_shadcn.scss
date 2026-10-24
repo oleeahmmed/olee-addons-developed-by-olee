@@ -629,3 +629,30 @@ html[data-mt-theme]:not(#mt-np) {
     .od-page { background-image: none !important; }
     .od-kpi--featured { background-image: none !important; background-color: var(--mt-card) !important; }
 }
+
+// The open app's own group (theme option "Current app menu"): its label folds the group
+// (open by default). Above or below the Apps list, or hidden.
+.o_mt_sidebar[data-style="classic"] {
+    .mt-sc-label-btn {
+        gap: 0.5rem;
+        width: 100%;
+        border: 0;
+        background: transparent;
+        text-align: start;
+        cursor: pointer;
+        .mt-sc-text { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+        .mt-sc-chevron {
+            width: 0.875rem;
+            height: 0.875rem;
+            margin-inline-start: auto;
+            opacity: 0.7;
+            transform: rotate(90deg);
+            transition: transform 200ms;
+        }
+        &:hover { background: var(--sc-accent); color: var(--sc-accent-fg); }
+        &:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--sc-ring); }
+    }
+    .mt-sc-appgroup.is-folded .mt-sc-label-btn .mt-sc-chevron { transform: none; }
+    // a little air between the open app's group and the Apps list
+    .mt-sc-appgroup + .mt-sc-apps, .mt-sc-apps + .mt-sc-appgroup { margin-top: 0.25rem; }
+}

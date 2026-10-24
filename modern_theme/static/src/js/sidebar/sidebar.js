@@ -310,8 +310,27 @@ export class MtSidebar extends Component {
     // Classic style: every other installed app, as collapsible items (shadcn
     // "E-commerce ›" rows) whose sub-items are that app's everyday pages.
     // ------------------------------------------------------------------
+    /** Classic style: "top" / "bottom" / "hidden" (theme option "Current app menu"). */
+    get appMenuPosition() {
+        return this.themeState.values.sidebar_app_menu || "top";
+    }
+    get showAppGroup() {
+        return Boolean(this.currentApp && this.sideTree.length && this.appMenuPosition !== "hidden");
+    }
+    isAppGroupOpen() {
+        return this.state.open.curApp !== false; // open unless the user folded it
+    }
+    toggleAppGroup(ev) {
+        ev?.stopPropagation();
+        this.state.open.curApp = !this.isAppGroupOpen();
+        writeJSON(OPEN_KEY, this.state.open);
+    }
+    /** Apps group: every other app; with the app group hidden, the current one too. */
     get otherApps() {
         const current = this.currentApp;
+        if (this.appMenuPosition === "hidden" || !this.sideTree.length) {
+            return this.apps;
+        }
         return this.apps.filter((app) => app.id !== current?.id);
     }
     appHasMenus(app) {
@@ -321,7 +340,11 @@ export class MtSidebar extends Component {
         return flattenLeaves(this.sideTreeFor(app)).map((leaf) => leaf.node);
     }
     isAppOpen(app) {
-        return this.state.open[`app${app.id}`] === true;
+        const saved = this.state.open[`app${app.id}`];
+        if (saved !== undefined) {
+            return saved;
+        }
+        return app.id === this.currentApp?.id; // the open app starts expanded
     }
     onAppItem(app, ev) {
         if (this.collapsed || !this.appHasMenus(app)) {

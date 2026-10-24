@@ -488,6 +488,8 @@ html[data-mt-scheme="dark"] .o_web_client .o_form_view.o_form_view .o_notebook.o
 //    Text weights follow shadcn: 600 for titles, 500 for controls, 400 for the rest.
 // ---------------------------------------------------------------------------
 $sc-card: 'html[data-mt-theme]:not(#mt-np) .od-page';
+// the page itself is shadcn --background (#fff / #0a0a0a), not the card colour
+html[data-mt-theme]:not(#mt-np) .od-page { background-color: var(--mt-background); }
 #{$sc-card} {
     .od-card {
         gap: 0.25rem;
@@ -544,7 +546,7 @@ $sc-card: 'html[data-mt-theme]:not(#mt-np) .od-page';
         select { font-weight: 500; }
     }
     .od-btn { border-radius: 0.625rem; font-weight: 500; }
-    .od-link { font-weight: 500; }
+    .od-link { font-weight: 500; color: var(--mt-primary-text); }
     .od-subhead { font-weight: 500; letter-spacing: 0.02em; }
     .od-donut-value { font-weight: 700; }
     .od-tooltip .od-tooltip-title { font-weight: 600; }
@@ -558,4 +560,60 @@ html[data-mt-theme][data-mt-scheme="dark"]:not(#mt-np) .od-page {
 html[data-mt-theme]:not(#mt-np) {
     .o_control_panel .o_breadcrumb .active, .o_control_panel .o_last_breadcrumb_item { font-weight: 600; letter-spacing: -0.01em; }
     .o_kanban_renderer .o_column_title { font-weight: 600; }
+}
+
+// ---------------------------------------------------------------------------
+// 10. Empty views (no records): the shadcn "Empty" block. A 48px muted tile with a
+//     Lucide icon instead of Odoo's large illustrations, a 16px medium title and a
+//     14px muted description, centred. Applies to Odoo's own helpers and to the
+//     custom helpers apps write in their action help (same class names).
+// ---------------------------------------------------------------------------
+$sc-inbox: "%3Cpolyline points='22 12 16 12 14 15 10 15 8 12 2 12'/%3E%3Cpath d='M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z'/%3E";
+$sc-plus-circle: "%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M8 12h8'/%3E%3Cpath d='M12 8v8'/%3E";
+html[data-mt-theme]:not(#mt-np) .o_view_nocontent {
+    padding: 1.5rem;
+    .o_nocontent_help {
+        max-width: 26rem;
+        margin: 0 auto;
+        padding: 0;
+        background: transparent;
+        box-shadow: none;
+        color: var(--mt-muted-foreground);
+        font-size: 0.875rem;
+        line-height: 1.375rem;
+        text-align: center;
+        > p { margin: 0 0 0.5rem; }
+        > p:first-of-type,
+        .o_view_nocontent_smiling_face,
+        .o_view_nocontent_neutral_face,
+        .o_view_nocontent_empty_folder {
+            margin-bottom: 0.375rem;
+            color: var(--mt-foreground);
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            line-height: 1.5rem;
+        }
+        // the icon tile (replaces the folder / smiling face pictures)
+        [class*="o_view_nocontent_"]::before {
+            content: "" !important;
+            display: block !important;
+            width: 3rem !important;
+            height: 3rem !important;
+            margin: 0 auto 1rem !important;
+            border-radius: 0.75rem;
+            background: var(--mt-muted) #{sc-svg($sc-inbox, '%23737373', 1.75)} center / 1.5rem no-repeat !important;
+            box-shadow: 0 0 0 1px var(--mt-border-base);
+            transform: none !important;
+            opacity: 1 !important;
+        }
+        .o_view_nocontent_smiling_face::before {
+            background-image: #{sc-svg($sc-plus-circle, '%23737373', 1.75)} !important;
+        }
+        a, .btn-link { color: var(--mt-primary-text); font-weight: 500; }
+    }
+}
+html[data-mt-theme][data-mt-scheme="dark"]:not(#mt-np) .o_view_nocontent .o_nocontent_help {
+    [class*="o_view_nocontent_"]::before { background-image: #{sc-svg($sc-inbox, '%23a1a1a1', 1.75)} !important; }
+    .o_view_nocontent_smiling_face::before { background-image: #{sc-svg($sc-plus-circle, '%23a1a1a1', 1.75)} !important; }
 }

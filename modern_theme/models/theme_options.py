@@ -68,6 +68,7 @@ SIDEBAR_STYLES = [
     ("floating", "Floating glass"),
 ]
 SIDEBAR_BGS = [("solid", "Solid"), ("tinted", "Brand tint"), ("gradient", "Gradient"), ("glass", "Glass")]
+SIDEBAR_APP_MENUS = [("top", "Top"), ("bottom", "Bottom"), ("hidden", "Hidden")]
 SIDEBAR_WIDTHS = [("narrow", "Narrow"), ("normal", "Normal"), ("wide", "Wide")]
 TOPBAR_STYLES = [("solid", "Solid bar"), ("blend", "Blend with canvas"), ("floating", "Floating card")]
 TOPBAR_HEIGHTS = [("compact", "Compact"), ("normal", "Normal"), ("tall", "Tall")]
@@ -90,6 +91,7 @@ OPTIONS = {
     "sidebar_style": (SIDEBAR_STYLES, "classic", True),
     "sidebar_bg": (SIDEBAR_BGS, "solid", True),
     "sidebar_width": (SIDEBAR_WIDTHS, "normal", True),
+    "sidebar_app_menu": (SIDEBAR_APP_MENUS, "top", True),
     "topbar_style": (TOPBAR_STYLES, "solid", True),
     "topbar_height": (TOPBAR_HEIGHTS, "normal", True),
     "content_width": (CONTENT_WIDTHS, "full", True),

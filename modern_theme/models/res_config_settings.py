@@ -16,6 +16,7 @@ class ResConfigSettings(models.TransientModel):
     mt_sidebar_style = fields.Selection(related="company_id.mt_sidebar_style", readonly=False)
     mt_sidebar_bg = fields.Selection(related="company_id.mt_sidebar_bg", readonly=False)
     mt_sidebar_width = fields.Selection(related="company_id.mt_sidebar_width", readonly=False)
+    mt_sidebar_app_menu = fields.Selection(related="company_id.mt_sidebar_app_menu", readonly=False)
     mt_topbar_style = fields.Selection(related="company_id.mt_topbar_style", readonly=False)
     mt_topbar_height = fields.Selection(related="company_id.mt_topbar_height", readonly=False)
     mt_content_width = fields.Selection(related="company_id.mt_content_width", readonly=False)

@@ -16,7 +16,7 @@ import { session } from "@web/session";
 // Same list as models/theme_options.py (OPTIONS keys rendered as attributes).
 export const ATTRIBUTE_OPTIONS = [
     "color_mode", "preset", "font", "font_scale", "radius", "border", "shadow", "density",
-    "sidebar_style", "sidebar_bg", "sidebar_width", "topbar_style", "topbar_height",
+    "sidebar_style", "sidebar_bg", "sidebar_width", "sidebar_app_menu", "topbar_style", "topbar_height",
     "content_width", "content_frame", "list_style", "form_style",
 ];
 

@@ -87,7 +87,7 @@
         </button>
     </t>
 
-    <!-- Pinned + recent menus -->
+    <!-- Pinned menus (top of the menu) -->
     <t t-name="modern_theme.Sidebar.Quick">
         <div t-if="favorites.length" class="mt-sb-block mt-sb-quick">
             <div class="mt-sb-heading"><i class="fa fa-star" aria-hidden="true"/><span class="mt-sb-label">Pinned</span></div>
@@ -109,6 +109,10 @@
                 </t>
             </ul>
         </div>
+    </t>
+
+    <!-- Recent menus: at the end of the menu, not above it -->
+    <t t-name="modern_theme.Sidebar.Recent">
         <div t-if="recent.length and !collapsed" class="mt-sb-block mt-sb-recent">
             <button type="button" class="mt-sb-heading mt-sb-heading-btn mt-sb-focusable"
                     t-att-aria-expanded="state.open.recent ? 'true' : 'false'"
@@ -277,50 +281,7 @@
                         </t>
                     </ul>
                 </div>
-                <div t-if="currentApp and sideTree.length" class="mt-sc-group">
-                    <div class="mt-sc-label" t-esc="currentApp.name"/>
-                    <ul class="mt-sc-menu" role="list">
-                        <t t-foreach="sideTree" t-as="node" t-key="node.id">
-                            <li t-if="node.children.length" class="mt-sc-item" t-att-class="{ 'is-open': isOpen(node) }">
-                                <button type="button" class="mt-sc-btn mt-sb-focusable"
-                                        t-att-data-group-id="node.id"
-                                        t-att-data-active="collapsed and containsActive(node) ? 'true' : 'false'"
-                                        t-att-aria-expanded="isOpen(node) ? 'true' : 'false'"
-                                        t-att-title="node.name"
-                                        t-on-click="(ev) => this.toggleGroup(node, ev)"
-                                        t-on-mouseenter="(ev) => this.collapsed and this.openFlyout(ev, { node })">
-                                    <i t-if="node.icon" t-attf-class="mt-sc-icon fa {{ node.icon }}" aria-hidden="true"/>
-                                    <span t-else="" class="mt-sc-icon mt-sb-dot" aria-hidden="true"/>
-                                    <span class="mt-sc-text" t-esc="node.name"/>
-                                    <t t-call="modern_theme.Lucide"><t t-set="name" t-value="'chevron-right'"/><t t-set="cls" t-value="'mt-sc-chevron'"/></t>
-                                </button>
-                                <ul t-if="isOpen(node) and !collapsed" class="mt-sc-sub" role="group">
-                                    <t t-call="modern_theme.Sidebar.ShadcnSub"><t t-set="nodes" t-value="node.children"/></t>
-                                </ul>
-                            </li>
-                            <li t-else="" class="mt-sc-item">
-                                <a class="mt-sc-btn mt-sb-focusable"
-                                   t-att-data-active="isActive(node) ? 'true' : 'false'"
-                                   t-att-href="node.href" t-att-title="node.name"
-                                   t-att-aria-current="isActive(node) ? 'page' : undefined"
-                                   t-att-data-menu-xmlid="node.xmlid"
-                                   t-on-click="(ev) => this.openNode(node, ev)"
-                                   t-on-mouseenter="() => this.collapsed and this.closeFlyout()">
-                                    <i t-if="node.icon" t-attf-class="mt-sc-icon fa {{ node.icon }}" aria-hidden="true"/>
-                                    <span t-else="" class="mt-sc-icon mt-sb-dot" aria-hidden="true"/>
-                                    <span class="mt-sc-text" t-esc="node.name"/>
-                                    <span t-if="badge(node)" class="mt-sc-badge" t-esc="badge(node)"/>
-                                    <span t-else="" class="mt-sc-pin" t-att-class="{ 'is-on': isFavorite(node) }" role="button" tabindex="-1"
-                                          t-att-title="isFavorite(node) ? 'Unpin' : 'Pin to sidebar'"
-                                          t-att-aria-label="isFavorite(node) ? 'Unpin' : 'Pin to sidebar'"
-                                          t-on-click="(ev) => this.toggleFavorite(node, ev)">
-                                        <t t-call="modern_theme.Lucide"><t t-set="name" t-value="'star'"/></t>
-                                    </span>
-                                </a>
-                            </li>
-                        </t>
-                    </ul>
-                </div>
+                <t t-if="showAppGroup and appMenuPosition !== 'bottom'" t-call="modern_theme.Sidebar.ShadcnAppGroup"/>
                 <!-- Every other app: collapsible items, their everyday pages as sub-items -->
                 <div t-if="currentApp and otherApps.length" class="mt-sc-group mt-sc-apps">
                     <div class="mt-sc-label">Apps</div>
@@ -342,6 +303,7 @@
                                     <t t-foreach="appLeaves(app)" t-as="sub" t-key="sub.id">
                                         <li class="mt-sc-sub-item">
                                             <a class="mt-sc-sub-btn mt-sb-focusable" t-att-href="sub.href" t-att-title="sub.name"
+                                               t-att-data-active="isActive(sub) ? 'true' : 'false'"
                                                t-att-data-menu-xmlid="sub.xmlid"
                                                t-on-click="(ev) => this.openNode(sub, ev)">
                                                 <span class="mt-sc-text" t-esc="sub.name"/>
@@ -353,6 +315,7 @@
                         </t>
                     </ul>
                 </div>
+                <t t-if="showAppGroup and appMenuPosition === 'bottom'" t-call="modern_theme.Sidebar.ShadcnAppGroup"/>
                 <!-- No app open (home screen): the apps themselves -->
                 <div t-if="!currentApp" class="mt-sc-group">
                     <div class="mt-sc-label">Apps</div>
@@ -387,6 +350,59 @@
                 </Dropdown>
             </div>
         </div>
+    </t>
+
+    <!-- Classic: the open app's own menus (theme option "Current app menu") -->
+    <t t-name="modern_theme.Sidebar.ShadcnAppGroup">
+    <div class="mt-sc-group mt-sc-appgroup" t-att-class="{ 'is-folded': !isAppGroupOpen() }">
+        <button type="button" class="mt-sc-label mt-sc-label-btn mt-sb-focusable"
+                t-att-aria-expanded="isAppGroupOpen() ? 'true' : 'false'"
+                t-on-click="toggleAppGroup">
+            <span class="mt-sc-text" t-esc="currentApp.name"/>
+            <t t-call="modern_theme.Lucide"><t t-set="name" t-value="'chevron-right'"/><t t-set="cls" t-value="'mt-sc-chevron'"/></t>
+        </button>
+        <ul t-if="isAppGroupOpen() or collapsed" class="mt-sc-menu" role="list">
+            <t t-foreach="sideTree" t-as="node" t-key="node.id">
+                <li t-if="node.children.length" class="mt-sc-item" t-att-class="{ 'is-open': isOpen(node) }">
+                    <button type="button" class="mt-sc-btn mt-sb-focusable"
+                            t-att-data-group-id="node.id"
+                            t-att-data-active="collapsed and containsActive(node) ? 'true' : 'false'"
+                            t-att-aria-expanded="isOpen(node) ? 'true' : 'false'"
+                            t-att-title="node.name"
+                            t-on-click="(ev) => this.toggleGroup(node, ev)"
+                            t-on-mouseenter="(ev) => this.collapsed and this.openFlyout(ev, { node })">
+                        <i t-if="node.icon" t-attf-class="mt-sc-icon fa {{ node.icon }}" aria-hidden="true"/>
+                        <span t-else="" class="mt-sc-icon mt-sb-dot" aria-hidden="true"/>
+                        <span class="mt-sc-text" t-esc="node.name"/>
+                        <t t-call="modern_theme.Lucide"><t t-set="name" t-value="'chevron-right'"/><t t-set="cls" t-value="'mt-sc-chevron'"/></t>
+                    </button>
+                    <ul t-if="isOpen(node) and !collapsed" class="mt-sc-sub" role="group">
+                        <t t-call="modern_theme.Sidebar.ShadcnSub"><t t-set="nodes" t-value="node.children"/></t>
+                    </ul>
+                </li>
+                <li t-else="" class="mt-sc-item">
+                    <a class="mt-sc-btn mt-sb-focusable"
+                       t-att-data-active="isActive(node) ? 'true' : 'false'"
+                       t-att-href="node.href" t-att-title="node.name"
+                       t-att-aria-current="isActive(node) ? 'page' : undefined"
+                       t-att-data-menu-xmlid="node.xmlid"
+                       t-on-click="(ev) => this.openNode(node, ev)"
+                       t-on-mouseenter="() => this.collapsed and this.closeFlyout()">
+                        <i t-if="node.icon" t-attf-class="mt-sc-icon fa {{ node.icon }}" aria-hidden="true"/>
+                        <span t-else="" class="mt-sc-icon mt-sb-dot" aria-hidden="true"/>
+                        <span class="mt-sc-text" t-esc="node.name"/>
+                        <span t-if="badge(node)" class="mt-sc-badge" t-esc="badge(node)"/>
+                        <span t-else="" class="mt-sc-pin" t-att-class="{ 'is-on': isFavorite(node) }" role="button" tabindex="-1"
+                              t-att-title="isFavorite(node) ? 'Unpin' : 'Pin to sidebar'"
+                              t-att-aria-label="isFavorite(node) ? 'Unpin' : 'Pin to sidebar'"
+                              t-on-click="(ev) => this.toggleFavorite(node, ev)">
+                            <t t-call="modern_theme.Lucide"><t t-set="name" t-value="'star'"/></t>
+                        </span>
+                    </a>
+                </li>
+            </t>
+        </ul>
+    </div>
     </t>
 
     <!-- Sub-items of a collapsible item: text only, no icons. Variables: nodes -->
@@ -466,6 +482,7 @@
                         </div>
                     </t>
                 </div>
+                <t t-call="modern_theme.Sidebar.Recent"/>
             </nav>
             <t t-call="modern_theme.Sidebar.User"/>
         </div>
@@ -518,6 +535,7 @@
                         <t t-set="level" t-value="0"/>
                     </t>
                 </div>
+                <t t-call="modern_theme.Sidebar.Recent"/>
             </nav>
         </div>
     </t>
@@ -591,6 +609,7 @@
                         </t>
                     </div>
                 </t>
+                <t t-call="modern_theme.Sidebar.Recent"/>
             </nav>
             <t t-call="modern_theme.Sidebar.User"/>
         </div>
