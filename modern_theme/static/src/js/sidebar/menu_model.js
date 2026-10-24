@@ -224,11 +224,41 @@ export function buildAppTree(menuService, app, config = null) {
         }
         top = top.filter((n) => n.children.length || n.href);
     }
+    // Less used pages of the app's own groups go to the top bar ("More"), so the sidebar
+    // keeps only the everyday pages. One heading per original group.
+    if (config?.topbar) {
+        const groups = new Map();
+        for (const xmlid of asSet(config.topbar)) {
+            const hit = takeLeaf(top, xmlid);
+            if (!hit) {
+                continue;
+            }
+            const key = hit.parent ? hit.parent.xmlid || hit.parent.name : "";
+            if (!groups.has(key)) {
+                groups.set(key, {
+                    id: `moved_${app.id}_${groups.size}`,
+                    name: hit.parent ? hit.parent.name : _t("More"),
+                    xmlid: "",
+                    appID: app.id,
+                    href: null,
+                    depth: 0,
+                    icon: hit.parent?.icon || null,
+                    children: [],
+                    own: false,
+                    moved: true,
+                });
+            }
+            groups.get(key).children.push({ ...hit.node, depth: 1, children: [] });
+        }
+        top = top.filter((n) => n.children.length || n.href);
+        top.push(...groups.values());
+    }
     for (const node of top) {
         node.kind = topKind(node);
         // "Secondary" menus (Reporting, Configuration, rarely used Odoo groups) go to the
         // top bar, so the sidebar only lists the everyday pages.
         node.secondary =
+            Boolean(node.moved) ||
             secondary.has(node.xmlid) ||
             node.kind !== "main" ||
             Boolean(config && own.length && !node.own);
@@ -256,6 +286,25 @@ export function topKind(node) {
         return "config";
     }
     return "main";
+}
+
+/** Remove the leaf with this xmlid (anywhere in the tree) and return { node, parent }. */
+function takeLeaf(nodes, xmlid, parent = null) {
+    for (let i = 0; i < nodes.length; i++) {
+        const node = nodes[i];
+        if (node.xmlid === xmlid && !node.children.length) {
+            nodes.splice(i, 1);
+            return { node, parent };
+        }
+        const found = takeLeaf(node.children, xmlid, node);
+        if (found) {
+            if (!node.children.length && !node.href) {
+                nodes.splice(i, 1); // the group is now empty
+            }
+            return found;
+        }
+    }
+    return null;
 }
 
 /** Remove the node with this xmlid from the (non-target) tree and return it. */
@@ -290,10 +339,11 @@ export function topNodes(tree) {
     const top = tree.filter((n) => n.secondary);
     const main = top.filter((n) => (n.kind || "main") === "main");
     const result = [];
-    if (main.length > 1) {
+    if (main.length > 1 || main.some((n) => n.moved)) {
         // Several small groups (Orders, Products, Team…): one "More" menu, one heading each.
         const leaves = main.filter((n) => !n.children.length);
-        const groups = main.filter((n) => n.children.length);
+        // the app's own pages moved out of the sidebar first, then Odoo's other groups
+        const groups = main.filter((n) => n.children.length).sort((a, b) => Number(!a.moved) - Number(!b.moved));
         result.push({
             id: `more_${main[0].appID || main[0].id}`,
             name: _t("More"),

@@ -191,6 +191,7 @@ export const OPTION_GROUPS = [
 ];
 
 export const PRESET_LABELS = [
+    ["once", _t("Once (neutral + emerald)")],
     ["indigo", _t("Indigo")],
     ["blue", _t("Blue")],
     ["sky", _t("Sky")],
@@ -213,7 +214,7 @@ export const PRESET_LABELS = [
 /** Company defaults shipped with the module (models/theme_options.py). */
 export const FACTORY_DEFAULTS = {
     color_mode: "light",
-    preset: "indigo",
+    preset: "once",
     font: "inter",
     font_scale: "md",
     radius: "md",

@@ -16,7 +16,7 @@ class ResCompany(models.Model):
 
     # ---- Modern Theme: company defaults (Settings > Modern Theme) ----------
     mt_color_mode = fields.Selection(COLOR_MODES, string="Color Mode", default="light", required=True)
-    mt_preset = fields.Selection(THEME_PRESETS, string="Theme Color", default="indigo", required=True)
+    mt_preset = fields.Selection(THEME_PRESETS, string="Theme Color", default="once", required=True)
     mt_font = fields.Selection(FONTS, string="Theme Font", default="inter", required=True)
     mt_font_scale = fields.Selection(FONT_SCALES, string="Font Size", default="md", required=True)
     mt_radius = fields.Selection(RADII, string="Corner Radius", default="md", required=True)

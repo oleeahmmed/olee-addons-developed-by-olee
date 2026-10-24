@@ -33,8 +33,8 @@ $mt: 'html[data-mt-theme]';
     overflow: hidden;
     transition: border-color var(--mt-duration) var(--mt-ease), box-shadow var(--mt-duration) var(--mt-ease);
     &:focus-within {
-        border-color: var(--mt-primary);
-        box-shadow: 0 0 0 3px var(--mt-ring);
+        border-color: var(--mt-focus-border);
+        box-shadow: 0 0 0 3px var(--mt-focus-ring);
     }
     .o_searchview {
         min-height: 0;

@@ -21,7 +21,7 @@ export const ATTRIBUTE_OPTIONS = [
 ];
 
 export const PRESET_SWATCHES = {
-    indigo: "#4f46e5", blue: "#2563eb", sky: "#0369a1", teal: "#0f766e", emerald: "#047857",
+    once: "#0a8466", indigo: "#4f46e5", blue: "#2563eb", sky: "#0369a1", teal: "#0f766e", emerald: "#047857",
     green: "#15803d", amber: "#b45309", yellow: "#facc15", orange: "#c2410c", red: "#dc2626",
     rose: "#e11d48", violet: "#7c3aed", slate: "#1e293b", zinc: "#18181b", stone: "#1c1917",
     gray: "#111827", neutral: "#171717",
@@ -55,7 +55,7 @@ export function applyThemeAttributes(values, root = document.documentElement) {
             root.setAttribute(`data-mt-${key.replaceAll("_", "-")}`, values[key]);
         }
     }
-    root.setAttribute("data-mt-theme", values.preset || "indigo");
+    root.setAttribute("data-mt-theme", values.preset || "once");
     root.setAttribute("data-mt-animations", values.animations === false ? "off" : "on");
     const style = root.style;
     if (values.preset === "custom" && values.primary_color) {

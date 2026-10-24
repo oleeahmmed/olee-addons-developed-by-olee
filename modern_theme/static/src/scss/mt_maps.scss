@@ -6,10 +6,15 @@ $mt-neutrals: (
     zinc: (light: (fg: #18181b, card: #ffffff, canvas: #f4f4f5, muted: #f1f1f3, mfg: #52525b, border: #e4e4e7, input: #c9c9cf), dark: (fg: #f4f4f5, card: #131316, canvas: #09090b, muted: #1d1d21, mfg: #a1a1aa, border: #27272a, input: #3a3a40)),
     stone: (light: (fg: #1c1917, card: #ffffff, canvas: #f5f5f4, muted: #f2f1ef, mfg: #57534e, border: #e7e5e4, input: #cdc9c5), dark: (fg: #f5f5f4, card: #151311, canvas: #0c0a09, muted: #201d1a, mfg: #a8a29e, border: #2c2825, input: #433e39)),
     gray: (light: (fg: #111827, card: #ffffff, canvas: #f3f4f6, muted: #f0f1f4, mfg: #4b5563, border: #e5e7eb, input: #c8ccd3), dark: (fg: #f3f4f6, card: #111827, canvas: #0a0f1a, muted: #1c2433, mfg: #9ca3af, border: #263041, input: #374151)),
+    // Once UI "gray": pure neutral greys, no blue tint (docs.once-ui.com)
+    once: (light: (fg: #0a0a0a, card: #ffffff, canvas: #f6f6f6, muted: #f0f0f0, mfg: #595959, border: #e0e0e0, input: #d2d2d2), dark: (fg: #ededed, card: #151515, canvas: #0a0a0a, muted: #202020, mfg: #b2b2b2, border: #2a2a2a, input: #3f3f3f)),
     neutral: (light: (fg: #171717, card: #ffffff, canvas: #f5f5f5, muted: #f2f2f2, mfg: #525252, border: #e5e5e5, input: #cacaca), dark: (fg: #f5f5f5, card: #141414, canvas: #0a0a0a, muted: #1f1f1f, mfg: #a3a3a3, border: #2a2a2a, input: #404040)),
 );
 
 $mt-presets: (
+    // Once UI: neutral greys, emerald brand, high-contrast (black / white) solid buttons.
+    once: (neutral: once, light: (primary: #0a8466, text: #0c6551, fg: #ffffff, solid: #0a0a0a, solid-fg: #ffffff, solid-hover: #2b2b2b),
+           dark: (primary: #10b981, text: #34d399, fg: #0a0a0a, solid: #ededed, solid-fg: #0a0a0a, solid-hover: #ffffff)),
     indigo: (neutral: slate, light: (primary: #4f46e5, text: #4338ca, fg: #ffffff), dark: (primary: #818cf8, text: #a5b4fc, fg: #0b0f17)),
     blue: (neutral: slate, light: (primary: #2563eb, text: #1d4ed8, fg: #ffffff), dark: (primary: #60a5fa, text: #93c5fd, fg: #0b0f17)),
     sky: (neutral: slate, light: (primary: #0369a1, text: #0369a1, fg: #ffffff), dark: (primary: #38bdf8, text: #7dd3fc, fg: #0b0f17)),
@@ -60,6 +65,16 @@ $mt-status: (
         --mt-primary-foreground: #{map-get($p, fg)};
         --mt-primary-text: #{map-get($p, text)};
         --mt-primary-text-rgb: #{red(map-get($p, text))}, #{green(map-get($p, text))}, #{blue(map-get($p, text))};
+        // Solid (main action) buttons: the brand colour, or a black / white "contrast" button.
+        @if map-has-key($p, solid) {
+            --mt-solid: #{map-get($p, solid)};
+            --mt-solid-fg: #{map-get($p, solid-fg)};
+            --mt-solid-hover: #{map-get($p, solid-hover)};
+        } @else {
+            --mt-solid: var(--mt-primary);
+            --mt-solid-fg: var(--mt-primary-foreground);
+            --mt-solid-hover: var(--mt-primary-hover);
+        }
     }
     --mt-success: #{map-get($s, success)};
     --mt-warning: #{map-get($s, warning)};

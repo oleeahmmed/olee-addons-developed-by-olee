@@ -80,6 +80,14 @@ All three share:
   page title (lists, kanban, forms), or top right on home pages and dashboards.
 * Menus come from `ir.ui.menu`: Odoo's groups and installed modules decide what shows.
 
+## Look: the "Once" preset (default)
+
+Inspired by Once UI: pure neutral greys (light `#f6f6f6` canvas / white cards, dark
+`#0a0a0a` canvas / `#151515` cards), emerald brand for accents and links, and
+high-contrast solid buttons (black in light mode, white in dark mode) through the
+`--mt-solid`, `--mt-solid-fg`, `--mt-solid-hover` tokens. Menu and chrome icons are
+Lucide line icons drawn over the Font Awesome names (`scss/icons.scss`).
+
 ## Sidebar API (for app addons)
 
 ```js
@@ -90,7 +98,8 @@ registry.category("modern_theme.sidebar_apps").add("crm.crm_menu_root", {
     ownPrefixes: ["crm_modern."],        // the addon's own top-level menus
     mergeInto: { "crm.crm_menu_report": "crm_modern.menu_reporting" },
     replaced: new Set(["crm.menu_crm_opportunities"]),   // Odoo menus to hide
-    secondary: new Set(["crm_modern.menu_config"]),      // bottom of the sidebar, closed by default
+    secondary: new Set(["crm_modern.menu_config"]),      // whole groups shown in the top bar
+    topbar: new Set(["crm_modern.menu_campaigns"]),      // single less-used pages: top bar "More"
     order: ["crm_modern.menu_home", "crm_modern.menu_marketing"],
     childOrder: { "crm_modern.menu_marketing": ["crm_modern.menu_leads"] },
     icons: registry.category("crm_modern.menu_icons"), // or a plain object xmlid -> "fa-…"

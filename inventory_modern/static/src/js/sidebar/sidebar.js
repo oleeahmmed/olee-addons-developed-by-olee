@@ -12,10 +12,9 @@ import { registry } from "@web/core/registry";
  */
 const APP_XMLID = "stock.menu_stock_root";
 // Odoo's other Inventory menus (Overview, Transfers, Scrap, Lots…) go to the top bar
-// ("More"); the two used every day join our Operations group.
+// ("More"); Replenishment, used every day, joins our Operations group.
 const MERGE_INTO = {};
 const PROMOTE = {
-    "stock.menu_action_inventory_tree": "inventory_modern.menu_operations", // Physical Inventory
     "stock.menu_reordering_rules_replenish": "inventory_modern.menu_operations", // Replenishment
 };
 // In the top bar (not the sidebar): Reporting, Configuration and less used groups
@@ -75,8 +74,14 @@ for (const [xmlid, icon] of Object.entries({
     menuIcons.add(xmlid, icon);
 }
 
+// Less used pages: in the top bar ("More"), so the sidebar keeps the everyday ones.
+const TOPBAR = new Set([
+    "inventory_modern.menu_moves",
+]);
+
 registry.category("modern_theme.sidebar_apps").add(APP_XMLID, {
     legacyPrefix: "im",
+    topbar: TOPBAR,
     ownPrefixes: ["inventory_modern."],
     mergeInto: MERGE_INTO,
     promote: PROMOTE,

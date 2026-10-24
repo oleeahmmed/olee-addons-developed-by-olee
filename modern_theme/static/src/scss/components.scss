@@ -19,19 +19,20 @@ $mt: 'html[data-mt-theme]';
         color var(--mt-duration) var(--mt-ease), box-shadow var(--mt-duration) var(--mt-ease);
 }
 #{$mt} .btn-primary {
-    --btn-color: var(--mt-primary-foreground);
-    --btn-bg: var(--mt-primary);
-    --btn-border-color: var(--mt-primary);
-    --btn-hover-color: var(--mt-primary-foreground);
-    --btn-hover-bg: var(--mt-primary-hover);
-    --btn-hover-border-color: var(--mt-primary-hover);
-    --btn-active-color: var(--mt-primary-foreground);
-    --btn-active-bg: var(--mt-primary-active);
-    --btn-active-border-color: var(--mt-primary-active);
-    --btn-disabled-color: var(--mt-primary-foreground);
-    --btn-disabled-bg: var(--mt-primary);
-    --btn-disabled-border-color: var(--mt-primary);
-    box-shadow: 0 1px 2px color-mix(in srgb, var(--mt-primary) 30%, transparent);
+    // Main actions use the "solid" colour: the brand, or black / white with the Once preset.
+    --btn-color: var(--mt-solid-fg, var(--mt-primary-foreground));
+    --btn-bg: var(--mt-solid, var(--mt-primary));
+    --btn-border-color: var(--mt-solid, var(--mt-primary));
+    --btn-hover-color: var(--mt-solid-fg, var(--mt-primary-foreground));
+    --btn-hover-bg: var(--mt-solid-hover, var(--mt-primary-hover));
+    --btn-hover-border-color: var(--mt-solid-hover, var(--mt-primary-hover));
+    --btn-active-color: var(--mt-solid-fg, var(--mt-primary-foreground));
+    --btn-active-bg: var(--mt-solid-hover, var(--mt-primary-active));
+    --btn-active-border-color: var(--mt-solid-hover, var(--mt-primary-active));
+    --btn-disabled-color: var(--mt-solid-fg, var(--mt-primary-foreground));
+    --btn-disabled-bg: var(--mt-solid, var(--mt-primary));
+    --btn-disabled-border-color: var(--mt-solid, var(--mt-primary));
+    box-shadow: 0 1px 2px color-mix(in srgb, var(--mt-solid, var(--mt-primary)) 22%, transparent);
 }
 #{$mt} .btn-secondary,
 #{$mt} .btn-light,
@@ -132,8 +133,8 @@ $mt: 'html[data-mt-theme]';
     &:focus {
         color: var(--mt-foreground);
         background-color: var(--mt-card);
-        border-color: var(--mt-primary);
-        box-shadow: 0 0 0 3px var(--mt-ring);
+        border-color: var(--mt-focus-border);
+        box-shadow: 0 0 0 3px var(--mt-focus-ring);
     }
     &:disabled { background-color: var(--mt-muted); color: var(--mt-muted-foreground); }
 }
@@ -147,7 +148,7 @@ $mt: 'html[data-mt-theme]';
     color: var(--mt-foreground);
     border-color: var(--mt-input);
     &::placeholder { color: var(--mt-placeholder); }
-    &:focus, &:focus-within { border-color: var(--mt-primary); }
+    &:focus, &:focus-within { border-color: var(--mt-focus-border); }
 }
 
 // Checkbox, radio, switch
@@ -163,8 +164,8 @@ $mt: 'html[data-mt-theme]';
         border-color: var(--mt-primary);
     }
     &:focus {
-        border-color: var(--mt-primary);
-        box-shadow: 0 0 0 3px var(--mt-ring);
+        border-color: var(--mt-focus-border);
+        box-shadow: 0 0 0 3px var(--mt-focus-ring);
     }
     &[type="checkbox"] { border-radius: calc(var(--mt-radius-xs) + 1px); }
 }
@@ -174,13 +175,13 @@ $mt: 'html[data-mt-theme]';
     border-color: transparent;
     // Knob drawn in the card colour so it is visible in both modes.
     --mt-knob: var(--mt-card);
-    &:checked { background-color: var(--mt-primary); }
+    &:checked { background-color: var(--mt-solid, var(--mt-primary)); }
 }
 #{$mt} .o_field_boolean_toggle .form-check-input,
 #{$mt} .o_boolean_toggle .form-check-input {
     background-color: color-mix(in srgb, var(--mt-muted-foreground) 45%, var(--mt-card));
     border-color: transparent;
-    &:checked { background-color: var(--mt-primary); }
+    &:checked { background-color: var(--mt-solid, var(--mt-primary)); }
 }
 
 // ---------------------------------------------------------------------------

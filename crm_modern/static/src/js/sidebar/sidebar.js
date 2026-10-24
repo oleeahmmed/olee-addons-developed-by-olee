@@ -205,8 +205,16 @@ async function onCreate(spec, env) {
     return false;
 }
 
+// Less used pages: in the top bar ("More"), so the sidebar keeps the everyday ones.
+const TOPBAR = new Set([
+    "crm_modern.menu_campaigns",
+    "crm_modern.menu_sale_orders",
+    "crm_modern.menu_dashboard",
+]);
+
 registry.category("modern_theme.sidebar_apps").add(APP_XMLID, {
     legacyPrefix: "cm",
+    topbar: TOPBAR,
     ownPrefixes: OWN_PREFIXES,
     mergeInto: MERGE_INTO,
     replaced: REPLACED,

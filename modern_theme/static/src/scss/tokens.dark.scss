@@ -2,7 +2,7 @@
 // tokens.scss, with identical selectors, so these values win in dark mode.
 
 :root {
-    @include mt-preset-vars(indigo, dark);
+    @include mt-preset-vars(once, dark);
 }
 @each $key, $preset in $mt-presets {
     html[data-mt-theme="#{$key}"] {
@@ -18,6 +18,8 @@ html[data-mt-theme="custom"] {
 
 html[data-mt-theme] {
     color-scheme: dark;
+    --mt-field-bg: color-mix(in srgb, var(--mt-input) 30%, var(--mt-card));
+    --mt-field-shadow: none;
     --mt-ring: color-mix(in srgb, var(--mt-primary) 50%, transparent);
     --mt-primary-soft: color-mix(in srgb, var(--mt-primary) 16%, var(--mt-card));
     --mt-primary-hover: color-mix(in oklab, var(--mt-primary) 86%, #ffffff);
@@ -77,4 +79,28 @@ html[data-mt-sidebar-bg="glass"] {
 html[data-mt-topbar-style="blend"] { --mt-topbar-bg: var(--mt-content-bg); }
 html[data-mt-theme] {
     --or-overlay: var(--mt-overlay);
+}
+html[data-mt-theme="custom"] {
+    --mt-solid: var(--mt-primary);
+    --mt-solid-fg: var(--mt-primary-foreground);
+    --mt-solid-hover: var(--mt-primary-hover);
+}
+// Once UI preset, dark: near-black canvas, #151515 surfaces, hairline borders, no glow.
+html[data-mt-theme="once"] {
+    --mt-content-bg: var(--mt-canvas-base);
+    --mt-canvas: var(--mt-canvas-base);
+    --mt-popover: #1a1a1a;
+    --mt-card-matte: #121212;
+    --mt-hover: color-mix(in srgb, var(--mt-foreground) 6%, transparent);
+    --mt-selected: color-mix(in srgb, var(--mt-foreground) 8%, var(--mt-card));
+    --mt-primary-soft: color-mix(in srgb, var(--mt-primary) 14%, var(--mt-card));
+    --mt-sidebar-active-bg: color-mix(in srgb, var(--mt-foreground) 8%, transparent);
+    --mt-sidebar-active-fg: #ffffff;
+    --mt-sidebar-indicator: var(--mt-primary);
+    --mt-ring: color-mix(in srgb, var(--mt-primary) 45%, transparent);
+    --mt-overlay: color-mix(in srgb, #000000 65%, transparent);
+    --mt-focus-border: color-mix(in srgb, var(--mt-foreground) 40%, var(--mt-card));
+    --mt-focus-ring: color-mix(in srgb, var(--mt-foreground) 14%, transparent);
+    --mt-field-bg: color-mix(in srgb, var(--mt-input) 30%, var(--mt-card));
+    --mt-field-shadow: none;
 }

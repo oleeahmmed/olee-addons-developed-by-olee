@@ -86,8 +86,8 @@ html[data-mt-scheme="dark"] {
         &.o_kanban_global_click:hover { transform: translateY(-1px); }
         &:focus-visible {
             outline: none;
-            border-color: var(--mt-primary) !important;
-            box-shadow: 0 0 0 3px var(--mt-ring) !important;
+            border-color: var(--mt-focus-border) !important;
+            box-shadow: 0 0 0 3px var(--mt-focus-ring) !important;
         }
         &.o_record_selected {
             border-color: var(--mt-primary) !important;

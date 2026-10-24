@@ -12,7 +12,7 @@
 // 1. Palette: one block per preset
 // ---------------------------------------------------------------------------
 :root {
-    @include mt-preset-vars(indigo, light);
+    @include mt-preset-vars(once, light);
 }
 @each $key, $preset in $mt-presets {
     html[data-mt-theme="#{$key}"] {
@@ -28,6 +28,9 @@ html[data-mt-theme="custom"] {
     --mt-primary-text: color-mix(in oklab, var(--mt-primary) 78%, var(--mt-foreground));
     --mt-primary-rgb: var(--mt-custom-primary-rgb, 79, 70, 229);
     --mt-primary-text-rgb: var(--mt-custom-primary-rgb, 79, 70, 229);
+    --mt-solid: var(--mt-primary);
+    --mt-solid-fg: var(--mt-primary-foreground);
+    --mt-solid-hover: var(--mt-primary-hover);
 }
 
 // ---------------------------------------------------------------------------
@@ -136,6 +139,11 @@ html[data-mt-topbar-height="tall"] { --mt-topbar-h: 3.75rem; }
 html[data-mt-theme] {
     // Brand
     --mt-ring: color-mix(in srgb, var(--mt-primary) 40%, transparent);
+    // Focus of fields (shadcn-like: a border plus a 3px soft ring)
+    --mt-focus-border: var(--mt-primary);
+    --mt-focus-ring: var(--mt-ring);
+    --mt-field-bg: var(--mt-card);
+    --mt-field-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
     --mt-primary-soft: color-mix(in srgb, var(--mt-primary) 10%, var(--mt-card));
     --mt-primary-soft-fg: var(--mt-primary-text);
     --mt-primary-hover: color-mix(in oklab, var(--mt-primary) 88%, var(--mt-foreground));
@@ -254,6 +262,28 @@ html[data-mt-topbar-style="floating"] {
     --mt-topbar-border: var(--mt-border);
 }
 
+// Once UI preset: a pure neutral canvas (no brand tint), neutral selection in the
+// navigation with the emerald brand only as the accent line, flat hairline cards.
+html[data-mt-theme="once"] {
+    --mt-content-bg: var(--mt-canvas-base);
+    --mt-canvas: var(--mt-canvas-base);
+    --mt-hover: color-mix(in srgb, var(--mt-foreground) 4.5%, transparent);
+    --mt-selected: color-mix(in srgb, var(--mt-foreground) 6%, var(--mt-card));
+    --mt-sidebar-active-bg: color-mix(in srgb, var(--mt-foreground) 6.5%, transparent);
+    --mt-sidebar-active-fg: var(--mt-foreground);
+    --mt-sidebar-indicator: var(--mt-primary);
+    --mt-ring: color-mix(in srgb, var(--mt-primary) 35%, transparent);
+    // shadcn: neutral focus (grey border + soft grey ring), the brand stays for actions
+    --mt-focus-border: color-mix(in srgb, var(--mt-foreground) 45%, var(--mt-card));
+    --mt-focus-ring: color-mix(in srgb, var(--mt-foreground) 12%, transparent);
+    --mt-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --mt-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.04);
+    --mt-shadow-md: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 20px -10px rgba(0, 0, 0, 0.12);
+    --mt-shadow-lg: 0 16px 36px -12px rgba(0, 0, 0, 0.18);
+    --mt-shadow-xl: 0 24px 56px -16px rgba(0, 0, 0, 0.24);
+    --mt-overlay: color-mix(in srgb, #000000 40%, transparent);
+}
+
 // ---------------------------------------------------------------------------
 // 4. Right-hand drawer ("sheet") tokens used by the modern app addons.
 // ---------------------------------------------------------------------------
@@ -283,9 +313,9 @@ html[data-mt-theme] {
     --or-accent-soft: var(--mt-primary-soft);
     --or-accent-ring: var(--mt-ring);
     --or-icon-bg: var(--mt-muted);
-    --or-save-bg: var(--mt-primary);
-    --or-save-fg: var(--mt-primary-foreground);
-    --or-save-hover: var(--mt-primary-hover);
+    --or-save-bg: var(--mt-solid, var(--mt-primary));
+    --or-save-fg: var(--mt-solid-fg, var(--mt-primary-foreground));
+    --or-save-hover: var(--mt-solid-hover, var(--mt-primary-hover));
     --or-rail-width: 3.25rem;
     --or-pill-bg: var(--mt-card);
     --or-pill-border: var(--mt-border-base);

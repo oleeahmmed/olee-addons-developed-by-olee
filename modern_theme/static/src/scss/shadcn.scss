@@ -1,0 +1,314 @@
+// Modern Theme: shadcn/ui-inspired controls — fields, select, checkbox, radio, switch,
+// combobox popovers, date picker, tabs, cards, chart tooltips, drawer and dialogs.
+// One consistent language in light and dark: hairline input borders, a soft 3px focus
+// ring, 0.5rem radius, neutral popovers with rounded rows, and the theme's "solid"
+// colour (black / white with the Once preset) for checked and selected states.
+// Loaded last in the theme bundle, after form.scss.
+
+$sc: 'html[data-mt-theme]';
+$sc-apps: 'html[data-mt-theme] .o_web_client';
+
+// Small icons drawn as data URIs (stroke colour baked in, one per scheme)
+@function sc-svg($path, $color, $stroke-width: 3) {
+    @return url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='#{$color}' stroke-width='#{$stroke-width}' stroke-linecap='round' stroke-linejoin='round'%3E#{$path}%3C/svg%3E");
+}
+$sc-check: "%3Cpath d='M20 6 9 17l-5-5'/%3E";
+$sc-minus: "%3Cpath d='M5 12h14'/%3E";
+$sc-chevron: "%3Cpath d='m6 9 6 6 6-6'/%3E";
+
+// ---------------------------------------------------------------------------
+// 1. Native <select>: readable options in dark mode, a quiet chevron
+// ---------------------------------------------------------------------------
+#{$sc} {
+    select.o_input,
+    select.form-select,
+    .o_field_selection select {
+        appearance: none;
+        -webkit-appearance: none;
+        padding-right: 2rem !important;
+        background-image: sc-svg($sc-chevron, '%23737373', 2) !important;
+        background-repeat: no-repeat !important;
+        background-position: right 0.625rem center !important;
+        background-size: 0.875rem !important;
+        color: var(--mt-foreground);
+        cursor: pointer;
+    }
+    select option,
+    select optgroup {
+        background-color: var(--mt-popover);
+        color: var(--mt-foreground);
+    }
+    select option:disabled,
+    select option[value="false"] { color: var(--mt-muted-foreground); }
+}
+html[data-mt-scheme="dark"] {
+    select.o_input,
+    select.form-select,
+    .o_field_selection select {
+        background-image: sc-svg($sc-chevron, '%23a3a3a3', 2) !important;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 2. Checkbox, radio, switch
+// ---------------------------------------------------------------------------
+#{$sc} .form-check-input {
+    box-shadow: var(--mt-field-shadow);
+    border-color: var(--mt-input);
+    background-color: var(--mt-field-bg);
+    transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+    &:focus, &:focus-visible {
+        border-color: var(--mt-focus-border);
+        box-shadow: 0 0 0 3px var(--mt-focus-ring);
+    }
+    &:checked, &:indeterminate {
+        background-color: var(--mt-solid, var(--mt-primary));
+        border-color: var(--mt-solid, var(--mt-primary));
+    }
+}
+#{$sc} .form-check-input[type="checkbox"]:not([role="switch"]) {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 0.25rem;
+    &:checked { --form-check-bg-image: #{sc-svg($sc-check, '%23ffffff')}; }
+    &:indeterminate { --form-check-bg-image: #{sc-svg($sc-minus, '%23ffffff')}; }
+}
+#{$sc} .form-check-input[type="radio"] {
+    width: 1rem;
+    height: 1rem;
+    &:checked {
+        background-color: var(--mt-field-bg);
+        border-color: var(--mt-solid, var(--mt-primary));
+        --form-check-bg-image: none;
+        background-image: radial-gradient(circle, var(--mt-solid, var(--mt-primary)) 0 0.25rem, transparent calc(0.25rem + 0.5px));
+    }
+}
+html[data-mt-scheme="dark"] .form-check-input[type="checkbox"]:not([role="switch"]) {
+    &:checked { --form-check-bg-image: #{sc-svg($sc-check, '%230a0a0a')}; }
+    &:indeterminate { --form-check-bg-image: #{sc-svg($sc-minus, '%230a0a0a')}; }
+}
+
+// Switches (Odoo toggles and the theme's boolean switches): 2rem × 1.15rem track,
+// a 1rem thumb in the page colour; checked = solid colour.
+#{$sc} .form-switch .form-check-input,
+#{$sc} .o_field_boolean_toggle .form-check-input,
+#{$sc} .o_boolean_toggle .form-check-input,
+#{$sc-apps} .o_form_view.o_form_view.o_form_view .o_field_boolean .form-check-input {
+    width: 2rem !important;
+    height: 1.15rem !important;
+    border: 1px solid transparent !important;
+    border-radius: 999px !important;
+    background-color: var(--mt-input) !important;
+    background-image: radial-gradient(circle at calc(0.5rem + 1px) 50%, var(--mt-card) 0 0.5rem, transparent calc(0.5rem + 0.5px)) !important;
+    background-size: auto !important;
+    box-shadow: var(--mt-field-shadow) !important;
+    cursor: pointer;
+    transition: background-color 150ms ease, background-image 150ms ease;
+    &:checked {
+        background-color: var(--mt-solid, var(--mt-primary)) !important;
+        background-image: radial-gradient(circle at calc(100% - 0.5rem - 1px) 50%, var(--mt-solid-fg, #fff) 0 0.5rem, transparent calc(0.5rem + 0.5px)) !important;
+    }
+    &:focus-visible { box-shadow: 0 0 0 3px var(--mt-focus-ring) !important; }
+}
+html[data-mt-scheme="dark"] {
+    .form-switch .form-check-input:not(:checked),
+    .o_field_boolean_toggle .form-check-input:not(:checked),
+    .o_boolean_toggle .form-check-input:not(:checked),
+    .o_web_client .o_form_view.o_form_view.o_form_view .o_field_boolean .form-check-input:not(:checked) {
+        background-image: radial-gradient(circle at calc(0.5rem + 1px) 50%, var(--mt-foreground) 0 0.5rem, transparent calc(0.5rem + 0.5px)) !important;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 3. Popovers: dropdowns, combobox (many2one / autocomplete), select menus
+// ---------------------------------------------------------------------------
+#{$sc} .dropdown-menu,
+#{$sc} .o-autocomplete--dropdown-menu,
+#{$sc} .o_select_menu_menu,
+#{$sc} .o-dropdown--menu {
+    --dropdown-border-radius: 0.625rem;
+    --dropdown-link-active-color: var(--mt-foreground);
+    --dropdown-link-active-bg: var(--mt-selected);
+    padding: 0.25rem !important;
+    border: 1px solid var(--mt-border-base) !important;
+    border-radius: 0.625rem !important;
+    background: var(--mt-popover) !important;
+    color: var(--mt-foreground);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 10px 24px -6px rgba(0, 0, 0, 0.12) !important;
+
+    .dropdown-item,
+    .o-autocomplete--dropdown-item > a,
+    .o_select_menu_item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        min-height: 2rem;
+        padding: 0.375rem 0.5rem !important;
+        border-radius: 0.375rem;
+        color: var(--mt-foreground);
+        font-size: 0.875rem;
+        line-height: 1.25;
+        &:hover,
+        &.focus, &:focus,
+        &.ui-state-active,
+        &.o-autocomplete--dropdown-item--active,
+        &.o_select_menu_item_focus {
+            background: var(--mt-hover) !important;
+            color: var(--mt-foreground) !important;
+        }
+        &.active, &.selected, &.o_select_active {
+            background: var(--mt-selected) !important;
+            color: var(--mt-foreground) !important;
+            font-weight: 500;
+        }
+        &.disabled, &:disabled { color: var(--mt-placeholder) !important; }
+    }
+    // "Search More…", "Create and edit…": quieter rows
+    .o_m2o_dropdown_option,
+    .o_m2o_dropdown_option > a,
+    .o_m2o_start_typing { color: var(--mt-muted-foreground) !important; font-size: 0.8125rem; }
+    .dropdown-divider { margin: 0.25rem -0.25rem; border-color: var(--mt-border-base); opacity: 1; }
+    .dropdown-header {
+        padding: 0.375rem 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0;
+        text-transform: none;
+        color: var(--mt-muted-foreground);
+    }
+}
+html[data-mt-scheme="dark"] {
+    .dropdown-menu,
+    .o-autocomplete--dropdown-menu,
+    .o_select_menu_menu,
+    .o-dropdown--menu {
+        box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.7) !important;
+    }
+}
+// Many2one / select-menu: the field reads as a combobox (chevron at the end)
+#{$sc-apps} .o_field_many2one_selection .o_dropdown_button,
+#{$sc-apps} .o_select_menu_toggler_caret { color: var(--mt-muted-foreground); opacity: 0.8; }
+
+// ---------------------------------------------------------------------------
+// 4. Date picker (calendar popover)
+// ---------------------------------------------------------------------------
+#{$sc} .o_datetime_picker {
+    --DateTimePicker__Cell-size-md: 2.25rem;
+    padding: 0.5rem;
+    .o_date_item_cell,
+    .o_datetime_button {
+        border-radius: 0.5rem !important;
+        font-size: 0.8125rem;
+        font-variant-numeric: tabular-nums;
+        &:hover:not(.o_selected):not(:disabled) { background: var(--mt-hover) !important; }
+    }
+    .o_today:not(.o_selected) > div,
+    .o_today:not(.o_selected) {
+        background: var(--mt-muted);
+        font-weight: 600;
+    }
+    .o_selected,
+    .o_select_start,
+    .o_select_end {
+        background: var(--mt-solid, var(--mt-primary)) !important;
+        color: var(--mt-solid-fg, var(--mt-primary-foreground)) !important;
+        font-weight: 600;
+    }
+    .o_highlighted:not(.o_selected) { background: var(--mt-selected) !important; }
+    .o_datetime_picker_header .btn,
+    .o_zoom_out { border-radius: 0.5rem; }
+}
+
+// ---------------------------------------------------------------------------
+// 5. Tabs (form notebooks): a muted tab list with the open tab raised
+// ---------------------------------------------------------------------------
+#{$sc-apps} .o_form_view.o_form_view .o_notebook.o_notebook.o_notebook {
+    .nav-tabs {
+        display: inline-flex !important;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.125rem;
+        padding: 0.1875rem !important;
+        margin: 0 0 0.75rem !important;
+        border-radius: 0.625rem;
+        background: var(--mt-muted) !important;
+    }
+    .nav-link {
+        height: 1.875rem;
+        margin: 0 !important;
+        padding: 0 0.75rem !important;
+        border: 1px solid transparent !important;
+        border-radius: 0.5rem !important;
+        background: transparent !important;
+        color: var(--mt-muted-foreground) !important;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        box-shadow: none !important;
+        &:hover { color: var(--mt-foreground) !important; }
+        &.active {
+            background: var(--mt-card) !important;
+            border-color: var(--mt-border-base) !important;
+            color: var(--mt-foreground) !important;
+            font-weight: 500;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06) !important;
+        }
+    }
+    .o_notebook_content,
+    &:not(:has(.nav-item:first-child > .nav-link.active)) .o_notebook_content {
+        border-radius: 0.75rem;
+    }
+}
+html[data-mt-scheme="dark"] .o_web_client .o_form_view.o_form_view .o_notebook.o_notebook.o_notebook .nav-link.active {
+    background: color-mix(in srgb, var(--mt-input) 45%, var(--mt-card)) !important;
+    border-color: transparent !important;
+}
+
+// ---------------------------------------------------------------------------
+// 6. Cards and charts (dashboards of every app)
+// ---------------------------------------------------------------------------
+#{$sc} .od-page {
+    .od-card {
+        border-radius: 0.875rem;
+        border-color: var(--mt-border-base);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+    .od-card-head h3 { font-size: 0.9375rem; font-weight: 600; letter-spacing: -0.01em; }
+    .od-card-head p { font-size: 0.8125rem; }
+    .od-kpi { border-radius: 0.875rem; }
+    // shadcn chart: no axis lines, dashed horizontal grid, rounded bars
+    .od-grid-line { stroke: var(--mt-border-base); stroke-dasharray: 3 3; }
+    .od-bar { rx: 4px; }
+    // tooltip: a small popover card with colour squares
+    .od-tooltip {
+        min-width: 9rem;
+        padding: 0.375rem 0.625rem;
+        border: 1px solid var(--mt-border-base);
+        border-radius: 0.5rem;
+        background: var(--mt-popover);
+        color: var(--mt-foreground);
+        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.25);
+        font-size: 0.75rem;
+        .od-tooltip-title { font-weight: 500; margin-bottom: 0.25rem; }
+        .od-tooltip-row { color: var(--mt-muted-foreground); strong { color: var(--mt-foreground); font-weight: 600; font-variant-numeric: tabular-nums; } }
+        .od-swatch--bar { border-radius: 2px; }
+        .od-tooltip-growth.is-good { color: var(--mt-success); }
+        .od-tooltip-growth.is-bad { color: var(--mt-destructive); }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 7. Drawer (right-hand sheet) and dialogs
+// ---------------------------------------------------------------------------
+#{$sc} {
+    --or-overlay: color-mix(in srgb, #000 50%, transparent);
+    --or-overlay-blur: 0px;
+    --or-sheet-shadow: -12px 0 32px -12px rgba(0, 0, 0, 0.25);
+}
+#{$sc} .modal {
+    --modal-border-radius: 0.75rem;
+    --modal-box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.25);
+    .modal-content { border: 1px solid var(--mt-border-base); }
+    .modal-title { font-size: 1.0625rem; font-weight: 600; letter-spacing: -0.01em; }
+    .btn-close { opacity: 0.6; border-radius: 0.375rem; &:hover { opacity: 1; } }
+}
+#{$sc} .modal-backdrop { --backdrop-bg: #000; --backdrop-opacity: 0.5; }

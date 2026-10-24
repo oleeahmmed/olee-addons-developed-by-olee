@@ -64,15 +64,15 @@ $mt-bar-height: 3.5rem;
 }
 
 @mixin mt-pill-solid {
-    --btn-bg: var(--mt-primary);
-    --btn-color: var(--mt-primary-foreground);
-    --btn-border-color: var(--mt-primary);
-    --btn-hover-bg: color-mix(in srgb, var(--mt-primary) 88%, var(--mt-foreground));
-    --btn-hover-color: var(--mt-primary-foreground);
-    --btn-hover-border-color: color-mix(in srgb, var(--mt-primary) 88%, var(--mt-foreground));
-    --btn-active-bg: color-mix(in srgb, var(--mt-primary) 80%, var(--mt-foreground));
-    --btn-active-color: var(--mt-primary-foreground);
-    --btn-active-border-color: color-mix(in srgb, var(--mt-primary) 80%, var(--mt-foreground));
+    --btn-bg: var(--mt-solid, var(--mt-primary));
+    --btn-color: var(--mt-solid-fg, var(--mt-primary-foreground));
+    --btn-border-color: var(--mt-solid, var(--mt-primary));
+    --btn-hover-bg: var(--mt-solid-hover, var(--mt-primary-hover));
+    --btn-hover-color: var(--mt-solid-fg, var(--mt-primary-foreground));
+    --btn-hover-border-color: var(--mt-solid-hover, var(--mt-primary-hover));
+    --btn-active-bg: var(--mt-solid-hover, var(--mt-primary-active));
+    --btn-active-color: var(--mt-solid-fg, var(--mt-primary-foreground));
+    --btn-active-border-color: var(--mt-solid-hover, var(--mt-primary-active));
 }
 
 // ===========================================================================
@@ -753,16 +753,16 @@ $mt-bar-height: 3.5rem;
         display: flex;
         align-items: center;
         padding: 0.125rem 0.75rem;
-        border: 1px solid var(--mt-border);
+        border: 1px solid var(--mt-input);
         border-radius: 0.5rem;
-        background: var(--mt-card);
+        background: var(--mt-field-bg);
         transition: border-color 150ms ease, box-shadow 150ms ease;
 
         &:hover { border-color: color-mix(in srgb, var(--mt-foreground) 22%, var(--mt-border)); }
 
         &:focus-within {
-            border-color: var(--mt-primary);
-            box-shadow: 0 0 0 1px var(--mt-primary);
+            border-color: var(--mt-focus-border);
+            box-shadow: 0 0 0 3px var(--mt-focus-ring);
         }
 
         > *,
@@ -822,9 +822,9 @@ $mt-bar-height: 3.5rem;
         textarea.o_input {
             min-height: 2.25rem;
             padding: 0.375rem 0.75rem;
-            border: 1px solid var(--mt-border) !important;
+            border: 1px solid var(--mt-input) !important;
             border-radius: 0.5rem !important;
-            background-color: var(--mt-card);
+            background-color: var(--mt-field-bg);
             color: var(--mt-foreground);
             font-size: 0.875rem;
             box-shadow: none;
@@ -834,8 +834,8 @@ $mt-bar-height: 3.5rem;
             &:hover { border-color: color-mix(in srgb, var(--mt-foreground) 22%, var(--mt-border)) !important; }
 
             &:focus {
-                border-color: var(--mt-primary) !important;
-                box-shadow: 0 0 0 1px var(--mt-primary) !important;
+                border-color: var(--mt-focus-border) !important;
+                box-shadow: 0 0 0 3px var(--mt-focus-ring) !important;
                 outline: none;
             }
         }
@@ -860,14 +860,14 @@ $mt-bar-height: 3.5rem;
         min-height: 2.25rem;
         align-items: center !important;
         padding: 0 0.75rem;
-        border: 1px solid var(--mt-border);
+        border: 1px solid var(--mt-input);
         border-radius: 0.5rem;
-        background: var(--mt-card);
+        background: var(--mt-field-bg);
         transition: border-color 150ms ease, box-shadow 150ms ease;
 
         &:focus-within {
-            border-color: var(--mt-primary);
-            box-shadow: 0 0 0 1px var(--mt-primary);
+            border-color: var(--mt-focus-border);
+            box-shadow: 0 0 0 3px var(--mt-focus-ring);
         }
 
         .o_input {
@@ -881,15 +881,15 @@ $mt-bar-height: 3.5rem;
     .o_inner_group .o_field_many2many_tags .o_field_tags {
         min-height: 2.25rem;
         padding: 0.25rem 0.75rem;
-        border: 1px solid var(--mt-border);
+        border: 1px solid var(--mt-input);
         border-radius: 0.5rem;
-        background: var(--mt-card);
+        background: var(--mt-field-bg);
         align-items: center;
         gap: 0.25rem;
 
         &:focus-within {
-            border-color: var(--mt-primary);
-            box-shadow: 0 0 0 1px var(--mt-primary);
+            border-color: var(--mt-focus-border);
+            box-shadow: 0 0 0 3px var(--mt-focus-ring);
         }
 
         .o_input { border: 0 !important; box-shadow: none !important; background: transparent !important; }
@@ -932,9 +932,9 @@ $mt-bar-height: 3.5rem;
         .odoo-editor-editable {
             min-height: 5rem;
             padding: 0.75rem 0.875rem !important;
-            border: 1px solid var(--mt-border);
+            border: 1px solid var(--mt-input);
             border-radius: 0.75rem;
-            background: var(--mt-background, var(--mt-card));
+            background: var(--mt-field-bg);
         }
     }
 
@@ -1271,8 +1271,8 @@ $mt-bar-height: 3.5rem;
                 box-shadow: none !important;
 
                 &:focus {
-                    border-color: var(--mt-primary) !important;
-                    box-shadow: 0 0 0 1px var(--mt-primary) !important;
+                    border-color: var(--mt-focus-border) !important;
+                    box-shadow: 0 0 0 3px var(--mt-focus-ring) !important;
                 }
             }
 
@@ -1339,11 +1339,11 @@ $mt-bar-height: 3.5rem;
 // 5. Chatter column
 // ===========================================================================
 #{$mt-form} .o-mail-Form-chatter {
-    background: var(--mt-card);
+    background: color-mix(in srgb, var(--mt-muted) 45%, var(--mt-card));
 
     &.o-aside {
-        flex: 0 0 clamp(20rem, 24vw, 26rem);
-        width: clamp(20rem, 24vw, 26rem);
+        flex: 0 0 clamp(21rem, 27vw, 28rem);
+        width: clamp(21rem, 27vw, 28rem);
         max-width: 40%;
         border-left: 1px solid var(--mt-border);
     }
@@ -1352,52 +1352,69 @@ $mt-bar-height: 3.5rem;
 }
 
 #{$mt-apps} .o-mail-Chatter {
-    background: var(--mt-card);
+    // The whole column is the timeline lane (as on the CRM record page): the header is a
+    // white strip on top, messages are white cards on a soft grey lane.
+    --mt-chatter-lane: color-mix(in srgb, var(--mt-muted) 45%, var(--mt-card));
+    background: var(--mt-chatter-lane) !important;
     color: var(--mt-foreground);
 
+    // ---- Header: Send message · Log note · Activity tabs, tools on the right ----------
     .o-mail-Chatter-top {
-        margin: 0.75rem 0.75rem 0;
-        padding: 0.125rem 0.375rem 0.5rem;
-        border: 1px solid var(--mt-border) !important;
-        border-radius: 0.875rem;
+        container: mt-chatter-top / inline-size;
+        margin: 0;
+        padding: 0;
+        border: 0 !important;
+        border-radius: 0;
         background: var(--mt-card) !important;
+        box-shadow: none !important;
+        z-index: 2;
 
-        &.shadow-sm { box-shadow: none !important; }
+        // pinned while the timeline scrolls under it: a hairline shadow instead of Odoo's box
+        &.shadow-sm { box-shadow: 0 6px 12px -10px color-mix(in srgb, var(--mt-foreground) 35%, transparent) !important; }
+        // composer open: it sits in the white header, separated from the lane
+        &:has(.o-mail-Composer) { border-bottom: 1px solid var(--mt-border) !important; padding-bottom: 0.75rem; }
     }
 
     .o-mail-Chatter-topbar {
-        min-height: 2.75rem;
+        min-height: 3rem;
+        padding: 0.375rem 0.5rem 0;
         align-items: stretch;
         gap: 0.125rem;
+        border-bottom: 1px solid var(--mt-border);
         overflow: visible !important;
 
-        // Same tabs as the lead composer: icon + label, green underline on the open one.
+        // Same tabs as the CRM record page: icon + label, primary underline on the open one.
         .o-mail-Chatter-sendMessage,
         .o-mail-Chatter-logNote,
         .o-mail-Chatter-activity {
             position: relative;
-            height: auto;
+            flex: 0 0 auto;
+            height: 2.625rem;
             margin: 0 !important;
             padding: 0 0.75rem !important;
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
             border: 0 !important;
-            border-radius: 0 !important;
+            border-radius: 0.5rem 0.5rem 0 0 !important;
             background: transparent !important;
             color: var(--mt-muted-foreground) !important;
             font-size: 0.8125rem;
             font-weight: 500;
+            white-space: nowrap;
             box-shadow: none !important;
+            transition: color var(--mt-duration) var(--mt-ease), background-color var(--mt-duration) var(--mt-ease);
 
             &::before {
                 font-family: FontAwesome;
                 font-weight: normal;
-                font-size: 0.75rem;
+                font-size: 0.8125rem;
+                line-height: 1;
                 color: inherit;
             }
 
-            &:hover { color: var(--mt-foreground) !important; background: transparent !important; }
+            &:hover { color: var(--mt-foreground) !important; background: var(--mt-muted) !important; }
+            &:focus-visible { box-shadow: inset 0 0 0 2px var(--mt-ring) !important; }
 
             &.active,
             &.btn-primary {
@@ -1410,33 +1427,49 @@ $mt-bar-height: 3.5rem;
                     position: absolute;
                     left: 0.5rem;
                     right: 0.5rem;
-                    bottom: 0;
+                    bottom: -1px;
                     height: 2px;
                     border-radius: 2px;
                     background: var(--mt-primary);
                 }
             }
         }
+        // Log note open: amber, like the note composer under it
+        .o-mail-Chatter-logNote.btn-primary {
+            color: var(--mt-warning) !important;
+            &::after { background: var(--mt-warning) !important; }
+        }
 
-        .o-mail-Chatter-sendMessage::before { content: "\f1d8"; }
-        .o-mail-Chatter-logNote::before { content: "\f096"; }
-        .o-mail-Chatter-activity::before { content: "\f073"; }
+        .o-mail-Chatter-sendMessage::before { content: "\f1d9"; } // paper-plane-o, as on the CRM record page
+        .o-mail-Chatter-logNote::before { content: "\f24a"; } // sticky-note-o
+        .o-mail-Chatter-activity::before { content: "\f271"; } // calendar-plus-o
+
+        .o-mail-Chatter-topbarGrow { padding: 0 !important; }
 
         // Odoo's oi-search glyph is a magnifying glass inside a rounded square.
         // Draw the same plain FontAwesome mark the paperclip uses.
-        .o-mail-SearchMessageInput .oi-search::before {
+        .o-mail-SearchMessageInput .oi-search::before,
+        > .btn-link .oi-search::before {
             font-family: FontAwesome;
             font-weight: normal;
             content: "\f002";
         }
 
+        // Search, attachments, followers: quiet square icon buttons, centred in the bar.
         > .btn-link,
         .o-mail-Chatter-attachFiles,
-        .o-mail-Followers-button {
-            min-width: 1.875rem;
-            height: 1.875rem;
-            margin: 0 !important;
-            padding: 0 0.375rem !important;
+        .o-mail-Followers-button,
+        .o-mail-Chatter-fileUploader .btn {
+            align-self: center;
+            flex: 0 0 auto;
+            min-width: 2rem;
+            height: 2rem;
+            margin: 0 0 0.3125rem !important;
+            padding: 0 0.4375rem !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.125rem;
             border: 0 !important;
             border-radius: 0.5rem;
             background: transparent !important;
@@ -1452,6 +1485,23 @@ $mt-bar-height: 3.5rem;
                 box-shadow: none !important;
             }
         }
+        .o-mail-Followers { align-self: center; margin: 0 !important; }
+        .o-mail-Followers-button.active { color: var(--mt-primary) !important; }
+        .o-mail-Followers-counter {
+            top: 0;
+            margin-left: 0.125rem;
+            font-size: 0.6875rem;
+            font-weight: 650;
+            font-variant-numeric: tabular-nums;
+        }
+    }
+
+    // "To: followers of …" line of the message composer
+    .o-mail-Chatter-top > .d-flex.py-1 {
+        padding: 0.625rem 0.75rem 0 !important;
+        font-size: 0.75rem;
+        color: var(--mt-muted-foreground);
+        > span:first-child { width: auto !important; padding: 0 0.375rem 0 0 !important; text-align: start !important; font-weight: 600 !important; }
     }
 
     // Message search: one quiet field, then plain icons (no boxed buttons).
@@ -1478,8 +1528,8 @@ $mt-bar-height: 3.5rem;
             background: var(--mt-card) !important;
 
             &:focus-within {
-                border-color: var(--mt-primary) !important;
-                box-shadow: 0 0 0 1px var(--mt-primary) !important;
+                border-color: var(--mt-focus-border) !important;
+                box-shadow: 0 0 0 3px var(--mt-focus-ring) !important;
             }
         }
 
@@ -1510,7 +1560,7 @@ $mt-bar-height: 3.5rem;
 
 
     .o-mail-Composer {
-        margin: 0 0.375rem 0.125rem;
+        margin: 0.75rem 0.75rem 0;
         border: 1px solid var(--mt-border);
         border-radius: 0.75rem;
         background: var(--mt-card);
@@ -1526,13 +1576,29 @@ $mt-bar-height: 3.5rem;
         }
 
         &.o-focused {
-            border-color: var(--mt-primary);
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-primary) 18%, transparent);
+            border-color: var(--mt-focus-border);
+            box-shadow: 0 0 0 3px var(--mt-focus-ring);
         }
 
         .o-mail-Composer-bg { background: transparent !important; }
 
         .o-mail-Composer-footer { padding: 0.125rem 0.5rem 0.5rem 0.75rem; }
+
+        // "or press CTRL + Enter": one quiet line with small key caps
+        span.text-muted.small:has(samp) {
+            white-space: nowrap;
+            font-size: 0.6875rem;
+            samp {
+                padding: 0.0625rem 0.3125rem;
+                border: 1px solid var(--mt-border);
+                border-radius: 0.25rem;
+                background: var(--mt-card);
+                font-family: inherit;
+                font-size: 0.625rem;
+                font-weight: 600;
+                color: var(--mt-muted-foreground);
+            }
+        }
 
         .o-mail-Composer-input {
             font-size: 0.875rem !important;
@@ -1571,13 +1637,19 @@ $mt-bar-height: 3.5rem;
     }
 
     .o-mail-Chatter-top:has(.o-mail-Chatter-logNote.btn-primary) .o-mail-Composer {
-        background: var(--mt-warning-soft);
+        background: color-mix(in srgb, var(--mt-warning-soft) 70%, var(--mt-card));
+        border-color: color-mix(in srgb, var(--mt-warning) 25%, var(--mt-border));
+        &.o-focused { border-color: var(--mt-warning); box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-warning) 22%, transparent); }
+        .o-mail-Composer-send {
+            background: color-mix(in srgb, var(--mt-warning) 18%, var(--mt-card)) !important;
+            color: color-mix(in srgb, var(--mt-warning) 80%, var(--mt-foreground)) !important;
+        }
     }
 
     .o-mail-Chatter-content,
     .o-mail-Thread { background: var(--mt-card) !important; }
 
-    // Date chip matches the Member Tiers "Tier 0" pill: soft primary, no border.
+    // Date chip: the same quiet uppercase marker as the CRM record timeline.
     .o-mail-DateSection {
         padding-top: 0.75rem !important;
 
@@ -1588,10 +1660,13 @@ $mt-bar-height: 3.5rem;
             padding: 0.15rem 0.55rem !important;
             border: 0 !important;
             border-radius: 999px;
-            background: color-mix(in srgb, var(--mt-primary) 14%, var(--mt-card));
-            font-size: 0.6875rem !important;
-            font-weight: 600;
-            color: var(--mt-primary) !important;
+            background: var(--mt-card);
+            box-shadow: 0 0 0 1px var(--mt-border);
+            font-size: 0.625rem !important;
+            font-weight: 650;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--mt-muted-foreground) !important;
         }
     }
 
@@ -1627,7 +1702,7 @@ $mt-bar-height: 3.5rem;
     // ---- Rich timeline: tinted lane, every message a soft card -------------------
     .o-mail-Chatter-content,
     .o-mail-Thread {
-        background: color-mix(in srgb, var(--mt-muted) 45%, var(--mt-card)) !important;
+        background: var(--mt-chatter-lane) !important;
     }
     .o-mail-Chatter-content { padding-bottom: 0.5rem; }
     .o-mail-Thread { padding: 0.25rem 0.75rem 1.5rem !important; }
@@ -1729,7 +1804,11 @@ $mt-bar-height: 3.5rem;
         background: var(--mt-card);
         box-shadow: 0 1px 2px color-mix(in srgb, var(--mt-foreground) 4%, transparent);
 
-        .o-mail-Activity-avatar { width: 2rem; height: 2rem; border-radius: 999px !important; object-fit: cover; }
+        transition: border-color var(--mt-duration) var(--mt-ease), box-shadow var(--mt-duration) var(--mt-ease);
+        &:hover { border-color: color-mix(in srgb, var(--mt-primary) 28%, var(--mt-border)); box-shadow: 0 4px 14px color-mix(in srgb, var(--mt-foreground) 7%, transparent); }
+        > .flex-grow { flex: 1 1 auto; min-width: 0; }
+        .o-mail-Activity-avatar { width: 2.25rem; height: 2.25rem; border-radius: 999px !important; object-fit: cover; }
+        .o-mail-Activity-iconContainer { box-shadow: 0 0 0 2px var(--mt-card); }
         .o-mail-Activity-info {
             line-height: 1.4 !important;
             font-size: 0.8125rem;
@@ -1749,7 +1828,11 @@ $mt-bar-height: 3.5rem;
         .o-mail-Activity-user { padding: 0 !important; color: var(--mt-muted-foreground); font-size: 0.75rem; }
         .o-mail-Activity-note { margin-top: 0.25rem; color: var(--mt-muted-foreground); font-size: 0.8125rem; }
         .o-mail-Activity-info .btn-link { margin-left: 0.25rem; }
-        .lh-lg { display: flex; flex-wrap: wrap; gap: 0.125rem; margin-top: 0.375rem; line-height: 1.2 !important; }
+        .lh-lg {
+            display: flex; flex-wrap: wrap; gap: 0.125rem; line-height: 1.2 !important;
+            margin: 0.5rem 0 0 -0.4375rem; padding-top: 0.375rem;
+            border-top: 1px dashed var(--mt-border);
+        }
         .lh-lg .btn-link {
             padding: 0.25rem 0.4375rem !important;
             margin: 0 !important;
@@ -1763,6 +1846,21 @@ $mt-bar-height: 3.5rem;
             &.o-mail-Activity-markDone { color: var(--mt-success) !important; &:hover { background: color-mix(in srgb, var(--mt-success) 12%, var(--mt-card)); } }
         }
     }
+}
+
+// Narrow chatter column: the closed tabs keep only their icon (the open one keeps its
+// label), so search, attachments and followers never get pushed out of the header.
+@container mt-chatter-top (max-width: 25rem) {
+    #{$mt-apps} .o-mail-Chatter-topbar .o-mail-Chatter-sendMessage:not(.btn-primary):not(.active),
+    #{$mt-apps} .o-mail-Chatter-topbar .o-mail-Chatter-logNote:not(.btn-primary):not(.active),
+    #{$mt-apps} .o-mail-Chatter-topbar .o-mail-Chatter-activity:not(.btn-primary):not(.active) {
+        padding: 0 0.6875rem !important;
+        font-size: 0;
+        gap: 0;
+        &::before { font-size: 0.875rem; }
+    }
+    // no room for the keyboard hint next to Send / Log in a narrow column
+    #{$mt-apps} .o-mail-Chatter-top .o-mail-Composer span.text-muted.small:has(samp) { display: none; }
 }
 
 // ===========================================================================
@@ -1906,7 +2004,7 @@ $mt-bar-height: 3.5rem;
         border: 1px solid var(--mt-border);
         border-radius: 0.5rem;
         background: var(--mt-card);
-        &:focus-within { border-color: var(--mt-primary); box-shadow: 0 0 0 3px var(--mt-ring); }
+        &:focus-within { border-color: var(--mt-focus-border); box-shadow: 0 0 0 3px var(--mt-focus-ring); }
         .o_input { border: 0 !important; background: transparent !important; box-shadow: none !important; padding: 0 !important; }
     }
     .o_field_widget[name="expected_revenue"] .o_input.position-absolute { padding: 0 !important; align-items: center; height: 100%; }

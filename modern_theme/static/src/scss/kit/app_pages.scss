@@ -406,7 +406,7 @@
                 tfoot { background: transparent; color: var(--#{$p}-muted-fg); }
                 .o_list_record_selector .form-check-input, thead .form-check-input {
                     border-color: var(--#{$p}-input);
-                    &:checked { background-color: var(--#{$p}-primary); border-color: var(--#{$p}-primary); }
+                    &:checked { background-color: var(--#{$p}-solid, var(--#{$p}-primary)); border-color: var(--#{$p}-solid, var(--#{$p}-primary)); }
                 }
                 .o_group_header { background: color-mix(in srgb, var(--#{$p}-muted) 45%, var(--#{$p}-card)); font-weight: 500; }
                 .badge { border-radius: var(--#{$p}-radius-sm); font-weight: 500; }

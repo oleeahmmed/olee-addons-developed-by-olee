@@ -14,6 +14,7 @@ client-side theme service updates the very same attributes live.
 COLOR_MODES = [("light", "Light"), ("dark", "Dark"), ("auto", "Auto")]
 
 THEME_PRESETS = [
+    ("once", "Once (neutral + emerald)"),
     ("indigo", "Indigo"),
     ("blue", "Blue"),
     ("sky", "Sky"),
@@ -33,11 +34,11 @@ THEME_PRESETS = [
     ("neutral", "Neutral"),
     ("custom", "Custom color"),
 ]
-DEFAULT_PRESET = "indigo"
+DEFAULT_PRESET = "once"
 
 # Swatches for pickers (the light-mode primary of each preset, see tokens.scss).
 PRESET_SWATCHES = {
-    "indigo": "#4f46e5", "blue": "#2563eb", "sky": "#0369a1", "teal": "#0f766e",
+    "once": "#0a8466", "indigo": "#4f46e5", "blue": "#2563eb", "sky": "#0369a1", "teal": "#0f766e",
     "emerald": "#047857", "green": "#15803d", "amber": "#b45309", "yellow": "#facc15",
     "orange": "#c2410c", "red": "#dc2626", "rose": "#e11d48", "violet": "#7c3aed",
     "slate": "#1e293b", "zinc": "#18181b", "stone": "#1c1917", "gray": "#111827",

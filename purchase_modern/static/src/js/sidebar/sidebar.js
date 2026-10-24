@@ -51,8 +51,15 @@ for (const [xmlid, icon] of Object.entries({
     menuIcons.add(xmlid, icon);
 }
 
+// Less used pages: in the top bar ("More"), so the sidebar keeps the everyday ones.
+const TOPBAR = new Set([
+    "purchase_modern.menu_to_bill",
+    "purchase_modern.menu_pricelists",
+]);
+
 registry.category("modern_theme.sidebar_apps").add(APP_XMLID, {
     legacyPrefix: "mp",
+    topbar: TOPBAR,
     ownPrefixes: ["purchase_modern."],
     mergeInto: MERGE_INTO,
     replaced: REPLACED,

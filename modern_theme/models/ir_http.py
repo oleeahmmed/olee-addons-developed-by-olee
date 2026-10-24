@@ -84,7 +84,7 @@ class IrHttp(models.AbstractModel):
     # ------------------------------------------------------------------
     def _modern_theme_preset(self):
         """Kept for templates written against the previous version."""
-        return self.env.company.sudo().mt_preset or "indigo"
+        return self.env.company.sudo().mt_preset or "once"
 
     def _mt_public_values(self):
         values = self.env.company.sudo()._mt_defaults()

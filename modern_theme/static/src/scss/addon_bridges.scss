@@ -29,6 +29,9 @@ html[data-mt-theme] {
         --#{$p}-primary-soft: var(--mt-primary-soft);
         --#{$p}-primary-soft-fg: var(--mt-primary-text);
         --#{$p}-ring: var(--mt-ring);
+        --#{$p}-solid: var(--mt-solid, var(--mt-primary));
+        --#{$p}-solid-fg: var(--mt-solid-fg, var(--mt-primary-foreground));
+        --#{$p}-solid-hover: var(--mt-solid-hover, var(--mt-primary-hover));
         // status
         --#{$p}-success: var(--mt-success);
         --#{$p}-success-soft: var(--mt-success-soft);
