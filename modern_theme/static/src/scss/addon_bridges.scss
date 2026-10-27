@@ -5,7 +5,7 @@
 // :root. Re-declaring them on `html[data-mt-theme]` (higher specificity) makes
 // the theme win whatever the asset order, without !important.
 
-$mt-addon-prefixes: cm, im, mp, ss, mr, cu, iv, ac;
+$mt-addon-prefixes: cm, im, mp, ss, mr, cu, iv, ac, em, pm;
 
 html[data-mt-theme] {
     @each $p in $mt-addon-prefixes {

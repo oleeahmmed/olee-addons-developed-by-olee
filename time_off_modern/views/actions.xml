@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Odoo's own hr.leave / hr.leave.allocation views in the modern page (static/src/js) -->
+    <record id="action_dashboard" model="ir.actions.client">
+        <field name="name">Time Off Dashboard</field>
+        <field name="tag">time_off_modern.dashboard</field>
+        <field name="path">modern-time-off</field>
+    </record>
+    <record id="action_requests" model="ir.actions.client">
+        <field name="name">Time Off Requests</field>
+        <field name="tag">time_off_modern.requests</field>
+        <field name="path">modern-time-off-requests</field>
+    </record>
+    <record id="action_allocations" model="ir.actions.client">
+        <field name="name">Allocations</field>
+        <field name="tag">time_off_modern.allocations</field>
+        <field name="path">modern-time-off-allocations</field>
+    </record>
+</odoo>

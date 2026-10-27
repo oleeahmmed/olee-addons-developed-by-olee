@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- shared: loading skeleton / error / app not installed -->
+    <t t-name="employee_modern.TimeDashboardState">
+        <t t-if="state.loading">
+            <div class="od-head"><div class="od-skel" style="height:3.75rem;width:22rem"/><div class="od-skel" style="height:2.25rem;width:20rem"/></div>
+            <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel" style="height:8.5rem"/></t></div>
+            <div class="od-grid"><div class="od-skel od-span-8" style="height:22rem"/><div class="od-skel od-span-4" style="height:22rem"/></div>
+        </t>
+        <t t-elif="state.error and !state.data">
+            <OdError message="state.error" onRetry.bind="load"/>
+        </t>
+        <section t-elif="state.data and !state.data.installed" class="od-card">
+            <div class="od-card-body">
+                <div class="od-empty">
+                    <i class="fa fa-puzzle-piece" aria-hidden="true"/>
+                    <strong><t t-esc="appName"/> is not installed</strong>
+                    <span>Install Odoo's <t t-esc="appName"/> app from Apps to use this page.</span>
+                </div>
+            </div>
+        </section>
+    </t>
+
+</templates>

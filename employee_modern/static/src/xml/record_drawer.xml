@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- The drawer of Modern CRM (same markup and classes, styled by modern_theme's sheet.scss) -->
+    <t t-name="employee_modern.FormDrawer">
+        <Dialog title="props.title" size="'md'" contentClass="'o_em_sheet o_or_sheet'" bodyClass="'or-sheet-body'" header="false">
+            <aside class="or-sheet-rail" aria-label="Drawer actions">
+                <button type="button" class="or-sheet-rail-btn" t-att-title="newLabel" t-att-aria-label="newLabel" t-on-click.stop="onNew">
+                    <i class="fa fa-plus" aria-hidden="true"/>
+                </button>
+                <button type="button" class="or-sheet-rail-btn" aria-label="Close" title="Close" t-on-click.stop="close">
+                    <span class="or-sheet-close-icon" aria-hidden="true">&#215;</span>
+                </button>
+            </aside>
+            <div class="or-sheet-main">
+                <div class="or-sheet-head">
+                    <div class="or-sheet-head-text">
+                        <h2 class="or-sheet-title" t-esc="props.title"/>
+                        <p t-if="props.subtitle" class="or-sheet-subtitle" t-esc="props.subtitle"/>
+                        <div t-if="props.slots and props.slots.actions" class="or-sheet-actions">
+                            <t t-slot="actions"/>
+                        </div>
+                    </div>
+                    <button type="button" class="or-sheet-close" aria-label="Close" title="Close" t-on-click.stop="close">
+                        <span class="or-sheet-close-icon" aria-hidden="true">&#215;</span>
+                    </button>
+                </div>
+                <div class="or-sheet-stack">
+                    <t t-slot="default"/>
+                </div>
+            </div>
+            <t t-set-slot="footer">
+                <t t-slot="footer"/>
+            </t>
+        </Dialog>
+    </t>
+
+    <!-- "All fields" link of a drawer: Odoo's own full form -->
+    <t t-name="employee_modern.DrawerFullFormLink">
+        <button type="button" class="or-link" t-on-click="openFullForm">
+            <i class="fa fa-external-link me-1" aria-hidden="true"/><t t-if="isEdit">Open full form</t><t t-else="">More fields</t>
+        </button>
+    </t>
+
+    <t t-name="employee_modern.DepartmentDrawer">
+        <FormDrawer title="title" subtitle="subtitle" close="props.close" onNew.bind="resetForm" newLabel="'New department'">
+            <t t-set-slot="actions"><t t-call="employee_modern.DrawerFullFormLink"/></t>
+            <form class="or-sheet-fields" t-on-submit.prevent="save" novalidate="">
+                <div t-if="state.error" class="or-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
+                <div class="or-field">
+                    <label class="or-label" for="em_dp_name">Department name</label>
+                    <input id="em_dp_name" class="or-input" t-model="state.name" placeholder="e.g. Sales" autofocus=""/>
+                </div>
+                <div class="or-field">
+                    <label class="or-label" for="em_dp_manager">Manager</label>
+                    <OrSelectCard id="'em_dp_manager'" value="state.manager_id" options="managerOptions"
+                                  placeholder="'No manager'" emptyHint="'Pick who leads the team'"
+                                  allowEmpty="true" onChange="(id) => this.state.manager_id = id"/>
+                </div>
+                <div class="or-field">
+                    <label class="or-label" for="em_dp_parent">Parent department</label>
+                    <OrSelectCard id="'em_dp_parent'" value="state.parent_id" options="parentOptions"
+                                  placeholder="'None (top level)'" emptyHint="'It is a main department'"
+                                  allowEmpty="true" onChange="(id) => this.state.parent_id = id"/>
+                </div>
+                <div class="or-field">
+                    <span class="or-label">Colour</span>
+                    <div class="or-color-dots" role="radiogroup" aria-label="Colour">
+                        <t t-foreach="colors" t-as="c" t-key="c">
+                            <button type="button" role="radio" t-att-aria-checked="state.color === c ? 'true' : 'false'"
+                                    t-attf-class="or-color-dot o_colorlist_item_color_{{ c }} {{ state.color === c ? 'is-on' : '' }}"
+                                    t-on-click="() => this.state.color = c" t-att-title="'Colour ' + c"/>
+                        </t>
+                    </div>
+                </div>
+                <button type="submit" class="d-none"/>
+            </form>
+            <t t-set-slot="footer">
+                <button type="button" class="or-save-pill" t-att-disabled="state.saving" t-on-click="save">Save</button>
+            </t>
+        </FormDrawer>
+    </t>
+
+    <t t-name="employee_modern.JobDrawer">
+        <FormDrawer title="title" subtitle="subtitle" close="props.close" onNew.bind="resetForm" newLabel="'New job position'">
+            <t t-set-slot="actions"><t t-call="employee_modern.DrawerFullFormLink"/></t>
+            <form class="or-sheet-fields" t-on-submit.prevent="save" novalidate="">
+                <div t-if="state.error" class="or-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
+                <div class="or-field">
+                    <label class="or-label" for="em_jb_name">Job position</label>
+                    <input id="em_jb_name" class="or-input" t-model="state.name" placeholder="e.g. Sales Manager" autofocus=""/>
+                </div>
+                <div class="or-field">
+                    <label class="or-label" for="em_jb_dep">Department</label>
+                    <OrSelectCard id="'em_jb_dep'" value="state.department_id" options="departmentOptions"
+                                  placeholder="'Any department'" emptyHint="'Not tied to one department'"
+                                  allowEmpty="true" onChange="(id) => this.state.department_id = id"/>
+                </div>
+                <div class="or-field or-field-row" t-if="contractTypes.length">
+                    <div>
+                        <label class="or-label" for="em_jb_type">Employment type</label>
+                        <select id="em_jb_type" class="or-select" t-model="state.contract_type_id">
+                            <option value="">Any</option>
+                            <t t-foreach="contractTypes" t-as="ct" t-key="ct.id"><option t-att-value="ct.id" t-esc="ct.name"/></t>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="or-label" for="em_jb_target">To hire</label>
+                        <input id="em_jb_target" type="number" min="0" step="1" class="or-input" t-model="state.no_of_recruitment"/>
+                    </div>
+                </div>
+                <div class="or-field" t-else="">
+                    <label class="or-label" for="em_jb_target2">To hire</label>
+                    <input id="em_jb_target2" type="number" min="0" step="1" class="or-input" t-model="state.no_of_recruitment"/>
+                </div>
+                <p class="or-hint">How many new people you plan to hire for this role.</p>
+                <button type="submit" class="d-none"/>
+            </form>
+            <t t-set-slot="footer">
+                <button type="button" class="or-save-pill" t-att-disabled="state.saving" t-on-click="save">Save</button>
+            </t>
+        </FormDrawer>
+    </t>
+
+</templates>

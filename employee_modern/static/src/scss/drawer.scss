@@ -1,0 +1,13 @@
+// HR drawers (department, job position, attendance) use the theme's CRM drawer look
+// (modern_theme sheet.scss: .o_or_sheet / .or-*). Only small HR additions here.
+.modal-content.o_em_sheet {
+    .or-sheet-actions .or-link {
+        display: inline-flex;
+        align-items: center;
+    }
+    .or-field-row { column-gap: 0.75rem !important; }
+    input[type="datetime-local"].or-input {
+        min-width: 0;
+        font-variant-numeric: tabular-nums;
+    }
+}

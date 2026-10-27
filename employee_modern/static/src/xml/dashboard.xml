@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="employee_modern.Dashboard">
+        <div class="o_em od-page">
+            <t t-if="state.loading">
+                <div class="od-head"><div class="od-skel" style="height:3.75rem;width:22rem"/><div class="od-skel" style="height:2.25rem;width:20rem"/></div>
+                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel" style="height:8.5rem"/></t></div>
+                <div class="od-grid"><div class="od-skel od-span-8" style="height:22rem"/><div class="od-skel od-span-4" style="height:22rem"/></div>
+            </t>
+            <t t-elif="state.error and !state.data">
+                <OdError message="state.error" onRetry.bind="load"/>
+            </t>
+            <t t-elif="state.data">
+                <t t-set="d" t-value="state.data"/>
+
+                <!-- header: who, when, filters -->
+                <header class="od-head">
+                    <div>
+                        <div class="od-eyebrow"><span class="od-live" aria-hidden="true"/> <t t-esc="d.company"/> · People overview</div>
+                        <h1 class="od-title"><t t-esc="greeting"/>, <t t-esc="firstName"/></h1>
+                        <p class="od-subtitle">
+                            Your team today · hires and departures <strong t-esc="caption.current"/>, compared with <t t-esc="caption.previous"/>
+                        </p>
+                    </div>
+                    <div class="od-head-actions">
+                        <OdFilters period="state.period" teamId="state.teamId" teams="departments" onChange.bind="onFilters" busy="state.busy"
+                                   allLabel="'All departments'" icon="'fa-sitemap'" label="'Department'"/>
+                        <button type="button" class="od-btn od-btn--icon" title="Refresh" aria-label="Refresh" t-on-click="() => this.load()">
+                            <i t-attf-class="fa fa-refresh {{ state.busy ? 'fa-spin' : '' }}" aria-hidden="true"/>
+                        </button>
+                        <button t-if="state.canCreate" type="button" class="od-btn od-btn--primary" data-hotkey="c" t-on-click="newEmployee">
+                            <i class="fa fa-plus" aria-hidden="true"/> New employee
+                        </button>
+                    </div>
+                </header>
+
+                <div t-att-class="{ 'od-busy': state.busy }">
+                    <!-- key figures -->
+                    <section class="od-kpis" aria-label="Key figures">
+                        <OdKpi featured="true" tone="'blue'" icon="'fa-users'" label="'Headcount'" value="count(k.headcount)"
+                               hint="count(k.departments) + ' departments · ' + count(k.managers) + ' managers'"
+                               onClick="() => this.go('employee_modern.action_employees')"/>
+                        <OdKpi tone="'teal'" icon="'fa-user-plus'" label="'New hires'" value="count(k.hires)"
+                               delta="k.hires_delta" compareLabel="compare" spark="d.spark"
+                               hint="count(k.hires_prev) + ' in the previous period'" onClick.bind="openHires"/>
+                        <OdKpi tone="'rose'" icon="'fa-sign-out'" label="'Departures'" value="count(k.departures)"
+                               delta="k.departures_delta" compareLabel="compare" invert="true"
+                               hint="count(k.departures_prev) + ' in the previous period'" onClick.bind="openDepartures"/>
+                        <OdKpi tone="'amber'" icon="'fa-refresh'" label="'Turnover'" value="number(k.turnover) + '%'"
+                               hint="'departures over the last 12 months'" invert="true"
+                               onClick="() => this.go('employee_modern.action_former')"/>
+                        <OdKpi tone="'violet'" icon="'fa-hourglass-half'" label="'Contracts ending'" value="count(k.ending)"
+                               hint="'in the next 30 days'" onClick="() => this.go('employee_modern.action_contracts_ending')"/>
+                        <OdKpi tone="'sky'" icon="'fa-calendar-check-o'" label="'Average tenure'" value="tenure"
+                               hint="'since the contract start'" onClick="() => this.go('employee_modern.action_records')"/>
+                    </section>
+
+                    <!-- who is out / in today: only with Time Off or Attendances -->
+                    <section t-if="d.presence" class="od-card">
+                        <div class="od-card-head"><div>
+                            <h3><span class="od-card-icon od-tone-amber"><i class="fa fa-calendar" aria-hidden="true"/></span> Today</h3>
+                            <p>Time off and attendance, as recorded in Odoo</p>
+                        </div></div>
+                        <div class="od-card-body">
+                            <OdStatusTiles items="d.presence" onClick.bind="openPresence"/>
+                        </div>
+                    </section>
+
+                    <!-- hiring through the year, and what to look at -->
+                    <div class="od-grid">
+                        <section class="od-card od-span-8">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-blue"><i class="fa fa-bar-chart" aria-hidden="true"/></span> Hires in <t t-esc="d.year"/></h3>
+                                    <p>Contracts started per month, with last year for comparison</p>
+                                </div>
+                                <div class="od-card-total"><strong class="od-num" t-esc="count(ytd)"/><span>year to date</span></div>
+                            </div>
+                            <div class="od-card-body">
+                                <OdComboChart data="d.months" format="count" formatAxis="axis" currentLabel="'' + d.year" previousLabel="'' + (d.year - 1)"
+                                              label="'Hires per month in ' + d.year + ' compared with ' + (d.year - 1)"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-rose"><i class="fa fa-bell-o" aria-hidden="true"/></span> Needs your attention</h3>
+                                    <p>Click a line to see the employees</p>
+                                </div>
+                            </div>
+                            <div class="od-card-body">
+                                <OdAttention items="d.attention" format="count" onClick.bind="openAttention"/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- where people work -->
+                    <div class="od-grid">
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-sitemap" aria-hidden="true"/></span> By department</h3>
+                                <p>Employees per department</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.by_department.length" class="od-empty"><i class="fa fa-sitemap" aria-hidden="true"/><strong>No department yet</strong><span>Create departments to see this.</span></div>
+                                <OdRank t-else="" items="byDepartment" format="count" tone="'teal'" onClick.bind="openDepartment"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-violet"><i class="fa fa-briefcase" aria-hidden="true"/></span> By job position</h3>
+                                <p>The most common roles</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.by_job.length" class="od-empty"><i class="fa fa-briefcase" aria-hidden="true"/><strong>No job position yet</strong><span>Set a job position on employees to see this.</span></div>
+                                <OdRank t-else="" items="d.by_job" format="count" tone="'violet'" onClick.bind="openJob"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-sky"><i class="fa fa-id-card-o" aria-hidden="true"/></span> By employee type</h3>
+                                <p>Employees, workers, trainees, contractors…</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.by_type.length" class="od-empty"><i class="fa fa-id-card-o" aria-hidden="true"/><strong>No employee yet</strong></div>
+                                <OdDonut t-else="" items="d.by_type" format="count" centerLabel="'Employees'" onClick.bind="openType"/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- people: birthdays and gender split -->
+                    <div class="od-grid">
+                        <section class="od-card od-span-8">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3>Latest employees</h3>
+                                    <p>The most recent contract starts · click one to open it</p>
+                                </div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('employee_modern.action_employees')">All employees <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body od-card-body--flush">
+                                <OdTable columns="employeeColumns" rows="employeeRows" pageSize="7" unit="'employees'" onRowClick.bind="openEmployee" emptyText="'No employee yet'"/>
+                            </div>
+                        </section>
+                        <div class="od-span-4 od-stack-col">
+                            <section class="od-card">
+                                <div class="od-card-head"><div>
+                                    <h3><span class="od-card-icon od-tone-amber"><i class="fa fa-birthday-cake" aria-hidden="true"/></span> Upcoming birthdays</h3>
+                                    <p>In the next 30 days</p>
+                                </div></div>
+                                <div class="od-card-body">
+                                    <div t-if="!birthdays.length" class="od-empty"><i class="fa fa-birthday-cake" aria-hidden="true"/><strong>No birthday soon</strong><span>Fill the date of birth in the Private tab.</span></div>
+                                    <OdFeed t-else="" items="birthdays" onClick.bind="openEmployee"/>
+                                </div>
+                            </section>
+                            <section t-if="d.by_gender.length" class="od-card">
+                                <div class="od-card-head"><div>
+                                    <h3><span class="od-card-icon od-tone-rose"><i class="fa fa-venus-mars" aria-hidden="true"/></span> By gender</h3>
+                                    <p>As filled on the employees</p>
+                                </div></div>
+                                <div class="od-card-body">
+                                    <OdDonut items="d.by_gender" format="count" centerLabel="'Filled'" onClick.bind="openGender"/>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

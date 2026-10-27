@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Task and project cards of Modern Project, drawn like the deal cards of Modern CRM.
+        Standalone views (no xpath into Odoo's own views), low priority (99): Odoo's
+        Project app keeps its default views and an Odoo update cannot break these.
+        Stages, drag and drop, quick create, subtasks, activities and the state toggle
+        are Odoo's own widgets.
+    -->
+    <record id="task_kanban_board" model="ir.ui.view">
+        <field name="name">project.task.kanban.modern</field>
+        <field name="model">project.task</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <kanban highlight_color="color" default_group_by="stage_id"
+                    class="o_kanban_small_column o_kanban_project_tasks o_pm_task_kanban"
+                    quick_create_view="project.quick_create_task_form"
+                    js_class="project_task_kanban" sample="1"
+                    default_order="priority desc, sequence, state, date_deadline asc, id desc">
+                <field name="stage_id"/>
+                <field name="state"/>
+                <field name="color"/>
+                <field name="priority"/>
+                <field name="project_id"/>
+                <field name="parent_id"/>
+                <field name="partner_id"/>
+                <field name="date_deadline"/>
+                <field name="subtask_count"/>
+                <field name="closed_subtask_count"/>
+                <field name="allow_milestones"/>
+                <field name="milestone_id"/>
+                <field name="has_late_and_unreached_milestone"/>
+                <field name="rating_count"/>
+                <field name="rating_avg"/>
+                <field name="rating_active"/>
+                <field name="is_template"/>
+                <field name="has_project_template"/>
+                <progressbar field="state" colors='{"1_done": "success-done", "1_canceled": "danger", "03_approved": "success", "02_changes_requested": "warning", "04_waiting_normal": "info", "01_in_progress": "200" }'/>
+                <templates>
+                    <t t-name="menu" t-if="!selection_mode" groups="base.group_user">
+                        <a t-if="widget.editable" role="menuitem" type="open" class="dropdown-item">Edit</a>
+                        <a t-if="widget.editable" role="menuitem" type="set_cover" class="dropdown-item" data-field="displayed_image_id">Set Cover Image</a>
+                        <a class="dropdown-item" role="menuitem" type="object" name="copy">Duplicate</a>
+                        <t t-if="widget.deletable"><a role="menuitem" type="delete" class="dropdown-item">Delete</a></t>
+                        <div role="separator" class="dropdown-divider"/>
+                        <field name="color" widget="kanban_color_picker"/>
+                    </t>
+                    <t t-name="card">
+                        <t t-set="pm_closed" t-value="['1_done', '1_canceled'].includes(record.state.raw_value)"/>
+                        <main t-att-class="pm_closed ? 'pm-kc-closed' : ''">
+                            <div class="pm-kc-head">
+                                <field name="name" class="pm-kc-title"/>
+                            </div>
+
+                            <div class="pm-kc-line" t-if="record.parent_id.raw_value" title="Parent task">
+                                <i title="Parent task" class="fa fa-level-up fa-rotate-90" aria-hidden="true"/>
+                                <field name="parent_id" class="text-truncate" invisible="context.get('default_parent_id', False)"/>
+                            </div>
+                            <div class="pm-kc-line" t-if="record.project_id.raw_value" invisible="context.get('default_project_id', False)" title="Project">
+                                <i title="Project" class="fa fa-folder-o" aria-hidden="true"/>
+                                <field name="project_id" class="text-truncate" options="{'no_open': True}"/>
+                            </div>
+                            <div class="pm-kc-line" t-if="record.partner_id.raw_value" title="Customer">
+                                <i title="Customer" class="fa fa-user-o" aria-hidden="true"/>
+                                <field name="partner_id" class="text-truncate"/>
+                            </div>
+                            <div t-if="record.allow_milestones.raw_value and record.milestone_id.raw_value" title="Milestone"
+                                 t-attf-class="pm-kc-line {{ record.has_late_and_unreached_milestone.raw_value and !pm_closed ? 'pm-kc-line--late' : '' }}">
+                                <i title="Milestone" class="fa fa-flag-o" aria-hidden="true"/>
+                                <field name="milestone_id" class="text-truncate" options="{'no_open': True}"/>
+                            </div>
+
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" class="pm-kc-tags"/>
+                            <field name="task_properties" widget="properties"/>
+                            <field name="displayed_image_id" widget="attachment_image"/>
+
+                            <t t-if="record.subtask_count.raw_value">
+                                <t t-set="pm_sub_done" t-value="record.closed_subtask_count.raw_value or 0"/>
+                                <t t-set="pm_sub_all" t-value="record.subtask_count.raw_value"/>
+                                <div class="pm-kc-progress">
+                                    <span class="pm-kc-progress-label"><i title="Sub-tasks" class="fa fa-check-square-o" aria-hidden="true"/> Sub-tasks</span>
+                                    <span class="pm-kc-progress-count"><t t-esc="pm_sub_done"/>/<t t-esc="pm_sub_all"/></span>
+                                </div>
+                                <div class="pm-kc-bar" aria-hidden="true">
+                                    <span t-attf-style="width: {{ Math.round(pm_sub_done * 100 / pm_sub_all) }}%"/>
+                                </div>
+                            </t>
+
+                            <div class="pm-kc-assign">
+                                <div class="pm-kc-assign-item">
+                                    <span class="pm-kc-assign-label">Assignees</span>
+                                    <field name="user_ids" widget="many2many_avatar_user" domain="[('share', '=', False)]" class="oe_kanban_action"/>
+                                </div>
+                                <div class="pm-kc-assign-item">
+                                    <span class="pm-kc-assign-label">Deadline</span>
+                                    <span t-if="record.date_deadline.raw_value and !pm_closed" class="pm-kc-deadline">
+                                        <field name="date_deadline" widget="remaining_days"/>
+                                    </span>
+                                    <span t-elif="record.date_deadline.raw_value" class="pm-kc-none">
+                                        <field name="date_deadline" widget="date"/>
+                                    </span>
+                                    <span t-else="" class="pm-kc-none">No deadline</span>
+                                </div>
+                            </div>
+
+                            <footer t-if="!selection_mode" class="pm-kc-foot">
+                                <div class="d-flex align-items-center pm-kc-foot-left">
+                                    <field name="priority" widget="priority"/>
+                                    <field name="activity_ids" widget="kanban_activity"/>
+                                    <t t-if="record.project_id.raw_value and record.subtask_count.raw_value">
+                                        <widget name="subtask_counter"/>
+                                    </t>
+                                    <b t-if="record.rating_active.raw_value and record.rating_count.raw_value &gt; 0" class="pm-kc-rating">
+                                        <span class="fa fa-fw fa-smile-o text-success" t-if="record.rating_avg.raw_value &gt;= 3.66" title="Average Rating: Happy" role="img" aria-label="Happy face"/>
+                                        <span class="fa fa-fw fa-meh-o text-warning" t-elif="record.rating_avg.raw_value &gt;= 2.33" title="Average Rating: Neutral" role="img" aria-label="Neutral face"/>
+                                        <span class="fa fa-fw fa-frown-o text-danger" t-else="" title="Average Rating: Unhappy" role="img" aria-label="Unhappy face"/>
+                                    </b>
+                                    <field name="is_rotting" invisible="1"/>
+                                    <field name="rotting_days" widget="rotting" class="d-flex"/>
+                                </div>
+                                <div class="ms-auto d-flex align-items-center">
+                                    <field name="state" widget="project_task_state_selection" options="{'is_toggle_mode': false}"/>
+                                </div>
+                            </footer>
+                        </main>
+                        <widget name="subtask_kanban_list"/>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- My Tasks: grouped by the user's own stages (Inbox, Today, This Week…), as in Odoo -->
+    <record id="task_kanban_my" model="ir.ui.view">
+        <field name="name">project.task.kanban.modern.my</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="task_kanban_board"/>
+        <field name="mode">primary</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="default_group_by">personal_stage_type_id</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- All Tasks: one column per project, as in Odoo -->
+    <record id="task_kanban_all" model="ir.ui.view">
+        <field name="name">project.task.kanban.modern.all</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="task_kanban_board"/>
+        <field name="mode">primary</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="default_group_by">project_id</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Project cards: open the project's task board on click -->
+    <record id="project_kanban" model="ir.ui.view">
+        <field name="name">project.project.kanban.modern</field>
+        <field name="model">project.project</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <kanban highlight_color="color" class="o_project_kanban o_pm_project_kanban" sample="1"
+                    default_order="is_favorite desc, sequence, name, id">
+                <field name="color"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="date_start"/>
+                <field name="date"/>
+                <field name="task_count"/>
+                <field name="open_task_count"/>
+                <field name="closed_task_count"/>
+                <field name="label_tasks"/>
+                <field name="last_update_status"/>
+                <field name="last_update_color"/>
+                <field name="privacy_visibility"/>
+                <field name="rating_count"/>
+                <field name="rating_avg"/>
+                <field name="show_ratings"/>
+                <field name="is_template"/>
+                <field name="sequence" widget="handle"/>
+                <templates>
+                    <t t-name="menu" groups="base.group_user">
+                        <a role="menuitem" type="open" class="dropdown-item">Task board</a>
+                        <a role="menuitem" type="object" name="project_modern_open_settings" class="dropdown-item" groups="project.group_project_manager">Settings</a>
+                        <a role="menuitem" type="object" name="action_view_tasks_analysis" class="dropdown-item" groups="project.group_project_user">Tasks Analysis</a>
+                        <a role="menuitem" type="object" name="copy" class="dropdown-item" groups="project.group_project_manager">Duplicate</a>
+                        <div role="separator" class="dropdown-divider" groups="project.group_project_manager"/>
+                        <field name="color" widget="kanban_color_picker" groups="project.group_project_manager"/>
+                    </t>
+                    <t t-name="card">
+                        <t t-set="pm_all" t-value="record.task_count.raw_value or 0"/>
+                        <t t-set="pm_done" t-value="record.closed_task_count.raw_value or 0"/>
+                        <div class="pm-pc-head">
+                            <div t-attf-class="pm-pc-logo o_colorlist_item_color_{{ record.color.raw_value or 0 }}" aria-hidden="true">
+                                <i title="Project" class="fa fa-folder-open-o"/>
+                            </div>
+                            <div class="pm-pc-titles">
+                                <field name="display_name" class="pm-pc-title"/>
+                                <div class="pm-kc-line" t-if="record.partner_id.raw_value">
+                                    <i title="Customer" class="fa fa-user-o" aria-hidden="true"/>
+                                    <field name="partner_id" class="text-truncate"/>
+                                </div>
+                                <div class="pm-kc-line" t-if="record.date.raw_value or record.date_start.raw_value">
+                                    <i title="Dates" class="fa fa-calendar-o" aria-hidden="true"/>
+                                    <field name="date_start" widget="daterange" options="{'end_date_field': 'date'}"/>
+                                </div>
+                            </div>
+                            <field name="is_favorite" widget="project_is_favorite" nolabel="1" class="pm-pc-fav"/>
+                        </div>
+
+                        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" class="pm-kc-tags"/>
+
+                        <div class="pm-kc-progress">
+                            <span class="pm-kc-progress-label">Progress</span>
+                            <span class="pm-kc-progress-count"><t t-esc="pm_all ? Math.round(pm_done * 100 / pm_all) : 0"/>%</span>
+                        </div>
+                        <div class="pm-kc-bar" aria-hidden="true">
+                            <span t-attf-style="width: {{ pm_all ? Math.round(pm_done * 100 / pm_all) : 0 }}%"/>
+                        </div>
+
+                        <div class="pm-pc-stats">
+                            <div class="pm-pc-stat">
+                                <strong><field name="open_task_count"/></strong>
+                                <span>Open</span>
+                            </div>
+                            <div class="pm-pc-stat">
+                                <strong t-esc="pm_done"/>
+                                <span>Done</span>
+                            </div>
+                            <div class="pm-pc-stat">
+                                <strong><field name="task_count"/></strong>
+                                <span><field name="label_tasks"/></span>
+                            </div>
+                        </div>
+
+                        <div class="pm-kc-assign">
+                            <div class="pm-kc-assign-item">
+                                <span class="pm-kc-assign-label">Manager</span>
+                                <field name="user_id" widget="many2one_avatar_user" domain="[('share', '=', False)]" class="oe_kanban_action"/>
+                            </div>
+                            <div class="pm-kc-assign-item">
+                                <span class="pm-kc-assign-label">Status</span>
+                                <span class="pm-pc-status oe_kanban_action">
+                                    <field t-if="widget.editable and !record.is_template.raw_value" name="last_update_status" widget="project_state_selection"/>
+                                    <span class="text-truncate" t-esc="record.last_update_status.value"/>
+                                </span>
+                            </div>
+                        </div>
+
+                        <footer class="pm-kc-foot">
+                            <div class="d-flex align-items-center pm-kc-foot-left">
+                                <field name="activity_ids" widget="kanban_activity"/>
+                                <span class="pm-kc-privacy" t-att-title="record.privacy_visibility.value">
+                                    <i title="Visibility" t-attf-class="fa {{ record.privacy_visibility.raw_value === 'portal' ? 'fa-globe' : (record.privacy_visibility.raw_value === 'followers' ? 'fa-lock' : 'fa-users') }}" aria-hidden="true"/>
+                                    <field name="privacy_visibility"/>
+                                </span>
+                                <b t-if="record.show_ratings.raw_value and record.rating_count.raw_value &gt; 0" class="pm-kc-rating">
+                                    <span class="fa fa-smile-o text-success" t-if="record.rating_avg.raw_value &gt;= 3.66" title="Average Rating: Happy"/>
+                                    <span class="fa fa-meh-o text-warning" t-elif="record.rating_avg.raw_value &gt;= 2.33" title="Average Rating: Neutral"/>
+                                    <span class="fa fa-frown-o text-danger" t-else="" title="Average Rating: Unhappy"/>
+                                </b>
+                            </div>
+                            <div class="ms-auto pm-kc-open">
+                                Open board <i title="Open" class="fa fa-angle-right" aria-hidden="true"/>
+                            </div>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Task stages and tags: plain lists (a row opens the CRM-style drawer, no inline edit) -->
+    <record id="stage_list" model="ir.ui.view">
+        <field name="name">project.task.type.list.modern</field>
+        <field name="model">project.task.type</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <list string="Task Stages">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="project_ids" widget="many2many_tags" optional="show"/>
+                <field name="fold" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="tag_list" model="ir.ui.view">
+        <field name="name">project.tags.list.modern</field>
+        <field name="model">project.tags</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <list string="Tags">
+                <field name="name"/>
+                <field name="color" widget="color_picker"/>
+            </list>
+        </field>
+    </record>
+</odoo>

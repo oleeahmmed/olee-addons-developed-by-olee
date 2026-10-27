@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Inside Odoo's Employees app (hr.menu_hr_root), which now opens on its Dashboard.
+        Sidebar = everyday work: Dashboard, Employees, Departments.
+        Top bar = used less: "Records" (new hires, contracts ending, former employees, job
+        positions, employee history), Odoo's Reporting and Configuration.
+        Time Off and Attendances stay separate apps (Modern Time Off / Modern Attendances).
+    -->
+    <menuitem id="menu_dashboard" name="Dashboard" parent="hr.menu_hr_root" action="action_dashboard"
+              sequence="-110" groups="hr.group_hr_user"/>
+    <menuitem id="menu_employees" name="Employees" parent="hr.menu_hr_root" action="action_employees"
+              sequence="-105" groups="hr.group_hr_user"/>
+    <menuitem id="menu_departments" name="Departments" parent="hr.menu_hr_root" action="action_departments"
+              sequence="-100" groups="hr.group_hr_user"/>
+
+    <menuitem id="menu_records" name="Records" parent="hr.menu_hr_root" sequence="-80" groups="hr.group_hr_user"/>
+    <menuitem id="menu_new_hires" name="New Hires" parent="menu_records" action="action_new_hires" sequence="1"/>
+    <menuitem id="menu_contracts_ending" name="Contracts Ending" parent="menu_records" action="action_contracts_ending" sequence="2"/>
+    <menuitem id="menu_former" name="Former Employees" parent="menu_records" action="action_former" sequence="3"/>
+    <menuitem id="menu_jobs" name="Job Positions" parent="menu_records" action="action_jobs" sequence="4"/>
+    <menuitem id="menu_history" name="Employee History" parent="menu_records" action="action_records" sequence="5"/>
+</odoo>

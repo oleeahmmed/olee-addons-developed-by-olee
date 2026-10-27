@@ -24,6 +24,12 @@ function cssColorAlpha(name, alpha, fallback = "") {
 }
 
 function themePalette() {
+    // An app may set its own chart colours (--mt-app-chart-1 … 6, e.g. Modern Employees);
+    // otherwise the theme's primary and status colours are used.
+    const custom = [1, 2, 3, 4, 5, 6].map((i) => cssColor(`--mt-app-chart-${i}`)).filter(Boolean);
+    if (custom.length) {
+        return custom;
+    }
     return [
         cssColor("--mt-primary"),
         cssColor("--mt-success", cssColor("--cm-success")),
@@ -42,11 +48,10 @@ function paintDatasets(data, { line = false, pie = false } = {}) {
     const card = cssColor("--mt-card", cssColor("--cm-card"));
     data.datasets.forEach((dataset, index) => {
         const color = palette[index % palette.length];
-        const fill = cssColorAlpha(
-            index === 0 ? "--mt-primary" : "--mt-success",
-            0.22,
-            color
-        );
+        const rgb = String(color).match(/(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+        const fill = rgb
+            ? `rgba(${rgb[1]}, ${rgb[2]}, ${rgb[3]}, 0.22)`
+            : cssColorAlpha(index === 0 ? "--mt-primary" : "--mt-success", 0.22, color);
         if (pie) {
             const n = Array.isArray(dataset.data) ? dataset.data.length : palette.length;
             dataset.backgroundColor = Array.from({ length: n }, (_, i) => palette[i % palette.length]);

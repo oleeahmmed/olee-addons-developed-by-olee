@@ -354,7 +354,7 @@
 
 }
 
-@each $p in cm, ss, im, mp, mr, cu, iv, ac {
+@each $p in cm, ss, im, mp, mr, cu, iv, ac, em {
     @include mt-workspace-components($p);
     @include mt-workspace-list($p);
 }

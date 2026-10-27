@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Client actions of Modern Employees: each one shows Odoo's own views of the
+         standard HR models inside the shared modern page (see static/src/js/pages). -->
+    <record id="action_dashboard" model="ir.actions.client">
+        <field name="name">People Dashboard</field>
+        <field name="tag">employee_modern.dashboard</field>
+        <field name="path">modern-employees</field>
+    </record>
+    <record id="action_employees" model="ir.actions.client">
+        <field name="name">Employees</field>
+        <field name="tag">employee_modern.employees</field>
+        <field name="path">modern-employees-all</field>
+    </record>
+    <record id="action_departments" model="ir.actions.client">
+        <field name="name">Departments</field>
+        <field name="tag">employee_modern.departments</field>
+        <field name="path">modern-employees-departments</field>
+    </record>
+    <record id="action_jobs" model="ir.actions.client">
+        <field name="name">Job Positions</field>
+        <field name="tag">employee_modern.jobs</field>
+        <field name="path">modern-employees-jobs</field>
+    </record>
+    <record id="action_new_hires" model="ir.actions.client">
+        <field name="name">New Hires</field>
+        <field name="tag">employee_modern.new_hires</field>
+        <field name="path">modern-employees-new</field>
+    </record>
+    <record id="action_contracts_ending" model="ir.actions.client">
+        <field name="name">Contracts Ending</field>
+        <field name="tag">employee_modern.contracts_ending</field>
+        <field name="path">modern-employees-ending</field>
+    </record>
+    <record id="action_former" model="ir.actions.client">
+        <field name="name">Former Employees</field>
+        <field name="tag">employee_modern.former</field>
+        <field name="path">modern-employees-former</field>
+    </record>
+    <record id="action_records" model="ir.actions.client">
+        <field name="name">Employee History</field>
+        <field name="tag">employee_modern.records</field>
+        <field name="path">modern-employees-history</field>
+    </record>
+</odoo>

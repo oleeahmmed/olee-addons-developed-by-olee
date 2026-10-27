@@ -1,0 +1,8 @@
+// Modern Project: pages, lists, dashboards and controls come from Modern Theme's shared
+// app kit (modern_theme/static/src/scss/kit/). This app only passes its prefix.
+@include mt-app-tokens(pm);
+@include mt-app-pages(pm);
+@include mt-app-list(pm);
+@include mt-app-controls(pm);
+@include mt-app-helpers(pm);
+@include mt-app-dash(pm);

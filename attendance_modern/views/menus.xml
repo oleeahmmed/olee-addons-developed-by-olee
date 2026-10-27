@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Inside Odoo's Attendances app. Sidebar: Dashboard, At Work, Attendances, Extra Hours.
+        Odoo's "Overview" and "Management" entries are replaced in the sidebar by these
+        (static/src/js/sidebar.js); Kiosk Mode, Reporting and Configuration go to the top bar.
+    -->
+    <menuitem id="menu_dashboard" name="Dashboard" parent="hr_attendance.menu_hr_attendance_root"
+              action="action_dashboard" sequence="-100" groups="hr_attendance.group_hr_attendance_officer"/>
+    <menuitem id="menu_at_work" name="At Work" parent="hr_attendance.menu_hr_attendance_root"
+              action="action_at_work" sequence="-95" groups="hr_attendance.group_hr_attendance_officer"/>
+    <menuitem id="menu_attendances" name="Attendances" parent="hr_attendance.menu_hr_attendance_root"
+              action="action_attendances" sequence="-90" groups="hr_attendance.group_hr_attendance_officer"/>
+    <menuitem id="menu_extra_hours" name="Extra Hours" parent="hr_attendance.menu_hr_attendance_root"
+              action="action_extra_hours" sequence="-85" groups="hr_attendance.group_hr_attendance_officer"/>
+</odoo>

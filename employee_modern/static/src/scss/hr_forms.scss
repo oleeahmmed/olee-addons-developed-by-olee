@@ -1,0 +1,143 @@
+// Modern Employees: HR forms in the same look as the quotation form of the theme —
+// the main fields in one rounded card (label above a rounded input), tabs and their
+// cards below, Odoo's organization chart and chatter untouched.
+// Works on the full page and in the right-side drawer. Odoo's own markup and class
+// names only, for looks only: an Odoo update can at worst bring back Odoo's look.
+
+$hf-card: var(--mt-card, #ffffff);
+$hf-border: var(--mt-border, #e5e5e5);
+$hf-fg: var(--mt-foreground, #0a0a0a);
+$hf-muted: var(--mt-muted, #f5f5f5);
+$hf-muted-fg: var(--mt-muted-foreground, #737373);
+
+@mixin hf-card {
+    margin: 0 0 0.875rem !important;
+    padding: 1rem 1.125rem 0.75rem !important;
+    border: 1px solid $hf-border;
+    border-radius: 1rem;
+    background: $hf-card;
+}
+
+html[data-mt-theme]:not(#hf-x) .o_form_view {
+    // -----------------------------------------------------------------------
+    // Employee: photo, name, email, phones, tags and presence in one card
+    // -----------------------------------------------------------------------
+    .o_form_sheet > div:has(> .o_employee_avatar) {
+        @include hf-card;
+        align-items: flex-start !important;
+        gap: 1.25rem;
+        padding: 1.25rem !important;
+
+        > .o_employee_avatar { margin: 0 !important; }
+        .o_employee_avatar img {
+            width: 6rem !important;
+            height: 6rem !important;
+            object-fit: cover;
+            border-radius: 0.875rem !important;
+            border: 1px solid $hf-border;
+        }
+        > .col-12 { padding: 0 !important; flex: 1 1 auto; width: auto; max-width: none; }
+        .oe_title h1 {
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem !important;
+            line-height: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.015em;
+            input { font-weight: 600; }
+        }
+        .oe_title h5 {
+            margin: 0 0 0.25rem;
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: $hf-muted-fg;
+            .fa { width: 1rem; color: $hf-muted-fg !important; font-size: 0.8125rem; }
+            input { font-size: 0.875rem; }
+        }
+        .o_field_many2many_tags .badge { border-radius: 0.375rem; font-weight: 500; }
+    }
+    // the employee's properties (custom fields): hidden while there are none
+    &.o_hr_employee_form_view .o_form_sheet > .o_field_properties:not(:has(.o_property_field)) { display: none; }
+
+    // presence ("Present", "Sick Time Off, back on …"): one small pill
+    .o_field_hr_presence_status_private .btn,
+    .o_field_hr_presence_status .btn {
+        white-space: nowrap;
+        border-radius: 999px !important;
+        font-size: 0.75rem !important;
+        font-weight: 500 !important;
+        padding: 0.25rem 0.625rem !important;
+        line-height: 1.25rem;
+        max-width: 16rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    // -----------------------------------------------------------------------
+    // Department, job position, allocation, attendance: first block = the card
+    // -----------------------------------------------------------------------
+    // department (manager), allocation (allocation type), attendance (check in), job (recruitment target)
+    &:is(:has(.o_field_widget[name="manager_id"]):has(.o_field_widget[name="parent_id"]), :has(.o_field_widget[name="allocation_type"]), :has(.o_field_widget[name="check_in"]):has(.o_field_widget[name="check_out"])) .o_form_sheet > .o_group:first-of-type,
+    &:has(.o_field_widget[name="no_of_recruitment"]) .o_form_sheet > .o_inner_group:first-of-type {
+        @include hf-card;
+    }
+    &:is(:has(.o_field_widget[name="manager_id"]):has(.o_field_widget[name="parent_id"]), :has(.o_field_widget[name="no_of_recruitment"]), :has(.o_field_widget[name="allocation_type"])) .o_form_sheet > .oe_title {
+        margin-bottom: 0.875rem;
+        :is(h1, h2) {
+            font-size: 1.5rem !important;
+            line-height: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.015em;
+            margin: 0;
+        }
+    }
+    &:has(.o_field_widget[name="check_in"]):has(.o_field_widget[name="check_out"]) .o_form_sheet > .o_group:first-of-type > .o_horizontal_separator {
+        margin: 0.75rem 0 0.5rem !important;
+        font-size: 0.875rem !important;
+        font-weight: 600 !important;
+        text-transform: none !important;
+        color: $hf-fg !important;
+    }
+
+    // -----------------------------------------------------------------------
+    // Time off request: title, the fields card and the balance card
+    // -----------------------------------------------------------------------
+    .o_hr_leave_content {
+        row-gap: 0.875rem;
+        > .o_hr_leave_column.col_left {
+            @include hf-card;
+            margin-bottom: 0 !important;
+        }
+        // Odoo's own balance box ("… summary"): one muted card, no box inside a box
+        > .o_hr_leave_column.col_right .sub_table {
+            border: 1px solid $hf-border;
+            border-radius: 1rem;
+            background: color-mix(in srgb, #{$hf-muted} 55%, #{$hf-card}) !important;
+            padding: 1rem 1.125rem !important;
+            font-size: 0.8125rem;
+            .o_hr_leave_subtitle {
+                font-size: 0.9375rem !important;
+                font-weight: 600;
+                line-height: 1.5rem;
+                margin-bottom: 0.625rem;
+            }
+            .fw-bold { font-weight: 500 !important; }
+            img.rounded { width: 1.5rem; height: 1.5rem; border-radius: 999px !important; }
+        }
+    }
+    .o_hr_leave_title {
+        font-size: 1.25rem !important;
+        line-height: 1.75rem;
+        font-weight: 600 !important;
+        letter-spacing: -0.01em;
+        margin-bottom: 0.875rem;
+    }
+
+    // alerts (time off duration notes…): shadcn Alert
+    &:is(.o_hr_leave_form, .o_hr_employee_form_view) .alert {
+        border-radius: 0.75rem;
+        border: 1px solid color-mix(in srgb, currentColor 22%, #{$hf-border});
+        background: color-mix(in srgb, currentColor 5%, #{$hf-card});
+        font-size: 0.8125rem;
+        padding: 0.75rem 1rem;
+    }
+}

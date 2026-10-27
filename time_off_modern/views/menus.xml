@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Inside Odoo's Time Off app. Sidebar: Dashboard, Requests, Allocations (for people
+        who approve time off), Team Calendar (everyone) and Odoo's own "My Time".
+        Odoo's "Management" and "Overview" entries are replaced in the sidebar by these
+        (static/src/js/sidebar.js); Reporting and Configuration go to the top bar.
+    -->
+    <menuitem id="menu_dashboard" name="Dashboard" parent="hr_holidays.menu_hr_holidays_root"
+              action="action_dashboard" sequence="-100" groups="hr_holidays.group_hr_holidays_responsible"/>
+    <menuitem id="menu_requests" name="Requests" parent="hr_holidays.menu_hr_holidays_root"
+              action="action_requests" sequence="-95" groups="hr_holidays.group_hr_holidays_responsible"/>
+    <menuitem id="menu_allocations" name="Allocations" parent="hr_holidays.menu_hr_holidays_root"
+              action="action_allocations" sequence="-90" groups="hr_holidays.group_hr_holidays_responsible"/>
+    <menuitem id="menu_team_calendar" name="Team Calendar" parent="hr_holidays.menu_hr_holidays_root"
+              action="hr_holidays.action_hr_holidays_dashboard" sequence="2"/>
+</odoo>

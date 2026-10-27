@@ -1,0 +1,140 @@
+// Odoo's KPI strips above lists (Purchase RFQ dashboard: New / RFQ Sent / Late RFQ /
+// Not Acknowledged / Late Receipt / Days to Order) as shadcn stat cards:
+// a white card, label small and muted on top, the figure large below, a coloured dot for
+// the tone Odoo gives (info / warning / danger). Odoo's own markup and classes only, for
+// looks only: clicks, filters and figures stay Odoo's, an update can at worst bring
+// back Odoo's look.
+
+html[data-mt-theme]:not(#mt-x) .o_purchase_dashboard {
+    padding: 1rem 1.5rem !important;
+    background: var(--mt-background, var(--mt-card)) !important;
+    border-bottom: 1px solid var(--mt-border) !important;
+
+    > .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin: 0;
+        > [class*="col-"] {
+            padding: 0;
+            width: auto;
+            max-width: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        > .col-lg-8 { flex: 1 1 32rem !important; }
+        > .col-lg-3 { flex: 0 1 13rem !important; }
+    }
+
+    // Odoo's grid (61 columns, spacers): one plain row of equal cards instead
+    .grid {
+        display: grid !important;
+        gap: 0.75rem !important;
+        padding: 0 !important;
+        grid-template-columns: minmax(0, 1fr);
+        > * { grid-column: auto !important; }
+    }
+    > .row > .col-lg-8 > .grid:has(> .g-col-lg-1:not(:empty)) {
+        grid-template-columns: 2.5rem minmax(0, 1fr);
+    }
+    .g-col-lg-1:empty,
+    .g-col-1:empty,
+    #left_grid_top,
+    #left_grid_bottom { display: none !important; }
+    // "All" / "My" row captions (multi-user companies)
+    .g-col-lg-1 {
+        padding: 0 !important;
+        justify-content: flex-start !important;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--mt-muted-foreground);
+    }
+    .g-col-lg-11.grid,
+    .g-col-lg-12.grid {
+        grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+    }
+    @media (min-width: 992px) {
+        .g-col-lg-11.grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    }
+
+    // the card
+    .purchase-dashboard-card {
+        --mt-stat-tone: var(--mt-muted-foreground);
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas: "label dot" "value value";
+        align-items: center;
+        row-gap: 0.375rem;
+        column-gap: 0.5rem;
+        width: 100%;
+        height: 100%;
+        min-height: 5.25rem;
+        margin: 0;
+        padding: 0.875rem 1rem !important;
+        text-align: left !important;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        overflow-wrap: anywhere;
+        font-size: 0.8125rem !important;
+        font-weight: 500 !important;
+        line-height: 1.25rem;
+        color: var(--mt-muted-foreground) !important;
+        background: var(--mt-card) !important;
+        border: 1px solid var(--mt-border) !important;
+        border-radius: var(--mt-radius-card, 0.75rem) !important;
+        box-shadow: var(--mt-shadow-xs, 0 1px 2px rgba(0, 0, 0, 0.05)) !important;
+        transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
+
+        > div {
+            grid-area: value;
+            margin: 0;
+            font-size: 1.5rem !important;
+            font-weight: 600;
+            line-height: 2rem;
+            letter-spacing: -0.02em;
+            font-variant-numeric: tabular-nums;
+            color: var(--mt-foreground);
+            .ps-4 { padding-left: 0.5rem !important; font-size: 0.8125rem; font-weight: 500; color: var(--mt-muted-foreground); }
+            .o_priority_star { color: #f59e0b; }
+        }
+        &::after {
+            content: "";
+            grid-area: dot;
+            justify-self: end;
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 999px;
+            background: var(--mt-stat-tone);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-stat-tone) 18%, transparent);
+        }
+
+        &.bg-info-subtle { --mt-stat-tone: #3b82f6; }
+        &.bg-warning-subtle, &.btn-warning { --mt-stat-tone: #f59e0b; }
+        &.bg-danger-subtle {
+            --mt-stat-tone: #ef4444;
+            > div { color: #dc2626; }
+        }
+        &.bg-secondary-subtle, &.bg-100 { --mt-stat-tone: color-mix(in srgb, var(--mt-muted-foreground) 55%, transparent); }
+
+        // "My" row: the figure only
+        &.o_purchase_dashboard_card_bottom {
+            min-height: 0;
+            grid-template-areas: "value dot";
+            > div { font-size: 1.125rem !important; line-height: 1.75rem; }
+        }
+    }
+    a.purchase-dashboard-card:hover,
+    a.purchase-dashboard-card:focus-visible {
+        border-color: color-mix(in srgb, var(--mt-foreground) 22%, var(--mt-border)) !important;
+        box-shadow: var(--mt-shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.08)) !important;
+        background: color-mix(in srgb, var(--mt-muted) 35%, var(--mt-card)) !important;
+    }
+    a.purchase-dashboard-card:focus-visible { outline: 2px solid var(--mt-ring); outline-offset: 2px; }
+    .o_no_hover { cursor: default; }
+}
+
+html[data-mt-theme]:not(#mt-x) .o_purchase_dashboard .purchase-dashboard-card.bg-danger-subtle > div {
+    color: color-mix(in srgb, #ef4444 85%, var(--mt-foreground));
+}

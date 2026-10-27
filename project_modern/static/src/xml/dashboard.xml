@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="project_modern.Dashboard">
+        <div class="o_pm od-page">
+            <t t-if="state.loading">
+                <div class="od-head"><div class="od-skel" style="height:3.75rem;width:22rem"/><div class="od-skel" style="height:2.25rem;width:20rem"/></div>
+                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel" style="height:8.5rem"/></t></div>
+                <div class="od-grid"><div class="od-skel od-span-8" style="height:22rem"/><div class="od-skel od-span-4" style="height:22rem"/></div>
+            </t>
+            <t t-elif="state.error and !state.data">
+                <OdError message="state.error" onRetry.bind="load"/>
+            </t>
+            <t t-elif="state.data">
+                <t t-set="d" t-value="state.data"/>
+
+                <header class="od-head">
+                    <div>
+                        <div class="od-eyebrow"><span class="od-live" aria-hidden="true"/> <t t-esc="d.company"/> · Projects overview</div>
+                        <h1 class="od-title"><t t-esc="greeting"/>, <t t-esc="firstName"/></h1>
+                        <p class="od-subtitle">
+                            Your work today · tasks completed <strong t-esc="caption.current"/>, compared with <t t-esc="caption.previous"/>
+                        </p>
+                    </div>
+                    <div class="od-head-actions">
+                        <OdFilters period="state.period" teamId="state.teamId" teams="projectList" onChange.bind="onFilters" busy="state.busy"
+                                   allLabel="'All projects'" icon="'fa-folder-open-o'" label="'Project'"/>
+                        <button type="button" class="od-btn od-btn--icon" title="Refresh" aria-label="Refresh" t-on-click="() => this.load()">
+                            <i t-attf-class="fa fa-refresh {{ state.busy ? 'fa-spin' : '' }}" aria-hidden="true"/>
+                        </button>
+                        <button t-if="state.canCreate" type="button" class="od-btn od-btn--primary" data-hotkey="c" t-on-click="newTask">
+                            <i class="fa fa-plus" aria-hidden="true"/> New task
+                        </button>
+                    </div>
+                </header>
+
+                <div t-att-class="{ 'od-busy': state.busy }">
+                    <section class="od-kpis" aria-label="Key figures">
+                        <OdKpi featured="true" tone="'blue'" icon="'fa-tasks'" label="'Open tasks'" value="count(k.open)"
+                               hint="count(k.projects) + ' projects'" onClick.bind="openOpen"/>
+                        <OdKpi tone="'teal'" icon="'fa-check-circle-o'" label="'Completed'" value="count(k.done)"
+                               delta="k.done_delta" compareLabel="compare" spark="d.spark"
+                               hint="count(k.done_prev) + ' in the previous period'" onClick.bind="openDone"/>
+                        <OdKpi tone="'rose'" icon="'fa-calendar-times-o'" label="'Overdue'" value="count(k.overdue)"
+                               hint="'open tasks past their deadline'" onClick="() => this.go('project_modern.action_overdue')"/>
+                        <OdKpi tone="'amber'" icon="'fa-calendar-check-o'" label="'Due this week'" value="count(k.due_week)"
+                               hint="'deadline before Monday'" onClick.bind="openDueWeek"/>
+                        <OdKpi tone="'violet'" icon="'fa-user'" label="'My open tasks'" value="count(k.mine)"
+                               hint="'assigned to you'" onClick="() => this.go('project_modern.action_my_tasks')"/>
+                        <OdKpi tone="'sky'" icon="'fa-plus-square-o'" label="'New tasks'" value="count(k.created)"
+                               delta="k.created_delta" compareLabel="compare"
+                               hint="count(k.created_prev) + ' in the previous period'" onClick.bind="openCreated"/>
+                    </section>
+
+                    <div class="od-grid">
+                        <section class="od-card od-span-8">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-bar-chart" aria-hidden="true"/></span> Tasks completed in <t t-esc="d.year"/></h3>
+                                    <p>Tasks closed per month, with last year for comparison</p>
+                                </div>
+                                <div class="od-card-total"><strong class="od-num" t-esc="count(ytd)"/><span>year to date</span></div>
+                            </div>
+                            <div class="od-card-body">
+                                <OdComboChart data="d.months" format="count" formatAxis="axis" currentLabel="'' + d.year" previousLabel="'' + (d.year - 1)"
+                                              label="'Tasks completed per month in ' + d.year + ' compared with ' + (d.year - 1)"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-rose"><i class="fa fa-bell-o" aria-hidden="true"/></span> Needs your attention</h3>
+                                    <p>Open tasks · click a line to see them</p>
+                                </div>
+                            </div>
+                            <div class="od-card-body">
+                                <OdAttention items="d.attention" format="count" onClick.bind="openAttention"/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="od-grid">
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-blue"><i class="fa fa-columns" aria-hidden="true"/></span> By stage</h3>
+                                <p>Open tasks in each column of the boards</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.by_stage.length" class="od-empty"><i class="fa fa-columns" aria-hidden="true"/><strong>No open task</strong></div>
+                                <OdProgressList t-else="" items="byStage" tone="'blue'" onClick.bind="openStage"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-violet"><i class="fa fa-users" aria-hidden="true"/></span> Workload</h3>
+                                <p>Open tasks per person</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.by_user.length" class="od-empty"><i class="fa fa-users" aria-hidden="true"/><strong>No open task</strong></div>
+                                <OdRank t-else="" items="d.by_user" format="count" tone="'violet'" onClick.bind="openUser"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-amber"><i class="fa fa-pie-chart" aria-hidden="true"/></span> By status</h3>
+                                <p>In progress, changes requested, approved, waiting</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.by_state.length" class="od-empty"><i class="fa fa-pie-chart" aria-hidden="true"/><strong>No open task</strong></div>
+                                <OdDonut t-else="" items="d.by_state" format="count" centerLabel="'Open tasks'" onClick.bind="openState"/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="od-grid">
+                        <section class="od-card od-span-8">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-folder-open-o" aria-hidden="true"/></span> Projects</h3>
+                                    <p>Tasks done out of all tasks · click a project to open its board</p>
+                                </div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('project_modern.action_projects')">All projects <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body">
+                                <div t-if="!d.projects.length" class="od-empty"><i class="fa fa-folder-open-o" aria-hidden="true"/><strong>No project yet</strong><span>Create a project to start.</span></div>
+                                <OdProgressList t-else="" items="d.projects" tone="'teal'" onClick.bind="openProject"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-sky"><i class="fa fa-check-square-o" aria-hidden="true"/></span> My tasks</h3>
+                                    <p>Tick a task to mark it done</p>
+                                </div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('project_modern.action_my_tasks')">All <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body">
+                                <OdTasks items="myTasks" onToggle.bind="markDone" onClick.bind="openTask" emptyText="'Nothing on your plate'"/>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

@@ -1,0 +1,18 @@
+// Modern Employees: pages, lists, dashboards and controls come from Modern Theme's shared
+// app kit (modern_theme/static/src/scss/kit/). This app only passes its prefix.
+@include mt-app-tokens(em);
+@include mt-app-pages(em);
+@include mt-app-list(em);
+@include mt-app-controls(em);
+@include mt-app-helpers(em);
+@include mt-app-dash(em);
+
+// Two cards stacked in one grid column (birthdays above the gender split).
+.o_em .od-stack-col {
+    display: flex;
+    flex-direction: column;
+    gap: inherit;
+    min-width: 0;
+    > .od-card { flex: 0 0 auto; }
+    > .od-card:last-child { flex: 1 1 auto; }
+}

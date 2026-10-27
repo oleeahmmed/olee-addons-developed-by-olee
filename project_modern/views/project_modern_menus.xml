@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Inside Odoo's own Project app (project.menu_main_pm), like Modern CRM inside CRM.
+        Sidebar (everyday work): Dashboard, Projects, My Tasks, All Tasks.
+        Top bar: More (overdue, unassigned, closed tasks), Odoo's Reporting and
+        Configuration (task stages and tags replaced by pages with the CRM drawer).
+        Visibility comes from Odoo's groups (Project user / manager).
+    -->
+    <menuitem id="menu_dashboard" name="Dashboard" parent="project.menu_main_pm" action="action_dashboard" sequence="-120"/>
+    <menuitem id="menu_projects" name="Projects" parent="project.menu_main_pm" action="action_projects" sequence="-110"/>
+    <menuitem id="menu_my_tasks" name="My Tasks" parent="project.menu_main_pm" action="action_my_tasks" sequence="-100"/>
+    <menuitem id="menu_all_tasks" name="All Tasks" parent="project.menu_main_pm" action="action_all_tasks" sequence="-90"
+              groups="project.group_project_user"/>
+
+    <menuitem id="menu_more" name="More" parent="project.menu_main_pm" sequence="-50" groups="project.group_project_user"/>
+    <menuitem id="menu_overdue" name="Overdue Tasks" parent="menu_more" action="action_overdue" sequence="1"/>
+    <menuitem id="menu_unassigned" name="Unassigned Tasks" parent="menu_more" action="action_unassigned" sequence="2"/>
+    <menuitem id="menu_closed" name="Closed Tasks" parent="menu_more" action="action_closed" sequence="3"/>
+
+    <!-- Configuration: Odoo's own menu, with the two simple lists as Modern pages -->
+    <menuitem id="menu_stages" name="Task Stages" parent="project.menu_project_config" action="action_stages" sequence="15"
+              groups="project.group_project_manager"/>
+    <menuitem id="menu_tags" name="Tags" parent="project.menu_project_config" action="action_tags" sequence="16"
+              groups="project.group_project_manager"/>
+</odoo>

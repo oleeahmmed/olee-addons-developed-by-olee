@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="attendance_modern.AttendanceDrawer">
+        <FormDrawer title="title" subtitle="subtitle" close="props.close" onNew.bind="resetForm" newLabel="'New attendance'">
+            <t t-set-slot="actions"><t t-call="employee_modern.DrawerFullFormLink"/></t>
+            <form class="or-sheet-fields" t-on-submit.prevent="save" novalidate="">
+                <div t-if="state.error" class="or-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
+                <div class="or-field">
+                    <label class="or-label" for="am_at_emp">Employee</label>
+                    <OrSelectCard id="'am_at_emp'" value="state.employee_id" options="employeeOptions"
+                                  placeholder="'Pick an employee'" emptyHint="'Who is checking in'"
+                                  onChange="(id) => this.state.employee_id = id"/>
+                </div>
+                <div class="or-field or-field-row">
+                    <div>
+                        <label class="or-label" for="am_at_in">Check in</label>
+                        <input id="am_at_in" type="datetime-local" class="or-input" t-model="state.check_in"/>
+                    </div>
+                    <div>
+                        <label class="or-label" for="am_at_out">Check out</label>
+                        <input id="am_at_out" type="datetime-local" class="or-input" t-model="state.check_out"/>
+                    </div>
+                </div>
+                <p class="or-hint">Times are in your own time zone. Extra hours are counted by Odoo when you save.</p>
+                <button type="submit" class="d-none"/>
+            </form>
+            <t t-set-slot="footer">
+                <button type="button" class="or-save-pill" t-att-disabled="state.saving" t-on-click="save">Save</button>
+            </t>
+        </FormDrawer>
+    </t>
+
+</templates>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- ============================================================ Time Off -->
+    <t t-name="time_off_modern.Dashboard">
+        <div class="o_em od-page">
+            <t t-set="appName" t-value="'Time Off'"/>
+            <t t-call="employee_modern.TimeDashboardState"/>
+            <t t-if="!state.loading and state.data and state.data.installed">
+                <t t-set="d" t-value="state.data"/>
+                <header class="od-head">
+                    <div>
+                        <div class="od-eyebrow"><span class="od-live" aria-hidden="true"/> <t t-esc="d.company"/> · Time Off overview</div>
+                        <h1 class="od-title"><t t-esc="greeting"/>, <t t-esc="firstName"/></h1>
+                        <p class="od-subtitle">
+                            Who is away, what waits for you · time off taken <strong t-esc="caption.current"/>, compared with <t t-esc="caption.previous"/>
+                        </p>
+                    </div>
+                    <div class="od-head-actions">
+                        <OdFilters period="state.period" teamId="state.teamId" teams="departments" onChange.bind="onFilters" busy="state.busy"
+                                   allLabel="'All departments'" icon="'fa-sitemap'" label="'Department'"/>
+                        <button type="button" class="od-btn od-btn--icon" title="Refresh" aria-label="Refresh" t-on-click="() => this.load()">
+                            <i t-attf-class="fa fa-refresh {{ state.busy ? 'fa-spin' : '' }}" aria-hidden="true"/>
+                        </button>
+                        <button type="button" class="od-btn" t-on-click="openTeamCalendar">
+                            <i class="fa fa-calendar" aria-hidden="true"/> Team calendar
+                        </button>
+                        <button type="button" class="od-btn od-btn--primary" data-hotkey="c" t-on-click="newTimeOff">
+                            <i class="fa fa-plus" aria-hidden="true"/> New time off
+                        </button>
+                    </div>
+                </header>
+
+                <div t-att-class="{ 'od-busy': state.busy }">
+                    <section class="od-kpis" aria-label="Key figures">
+                        <OdKpi featured="true" tone="'amber'" icon="'fa-plane'" label="'Out today'" value="count(k.out_today)"
+                               hint="count(k.upcoming) + ' more starting in the next 7 days'" onClick.bind="openOutToday"/>
+                        <OdKpi tone="'rose'" icon="'fa-clock-o'" label="'To approve'" value="count(k.to_approve)"
+                               hint="'time off requests waiting'" onClick="() => this.go('time_off_modern.action_requests')"/>
+                        <OdKpi tone="'teal'" icon="'fa-calendar-check-o'" label="'Days taken'" value="days(k.days)"
+                               delta="k.days_delta" compareLabel="compare" spark="d.spark"
+                               hint="days(k.days_prev) + ' in the previous period'" onClick.bind="openTaken"/>
+                        <OdKpi tone="'blue'" icon="'fa-file-text-o'" label="'Requests'" value="count(k.requests)"
+                               hint="'starting in this period'" onClick="() => this.go('time_off_modern.action_requests')"/>
+                        <OdKpi tone="'violet'" icon="'fa-plus-square-o'" label="'Allocations to approve'" value="count(k.alloc_to_approve)"
+                               hint="'extra days asked for'" onClick="() => this.go('time_off_modern.action_requestsocations')"/>
+                        <OdKpi tone="'slate'" icon="'fa-ban'" label="'Refused'" value="count(k.refused)"
+                               hint="'in this period'" invert="true"/>
+                    </section>
+
+                    <div class="od-grid">
+                        <section class="od-card od-span-8">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-bar-chart" aria-hidden="true"/></span> Days off in <t t-esc="d.year"/></h3>
+                                    <p>Approved time off per month, with last year for comparison</p>
+                                </div>
+                                <div class="od-card-total"><strong class="od-num" t-esc="days(ytd)"/><span>year to date</span></div>
+                            </div>
+                            <div class="od-card-body">
+                                <OdComboChart data="d.months" format="number" formatAxis="axis" currentLabel="'' + d.year" previousLabel="'' + (d.year - 1)"
+                                              label="'Days off per month in ' + d.year + ' compared with ' + (d.year - 1)"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-rose"><i class="fa fa-bell-o" aria-hidden="true"/></span> Needs your attention</h3>
+                                <p>Click a line to see the requests</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <OdAttention items="d.attention" format="count" onClick.bind="openAttention"/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="od-grid">
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-amber"><i class="fa fa-plane" aria-hidden="true"/></span> Out today</h3>
+                                <p>Approved time off covering today</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!outFeed.length" class="od-empty"><i class="fa fa-smile-o" aria-hidden="true"/><strong>Everyone is in today</strong></div>
+                                <OdFeed t-else="" items="outFeed" onClick.bind="openLeave"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-violet"><i class="fa fa-tags" aria-hidden="true"/></span> By type</h3>
+                                <p>Days taken in this period</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.by_type.length" class="od-empty"><i class="fa fa-pie-chart" aria-hidden="true"/><strong>No time off taken in this period</strong></div>
+                                <OdDonut t-else="" items="d.by_type" format="number" centerLabel="'Days'" onClick.bind="openType"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-blue"><i class="fa fa-calendar" aria-hidden="true"/></span> Coming up</h3>
+                                <p>Time off in the next 30 days</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!upcomingFeed.length" class="od-empty"><i class="fa fa-calendar-o" aria-hidden="true"/><strong>No time off planned</strong></div>
+                                <OdFeed t-else="" items="upcomingFeed" onClick.bind="openLeave"/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="od-grid">
+                        <section class="od-card od-span-8">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3>Waiting for approval</h3>
+                                    <p>The next requests to decide · click one to approve or refuse it</p>
+                                </div>
+                                <button type="button" class="od-link" t-on-click="() => this.go('time_off_modern.action_requests')">All requests <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                            </div>
+                            <div class="od-card-body od-card-body--flush">
+                                <OdTable columns="leaveColumns" rows="leaveRows" pageSize="7" unit="'requests'" onRowClick.bind="openLeave" emptyText="'Nothing waits for approval'"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-sitemap" aria-hidden="true"/></span> By department</h3>
+                                <p>Days taken in this period</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.by_department.length" class="od-empty"><i class="fa fa-sitemap" aria-hidden="true"/><strong>No time off taken in this period</strong></div>
+                                <OdRank t-else="" items="d.by_department" format="number" tone="'teal'" onClick.bind="openDepartment"/>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

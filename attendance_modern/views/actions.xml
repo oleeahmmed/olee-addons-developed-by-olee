@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Odoo's own hr.attendance views in the modern page (static/src/js) -->
+    <record id="action_dashboard" model="ir.actions.client">
+        <field name="name">Attendance Dashboard</field>
+        <field name="tag">attendance_modern.dashboard</field>
+        <field name="path">modern-attendance</field>
+    </record>
+    <record id="action_at_work" model="ir.actions.client">
+        <field name="name">At Work</field>
+        <field name="tag">attendance_modern.at_work</field>
+        <field name="path">modern-attendance-at-work</field>
+    </record>
+    <record id="action_attendances" model="ir.actions.client">
+        <field name="name">Attendances</field>
+        <field name="tag">attendance_modern.attendances</field>
+        <field name="path">modern-attendance-all</field>
+    </record>
+    <record id="action_extra_hours" model="ir.actions.client">
+        <field name="name">Extra Hours</field>
+        <field name="tag">attendance_modern.extra_hours</field>
+        <field name="path">modern-attendance-extra-hours</field>
+    </record>
+</odoo>

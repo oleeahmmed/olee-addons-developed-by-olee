@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- One client action per page; each page is an OWL component registered under the same tag. -->
+    <record id="action_dashboard" model="ir.actions.client">
+        <field name="name">Dashboard</field>
+        <field name="tag">project_modern.dashboard</field>
+        <field name="path">modern-project</field>
+    </record>
+    <record id="action_projects" model="ir.actions.client">
+        <field name="name">Projects</field>
+        <field name="tag">project_modern.projects</field>
+        <field name="path">modern-projects</field>
+    </record>
+    <record id="action_board" model="ir.actions.client">
+        <field name="name">Tasks</field>
+        <field name="tag">project_modern.board</field>
+        <field name="path">modern-project-board</field>
+    </record>
+    <record id="action_my_tasks" model="ir.actions.client">
+        <field name="name">My Tasks</field>
+        <field name="tag">project_modern.my_tasks</field>
+        <field name="path">modern-my-tasks</field>
+    </record>
+    <record id="action_all_tasks" model="ir.actions.client">
+        <field name="name">All Tasks</field>
+        <field name="tag">project_modern.all_tasks</field>
+        <field name="path">modern-all-tasks</field>
+    </record>
+    <record id="action_overdue" model="ir.actions.client">
+        <field name="name">Overdue Tasks</field>
+        <field name="tag">project_modern.overdue</field>
+        <field name="path">modern-overdue-tasks</field>
+    </record>
+    <record id="action_unassigned" model="ir.actions.client">
+        <field name="name">Unassigned Tasks</field>
+        <field name="tag">project_modern.unassigned</field>
+        <field name="path">modern-unassigned-tasks</field>
+    </record>
+    <record id="action_closed" model="ir.actions.client">
+        <field name="name">Closed Tasks</field>
+        <field name="tag">project_modern.closed</field>
+        <field name="path">modern-closed-tasks</field>
+    </record>
+    <record id="action_stages" model="ir.actions.client">
+        <field name="name">Task Stages</field>
+        <field name="tag">project_modern.stages</field>
+        <field name="path">modern-task-stages</field>
+    </record>
+    <record id="action_tags" model="ir.actions.client">
+        <field name="name">Tags</field>
+        <field name="tag">project_modern.tags</field>
+        <field name="path">modern-project-tags</field>
+    </record>
+</odoo>

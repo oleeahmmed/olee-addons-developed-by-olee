@@ -617,3 +617,28 @@ html[data-mt-theme][data-mt-scheme="dark"]:not(#mt-np) .o_view_nocontent .o_noco
     [class*="o_view_nocontent_"]::before { background-image: #{sc-svg($sc-inbox, '%23a1a1a1', 1.75)} !important; }
     .o_view_nocontent_smiling_face::before { background-image: #{sc-svg($sc-plus-circle, '%23a1a1a1', 1.75)} !important; }
 }
+
+// ---------------------------------------------------------------------------
+// 11. Search bar: facets and the input stay on one line. When the control panel is
+// crowded (several header buttons), the input used to wrap under the facet and
+// overflow the fixed-height bar.
+// ---------------------------------------------------------------------------
+html:not(#mt-sv) .o_control_panel .o_searchview {
+    min-height: 2rem;
+    height: auto;
+    .o_searchview_input_container {
+        flex-wrap: nowrap;
+        min-width: 0;
+        align-items: center;
+    }
+    .o_searchview_facet {
+        flex: 0 1 auto;
+        min-width: 0;
+        .o_facet_values { flex-wrap: nowrap; }
+    }
+    .o_searchview_input {
+        flex: 1 1 4rem;
+        min-width: 4rem;
+        width: 0 !important;
+    }
+}
