@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- The drawer of Modern CRM (same markup and classes, styled by modern_theme's sheet.scss) -->
+    <t t-name="pos_modern.FormDrawer">
+        <Dialog title="props.title" size="'md'" contentClass="'o_ps_sheet o_or_sheet'" bodyClass="'or-sheet-body'" header="false">
+            <aside class="or-sheet-rail" aria-label="Drawer actions">
+                <button type="button" class="or-sheet-rail-btn" t-att-title="newLabel" t-att-aria-label="newLabel" t-on-click.stop="onNew">
+                    <i class="fa fa-plus" aria-hidden="true"/>
+                </button>
+                <button type="button" class="or-sheet-rail-btn" aria-label="Close" title="Close" t-on-click.stop="close">
+                    <span class="or-sheet-close-icon" aria-hidden="true">&#215;</span>
+                </button>
+            </aside>
+            <div class="or-sheet-main">
+                <div class="or-sheet-head">
+                    <div class="or-sheet-head-text">
+                        <h2 class="or-sheet-title" t-esc="props.title"/>
+                        <p t-if="props.subtitle" class="or-sheet-subtitle" t-esc="props.subtitle"/>
+                        <div t-if="props.slots and props.slots.actions" class="or-sheet-actions">
+                            <t t-slot="actions"/>
+                        </div>
+                    </div>
+                    <button type="button" class="or-sheet-close" aria-label="Close" title="Close" t-on-click.stop="close">
+                        <span class="or-sheet-close-icon" aria-hidden="true">&#215;</span>
+                    </button>
+                </div>
+                <div class="or-sheet-stack">
+                    <t t-slot="default"/>
+                </div>
+            </div>
+            <t t-set-slot="footer">
+                <t t-slot="footer"/>
+            </t>
+        </Dialog>
+    </t>
+
+    <t t-name="pos_modern.Picker">
+        <div class="ps-picker">
+            <i class="fa fa-search ps-picker-icon" aria-hidden="true"/>
+            <input t-att-id="props.id" type="text" class="or-input ps-picker-input" autocomplete="off"
+                   t-att-placeholder="label or props.placeholder" t-att-value="state.editing ? state.q : label"
+                   role="combobox" t-att-aria-expanded="state.open ? 'true' : 'false'"
+                   t-on-input="onInput" t-on-focus="onFocus" t-on-blur="onBlur" t-on-keydown="onKeydown"/>
+            <button t-if="props.allowEmpty and props.value" type="button" class="ps-picker-clear" title="Clear" aria-label="Clear"
+                    t-on-mousedown.prevent="noop" t-on-click="clear">&#215;</button>
+            <ul t-if="state.open and (state.results.length or !state.loading)" class="ps-picker-menu" role="listbox">
+                <t t-foreach="state.results" t-as="r" t-key="r[0]">
+                    <li role="option" t-att-aria-selected="r_index === state.active ? 'true' : 'false'"
+                        t-att-class="{ 'is-active': r_index === state.active }"
+                        t-on-mousedown.prevent="noop" t-on-click="() => this.pick(r)" t-esc="r[1]"/>
+                </t>
+                <li t-if="!state.results.length" class="ps-picker-empty">No match</li>
+            </ul>
+        </div>
+    </t>
+
+    <!-- "Open full form" / "More fields": Odoo's own form, full page -->
+    <t t-name="pos_modern.DrawerFullFormLink">
+        <button type="button" class="or-link" t-on-click="openFullForm">
+            <i class="fa fa-external-link me-1" aria-hidden="true"/><t t-if="isEdit">Open full form</t><t t-else="">More fields</t>
+        </button>
+    </t>
+
+    <t t-name="pos_modern.Error">
+        <div t-if="state.error" class="or-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
+    </t>
+
+    <t t-name="pos_modern.SaveFooter">
+        <button type="button" class="or-save-pill" t-att-disabled="state.saving" t-on-click="save">Save</button>
+    </t>
+
+    <t t-name="pos_modern.ProductDrawer">
+        <FormDrawer title="title" subtitle="subtitle" close="props.close" onNew.bind="resetForm" newLabel="'New product'">
+            <t t-set-slot="actions"><t t-call="pos_modern.DrawerFullFormLink"/></t>
+            <form class="or-sheet-fields" t-on-submit.prevent="save" novalidate="">
+                <t t-call="pos_modern.Error"/>
+                <div class="or-field">
+                    <label class="or-label" for="ps_pr_name">Product name</label>
+                    <input id="ps_pr_name" class="or-input" t-model="state.name" placeholder="e.g. Cappuccino" autofocus=""/>
+                </div>
+                <div class="or-field or-field-row">
+                    <div>
+                        <label class="or-label" for="ps_pr_price">Sales price</label>
+                        <input id="ps_pr_price" type="number" min="0" step="0.01" inputmode="decimal" class="or-input" t-model="state.list_price"/>
+                    </div>
+                    <div>
+                        <label class="or-label" for="ps_pr_ref">Internal reference</label>
+                        <input id="ps_pr_ref" class="or-input" t-model="state.default_code" placeholder="e.g. CAP-01"/>
+                    </div>
+                </div>
+                <div class="or-field">
+                    <label class="or-label" for="ps_pr_barcode">Barcode</label>
+                    <input id="ps_pr_barcode" class="or-input" t-model="state.barcode" placeholder="Scan or type the barcode" autocomplete="off"/>
+                    <p class="or-hint">Scanning it at the register adds the product to the order.</p>
+                </div>
+                <div class="or-field" t-if="categories.length">
+                    <span class="or-label">PoS categories</span>
+                    <div class="or-sheet-chips">
+                        <t t-foreach="categories" t-as="c" t-key="c.id">
+                            <button type="button" class="or-chip" t-att-class="{ 'is-on': state.pos_categ_ids.includes(c.id) }"
+                                    t-on-click="() => this.toggle('pos_categ_ids', c.id)">
+                                <span t-attf-class="ps-dot o_colorlist_item_color_{{ c.color or 0 }}" aria-hidden="true"/>
+                                <t t-esc="c.display_name"/>
+                            </button>
+                        </t>
+                    </div>
+                    <p class="or-hint">The tabs where the cashier finds it.</p>
+                </div>
+                <button type="submit" class="d-none"/>
+            </form>
+            <t t-set-slot="footer"><t t-call="pos_modern.SaveFooter"/></t>
+        </FormDrawer>
+    </t>
+
+    <t t-name="pos_modern.CustomerDrawer">
+        <FormDrawer title="title" subtitle="subtitle" close="props.close" onNew.bind="resetForm" newLabel="'New customer'">
+            <t t-set-slot="actions"><t t-call="pos_modern.DrawerFullFormLink"/></t>
+            <form class="or-sheet-fields" t-on-submit.prevent="save" novalidate="">
+                <t t-call="pos_modern.Error"/>
+                <div class="or-field">
+                    <span class="or-label">Type</span>
+                    <div class="or-sheet-chips">
+                        <button type="button" class="or-chip" t-att-class="{ 'is-on': !state.is_company }" t-on-click="() => this.state.is_company = false">
+                            <i class="fa fa-user me-1" aria-hidden="true"/>Person
+                        </button>
+                        <button type="button" class="or-chip" t-att-class="{ 'is-on': state.is_company }" t-on-click="() => this.state.is_company = true">
+                            <i class="fa fa-building-o me-1" aria-hidden="true"/>Company
+                        </button>
+                    </div>
+                </div>
+                <div class="or-field">
+                    <label class="or-label" for="ps_cu_name"><t t-if="state.is_company">Company name</t><t t-else="">Full name</t></label>
+                    <input id="ps_cu_name" class="or-input" t-model="state.name" t-att-placeholder="state.is_company ? 'e.g. Ready Mat' : 'e.g. Rahim Uddin'" autofocus=""/>
+                </div>
+                <div class="or-field or-field-row">
+                    <div>
+                        <label class="or-label" for="ps_cu_phone">Phone</label>
+                        <input id="ps_cu_phone" type="tel" class="or-input" t-model="state.phone" placeholder="Phone" autocomplete="tel"/>
+                    </div>
+                    <div>
+                        <label class="or-label" for="ps_cu_email">Email</label>
+                        <input id="ps_cu_email" type="email" class="or-input" t-model="state.email" placeholder="name@example.com" autocomplete="email"/>
+                    </div>
+                </div>
+                <div class="or-field">
+                    <label class="or-label" for="ps_cu_street">Address</label>
+                    <input id="ps_cu_street" class="or-input" t-model="state.street" placeholder="Street" autocomplete="street-address"/>
+                </div>
+                <div class="or-field or-field-row">
+                    <div>
+                        <label class="or-label" for="ps_cu_city">City</label>
+                        <input id="ps_cu_city" class="or-input" t-model="state.city" placeholder="City" autocomplete="address-level2"/>
+                    </div>
+                    <div>
+                        <label class="or-label" for="ps_cu_vat">Tax ID</label>
+                        <input id="ps_cu_vat" class="or-input" t-model="state.vat" placeholder="Optional"/>
+                    </div>
+                </div>
+                <button type="submit" class="d-none"/>
+            </form>
+            <t t-set-slot="footer"><t t-call="pos_modern.SaveFooter"/></t>
+        </FormDrawer>
+    </t>
+
+    <t t-name="pos_modern.ShopDrawer">
+        <FormDrawer title="title" subtitle="subtitle" close="props.close" onNew.bind="resetForm" newLabel="'New shop'">
+            <t t-set-slot="actions"><t t-call="pos_modern.DrawerFullFormLink"/></t>
+            <form class="or-sheet-fields" t-on-submit.prevent="save" novalidate="">
+                <t t-call="pos_modern.Error"/>
+                <div class="or-field">
+                    <label class="or-label" for="ps_sh_name">Shop name</label>
+                    <input id="ps_sh_name" class="or-input" t-model="state.name" placeholder="e.g. Gulshan Outlet" autofocus=""/>
+                    <p class="or-hint">After saving, open its register from its card on the Shops page.</p>
+                </div>
+                <button type="submit" class="d-none"/>
+            </form>
+            <t t-set-slot="footer"><t t-call="pos_modern.SaveFooter"/></t>
+        </FormDrawer>
+    </t>
+
+    <t t-name="pos_modern.CategoryDrawer">
+        <FormDrawer title="title" subtitle="subtitle" close="props.close" onNew.bind="resetForm" newLabel="'New category'">
+            <t t-set-slot="actions"><t t-call="pos_modern.DrawerFullFormLink"/></t>
+            <form class="or-sheet-fields" t-on-submit.prevent="save" novalidate="">
+                <t t-call="pos_modern.Error"/>
+                <div class="or-field">
+                    <label class="or-label" for="ps_ct_name">Category name</label>
+                    <input id="ps_ct_name" class="or-input" t-model="state.name" placeholder="e.g. Drinks" autofocus=""/>
+                </div>
+                <div class="or-field">
+                    <label class="or-label" for="ps_ct_parent">Parent category</label>
+                    <PsPicker id="'ps_ct_parent'" resModel="'pos.category'" domain="parentDomain" value="state.parent_id"
+                              placeholder="'None (main tab)'" allowEmpty="true"
+                              onSelect="(v) => this.state.parent_id = v || false"/>
+                </div>
+                <div class="or-field">
+                    <label class="or-label" for="ps_ct_seq">Order</label>
+                    <input id="ps_ct_seq" type="number" min="0" step="1" class="or-input" t-model="state.sequence"/>
+                    <p class="or-hint">Lower numbers come first at the register.</p>
+                </div>
+                <div class="or-field">
+                    <span class="or-label">Colour</span>
+                    <div class="or-color-dots" role="radiogroup" aria-label="Colour">
+                        <t t-foreach="colors" t-as="c" t-key="c">
+                            <button type="button" role="radio" t-att-aria-checked="state.color === c ? 'true' : 'false'"
+                                    t-attf-class="or-color-dot o_colorlist_item_color_{{ c }} {{ state.color === c ? 'is-on' : '' }}"
+                                    t-on-click="() => this.state.color = c" t-att-title="'Colour ' + c"/>
+                        </t>
+                    </div>
+                </div>
+                <button type="submit" class="d-none"/>
+            </form>
+            <t t-set-slot="footer"><t t-call="pos_modern.SaveFooter"/></t>
+        </FormDrawer>
+    </t>
+
+</templates>

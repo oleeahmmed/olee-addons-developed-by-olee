@@ -2,6 +2,7 @@ import { Component, onWillDestroy, onWillStart, useState } from "@odoo/owl";
 import { Dialog } from "@web/core/dialog/dialog";
 import { _t } from "@web/core/l10n/translation";
 import { useService } from "@web/core/utils/hooks";
+import { MtDateInput } from "@modern_theme/js/app_kit/date_input";
 import { OrSelectCard } from "@modern_theme/js/or_select_card";
 
 /**
@@ -53,7 +54,7 @@ export function openQuickDrawer(dialogService, DrawerComponent, props = {}) {
 
 /** Shared part of the HR drawers: load / new / save / open the full form. */
 export class QuickDrawer extends Component {
-    static components = { FormDrawer, OrSelectCard };
+    static components = { FormDrawer, MtDateInput, OrSelectCard };
     static props = {
         close: Function,
         onSaved: { type: Function, optional: true },

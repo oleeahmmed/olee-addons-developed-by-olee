@@ -1,0 +1,8 @@
+// Modern POS: pages, lists, dashboards and controls come from Modern Theme's shared
+// app kit (modern_theme/static/src/scss/kit/). This app only passes its prefix.
+@include mt-app-tokens(ps);
+@include mt-app-pages(ps);
+@include mt-app-list(ps);
+@include mt-app-controls(ps);
+@include mt-app-helpers(ps);
+@include mt-app-dash(ps);

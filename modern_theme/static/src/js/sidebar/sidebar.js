@@ -317,13 +317,12 @@ export class MtSidebar extends Component {
     get showAppGroup() {
         return Boolean(this.currentApp && this.sideTree.length && this.appMenuPosition !== "hidden");
     }
+    /** The open app's own menus are always shown: they are the app's navigation. */
     isAppGroupOpen() {
-        return this.state.open.curApp !== false; // open unless the user folded it
+        return true;
     }
     toggleAppGroup(ev) {
         ev?.stopPropagation();
-        this.state.open.curApp = !this.isAppGroupOpen();
-        writeJSON(OPEN_KEY, this.state.open);
     }
     /** Apps group: every other app; with the app group hidden, the current one too. */
     get otherApps() {

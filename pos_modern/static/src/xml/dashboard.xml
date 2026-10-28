@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="pos_modern.Dashboard">
+        <div class="o_ps od-page">
+            <t t-if="state.loading">
+                <div class="od-head"><div class="od-skel" style="height:3.75rem;width:22rem"/><div class="od-skel" style="height:2.25rem;width:20rem"/></div>
+                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel" style="height:8.5rem"/></t></div>
+                <div class="od-grid"><div class="od-skel od-span-8" style="height:22rem"/><div class="od-skel od-span-4" style="height:22rem"/></div>
+            </t>
+            <t t-elif="state.error and !state.data">
+                <OdError message="state.error" onRetry.bind="load"/>
+            </t>
+            <t t-elif="state.data">
+                <t t-set="d" t-value="state.data"/>
+
+                <header class="od-head">
+                    <div>
+                        <div class="od-eyebrow"><span class="od-live" aria-hidden="true"/> <t t-esc="d.company"/> · Point of Sale overview</div>
+                        <h1 class="od-title"><t t-esc="greeting"/>, <t t-esc="firstName"/></h1>
+                        <p class="od-subtitle">
+                            Sales at your registers <strong t-esc="caption.current"/>, compared with <t t-esc="caption.previous"/>
+                        </p>
+                    </div>
+                    <div class="od-head-actions">
+                        <OdFilters period="state.period" teamId="state.teamId" teams="shopList" onChange.bind="onFilters" busy="state.busy"
+                                   allLabel="'All shops'" icon="'fa-shopping-basket'" label="'Shop'"/>
+                        <button type="button" class="od-btn od-btn--icon" title="Refresh" aria-label="Refresh" t-on-click="() => this.load()">
+                            <i t-attf-class="fa fa-refresh {{ state.busy ? 'fa-spin' : '' }}" aria-hidden="true"/>
+                        </button>
+                        <button type="button" class="od-btn" t-on-click="() => this.go('pos_modern.action_shops')">
+                            <i class="fa fa-shopping-basket" aria-hidden="true"/> Shops
+                        </button>
+                        <button t-if="state.canCreate" type="button" class="od-btn od-btn--primary" data-hotkey="c" t-on-click="newProduct">
+                            <i class="fa fa-plus" aria-hidden="true"/> New product
+                        </button>
+                    </div>
+                </header>
+
+                <div t-att-class="{ 'od-busy': state.busy }">
+                    <section class="od-kpis" aria-label="Key figures">
+                        <OdKpi featured="true" tone="'blue'" icon="'fa-line-chart'" label="'Revenue'" value="money(k.revenue)"
+                               delta="k.revenue_delta" compareLabel="compare" spark="d.spark"
+                               hint="money(k.revenue_prev) + ' in the previous period'" onClick.bind="openSales"/>
+                        <OdKpi tone="'teal'" icon="'fa-shopping-cart'" label="'Orders'" value="count(k.orders)"
+                               delta="k.orders_delta" compareLabel="compare"
+                               hint="count(k.orders_prev) + ' in the previous period'" onClick.bind="openSales"/>
+                        <OdKpi tone="'violet'" icon="'fa-shopping-basket'" label="'Average basket'" value="money(k.basket)"
+                               delta="k.basket_delta" compareLabel="compare"
+                               hint="'per paid order'" onClick.bind="openSales"/>
+                        <OdKpi tone="'sky'" icon="'fa-users'" label="'Customers'" value="count(k.customers)"
+                               delta="k.customers_delta" compareLabel="compare"
+                               hint="'named on an order'" onClick.bind="openCustomers"/>
+                        <OdKpi tone="'rose'" icon="'fa-undo'" label="'Refunds'" value="money(k.refunds)"
+                               delta="k.refunds_delta" compareLabel="compare" invert="true"
+                               hint="money(k.refunds_prev) + ' in the previous period'" onClick.bind="openRefunds"/>
+                        <OdKpi tone="'amber'" icon="'fa-unlock'" label="'Open sessions'" value="count(k.open_sessions)"
+                               hint="count(k.shops) + ' shops'" onClick="() => this.go('pos_modern.action_sessions')"/>
+                    </section>
+
+                    <div class="od-grid">
+                        <section class="od-card od-span-8">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-blue"><i class="fa fa-bar-chart" aria-hidden="true"/></span> Revenue in <t t-esc="d.year"/></h3>
+                                    <p>Paid orders per month, with last year for comparison</p>
+                                </div>
+                                <div class="od-card-total"><strong class="od-num" t-esc="money(ytd)"/><span>year to date</span></div>
+                            </div>
+                            <div class="od-card-body">
+                                <OdComboChart data="d.months" format="moneyFull" formatAxis="axis" currentLabel="'' + d.year" previousLabel="'' + (d.year - 1)"
+                                              label="'Revenue per month in ' + d.year + ' compared with ' + (d.year - 1)"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head">
+                                <div>
+                                    <h3><span class="od-card-icon od-tone-rose"><i class="fa fa-bell-o" aria-hidden="true"/></span> Needs your attention</h3>
+                                    <p>Sessions and orders · click a line to see them</p>
+                                </div>
+                            </div>
+                            <div class="od-card-body">
+                                <OdAttention items="d.attention" format="count" onClick.bind="openAttention"/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="od-grid">
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-teal"><i class="fa fa-trophy" aria-hidden="true"/></span> Best sellers</h3>
+                                <p>Products by revenue <t t-esc="caption.current"/></p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.top_products.length" class="od-empty"><i class="fa fa-cube" aria-hidden="true"/><strong>No sale yet</strong><span>Open a shop and start selling.</span></div>
+                                <OdRank t-else="" items="d.top_products" format="money" tone="'teal'" numbered="true" onClick.bind="openProduct"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-violet"><i class="fa fa-shopping-basket" aria-hidden="true"/></span> By shop</h3>
+                                <p>Revenue of each register</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.by_shop.length" class="od-empty"><i class="fa fa-shopping-basket" aria-hidden="true"/><strong>No sale yet</strong></div>
+                                <OdRank t-else="" items="d.by_shop" format="money" tone="'violet'" onClick.bind="openShop"/>
+                            </div>
+                        </section>
+                        <section class="od-card od-span-4">
+                            <div class="od-card-head"><div>
+                                <h3><span class="od-card-icon od-tone-amber"><i class="fa fa-credit-card" aria-hidden="true"/></span> Payment methods</h3>
+                                <p>Cash, card, customer account…</p>
+                            </div></div>
+                            <div class="od-card-body">
+                                <div t-if="!d.by_method.length" class="od-empty"><i class="fa fa-credit-card" aria-hidden="true"/><strong>No payment yet</strong></div>
+                                <OdDonut t-else="" items="d.by_method" format="money" centerLabel="'Collected'" onClick.bind="openMethod"/>
+                            </div>
+                        </section>
+                    </div>
+
+                    <section t-if="d.shops.length" class="od-card">
+                        <div class="od-card-head">
+                            <div>
+                                <h3><span class="od-card-icon od-tone-sky"><i class="fa fa-unlock" aria-hidden="true"/></span> Your shops now</h3>
+                                <p>Session status and orders in the current session</p>
+                            </div>
+                            <button type="button" class="od-link" t-on-click="() => this.go('pos_modern.action_shops')">Open a register <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                        </div>
+                        <div class="od-card-body">
+                            <OdStatusTiles items="d.shops" onClick.bind="openShop"/>
+                        </div>
+                    </section>
+
+                    <section class="od-card">
+                        <div class="od-card-head">
+                            <div>
+                                <h3>Latest orders</h3>
+                                <p>The most recent sales at your registers · click one to open it</p>
+                            </div>
+                            <button type="button" class="od-link" t-on-click="() => this.go('pos_modern.action_orders')">All orders <i class="fa fa-angle-right" aria-hidden="true"/></button>
+                        </div>
+                        <div class="od-card-body od-card-body--flush">
+                            <OdTable columns="orderColumns" rows="orderRows" pageSize="8" unit="'orders'" onRowClick.bind="openOrder" emptyText="'No order yet'"/>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

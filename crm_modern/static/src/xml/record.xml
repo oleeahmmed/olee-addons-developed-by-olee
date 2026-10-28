@@ -98,7 +98,7 @@
                                     </div>
                                     <label t-if="isOpp" class="cm-kpi">
                                         <span>Expected closing</span>
-                                        <input type="date" class="cm-inline-input" t-att-value="rec.date_deadline or ''" t-on-change="onDate"/>
+                                        <MtDateInput value="rec.date_deadline or ''" onChange.bind="onDate" class="'cm-inline-input'" placeholder="'No date'"/>
                                     </label>
                                 </div>
                                 <div class="cm-rec-props">

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- One client action per page; each page is an OWL component registered under the same tag.
+         The Dashboard comes first: it gave its old path (modern-pos) to the Menu page. -->
+    <record id="action_dashboard" model="ir.actions.client">
+        <field name="name">Dashboard</field>
+        <field name="tag">pos_modern.dashboard</field>
+        <field name="path">modern-pos-dashboard</field>
+    </record>
+    <record id="action_menu" model="ir.actions.client">
+        <field name="name">Menu</field>
+        <field name="tag">pos_modern.menu</field>
+        <field name="path">modern-pos</field>
+    </record>
+    <record id="action_tables" model="ir.actions.client">
+        <field name="name">Tables</field>
+        <field name="tag">pos_modern.tables</field>
+        <field name="path">modern-pos-tables</field>
+    </record>
+    <record id="action_shops" model="ir.actions.client">
+        <field name="name">Shops</field>
+        <field name="tag">pos_modern.shops</field>
+        <field name="path">modern-pos-shops</field>
+    </record>
+    <record id="action_orders" model="ir.actions.client">
+        <field name="name">Orders</field>
+        <field name="tag">pos_modern.orders</field>
+        <field name="path">modern-pos-orders</field>
+    </record>
+    <record id="action_sessions" model="ir.actions.client">
+        <field name="name">Sessions</field>
+        <field name="tag">pos_modern.sessions</field>
+        <field name="path">modern-pos-sessions</field>
+    </record>
+    <record id="action_products" model="ir.actions.client">
+        <field name="name">Products</field>
+        <field name="tag">pos_modern.products</field>
+        <field name="path">modern-pos-products</field>
+    </record>
+    <record id="action_customers" model="ir.actions.client">
+        <field name="name">Customers</field>
+        <field name="tag">pos_modern.customers</field>
+        <field name="path">modern-pos-customers</field>
+    </record>
+    <record id="action_payments" model="ir.actions.client">
+        <field name="name">Payments</field>
+        <field name="tag">pos_modern.payments</field>
+        <field name="path">modern-pos-payments</field>
+    </record>
+    <record id="action_refunds" model="ir.actions.client">
+        <field name="name">Refunds</field>
+        <field name="tag">pos_modern.refunds</field>
+        <field name="path">modern-pos-refunds</field>
+    </record>
+    <record id="action_ongoing" model="ir.actions.client">
+        <field name="name">Ongoing Orders</field>
+        <field name="tag">pos_modern.ongoing</field>
+        <field name="path">modern-pos-ongoing</field>
+    </record>
+    <record id="action_categories" model="ir.actions.client">
+        <field name="name">Product Categories</field>
+        <field name="tag">pos_modern.categories</field>
+        <field name="path">modern-pos-categories</field>
+    </record>
+</odoo>

@@ -48,7 +48,7 @@
                                           allowEmpty="true" onChange="(id) => this.state.stage_id = id"/>
                         </div>
                         <div class="or-field"><label class="or-label" for="cm_qc_close">Expected closing</label>
-                            <input id="cm_qc_close" type="date" class="or-input" t-model="state.date_deadline"/></div>
+                            <MtDateInput id="'cm_qc_close'" value="state.date_deadline" onChange="(v) => this.state.date_deadline = v"/></div>
                     </t>
                     <div class="or-field"><label class="or-label" for="cm_qc_prio">Priority</label>
                         <select id="cm_qc_prio" class="or-select" t-model="state.priority">

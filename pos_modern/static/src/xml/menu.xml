@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="pos_modern.Menu">
+        <div class="o_ps ps-pos">
+            <t t-if="state.loading">
+                <div class="ps-pos-main"><div class="ps-skel" style="height:3rem;width:18rem"/><div class="ps-skel" style="height:6rem;margin-top:1rem"/><div class="ps-skel" style="height:24rem;margin-top:1rem"/></div>
+                <aside class="ps-cart"><div class="ps-skel" style="height:100%"/></aside>
+            </t>
+            <t t-elif="!state.data.config_id">
+                <div class="ps-pos-empty">
+                    <i class="fa fa-shopping-basket" aria-hidden="true"/>
+                    <strong>No shop yet</strong>
+                    <span>Create a shop (a register) to start selling.</span>
+                    <button type="button" class="ps-btn ps-btn--primary" t-on-click="() => this.action.doAction('pos_modern.action_shops')">Go to Shops</button>
+                </div>
+            </t>
+            <t t-else="">
+                <t t-set="d" t-value="state.data"/>
+                <!-- products -->
+                <section class="ps-pos-main">
+                    <header class="ps-pos-head">
+                        <div class="ps-pos-title">
+                            <h1>Point of Sale</h1>
+                            <div class="ps-pos-shop">
+                                <label class="ps-select">
+                                    <i class="fa fa-shopping-basket" aria-hidden="true"/>
+                                    <select t-on-change="onShop" aria-label="Shop">
+                                        <t t-foreach="d.shops" t-as="s" t-key="s.id">
+                                            <option t-att-value="s.id" t-att-selected="s.id === d.config_id" t-esc="s.name"/>
+                                        </t>
+                                    </select>
+                                </label>
+                                <span t-if="sessionOpen" class="ps-pill ps-pill--success"><span class="ps-dot-live"/>Open<t t-if="session.user"> · <t t-esc="session.user"/></t></span>
+                                <span t-elif="sessionClosing" class="ps-pill ps-pill--warning">Closing</span>
+                                <span t-else="" class="ps-pill">Closed</span>
+                            </div>
+                        </div>
+                        <div class="ps-pos-actions">
+                            <button type="button" class="ps-btn" t-on-click="addProduct"><i class="fa fa-plus" aria-hidden="true"/> Add Product</button>
+                            <button t-if="d.restaurant" type="button" class="ps-btn" t-on-click="goTables"><i class="fa fa-th" aria-hidden="true"/> Tables</button>
+                            <label class="ps-search">
+                                <i class="fa fa-search" aria-hidden="true"/>
+                                <input type="search" placeholder="Search menu..." t-model="state.search" t-on-keydown="onSearchKey" aria-label="Search products"/>
+                            </label>
+                        </div>
+                    </header>
+
+                    <nav class="ps-cats" aria-label="Categories">
+                        <button type="button" class="ps-cat" t-att-class="{ 'is-on': state.category === 'all' }" t-on-click="() => this.setCategory('all')">
+                            <span class="ps-cat-icon ps-cat-icon--all"><i class="fa fa-th-large" aria-hidden="true"/></span>
+                            <span class="ps-cat-name">All</span>
+                        </button>
+                        <t t-foreach="categories" t-as="c" t-key="c.id">
+                            <button type="button" class="ps-cat" t-att-class="{ 'is-on': state.category === c.id }" t-on-click="() => this.setCategory(c.id)">
+                                <img t-if="c.image" class="ps-cat-icon" t-att-src="categoryImage(c)" alt="" loading="lazy"/>
+                                <span t-else="" t-attf-class="ps-cat-icon ps-tone-{{ tone(c.id) }}" t-esc="initials(c.name)"/>
+                                <span class="ps-cat-name" t-esc="c.name"/>
+                            </button>
+                        </t>
+                    </nav>
+
+                    <div t-if="!products.length" class="ps-pos-empty ps-pos-empty--inline">
+                        <i class="fa fa-cube" aria-hidden="true"/>
+                        <strong>No product here</strong>
+                        <span>Products "Available in POS" show up on this menu.</span>
+                    </div>
+                    <div t-else="" class="ps-grid">
+                        <t t-foreach="products" t-as="p" t-key="p.id">
+                            <button type="button" class="ps-prod" t-att-class="{ 'is-in': qtyOf(p) }" t-on-click="() => this.add(p)" t-att-title="p.name">
+                                <span class="ps-prod-img">
+                                    <img t-if="p.image" t-att-src="productImage(p)" alt="" loading="lazy"/>
+                                    <span t-else="" t-attf-class="ps-prod-ph ps-tone-{{ tone(p.id) }}" t-esc="initials(p.name)"/>
+                                    <span t-if="qtyOf(p)" class="ps-prod-qty" t-esc="qtyOf(p)"/>
+                                </span>
+                                <span class="ps-prod-body">
+                                    <span class="ps-prod-text">
+                                        <span class="ps-prod-name" t-esc="p.name"/>
+                                        <span class="ps-prod-price" t-esc="money(price(p))"/>
+                                    </span>
+                                    <span class="ps-prod-add" aria-hidden="true"><i class="fa fa-cart-plus"/></span>
+                                </span>
+                            </button>
+                        </t>
+                    </div>
+                </section>
+
+                <!-- cart -->
+                <aside class="ps-cart" aria-label="Your Cart">
+                    <div class="ps-cart-head">
+                        <h2>Your Cart</h2>
+                        <span t-if="itemCount" class="ps-cart-count" t-esc="itemCount"/>
+                        <button t-if="state.cart.length" type="button" class="ps-link ms-auto" t-on-click="clearCart">Clear</button>
+                    </div>
+                    <div t-if="state.tableId" class="ps-cart-table">
+                        <i class="fa fa-cutlery" aria-hidden="true"/> <span t-esc="state.tableName or 'Table'"/>
+                        <button type="button" class="ps-link ms-auto" t-on-click="clearTable" title="Remove the table">&#215;</button>
+                    </div>
+
+                    <!-- session closed -->
+                    <div t-if="!sessionOpen" class="ps-cart-session">
+                        <i class="fa fa-lock" aria-hidden="true"/>
+                        <t t-if="sessionClosing">
+                            <strong>The session is being closed</strong>
+                            <span>Finish closing it in Sessions, then open a new one.</span>
+                            <button type="button" class="ps-btn" t-on-click="() => this.action.doAction('pos_modern.action_sessions')">Sessions</button>
+                        </t>
+                        <t t-else="">
+                            <strong>Open the shop to sell</strong>
+                            <span>Start the session of <t t-esc="d.config_name"/>.</span>
+                            <label t-if="d.cash_control" class="ps-field">
+                                <span>Cash in the drawer</span>
+                                <input type="number" min="0" step="0.01" inputmode="decimal" class="ps-input" t-model="state.openingCash" placeholder="0"/>
+                            </label>
+                            <button type="button" class="ps-btn ps-btn--primary ps-btn--block" t-att-disabled="state.busy" t-on-click="openSession">
+                                <i class="fa fa-unlock" aria-hidden="true"/> Open session
+                            </button>
+                        </t>
+                    </div>
+
+                    <!-- order created -->
+                    <div t-elif="state.done" class="ps-cart-done">
+                        <span class="ps-done-icon"><i class="fa fa-check" aria-hidden="true"/></span>
+                        <strong>Order paid</strong>
+                        <span class="ps-done-ref" t-esc="state.done.name"/>
+                        <span class="ps-done-total" t-esc="money(state.done.total)"/>
+                        <button type="button" class="ps-btn ps-btn--primary ps-btn--block" t-on-click="newOrder"><i class="fa fa-plus" aria-hidden="true"/> New order</button>
+                        <button type="button" class="ps-btn ps-btn--block" t-on-click="openOrder">View order</button>
+                    </div>
+
+                    <t t-else="">
+                        <div t-if="!cartLines.length" class="ps-cart-empty">
+                            <span class="ps-cart-empty-icon">🛒</span>
+                            <span>Your cart is empty.</span>
+                            <small>Tap a product to add it.</small>
+                        </div>
+                        <ul t-else="" class="ps-lines">
+                            <t t-foreach="cartLines" t-as="l" t-key="l.id">
+                                <li class="ps-line">
+                                    <span class="ps-line-img">
+                                        <img t-if="l.product.image" t-att-src="productImage(l.product)" alt=""/>
+                                        <span t-else="" t-attf-class="ps-prod-ph ps-tone-{{ tone(l.id) }}" t-esc="initials(l.product.name)"/>
+                                    </span>
+                                    <span class="ps-line-text">
+                                        <span class="ps-line-name" t-esc="l.product.name"/>
+                                        <span class="ps-line-price" t-esc="money(price(l.product) * l.qty)"/>
+                                    </span>
+                                    <span class="ps-step">
+                                        <button type="button" aria-label="Decrease" t-on-click="() => this.decrease(l)">−</button>
+                                        <span t-esc="l.qty"/>
+                                        <button type="button" aria-label="Increase" t-on-click="() => this.increase(l)">+</button>
+                                    </span>
+                                </li>
+                            </t>
+                        </ul>
+
+                        <div class="ps-cart-foot">
+                            <div class="ps-cart-customer">
+                                <PsPicker id="'ps_menu_partner'" resModel="'res.partner'" value="state.partner"
+                                          placeholder="'Customer (optional)'" allowEmpty="true" onSelect.bind="setPartner"/>
+                            </div>
+                            <dl class="ps-sum">
+                                <div><dt>Subtotal</dt><dd t-esc="money(subtotal)"/></div>
+                                <div><dt>Tax</dt><dd t-esc="money(tax)"/></div>
+                                <div class="ps-sum-total"><dt>Total</dt><dd t-esc="money(total)"/></div>
+                            </dl>
+                            <div class="ps-pay" role="radiogroup" aria-label="Payment method">
+                                <t t-foreach="d.payment_methods" t-as="m" t-key="m.id">
+                                    <button type="button" role="radio" class="ps-pay-btn" t-att-class="{ 'is-on': state.methodId === m.id }"
+                                            t-att-aria-checked="state.methodId === m.id ? 'true' : 'false'" t-on-click="() => this.state.methodId = m.id">
+                                        <i t-attf-class="fa {{ m.is_cash ? 'fa-money' : 'fa-credit-card' }}" aria-hidden="true"/>
+                                        <span t-esc="m.name"/>
+                                    </button>
+                                </t>
+                            </div>
+                            <div t-if="state.error" class="ps-error" t-esc="state.error"/>
+                            <button type="button" class="ps-btn ps-btn--primary ps-btn--block ps-btn--lg"
+                                    t-att-disabled="!cartLines.length or state.busy" t-on-click="createOrder">
+                                <t t-if="state.busy"><i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"/> Saving…</t>
+                                <t t-else="">Create Order<t t-if="cartLines.length"> · <t t-esc="money(total)"/></t></t>
+                            </button>
+                        </div>
+                    </t>
+                </aside>
+            </t>
+        </div>
+    </t>
+
+    <t t-name="pos_modern.Tables">
+        <div class="o_ps ps-tables">
+            <t t-if="state.loading">
+                <div class="ps-skel" style="height:3rem;width:18rem"/>
+                <div class="ps-skel" style="height:24rem;margin-top:1rem"/>
+            </t>
+            <t t-else="">
+                <header class="ps-pos-head">
+                    <div class="ps-pos-title">
+                        <h1>Tables</h1>
+                        <div class="ps-pos-shop" t-if="state.shops.length">
+                            <label class="ps-select">
+                                <i class="fa fa-shopping-basket" aria-hidden="true"/>
+                                <select t-on-change="onShop" aria-label="Shop">
+                                    <t t-foreach="state.shops" t-as="s" t-key="s.id">
+                                        <option t-att-value="s.id" t-att-selected="s.id === state.data.config_id" t-esc="s.name"/>
+                                    </t>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="ps-pos-actions">
+                        <button type="button" class="ps-btn" t-on-click="() => this.action.doAction('pos_modern.action_menu')"><i class="fa fa-cutlery" aria-hidden="true"/> Menu</button>
+                    </div>
+                </header>
+                <div t-if="!state.data.installed or !state.data.floors.length" class="ps-pos-empty ps-pos-empty--inline">
+                    <i class="fa fa-th" aria-hidden="true"/>
+                    <strong>No table yet</strong>
+                    <span>Turn on "Is a Bar/Restaurant" in the shop's settings and add floors and tables.</span>
+                </div>
+                <t t-else="">
+                    <nav class="ps-floors" aria-label="Floors">
+                        <t t-foreach="state.data.floors" t-as="f" t-key="f.id">
+                            <button type="button" class="ps-floor" t-att-class="{ 'is-on': state.floorId === f.id }" t-on-click="() => this.state.floorId = f.id" t-esc="f.name"/>
+                        </t>
+                    </nav>
+                    <div class="ps-table-grid">
+                        <t t-foreach="floor ? floor.tables : []" t-as="t" t-key="t.id">
+                            <button type="button" t-attf-class="ps-table ps-table--{{ t.shape }} {{ t.orders ? 'is-busy' : '' }}" t-on-click="() => this.openTable(t)">
+                                <span class="ps-table-no" t-esc="t.number"/>
+                                <span class="ps-table-seats"><i class="fa fa-user-o" aria-hidden="true"/> <t t-esc="t.seats"/></span>
+                                <span class="ps-table-state"><t t-if="t.orders">Occupied</t><t t-else="">Free</t></span>
+                            </button>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </div>
+    </t>
+
+</templates>

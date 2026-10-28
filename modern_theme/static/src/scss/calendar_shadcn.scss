@@ -1,0 +1,358 @@
+// Modern Theme: every Odoo calendar view (Calendar app, tasks, time off, CRM activities,
+// …) drawn like the shadcn/ui calendar (shadcnuikit.com/dashboard/apps/calendar):
+//   toolbar  = [Today] [‹ ›] Month title ............ [Month ⌄]
+//   grid     = light hairlines, quiet weekday header, day number top-left, today in a
+//              solid circle, other-month days muted, no grey weekends
+//   events   = soft pastel pills in the event's own colour
+//   week/day = muted hour labels, light lines, solid "now" line with a dot
+// Only CSS over Odoo's own FullCalendar markup: nothing changes in behaviour.
+// Light and dark through the theme tokens.
+
+$cal: 'html[data-mt-theme] .o_calendar_container';
+$fc: 'html[data-mt-theme] .o_calendar_renderer .o_calendar_widget';
+
+// ---------------------------------------------------------------------------
+// 1. Toolbar
+// ---------------------------------------------------------------------------
+#{$cal} {
+    background: var(--mt-card);
+
+    > .o_calendar_header,
+    > .o_sidebar_toggler {
+        border-bottom: 1px solid var(--mt-border) !important;
+        min-height: 3.5rem;
+    }
+    > .o_calendar_header {
+        gap: 0.5rem !important;
+        padding: 0.625rem 1rem !important;
+
+        .btn {
+            height: 2.25rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--mt-radius-btn, 0.5rem) !important;
+            font-size: 0.875rem;
+            font-weight: 500;
+            box-shadow: none !important;
+        }
+        // "Today": outline button, first
+        .o_calendar_button_today {
+            order: 1 !important;
+            margin-inline-start: 0 !important;
+            padding-inline: 0.875rem;
+            background: var(--mt-card) !important;
+            border: 1px solid var(--mt-border-base, var(--mt-border)) !important;
+            color: var(--mt-foreground) !important;
+            box-shadow: var(--mt-shadow-xs, 0 1px 2px rgba(0, 0, 0, 0.05)) !important;
+            &:hover { background: var(--mt-hover) !important; }
+        }
+        // ‹ › : ghost icon buttons
+        .o_calendar_navigation_buttons {
+            order: 2 !important;
+            gap: 0.125rem;
+            .btn {
+                width: 2.25rem;
+                padding: 0;
+                background: transparent !important;
+                border: 0 !important;
+                color: var(--mt-foreground) !important;
+                border-radius: var(--mt-radius-btn, 0.5rem) !important;
+                &:hover { background: var(--mt-hover) !important; }
+            }
+            .oi-arrow-left::before { content: "\2039"; font-family: inherit; font-size: 1.5rem; line-height: 1; }
+            .oi-arrow-right::before { content: "\203A"; font-family: inherit; font-size: 1.5rem; line-height: 1; }
+            .oi-arrow-left, .oi-arrow-right { margin-top: -0.2rem; }
+        }
+        // Month title: big and bold
+        > h5 {
+            order: 3 !important;
+            align-items: center;
+            gap: 0.5rem;
+            padding-inline-start: 0.25rem !important;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            color: var(--mt-foreground);
+            .o_current_week {
+                background: var(--mt-muted) !important;
+                color: var(--mt-muted-foreground) !important;
+                font-size: 0.75rem;
+                font-weight: 500;
+                border-radius: var(--mt-radius-badge, 999px) !important;
+                padding: 0.2rem 0.5rem !important;
+            }
+        }
+        // Month ⌄ : outline select on the right
+        .o_view_scale_selector {
+            order: 4 !important;
+            margin-inline-start: auto !important;
+            .scale_button_selection {
+                min-width: 7rem;
+                justify-content: space-between;
+                gap: 0.5rem;
+                padding-inline: 0.75rem;
+                background: var(--mt-card) !important;
+                border: 1px solid var(--mt-border-base, var(--mt-border)) !important;
+                color: var(--mt-foreground) !important;
+                box-shadow: var(--mt-shadow-xs, 0 1px 2px rgba(0, 0, 0, 0.05)) !important;
+                &:hover { background: var(--mt-hover) !important; }
+            }
+        }
+        > :not(.o_calendar_navigation_buttons):not(.o_view_scale_selector):not(.o_calendar_button_today):not(h5) {
+            order: 5;
+        }
+    }
+    > .o_sidebar_toggler .btn {
+        border-radius: var(--mt-radius-btn, 0.5rem);
+        background: transparent;
+        color: var(--mt-muted-foreground);
+        &:hover { background: var(--mt-hover); color: var(--mt-foreground); }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 2. Grid (all scales)
+// ---------------------------------------------------------------------------
+#{$fc} {
+    --fc-border-color: var(--mt-border);
+    --fc-page-bg-color: var(--mt-card);
+    --fc-neutral-bg-color: color-mix(in srgb, var(--mt-muted) 55%, var(--mt-card));
+    --fc-today-bg-color: transparent;
+    --fc-non-business-color: color-mix(in srgb, var(--mt-muted) 35%, transparent);
+    --o-cw-border-color: var(--mt-border);
+    color: var(--mt-foreground);
+
+    // no grey weekends / unavailable days
+    .o_calendar_disabled,
+    .fc-more-popover.o_calendar_disabled {
+        background-color: transparent !important;
+    }
+
+    // Weekday header: quiet, centred, "Sun" not "SUN"
+    .fc-col-header-cell {
+        background: var(--mt-card);
+        color: var(--mt-muted-foreground);
+        font-weight: 500;
+        a, .fc-col-header-cell-cushion {
+            text-transform: none !important;
+            font-size: 0.8125rem !important;
+            color: var(--mt-muted-foreground);
+            text-decoration: none;
+            padding-block: 0.5rem;
+        }
+    }
+
+    // Events: soft pastel pills in their own colour
+    .fc-event[class*="o_calendar_color_"]:not(.o_event_dot):not(.fc-dragging):not(.o_event_hatched):not(.o_event_striked) {
+        --fc-event-bg-color: color-mix(in srgb, var(--o-event-bg) 16%, var(--mt-card));
+        --fc-event-border-color: transparent;
+        --fc-event-text-color: color-mix(in srgb, var(--o-event-bg) 55%, var(--mt-foreground));
+        background-color: var(--fc-event-bg-color);
+        border: 0 !important;
+        border-radius: 0.375rem;
+        color: var(--fc-event-text-color);
+        font-size: 0.75rem;
+        font-weight: 500;
+        box-shadow: none !important;
+        .fc-bg { background: transparent !important; }
+        .o_event_title, .fc-event-main, .fc-event-time { color: var(--fc-event-text-color); }
+        &:hover { background-color: color-mix(in srgb, var(--o-event-bg) 26%, var(--mt-card)); }
+    }
+    .fc-timegrid-event[class*="o_calendar_color_"]:not(.o_event_dot) {
+        border-inline-start: 3px solid var(--o-event-bg) !important;
+        border-radius: 0.375rem;
+    }
+    // past events: a light veil in the page colour (Odoo's is always white)
+    .fc-event.o_past_event::after {
+        background-color: color-mix(in srgb, var(--mt-card) 35%, transparent) !important;
+        border-radius: inherit;
+    }
+    .fc-event.o_event_dot {
+        border-radius: 0.375rem;
+        background-color: transparent;
+        color: var(--mt-foreground);
+        font-size: 0.75rem;
+        .fc-event-main, .o_event_title, .fc-event-time, .fc-event-main-frame { color: var(--mt-foreground) !important; }
+        &:hover { background-color: var(--mt-hover); }
+    }
+
+    .fc-more-link, .fc-daygrid-more-link {
+        color: var(--mt-muted-foreground) !important;
+        font-size: 0.75rem;
+        font-weight: 500;
+        &:hover { color: var(--mt-foreground) !important; }
+    }
+    .fc-popover {
+        background: var(--mt-popover, var(--mt-card));
+        border: 1px solid var(--mt-border);
+        border-radius: var(--mt-radius-lg, 0.75rem);
+        box-shadow: var(--mt-shadow-lg);
+        overflow: hidden;
+        .fc-popover-header { background: transparent; }
+    }
+    .fc-highlight { background: var(--mt-selected, rgba(0, 0, 0, 0.04)); }
+}
+
+// ---------------------------------------------------------------------------
+// 3. Month view
+// ---------------------------------------------------------------------------
+#{$fc} .fc-dayGridMonth-view {
+    .fc-daygrid-body tr .fc-day {
+        .fc-daygrid-day-top {
+            flex-direction: row !important;
+            align-items: flex-start !important;
+            justify-content: flex-start !important;
+            padding: 0.375rem 0.375rem 0;
+        }
+        .fc-daygrid-day-number {
+            min-width: 1.75rem;
+            height: 1.75rem;
+            padding: 0 !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1 !important;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            font-variant-numeric: tabular-nums;
+            color: var(--mt-foreground);
+            text-decoration: none;
+        }
+        &.fc-day-other {
+            background: color-mix(in srgb, var(--mt-muted) 45%, var(--mt-card));
+            .fc-daygrid-day-top { opacity: 1; }
+            .fc-daygrid-day-number { color: var(--mt-muted-foreground) !important; }
+        }
+        &.fc-day-today {
+            --o-cw-bg: var(--mt-solid, var(--mt-primary));
+            --o-cw-color: var(--mt-solid-fg, var(--mt-primary-foreground));
+            background: transparent;
+            .fc-daygrid-day-number {
+                background: var(--mt-solid, var(--mt-primary)) !important;
+                color: var(--mt-solid-fg, var(--mt-primary-foreground)) !important;
+                border-radius: 999px;
+                font-weight: 600;
+            }
+        }
+        &:hover:not(.fc-day-other) { background: color-mix(in srgb, var(--mt-muted) 30%, var(--mt-card)); }
+    }
+    .fc-daygrid-event-harness { margin: 1px 0.375rem; }
+    .fc-event {
+        padding: 0.125rem 0.375rem !important;
+        .fc-event-main { max-height: none !important; line-height: 1.35 !important; }
+    }
+    // no week numbers in the grid (as in shadcn)
+    .fc-daygrid-week-number { display: none !important; }
+    .o-fc-week, .o-fc-week-header { color: var(--mt-muted-foreground); background: transparent !important; }
+}
+
+// ---------------------------------------------------------------------------
+// 4. Week and day views
+// ---------------------------------------------------------------------------
+#{$fc} :is(.fc-timeGridWeek-view, .fc-timeGridDay-view) {
+    --o-cw-bg: var(--mt-solid, var(--mt-primary));
+    --o-cw-color: var(--mt-solid-fg, var(--mt-primary-foreground));
+
+    .fc-col-header-cell {
+        a { gap: 0.25rem; }
+        .o_cw_day_name { font-size: 0.75rem; color: var(--mt-muted-foreground); }
+        .o_cw_day_number {
+            min-width: 2rem;
+            font-size: 1.125rem !important;
+            font-weight: 600;
+            color: var(--mt-foreground);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        &.fc-day-today .o_cw_day_number {
+            background: var(--mt-solid, var(--mt-primary)) !important;
+            color: var(--mt-solid-fg, var(--mt-primary-foreground)) !important;
+            border-radius: 999px;
+        }
+    }
+    .fc-scrollgrid-section-body:not(.fc-scrollgrid-section-liquid) .fc-scroller-harness {
+        background: color-mix(in srgb, var(--mt-muted) 40%, var(--mt-card)) !important;
+    }
+    .fc-timegrid-axis, .fc-timegrid-axis-cushion {
+        color: var(--mt-muted-foreground);
+        font-size: 0.75rem;
+    }
+    .fc-timegrid-slot-label { color: var(--mt-muted-foreground); }
+    .fc-timegrid-slot-label-cushion { font-size: 0.75rem; text-transform: uppercase; }
+    .fc-timegrid-slot { height: 3rem; }
+    .fc-timegrid-col.fc-day-today { background: transparent !important; }
+    .fc-timegrid-divider.fc-cell-shaded { background: var(--mt-border); padding: 0 !important; &::after { display: none; } }
+    .fc-timegrid-now-indicator-line {
+        border-color: var(--mt-solid, var(--mt-primary)) !important;
+        border-width: 2px 0 0 !important;
+    }
+    .o_calendar_time_indicator_now { opacity: 0.25 !important; }
+    .fc-timegrid-event .fc-event-main { padding: 0.125rem 0.25rem; }
+}
+
+// ---------------------------------------------------------------------------
+// 5. Year view
+// ---------------------------------------------------------------------------
+#{$fc} .fc-dayGridYear-view {
+    .fc-toolbar-title { font-size: 0.9375rem; font-weight: 600; color: var(--mt-foreground); }
+    .fc-day-today .fc-daygrid-day-number {
+        background: var(--mt-solid, var(--mt-primary)) !important;
+        color: var(--mt-solid-fg, var(--mt-primary-foreground)) !important;
+        border-radius: 999px;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 6. Side panel: mini calendar + filters as quiet sections
+// ---------------------------------------------------------------------------
+html[data-mt-theme] .o_calendar_sidebar_container {
+    background: var(--mt-card) !important;
+    border-inline-start: 1px solid var(--mt-border) !important;
+    .o_calendar_sidebar {
+        padding-inline: 0.75rem;
+        .o_datetime_picker {
+            margin-bottom: 0.75rem;
+            padding: 0.5rem !important;
+            border: 1px solid var(--mt-border);
+            border-radius: var(--mt-radius-lg, 0.75rem);
+            background: var(--mt-card);
+        }
+    }
+    .o_calendar_filter {
+        padding-block: 0.5rem;
+        border-top: 1px solid var(--mt-border);
+        .o_cw_filter_label, .o_calendar_filter_items_checkall, h5, .o_cw_filter_title {
+            color: var(--mt-foreground);
+            font-size: 0.8125rem;
+            font-weight: 600;
+        }
+        .o_calendar_filter_item {
+            border-radius: var(--mt-radius-sm, 0.375rem);
+            &:hover { background: var(--mt-hover); }
+        }
+        .o_cw_filter_input_bg { border-radius: 0.3rem; }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 7. Date picker popover (every date / datetime field): quiet headers like shadcn
+// ---------------------------------------------------------------------------
+html[data-mt-theme] .o_datetime_picker {
+    .o_day_of_week_cell {
+        font-weight: 400 !important;
+        font-size: 0.75rem;
+        color: var(--mt-muted-foreground);
+    }
+    .o_week_number_cell {
+        font-weight: 400 !important;
+        font-size: 0.6875rem;
+        color: var(--mt-muted-foreground);
+        opacity: 0.6;
+    }
+    .o_out_of_range:not(.o_selected) { color: var(--mt-muted-foreground) !important; opacity: 0.6; }
+    .o_datetime_picker_header {
+        .o_header_part, .btn-link { color: var(--mt-foreground); font-weight: 600; text-decoration: none; }
+    }
+}

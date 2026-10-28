@@ -5,6 +5,7 @@ import { registry } from "@web/core/registry";
 import { ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 import { user } from "@web/core/user";
 import { useService } from "@web/core/utils/hooks";
+import { MtDateInput } from "@modern_theme/js/app_kit/date_input";
 import { RecordActions } from "../components/record_actions";
 import { TagInput } from "../components/tag_input";
 import { UI } from "../components/ui";
@@ -26,7 +27,7 @@ const FIELDS = [
  */
 export class RecordPage extends Component {
     static template = "crm_modern.Record";
-    static components = { ...UI, TagInput, Chatter, RecordActions };
+    static components = { ...UI, TagInput, Chatter, RecordActions, MtDateInput };
     static props = ["*"];
 
     setup() {
@@ -133,8 +134,9 @@ export class RecordPage extends Component {
             this.write({ [field]: value });
         }
     }
-    onDate(ev) {
-        this.write({ date_deadline: ev.target.value || false });
+    onDate(value) {
+        // MtDateInput gives "yyyy-MM-dd" (or "" when cleared)
+        this.write({ date_deadline: value || false });
     }
     /** crm.lead.description is an HTML field: edit it as plain text (one paragraph per line). */
     get notesText() {

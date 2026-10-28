@@ -354,13 +354,10 @@
 
     <!-- Classic: the open app's own menus (theme option "Current app menu") -->
     <t t-name="modern_theme.Sidebar.ShadcnAppGroup">
-    <div class="mt-sc-group mt-sc-appgroup" t-att-class="{ 'is-folded': !isAppGroupOpen() }">
-        <button type="button" class="mt-sc-label mt-sc-label-btn mt-sb-focusable"
-                t-att-aria-expanded="isAppGroupOpen() ? 'true' : 'false'"
-                t-on-click="toggleAppGroup">
+    <div class="mt-sc-group mt-sc-appgroup">
+        <div class="mt-sc-label">
             <span class="mt-sc-text" t-esc="currentApp.name"/>
-            <t t-call="modern_theme.Lucide"><t t-set="name" t-value="'chevron-right'"/><t t-set="cls" t-value="'mt-sc-chevron'"/></t>
-        </button>
+        </div>
         <ul t-if="isAppGroupOpen() or collapsed" class="mt-sc-menu" role="list">
             <t t-foreach="sideTree" t-as="node" t-key="node.id">
                 <li t-if="node.children.length" class="mt-sc-item" t-att-class="{ 'is-open': isOpen(node) }">

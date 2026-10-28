@@ -101,7 +101,7 @@
                 <div class="or-field or-field-row">
                     <div>
                         <label class="or-label" for="pm_tk_deadline">Deadline</label>
-                        <input id="pm_tk_deadline" type="date" class="or-input" t-model="state.date_deadline"/>
+                        <MtDateInput id="'pm_tk_deadline'" value="state.date_deadline" onChange="(v) => this.state.date_deadline = v"/>
                     </div>
                     <div>
                         <label class="or-label" for="pm_tk_priority">Priority</label>
@@ -152,11 +152,11 @@
                 <div class="or-field or-field-row">
                     <div>
                         <label class="or-label" for="pm_pj_start">Start date</label>
-                        <input id="pm_pj_start" type="date" class="or-input" t-model="state.date_start"/>
+                        <MtDateInput id="'pm_pj_start'" value="state.date_start" onChange="(v) => this.state.date_start = v"/>
                     </div>
                     <div>
                         <label class="or-label" for="pm_pj_end">End date</label>
-                        <input id="pm_pj_end" type="date" class="or-input" t-model="state.date"/>
+                        <MtDateInput id="'pm_pj_end'" value="state.date" onChange="(v) => this.state.date = v" min="state.date_start or undefined"/>
                     </div>
                 </div>
                 <div class="or-field" t-if="privacyOptions.length">

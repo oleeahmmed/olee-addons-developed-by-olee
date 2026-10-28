@@ -6,6 +6,7 @@ import { user } from "@web/core/user";
 import { TagInput } from "./tag_input";
 import { ActivityIcon, TagChips } from "./ui";
 import { FormDrawer } from "./form_drawer";
+import { MtDateInput } from "@modern_theme/js/app_kit/date_input";
 import { OrSelectCard } from "@modern_theme/js/or_select_card";
 
 const EMAIL_RE = /^\S+@\S+\.\S+$/;
@@ -31,7 +32,7 @@ async function loadChoices(orm, { stages = false, campaigns = false } = {}) {
 /** Quick create for a lead or an opportunity (standard crm.lead fields). */
 export class QuickCreateDialog extends Component {
     static template = "crm_modern.QuickCreateDialog";
-    static components = { FormDrawer, TagInput, OrSelectCard };
+    static components = { FormDrawer, TagInput, OrSelectCard, MtDateInput };
     static props = {
         close: Function,
         type: { type: String, validate: (t) => ["lead", "opportunity"].includes(t) },

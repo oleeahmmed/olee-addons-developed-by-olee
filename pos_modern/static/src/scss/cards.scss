@@ -1,0 +1,120 @@
+// Modern POS: shop and order cards drawn like Modern CRM's deal cards
+// (views pos_modern.shop_kanban / order_kanban). Lanes, card shell and hover come from
+// modern_theme (kanban.scss); only the inside is drawn here. Theme tokens only
+// (--ps-* follow the theme preset and dark mode).
+
+.o_ps .ps-native :is(.o_ps_shop_kanban, .o_ps_order_kanban) {
+    .ps-kc-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem; padding-right: 1.25rem; }
+    .ps-kc-title, .ps-sc-title {
+        display: block; min-width: 0; font-size: 0.875rem; font-weight: 600; line-height: 1.35; color: var(--ps-fg);
+        span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    }
+    .ps-kc-line {
+        display: flex; align-items: center; gap: 0.375rem; min-width: 0; margin-top: 0.25rem;
+        font-size: 0.75rem; color: var(--ps-muted-fg);
+        > .fa { width: 0.875rem; flex: 0 0 auto; text-align: center; color: var(--ps-subtle-fg); font-size: 0.75rem; }
+        .o_field_widget { min-width: 0; }
+    }
+    .ps-kc-money {
+        display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; margin-top: 0.625rem;
+        .ps-kc-amount { font-size: 1rem; font-weight: 650; letter-spacing: -0.01em; color: var(--ps-fg); font-variant-numeric: tabular-nums; }
+        .ps-kc-refund { color: var(--ps-danger); }
+        .ps-kc-ref { font-size: 0.6875rem; color: var(--ps-subtle-fg); font-variant-numeric: tabular-nums; }
+    }
+    .ps-kc-state .badge { border-radius: 999px; font-size: 0.6875rem; font-weight: 600; }
+
+    // session / cashier: the CRM grey box
+    .ps-kc-assign {
+        display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0.5rem; margin-top: 0.625rem;
+        padding: 0.5rem 0.625rem; border-radius: var(--ps-radius);
+        background: color-mix(in srgb, var(--ps-muted) 70%, transparent);
+        .ps-kc-assign-item { display: grid; gap: 0.1875rem; min-width: 0; align-content: start; }
+        .ps-kc-assign-item > .o_field_widget, .ps-kc-assign-item > span { display: block; min-width: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .ps-kc-assign-label { font-size: 0.625rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ps-subtle-fg); }
+        .ps-kc-value { font-size: 0.75rem; font-weight: 500; line-height: 1.375rem; color: var(--ps-fg); }
+        .ps-kc-none { font-size: 0.75rem; line-height: 1.375rem; color: var(--ps-subtle-fg); }
+        .o_m2o_avatar img, .o_avatar img { width: 1.375rem; height: 1.375rem; border-radius: 50%; }
+        .o_field_many2one_avatar_user { font-size: 0.75rem; }
+    }
+
+    .ps-kc-foot {
+        display: flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem; padding-top: 0.625rem;
+        border-top: 1px solid color-mix(in srgb, var(--ps-border) 75%, transparent);
+        font-size: 0.75rem; color: var(--ps-subtle-fg);
+        .ps-kc-session { min-width: 0; }
+        .o_m2o_avatar img, .o_avatar img { width: 1.5rem; height: 1.5rem; border-radius: 50%; box-shadow: 0 0 0 2px var(--ps-card); }
+    }
+}
+
+// ---- shop card ----
+.o_ps .ps-native .o_ps_shop_kanban {
+    .o_kanban_record { display: flex; flex-direction: column; }
+    .ps-sc-head { display: flex; align-items: flex-start; gap: 0.75rem; padding-right: 1.25rem; }
+    .ps-sc-logo {
+        display: grid; place-items: center; flex-shrink: 0; width: 2.5rem; height: 2.5rem; border-radius: 0.75rem;
+        background: var(--ps-muted); color: var(--ps-subtle-fg); font-size: 1rem;
+        &.ps-sc-logo--opened { background: var(--ps-success-soft); color: var(--ps-success); }
+        &.ps-sc-logo--opening_control { background: var(--ps-info-soft); color: var(--ps-info); }
+        &.ps-sc-logo--closing_control { background: var(--ps-warning-soft); color: var(--ps-warning); }
+    }
+    .ps-sc-titles { min-width: 0; flex: 1 1 auto; }
+    .ps-sc-title { font-size: 1rem; font-weight: 650; }
+    .ps-sc-badges { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.3125rem; }
+    .ps-badge {
+        display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.0625rem 0.5rem; border-radius: 999px;
+        font-size: 0.6875rem; font-weight: 600; line-height: 1.125rem;
+        background: var(--ps-muted); color: var(--ps-muted-fg);
+        .fa { font-size: 0.4375rem; }
+        &.ps-badge--success { background: var(--ps-success-soft); color: var(--ps-success); }
+        &.ps-badge--info { background: var(--ps-info-soft); color: var(--ps-info); }
+        &.ps-badge--warning { background: var(--ps-warning-soft); color: var(--ps-warning); }
+        &.ps-badge--danger { background: var(--ps-danger-soft); color: var(--ps-danger); }
+    }
+    .ps-sc-stats {
+        display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.375rem; margin-top: 0.875rem;
+        .ps-sc-stat {
+            display: grid; gap: 0.0625rem; min-width: 0; padding: 0.5rem 0.625rem; border-radius: var(--ps-radius-sm);
+            background: color-mix(in srgb, var(--ps-muted) 55%, transparent);
+            strong, strong span { font-size: 0.9375rem; font-weight: 650; font-variant-numeric: tabular-nums; line-height: 1.25; color: var(--ps-fg); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+            > span { font-size: 0.6875rem; color: var(--ps-subtle-fg); font-weight: 600; letter-spacing: 0.02em; }
+            &.ps-sc-stat--wide { grid-column: span 2; }
+        }
+    }
+    .ps-sc-rescue { display: inline-flex; align-items: center; gap: 0.375rem; margin-top: 0.5rem; font-size: 0.75rem; color: var(--ps-warning); }
+    .ps-kc-foot { margin-top: auto; }
+    .ps-sc-open { border-radius: var(--ps-radius); font-size: 0.8125rem; font-weight: 600; padding: 0.375rem 0.875rem; .fa { margin-right: 0.25rem; font-size: 0.75rem; } }
+    .ps-sc-link { font-size: 0.75rem; font-weight: 600; color: var(--ps-subtle-fg); &:hover { color: var(--ps-primary); } }
+    .ps-kc-assign { margin-bottom: 0.25rem; }
+}
+.o_ps .ps-native .o_ps_order_kanban .o_kanban_record { cursor: pointer; }
+
+// ---- drawer: search picker and chips (CRM drawer look, modern_theme sheet.scss) ----
+.modal-content.o_ps_sheet {
+    .ps-picker { position: relative; }
+    .ps-picker-icon { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: var(--or-sheet-muted, var(--mt-muted-foreground)); pointer-events: none; }
+    .ps-picker-input.or-input { padding-left: 2rem; padding-right: 2rem; }
+    .ps-picker-clear {
+        position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%);
+        border: 0; background: none; padding: 0 0.25rem; font-size: 1.125rem; line-height: 1;
+        color: var(--or-sheet-muted, var(--mt-muted-foreground));
+        &:hover { color: var(--mt-foreground); }
+    }
+    .ps-picker-menu {
+        position: absolute; z-index: 5; left: 0; right: 0; top: calc(100% + 0.25rem);
+        margin: 0; padding: 0.25rem; list-style: none; max-height: 15rem; overflow: auto;
+        border: 1px solid var(--mt-border); border-radius: var(--mt-radius-lg, 0.75rem);
+        background: var(--mt-popover, var(--mt-card)); box-shadow: var(--mt-shadow-lg);
+        li {
+            padding: 0.4375rem 0.625rem; border-radius: var(--mt-radius-sm); font-size: 0.8125rem; cursor: pointer;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+            &.is-active, &:hover { background: var(--mt-muted); }
+        }
+        .ps-picker-empty { color: var(--mt-muted-foreground); cursor: default; &:hover { background: none; } }
+    }
+    .ps-chips { max-height: 11rem; overflow: auto; }
+    .ps-chip-user { display: inline-flex; align-items: center; gap: 0.375rem; padding-left: 0.25rem; }
+    .ps-chip-avatar { width: 1.25rem; height: 1.25rem; border-radius: 50%; object-fit: cover; }
+    .or-chip .ps-dot { display: inline-block; width: 0.5rem; height: 0.5rem; margin-right: 0.375rem; border-radius: 50%; vertical-align: 0.0625rem; }
+    .or-chip .ps-dot.o_colorlist_item_color_0 { background: var(--mt-border); }
+    .or-field-row { column-gap: 0.75rem; }
+}

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Shop and order cards of Modern POS, drawn like the deal cards of Modern CRM.
+        Standalone views (no xpath into Odoo's own views), low priority (99): Odoo's
+        Point of Sale keeps its default views and an Odoo update cannot break these.
+        Opening / continuing / closing a register uses Odoo's own buttons and methods.
+    -->
+    <record id="shop_kanban" model="ir.ui.view">
+        <field name="name">pos.config.kanban.modern</field>
+        <field name="model">pos.config</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <kanban can_open="0" class="o_pos_kanban o_ps_shop_kanban" js_class="pos_config_kanban_view">
+                <field name="cash_control"/>
+                <field name="current_session_id"/>
+                <field name="current_session_state"/>
+                <field name="current_user_id"/>
+                <field name="pos_session_state"/>
+                <field name="pos_session_duration"/>
+                <field name="pos_session_username"/>
+                <field name="currency_id"/>
+                <field name="last_session_closing_date"/>
+                <field name="last_session_closing_cash"/>
+                <field name="number_of_rescue_session"/>
+                <field name="statistics_for_current_session"/>
+                <templates>
+                    <t t-name="menu">
+                        <a role="menuitem" type="action" name="%(point_of_sale.action_pos_order_filtered)d" class="dropdown-item">Orders</a>
+                        <a role="menuitem" type="action" name="%(point_of_sale.action_pos_session_filtered)d" class="dropdown-item">Sessions</a>
+                        <a role="menuitem" type="action" name="%(point_of_sale.action_report_pos_order_all_filtered)d" class="dropdown-item">Sales analysis</a>
+                        <t t-if="widget.editable">
+                            <div role="separator" class="dropdown-divider" groups="point_of_sale.group_pos_manager"/>
+                            <a role="menuitem" type="object" name="action_pos_config_modal_edit" class="dropdown-item" groups="point_of_sale.group_pos_manager">Configure</a>
+                        </t>
+                    </t>
+                    <t t-name="card">
+                        <t t-set="ps_state" t-value="record.pos_session_state.raw_value"/>
+                        <t t-set="ps_stats" t-value="record.statistics_for_current_session.raw_value"/>
+                        <div class="ps-sc-head">
+                            <div t-attf-class="ps-sc-logo ps-sc-logo--{{ ps_state or 'closed' }}" aria-hidden="true">
+                                <i class="fa fa-shopping-basket" title="Shop"/>
+                            </div>
+                            <div class="ps-sc-titles">
+                                <field name="name" class="ps-sc-title"/>
+                                <div class="ps-sc-badges">
+                                    <span t-if="ps_state == 'opened' and record.pos_session_duration.raw_value &gt; 1"
+                                          t-attf-class="ps-badge ps-badge--{{ record.pos_session_duration.raw_value &gt; 3 ? 'danger' : 'warning' }}"
+                                          title="The session has been opened for an unusually long period. Please consider closing.">To close</span>
+                                    <span t-elif="ps_state == 'opened'" class="ps-badge ps-badge--success"><i class="fa fa-circle" title="Open"/> Open</span>
+                                    <span t-elif="ps_state == 'opening_control'" class="ps-badge ps-badge--info">Opening control</span>
+                                    <span t-elif="ps_state == 'closing_control'" class="ps-badge ps-badge--warning">Closing control</span>
+                                    <span t-else="" class="ps-badge">Closed</span>
+                                    <span t-if="!record.current_session_id.raw_value and record.pos_session_username.value" class="ps-badge ps-badge--info">
+                                        Opened by <field name="pos_session_username"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ps-sc-stats">
+                            <t t-if="ps_stats">
+                                <div class="ps-sc-stat">
+                                    <strong t-esc="ps_stats.orders.paid.display or '0'"/>
+                                    <span>Sold</span>
+                                </div>
+                                <div class="ps-sc-stat">
+                                    <strong t-esc="ps_stats.orders.draft.display or '0'"/>
+                                    <span>Ongoing</span>
+                                </div>
+                                <div class="ps-sc-stat">
+                                    <strong t-esc="ps_stats.cash.opening_cash or '—'"/>
+                                    <span>Opening cash</span>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div class="ps-sc-stat ps-sc-stat--wide">
+                                    <strong t-if="record.last_session_closing_date.raw_value"><field name="last_session_closing_date"/></strong>
+                                    <strong t-else="">—</strong>
+                                    <span>Last closing</span>
+                                </div>
+                                <div class="ps-sc-stat" invisible="not cash_control">
+                                    <strong><field name="last_session_closing_cash" widget="monetary"/></strong>
+                                    <span>Cash in drawer</span>
+                                </div>
+                            </t>
+                        </div>
+
+                        <div class="ps-kc-assign">
+                            <div class="ps-kc-assign-item">
+                                <span class="ps-kc-assign-label">Session</span>
+                                <span t-if="ps_stats and ps_stats.date.is_started" class="ps-kc-value" t-esc="ps_stats.date.start_date"/>
+                                <span t-elif="record.current_session_id.raw_value" class="ps-kc-value"><field name="current_session_id"/></span>
+                                <span t-else="" class="ps-kc-none">No open session</span>
+                            </div>
+                            <div class="ps-kc-assign-item">
+                                <span class="ps-kc-assign-label">Cashier</span>
+                                <field t-if="record.current_user_id.raw_value" name="current_user_id" widget="many2one_avatar_user" class="oe_kanban_action"/>
+                                <span t-else="" class="ps-kc-none">—</span>
+                            </div>
+                        </div>
+
+                        <a t-if="record.number_of_rescue_session.value &gt; 0" class="ps-sc-rescue" name="open_opened_rescue_session_form" type="object">
+                            <i class="fa fa-life-ring" title="Rescue session"/> <field name="number_of_rescue_session"/> outstanding rescue session
+                        </a>
+
+                        <footer class="ps-kc-foot">
+                            <button t-if="record.current_session_state.raw_value != 'closing_control'" class="btn btn-primary ps-sc-open" name="open_ui" type="object">
+                                <t t-if="record.current_session_state.raw_value === 'opened'"><i class="fa fa-play" title="Continue"/> Continue Selling</t>
+                                <t t-else=""><i class="fa fa-unlock" title="Open"/> Open Register</t>
+                            </button>
+                            <button t-else="" class="btn btn-secondary ps-sc-open" name="open_existing_session_cb" type="object"><i class="fa fa-lock" title="Close"/> Close</button>
+                            <a class="ps-sc-link ms-auto" type="action" name="%(point_of_sale.action_pos_order_filtered)d">Orders <i class="fa fa-angle-right" title="Orders"/></a>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Order cards -->
+    <record id="order_kanban" model="ir.ui.view">
+        <field name="name">pos.order.kanban.modern</field>
+        <field name="model">pos.order</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <kanban create="false" class="o_ps_order_kanban" sample="1">
+                <field name="currency_id"/>
+                <field name="state"/>
+                <field name="partner_id"/>
+                <field name="config_id"/>
+                <field name="session_id"/>
+                <field name="date_order"/>
+                <field name="amount_total"/>
+                <field name="user_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="ps-kc-head">
+                            <field name="name" class="ps-kc-title"/>
+                            <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state in ('paid', 'done')"
+                                   decoration-primary="state == 'invoiced'" decoration-muted="state == 'cancel'" class="ps-kc-state"/>
+                        </div>
+                        <div class="ps-kc-line">
+                            <i class="fa fa-calendar-o" title="Date"/>
+                            <field name="date_order"/>
+                        </div>
+                        <div class="ps-kc-line" t-if="record.partner_id.raw_value">
+                            <i class="fa fa-user-o" title="Customer"/>
+                            <field name="partner_id" class="text-truncate"/>
+                        </div>
+                        <div class="ps-kc-line">
+                            <i class="fa fa-shopping-basket" title="Shop"/>
+                            <field name="config_id" class="text-truncate"/>
+                        </div>
+                        <div class="ps-kc-money">
+                            <span t-attf-class="ps-kc-amount {{ record.amount_total.raw_value &lt; 0 ? 'ps-kc-refund' : '' }}">
+                                <field name="amount_total" widget="monetary"/>
+                            </span>
+                            <field name="pos_reference" class="ps-kc-ref"/>
+                        </div>
+                        <footer class="ps-kc-foot">
+                            <field name="session_id" class="ps-kc-session text-truncate"/>
+                            <field name="user_id" widget="many2one_avatar_user" class="ms-auto"/>
+                        </footer>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- POS categories: a plain list (a row opens the CRM-style drawer, no inline edit) -->
+    <record id="category_list" model="ir.ui.view">
+        <field name="name">pos.category.list.modern</field>
+        <field name="model">pos.category</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <list string="Product Categories">
+                <field name="sequence" widget="handle"/>
+                <field name="display_name" string="Category"/>
+                <field name="color" widget="color_picker"/>
+            </list>
+        </field>
+    </record>
+</odoo>

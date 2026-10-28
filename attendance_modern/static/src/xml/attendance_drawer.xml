@@ -15,11 +15,11 @@
                 <div class="or-field or-field-row">
                     <div>
                         <label class="or-label" for="am_at_in">Check in</label>
-                        <input id="am_at_in" type="datetime-local" class="or-input" t-model="state.check_in"/>
+                        <MtDateInput id="'am_at_in'" type="'datetime'" value="state.check_in" onChange="(v) => this.state.check_in = v"/>
                     </div>
                     <div>
                         <label class="or-label" for="am_at_out">Check out</label>
-                        <input id="am_at_out" type="datetime-local" class="or-input" t-model="state.check_out"/>
+                        <MtDateInput id="'am_at_out'" type="'datetime'" value="state.check_out" onChange="(v) => this.state.check_out = v" min="state.check_in or undefined"/>
                     </div>
                 </div>
                 <p class="or-hint">Times are in your own time zone. Extra hours are counted by Odoo when you save.</p>

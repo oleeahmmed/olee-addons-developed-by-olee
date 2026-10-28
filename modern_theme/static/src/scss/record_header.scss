@@ -1,0 +1,124 @@
+// Modern Theme: record details laid out like the Sales quotation header.
+//
+// Many Odoo forms put their main fields in one 4-column group (<group col="4">):
+// POS orders and refunds, POS sessions and payments, stock moves, journal items…
+// Odoo renders that as one grid straight in the sheet, which the theme's "label above
+// the field" layout turned into a long single column with overlapping labels. Here it
+// becomes the quotation look: one rounded card, two columns, a small muted label above
+// each value, read-only values in a soft box, editable ones in the normal inputs.
+// Pure CSS on Odoo's own markup (the theme only groups each label/field line in
+// .mt-row), so every such form gets it, in light and dark.
+
+$rh-form: 'html[data-mt-theme] .o_web_client .o_form_view:not(.o_base_settings):not(.o_base_settings_view)';
+
+#{$rh-form} .o_form_sheet > .o_inner_group:has(> .mt-row > .o_cell:nth-child(4)) {
+    display: flex !important;
+    flex-direction: column;
+    gap: 0.875rem;
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 0 1rem !important;
+    padding: 1rem 1.125rem 1.125rem !important;
+    border: 1px solid var(--mt-border);
+    border-radius: 1rem;
+    background: var(--mt-card);
+
+    // one line = up to two fields side by side, each label above its value
+    > .mt-row {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: auto auto;
+        grid-auto-flow: column;
+        column-gap: 1rem;
+        row-gap: 0.375rem;
+        align-items: start;
+
+        @media (max-width: 767.98px) {
+            grid-template-columns: minmax(0, 1fr);
+            grid-template-rows: none;
+            grid-auto-flow: row;
+        }
+    }
+
+    > .mt-row > .o_cell {
+        width: auto !important;
+        max-width: none !important;
+        min-width: 0;
+        margin: 0 !important;
+        padding: 0 !important;
+        grid-column: auto !important;
+    }
+
+    // the theme's floating label (one field per line) is not needed in this layout
+    > .mt-row.mt-row.mt-row > .o_wrap_label.o_wrap_label {
+        position: static !important;
+        margin: 0 !important;
+        pointer-events: auto;
+    }
+    > .mt-row.mt-row.mt-row > .o_cell.o_cell:not(.o_wrap_label) { padding-top: 0 !important; }
+
+    .o_wrap_label {
+        align-self: end;
+        .o_form_label {
+            margin: 0;
+            font-size: 0.75rem;
+            font-weight: 500 !important;
+            color: var(--mt-muted-foreground);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            sup { color: var(--mt-muted-foreground); }
+        }
+    }
+
+    // read-only values (order ref, date, session, totals…) in a soft box
+    .o_wrap_input > .o_field_widget.o_readonly_modifier:not(.o_field_boolean):not(.o_field_x2many):not(.o_field_html) {
+        display: flex !important;
+        align-items: center;
+        width: 100%;
+        min-height: 2.25rem;
+        padding: 0.375rem 0.75rem !important;
+        border: 1px solid var(--mt-border) !important;
+        border-radius: 0.5rem !important;
+        background: color-mix(in srgb, var(--mt-muted) 45%, var(--mt-card)) !important;
+        color: var(--mt-foreground);
+        font-size: 0.875rem;
+        box-shadow: none !important;
+
+        > *, .o_many2one, .o_field_many2one_selection { min-width: 0; margin: 0 !important; }
+        a.o_form_uri { color: var(--mt-primary-text, var(--mt-primary)) !important; }
+
+        // empty read-only value: a quiet dash instead of a blank box
+        &.o_field_empty { justify-content: flex-start !important; }
+        &.o_field_empty > * { display: none; }
+        &.o_field_empty::after {
+            content: "—";
+            color: var(--mt-muted-foreground);
+        }
+    }
+}
+
+// The notebook below the card: same spacing as the quotation
+#{$rh-form} .o_form_sheet > .o_inner_group:has(> .mt-row > .o_cell:nth-child(4)) ~ .o_notebook {
+    margin-top: 0.25rem;
+}
+
+// Totals under the lines (Odoo's subtotal footer): a right-aligned summary card
+#{$rh-form} .o_form_sheet .oe_subtotal_footer {
+    margin-inline-start: auto;
+    min-width: 16rem;
+    padding: 0.75rem 1rem !important;
+    border: 1px solid var(--mt-border);
+    border-radius: 0.75rem;
+    background: color-mix(in srgb, var(--mt-muted) 30%, var(--mt-card));
+    font-variant-numeric: tabular-nums;
+
+    .o_form_label { color: var(--mt-muted-foreground); font-size: 0.8125rem; font-weight: 500 !important; }
+    .oe_subtotal_footer_separator,
+    .oe_subtotal_footer_separator .o_form_label {
+        color: var(--mt-foreground);
+        font-size: 1rem;
+        font-weight: 700 !important;
+    }
+    .oe_subtotal_footer_separator { border-top: 1px solid var(--mt-border) !important; }
+}

@@ -78,8 +78,8 @@
                             <button type="button" role="radio" t-att-aria-checked="state.act.when === o.key ? 'true' : 'false'"
                                     t-att-class="{ 'cm-on': state.act.when === o.key }" t-on-click="() => this.pickWhen(o.key)" t-esc="o.label"/>
                         </t>
-                        <input type="date" t-attf-class="cm-chip-date {{ state.act.when === 'date' ? 'cm-on' : '' }}" aria-label="Due date"
-                               t-att-value="state.act.date" t-on-change="onDate"/>
+                        <MtDateInput value="state.act.date" onChange.bind="onDate" placeholder="'Pick a date'"
+                                     class="state.act.when === 'date' ? 'cm-chip-date cm-on' : 'cm-chip-date'"/>
                     </div>
                     <button type="button" class="cm-btn cm-btn-ghost cm-btn-sm" title="Odoo scheduler: notes, activity plans" t-on-click="props.onAdvancedSchedule">
                         <i class="fa fa-list-ol" aria-hidden="true"/> <span class="cm-hide-sm">Plan / more</span>

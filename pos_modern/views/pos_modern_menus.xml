@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Inside Odoo's own Point of Sale app (point_of_sale.menu_point_root). Kept as simple
+        as the shadcn POS app: the sidebar has Menu (sell: pick products, cart, pay),
+        Tables (restaurants only) and Orders. Everything else is in the top bar: More
+        (dashboard, shops, sessions, products, customers, payments, refunds, ongoing
+        orders), Odoo's Reporting and Configuration.
+        Visibility comes from Odoo's groups (POS user / manager).
+    -->
+    <menuitem id="menu_menu" name="Menu" parent="point_of_sale.menu_point_root" action="action_menu" sequence="-130"/>
+    <menuitem id="menu_tables" name="Tables" parent="point_of_sale.menu_point_root" action="action_tables" sequence="-125"/>
+    <menuitem id="menu_orders" name="Orders" parent="point_of_sale.menu_point_root" action="action_orders" sequence="-120"/>
+
+    <menuitem id="menu_more" name="More" parent="point_of_sale.menu_point_root" sequence="-50"/>
+    <menuitem id="menu_dashboard" name="Dashboard" parent="menu_more" action="action_dashboard" sequence="1"/>
+    <menuitem id="menu_shops" name="Shops" parent="menu_more" action="action_shops" sequence="2"/>
+    <menuitem id="menu_sessions" name="Sessions" parent="menu_more" action="action_sessions" sequence="3"/>
+    <menuitem id="menu_products" name="Products" parent="menu_more" action="action_products" sequence="4"/>
+    <menuitem id="menu_customers" name="Customers" parent="menu_more" action="action_customers" sequence="5"/>
+    <menuitem id="menu_payments" name="Payments" parent="menu_more" action="action_payments" sequence="6"/>
+    <menuitem id="menu_refunds" name="Refunds" parent="menu_more" action="action_refunds" sequence="7"/>
+    <menuitem id="menu_ongoing" name="Ongoing Orders" parent="menu_more" action="action_ongoing" sequence="8"/>
+
+    <!-- Configuration ▸ Products: the POS categories as a Modern page -->
+    <menuitem id="menu_categories" name="PoS Product Categories" parent="point_of_sale.pos_menu_products_configuration"
+              action="action_categories" sequence="1" groups="point_of_sale.group_pos_manager"/>
+
+    <function model="ir.ui.menu" name="_pos_modern_sync_tables_menu"/>
+</odoo>

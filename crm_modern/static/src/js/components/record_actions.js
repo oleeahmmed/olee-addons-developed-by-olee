@@ -4,6 +4,7 @@ import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { loadFeatures } from "../core/features";
 import { openInDialog } from "../core/utils";
+import { MtDateInput } from "@modern_theme/js/app_kit/date_input";
 
 /**
  * Extra tabs other addons add to the record page's action card, e.g. "Quotation"
@@ -21,6 +22,7 @@ const { DateTime } = luxon;
  */
 export class RecordActions extends Component {
     static template = "crm_modern.RecordActions";
+    static components = { MtDateInput };
     static props = {
         record: Object,
         users: Array,
@@ -162,8 +164,8 @@ export class RecordActions extends Component {
     pickWhen(key) {
         Object.assign(this.state.act, { when: key, date: "" });
     }
-    onDate(ev) {
-        Object.assign(this.state.act, { date: ev.target.value, when: ev.target.value ? "date" : "auto" });
+    onDate(value) {
+        Object.assign(this.state.act, { date: value, when: value ? "date" : "auto" });
     }
     get deadline() {
         const today = DateTime.local().startOf("day");

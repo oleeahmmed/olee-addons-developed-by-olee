@@ -4,6 +4,7 @@ import { serializeDateTime } from "@web/core/l10n/dates";
 import { _t } from "@web/core/l10n/translation";
 import { user } from "@web/core/user";
 import { useService } from "@web/core/utils/hooks";
+import { MtDateInput } from "@modern_theme/js/app_kit/date_input";
 import { OrSelectCard } from "@modern_theme/js/or_select_card";
 
 /**
@@ -128,7 +129,7 @@ const toIds = (v) => (v || []).map((x) => (Array.isArray(x) ? x[0] : typeof x ==
 
 /** Shared part of the drawers: load / new / save / open the full form. */
 export class QuickDrawer extends Component {
-    static components = { FormDrawer, OrSelectCard, PmPicker };
+    static components = { FormDrawer, MtDateInput, OrSelectCard, PmPicker };
     static props = {
         close: Function,
         onSaved: { type: Function, optional: true },
