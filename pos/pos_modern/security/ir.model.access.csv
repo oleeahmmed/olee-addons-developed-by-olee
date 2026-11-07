@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pos_modern_hold_user,pos.modern.hold user,model_pos_modern_hold,point_of_sale.group_pos_user,1,1,1,1
+access_pos_modern_modifier_user,pos.modern.modifier user,model_pos_modern_modifier,point_of_sale.group_pos_user,1,0,0,0
+access_pos_modern_modifier_manager,pos.modern.modifier manager,model_pos_modern_modifier,point_of_sale.group_pos_manager,1,1,1,1

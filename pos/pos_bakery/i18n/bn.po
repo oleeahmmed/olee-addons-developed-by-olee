@@ -1,0 +1,763 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pos_bakery
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-06 22:27+0000\n"
+"PO-Revision-Date: 2026-11-06 22:27+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: pos_bakery
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/models/bakery.py:0
+msgid "%(name)s · %(flavour)s %(weight)s"
+msgstr "%(name)s · %(flavour)s %(weight)s"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos_bakery/static/src/js/bakery.js:0
+msgid "%s item(s) written off."
+msgstr "%s টি আইটেম বাদ দেওয়া হয়েছে।"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "& take the advance"
+msgstr "ও অগ্রিম নিন"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "1 pound, 2 kg"
+msgstr "১ পাউন্ড, ২ কেজি"
+
+#. module: pos_bakery
+#: model:ir.model.fields,help:pos_bakery.field_pos_bk_cake__weight
+msgid "1 pound, 2 kg…"
+msgstr "১ পাউন্ড, ২ কেজি…"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Add a product"
+msgstr "পণ্য যোগ করুন"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__advance
+#: model_terms:ir.ui.view,arch_db:pos_bakery.pos_bk_cake_list
+msgid "Advance"
+msgstr "অগ্রিম"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__advance_order_id
+msgid "Advance Order"
+msgstr "অগ্রিমের অর্ডার"
+
+#. module: pos_bakery
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/static/src/js/bakery.js:0
+msgid "Advance for %s"
+msgstr "%s-এর অগ্রিম"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Advance now"
+msgstr "এখন অগ্রিম"
+
+#. module: pos_bakery
+#: model:ir.model.fields.selection,name:pos_bakery.selection__pos_bk_cake__state__confirmed
+msgid "Advance paid"
+msgstr "অগ্রিম পরিশোধিত"
+
+#. module: pos_bakery
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/models/bakery.py:0
+msgid "Advance paid on %s"
+msgstr "%s-এর অগ্রিম আগে দেওয়া হয়েছে"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model_terms:ir.ui.view,arch_db:pos_bakery.pos_bk_batch_form
+msgid "Bake"
+msgstr "বেক"
+
+#. module: pos_bakery
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/models/bakery.py:0
+msgid "Bake %s"
+msgstr "বেক %s"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos_bakery/static/src/js/bakery.js:0
+msgid "Bake saved: the stock is updated."
+msgstr "বেক সেভ হয়েছে: স্টক আপডেট হয়েছে।"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__line_ids
+msgid "Baked"
+msgstr "বেক হয়েছে"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Baked, sold, wasted and left, per product."
+msgstr "প্রতি পণ্যে বেক, বিক্রি, নষ্ট ও বাকি।"
+
+#. module: pos_bakery
+#: model_terms:ir.ui.view,arch_db:pos_bakery.pos_config_counter_form_bakery
+msgid "Bakery"
+msgstr "বেকারি"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_config__bk_bakery
+msgid "Bakery counter"
+msgstr "বেকারি কাউন্টার"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.actions.client,name:pos_bakery.action_bakery_day
+#: model:ir.ui.menu,name:pos_bakery.menu_bakery_day
+msgid "Bakery day"
+msgstr "বেকারির দিন"
+
+#. module: pos_bakery
+#: model:ir.model,name:pos_bakery.model_pos_bk_batch
+msgid "Bakery production batch"
+msgstr "বেকারির প্রোডাকশন ব্যাচ"
+
+#. module: pos_bakery
+#: model:ir.model,name:pos_bakery.model_pos_bk_batch_line
+msgid "Bakery production line"
+msgstr "বেকারির প্রোডাকশন লাইন"
+
+#. module: pos_bakery
+#: model:ir.actions.act_window,name:pos_bakery.action_bakes
+#: model:ir.ui.menu,name:pos_bakery.menu_bakes
+#: model_terms:ir.ui.view,arch_db:pos_bakery.pos_bk_batch_list
+msgid "Bakes"
+msgstr "বেক"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__batch_id
+msgid "Batch"
+msgstr "ব্যাচ"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__product_id
+msgid "Cake"
+msgstr "কেক"
+
+#. module: pos_bakery
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/models/bakery.py:0
+msgid "Cake advance"
+msgstr "কেকের অগ্রিম"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_config__bk_advance_product_id
+msgid "Cake advance product"
+msgstr "কেকের অগ্রিমের পণ্য"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/drawer_forms.js:0
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/js/drawer_forms.js:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model,name:pos_bakery.model_pos_bk_cake
+#: model_terms:ir.ui.view,arch_db:pos_bakery.pos_bk_cake_form
+msgid "Cake order"
+msgstr "কেকের অর্ডার"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos_bakery/static/src/js/bakery.js:0
+msgid "Cake order %s saved."
+msgstr "কেকের অর্ডার %s সেভ হয়েছে।"
+
+#. module: pos_bakery
+#: model:ir.actions.act_window,name:pos_bakery.action_cakes
+#: model:ir.ui.menu,name:pos_bakery.menu_cakes
+#: model_terms:ir.ui.view,arch_db:pos_bakery.pos_bk_cake_list
+msgid "Cake orders"
+msgstr "কেকের অর্ডার"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Cake orders to deliver"
+msgstr "ডেলিভারির কেকের অর্ডার"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Cakes"
+msgstr "কেক"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Cancel"
+msgstr "বাতিল"
+
+#. module: pos_bakery
+#: model:ir.model.fields.selection,name:pos_bakery.selection__pos_bk_cake__state__cancel
+msgid "Cancelled"
+msgstr "বাতিল হয়েছে"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Chocolate, vanilla…"
+msgstr "চকলেট, ভ্যানিলা…"
+
+#. module: pos_bakery
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/static/src/js/bakery.js:0
+msgid "Choose the cake."
+msgstr "কেক বাছুন।"
+
+#. module: pos_bakery
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/models/bakery.py:0
+msgid "Choose the delivery date and time."
+msgstr "ডেলিভারির তারিখ ও সময় বাছুন।"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Close"
+msgstr "বন্ধ"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Colours, photo, candles…"
+msgstr "রং, ছবি, মোমবাতি…"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__company_id
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__company_id
+msgid "Company"
+msgstr "কোম্পানি"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__config_id
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__config_id
+msgid "Config"
+msgstr "কনফিগ"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__create_uid
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__create_uid
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__create_uid
+msgid "Created by"
+msgstr "তৈরি করেছেন"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__create_date
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__create_date
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__create_date
+msgid "Created on"
+msgstr "তৈরির সময়"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/drawer_forms.js:0
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/js/drawer_forms.js:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__partner_id
+msgid "Customer"
+msgstr "কাস্টমার"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__customer_name
+msgid "Customer Name"
+msgstr "কাস্টমারের নাম"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__date
+msgid "Date"
+msgstr "তারিখ"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Deliver"
+msgstr "ডেলিভারি দিন"
+
+#. module: pos_bakery
+#: model:ir.model.fields.selection,name:pos_bakery.selection__pos_bk_cake__state__delivered
+msgid "Delivered"
+msgstr "ডেলিভারি হয়েছে"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__delivery_at
+msgid "Delivery"
+msgstr "ডেলিভারি"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Design note"
+msgstr "ডিজাইন নোট"
+
+#. module: pos_bakery
+#: model_terms:ir.ui.view,arch_db:pos_bakery.pos_bk_cake_form
+msgid "Design, colour, photo reference…"
+msgstr "ডিজাইন, রং, ছবির রেফারেন্স…"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__display_name
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__display_name
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__display_name
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_config__display_name
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_order__display_name
+msgid "Display Name"
+msgstr "নাম"
+
+#. module: pos_bakery
+#: model:ir.model.fields.selection,name:pos_bakery.selection__pos_bk_batch__state__done
+msgid "Done"
+msgstr "শেষ"
+
+#. module: pos_bakery
+#: model:ir.model.fields.selection,name:pos_bakery.selection__pos_bk_batch__state__draft
+msgid "Draft"
+msgstr "খসড়া"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__due
+#: model_terms:ir.ui.view,arch_db:pos_bakery.pos_bk_cake_list
+msgid "Due"
+msgstr "বাকি"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__final_order_id
+msgid "Final Order"
+msgstr "শেষ অর্ডার"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__flavour
+msgid "Flavour"
+msgstr "ফ্লেভার"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Happy Birthday Ayan"
+msgstr "শুভ জন্মদিন আয়ান"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__id
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__id
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__id
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_config__id
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_order__id
+msgid "ID"
+msgstr "ID"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__write_uid
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__write_uid
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__write_uid
+msgid "Last Updated by"
+msgstr "শেষ আপডেট করেছেন"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__write_date
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__write_date
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__write_date
+msgid "Last Updated on"
+msgstr "শেষ আপডেট"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Left now"
+msgstr "এখন বাকি"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__production_id
+msgid "Manufacturing order"
+msgstr "ম্যানুফ্যাকচারিং অর্ডার"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__message
+msgid "Message on the cake"
+msgstr "কেকের উপরের লেখা"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Mobile"
+msgstr "মোবাইল"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/drawer_forms.js:0
+#: code:addons/pos_bakery/static/src/js/drawer_forms.js:0
+msgid "Money"
+msgstr "টাকা"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Morning bake"
+msgstr "সকালের বেক"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__name
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__name
+msgid "Name"
+msgstr "নাম"
+
+#. module: pos_bakery
+#: model:ir.model.fields.selection,name:pos_bakery.selection__pos_bk_cake__state__draft
+msgid "New"
+msgstr "নতুন"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/drawer_forms.js:0
+#: code:addons/pos_bakery/static/src/js/drawer_forms.js:0
+msgid "New cake order"
+msgstr "নতুন কেকের অর্ডার"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "New cake order with advance"
+msgstr "অগ্রিমসহ নতুন কেকের অর্ডার"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "No bakery shop"
+msgstr "কোনো বেকারি শপ নেই"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "No cake order to deliver"
+msgstr "ডেলিভারির কোনো কেকের অর্ডার নেই"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__note
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__note
+msgid "Note"
+msgstr "নোট"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Nothing baked or sold this day."
+msgstr "এই দিনে কিছু বেক বা বিক্রি হয়নি।"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__phone
+msgid "Phone"
+msgstr "ফোন"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Please wait for your number"
+msgstr "আপনার নম্বরের জন্য অপেক্ষা করুন"
+
+#. module: pos_bakery
+#: model:ir.model,name:pos_bakery.model_pos_config
+msgid "Point of Sale Configuration"
+msgstr "POS কনফিগারেশন"
+
+#. module: pos_bakery
+#: model:ir.model,name:pos_bakery.model_pos_order
+msgid "Point of Sale Orders"
+msgstr "POS অর্ডার"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__price_total
+msgid "Price"
+msgstr "দাম"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_config__bk_token_slip
+msgid "Print the token on its own slip"
+msgstr "টোকেন আলাদা স্লিপে প্রিন্ট"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__product_id
+msgid "Product"
+msgstr "পণ্য"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__qty
+msgid "Qty"
+msgstr "পরিমাণ"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_config__bk_token
+msgid "Queue token on every sale"
+msgstr "প্রতি বিক্রিতে কিউ টোকেন"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields.selection,name:pos_bakery.selection__pos_bk_cake__state__ready
+msgid "Ready"
+msgstr "তৈরি"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Reason"
+msgstr "কারণ"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Save"
+msgstr "সেভ"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/drawer_forms.js:0
+#: code:addons/pos_bakery/static/src/js/drawer_forms.js:0
+msgid "Shop"
+msgstr "শপ"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Sold"
+msgstr "বিক্রি"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__state
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__state
+msgid "State"
+msgstr "অবস্থা"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "TOKEN"
+msgstr "টোকেন"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Take advance"
+msgstr "অগ্রিম নিন"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/drawer_forms.js:0
+#: code:addons/pos_bakery/static/src/js/drawer_forms.js:0
+msgid "Take the advance and deliver from the bakery counter (Cakes button)."
+msgstr "অগ্রিম নেওয়া ও ডেলিভারি বেকারি কাউন্টার থেকে করুন (Cakes বাটন)।"
+
+#. module: pos_bakery
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/models/bakery.py:0
+msgid "The advance is more than the price."
+msgstr "অগ্রিম দামের বেশি।"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos_bakery/static/src/js/bakery.js:0
+msgid "The cake product is not on this counter."
+msgstr "কেকের পণ্যটি এই কাউন্টারে নেই।"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_order__bk_token
+msgid "Token"
+msgstr "টোকেন"
+
+#. module: pos_bakery
+#: model:ir.model.fields,help:pos_bakery.field_pos_config__bk_bakery
+msgid "Token, morning bake, wastage, cake orders."
+msgstr "টোকেন, সকালের বেক, নষ্ট, কেকের অর্ডার।"
+
+#. module: pos_bakery
+#: model_terms:ir.ui.view,arch_db:pos_bakery.pos_bk_cake_list
+msgid "Total"
+msgstr "মোট"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Turn on \"Bakery counter\" in a shop's Counter settings."
+msgstr "কোনো শপের কাউন্টার সেটিংসে \"Bakery counter\" চালু করুন।"
+
+#. module: pos_bakery
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/models/bakery.py:0
+msgid "Type the cake's price."
+msgstr "কেকের দাম লিখুন।"
+
+#. module: pos_bakery
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/models/bakery.py:0
+msgid "Type what was baked."
+msgstr "কী বেক হয়েছে লিখুন।"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Unsold or spoiled items to write off the stock."
+msgstr "বিক্রি না হওয়া বা নষ্ট আইটেম স্টক থেকে বাদ।"
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__user_id
+msgid "User"
+msgstr "ইউজার"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Wastage"
+msgstr "নষ্ট"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Waste"
+msgstr "নষ্ট"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Wasted"
+msgstr "নষ্ট হয়েছে"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__weight
+msgid "Weight"
+msgstr "ওজন"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid ""
+"What was baked this morning. Products with a recipe use up their "
+"ingredients."
+msgstr "সকালে কী বেক হলো। রেসিপি থাকা পণ্য তাদের উপকরণ খরচ করে।"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Which cake?"
+msgstr "কোন কেক?"
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "in stock"
+msgstr "স্টকে"

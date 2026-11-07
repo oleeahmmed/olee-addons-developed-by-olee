@@ -1,0 +1,762 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pos_bakery
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-06 22:27+0000\n"
+"PO-Revision-Date: 2026-11-06 22:27+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: pos_bakery
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/models/bakery.py:0
+msgid "%(name)s · %(flavour)s %(weight)s"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos_bakery/static/src/js/bakery.js:0
+msgid "%s item(s) written off."
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "& take the advance"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "1 pound, 2 kg"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,help:pos_bakery.field_pos_bk_cake__weight
+msgid "1 pound, 2 kg…"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Add a product"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__advance
+#: model_terms:ir.ui.view,arch_db:pos_bakery.pos_bk_cake_list
+msgid "Advance"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__advance_order_id
+msgid "Advance Order"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/static/src/js/bakery.js:0
+msgid "Advance for %s"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Advance now"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields.selection,name:pos_bakery.selection__pos_bk_cake__state__confirmed
+msgid "Advance paid"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/models/bakery.py:0
+msgid "Advance paid on %s"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model_terms:ir.ui.view,arch_db:pos_bakery.pos_bk_batch_form
+msgid "Bake"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/models/bakery.py:0
+msgid "Bake %s"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos_bakery/static/src/js/bakery.js:0
+msgid "Bake saved: the stock is updated."
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__line_ids
+msgid "Baked"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Baked, sold, wasted and left, per product."
+msgstr ""
+
+#. module: pos_bakery
+#: model_terms:ir.ui.view,arch_db:pos_bakery.pos_config_counter_form_bakery
+msgid "Bakery"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_config__bk_bakery
+msgid "Bakery counter"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.actions.client,name:pos_bakery.action_bakery_day
+#: model:ir.ui.menu,name:pos_bakery.menu_bakery_day
+msgid "Bakery day"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model,name:pos_bakery.model_pos_bk_batch
+msgid "Bakery production batch"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model,name:pos_bakery.model_pos_bk_batch_line
+msgid "Bakery production line"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.actions.act_window,name:pos_bakery.action_bakes
+#: model:ir.ui.menu,name:pos_bakery.menu_bakes
+#: model_terms:ir.ui.view,arch_db:pos_bakery.pos_bk_batch_list
+msgid "Bakes"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__batch_id
+msgid "Batch"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__product_id
+msgid "Cake"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/models/bakery.py:0
+msgid "Cake advance"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_config__bk_advance_product_id
+msgid "Cake advance product"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/drawer_forms.js:0
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/js/drawer_forms.js:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model,name:pos_bakery.model_pos_bk_cake
+#: model_terms:ir.ui.view,arch_db:pos_bakery.pos_bk_cake_form
+msgid "Cake order"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos_bakery/static/src/js/bakery.js:0
+msgid "Cake order %s saved."
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.actions.act_window,name:pos_bakery.action_cakes
+#: model:ir.ui.menu,name:pos_bakery.menu_cakes
+#: model_terms:ir.ui.view,arch_db:pos_bakery.pos_bk_cake_list
+msgid "Cake orders"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Cake orders to deliver"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Cakes"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Cancel"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields.selection,name:pos_bakery.selection__pos_bk_cake__state__cancel
+msgid "Cancelled"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Chocolate, vanilla…"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/static/src/js/bakery.js:0
+msgid "Choose the cake."
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/models/bakery.py:0
+msgid "Choose the delivery date and time."
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Close"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Colours, photo, candles…"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__company_id
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__company_id
+msgid "Company"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__config_id
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__config_id
+msgid "Config"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__create_uid
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__create_uid
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__create_date
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__create_date
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/drawer_forms.js:0
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/js/drawer_forms.js:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__partner_id
+msgid "Customer"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__customer_name
+msgid "Customer Name"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__date
+msgid "Date"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Deliver"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields.selection,name:pos_bakery.selection__pos_bk_cake__state__delivered
+msgid "Delivered"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__delivery_at
+msgid "Delivery"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Design note"
+msgstr ""
+
+#. module: pos_bakery
+#: model_terms:ir.ui.view,arch_db:pos_bakery.pos_bk_cake_form
+msgid "Design, colour, photo reference…"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__display_name
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__display_name
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__display_name
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_config__display_name
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_order__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields.selection,name:pos_bakery.selection__pos_bk_batch__state__done
+msgid "Done"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields.selection,name:pos_bakery.selection__pos_bk_batch__state__draft
+msgid "Draft"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__due
+#: model_terms:ir.ui.view,arch_db:pos_bakery.pos_bk_cake_list
+msgid "Due"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__final_order_id
+msgid "Final Order"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__flavour
+msgid "Flavour"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Happy Birthday Ayan"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__id
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__id
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__id
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_config__id
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_order__id
+msgid "ID"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__write_uid
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__write_uid
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__write_date
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__write_date
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Left now"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__production_id
+msgid "Manufacturing order"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__message
+msgid "Message on the cake"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Mobile"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/drawer_forms.js:0
+#: code:addons/pos_bakery/static/src/js/drawer_forms.js:0
+msgid "Money"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Morning bake"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__name
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__name
+msgid "Name"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields.selection,name:pos_bakery.selection__pos_bk_cake__state__draft
+msgid "New"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/drawer_forms.js:0
+#: code:addons/pos_bakery/static/src/js/drawer_forms.js:0
+msgid "New cake order"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "New cake order with advance"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "No bakery shop"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "No cake order to deliver"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__note
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__note
+msgid "Note"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Nothing baked or sold this day."
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__phone
+msgid "Phone"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Please wait for your number"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model,name:pos_bakery.model_pos_config
+msgid "Point of Sale Configuration"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model,name:pos_bakery.model_pos_order
+msgid "Point of Sale Orders"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__price_total
+msgid "Price"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_config__bk_token_slip
+msgid "Print the token on its own slip"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__product_id
+msgid "Product"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch_line__qty
+msgid "Qty"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_config__bk_token
+msgid "Queue token on every sale"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields.selection,name:pos_bakery.selection__pos_bk_cake__state__ready
+msgid "Ready"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Reason"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Save"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/drawer_forms.js:0
+#: code:addons/pos_bakery/static/src/js/drawer_forms.js:0
+msgid "Shop"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Sold"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__state
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__state
+msgid "State"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "TOKEN"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Take advance"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/drawer_forms.js:0
+#: code:addons/pos_bakery/static/src/js/drawer_forms.js:0
+msgid "Take the advance and deliver from the bakery counter (Cakes button)."
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/models/bakery.py:0
+msgid "The advance is more than the price."
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos_bakery/static/src/js/bakery.js:0
+msgid "The cake product is not on this counter."
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_order__bk_token
+msgid "Token"
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,help:pos_bakery.field_pos_config__bk_bakery
+msgid "Token, morning bake, wastage, cake orders."
+msgstr ""
+
+#. module: pos_bakery
+#: model_terms:ir.ui.view,arch_db:pos_bakery.pos_bk_cake_list
+msgid "Total"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Turn on \"Bakery counter\" in a shop's Counter settings."
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/models/bakery.py:0
+msgid "Type the cake's price."
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-python
+#: code:addons/pos/pos_bakery/models/bakery.py:0
+#: code:addons/pos_bakery/models/bakery.py:0
+msgid "Type what was baked."
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Unsold or spoiled items to write off the stock."
+msgstr ""
+
+#. module: pos_bakery
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_batch__user_id
+msgid "User"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/js/bakery.js:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Wastage"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Waste"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Wasted"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+#: model:ir.model.fields,field_description:pos_bakery.field_pos_bk_cake__weight
+msgid "Weight"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid ""
+"What was baked this morning. Products with a recipe use up their "
+"ingredients."
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "Which cake?"
+msgstr ""
+
+#. module: pos_bakery
+#. odoo-javascript
+#: code:addons/pos/pos_bakery/static/src/xml/bakery.xml:0
+#: code:addons/pos_bakery/static/src/xml/bakery.xml:0
+msgid "in stock"
+msgstr ""

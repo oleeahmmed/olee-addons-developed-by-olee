@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="qr_menu_page" name="POS QR menu">
+        <t t-call="web.frontend_layout">
+            <t t-set="no_header" t-value="True"/>
+            <t t-set="no_footer" t-value="True"/>
+            <t t-set="title" t-value="config.name"/>
+            <div class="o_ps_qr">
+                <div class="qr-head">
+                    <h1 t-esc="config.name"/>
+                    <p><t t-esc="company.name"/><t t-if="table"> · Table <t t-esc="table"/></t></p>
+                    <nav class="qr-cats">
+                        <t t-foreach="sections" t-as="s"><a t-att-href="'#cat-%s' % s['id']" t-esc="s['name']"/></t>
+                    </nav>
+                </div>
+                <t t-foreach="sections" t-as="s">
+                    <section class="qr-section" t-att-id="'cat-%s' % s['id']">
+                        <h2 t-esc="s['name']"/>
+                        <div class="qr-items">
+                            <t t-foreach="s['items']" t-as="i">
+                                <div class="qr-item">
+                                    <img t-if="i['image']" t-att-src="'/web/image/product.product/%s/image_256' % i['id']" alt="" loading="lazy"/>
+                                    <div class="qr-item-body">
+                                        <span class="qr-item-name" t-esc="i['name']"/>
+                                        <span t-if="i.get('name_bn')" class="qr-item-desc" t-esc="i['name_bn']"/>
+                                        <span class="qr-item-price" t-esc="i['incl'] if tax_included else i['excl']" t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </section>
+                </t>
+                <div class="qr-foot">Prices include VAT where applicable. Ask the staff to order.</div>
+            </div>
+        </t>
+    </template>
+
+    <template id="qr_cards_page" name="POS QR cards">
+        <t t-call="web.frontend_layout">
+            <t t-set="no_header" t-value="True"/>
+            <t t-set="no_footer" t-value="True"/>
+            <div class="o_ps_qr_cards">
+                <t t-foreach="cards" t-as="c">
+                    <div class="qr-card">
+                        <strong t-esc="config.name"/>
+                        <img t-att-src="c['qr']" alt=""/>
+                        <span t-esc="c['label']"/>
+                        <small>Scan to see the menu</small>
+                    </div>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

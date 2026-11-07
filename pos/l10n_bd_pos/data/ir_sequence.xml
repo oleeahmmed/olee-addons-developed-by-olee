@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_mushak_63" model="ir.sequence">
+        <field name="name">Mushak-6.3 (POS tax invoice)</field>
+        <field name="code">l10n_bd_pos.mushak63</field>
+        <field name="prefix">M63/%(range_year)s/</field>
+        <field name="padding">6</field>
+        <field name="use_date_range">True</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_mushak_67" model="ir.sequence">
+        <field name="name">Mushak-6.7 (POS credit note)</field>
+        <field name="code">l10n_bd_pos.mushak67</field>
+        <field name="prefix">M67/%(range_year)s/</field>
+        <field name="padding">6</field>
+        <field name="use_date_range">True</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

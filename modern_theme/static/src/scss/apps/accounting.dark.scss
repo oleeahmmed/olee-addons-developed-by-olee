@@ -1,0 +1,6 @@
+// Modern Theme — modern_accounting: every style of the app lives here (moved out of
+// modern_accounting/static/src/scss so the app ships no stylesheet of its own).
+
+// ---- from modern_accounting/static/src/scss/app.dark.scss
+// Modern Accounting: dark values of the app tokens (Modern Theme app kit).
+@include mt-app-tokens-dark(ac);

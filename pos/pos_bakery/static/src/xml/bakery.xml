@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-inherit="pos_modern.Menu" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('ps-hook-head-actions')]" position="inside">
+            <t t-if="features.bakery">
+                <button type="button" class="ps-btn" t-on-click="newCake" title="New cake order with advance"><i class="fa fa-birthday-cake" aria-hidden="true"/> Cake order</button>
+                <button type="button" class="ps-btn" t-on-click="openCakes" title="Cake orders to deliver"><i class="fa fa-calendar" aria-hidden="true"/> Cakes</button>
+                <button type="button" class="ps-btn" t-on-click="() => this.bakeryDialog('bake')" title="Morning bake"><i class="fa fa-fire" aria-hidden="true"/> Bake</button>
+                <button type="button" class="ps-btn" t-on-click="() => this.bakeryDialog('waste')" title="Wastage"><i class="fa fa-trash-o" aria-hidden="true"/> Waste</button>
+            </t>
+        </xpath>
+    </t>
+
+    <t t-inherit="pos_modern.Receipt" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('ps-r-meta')]" position="before">
+            <div t-if="r.extra and r.extra.token" class="ps-r-token"><span>TOKEN</span><strong t-esc="num(r.extra.token)"/></div>
+        </xpath>
+    </t>
+
+    <t t-name="pos_bakery.TokenSlip">
+        <div class="ps-receipt">
+            <div class="ps-r-head"><div class="ps-r-company" t-esc="shop"/></div>
+            <div class="ps-r-token"><span>TOKEN</span><strong t-esc="token"/></div>
+            <div class="ps-r-foot">Please wait for your number</div>
+        </div>
+    </t>
+
+    <t t-name="pos_bakery.StockDialog">
+        <Dialog title="title" size="'md'" contentClass="'o_ps ps-dialog'">
+            <div class="ps-cust">
+                <label class="ps-search ps-search--block">
+                    <i class="fa fa-search" aria-hidden="true"/>
+                    <input type="search" placeholder="Add a product" t-model="state.q"/>
+                </label>
+                <ul t-if="matches.length" class="ps-menu ps-menu--down">
+                    <li t-foreach="matches" t-as="p" t-key="p.id" t-on-mousedown.prevent="() => this.add(p)"><strong t-esc="p.name"/><small t-if="p.stock !== undefined"><t t-esc="p.stock"/> in stock</small></li>
+                </ul>
+            </div>
+            <ul class="ps-list" style="margin-top:.75rem">
+                <li t-foreach="state.rows" t-as="r" t-key="r.id" class="ps-list-row">
+                    <span class="ps-list-main"><strong t-esc="r.name"/></span>
+                    <input type="number" min="0" step="1" class="ps-input" style="width:7rem" placeholder="Qty" t-model="r.qty"/>
+                    <button type="button" class="ps-btn ps-btn--sm ps-btn--ghost" t-on-click="() => this.remove(r)"><i class="fa fa-times" aria-hidden="true"/></button>
+                </li>
+                <li t-if="!state.rows.length" class="ps-muted">
+                    <t t-if="props.mode === 'bake'">What was baked this morning. Products with a recipe use up their ingredients.</t>
+                    <t t-else="">Unsold or spoiled items to write off the stock.</t>
+                </li>
+            </ul>
+            <label class="ps-field"><span t-if="props.mode === 'bake'">Note</span><span t-else="">Reason</span>
+                <input type="text" class="ps-input" t-model="state.note" t-att-placeholder="props.mode === 'bake' ? 'Morning shift' : 'Expired, broken, burnt…'"/>
+            </label>
+            <t t-set-slot="footer">
+                <button type="button" class="ps-btn ps-btn--primary" t-att-disabled="state.busy or !state.rows.length" t-on-click="save">Save</button>
+                <button type="button" class="ps-btn" t-on-click="props.close">Cancel</button>
+            </t>
+        </Dialog>
+    </t>
+
+    <t t-name="pos_bakery.CakeDialog">
+        <Dialog title="'New cake order'" size="'lg'" contentClass="'o_ps ps-dialog'">
+            <div class="ps-cust">
+                <div t-if="state.product" class="ps-cust-chosen">
+                    <span class="ps-cust-avatar"><i class="fa fa-birthday-cake" aria-hidden="true"/></span>
+                    <span class="ps-cust-text"><strong t-esc="state.product.name"/><small t-esc="props.money(state.product.incl)"/></span>
+                    <button type="button" class="ps-link" t-on-click="() => this.state.product = null">&#215;</button>
+                </div>
+                <t t-else="">
+                    <label class="ps-search ps-search--block">
+                        <i class="fa fa-birthday-cake" aria-hidden="true"/>
+                        <input type="search" placeholder="Which cake?" t-model="state.q"/>
+                    </label>
+                    <ul t-if="matches.length" class="ps-menu ps-menu--down">
+                        <li t-foreach="matches" t-as="p" t-key="p.id" t-on-mousedown.prevent="() => this.pickProduct(p)"><strong t-esc="p.name"/><small t-esc="props.money(p.incl)"/></li>
+                    </ul>
+                </t>
+            </div>
+            <div class="ps-grid-form" style="margin-top:.75rem">
+                <label class="ps-field"><span>Flavour</span><input type="text" class="ps-input" t-model="state.flavour" placeholder="Chocolate, vanilla…"/></label>
+                <label class="ps-field"><span>Weight</span><input type="text" class="ps-input" t-model="state.weight" placeholder="1 pound, 2 kg"/></label>
+                <label class="ps-field"><span>Delivery</span><input type="datetime-local" class="ps-input" t-model="state.delivery_at"/></label>
+                <label class="ps-field"><span>Message on the cake</span><input type="text" class="ps-input" t-model="state.message" placeholder="Happy Birthday Ayan"/></label>
+                <label class="ps-field"><span>Customer</span><input type="text" class="ps-input" t-model="state.customer_name"/></label>
+                <label class="ps-field"><span>Mobile</span><input type="tel" class="ps-input" t-model="state.phone"/></label>
+                <label class="ps-field"><span>Price</span><input type="number" min="0" class="ps-input" t-model="state.price_total"/></label>
+                <label class="ps-field"><span>Advance now</span><input type="number" min="0" class="ps-input" t-model="state.advance"/></label>
+            </div>
+            <label class="ps-field"><span>Design note</span><input type="text" class="ps-input" t-model="state.note" placeholder="Colours, photo, candles…"/></label>
+            <div t-if="state.error" class="ps-error" t-esc="state.error"/>
+            <t t-set-slot="footer">
+                <button type="button" class="ps-btn ps-btn--primary" t-att-disabled="state.busy" t-on-click="save"><i class="fa fa-check" aria-hidden="true"/> Save<t t-if="state.advance &gt; 0"> &amp; take the advance</t></button>
+                <button type="button" class="ps-btn" t-on-click="props.close">Cancel</button>
+            </t>
+        </Dialog>
+    </t>
+
+    <t t-name="pos_bakery.CakesDialog">
+        <Dialog title="'Cake orders'" size="'lg'" contentClass="'o_ps ps-dialog'">
+            <div t-if="state.loading" class="ps-skel" style="height:8rem"/>
+            <div t-elif="!state.rows.length" class="ps-pos-empty ps-pos-empty--inline">
+                <i class="fa fa-birthday-cake" aria-hidden="true"/><strong>No cake order to deliver</strong>
+            </div>
+            <ul t-else="" class="ps-list">
+                <li t-foreach="state.rows" t-as="r" t-key="r.id" class="ps-list-row">
+                    <span class="ps-list-main">
+                        <strong><t t-esc="r.delivery"/> · <t t-esc="r.product"/><t t-if="r.weight"> · <t t-esc="r.weight"/></t></strong>
+                        <small><t t-esc="r.name"/> · <t t-esc="r.customer"/> <t t-esc="r.phone"/><t t-if="r.message"> · “<t t-esc="r.message"/>”</t></small>
+                    </span>
+                    <span t-attf-class="ps-tag {{ r.state === 'ready' ? 'ps-tag--success' : (r.state === 'draft' ? 'ps-tag--warning' : 'ps-tag--info') }}" t-esc="r.state_label"/>
+                    <span class="ps-list-amount">Due <t t-esc="props.money(r.due)"/></span>
+                    <button t-if="r.state === 'draft' and r.advance" type="button" class="ps-btn ps-btn--sm" t-on-click="() => this.advance(r)">Take advance</button>
+                    <button t-if="r.state === 'confirmed'" type="button" class="ps-btn ps-btn--sm" t-on-click="() => this.setState(r, 'ready')">Ready</button>
+                    <button type="button" class="ps-btn ps-btn--sm ps-btn--primary" t-on-click="() => this.deliver(r)">Deliver</button>
+                </li>
+            </ul>
+            <t t-set-slot="footer">
+                <button type="button" class="ps-btn" t-on-click="props.close">Close</button>
+            </t>
+        </Dialog>
+    </t>
+
+    <t t-name="pos_bakery.Day">
+        <div class="o_ps ps-page">
+            <header class="ps-pos-head">
+                <div class="ps-pos-title">
+                    <h1>Bakery day</h1>
+                    <div class="ps-muted">Baked, sold, wasted and left, per product.</div>
+                </div>
+                <div class="ps-pos-actions">
+                    <select t-if="state.shops.length > 1" class="ps-input ps-input--auto" t-on-change="(ev) => this.setShop(ev.target.value)">
+                        <t t-foreach="state.shops" t-as="s" t-key="s.id"><option t-att-value="s.id" t-esc="s.name"/></t>
+                    </select>
+                    <input type="date" class="ps-input ps-input--auto" t-att-value="state.day" t-on-change="(ev) => this.setDay(ev.target.value)"/>
+                </div>
+            </header>
+            <div t-if="state.loading" class="ps-skel" style="height:20rem"/>
+            <div t-elif="!state.configId" class="ps-pos-empty ps-pos-empty--inline">
+                <i class="fa fa-birthday-cake" aria-hidden="true"/><strong>No bakery shop</strong>
+                <span>Turn on "Bakery counter" in a shop's Counter settings.</span>
+            </div>
+            <t t-else="">
+                <div class="ps-kpis">
+                    <div class="ps-kpi"><span>Baked</span><strong t-esc="state.data.totals.baked"/></div>
+                    <div class="ps-kpi"><span>Sold</span><strong t-esc="state.data.totals.sold"/></div>
+                    <div class="ps-kpi"><span>Wasted</span><strong t-esc="state.data.totals.wasted"/></div>
+                </div>
+                <section class="ps-panel">
+                    <table class="ps-table-list">
+                        <thead><tr><th>Product</th><th class="text-end">Baked</th><th class="text-end">Sold</th><th class="text-end">Wasted</th><th class="text-end">Left now</th></tr></thead>
+                        <tbody>
+                            <tr t-foreach="state.data.rows" t-as="r" t-key="r.id" t-att-class="{ 'is-warning': r.wasted > 0 }">
+                                <td t-esc="r.name"/>
+                                <td class="text-end" t-esc="r.baked"/>
+                                <td class="text-end" t-esc="r.sold"/>
+                                <td class="text-end" t-esc="r.wasted"/>
+                                <td class="text-end" t-esc="r.left === null ? '—' : r.left"/>
+                            </tr>
+                            <tr t-if="!state.data.rows.length"><td colspan="5" class="ps-muted">Nothing baked or sold this day.</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+            </t>
+        </div>
+    </t>
+</templates>

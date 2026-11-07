@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- counter: merchant number on wallet tenders, SMS receipt after payment -->
+    <t t-inherit="pos_modern.Menu" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('ps-hook-pay-tender')]" position="inside">
+            <div t-if="pm and pm.merchant" class="ps-note">
+                <i class="fa fa-mobile" aria-hidden="true"/> Send to <strong t-esc="pm.merchant"/>
+            </div>
+        </xpath>
+        <xpath expr="//div[hasclass('ps-hook-done-extra')]" position="inside">
+            <div t-if="features.sms and state.done.id" class="ps-row ps-row--tight ps-sms">
+                <input type="tel" class="ps-input" placeholder="Mobile for the SMS receipt"
+                       t-att-value="state.sms.phone or (state.done.receipt and state.done.receipt.customer ? state.done.receipt.customer.phone : '')"
+                       t-on-input="(ev) => this.state.sms.phone = ev.target.value"/>
+                <button type="button" class="ps-btn" t-att-disabled="state.sms.busy" t-on-click="sendSms">
+                    <i t-attf-class="fa {{ state.sms.sent === 'sent' ? 'fa-check' : 'fa-commenting-o' }}" aria-hidden="true"/> SMS
+                </button>
+            </div>
+        </xpath>
+    </t>
+
+    <!-- receipt: payer's number under the wallet payment -->
+    <t t-inherit="pos_modern.Receipt" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('ps-r-pay')]/div[1]" position="after">
+            <t t-foreach="r.payments" t-as="pp" t-key="'ph' + pp_index">
+                <div t-if="pp.phone" class="ps-r-sub"><span><t t-esc="pp.name"/> from</span><span t-esc="pp.phone"/></div>
+            </t>
+        </xpath>
+    </t>
+
+    <!-- X / Z report: wallets with what was verified -->
+    <t t-inherit="pos_modern.SessionReport" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('ps-r-hook-report')]" position="inside">
+            <t t-if="r.extra.wallets and r.extra.wallets.length">
+                <div class="ps-r-section">Mobile wallets</div>
+                <div class="ps-r-pay">
+                    <div t-foreach="r.extra.wallets" t-as="w" t-key="w.name"><span><t t-esc="w.name"/> (<t t-esc="w.count"/>)</span><span t-esc="money(w.amount)"/></div>
+                </div>
+            </t>
+        </xpath>
+    </t>
+    <t t-inherit="pos_modern.DayEndDialog" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('ps-hook-dayend-methods')]" position="inside">
+            <t t-if="r.extra.wallets and r.extra.wallets.length">
+                <h3>Mobile wallets (verified)</h3>
+                <table class="ps-table-list">
+                    <tbody>
+                        <tr t-foreach="r.extra.wallets" t-as="w" t-key="w.name" t-att-class="{ 'is-warning': w.verified &lt; w.amount }">
+                            <td><t t-esc="w.name"/> <small class="ps-muted">(<t t-esc="w.count"/>)</small></td>
+                            <td class="text-end"><t t-esc="money(w.verified)"/> / <t t-esc="money(w.amount)"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </t>
+        </xpath>
+    </t>
+
+    <!-- reconciliation page -->
+    <t t-name="pos_bd_payment.Reconcile">
+        <div class="o_ps ps-page">
+            <header class="ps-pos-head">
+                <div class="ps-pos-title">
+                    <h1>Wallet reconciliation</h1>
+                    <div class="ps-muted">bKash, Nagad, Rocket, Upay and card payments with their TrxID</div>
+                </div>
+                <div class="ps-pos-actions">
+                    <button type="button" class="ps-btn" t-on-click="() => this.state.showPaste = !state.showPaste"><i class="fa fa-paste" aria-hidden="true"/> Paste statement</button>
+                </div>
+            </header>
+            <t t-if="state.loading"><div class="ps-skel" style="height:20rem"/></t>
+            <t t-else="">
+                <t t-set="d" t-value="state.data"/>
+                <div class="ps-toolbar">
+                    <input type="date" class="ps-input ps-input--auto" t-att-value="state.filters.date_from" t-on-change="(ev) => this.setFilter('date_from', ev.target.value)" aria-label="From"/>
+                    <input type="date" class="ps-input ps-input--auto" t-att-value="state.filters.date_to" t-on-change="(ev) => this.setFilter('date_to', ev.target.value)" aria-label="To"/>
+                    <select class="ps-input ps-input--auto" t-on-change="(ev) => this.setFilter('config_id', ev.target.value)" aria-label="Shop">
+                        <option value="">All shops</option>
+                        <t t-foreach="d.shops" t-as="s" t-key="s.id"><option t-att-value="s.id" t-att-selected="s.id == state.filters.config_id" t-esc="s.name"/></t>
+                    </select>
+                    <select class="ps-input ps-input--auto" t-on-change="(ev) => this.setFilter('provider', ev.target.value)" aria-label="Provider">
+                        <option value="">All channels</option>
+                        <t t-foreach="d.providers" t-as="p" t-key="p.id"><option t-att-value="p.id" t-att-selected="p.id === state.filters.provider" t-esc="p.name"/></t>
+                    </select>
+                    <div class="ps-tabs">
+                        <button type="button" t-att-class="{ 'is-on': state.filters.state === 'all' }" t-on-click="() => this.setFilter('state', 'all')">All</button>
+                        <button type="button" t-att-class="{ 'is-on': state.filters.state === 'todo' }" t-on-click="() => this.setFilter('state', 'todo')">To check</button>
+                        <button type="button" t-att-class="{ 'is-on': state.filters.state === 'done' }" t-on-click="() => this.setFilter('state', 'done')">Verified</button>
+                    </div>
+                </div>
+                <div class="ps-kpis">
+                    <div class="ps-kpi"><span>Payments</span><strong t-esc="summary.count"/></div>
+                    <div class="ps-kpi"><span>Total</span><strong t-esc="money(summary.total)"/></div>
+                    <div class="ps-kpi"><span>Verified</span><strong t-esc="money(summary.verified)"/></div>
+                    <div class="ps-kpi"><span>To check</span><strong t-esc="money(summary.left)"/></div>
+                    <t t-foreach="d.totals" t-as="t" t-key="t.name">
+                        <div class="ps-kpi"><span><t t-esc="t.name"/> (<t t-esc="t.count"/>)</span><strong t-esc="money(t.amount)"/></div>
+                    </t>
+                </div>
+                <section t-if="state.showPaste" class="ps-panel" style="margin-bottom:1rem">
+                    <h3>Merchant statement</h3>
+                    <p class="ps-muted">Paste the statement (bKash / Nagad merchant portal, SMS list…). Every TrxID found is ticked.</p>
+                    <textarea class="ps-input" rows="6" t-model="state.statement" placeholder="9C4A7B2D1E  1,250.00&#10;8F3K2L9Q0P  560.00"/>
+                    <div class="ps-row"><button type="button" class="ps-btn ps-btn--primary" t-on-click="match">Tick the matching TrxIDs</button></div>
+                    <div t-if="state.unknown.length" class="ps-note ps-note--warning">
+                        In the statement but not in the POS: <t t-esc="state.unknown.join(', ')"/>
+                    </div>
+                </section>
+                <section class="ps-panel">
+                    <table class="ps-table-list">
+                        <thead><tr><th>Date</th><th>Order</th><th>Shop</th><th>Channel</th><th>TrxID</th><th>Payer</th><th class="text-end">Amount</th><th>Verified</th></tr></thead>
+                        <tbody>
+                            <tr t-foreach="d.rows" t-as="r" t-key="r.id" t-att-class="{ 'is-warning': !r.verified }">
+                                <td t-esc="r.date"/>
+                                <td><a href="#" t-on-click.prevent="() => this.openOrder(r)" t-esc="r.order"/></td>
+                                <td t-esc="r.shop"/>
+                                <td t-esc="r.method"/>
+                                <td><code t-esc="r.trx or '—'"/></td>
+                                <td t-esc="r.phone"/>
+                                <td class="text-end" t-esc="money(r.amount)"/>
+                                <td><button type="button" t-attf-class="ps-chip {{ r.verified ? 'is-on' : '' }}" t-on-click="() => this.toggle(r)">
+                                    <i t-attf-class="fa {{ r.verified ? 'fa-check-square-o' : 'fa-square-o' }}" aria-hidden="true"/></button></td>
+                            </tr>
+                            <tr t-if="!d.rows.length"><td colspan="8" class="ps-muted">No wallet or card payment for these days.</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+            </t>
+        </div>
+    </t>
+</templates>

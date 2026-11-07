@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pos_config_counter_form_clothes" model="ir.ui.view">
+        <field name="name">pos.config.counter.form.clothes</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="pos_modern.pos_config_counter_form"/>
+        <field name="arch" type="xml">
+            <div name="pm_addons" position="inside">
+                <group string="Clothing" name="clothes">
+                    <field name="cl_clothes"/>
+                    <field name="cl_care_default" invisible="not cl_clothes"/>
+                    <div colspan="2" class="text-muted" invisible="not cl_clothes">
+                        Use 58 × 40 mm barcode labels for hand tags. Sizes and colours are the product's attributes (variants).
+                    </div>
+                </group>
+            </div>
+        </field>
+    </record>
+
+    <record id="product_template_clothes_list" model="ir.ui.view">
+        <field name="name">product.template.list.clothes</field>
+        <field name="model">product.template</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <list string="Styles" editable="bottom" create="0">
+                <field name="name" readonly="1"/>
+                <field name="product_variant_count" string="Variants" readonly="1"/>
+                <field name="cl_fabric"/>
+                <field name="cl_season"/>
+                <field name="cl_care"/>
+                <field name="list_price"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_styles" model="ir.actions.act_window">
+        <field name="name">Styles (care &amp; fabric)</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="product_template_clothes_list"/>
+        <field name="domain">[('available_in_pos', '=', True)]</field>
+        <!-- rows open in the modern drawer (pos_clothes/static/src/js/drawer_forms.js) -->
+        <field name="context">{'modern_drawer': 'style'}</field>
+    </record>
+    <record id="action_size_report" model="ir.actions.client">
+        <field name="name">Sizes report</field>
+        <field name="tag">pos_clothes.sizes</field>
+        <field name="path">pos-sizes</field>
+    </record>
+    <menuitem id="menu_size_report" name="Sizes report" parent="pos_modern.menu_more" action="action_size_report" sequence="60"/>
+    <menuitem id="menu_styles" name="Styles (care &amp; fabric)" parent="pos_modern.menu_more" action="action_styles" sequence="61"/>
+</odoo>

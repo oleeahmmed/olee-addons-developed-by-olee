@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pos_config_counter_form_pharmacy" model="ir.ui.view">
+        <field name="name">pos.config.counter.form.pharmacy</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="pos_modern.pos_config_counter_form"/>
+        <field name="arch" type="xml">
+            <div name="pm_addons" position="inside">
+                <group string="Pharmacy" name="pharmacy">
+                    <field name="ph_pharmacy"/>
+                    <field name="ph_fefo" invisible="not ph_pharmacy"/>
+                    <field name="ph_block_expired" invisible="not ph_pharmacy"/>
+                    <field name="ph_expiry_warn_days" invisible="not ph_pharmacy"/>
+                    <field name="ph_rx_mandatory" invisible="not ph_pharmacy"/>
+                </group>
+            </div>
+        </field>
+    </record>
+
+    <!-- Medicines: a standalone editable list (no xpath into Odoo's product form) -->
+    <record id="product_template_medicine_list" model="ir.ui.view">
+        <field name="name">product.template.list.pharmacy</field>
+        <field name="model">product.template</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <list string="Medicines" editable="bottom">
+                <field name="name"/>
+                <field name="ph_generic_name"/>
+                <field name="ph_strength"/>
+                <field name="ph_dosage_form"/>
+                <field name="ph_manufacturer" optional="show"/>
+                <field name="ph_rx_required"/>
+                <field name="ph_strip_size"/>
+                <field name="ph_box_size"/>
+                <field name="ph_rack" optional="show"/>
+                <field name="list_price" string="Price / piece"/>
+                <field name="barcode" optional="hide"/>
+                <field name="tracking" optional="show"/>
+                <field name="ph_is_medicine" column_invisible="True"/>
+                <field name="available_in_pos" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+    <record id="product_template_medicine_search" model="ir.ui.view">
+        <field name="name">product.template.search.pharmacy</field>
+        <field name="model">product.template</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <search string="Medicines">
+                <field name="name" filter_domain="['|', '|', ('name', 'ilike', self), ('ph_generic_name', 'ilike', self), ('default_code', 'ilike', self)]"/>
+                <field name="ph_generic_name"/>
+                <field name="ph_manufacturer"/>
+                <filter name="rx" string="Prescription required" domain="[('ph_rx_required', '=', True)]"/>
+                <group>
+                    <filter name="by_generic" string="Generic name" context="{'group_by': 'ph_generic_name'}"/>
+                    <filter name="by_maker" string="Manufacturer" context="{'group_by': 'ph_manufacturer'}"/>
+                    <filter name="by_form" string="Dosage form" context="{'group_by': 'ph_dosage_form'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_medicines" model="ir.actions.act_window">
+        <field name="name">Medicines</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0), (0, 0, {'view_mode': 'list', 'view_id': ref('product_template_medicine_list')})]"/>
+        <field name="search_view_id" ref="product_template_medicine_search"/>
+        <field name="domain">[('ph_is_medicine', '=', True)]</field>
+        <field name="context">{'modern_drawer': 'medicine', 'default_ph_is_medicine': True, 'default_available_in_pos': True, 'default_is_storable': True, 'default_tracking': 'lot', 'default_use_expiration_date': True}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Add your first medicine</p>
+            <p>Brand, generic name, strength, pieces per strip and strips per box. Batches and expiry dates come with the purchase receipts.</p>
+        </field>
+    </record>
+
+    <record id="action_expiry" model="ir.actions.client">
+        <field name="name">Near expiry</field>
+        <field name="tag">pos_pharmacy.expiry</field>
+        <field name="path">pos-near-expiry</field>
+    </record>
+</odoo>

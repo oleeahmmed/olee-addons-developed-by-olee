@@ -16,7 +16,7 @@ employee, department and job forms (with the chatter), with a modern look.
   Modern Attendances (attendance_modern) install by themselves when Odoo's Time Off /
   Attendances apps are installed, and give those apps the same look and a simple sidebar.
     """,
-    'version': '19.0.3.1.0',
+    'version': '19.0.3.1.1',
     'category': 'Human Resources/Employees',
     'author': 'Olee',
     'license': 'LGPL-3',
@@ -27,10 +27,6 @@ employee, department and job forms (with the chatter), with a modern look.
     ],
     'assets': {
         'web.assets_backend': [
-            'employee_modern/static/src/scss/app.scss',
-            'employee_modern/static/src/scss/hr_views.scss',
-            'employee_modern/static/src/scss/hr_forms.scss',
-            'employee_modern/static/src/scss/drawer.scss',
             # listed one by one, so files left over from an older version never load
             'employee_modern/static/src/js/sidebar/sidebar.js',
             'employee_modern/static/src/js/drawer/record_drawer.js',
@@ -42,9 +38,6 @@ employee, department and job forms (with the chatter), with a modern look.
             'employee_modern/static/src/xml/dashboard.xml',
             'employee_modern/static/src/xml/time_base.xml',
             'employee_modern/static/src/xml/record_drawer.xml',
-        ],
-        'web.assets_web_dark': [
-            'employee_modern/static/src/scss/app.dark.scss',
         ],
     },
     'installable': True,

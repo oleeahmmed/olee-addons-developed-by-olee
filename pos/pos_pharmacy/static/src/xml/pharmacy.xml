@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-inherit="pos_modern.Menu" t-inherit-mode="extension">
+        <!-- generic name, strength, rack and nearest expiry on the card -->
+        <xpath expr="//span[hasclass('ps-hook-prod-meta')]" position="inside">
+            <t t-if="features.pharmacy and p.generic">
+                <span class="ps-prod-meta"><t t-esc="p.generic"/><t t-if="p.strength"> · <t t-esc="p.strength"/></t></span>
+                <span class="ps-prod-meta">
+                    <span t-if="p.rx" class="ps-tag ps-tag--danger">Rx</span>
+                    <span t-if="p.expiry" t-attf-class="ps-tag {{ p.expiry_state === 'ok' ? '' : (p.expiry_state === 'soon' ? 'ps-tag--warning' : 'ps-tag--danger') }}">exp. <t t-esc="p.expiry"/></span>
+                    <span t-if="p.rack" class="ps-tag">Rack <t t-esc="p.rack"/></span>
+                </span>
+            </t>
+        </xpath>
+        <!-- prescription -->
+        <xpath expr="//div[hasclass('ps-hook-cart-foot')]" position="inside">
+            <div t-if="rxNeeded" class="ps-cart-block">
+                <strong><i class="fa fa-file-text-o" aria-hidden="true"/> Prescription</strong>
+                <div class="ps-row ps-row--tight">
+                    <input type="text" class="ps-input" placeholder="Doctor" t-model="state.rx.doctor"/>
+                    <input type="text" class="ps-input" placeholder="Patient" t-model="state.rx.patient"/>
+                </div>
+                <div class="ps-row ps-row--tight">
+                    <input type="text" class="ps-input" placeholder="Age" t-model="state.rx.age"/>
+                    <input type="text" class="ps-input" placeholder="Rx no." t-model="state.rx.ref"/>
+                </div>
+            </div>
+        </xpath>
+    </t>
+
+    <t t-inherit="pos_modern.Receipt" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('ps-r-hook-line')]" position="inside">
+            <div t-if="l.generic" class="ps-r-sub" t-esc="l.generic"/>
+        </xpath>
+        <xpath expr="//div[hasclass('ps-r-hook-meta')]" position="inside">
+            <t t-if="r.extra.rx">
+                <div><span>Doctor</span><span t-esc="r.extra.rx.doctor"/></div>
+                <div><span>Patient</span><span><t t-esc="r.extra.rx.patient"/><t t-if="r.extra.rx.age"> (<t t-esc="r.extra.rx.age"/>)</t></span></div>
+                <div t-if="r.extra.rx.ref"><span>Rx no.</span><span t-esc="r.extra.rx.ref"/></div>
+            </t>
+        </xpath>
+    </t>
+
+    <t t-name="pos_pharmacy.UnitDialog">
+        <Dialog title="props.product.name" size="'md'" contentClass="'o_ps ps-dialog'">
+            <p class="ps-muted"><t t-esc="props.product.generic"/><t t-if="props.product.strength"> · <t t-esc="props.product.strength"/></t></p>
+            <div class="ps-choices">
+                <t t-foreach="units" t-as="u" t-key="u.id">
+                    <button type="button" class="ps-choice" t-att-class="{ 'is-on': state.unit === u.id }" t-on-click="() => this.state.unit = u.id">
+                        <strong t-esc="u.label"/>
+                        <small t-esc="props.price(props.product.incl * u.pieces)"/>
+                    </button>
+                </t>
+            </div>
+            <div class="ps-row" style="margin-top:1rem">
+                <span class="ps-step">
+                    <button type="button" t-on-click="() => this.step(-1)">−</button>
+                    <span t-esc="state.count"/>
+                    <button type="button" t-on-click="() => this.step(1)">+</button>
+                </span>
+                <span class="ps-muted"><t t-esc="pieces"/> pieces · <strong t-esc="props.price(props.product.incl * pieces)"/></span>
+            </div>
+            <t t-set-slot="footer">
+                <button type="button" class="ps-btn ps-btn--primary" t-on-click="ok"><i class="fa fa-cart-plus" aria-hidden="true"/> Add</button>
+                <button type="button" class="ps-btn" t-on-click="props.close">Cancel</button>
+            </t>
+        </Dialog>
+    </t>
+
+    <t t-name="pos_pharmacy.Expiry">
+        <div class="o_ps ps-page">
+            <header class="ps-pos-head">
+                <div class="ps-pos-title">
+                    <h1>Near expiry</h1>
+                    <div class="ps-muted">Batches in the pharmacy's stock expiring soon: return them to the supplier or sell them first.</div>
+                </div>
+            </header>
+            <div class="ps-toolbar">
+                <div class="ps-tabs">
+                    <t t-foreach="[30, 60, 90, 180]" t-as="d" t-key="d">
+                        <button type="button" t-att-class="{ 'is-on': state.days === d }" t-on-click="() => this.setDays(d)"><t t-esc="d"/> days</button>
+                    </t>
+                </div>
+                <select t-if="state.data and state.data.shops.length > 1" class="ps-input ps-input--auto" t-on-change="(ev) => this.setShop(ev.target.value)">
+                    <option value="">All pharmacies</option>
+                    <t t-foreach="state.data.shops" t-as="s" t-key="s.id"><option t-att-value="s.id" t-esc="s.name"/></t>
+                </select>
+            </div>
+            <div t-if="state.loading" class="ps-skel" style="height:20rem"/>
+            <t t-else="">
+                <div class="ps-kpis">
+                    <div class="ps-kpi"><span>Batches</span><strong t-esc="state.data.rows.length"/></div>
+                    <div class="ps-kpi"><span>Already expired</span><strong t-esc="state.data.expired"/></div>
+                    <div class="ps-kpi"><span>Stock value</span><strong t-esc="money(state.data.value)"/></div>
+                </div>
+                <section class="ps-panel">
+                    <table class="ps-table-list">
+                        <thead><tr><th>Expiry</th><th>Days</th><th>Medicine</th><th>Generic</th><th>Batch</th><th>Rack</th><th class="text-end">Qty</th></tr></thead>
+                        <tbody>
+                            <tr t-foreach="state.data.rows" t-as="r" t-key="r.lot + r_index" t-att-class="rowClass(r)">
+                                <td t-esc="r.expiry"/>
+                                <td><span t-attf-class="ps-tag {{ r.days &lt; 0 ? 'ps-tag--danger' : (r.days &lt;= 30 ? 'ps-tag--warning' : '') }}" t-esc="r.days &lt; 0 ? 'expired' : r.days"/></td>
+                                <td t-esc="r.product"/>
+                                <td t-esc="r.generic"/>
+                                <td><code t-esc="r.lot"/></td>
+                                <td t-esc="r.rack"/>
+                                <td class="text-end"><t t-esc="r.qty"/> <t t-esc="r.uom"/></td>
+                            </tr>
+                            <tr t-if="!state.data.rows.length"><td colspan="7" class="ps-muted">Nothing expires in the next <t t-esc="state.days"/> days.</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+            </t>
+        </div>
+    </t>
+</templates>

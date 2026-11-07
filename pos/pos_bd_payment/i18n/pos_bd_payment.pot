@@ -1,0 +1,784 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pos_bd_payment
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-06 23:37+0000\n"
+"PO-Revision-Date: 2026-11-06 23:37+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: pos_bd_payment
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos_bd_payment/models/pos_config.py:0
+msgid "%(methods)s added to %(shop)s."
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos_bd_payment/models/pos_config.py:0
+msgid "%s TrxID"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/sms.py:0
+#: code:addons/pos_bd_payment/models/sms.py:0
+msgid "%s is not a Bangladeshi mobile number."
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/js/reconcile.js:0
+#: code:addons/pos_bd_payment/static/src/js/reconcile.js:0
+msgid "%s payment(s) ticked from the statement."
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid ""
+"9C4A7B2D1E  1,250.00\n"
+"8F3K2L9Q0P  560.00"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_res_company__bd_sms_api_key
+msgid "API key / token"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "All"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "All channels"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "All shops"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Amount"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment_method__bd_needs_trx
+msgid "Ask the TrxID"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment_method__bd_needs_phone
+msgid "Ask the payer's number"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__attempts
+msgid "Attempts"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment__bd_provider
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment_method__bd_provider
+msgid "BD provider"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_config_counter_form_bd
+msgid "Bangladesh payments"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_payment_method__bd_provider__bank
+msgid "Bank transfer"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__res_company__bd_sms_provider__bulksmsbd
+msgid "BulkSMSBD"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_payment_method__bd_provider__card
+msgid "Card (POS terminal)"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Channel"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/sms.py:0
+#: code:addons/pos_bd_payment/models/sms.py:0
+msgid ""
+"Choose an SMS gateway first (Point of Sale ▸ Configuration ▸ SMS gateway)."
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos_bd_payment/models/pos_config.py:0
+msgid "Close the session of %s before changing its payment methods."
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model,name:pos_bd_payment.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__company_id
+msgid "Company"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__res_company__bd_sms_provider__custom
+msgid "Custom HTTP gateway"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_res_company__bd_sms_url
+msgid "Custom URL"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__partner_id
+msgid "Customer"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_bd_sms_list
+msgid "Date"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__display_name
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_config__display_name
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_order__display_name
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment__display_name
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment_method__display_name
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_session__display_name
+#: model:ir.model.fields,field_description:pos_bd_payment.field_res_company__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_bd_sms__state__error
+msgid "Error"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,help:pos_bd_payment.field_pos_payment__bd_verified
+msgid "Found in the wallet / bank statement."
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "From"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,help:pos_bd_payment.field_res_company__bd_sms_url
+msgid "GET URL with placeholders {to} {message} {api_key} {sender}."
+msgstr ""
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.res_company_sms_form
+msgid "Gateway"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__response
+msgid "Gateway answer"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__id
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_config__id
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_order__id
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment__id
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment_method__id
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_session__id
+#: model:ir.model.fields,field_description:pos_bd_payment.field_res_company__id
+msgid "ID"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "In the statement but not in the POS:"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,help:pos_bd_payment.field_res_company__bd_sms_sender
+msgid "Masking name or SID given by the gateway."
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment_method__bd_merchant_number
+msgid "Merchant / agent number"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Merchant statement"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__body
+msgid "Message"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Mobile for the SMS receipt"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment_method__bd_is_wallet
+msgid "Mobile wallet"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,help:pos_bd_payment.field_pos_payment__bd_provider
+#: model:ir.model.fields,help:pos_bd_payment.field_pos_payment_method__bd_provider
+msgid "Mobile wallet or channel of this payment method (Bangladesh)."
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Mobile wallets"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Mobile wallets (verified)"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos_bd_payment/models/pos_config.py:0
+msgid "Mobile wallets ready"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_payment_method__bd_provider__nagad
+msgid "Nagad"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__res_company__bd_sms_provider__none
+msgid "No SMS"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/sms.py:0
+#: code:addons/pos_bd_payment/models/sms.py:0
+msgid "No SMS gateway configured."
+msgstr ""
+
+#. module: pos_bd_payment
+#: model_terms:ir.actions.act_window,help:pos_bd_payment.action_bd_payment_methods
+msgid "No payment method yet"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "No wallet or card payment for these days."
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,help:pos_bd_payment.field_res_company__bd_sms_auto
+msgid "Only when the customer has a mobile number."
+msgstr ""
+
+#. module: pos_bd_payment
+#: model_terms:ir.actions.act_window,help:pos_bd_payment.action_bd_payment_methods
+msgid ""
+"Open a shop's Counter settings and click \"Set up BD wallets\" to create "
+"bKash, Nagad, Rocket and Upay."
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__order_id
+msgid "Order"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_payment_method__bd_provider__other
+msgid "Other"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.actions.server,name:pos_bd_payment.cron_send_sms_ir_actions_server
+msgid "POS: send queued SMS receipts"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Paste statement"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid ""
+"Paste the statement (bKash / Nagad merchant portal, SMS list…). Every TrxID "
+"found is ticked."
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Payer"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment__bd_payer_phone
+msgid "Payer's number"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment__transaction_id
+msgid "Payment Transaction ID"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_config_counter_form_bd
+msgid "Payment methods"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.actions.act_window,name:pos_bd_payment.action_bd_payment_methods
+#: model:ir.ui.menu,name:pos_bd_payment.menu_bd_payment_methods
+msgid "Payment methods (BD)"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_payment_method_bd_list
+msgid "Payment methods (Bangladesh)"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Payments"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,help:pos_bd_payment.field_res_company__bd_sms_template
+msgid "Placeholders: {shop} {ref} {total} {date} {customer} {extra}"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model,name:pos_bd_payment.model_pos_config
+msgid "Point of Sale Configuration"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model,name:pos_bd_payment.model_pos_order
+msgid "Point of Sale Orders"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model,name:pos_bd_payment.model_pos_payment_method
+msgid "Point of Sale Payment Methods"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model,name:pos_bd_payment.model_pos_payment
+msgid "Point of Sale Payments"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model,name:pos_bd_payment.model_pos_session
+msgid "Point of Sale Session"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Provider"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_bd_sms__state__queued
+msgid "Queued"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_res_company__bd_sms_template
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.res_company_sms_form
+msgid "Receipt SMS"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,help:pos_bd_payment.field_pos_payment_method__bd_trx_pattern
+msgid ""
+"Regular expression the TrxID must match (upper case letters and digits). "
+"Leave empty to accept anything."
+msgstr ""
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_bd_sms_form
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_bd_sms_list
+msgid "Retry"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_payment_method__bd_provider__rocket
+msgid "Rocket (DBBL)"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_order__bd_sms_ids
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_bd_sms_form
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_bd_sms_list
+msgid "SMS"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/js/drawer_forms.js:0
+#: code:addons/pos_bd_payment/static/src/js/drawer_forms.js:0
+#: model:ir.actions.client,name:pos_bd_payment.action_sms_page
+#: model:ir.actions.server,name:pos_bd_payment.action_sms_settings
+#: model:ir.model.fields,field_description:pos_bd_payment.field_res_company__bd_sms_provider
+#: model:ir.ui.menu,name:pos_bd_payment.menu_sms_settings
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_config_counter_form_bd
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.res_company_sms_form
+msgid "SMS gateway"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.actions.act_window,name:pos_bd_payment.action_sms_log
+#: model:ir.ui.menu,name:pos_bd_payment.menu_sms_log
+msgid "SMS log"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/js/counter_patch.js:0
+#: code:addons/pos_bd_payment/static/src/js/counter_patch.js:0
+msgid "SMS queued for %s"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model,name:pos_bd_payment.model_pos_bd_sms
+msgid "SMS sent from the POS"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/js/counter_patch.js:0
+#: code:addons/pos_bd_payment/static/src/js/counter_patch.js:0
+msgid "SMS sent to %s"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__res_company__bd_sms_provider__sslwireless
+msgid "SSL Wireless (SMS Plus)"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_bd_sms_form
+msgid "Send now"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_res_company__bd_sms_auto
+msgid "Send the receipt by SMS after each sale"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Send to"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_res_company__bd_sms_sender
+msgid "Sender ID / SID"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_bd_sms__state__sent
+msgid "Sent"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__sent_at
+msgid "Sent on"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_config_counter_form_bd
+msgid "Set up BD wallets"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Shop"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,help:pos_bd_payment.field_pos_payment_method__bd_merchant_number
+msgid "Shown to the cashier: the number the customer sends money to."
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__state
+msgid "State"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_payment_method__bd_provider__tap
+msgid "TAP"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos/pos_bd_payment/static/src/js/counter_patch.js:0
+#: code:addons/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos_bd_payment/static/src/js/counter_patch.js:0
+msgid "The TrxID %s is typed twice."
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,help:pos_bd_payment.field_pos_payment_method__bd_needs_trx
+msgid ""
+"The cashier types the transaction ID of the payment (wallets, card slip)."
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Tick the matching TrxIDs"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__to
+msgid "To"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "To check"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_payment_bd_list
+msgid "Total"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos_bd_payment/models/pos_config.py:0
+msgid "Transaction / slip no."
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_payment_bd_list
+msgid "TrxID"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos_bd_payment/models/pos_config.py:0
+msgid "TrxID %(ref)s was already used on %(order)s (%(date)s)."
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment_method__bd_trx_pattern
+msgid "TrxID format"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos/pos_bd_payment/static/src/js/counter_patch.js:0
+#: code:addons/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos_bd_payment/static/src/js/counter_patch.js:0
+msgid "Type the TrxID of the %s payment."
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_payment_method__bd_provider__upay
+msgid "Upay"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment__bd_verified
+msgid "Verified"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment__bd_verified_by
+msgid "Verified by"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment__bd_verified_at
+msgid "Verified on"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_payment_bd_list
+msgid "Wallet payments"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: model:ir.actions.client,name:pos_bd_payment.action_reconcile
+#: model:ir.ui.menu,name:pos_bd_payment.menu_reconcile
+msgid "Wallet reconciliation"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_payment_method__bd_provider__bkash
+msgid "bKash"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_config_counter_form_bd
+msgid ""
+"bKash, Nagad, Rocket and Upay as separate tenders with their own journal, "
+"the TrxID asked at the counter."
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "bKash, Nagad, Rocket, Upay and card payments with their TrxID"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "from"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.res_company_sms_form
+msgid ""
+"https://api.example.com/send?key={api_key}&to={to}&from={sender}&text={message}"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.res_company_sms_form
+msgid "{shop} {ref} {total} {date} {customer} {extra}"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos/pos_bd_payment/static/src/js/counter_patch.js:0
+#: code:addons/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos_bd_payment/static/src/js/counter_patch.js:0
+msgid "“%(ref)s” is not a valid %(method)s TrxID."
+msgstr ""

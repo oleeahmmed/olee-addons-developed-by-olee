@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_expiry" name="Near expiry" parent="pos_modern.menu_more" action="action_expiry" sequence="30"/>
+    <menuitem id="menu_medicines" name="Medicines" parent="pos_modern.menu_more" action="action_medicines" sequence="31"/>
+</odoo>

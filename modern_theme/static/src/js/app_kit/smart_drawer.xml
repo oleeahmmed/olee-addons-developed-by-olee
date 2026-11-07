@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Right-side sheet, same markup as Modern CRM's drawer (styles: scss/sheet.scss) -->
+    <t t-name="modern_theme.MtDrawer">
+        <Dialog title="props.title" size="'md'" contentClass="'o_or_sheet o_mt_drawer'" bodyClass="'or-sheet-body'" header="false">
+            <aside class="or-sheet-rail" aria-label="Drawer actions">
+                <button type="button" class="or-sheet-rail-btn" t-att-title="newLabel" t-att-aria-label="newLabel" t-on-click.stop="onNew">
+                    <i class="fa fa-plus" aria-hidden="true"/>
+                </button>
+                <button type="button" class="or-sheet-rail-btn" aria-label="Close" title="Close" t-on-click.stop="close">
+                    <span class="or-sheet-close-icon" aria-hidden="true">&#215;</span>
+                </button>
+                <button t-if="props.onOpenFull" type="button" class="or-sheet-rail-btn mt-rail-full" t-att-title="fullLabel"
+                        t-att-aria-label="fullLabel" t-on-click.stop="openFull">
+                    <i class="fa fa-external-link" aria-hidden="true"/>
+                </button>
+            </aside>
+            <div class="or-sheet-main">
+                <div class="or-sheet-head">
+                    <div class="or-sheet-head-text">
+                        <h2 class="or-sheet-title" t-esc="props.title"/>
+                        <p t-if="props.subtitle" class="or-sheet-subtitle" t-esc="props.subtitle"/>
+                        <div t-if="props.slots and props.slots.actions" class="or-sheet-actions">
+                            <t t-slot="actions"/>
+                        </div>
+                    </div>
+                    <button type="button" class="or-sheet-close" aria-label="Close" title="Close" t-on-click.stop="close">
+                        <span class="or-sheet-close-icon" aria-hidden="true">&#215;</span>
+                    </button>
+                </div>
+                <div class="or-sheet-stack">
+                    <t t-slot="default"/>
+                </div>
+            </div>
+            <t t-set-slot="footer">
+                <t t-slot="footer"/>
+            </t>
+        </Dialog>
+    </t>
+
+    <t t-name="modern_theme.MtPicker">
+        <div class="mt-picker" t-att-class="{ 'is-disabled': props.disabled }">
+            <i class="fa fa-search mt-picker-icon" aria-hidden="true"/>
+            <input t-att-id="props.id" type="text" class="or-input mt-picker-input" autocomplete="off"
+                   t-att-placeholder="label or props.placeholder" t-att-value="state.editing ? state.q : label"
+                   t-att-disabled="props.disabled"
+                   role="combobox" t-att-aria-expanded="state.open ? 'true' : 'false'"
+                   t-on-input="onInput" t-on-focus="onFocus" t-on-blur="onBlur" t-on-keydown="onKeydown"/>
+            <button t-if="props.allowEmpty and props.value and !props.disabled" type="button" class="mt-picker-clear" title="Clear" aria-label="Clear"
+                    t-on-mousedown.prevent="noop" t-on-click="clear">&#215;</button>
+            <ul t-if="state.open and (options.length or !state.loading)" class="or-menu mt-picker-menu" role="listbox">
+                <t t-foreach="options" t-as="r" t-key="r[0] + '_' + r_index">
+                    <li role="option" class="or-menu-item" t-att-aria-selected="r_index === state.active ? 'true' : 'false'"
+                        t-att-class="{ 'is-active': r_index === state.active, 'mt-picker-create': !r[0] }"
+                        t-on-mousedown.prevent="noop" t-on-click="() => this.pick(r)">
+                        <i t-if="!r[0]" class="fa fa-plus" aria-hidden="true"/><span t-esc="r[1]"/>
+                    </li>
+                </t>
+                <li t-if="!options.length" class="mt-picker-empty">No match</li>
+            </ul>
+        </div>
+    </t>
+
+    <!-- One field of a description: label, control, hint -->
+    <t t-name="modern_theme.SmartField">
+        <div class="or-field mt-sd-field" t-att-class="{ 'is-readonly': f.readonly }">
+            <t t-if="f.widget === 'toggle'">
+                <div class="mt-sd-toggle" t-att-class="{ 'is-on': state.values[f.name] }">
+                    <span class="mt-sd-toggle-label" t-esc="f.label"/>
+                    <button type="button" role="switch" class="or-toggle" t-att-id="f.id" t-att-aria-label="f.label"
+                            t-att-aria-checked="state.values[f.name] ? 'true' : 'false'" t-att-disabled="f.readonly"
+                            t-on-click="() => this.toggle(f.name)"/>
+                </div>
+            </t>
+            <t t-else="">
+                <label class="or-label" t-att-for="f.id"><t t-esc="f.label"/><span t-if="f.required and !f.readonly" class="mt-sd-req" aria-hidden="true">*</span></label>
+
+                <input t-if="f.widget === 'char'" t-att-id="f.id" t-att-type="f.password ? 'password' : 'text'" autocomplete="off" class="or-input" t-att-value="state.values[f.name]"
+                       t-att-placeholder="f.placeholder or ''" t-att-disabled="f.readonly"
+                       t-on-input="(ev) => this.onInput(f.name, ev)"/>
+
+                <input t-elif="f.widget === 'number'" t-att-id="f.id" type="number" class="or-input" t-att-value="state.values[f.name]"
+                       t-att-step="f.step or (f.meta.type === 'integer' ? '1' : 'any')" t-att-min="f.min"
+                       t-att-placeholder="f.placeholder or '0'" t-att-disabled="f.readonly"
+                       t-on-input="(ev) => this.onInput(f.name, ev)"/>
+
+                <input t-elif="f.widget === 'date'" t-att-id="f.id" type="date" class="or-input" t-att-value="state.values[f.name]"
+                       t-att-disabled="f.readonly" t-on-input="(ev) => this.onInput(f.name, ev)"/>
+
+                <input t-elif="f.widget === 'datetime'" t-att-id="f.id" type="datetime-local" class="or-input" t-att-value="state.values[f.name]"
+                       t-att-disabled="f.readonly" t-on-input="(ev) => this.onInput(f.name, ev)"/>
+
+                <textarea t-elif="f.widget === 'textarea'" t-att-id="f.id" class="or-textarea" t-att-rows="f.rows or 3"
+                          t-att-value="state.values[f.name]" t-att-placeholder="f.placeholder or ''" t-att-disabled="f.readonly"
+                          t-on-input="(ev) => this.onInput(f.name, ev)"/>
+
+                <div t-elif="f.widget === 'hexcolor'" class="mt-sd-hexcolor">
+                    <input type="color" class="mt-sd-hexcolor-swatch" t-att-aria-label="f.label" t-att-disabled="f.readonly"
+                           t-att-value="state.values[f.name] or '#000000'" t-on-input="(ev) => this.onInput(f.name, ev)"/>
+                    <input t-att-id="f.id" type="text" class="or-input" t-att-value="state.values[f.name]" placeholder="#3b82f6"
+                           t-att-disabled="f.readonly" t-on-input="(ev) => this.onInput(f.name, ev)"/>
+                </div>
+
+                <div t-elif="f.widget === 'color'" class="mt-sd-color">
+                    <button type="button" t-att-id="f.id" class="or-input mt-sd-color-btn" t-att-disabled="f.readonly"
+                            t-att-aria-expanded="state.colorOpen === f.name ? 'true' : 'false'"
+                            t-on-click="() => this.toggleColors(f.name)">
+                        <span t-attf-class="mt-sd-swatch o_colorlist_item_color_{{ state.values[f.name] or 0 }}"/>
+                        <i class="fa fa-angle-down ms-auto" aria-hidden="true"/>
+                    </button>
+                    <div t-if="state.colorOpen === f.name" class="mt-sd-color-menu" role="radiogroup" t-att-aria-label="f.label">
+                        <t t-foreach="colors" t-as="c" t-key="c">
+                            <button type="button" role="radio" t-att-aria-checked="state.values[f.name] === c ? 'true' : 'false'"
+                                    t-attf-class="or-color-dot o_colorlist_item_color_{{ c }} {{ state.values[f.name] === c ? 'is-on' : '' }}"
+                                    t-on-click="() => this.pickColor(f.name, c)" t-att-title="'Colour ' + c"/>
+                        </t>
+                    </div>
+                </div>
+
+                <div t-elif="f.widget === 'chips' and f.meta.type === 'selection'" class="or-sheet-chips mt-sd-chips" role="radiogroup" t-att-aria-label="f.label">
+                    <t t-foreach="f.options" t-as="o" t-key="o.id">
+                        <button type="button" role="radio" class="or-chip" t-att-class="{ 'is-on': state.values[f.name] === o.id }"
+                                t-att-aria-checked="state.values[f.name] === o.id ? 'true' : 'false'" t-att-disabled="f.readonly"
+                                t-on-click="() => this.set(f.name, o.id)" t-esc="o.title"/>
+                    </t>
+                    <button t-if="!f.required and state.values[f.name] and !f.readonly" type="button" class="or-chip mt-sd-chip-clear"
+                            t-on-click="() => this.set(f.name, false)" title="Clear">&#215;</button>
+                </div>
+
+                <OrSelectCard t-elif="f.widget === 'cards'" id="f.id" value="state.values[f.name]" options="f.options"
+                              placeholder="f.placeholder" allowEmpty="!f.required"
+                              onChange="(id) => this.set(f.name, id || false)"/>
+
+                <MtPicker t-elif="f.widget === 'many2one'" id="f.id" resModel="f.meta.relation" domain="domainOf(f)"
+                          context="f.context or {}" value="state.values[f.name]" placeholder="f.placeholder or ''"
+                          allowEmpty="!f.required" canCreate="!!f.create" disabled="f.readonly"
+                          onSelect="(v) => this.set(f.name, v || false)"/>
+
+                <div t-elif="f.widget === 'chips' and f.meta.type === 'many2many'" class="or-sheet-chips mt-sd-chips" role="group" t-att-aria-label="f.label">
+                    <t t-foreach="choicesOf(f)" t-as="o" t-key="o.id">
+                        <button type="button" class="or-chip" t-att-class="{ 'is-on': hasTag(f.name, o.id) }"
+                                t-att-aria-pressed="hasTag(f.name, o.id) ? 'true' : 'false'" t-att-disabled="f.readonly"
+                                t-on-click="() => this.toggleChoice(f.name, o.id, o.name)">
+                            <i t-if="hasTag(f.name, o.id)" class="fa fa-check" aria-hidden="true"/><t t-esc="o.name"/>
+                        </button>
+                    </t>
+                    <span t-if="!choicesOf(f).length" class="or-hint">Nothing to pick yet.</span>
+                </div>
+
+                <div t-elif="f.widget === 'tags'" class="mt-sd-tags">
+                    <div t-if="(state.values[f.name] or []).length" class="or-sheet-chips">
+                        <t t-foreach="state.values[f.name]" t-as="t" t-key="t.id">
+                            <span class="or-chip is-on mt-sd-tag">
+                                <t t-esc="t.name"/>
+                                <button t-if="!f.readonly" type="button" class="mt-sd-tag-x" t-att-aria-label="'Remove ' + t.name"
+                                        t-on-click="() => this.removeTag(f.name, t.id)">&#215;</button>
+                            </span>
+                        </t>
+                    </div>
+                    <MtPicker t-if="!f.readonly" id="f.id" resModel="f.meta.relation" domain="domainOf(f)" context="f.context or {}"
+                              value="false" exclude="tagIds(f.name)" placeholder="f.placeholder"
+                              canCreate="!!f.create" onSelect="(v) => this.addTag(f.name, v)"/>
+                </div>
+
+                <div t-elif="f.widget === 'names'" class="mt-sd-names">
+                    <ol t-if="(state.names[f.name] or []).length" class="mt-sd-name-list">
+                        <t t-foreach="state.names[f.name]" t-as="n" t-key="n_index + '_' + n.name">
+                            <li class="mt-sd-name">
+                                <span class="mt-sd-name-text" t-esc="n.name"/>
+                                <t t-if="!f.readonly">
+                                    <button type="button" class="mt-sd-name-btn" title="Move up" aria-label="Move up"
+                                            t-att-disabled="n_first" t-on-click="() => this.moveName(f.name, n_index, -1)"><i class="fa fa-angle-up"/></button>
+                                    <button type="button" class="mt-sd-name-btn" title="Move down" aria-label="Move down"
+                                            t-att-disabled="n_last" t-on-click="() => this.moveName(f.name, n_index, 1)"><i class="fa fa-angle-down"/></button>
+                                    <button type="button" class="mt-sd-name-btn is-danger" title="Remove" aria-label="Remove"
+                                            t-on-click="() => this.removeName(f.name, n_index)">&#215;</button>
+                                </t>
+                            </li>
+                        </t>
+                    </ol>
+                    <input t-if="!f.readonly" t-att-id="f.id" type="text" class="or-input" t-att-placeholder="f.placeholder"
+                           t-on-keydown="(ev) => this.addName(f.name, ev)"/>
+                </div>
+
+            </t>
+        </div>
+    </t>
+
+    <!-- The fields of a description, with sections and side-by-side pairs -->
+    <t t-name="modern_theme.SmartFields">
+        <div t-if="!state.ready" class="or-sheet-fields" aria-busy="true">
+            <div class="mt-sd-skeleton"/>
+            <div class="mt-sd-skeleton"/>
+            <div class="mt-sd-skeleton is-short"/>
+        </div>
+        <form t-else="" class="or-sheet-fields mt-sd-form" t-on-submit.prevent="save" novalidate="">
+            <div t-if="state.error" class="or-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
+            <t t-foreach="rows" t-as="row" t-key="row.key">
+                <div t-if="row.type === 'pair'" class="or-field-row">
+                    <t t-foreach="row.fields" t-as="f" t-key="f.name">
+                        <t t-call="modern_theme.SmartField"/>
+                    </t>
+                </div>
+                <t t-else="">
+                    <t t-set="f" t-value="row.field"/>
+                    <t t-call="modern_theme.SmartField"/>
+                </t>
+            </t>
+            <button type="submit" class="d-none"/>
+        </form>
+    </t>
+
+    <t t-name="modern_theme.SmartDrawer">
+        <MtDrawer title="title" close="props.close" onNew.bind="resetForm" newLabel="newLabel"
+                  onOpenFull="spec.fullForm !== false ? () => this.openFullForm() : undefined">
+            <t t-call="modern_theme.SmartFields"/>
+            <t t-set-slot="footer">
+                <button t-if="state.canSave" type="button" class="or-save-pill" t-att-disabled="state.saving or !state.ready" t-on-click="save">Save</button>
+                <button t-else="" type="button" class="or-save-pill" t-on-click="() => this.props.close()">Close</button>
+            </t>
+        </MtDrawer>
+    </t>
+
+    <!-- A single record as a page (company settings) -->
+    <t t-name="modern_theme.SmartFormPage">
+        <div class="o_mt_smart_page">
+            <div class="mt-sp-card">
+                <div class="or-sheet-head">
+                    <div class="or-sheet-head-text">
+                        <h2 class="or-sheet-title" t-esc="spec.pageTitle or spec.title"/>
+                    </div>
+                </div>
+                <t t-call="modern_theme.SmartFields"/>
+                <div class="mt-sp-foot">
+                    <span t-if="state.saved" class="mt-sp-saved"><i class="fa fa-check" aria-hidden="true"/> Saved</span>
+                    <button t-if="state.canSave" type="button" class="or-save-pill" t-att-disabled="state.saving or !state.ready" t-on-click="save">Save</button>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

@@ -2009,3 +2009,124 @@ $mt-bar-height: 3.5rem;
     }
     .o_field_widget[name="expected_revenue"] .o_input.position-absolute { padding: 0 !important; align-items: center; height: 100%; }
 }
+
+// ===========================================================================
+// 8. Every form like the quotation page (shadcn): the main fields in one card,
+//    balanced two columns, quiet sections inside tabs, sane dialogs.
+// ===========================================================================
+#{$mt-form},
+#{$mt-apps} .modal .o_form_view {
+    // A lone <group> of fields (no sub-groups) renders as .o_inner_group straight in
+    // the sheet: give it the same balanced two-column grid as grouped forms.
+    .o_form_sheet > .o_inner_group:not(.oe_subtotal_footer):not(:has(.o_field_x2many, .o_field_html, .o_horizontal_separator)) {
+        @media (min-width: 992px) {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            column-gap: 2rem !important;
+            align-items: start;
+
+            > * { grid-column: 1 / -1; }
+            > .mt-row { grid-column: auto; }
+        }
+    }
+
+    // Inside a tab the page is the card already: named sections are plain blocks
+    // (no card in a card), and a section holding a table takes the full width.
+    .o_notebook .o_group.row:has(> .o_inner_group .o_horizontal_separator) {
+        gap: 1.25rem 2rem;
+
+        > .o_inner_group:has(.o_horizontal_separator) {
+            padding: 0 !important;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+        }
+
+        &:has(.o_field_x2many) { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    // Tables inside a section get their own frame back (the tab frames only full-width tables).
+    .o_notebook .o_inner_group .o_field_x2many_list .o_list_renderer {
+        border: 1px solid var(--mt-border);
+        border-radius: 0.75rem;
+    }
+
+    // Value with its unit after it ("15.0000 %"): one line, unit right next to the box.
+    .o_inner_group .o_row:has(> .o_field_widget + span),
+    .o_inner_group .o_row:has(> .o_field_widget + .o_form_label) {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        > span, > .o_form_label { flex: 0 0 auto; color: var(--mt-muted-foreground); }
+    }
+}
+
+// Full pages: the fields above the tabs sit in one card, as on the quotation page.
+#{$mt-form} .o_form_sheet {
+    > .o_group:not(:has(> .o_inner_group .o_horizontal_separator)),
+    > .o_inner_group:not(.oe_subtotal_footer):not(:has(.o_field_x2many, .o_horizontal_separator)) {
+        margin: 0 0 0.25rem !important;
+        padding: 1rem 1.125rem 0.5rem !important;
+        border: 1px solid var(--mt-border);
+        border-radius: 1rem;
+        background: var(--mt-card);
+    }
+}
+
+// A form without chatter does not need the whole screen: keep lines readable.
+#{$mt-form}:not(:has(.o-mail-Form-chatter)) .o_form_sheet_bg > .o_form_sheet {
+    max-width: 68rem !important;
+}
+
+// Dialog forms: Odoo puts .p-0 on the body of action dialogs; keep the breathing room,
+// and show the record title as a normal field (not a giant heading).
+#{$mt-apps} .modal .modal-content:has(.o_form_view) {
+    .modal-body.p-0 .o_form_view .o_form_sheet,
+    .modal-body.o_act_window .o_form_view .o_form_sheet {
+        padding: 1.25rem 1.5rem 0.5rem !important;
+    }
+
+    .o_form_view .oe_title {
+        margin-bottom: 0.75rem;
+
+        > label, .o_form_label { display: block; margin-bottom: 0.25rem; }
+
+        h1 {
+            margin: 0;
+            font-size: inherit;
+
+            .o_field_widget, .o_input {
+                width: 100%;
+                font-size: 0.9375rem !important;
+                font-weight: 500 !important;
+                line-height: 1.25;
+            }
+            .o_input {
+                min-height: 2.5rem;
+                padding: 0.5rem 0.75rem !important;
+                border: 1px solid var(--mt-input) !important;
+                border-radius: 0.5rem !important;
+                background: var(--mt-field-bg) !important;
+                &::placeholder { font-weight: 400; color: color-mix(in srgb, var(--mt-muted-foreground) 70%, transparent) !important; }
+                &:focus { border-color: var(--mt-focus-border) !important; box-shadow: 0 0 0 3px var(--mt-focus-ring) !important; }
+            }
+        }
+    }
+
+    // <setting> blocks inside a dialog (e.g. "Is a Bar/Restaurant"): one switch row
+    .o_settings_container { margin: 0 !important; }
+    .o_setting_box {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin: 0;
+        padding: 0.625rem 0.875rem !important;
+        border: 1px solid var(--mt-border);
+        border-radius: 0.625rem;
+        background: var(--mt-card);
+
+        .o_setting_left_pane { order: 2; margin-left: auto; width: auto; padding: 0; }
+        .o_setting_right_pane { order: 1; margin: 0; padding: 0; border: 0; }
+        .o_form_label { font-size: 0.875rem; color: var(--mt-foreground); font-weight: 500 !important; }
+    }
+}

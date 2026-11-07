@@ -1,0 +1,45 @@
+// Modern Theme — crm_modern: every style of the app lives here (moved out of
+// crm_modern/static/src/scss so the app ships no stylesheet of its own).
+
+// ---- from crm_modern/static/src/scss/tokens.dark.scss
+// Dark mode: CRM tokens stay aliases of --mt-* (tokens.dark.scss already
+// swapped those). This file only exists so the dark asset bundle has a hook;
+// do not re-hardcode a second palette here.
+:root {
+    --cm-bg: var(--mt-content-bg, var(--mt-background));
+    --cm-fg: var(--mt-foreground);
+    --cm-card: var(--mt-card);
+    --cm-muted: var(--mt-muted);
+    --cm-muted-fg: var(--mt-muted-foreground);
+    --cm-subtle-fg: var(--mt-muted-foreground);
+    --cm-border: var(--mt-border);
+    --cm-input: var(--mt-input);
+    --cm-card-matte: var(--mt-card-matte, var(--mt-card));
+    --cm-edge: color-mix(in srgb, var(--mt-foreground) 10%, transparent);
+    --cm-primary: var(--mt-primary);
+    --cm-primary-fg: var(--mt-primary-foreground);
+    --cm-primary-soft: color-mix(in srgb, var(--mt-primary) 18%, var(--mt-card));
+    --cm-primary-soft-fg: var(--mt-primary);
+    --cm-ring: color-mix(in srgb, var(--mt-primary) 45%, transparent);
+    --cm-success: var(--mt-success);
+    --cm-success-soft: color-mix(in srgb, var(--mt-success) 16%, var(--mt-card));
+    --cm-warning: var(--mt-warning);
+    --cm-warning-soft: color-mix(in srgb, var(--mt-warning) 16%, var(--mt-card));
+    --cm-danger: var(--mt-destructive);
+    --cm-danger-soft: color-mix(in srgb, var(--mt-destructive) 16%, var(--mt-card));
+    --cm-info: var(--mt-info, var(--mt-primary));
+    --cm-info-soft: color-mix(in srgb, var(--mt-info, var(--mt-primary)) 16%, var(--mt-card));
+    --cm-violet: var(--mt-info, var(--mt-primary));
+    --cm-violet-soft: color-mix(in srgb, var(--mt-info, var(--mt-primary)) 16%, var(--mt-card));
+    --cm-chart-1: var(--mt-primary);
+    --cm-chart-2: var(--mt-success);
+    --cm-chart-3: var(--mt-warning);
+    --cm-chart-4: var(--mt-info, var(--mt-primary));
+    --cm-sidebar: var(--mt-sidebar-bg, var(--mt-card));
+    --cm-sidebar-fg: var(--mt-sidebar-fg, var(--mt-foreground));
+    --cm-sidebar-hover: var(--mt-sidebar-accent, var(--mt-muted));
+    --cm-sidebar-accent: var(--mt-sidebar-accent, var(--mt-muted));
+    --cm-sidebar-accent-fg: var(--mt-sidebar-accent-fg, var(--mt-foreground));
+    --cm-sidebar-muted-fg: var(--mt-sidebar-muted-fg, var(--mt-muted-foreground));
+    --cm-sidebar-border: var(--mt-sidebar-border, var(--mt-border));
+}

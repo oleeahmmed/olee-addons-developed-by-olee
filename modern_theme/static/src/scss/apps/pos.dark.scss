@@ -1,0 +1,5 @@
+// Modern Theme — Point of Sale: dark values of the POS app tokens (app kit).
+@include mt-app-tokens-dark(ps);
+
+// the printed receipt stays black on white in dark mode
+.ps-receipt { background: #fff; color: #000; }

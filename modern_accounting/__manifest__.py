@@ -22,7 +22,7 @@ account.move.line, account.payment and account.account records through Odoo's
 own list, pivot, graph and form views, with Odoo's own rights and record rules.
 Invoices and bills stay in the Invoicing app.
     """,
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.0.1',
     'category': 'Accounting/Accounting',
     'author': 'Olee',
     'license': 'LGPL-3',
@@ -34,13 +34,9 @@ Invoices and bills stay in the Invoicing app.
     ],
     'assets': {
         'web.assets_backend': [
-            'modern_accounting/static/src/scss/app.scss',
             'modern_accounting/static/src/js/sidebar/*.js',
             'modern_accounting/static/src/js/pages/*.js',
             'modern_accounting/static/src/xml/*.xml',
-        ],
-        'web.assets_web_dark': [
-            'modern_accounting/static/src/scss/app.dark.scss',
         ],
     },
     'uninstall_hook': 'uninstall_hook',

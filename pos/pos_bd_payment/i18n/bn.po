@@ -1,0 +1,794 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pos_bd_payment
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-06 23:37+0000\n"
+"PO-Revision-Date: 2026-11-06 23:37+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: pos_bd_payment
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos_bd_payment/models/pos_config.py:0
+msgid "%(methods)s added to %(shop)s."
+msgstr "%(methods)s যোগ হয়েছে %(shop)s-এ।"
+
+#. module: pos_bd_payment
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos_bd_payment/models/pos_config.py:0
+msgid "%s TrxID"
+msgstr "%s TrxID"
+
+#. module: pos_bd_payment
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/sms.py:0
+#: code:addons/pos_bd_payment/models/sms.py:0
+msgid "%s is not a Bangladeshi mobile number."
+msgstr "%s বাংলাদেশি মোবাইল নম্বর নয়।"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/js/reconcile.js:0
+#: code:addons/pos_bd_payment/static/src/js/reconcile.js:0
+msgid "%s payment(s) ticked from the statement."
+msgstr "স্টেটমেন্ট থেকে %s টি পেমেন্ট টিক হয়েছে।"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid ""
+"9C4A7B2D1E  1,250.00\n"
+"8F3K2L9Q0P  560.00"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_res_company__bd_sms_api_key
+msgid "API key / token"
+msgstr "API কি / টোকেন"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "All"
+msgstr "সব"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "All channels"
+msgstr "সব চ্যানেল"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "All shops"
+msgstr "সব শপ"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Amount"
+msgstr "পরিমাণ (টাকা)"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment_method__bd_needs_trx
+msgid "Ask the TrxID"
+msgstr "TrxID চাইবে"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment_method__bd_needs_phone
+msgid "Ask the payer's number"
+msgstr "পেয়ারের নম্বর চাইবে"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__attempts
+msgid "Attempts"
+msgstr "চেষ্টা"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment__bd_provider
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment_method__bd_provider
+msgid "BD provider"
+msgstr "BD প্রোভাইডার"
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_config_counter_form_bd
+msgid "Bangladesh payments"
+msgstr "বাংলাদেশি পেমেন্ট"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_payment_method__bd_provider__bank
+msgid "Bank transfer"
+msgstr "ব্যাংক ট্রান্সফার"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__res_company__bd_sms_provider__bulksmsbd
+msgid "BulkSMSBD"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_payment_method__bd_provider__card
+msgid "Card (POS terminal)"
+msgstr "কার্ড (POS টার্মিনাল)"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Channel"
+msgstr "চ্যানেল"
+
+#. module: pos_bd_payment
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/sms.py:0
+#: code:addons/pos_bd_payment/models/sms.py:0
+msgid ""
+"Choose an SMS gateway first (Point of Sale ▸ Configuration ▸ SMS gateway)."
+msgstr ""
+"আগে একটি SMS গেটওয়ে বাছুন (পয়েন্ট অব সেল ▸ কনফিগারেশন ▸ SMS গেটওয়ে)।"
+
+#. module: pos_bd_payment
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos_bd_payment/models/pos_config.py:0
+msgid "Close the session of %s before changing its payment methods."
+msgstr "পেমেন্ট মেথড বদলানোর আগে %s-এর সেশন বন্ধ করুন।"
+
+#. module: pos_bd_payment
+#: model:ir.model,name:pos_bd_payment.model_res_company
+msgid "Companies"
+msgstr "কোম্পানি"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__company_id
+msgid "Company"
+msgstr "কোম্পানি"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__create_uid
+msgid "Created by"
+msgstr "তৈরি করেছেন"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__create_date
+msgid "Created on"
+msgstr "তৈরির সময়"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__res_company__bd_sms_provider__custom
+msgid "Custom HTTP gateway"
+msgstr "কাস্টম HTTP গেটওয়ে"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_res_company__bd_sms_url
+msgid "Custom URL"
+msgstr "কাস্টম URL"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__partner_id
+msgid "Customer"
+msgstr "কাস্টমার"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_bd_sms_list
+msgid "Date"
+msgstr "তারিখ"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__display_name
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_config__display_name
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_order__display_name
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment__display_name
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment_method__display_name
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_session__display_name
+#: model:ir.model.fields,field_description:pos_bd_payment.field_res_company__display_name
+msgid "Display Name"
+msgstr "নাম"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_bd_sms__state__error
+msgid "Error"
+msgstr "ত্রুটি"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,help:pos_bd_payment.field_pos_payment__bd_verified
+msgid "Found in the wallet / bank statement."
+msgstr "ওয়ালেট / ব্যাংক স্টেটমেন্টে পাওয়া গেছে।"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "From"
+msgstr "থেকে"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,help:pos_bd_payment.field_res_company__bd_sms_url
+msgid "GET URL with placeholders {to} {message} {api_key} {sender}."
+msgstr "{to} {message} {api_key} {sender} প্লেসহোল্ডারসহ GET URL।"
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.res_company_sms_form
+msgid "Gateway"
+msgstr "গেটওয়ে"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__response
+msgid "Gateway answer"
+msgstr "গেটওয়ের উত্তর"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__id
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_config__id
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_order__id
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment__id
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment_method__id
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_session__id
+#: model:ir.model.fields,field_description:pos_bd_payment.field_res_company__id
+msgid "ID"
+msgstr "ID"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "In the statement but not in the POS:"
+msgstr "স্টেটমেন্টে আছে কিন্তু POS-এ নেই:"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__write_uid
+msgid "Last Updated by"
+msgstr "শেষ আপডেট করেছেন"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__write_date
+msgid "Last Updated on"
+msgstr "শেষ আপডেট"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,help:pos_bd_payment.field_res_company__bd_sms_sender
+msgid "Masking name or SID given by the gateway."
+msgstr "গেটওয়ে থেকে পাওয়া মাস্কিং নাম বা SID।"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment_method__bd_merchant_number
+msgid "Merchant / agent number"
+msgstr "মার্চেন্ট / এজেন্ট নম্বর"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Merchant statement"
+msgstr "মার্চেন্ট স্টেটমেন্ট"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__body
+msgid "Message"
+msgstr "মেসেজ"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Mobile for the SMS receipt"
+msgstr "SMS রসিদের জন্য মোবাইল"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment_method__bd_is_wallet
+msgid "Mobile wallet"
+msgstr "মোবাইল ওয়ালেট"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,help:pos_bd_payment.field_pos_payment__bd_provider
+#: model:ir.model.fields,help:pos_bd_payment.field_pos_payment_method__bd_provider
+msgid "Mobile wallet or channel of this payment method (Bangladesh)."
+msgstr "এই পেমেন্ট মেথডের মোবাইল ওয়ালেট বা চ্যানেল (বাংলাদেশ)।"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Mobile wallets"
+msgstr "মোবাইল ওয়ালেট"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Mobile wallets (verified)"
+msgstr "মোবাইল ওয়ালেট (যাচাইকৃত)"
+
+#. module: pos_bd_payment
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos_bd_payment/models/pos_config.py:0
+msgid "Mobile wallets ready"
+msgstr "মোবাইল ওয়ালেট প্রস্তুত"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_payment_method__bd_provider__nagad
+msgid "Nagad"
+msgstr "নগদ"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__res_company__bd_sms_provider__none
+msgid "No SMS"
+msgstr "SMS নেই"
+
+#. module: pos_bd_payment
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/sms.py:0
+#: code:addons/pos_bd_payment/models/sms.py:0
+msgid "No SMS gateway configured."
+msgstr "কোনো SMS গেটওয়ে সেট করা নেই।"
+
+#. module: pos_bd_payment
+#: model_terms:ir.actions.act_window,help:pos_bd_payment.action_bd_payment_methods
+msgid "No payment method yet"
+msgstr "এখনো পেমেন্ট মেথড নেই"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "No wallet or card payment for these days."
+msgstr "এই দিনগুলোতে কোনো ওয়ালেট বা কার্ড পেমেন্ট নেই।"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,help:pos_bd_payment.field_res_company__bd_sms_auto
+msgid "Only when the customer has a mobile number."
+msgstr "শুধু কাস্টমারের মোবাইল নম্বর থাকলে।"
+
+#. module: pos_bd_payment
+#: model_terms:ir.actions.act_window,help:pos_bd_payment.action_bd_payment_methods
+msgid ""
+"Open a shop's Counter settings and click \"Set up BD wallets\" to create "
+"bKash, Nagad, Rocket and Upay."
+msgstr ""
+"শপের কাউন্টার সেটিংস খুলে \"Set up BD wallets\" চাপুন — বিকাশ, নগদ, রকেট ও "
+"উপায় তৈরি হবে।"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__order_id
+msgid "Order"
+msgstr "অর্ডার"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_payment_method__bd_provider__other
+msgid "Other"
+msgstr "অন্যান্য"
+
+#. module: pos_bd_payment
+#: model:ir.actions.server,name:pos_bd_payment.cron_send_sms_ir_actions_server
+msgid "POS: send queued SMS receipts"
+msgstr "POS: জমে থাকা SMS রসিদ পাঠান"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Paste statement"
+msgstr "স্টেটমেন্ট পেস্ট করুন"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid ""
+"Paste the statement (bKash / Nagad merchant portal, SMS list…). Every TrxID "
+"found is ticked."
+msgstr ""
+"স্টেটমেন্ট পেস্ট করুন (বিকাশ / নগদ মার্চেন্ট পোর্টাল, SMS তালিকা…)। যত TrxID"
+" পাওয়া যাবে সব টিক হবে।"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Payer"
+msgstr "পেয়ার"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment__bd_payer_phone
+msgid "Payer's number"
+msgstr "পেয়ারের নম্বর"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment__transaction_id
+msgid "Payment Transaction ID"
+msgstr "পেমেন্ট ট্রানজেকশন আইডি"
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_config_counter_form_bd
+msgid "Payment methods"
+msgstr "পেমেন্ট মেথড"
+
+#. module: pos_bd_payment
+#: model:ir.actions.act_window,name:pos_bd_payment.action_bd_payment_methods
+#: model:ir.ui.menu,name:pos_bd_payment.menu_bd_payment_methods
+msgid "Payment methods (BD)"
+msgstr "পেমেন্ট মেথড (BD)"
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_payment_method_bd_list
+msgid "Payment methods (Bangladesh)"
+msgstr "পেমেন্ট মেথড (বাংলাদেশ)"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Payments"
+msgstr "পেমেন্ট"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,help:pos_bd_payment.field_res_company__bd_sms_template
+msgid "Placeholders: {shop} {ref} {total} {date} {customer} {extra}"
+msgstr "প্লেসহোল্ডার: {shop} {ref} {total} {date} {customer} {extra}"
+
+#. module: pos_bd_payment
+#: model:ir.model,name:pos_bd_payment.model_pos_config
+msgid "Point of Sale Configuration"
+msgstr "POS কনফিগারেশন"
+
+#. module: pos_bd_payment
+#: model:ir.model,name:pos_bd_payment.model_pos_order
+msgid "Point of Sale Orders"
+msgstr "POS অর্ডার"
+
+#. module: pos_bd_payment
+#: model:ir.model,name:pos_bd_payment.model_pos_payment_method
+msgid "Point of Sale Payment Methods"
+msgstr "POS পেমেন্ট মেথড"
+
+#. module: pos_bd_payment
+#: model:ir.model,name:pos_bd_payment.model_pos_payment
+msgid "Point of Sale Payments"
+msgstr "POS পেমেন্ট"
+
+#. module: pos_bd_payment
+#: model:ir.model,name:pos_bd_payment.model_pos_session
+msgid "Point of Sale Session"
+msgstr "POS সেশন"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Provider"
+msgstr "প্রোভাইডার"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_bd_sms__state__queued
+msgid "Queued"
+msgstr "অপেক্ষায়"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_res_company__bd_sms_template
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.res_company_sms_form
+msgid "Receipt SMS"
+msgstr "রসিদ SMS"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,help:pos_bd_payment.field_pos_payment_method__bd_trx_pattern
+msgid ""
+"Regular expression the TrxID must match (upper case letters and digits). "
+"Leave empty to accept anything."
+msgstr ""
+"TrxID যে রেগুলার এক্সপ্রেশনের সাথে মিলতে হবে (বড় হাতের অক্ষর ও সংখ্যা)। "
+"খালি রাখলে সব চলবে।"
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_bd_sms_form
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_bd_sms_list
+msgid "Retry"
+msgstr "আবার চেষ্টা"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_payment_method__bd_provider__rocket
+msgid "Rocket (DBBL)"
+msgstr "রকেট (DBBL)"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_order__bd_sms_ids
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_bd_sms_form
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_bd_sms_list
+msgid "SMS"
+msgstr "SMS"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/js/drawer_forms.js:0
+#: code:addons/pos_bd_payment/static/src/js/drawer_forms.js:0
+#: model:ir.actions.client,name:pos_bd_payment.action_sms_page
+#: model:ir.actions.server,name:pos_bd_payment.action_sms_settings
+#: model:ir.model.fields,field_description:pos_bd_payment.field_res_company__bd_sms_provider
+#: model:ir.ui.menu,name:pos_bd_payment.menu_sms_settings
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_config_counter_form_bd
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.res_company_sms_form
+msgid "SMS gateway"
+msgstr "SMS গেটওয়ে"
+
+#. module: pos_bd_payment
+#: model:ir.actions.act_window,name:pos_bd_payment.action_sms_log
+#: model:ir.ui.menu,name:pos_bd_payment.menu_sms_log
+msgid "SMS log"
+msgstr "SMS লগ"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/js/counter_patch.js:0
+#: code:addons/pos_bd_payment/static/src/js/counter_patch.js:0
+msgid "SMS queued for %s"
+msgstr "%s-এর জন্য SMS অপেক্ষায়"
+
+#. module: pos_bd_payment
+#: model:ir.model,name:pos_bd_payment.model_pos_bd_sms
+msgid "SMS sent from the POS"
+msgstr "POS থেকে পাঠানো SMS"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/js/counter_patch.js:0
+#: code:addons/pos_bd_payment/static/src/js/counter_patch.js:0
+msgid "SMS sent to %s"
+msgstr "%s-এ SMS পাঠানো হয়েছে"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__res_company__bd_sms_provider__sslwireless
+msgid "SSL Wireless (SMS Plus)"
+msgstr "SSL Wireless (SMS Plus)"
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_bd_sms_form
+msgid "Send now"
+msgstr "এখনই পাঠান"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_res_company__bd_sms_auto
+msgid "Send the receipt by SMS after each sale"
+msgstr "প্রতিটি বিক্রির পর SMS-এ রসিদ পাঠান"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Send to"
+msgstr "পাঠান এই নম্বরে"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_res_company__bd_sms_sender
+msgid "Sender ID / SID"
+msgstr "সেন্ডার আইডি / SID"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_bd_sms__state__sent
+msgid "Sent"
+msgstr "পাঠানো হয়েছে"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__sent_at
+msgid "Sent on"
+msgstr "পাঠানোর সময়"
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_config_counter_form_bd
+msgid "Set up BD wallets"
+msgstr "BD ওয়ালেট সেটআপ"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Shop"
+msgstr "শপ"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,help:pos_bd_payment.field_pos_payment_method__bd_merchant_number
+msgid "Shown to the cashier: the number the customer sends money to."
+msgstr "ক্যাশিয়ার দেখবেন: কাস্টমার যে নম্বরে টাকা পাঠাবেন।"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__state
+msgid "State"
+msgstr "অবস্থা"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_payment_method__bd_provider__tap
+msgid "TAP"
+msgstr "TAP"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos/pos_bd_payment/static/src/js/counter_patch.js:0
+#: code:addons/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos_bd_payment/static/src/js/counter_patch.js:0
+msgid "The TrxID %s is typed twice."
+msgstr "TrxID %s দুইবার লেখা হয়েছে।"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,help:pos_bd_payment.field_pos_payment_method__bd_needs_trx
+msgid ""
+"The cashier types the transaction ID of the payment (wallets, card slip)."
+msgstr "ক্যাশিয়ার পেমেন্টের ট্রানজেকশন আইডি লেখেন (ওয়ালেট, কার্ড স্লিপ)।"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "Tick the matching TrxIDs"
+msgstr "মিলে যাওয়া TrxID টিক করুন"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_bd_sms__to
+msgid "To"
+msgstr "প্রাপক"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "To check"
+msgstr "যাচাই বাকি"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_payment_bd_list
+msgid "Total"
+msgstr "মোট"
+
+#. module: pos_bd_payment
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos_bd_payment/models/pos_config.py:0
+msgid "Transaction / slip no."
+msgstr "ট্রানজেকশন / স্লিপ নম্বর"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_payment_bd_list
+msgid "TrxID"
+msgstr "TrxID"
+
+#. module: pos_bd_payment
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos_bd_payment/models/pos_config.py:0
+msgid "TrxID %(ref)s was already used on %(order)s (%(date)s)."
+msgstr "TrxID %(ref)s আগেই %(order)s-এ ব্যবহার হয়েছে (%(date)s)।"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment_method__bd_trx_pattern
+msgid "TrxID format"
+msgstr "TrxID ফরম্যাট"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos/pos_bd_payment/static/src/js/counter_patch.js:0
+#: code:addons/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos_bd_payment/static/src/js/counter_patch.js:0
+msgid "Type the TrxID of the %s payment."
+msgstr "%s পেমেন্টের TrxID লিখুন।"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_payment_method__bd_provider__upay
+msgid "Upay"
+msgstr "উপায়"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment__bd_verified
+msgid "Verified"
+msgstr "যাচাইকৃত"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment__bd_verified_by
+msgid "Verified by"
+msgstr "যাচাই করেছেন"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields,field_description:pos_bd_payment.field_pos_payment__bd_verified_at
+msgid "Verified on"
+msgstr "যাচাইয়ের সময়"
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_payment_bd_list
+msgid "Wallet payments"
+msgstr "ওয়ালেট পেমেন্ট"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: model:ir.actions.client,name:pos_bd_payment.action_reconcile
+#: model:ir.ui.menu,name:pos_bd_payment.menu_reconcile
+msgid "Wallet reconciliation"
+msgstr "ওয়ালেট মিলানো"
+
+#. module: pos_bd_payment
+#: model:ir.model.fields.selection,name:pos_bd_payment.selection__pos_payment_method__bd_provider__bkash
+msgid "bKash"
+msgstr "বিকাশ"
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.pos_config_counter_form_bd
+msgid ""
+"bKash, Nagad, Rocket and Upay as separate tenders with their own journal, "
+"the TrxID asked at the counter."
+msgstr ""
+"বিকাশ, নগদ, রকেট ও উপায় আলাদা টেন্ডার, নিজস্ব জার্নালসহ; কাউন্টারে TrxID "
+"চাওয়া হয়।"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "bKash, Nagad, Rocket, Upay and card payments with their TrxID"
+msgstr "বিকাশ, নগদ, রকেট, উপায় ও কার্ড পেমেন্ট, TrxID-সহ"
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#: code:addons/pos/pos_bd_payment/static/src/xml/bd_payment.xml:0
+#: code:addons/pos_bd_payment/static/src/xml/bd_payment.xml:0
+msgid "from"
+msgstr "থেকে"
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.res_company_sms_form
+msgid ""
+"https://api.example.com/send?key={api_key}&to={to}&from={sender}&text={message}"
+msgstr ""
+
+#. module: pos_bd_payment
+#: model_terms:ir.ui.view,arch_db:pos_bd_payment.res_company_sms_form
+msgid "{shop} {ref} {total} {date} {customer} {extra}"
+msgstr ""
+
+#. module: pos_bd_payment
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos/pos_bd_payment/static/src/js/counter_patch.js:0
+#: code:addons/pos_bd_payment/models/pos_config.py:0
+#: code:addons/pos_bd_payment/static/src/js/counter_patch.js:0
+msgid "“%(ref)s” is not a valid %(method)s TrxID."
+msgstr "“%(ref)s” বৈধ %(method)s TrxID নয়।"

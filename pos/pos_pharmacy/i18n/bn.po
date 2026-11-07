@@ -1,0 +1,588 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pos_pharmacy
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-06 22:24+0000\n"
+"PO-Revision-Date: 2026-11-06 22:24+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: pos_pharmacy
+#. odoo-python
+#: code:addons/pos/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos_pharmacy/models/pos_config.py:0
+msgid "%(n)s %(unit)s"
+msgstr "%(n)s %(unit)s"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,help:pos_pharmacy.field_product_product__ph_box_size
+#: model:ir.model.fields,help:pos_pharmacy.field_product_template__ph_box_size
+msgid "0 = not sold by box"
+msgstr "০ = বক্সে বিক্রি নয়"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,help:pos_pharmacy.field_product_product__ph_strip_size
+#: model:ir.model.fields,help:pos_pharmacy.field_product_template__ph_strip_size
+msgid "0 = not sold by strip"
+msgstr "০ = স্ট্রিপে বিক্রি নয়"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,help:pos_pharmacy.field_product_product__ph_strength
+#: model:ir.model.fields,help:pos_pharmacy.field_product_template__ph_strength
+msgid "500 mg, 5 mg/5 ml…"
+msgstr "৫০০ মি.গ্রা., ৫ মি.গ্রা./৫ মি.লি.…"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos/pos_pharmacy/static/src/js/pharmacy.js:0
+#: code:addons/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos_pharmacy/static/src/js/pharmacy.js:0
+msgid ""
+"A prescription medicine is in the cart: type the doctor and the patient."
+msgstr "কার্টে প্রেসক্রিপশনের ওষুধ আছে: ডাক্তার ও রোগীর নাম লিখুন।"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Add"
+msgstr "যোগ করুন"
+
+#. module: pos_pharmacy
+#: model_terms:ir.actions.act_window,help:pos_pharmacy.action_medicines
+msgid "Add your first medicine"
+msgstr "প্রথম ওষুধ যোগ করুন"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_order__ph_patient_age
+msgid "Age"
+msgstr "বয়স"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "All pharmacies"
+msgstr "সব ফার্মেসি"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Already expired"
+msgstr "মেয়াদোত্তীর্ণ"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos_pharmacy/static/src/js/drawer_forms.js:0
+msgid "At the counter"
+msgstr "কাউন্টারে"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Batch"
+msgstr "ব্যাচ"
+
+#. module: pos_pharmacy
+#. odoo-python
+#: code:addons/pos/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos_pharmacy/models/pos_config.py:0
+msgid "Batch %s"
+msgstr "ব্যাচ %s"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Batches"
+msgstr "ব্যাচ"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid ""
+"Batches in the pharmacy's stock expiring soon: return them to the supplier "
+"or sell them first."
+msgstr ""
+"শিগগির মেয়াদ শেষ হবে এমন ব্যাচ: সাপ্লায়ারকে ফেরত দিন বা আগে বিক্রি করুন।"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_config__ph_block_expired
+msgid "Block expired batches"
+msgstr "মেয়াদোত্তীর্ণ ব্যাচ বন্ধ"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/pharmacy.js:0
+#: code:addons/pos_pharmacy/static/src/js/pharmacy.js:0
+msgid "Box (%s strips)"
+msgstr "বক্স (%s স্ট্রিপ)"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos_pharmacy/static/src/js/drawer_forms.js:0
+msgid "Brand name"
+msgstr "ব্র্যান্ড নাম"
+
+#. module: pos_pharmacy
+#: model_terms:ir.actions.act_window,help:pos_pharmacy.action_medicines
+msgid ""
+"Brand, generic name, strength, pieces per strip and strips per box. Batches "
+"and expiry dates come with the purchase receipts."
+msgstr ""
+"ব্র্যান্ড, জেনেরিক নাম, শক্তি, প্রতি স্ট্রিপে পিস ও প্রতি বক্সে স্ট্রিপ। "
+"ব্যাচ ও মেয়াদ আসে ক্রয়ের রিসিট থেকে।"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Cancel"
+msgstr "বাতিল"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__capsule
+msgid "Capsule"
+msgstr "ক্যাপসুল"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__cream
+msgid "Cream / Ointment"
+msgstr "ক্রিম / মলম"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Days"
+msgstr "দিন"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__device
+msgid "Device / Surgical"
+msgstr "ডিভাইস / সার্জিক্যাল"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_config__display_name
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_order__display_name
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__display_name
+msgid "Display Name"
+msgstr "নাম"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_order__ph_doctor
+msgid "Doctor"
+msgstr "ডাক্তার"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,help:pos_pharmacy.field_pos_config__ph_rx_mandatory
+msgid "Doctor and patient must be typed when a prescription medicine is sold."
+msgstr "প্রেসক্রিপশনের ওষুধ বিক্রিতে ডাক্তার ও রোগীর নাম লিখতেই হবে।"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_product__ph_dosage_form
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__ph_dosage_form
+#: model_terms:ir.ui.view,arch_db:pos_pharmacy.product_template_medicine_search
+msgid "Dosage form"
+msgstr "ডোজের ধরন"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__drops
+msgid "Drops"
+msgstr "ড্রপ"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos/pos_pharmacy/static/src/js/pharmacy.js:0
+#: code:addons/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos_pharmacy/static/src/js/pharmacy.js:0
+msgid "Every batch of %s in stock is expired."
+msgstr "%s-এর স্টকের সব ব্যাচ মেয়াদোত্তীর্ণ।"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Expiry"
+msgstr "মেয়াদ"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos_pharmacy/static/src/js/drawer_forms.js:0
+msgid ""
+"Found at the counter by brand or generic name. Batches and expiry come with "
+"each purchase."
+msgstr ""
+"কাউন্টারে ব্র্যান্ড বা জেনেরিক নামে পাওয়া যায়। ব্যাচ ও মেয়াদ আসে প্রতিটি "
+"কেনার সাথে।"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Generic"
+msgstr "জেনেরিক"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_product__ph_generic_name
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__ph_generic_name
+#: model_terms:ir.ui.view,arch_db:pos_pharmacy.product_template_medicine_search
+msgid "Generic name"
+msgstr "জেনেরিক নাম"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,help:pos_pharmacy.field_pos_config__ph_pharmacy
+msgid "Generic search, strip / box selling, batches by expiry, prescriptions."
+msgstr ""
+"জেনেরিক খোঁজা, স্ট্রিপ / বক্সে বিক্রি, মেয়াদ অনুযায়ী ব্যাচ, প্রেসক্রিপশন।"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_config__id
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_order__id
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__id
+msgid "ID"
+msgstr "ID"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__inhaler
+msgid "Inhaler"
+msgstr "ইনহেলার"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__injection
+msgid "Injection"
+msgstr "ইনজেকশন"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_product__ph_manufacturer
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__ph_manufacturer
+#: model_terms:ir.ui.view,arch_db:pos_pharmacy.product_template_medicine_search
+msgid "Manufacturer"
+msgstr "প্রস্তুতকারক"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_product__ph_is_medicine
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__ph_is_medicine
+msgid "Medicine"
+msgstr "ওষুধ"
+
+#. module: pos_pharmacy
+#: model:ir.actions.act_window,name:pos_pharmacy.action_medicines
+#: model:ir.ui.menu,name:pos_pharmacy.menu_medicines
+#: model_terms:ir.ui.view,arch_db:pos_pharmacy.product_template_medicine_list
+#: model_terms:ir.ui.view,arch_db:pos_pharmacy.product_template_medicine_search
+msgid "Medicines"
+msgstr "ওষুধ"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: model:ir.actions.client,name:pos_pharmacy.action_expiry
+#: model:ir.ui.menu,name:pos_pharmacy.menu_expiry
+msgid "Near expiry"
+msgstr "মেয়াদ শেষের কাছে"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos_pharmacy/static/src/js/drawer_forms.js:0
+msgid "New medicine"
+msgstr "নতুন ওষুধ"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Nothing expires in the next"
+msgstr "এর মধ্যে কিছুর মেয়াদ শেষ হবে না:"
+
+#. module: pos_pharmacy
+#. odoo-python
+#: code:addons/pos/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos_pharmacy/models/pos_config.py:0
+msgid "Only %(qty)s of %(product)s in stock."
+msgstr "%(product)s স্টকে আছে মাত্র %(qty)s।"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__other
+msgid "Other"
+msgstr "অন্যান্য"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_order__ph_patient
+msgid "Patient"
+msgstr "রোগী"
+
+#. module: pos_pharmacy
+#: model_terms:ir.ui.view,arch_db:pos_pharmacy.pos_config_counter_form_pharmacy
+msgid "Pharmacy"
+msgstr "ফার্মেসি"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_config__ph_pharmacy
+msgid "Pharmacy counter"
+msgstr "ফার্মেসি কাউন্টার"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_config__ph_fefo
+msgid "Pick batches by expiry (FEFO)"
+msgstr "মেয়াদ অনুযায়ী ব্যাচ বাছাই (FEFO)"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/pharmacy.js:0
+#: code:addons/pos_pharmacy/static/src/js/pharmacy.js:0
+msgid "Piece"
+msgstr "পিস"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_product__ph_strip_size
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__ph_strip_size
+msgid "Pieces per strip"
+msgstr "প্রতি স্ট্রিপে পিস"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos_pharmacy/static/src/js/drawer_forms.js:0
+msgid "PoS categories"
+msgstr "POS ক্যাটাগরি"
+
+#. module: pos_pharmacy
+#: model:ir.model,name:pos_pharmacy.model_pos_config
+msgid "Point of Sale Configuration"
+msgstr "POS কনফিগারেশন"
+
+#. module: pos_pharmacy
+#: model:ir.model,name:pos_pharmacy.model_pos_order
+msgid "Point of Sale Orders"
+msgstr "POS অর্ডার"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__powder
+msgid "Powder / Sachet"
+msgstr "পাউডার / স্যাশে"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Prescription"
+msgstr "প্রেসক্রিপশন"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_config__ph_rx_mandatory
+msgid "Prescription details mandatory"
+msgstr "প্রেসক্রিপশনের তথ্য বাধ্যতামূলক"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_order__ph_rx_ref
+msgid "Prescription no."
+msgstr "প্রেসক্রিপশন নং"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_product__ph_rx_required
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__ph_rx_required
+#: model_terms:ir.ui.view,arch_db:pos_pharmacy.product_template_medicine_search
+msgid "Prescription required"
+msgstr "প্রেসক্রিপশন লাগবে"
+
+#. module: pos_pharmacy
+#: model_terms:ir.ui.view,arch_db:pos_pharmacy.product_template_medicine_list
+msgid "Price / piece"
+msgstr "দাম / পিস"
+
+#. module: pos_pharmacy
+#: model:ir.model,name:pos_pharmacy.model_product_template
+msgid "Product"
+msgstr "পণ্য"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Qty"
+msgstr "পরিমাণ"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Rack"
+msgstr "র‍্যাক"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_product__ph_rack
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__ph_rack
+msgid "Rack / shelf"
+msgstr "র‍্যাক / তাক"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Rx"
+msgstr "Rx"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Rx no."
+msgstr "Rx নং"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos_pharmacy/static/src/js/drawer_forms.js:0
+msgid "Selling by strip and box"
+msgstr "স্ট্রিপ ও বক্সে বিক্রি"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,help:pos_pharmacy.field_product_product__ph_manufacturer
+#: model:ir.model.fields,help:pos_pharmacy.field_product_template__ph_manufacturer
+msgid "Square, Beximco, Incepta…"
+msgstr "স্কয়ার, বেক্সিমকো, ইনসেপ্টা…"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Stock value"
+msgstr "স্টকের মূল্য"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_product__ph_strength
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__ph_strength
+msgid "Strength"
+msgstr "শক্তি"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/pharmacy.js:0
+#: code:addons/pos_pharmacy/static/src/js/pharmacy.js:0
+msgid "Strip (%s pcs)"
+msgstr "স্ট্রিপ (%s পিস)"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_product__ph_box_size
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__ph_box_size
+msgid "Strips per box"
+msgstr "প্রতি বক্সে স্ট্রিপ"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__suppository
+msgid "Suppository"
+msgstr "সাপোজিটরি"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__syrup
+msgid "Syrup / Suspension"
+msgstr "সিরাপ / সাসপেনশন"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__tablet
+msgid "Tablet"
+msgstr "ট্যাবলেট"
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_config__ph_expiry_warn_days
+msgid "Warn when expiring within (days)"
+msgstr "এত দিনের মধ্যে মেয়াদ শেষ হলে সতর্ক করুন"
+
+#. module: pos_pharmacy
+#. odoo-python
+#: code:addons/pos/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos_pharmacy/models/pos_config.py:0
+msgid "box"
+msgstr "বক্স"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "days"
+msgstr "দিন"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "days."
+msgstr "দিনে।"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos_pharmacy/static/src/js/drawer_forms.js:0
+msgid "e.g. Napa 500"
+msgstr "যেমন নাপা ৫০০"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos_pharmacy/static/src/js/drawer_forms.js:0
+msgid "e.g. Paracetamol"
+msgstr "যেমন প্যারাসিটামল"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "exp."
+msgstr "মেয়াদ"
+
+#. module: pos_pharmacy
+#. odoo-python
+#: code:addons/pos/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos_pharmacy/models/pos_config.py:0
+msgid "exp. %s"
+msgstr "মেয়াদ %s"
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "pieces ·"
+msgstr "পিস ·"
+
+#. module: pos_pharmacy
+#. odoo-python
+#: code:addons/pos/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos_pharmacy/models/pos_config.py:0
+msgid "strip"
+msgstr "স্ট্রিপ"

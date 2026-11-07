@@ -1,0 +1,931 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pos_restaurant_bd
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-06 22:24+0000\n"
+"PO-Revision-Date: 2026-11-06 22:24+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/js/restaurant.js:0
+#: code:addons/pos_restaurant_bd/static/src/js/restaurant.js:0
+msgid "%s sent to the kitchen"
+msgstr "%s রান্নাঘরে পাঠানো হয়েছে"
+
+#. module: pos_restaurant_bd
+#. odoo-python
+#: code:addons/pos/pos_restaurant_bd/models/pos_config.py:0
+#: code:addons/pos_restaurant_bd/models/pos_config.py:0
+msgid "%s%% of the bill"
+msgstr "বিলের %s%%"
+
+#. module: pos_restaurant_bd
+#: model_terms:ir.ui.view,arch_db:pos_restaurant_bd.qr_cards_page
+msgid "<small>Scan to see the menu</small>"
+msgstr "<small>মেনু দেখতে স্ক্যান করুন</small>"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "A table that already has a bill: both bills are merged."
+msgstr "যে টেবিলে আগে থেকে বিল আছে: দুই বিল এক হয়ে যাবে।"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_staff__active
+msgid "Active"
+msgstr "চালু"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Address"
+msgstr "ঠিকানা"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "All"
+msgstr "সব"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "All clear"
+msgstr "সব শেষ"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "All stations"
+msgstr "সব স্টেশন"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "BILL ·"
+msgstr "বিল ·"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "BIN:"
+msgstr "বিআইএন:"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Bill"
+msgstr "বিল"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Bill asked"
+msgstr "বিল চাওয়া হয়েছে"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/js/restaurant.js:0
+#: code:addons/pos_restaurant_bd/static/src/js/restaurant.js:0
+msgid "Bill printed: the table waits for payment."
+msgstr "বিল প্রিন্ট হয়েছে: টেবিল পেমেন্টের অপেক্ষায়।"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/js/restaurant.js:0
+#: code:addons/pos_restaurant_bd/static/src/js/restaurant.js:0
+msgid "Bills merged on table %s"
+msgstr "টেবিল %s-এ বিল এক করা হয়েছে"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Cancel"
+msgstr "বাতিল"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_rb_ticket__state__cancel
+msgid "Cancelled"
+msgstr "বাতিল হয়েছে"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_staff__company_id
+msgid "Company"
+msgstr "কোম্পানি"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_restaurant_bd/models/pos_config.py:0
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/models/pos_config.py:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Complimentary"
+msgstr "কমপ্লিমেন্টারি"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_rb_ticket__state__cooking
+msgid "Cooking"
+msgstr "রান্না হচ্ছে"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Cooking ("
+msgstr "রান্না হচ্ছে ("
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Covers"
+msgstr "কভার"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_staff__create_uid
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket__create_uid
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket_line__create_uid
+msgid "Created by"
+msgstr "তৈরি করেছেন"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_staff__create_date
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket__create_date
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket_line__create_date
+msgid "Created on"
+msgstr "তৈরির সময়"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket__customer
+msgid "Customer"
+msgstr "কাস্টমার"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Date"
+msgstr "তারিখ"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_config__rb_default_type
+msgid "Default order type"
+msgstr "ডিফল্ট অর্ডারের ধরন"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_order__rb_delivery_partner
+msgid "Delivered by"
+msgstr "ডেলিভারি করবে"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_config__rb_default_type__delivery
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_order__rb_order_type__delivery
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_rb_ticket__order_type__delivery
+msgid "Delivery"
+msgstr "ডেলিভারি"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_order__rb_delivery_address
+msgid "Delivery address"
+msgstr "ডেলিভারির ঠিকানা"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_restaurant_bd/models/pos_config.py:0
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/models/pos_config.py:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Delivery charge"
+msgstr "ডেলিভারি চার্জ"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_config__rb_delivery_product_id
+msgid "Delivery charge product"
+msgstr "ডেলিভারি চার্জের পণ্য"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_order__rb_delivery_ref
+msgid "Delivery order no."
+msgstr "ডেলিভারি অর্ডার নং"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_config__rb_default_type__dine_in
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_order__rb_order_type__dine_in
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_rb_ticket__order_type__dine_in
+msgid "Dine-in"
+msgstr "ডাইন-ইন"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Discount"
+msgstr "ছাড়"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_config__display_name
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_order__display_name
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_staff__display_name
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket__display_name
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket_line__display_name
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_session__display_name
+msgid "Display Name"
+msgstr "নাম"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket_line__done
+msgid "Done"
+msgstr "শেষ"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,help:pos_restaurant_bd.field_pos_rb_staff__config_ids
+msgid "Empty = every shop"
+msgstr "খালি = সব শপ"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_order__rb_delivery_partner__foodpanda
+msgid "Foodpanda"
+msgstr "ফুডপান্ডা"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "For"
+msgstr "যার জন্য"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Free"
+msgstr "ফ্রি"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,help:pos_restaurant_bd.field_pos_config__rb_station_split
+msgid ""
+"Grill, tandoor, drinks… (the product's first PoS category) each get their "
+"own KOT."
+msgstr ""
+"গ্রিল, তন্দুর, পানীয়… (পণ্যের প্রথম POS ক্যাটাগরি) প্রত্যেকে আলাদা KOT "
+"পায়।"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Guests"
+msgstr "অতিথি"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_config__id
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_order__id
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_staff__id
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket__id
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket_line__id
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_session__id
+msgid "ID"
+msgstr "ID"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket__line_ids
+msgid "Items"
+msgstr "আইটেম"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "KITCHEN ·"
+msgstr "রান্নাঘর ·"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket__name
+msgid "KOT"
+msgstr "KOT"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_staff__kind
+msgid "Kind"
+msgstr "ধরন"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: model:ir.ui.menu,name:pos_restaurant_bd.menu_kds
+msgid "Kitchen"
+msgstr "রান্নাঘর"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Kitchen (KOT)"
+msgstr "রান্নাঘর (KOT)"
+
+#. module: pos_restaurant_bd
+#: model:ir.model,name:pos_restaurant_bd.model_pos_rb_ticket
+msgid "Kitchen order ticket (KOT)"
+msgstr "কিচেন অর্ডার টিকিট (KOT)"
+
+#. module: pos_restaurant_bd
+#: model:ir.model,name:pos_restaurant_bd.model_pos_rb_ticket_line
+msgid "Kitchen order ticket line"
+msgstr "কিচেন অর্ডার টিকিটের লাইন"
+
+#. module: pos_restaurant_bd
+#: model:ir.actions.client,name:pos_restaurant_bd.action_kds
+msgid "Kitchen screen"
+msgstr "কিচেন স্ক্রিন"
+
+#. module: pos_restaurant_bd
+#: model:ir.actions.act_window,name:pos_restaurant_bd.action_tickets
+#: model:ir.ui.menu,name:pos_restaurant_bd.menu_tickets
+#: model_terms:ir.ui.view,arch_db:pos_restaurant_bd.pos_rb_ticket_list
+msgid "Kitchen tickets"
+msgstr "কিচেন টিকিট"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_config__rb_kitchen
+msgid "Kitchen tickets (KOT) and kitchen screen"
+msgstr "কিচেন টিকিট (KOT) ও কিচেন স্ক্রিন"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_staff__write_uid
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket__write_uid
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket_line__write_uid
+msgid "Last Updated by"
+msgstr "শেষ আপডেট করেছেন"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_staff__write_date
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket__write_date
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket_line__write_date
+msgid "Last Updated on"
+msgstr "শেষ আপডেট"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Merge"
+msgstr "এক করুন"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Move / merge"
+msgstr "সরান / এক করুন"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Move to another table, or merge with its bill"
+msgstr "অন্য টেবিলে সরান, বা তার বিলের সাথে এক করুন"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/js/restaurant.js:0
+#: code:addons/pos_restaurant_bd/static/src/js/restaurant.js:0
+msgid "Moved to table %s"
+msgstr "টেবিল %s-এ সরানো হয়েছে"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_staff__name
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket_line__name
+msgid "Name"
+msgstr "নাম"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_rb_ticket__state__new
+msgid "New"
+msgstr "নতুন"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "New ("
+msgstr "নতুন ("
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "New tickets arrive by themselves (every 8 seconds)."
+msgstr "নতুন টিকিট নিজে থেকেই আসে (প্রতি ৮ সেকেন্ডে)।"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_restaurant_bd/static/src/js/drawer_forms.js:0
+msgid "New waiter or rider"
+msgstr "নতুন ওয়েটার বা রাইডার"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "No restaurant shop"
+msgstr "কোনো রেস্টুরেন্ট শপ নেই"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "No ticket waiting."
+msgstr "অপেক্ষায় কোনো টিকিট নেই।"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Not a receipt · please pay at the counter"
+msgstr "এটি রসিদ নয় · কাউন্টারে পরিশোধ করুন"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Not complimentary"
+msgstr "কমপ্লিমেন্টারি নয়"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket__note
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket_line__note
+msgid "Note"
+msgstr "নোট"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/js/restaurant.js:0
+#: code:addons/pos_restaurant_bd/static/src/js/restaurant.js:0
+msgid "Nothing new for the kitchen"
+msgstr "রান্নাঘরের জন্য নতুন কিছু নেই"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Occupied"
+msgstr "ভরা"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_config__rb_station_split
+msgid "One kitchen ticket per station"
+msgstr "প্রতি স্টেশনে আলাদা কিচেন টিকিট"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket__hold_ref
+msgid "Open bill"
+msgstr "খোলা বিল"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket__order_id
+msgid "Order"
+msgstr "অর্ডার"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket__order_type
+msgid "Order Type"
+msgstr "অর্ডারের ধরন"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_order__rb_order_type
+msgid "Order type"
+msgstr "অর্ডারের ধরন"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,help:pos_restaurant_bd.field_pos_config__rb_restaurant
+msgid "Order types, kitchen tickets, service charge, QR menu."
+msgstr "অর্ডারের ধরন, কিচেন টিকিট, সার্ভিস চার্জ, QR মেনু।"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_order__rb_delivery_partner__other
+msgid "Other"
+msgstr "অন্যান্য"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_order__rb_delivery_partner__own
+msgid "Own rider"
+msgstr "নিজস্ব রাইডার"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_order__rb_delivery_partner__pathao
+msgid "Pathao Food"
+msgstr "পাঠাও ফুড"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Per cover (dine-in)"
+msgstr "মাথাপিছু (ডাইন-ইন)"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_staff__phone
+msgid "Phone"
+msgstr "ফোন"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_restaurant_bd/static/src/js/drawer_forms.js:0
+msgid ""
+"Picked on the bill at the counter; the day-end report shows each one's "
+"sales."
+msgstr "কাউন্টারে বিলে বাছা হয়; দিন শেষের রিপোর্টে প্রত্যেকের বিক্রি দেখায়।"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,help:pos_restaurant_bd.field_pos_rb_ticket_line__station
+msgid "PoS category of the product (grill, drinks…)"
+msgstr "পণ্যের POS ক্যাটাগরি (গ্রিল, পানীয়…)"
+
+#. module: pos_restaurant_bd
+#: model:ir.model,name:pos_restaurant_bd.model_pos_config
+msgid "Point of Sale Configuration"
+msgstr "POS কনফিগারেশন"
+
+#. module: pos_restaurant_bd
+#: model:ir.model,name:pos_restaurant_bd.model_pos_order
+msgid "Point of Sale Orders"
+msgstr "POS অর্ডার"
+
+#. module: pos_restaurant_bd
+#: model:ir.model,name:pos_restaurant_bd.model_pos_session
+msgid "Point of Sale Session"
+msgstr "POS সেশন"
+
+#. module: pos_restaurant_bd
+#: model_terms:ir.ui.view,arch_db:pos_restaurant_bd.qr_menu_page
+msgid "Prices include VAT where applicable. Ask the staff to order."
+msgstr "প্রযোজ্য ক্ষেত্রে দামে ভ্যাট আছে। অর্ডার দিতে স্টাফকে বলুন।"
+
+#. module: pos_restaurant_bd
+#: model_terms:ir.ui.view,arch_db:pos_restaurant_bd.pos_config_counter_form_restaurant
+msgid "Print table QR cards"
+msgstr "টেবিলের QR কার্ড প্রিন্ট"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_config__rb_print_kot
+msgid "Print the KOT on the receipt printer"
+msgstr "রসিদ প্রিন্টারে KOT প্রিন্ট"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Print the guest check; the table waits for payment"
+msgstr "গেস্ট চেক প্রিন্ট; টেবিল পেমেন্টের অপেক্ষায় থাকবে"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket_line__product_id
+msgid "Product"
+msgstr "পণ্য"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_config__rb_qr_menu
+msgid "Public QR menu"
+msgstr "পাবলিক QR মেনু"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket_line__qty
+msgid "Qty"
+msgstr "পরিমাণ"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_rb_ticket__state__ready
+msgid "Ready"
+msgstr "তৈরি"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Ready ("
+msgstr "তৈরি ("
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket__ready_at
+msgid "Ready At"
+msgstr "তৈরির সময়"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: model_terms:ir.ui.view,arch_db:pos_restaurant_bd.pos_config_counter_form_restaurant
+msgid "Restaurant"
+msgstr "রেস্টুরেন্ট"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_config__rb_restaurant
+msgid "Restaurant counter"
+msgstr "রেস্টুরেন্ট কাউন্টার"
+
+#. module: pos_restaurant_bd
+#: model:ir.model,name:pos_restaurant_bd.model_pos_rb_staff
+msgid "Restaurant waiter / rider"
+msgstr "রেস্টুরেন্ট ওয়েটার / রাইডার"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Restaurant ·"
+msgstr "রেস্টুরেন্ট ·"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_order__rb_rider_id
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_rb_staff__kind__rider
+msgid "Rider"
+msgstr "রাইডার"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Rider (cash on delivery: hold the bill until he is back)"
+msgstr "রাইডার (ক্যাশ অন ডেলিভারি: সে ফেরা পর্যন্ত বিল হোল্ড রাখুন)"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_rb_ticket__state__served
+msgid "Served"
+msgstr "পরিবেশিত"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket__served_at
+msgid "Served At"
+msgstr "পরিবেশনের সময়"
+
+#. module: pos_restaurant_bd
+#. odoo-python
+#: code:addons/pos/pos_restaurant_bd/models/pos_config.py:0
+#: code:addons/pos_restaurant_bd/models/pos_config.py:0
+msgid "Service charge"
+msgstr "সার্ভিস চার্জ"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_config__rb_service_pct
+msgid "Service charge (%) on dine-in"
+msgstr "ডাইন-ইনে সার্ভিস চার্জ (%)"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_config__rb_service_product_id
+msgid "Service charge product"
+msgstr "সার্ভিস চার্জের পণ্য"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_order__rb_delivery_partner__shohoz
+msgid "Shohoz Food"
+msgstr "সহজ ফুড"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket__config_id
+msgid "Shop"
+msgstr "শপ"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_restaurant_bd/static/src/js/drawer_forms.js:0
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_staff__config_ids
+msgid "Shops"
+msgstr "শপ"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Start"
+msgstr "শুরু"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket__state
+msgid "State"
+msgstr "অবস্থা"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket_line__station
+msgid "Station"
+msgstr "স্টেশন"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Subtotal"
+msgstr "সাবটোটাল"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "TOTAL"
+msgstr "মোট"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket__table_name
+msgid "Table"
+msgstr "টেবিল"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_config__rb_default_type__takeaway
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_order__rb_order_type__takeaway
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_rb_ticket__order_type__takeaway
+msgid "Takeaway"
+msgstr "টেকঅ্যাওয়ে"
+
+#. module: pos_restaurant_bd
+#. odoo-python
+#: code:addons/pos/pos_restaurant_bd/models/pos_config.py:0
+#: code:addons/pos_restaurant_bd/models/pos_config.py:0
+msgid "The bill or the table is gone."
+msgstr "বিল বা টেবিলটি আর নেই।"
+
+#. module: pos_restaurant_bd
+#. odoo-python
+#: code:addons/pos/pos_restaurant_bd/models/pos_config.py:0
+#: code:addons/pos_restaurant_bd/models/pos_config.py:0
+msgid "The cart is empty."
+msgstr "কার্ট খালি।"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Their order no."
+msgstr "তাদের অর্ডার নং"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "This table"
+msgstr "এই টেবিল"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket_line__ticket_id
+msgid "Ticket"
+msgstr "টিকিট"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_config__rb_late_minutes
+msgid "Ticket late after (minutes)"
+msgstr "টিকিট দেরি ধরা হবে (মিনিট পর)"
+
+#. module: pos_restaurant_bd
+#: model_terms:ir.ui.view,arch_db:pos_restaurant_bd.pos_rb_ticket_list
+msgid "Time"
+msgstr "সময়"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "Turn on \"Restaurant counter\" in a shop's Counter settings."
+msgstr "কোনো শপের কাউন্টার সেটিংসে \"Restaurant counter\" চালু করুন।"
+
+#. module: pos_restaurant_bd
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_rb_ticket__user_id
+msgid "User"
+msgstr "ইউজার"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: model:ir.model.fields,field_description:pos_restaurant_bd.field_pos_order__rb_waiter_id
+#: model:ir.model.fields.selection,name:pos_restaurant_bd.selection__pos_rb_staff__kind__waiter
+msgid "Waiter"
+msgstr "ওয়েটার"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_restaurant_bd/static/src/js/drawer_forms.js:0
+msgid "Waiter / rider"
+msgstr "ওয়েটার / রাইডার"
+
+#. module: pos_restaurant_bd
+#: model:ir.actions.act_window,name:pos_restaurant_bd.action_staff
+#: model:ir.ui.menu,name:pos_restaurant_bd.menu_staff
+#: model_terms:ir.ui.view,arch_db:pos_restaurant_bd.pos_rb_staff_list
+msgid "Waiters & riders"
+msgstr "ওয়েটার ও রাইডার"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "covers ·"
+msgstr "কভার ·"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_restaurant_bd/static/src/js/drawer_forms.js:0
+msgid "e.g. Rahim"
+msgstr "যেমন রহিম"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "guests"
+msgstr "অতিথি"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "in kitchen"
+msgstr "রান্নাঘরে"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "min"
+msgstr "মিনিট"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "new"
+msgstr "নতুন"
+
+#. module: pos_restaurant_bd
+#. odoo-javascript
+#: code:addons/pos/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+#: code:addons/pos_restaurant_bd/static/src/xml/restaurant.xml:0
+msgid "per cover"
+msgstr "মাথাপিছু"
+
+#. module: pos_restaurant_bd
+#: model_terms:ir.ui.view,arch_db:pos_restaurant_bd.qr_menu_page
+msgid "· Table"
+msgstr "· টেবিল"

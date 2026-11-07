@@ -1,0 +1,1727 @@
+// Modern Theme — crm_modern: every style of the app lives here (moved out of
+// crm_modern/static/src/scss so the app ships no stylesheet of its own).
+
+// ---- from crm_modern/static/src/scss/tokens.scss
+// Modern CRM design tokens — aliases of the global Modern Theme (--mt-*).
+// Never a second palette: changing the preset or light/dark restyles CRM too.
+:root {
+    --cm-radius: var(--mt-radius, 0.625rem);
+    --cm-radius-sm: var(--mt-radius-sm, 0.375rem);
+
+    --cm-bg: var(--mt-content-bg, var(--mt-background));
+    --cm-fg: var(--mt-foreground);
+    --cm-card: var(--mt-card);
+    --cm-muted: var(--mt-muted);
+    --cm-muted-fg: var(--mt-muted-foreground);
+    --cm-subtle-fg: var(--mt-muted-foreground);
+    --cm-border: var(--mt-border);
+    --cm-input: var(--mt-input);
+    --cm-card-matte: var(--mt-card-matte, var(--mt-card));
+    --cm-edge: color-mix(in srgb, var(--mt-foreground) 8%, transparent);
+
+    --cm-primary: var(--mt-primary);
+    --cm-primary-fg: var(--mt-primary-foreground);
+    --cm-primary-soft: color-mix(in srgb, var(--mt-primary) 13%, var(--mt-card));
+    --cm-primary-soft-fg: var(--mt-primary);
+    --cm-ring: color-mix(in srgb, var(--mt-primary) 45%, transparent);
+
+    --cm-success: var(--mt-success);
+    --cm-success-soft: color-mix(in srgb, var(--mt-success) 14%, var(--mt-card));
+    --cm-warning: var(--mt-warning);
+    --cm-warning-soft: color-mix(in srgb, var(--mt-warning) 14%, var(--mt-card));
+    --cm-danger: var(--mt-destructive);
+    --cm-danger-soft: color-mix(in srgb, var(--mt-destructive) 14%, var(--mt-card));
+    --cm-info: var(--mt-info, var(--mt-primary));
+    --cm-info-soft: color-mix(in srgb, var(--mt-info, var(--mt-primary)) 14%, var(--mt-card));
+    --cm-violet: var(--mt-info, var(--mt-primary));
+    --cm-violet-soft: color-mix(in srgb, var(--mt-info, var(--mt-primary)) 14%, var(--mt-card));
+
+    --cm-chart-1: var(--mt-primary);
+    --cm-chart-2: var(--mt-success);
+    --cm-chart-3: var(--mt-warning);
+    --cm-chart-4: var(--mt-info, var(--mt-primary));
+
+    --cm-sidebar: var(--mt-sidebar-bg, var(--mt-card));
+    --cm-sidebar-fg: var(--mt-sidebar-fg, var(--mt-foreground));
+    --cm-sidebar-hover: var(--mt-sidebar-accent, var(--mt-muted));
+    --cm-sidebar-accent: var(--mt-sidebar-accent, var(--mt-muted));
+    --cm-sidebar-accent-fg: var(--mt-sidebar-accent-fg, var(--mt-foreground));
+    --cm-sidebar-muted-fg: var(--mt-sidebar-muted-fg, var(--mt-muted-foreground));
+    --cm-sidebar-border: var(--mt-sidebar-border, var(--mt-border));
+    --cm-sidebar-width: 15.5rem;
+
+    --cm-shadow-xs: var(--mt-shadow-xs);
+    --cm-shadow-md: var(--mt-shadow-md);
+    --cm-shadow-sm: var(--mt-shadow-sm);
+    --cm-shadow-lg: var(--mt-shadow-lg);
+    --cm-ease: var(--mt-ease, cubic-bezier(0.2, 0, 0, 1));
+}
+
+// ---- from crm_modern/static/src/scss/pages.scss
+// Page-level layout for the client actions.
+.o_cm.o_cm_page {
+    height: 100%;
+    overflow-y: auto;
+    background: var(--cm-bg);
+    font-size: 0.875rem;
+
+    .cm-container {
+        max-width: 1400px; margin: 0 auto; padding: 1.5rem 1.5rem 3rem;
+        display: flex; flex-direction: column; gap: 1.5rem;
+        @media (max-width: 767.98px) { padding: 1rem 1rem 2.5rem; gap: 1.25rem; }
+    }
+    .cm-container--campaign { max-width: 40rem; }
+    &.cm-campaign-page .cm-card-body { padding-top: 1.25rem; }
+    &.o_cm_page--native .cm-container--native {
+        max-width: none;
+        width: 100%;
+        padding: 0;
+        gap: 0;
+    }
+
+    .cm-grid-stats {
+        display: grid; gap: 1rem; grid-template-columns: repeat(4, minmax(0, 1fr));
+        @media (max-width: 1199.98px) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        @media (max-width: 575.98px) { grid-template-columns: minmax(0, 1fr); }
+    }
+    .cm-grid-main {
+        display: grid; gap: 1rem; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+        @media (max-width: 1199.98px) { grid-template-columns: minmax(0, 1fr); }
+    }
+    .cm-due-overdue { color: var(--cm-danger); font-weight: 600; }
+    .cm-grid-cards {
+        display: grid; gap: 1rem; grid-template-columns: repeat(3, minmax(0, 1fr));
+        @media (max-width: 1399.98px) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        @media (max-width: 767.98px) { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    // ---------- charts ----------
+    .cm-chart {
+        position: relative;
+        svg { display: block; width: 100%; height: auto; touch-action: none; user-select: none; }
+        .cm-tooltip {
+            position: absolute; top: 0; transform: translateX(-50%); pointer-events: none;
+            background: var(--cm-card); border: 1px solid var(--cm-border); border-radius: var(--cm-radius-sm);
+            box-shadow: var(--cm-shadow-lg); padding: 0.375rem 0.625rem; font-size: 0.75rem; white-space: nowrap;
+        }
+    }
+    .cm-barlist {
+        list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem;
+        .cm-bar-meta { display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.75rem; margin-bottom: 0.25rem; }
+        .cm-bar {
+            height: 0.5rem; border-radius: 999px; background: var(--cm-muted); overflow: hidden;
+            > span { display: block; height: 100%; border-radius: inherit; background: var(--cm-chart-1); }
+        }
+    }
+
+    // ---------- list rows ----------
+    .cm-list-row {
+        display: flex; align-items: center; gap: 0.75rem; padding: 0.625rem 0.75rem; border-radius: var(--cm-radius);
+        transition: background-color 120ms var(--cm-ease);
+        &:hover { background: color-mix(in srgb, var(--cm-muted) 60%, transparent); }
+    }
+
+    // ---------- kanban ----------
+    .cm-board {
+        overflow-x: auto; margin: 0 -1.5rem; padding: 0 1.5rem 0.5rem;
+        @media (max-width: 767.98px) { margin: 0 -1rem; padding: 0 1rem 0.5rem; }
+    }
+    .cm-board-cols { display: flex; gap: 1rem; align-items: stretch; }
+    .cm-board-campaigns .cm-col { flex-basis: 26rem; width: 26rem; }
+    .cm-person-kanban-card {
+        .cm-card-header .d-flex {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .cm-card-footer {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.5rem;
+            .cm-btn { justify-content: center; }
+        }
+    }
+    .cm-card-row { flex-wrap: nowrap; }
+    .cm-card.cm-dragging { opacity: 0.4; }
+    .cm-drag-handle { cursor: grab; &:active { cursor: grabbing; } }
+    .cm-col {
+        display: flex; flex-direction: column; flex: 0 0 17.5rem; width: 17.5rem; min-height: 14rem;
+        border-radius: calc(var(--cm-radius) + 2px); padding: 0.5rem;
+        background: color-mix(in srgb, var(--cm-muted) 70%, transparent);
+        transition: background-color 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease);
+        &.cm-drop { background: var(--cm-primary-soft); box-shadow: 0 0 0 2px var(--cm-ring); }
+    }
+    .cm-col-head {
+        padding: 0.25rem 0.5rem 0.5rem;
+        .cm-col-title { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 600; }
+        .cm-col-count {
+            font-size: 0.6875rem; font-weight: 500; padding: 0 0.375rem; border-radius: 0.375rem;
+            background: var(--cm-card); color: var(--cm-muted-fg);
+        }
+        .cm-col-sum {
+            display: flex; align-items: center; gap: 0.5rem; margin-top: 0.375rem;
+            .cm-progress { height: 0.25rem; }
+            span { font-size: 0.75rem; font-weight: 500; color: var(--cm-muted-fg); }
+        }
+    }
+    .cm-col-body { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; list-style: none; margin: 0; padding: 0; }
+    .cm-col-empty {
+        display: grid; place-items: center; flex: 1; min-height: 5rem; border: 1px dashed var(--cm-border);
+        border-radius: var(--cm-radius); font-size: 0.75rem; color: var(--cm-muted-fg);
+    }
+    .cm-deal {
+        position: relative; padding: 0.75rem; border-radius: var(--cm-radius); background: var(--cm-card);
+        border: 1px solid var(--cm-border); cursor: grab;
+        transition: border-color 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease), opacity 150ms var(--cm-ease);
+        &:hover { border-color: color-mix(in srgb, var(--cm-primary) 40%, var(--cm-border)); box-shadow: var(--cm-shadow-sm); }
+        &:active { cursor: grabbing; }
+        &.cm-dragging { opacity: 0.4; }
+        .cm-deal-title {
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+            font-weight: 500; line-height: 1.35; background: none; border: 0; padding: 0; text-align: left; color: inherit; cursor: pointer;
+            &::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+            &:focus-visible { box-shadow: none; }
+            &:focus-visible::after { box-shadow: 0 0 0 3px var(--cm-ring); }
+        }
+        .cm-deal-foot {
+            display: flex; align-items: center; justify-content: space-between; margin-top: 0.75rem;
+            > * { position: relative; z-index: 1; }
+        }
+        .cm-deal-menu { position: relative; z-index: 1; }
+        .cm-tag-list { position: relative; z-index: 1; margin-top: 0.5rem; }
+    }
+
+    // ---------- record page ----------
+    .cm-stepper-wrap { overflow-x: auto; }
+    .cm-stepper {
+        display: flex; min-width: max-content; overflow: hidden; border: 1px solid var(--cm-border);
+        border-radius: var(--cm-radius); background: var(--cm-card);
+        button {
+            flex: 1; min-width: 7rem; height: 2.5rem; padding: 0 1.25rem; border: 0; background: transparent;
+            font-size: 0.75rem; font-weight: 500; color: var(--cm-muted-fg); cursor: pointer; white-space: nowrap;
+            display: inline-flex; align-items: center; justify-content: center; gap: 0.375rem;
+            transition: background-color 150ms var(--cm-ease), color 150ms var(--cm-ease), box-shadow 160ms var(--cm-ease);
+            & + button { border-left: 1px solid var(--cm-border); }
+            &:hover { background: var(--cm-muted); color: var(--cm-fg); }
+            &.cm-done { background: var(--cm-primary-soft); color: var(--cm-primary-soft-fg); }
+            &[aria-current="step"] { background: var(--cm-primary); color: var(--cm-primary-fg); }
+            &[aria-current="step"].cm-won { background: var(--cm-success); color: var(--cm-primary-fg); }
+        }
+    }
+    .cm-record-grid {
+        display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1fr) 28rem; align-items: start;
+        @media (max-width: 1199.98px) { grid-template-columns: minmax(0, 1fr); }
+    }
+    .cm-info {
+        display: grid; gap: 0.75rem; font-size: 0.875rem; margin: 0;
+        > div { display: grid; grid-template-columns: 1.25rem 6.5rem minmax(0, 1fr); align-items: center; gap: 0.5rem; }
+        .fa { color: var(--cm-subtle-fg); text-align: center; }
+        dt { font-weight: 400; color: var(--cm-muted-fg); }
+        dd { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    }
+    .cm-chatter {
+        overflow: hidden;
+        @media (min-width: 1200px) { position: sticky; top: 1rem; max-height: calc(100vh - 8rem); overflow-y: auto; }
+    }
+    .cm-banner {
+        display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1rem; border-radius: var(--cm-radius);
+        font-size: 0.875rem; background: var(--cm-danger-soft); color: var(--cm-danger);
+        &.cm-banner-success { background: var(--cm-success-soft); color: var(--cm-success); }
+    }
+
+    // ---------- campaign / team cards ----------
+    .cm-kv {
+        display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.5rem; padding: 0.75rem;
+        border-radius: var(--cm-radius); background: color-mix(in srgb, var(--cm-muted) 70%, transparent); text-align: center;
+        &.cm-kv-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        &.cm-kv-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        button {
+            border: 0; background: none; padding: 0; color: inherit; cursor: pointer; border-radius: var(--cm-radius-sm);
+            &:hover strong { color: var(--cm-primary); }
+        }
+        strong { display: block; font-size: 0.875rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+        span { font-size: 0.6875rem; color: var(--cm-muted-fg); }
+    }
+    .cm-chan-icon {
+        display: grid; place-items: center; flex-shrink: 0; width: 2.5rem; height: 2.5rem;
+        border-radius: var(--cm-radius); background: var(--cm-primary-soft); color: var(--cm-primary-soft-fg); font-size: 1rem;
+    }
+
+    .cm-bulkbar {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem;
+        border-radius: var(--cm-radius); border: 1px solid color-mix(in srgb, var(--cm-primary) 30%, transparent);
+        background: var(--cm-primary-soft); color: var(--cm-primary-soft-fg);
+    }
+
+    .cm-config-row {
+        display: grid; align-items: center; gap: 0.75rem; padding: 0.75rem;
+        border: 1px solid var(--cm-border); border-radius: var(--cm-radius); background: var(--cm-card);
+        grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+        @media (max-width: 767.98px) { grid-template-columns: auto minmax(0, 1fr); }
+    }
+    .cm-seq {
+        display: grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: var(--cm-radius-sm);
+        font-size: 0.75rem; font-weight: 600; background: var(--cm-primary-soft); color: var(--cm-primary-soft-fg);
+        &.cm-seq-won { background: var(--cm-success-soft); color: var(--cm-success); }
+    }
+}
+
+// Import / quick-create dialogs share these.
+.o_cm_dialog {
+    .cm-choice {
+        display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem;
+        button {
+            display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; text-align: left; cursor: pointer;
+            border: 1px solid var(--cm-border); border-radius: var(--cm-radius); background: var(--cm-card); color: var(--cm-fg);
+            transition: background-color 150ms var(--cm-ease), border-color 150ms var(--cm-ease);
+            &:hover { background: var(--cm-muted); }
+            &[aria-checked="true"] { border-color: var(--cm-primary); background: var(--cm-primary-soft); }
+            .cm-choice-icon {
+                display: grid; place-items: center; flex-shrink: 0; width: 2.25rem; height: 2.25rem; border-radius: var(--cm-radius);
+                background: var(--cm-muted); color: var(--cm-muted-fg);
+            }
+            &[aria-checked="true"] .cm-choice-icon { background: var(--cm-primary); color: var(--cm-primary-fg); }
+            strong { display: block; font-size: 0.875rem; }
+            small { color: var(--cm-muted-fg); font-size: 0.75rem; }
+        }
+    }
+    .cm-drop-zone {
+        display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 2.25rem 1.5rem;
+        border: 2px dashed var(--cm-border); border-radius: calc(var(--cm-radius) + 2px); text-align: center;
+        transition: border-color 150ms var(--cm-ease), background-color 150ms var(--cm-ease);
+        &.cm-over { border-color: var(--cm-primary); background: var(--cm-primary-soft); }
+    }
+    .cm-map-grid {
+        display: grid; gap: 0.5rem; grid-template-columns: repeat(2, minmax(0, 1fr));
+        @media (max-width: 575.98px) { grid-template-columns: minmax(0, 1fr); }
+        > div {
+            display: flex; align-items: center; gap: 0.5rem; padding: 0.375rem 0.625rem;
+            border: 1px solid var(--cm-border); border-radius: var(--cm-radius-sm);
+        }
+        .cm-map-col { width: 7rem; flex-shrink: 0; font-size: 0.75rem; font-weight: 500; }
+    }
+    .cm-preview {
+        max-height: 14rem; overflow: auto; border: 1px solid var(--cm-border); border-radius: var(--cm-radius);
+        tr.cm-invalid { background: var(--cm-danger-soft); }
+    }
+    .cm-color-grid {
+        display: grid; grid-template-columns: repeat(6, 1.5rem); gap: 0.375rem;
+        button {
+            width: 1.5rem; height: 1.5rem; border-radius: 50%; border: 0; cursor: pointer; transition: transform 120ms var(--cm-ease);
+            &:hover { transform: scale(1.1); }
+            &[aria-checked="true"] { box-shadow: 0 0 0 2px var(--cm-card), 0 0 0 4px var(--cm-fg); }
+        }
+    }
+}
+
+// Embedded native Odoo views. The card hugs its rows instead of painting a
+// full-height void under a short list, and the toolbar keeps one line.
+.o_cm.o_cm_page.o_cm_page--native {
+    overflow: auto;
+    .cm-native {
+        flex: 0 1 auto;
+        overflow: visible;
+        > .o_view_controller, > .o_cm_native_view { flex: 0 1 auto; min-height: 12rem; overflow: visible; }
+        .o_list_view, .o_list_view > .o_content, .o_list_renderer,
+        .o_kanban_view, .o_kanban_view > .o_content, .o_kanban_renderer {
+            flex: 0 1 auto;
+            height: auto;
+            min-height: 12rem;
+        }
+        .o_control_panel_main { flex-wrap: wrap !important; }
+        .o_control_panel_navigation { flex-shrink: 0; min-width: max-content; }
+        .o_cp_switch_buttons { flex: 0 0 auto; }
+        .o_control_panel_main_buttons .btn { white-space: nowrap; }
+        img.o_avatar {
+            width: 1.5rem; height: 1.5rem; object-fit: cover; font-size: 0; color: transparent;
+            background: var(--cm-muted); border-radius: 50%;
+        }
+        .o_view_nocontent .o_nocontent_help :is(.o_view_nocontent_smiling_face, .o_view_nocontent_neutral_face, .o_view_nocontent_empty_folder)::before {
+            display: none;
+            content: none;
+            width: 0;
+            height: 0;
+            background: none;
+        }
+    }
+}
+
+// Embedded native Odoo views (pivot, graph, calendar, activity) inside a modern card.
+.o_cm.o_cm_page .cm-native {
+    overflow: hidden;
+    .o_cm_native_view { background: var(--cm-card); }
+    .o_control_panel { background: var(--cm-card); border-bottom: 1px solid var(--cm-border); padding: 0.75rem 1rem; }
+    .o_content { background: var(--cm-card); }
+    // scope to the view content: the view-switch buttons also carry .o_pivot / .o_graph classes
+    .o_content > .o_pivot, .o_content > .o_graph_renderer, .o_calendar_container, .o_content > .o_activity_view { min-height: 24rem; }
+}
+
+
+// shadcn-style skin for the standard Odoo controls that live inside Modern CRM pages
+// (embedded list / kanban / pivot / graph / calendar / activity views, their control
+// panel, search bar, pager and view switcher). Scoped to .o_cm so the rest of Odoo
+// keeps its own look.
+
+.o_cm {
+    // ---------- Bootstrap / Odoo button tokens ----------
+    .btn {
+        --btn-border-radius: var(--cm-radius-sm);
+        --btn-font-weight: 500;
+        --btn-padding-y: 0.375rem;
+        --btn-padding-x: 0.875rem;
+        transition: background-color 150ms var(--cm-ease), border-color 150ms var(--cm-ease), color 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease);
+        &:focus-visible { box-shadow: 0 0 0 3px var(--cm-ring); }
+    }
+    .btn-primary {
+        --btn-bg: var(--cm-primary);
+        --btn-border-color: var(--cm-primary);
+        --btn-color: var(--cm-primary-fg);
+        --btn-hover-bg: color-mix(in srgb, var(--cm-primary) 88%, var(--cm-fg));
+        --btn-hover-border-color: color-mix(in srgb, var(--cm-primary) 88%, var(--cm-fg));
+        --btn-hover-color: var(--cm-primary-fg);
+        --btn-active-bg: color-mix(in srgb, var(--cm-primary) 80%, var(--cm-fg));
+        --btn-active-border-color: color-mix(in srgb, var(--cm-primary) 80%, var(--cm-fg));
+        --btn-active-color: var(--cm-primary-fg);
+        --btn-disabled-bg: var(--cm-primary);
+        --btn-disabled-border-color: var(--cm-primary);
+    }
+    .btn-secondary, .btn-light, .btn-outline-secondary {
+        --btn-bg: var(--cm-card);
+        --btn-border-color: var(--cm-border);
+        --btn-color: var(--cm-fg);
+        --btn-hover-bg: var(--cm-muted);
+        --btn-hover-border-color: var(--cm-border);
+        --btn-hover-color: var(--cm-fg);
+        --btn-active-bg: var(--cm-muted);
+        --btn-active-border-color: var(--cm-border);
+        --btn-active-color: var(--cm-fg);
+    }
+    .btn-link { --btn-color: var(--cm-primary); --btn-hover-color: var(--cm-primary); }
+    a:not(.btn):not(.dropdown-item):not(.cm-sb-item) { color: var(--cm-primary); }
+
+    // ---------- control panel (card header of the embedded view) ----------
+    .cm-native {
+        > .o_view_controller, .o_cm_native_view { background: var(--cm-card); }
+        .o_control_panel {
+            gap: 0.75rem !important; // Bootstrap gap utility on the element itself
+            padding: 0.625rem 1rem !important;
+            background: var(--cm-card);
+            border-bottom: 1px solid var(--cm-border);
+        }
+        .o_control_panel_main { align-items: center; gap: 0.75rem; }
+        .o_control_panel_breadcrumbs {
+            .o_last_breadcrumb_item { font-size: 1.125rem; font-weight: 600; letter-spacing: -0.01em; color: var(--cm-fg); }
+            .o_control_panel_breadcrumbs_actions .btn { color: var(--cm-muted-fg); }
+        }
+
+        // search bar
+        .o_cp_searchview { min-width: 0; }
+        .o_searchview {
+            min-height: 2rem;
+            height: 2rem;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+            .o_searchview_input { font-size: 0.8125rem; }
+            .o_searchview_facet {
+                border-radius: var(--cm-radius-sm);
+                background: var(--cm-muted);
+                .o_searchview_facet_label { background: var(--cm-primary); color: var(--cm-primary-fg); border-radius: var(--cm-radius-sm) 0 0 var(--cm-radius-sm); }
+            }
+        }
+        .o_searchview_dropdown_toggler {
+            min-height: 2rem;
+            height: 2rem;
+            border: 0;
+            border-left: 1px solid var(--cm-input);
+            border-radius: 0;
+            background: transparent;
+            color: var(--cm-muted-fg);
+            &:hover { background: var(--cm-muted); color: var(--cm-fg); }
+        }
+
+        // pager + view switcher → compact segmented controls
+        .o_control_panel_navigation { align-items: center; gap: 0.5rem; }
+        .o_pager { align-items: center; font-size: 0.8125rem; color: var(--cm-muted-fg); }
+        .o_pager .btn, .o_cp_switch_buttons .btn {
+            height: 2rem;
+            min-height: 0;
+            padding: 0 0.625rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .o_cp_switch_buttons {
+            padding: 0.1875rem;
+            gap: 0.125rem;
+            border-radius: var(--cm-radius);
+            background: var(--cm-muted);
+            .btn {
+                height: 1.75rem;
+                border: 0;
+                border-radius: var(--cm-radius-sm) !important; // btn-group squares the inner corners
+                background: transparent;
+                color: var(--cm-muted-fg);
+                &:hover { color: var(--cm-fg); background: color-mix(in srgb, var(--cm-card) 60%, transparent); }
+                &.active { background: var(--cm-card); color: var(--cm-fg); box-shadow: var(--cm-shadow-sm); }
+            }
+        }
+
+        // ---------- list ----------
+        .o_content { background: var(--cm-card); }
+        .o_list_renderer {
+            .o_list_table {
+                --table-bg: var(--cm-card);
+                --table-hover-bg: color-mix(in srgb, var(--cm-muted) 70%, transparent);
+                --table-striped-bg: transparent;
+                font-size: 0.875rem;
+                color: var(--cm-fg);
+            }
+            --ListRenderer-thead-bg-color: color-mix(in srgb, var(--cm-muted) 60%, var(--cm-card));
+            thead th {
+                height: 2.5rem;
+                background: color-mix(in srgb, var(--cm-muted) 60%, var(--cm-card)) !important;
+                color: var(--cm-muted-fg) !important;
+                font-size: 0.75rem;
+                font-weight: 500;
+                border-bottom: 1px solid var(--cm-border);
+            }
+            tbody td { padding-top: 0.625rem; padding-bottom: 0.625rem; border-color: var(--cm-border); vertical-align: middle; }
+            tbody tr.o_data_row:hover > td { background: color-mix(in srgb, var(--cm-muted) 70%, transparent); }
+            tr.o_data_row.o_data_row_selected > td,
+            tr.table-info > td {
+                background: var(--cm-muted) !important;
+                color: var(--cm-fg) !important;
+                box-shadow: none !important;
+            }
+            tfoot { background: transparent; color: var(--cm-muted-fg); }
+            .o_list_record_selector .form-check-input, thead .form-check-input {
+                border-color: var(--cm-input);
+                &:checked { background-color: var(--cm-primary); border-color: var(--cm-primary); }
+            }
+            .o_group_header { background: color-mix(in srgb, var(--cm-muted) 45%, var(--cm-card)); font-weight: 500; }
+            .badge { border-radius: var(--cm-radius-sm); font-weight: 500; }
+        }
+        // empty filler rows Odoo adds under short lists
+        .o_list_table tbody tr:not(.o_data_row):not(.o_group_header) td { border-color: transparent; }
+
+        // ---------- pivot / graph / calendar / activity ----------
+        .o_pivot table {
+            font-size: 0.8125rem;
+            th, td { border-color: var(--cm-border); }
+            thead th, .o_pivot_header_cell_closed, .o_pivot_header_cell_opened { background: color-mix(in srgb, var(--cm-muted) 55%, var(--cm-card)); }
+        }
+        .o_graph_renderer, .o_calendar_container, .o_activity_view { background: var(--cm-card); color: var(--cm-fg); }
+        .o_graph_renderer {
+            padding: 1rem 1.25rem;
+            .o_graph_canvas_container { background: var(--cm-card); }
+            .o_graph_tooltip, .o-tooltip {
+                background: var(--cm-card) !important;
+                color: var(--cm-fg) !important;
+                border-color: var(--cm-border) !important;
+            }
+        }
+        .o_calendar_container .fc { --fc-border-color: var(--cm-border); }
+        .o_activity_view table { th, td { border-color: var(--cm-border); } }
+    }
+
+    // ---------- dropdown menus rendered by the embedded views ----------
+    .dropdown-menu, .o-dropdown--menu {
+        border: 1px solid var(--cm-border);
+        border-radius: var(--cm-radius);
+        box-shadow: var(--cm-shadow-lg);
+    }
+}
+
+// Dropdowns (search filters, group by, action menu, card menus) are portaled out of
+// .o_cm into the overlay container, so give them the same shape app-wide on our pages.
+.o_web_client:has(.o_cm_page) .o-dropdown--menu.dropdown-menu {
+    border-color: var(--cm-border);
+    border-radius: var(--cm-radius);
+    box-shadow: var(--cm-shadow-lg);
+    padding: 0.25rem;
+    .dropdown-item, .o-dropdown-item {
+        border-radius: var(--cm-radius-sm);
+        font-size: 0.875rem;
+        &:hover, &.focus, &:focus { background: var(--cm-muted); color: var(--cm-fg); }
+        &.selected, &.active { background: var(--cm-primary-soft); color: var(--cm-primary-soft-fg); }
+    }
+    .dropdown-header, .o_dropdown_title { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--cm-subtle-fg); }
+}
+
+
+// ============================================================================
+// Chatter (Odoo mail component on the record page): shadcn skin
+// ============================================================================
+.o_cm .cm-chatter {
+    .o-mail-Chatter { background: transparent; }
+    .o-mail-Chatter-top { background: var(--cm-card); border-bottom: 1px solid var(--cm-border); }
+    .o-mail-Chatter-topbar {
+        gap: 0.375rem;
+        padding: 0.75rem 1rem;
+        // Send message / Log note / Activity: compact buttons; the open one is primary
+        .o-mail-Chatter-sendMessage, .o-mail-Chatter-logNote, .o-mail-Chatter-activity {
+            height: 2rem;
+            padding: 0 0.875rem;
+            border-radius: var(--cm-radius-sm);
+            font-size: 0.8125rem;
+            font-weight: 500;
+            box-shadow: none;
+        }
+        .o-mail-Chatter-sendMessage, .o-mail-Chatter-logNote, .o-mail-Chatter-activity {
+            --btn-bg: var(--cm-card);
+            --btn-color: var(--cm-fg);
+            --btn-border-color: var(--cm-border);
+            --btn-hover-bg: var(--cm-muted);
+            --btn-hover-color: var(--cm-fg);
+            --btn-hover-border-color: var(--cm-border);
+        }
+        .o-mail-Chatter-sendMessage.btn-primary, .o-mail-Chatter-logNote.btn-primary,
+        .o-mail-Chatter-sendMessage.active, .o-mail-Chatter-logNote.active {
+            --btn-bg: var(--cm-primary);
+            --btn-color: var(--cm-primary-fg);
+            --btn-border-color: var(--cm-primary);
+            --btn-hover-bg: color-mix(in srgb, var(--cm-primary) 88%, var(--cm-fg));
+            --btn-hover-color: var(--cm-primary-fg);
+            --btn-hover-border-color: color-mix(in srgb, var(--cm-primary) 88%, var(--cm-fg));
+        }
+        .o-mail-Chatter-attachFiles, .o-mail-Followers-button, .btn-link {
+            color: var(--cm-muted-fg);
+            border-radius: var(--cm-radius-sm);
+            &:hover { background: var(--cm-muted); color: var(--cm-fg); }
+        }
+    }
+
+    // composer
+    .o-mail-Composer {
+        padding: 0.875rem 1rem 1rem;
+        background: var(--cm-card);
+        .o-mail-Composer-coreMain {
+            border: 1px solid var(--cm-input);
+            border-radius: var(--cm-radius);
+            background: var(--cm-card);
+            box-shadow: var(--cm-shadow-sm);
+            transition: border-color 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease);
+            &:focus-within { border-color: var(--cm-primary); box-shadow: 0 0 0 3px var(--cm-ring); }
+        }
+        .o-mail-Composer-bg, .o-mail-Composer-inputContainer { background: transparent; border: 0; }
+        .o-mail-Composer-input { font-size: 0.875rem; line-height: 1.5; padding: 0.625rem 0.75rem; }
+        .o-mail-Composer-input::placeholder { color: var(--cm-subtle-fg); }
+        .o-mail-Composer-send {
+            --btn-bg: var(--cm-primary);
+            --btn-border-color: var(--cm-primary);
+            --btn-color: var(--cm-primary-fg);
+            --btn-hover-bg: color-mix(in srgb, var(--cm-primary) 88%, var(--cm-fg));
+            --btn-hover-color: var(--cm-primary-fg);
+            height: 2rem;
+            padding: 0 0.875rem;
+            border-radius: var(--cm-radius-sm);
+            font-weight: 500;
+        }
+        .o-mail-Composer-actions .btn, .o-mail-Composer-quickActions .btn {
+            color: var(--cm-muted-fg);
+            border-radius: var(--cm-radius-sm);
+            &:hover { background: var(--cm-muted); color: var(--cm-fg); }
+        }
+        .o-mail-Composer-avatar { border-radius: 50%; }
+    }
+
+    // thread + messages
+    .o-mail-Thread { padding: 0.5rem 0.75rem 1rem; background: transparent; }
+    .o-mail-DateSection { font-size: 0.6875rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--cm-subtle-fg); }
+    .o-mail-Message {
+        border-radius: var(--cm-radius);
+        padding: 0.375rem 0.5rem;
+        transition: background-color 120ms var(--cm-ease);
+        &:hover { background: color-mix(in srgb, var(--cm-muted) 55%, transparent); }
+        .o-mail-Message-avatar { border-radius: 50%; }
+        .o-mail-Message-author { font-weight: 600; font-size: 0.8125rem; color: var(--cm-fg); }
+        .o-mail-Message-date { font-size: 0.6875rem; color: var(--cm-subtle-fg); }
+        .o-mail-Message-body { font-size: 0.875rem; line-height: 1.55; color: var(--cm-fg); }
+        .o-mail-Message-bubble { border-radius: var(--cm-radius); border-color: var(--cm-border); background: var(--cm-card); }
+        .o-mail-Message-bubbleTail { display: none; }
+        .o-mail-Message-actions .btn { border-radius: var(--cm-radius-sm); color: var(--cm-muted-fg); }
+        a { color: var(--cm-primary); }
+    }
+    .o-mail-Message-notification { color: var(--cm-muted-fg); }
+
+    // activities inside the chatter (when shown)
+    .o-mail-Activity {
+        margin: 0.375rem 0.75rem;
+        padding: 0.625rem 0.75rem;
+        border: 1px solid var(--cm-border);
+        border-radius: var(--cm-radius);
+        background: var(--cm-card);
+        .o-mail-Activity-markDone, .o-mail-Activity-edit { border-radius: var(--cm-radius-sm); }
+    }
+    .o-mail-AttachmentList { padding: 0.5rem 1rem; }
+}
+
+// ============================================================================
+// Dialogs opened from Modern CRM pages (activity scheduler, Odoo forms,
+// lost reason, convert, ...): rounded card, quiet header, shadcn buttons.
+// Our own dialogs (.o_cm_dialog) and the right sheet (.o_or_sheet / .o_cm_drawer)
+// already carry these styles — do not restyle them as centered Bootstrap cards.
+// ============================================================================
+.o_web_client:has(.o_cm_page) .modal .modal-content:not(.o_cm_dialog):not(.o_cm_drawer):not(.o_or_sheet) {
+    border: 1px solid var(--cm-border);
+    border-radius: calc(var(--cm-radius) + 4px);
+    box-shadow: var(--cm-shadow-lg);
+    overflow: hidden;
+
+    .modal-header {
+        border-bottom: 1px solid var(--cm-border);
+        padding: 1rem 1.5rem;
+        .modal-title { font-size: 1rem; font-weight: 600; color: var(--cm-fg); }
+    }
+    .modal-body { padding: 1.25rem 1.5rem; }
+    .modal-footer {
+        gap: 0.5rem;
+        padding: 0.875rem 1.5rem;
+        border-top: 1px solid var(--cm-border);
+        background: color-mix(in srgb, var(--cm-muted) 40%, var(--cm-card));
+        > * { margin: 0; }
+    }
+    .btn {
+        --btn-border-radius: var(--cm-radius-sm);
+        --btn-font-weight: 500;
+        &:focus-visible { box-shadow: 0 0 0 3px var(--cm-ring); }
+    }
+    .btn-primary {
+        --btn-bg: var(--cm-primary);
+        --btn-border-color: var(--cm-primary);
+        --btn-color: var(--cm-primary-fg);
+        --btn-hover-bg: color-mix(in srgb, var(--cm-primary) 88%, var(--cm-fg));
+        --btn-hover-border-color: color-mix(in srgb, var(--cm-primary) 88%, var(--cm-fg));
+        --btn-hover-color: var(--cm-primary-fg);
+        --btn-active-bg: color-mix(in srgb, var(--cm-primary) 80%, var(--cm-fg));
+        --btn-active-border-color: color-mix(in srgb, var(--cm-primary) 80%, var(--cm-fg));
+    }
+    .btn-secondary {
+        --btn-bg: var(--cm-card);
+        --btn-border-color: var(--cm-border);
+        --btn-color: var(--cm-fg);
+        --btn-hover-bg: var(--cm-muted);
+        --btn-hover-border-color: var(--cm-border);
+        --btn-hover-color: var(--cm-fg);
+        --btn-active-bg: var(--cm-primary-soft);
+        --btn-active-border-color: var(--cm-primary);
+        --btn-active-color: var(--cm-primary-soft-fg);
+    }
+    .o_form_label { font-size: 0.8125rem; font-weight: 500; color: var(--cm-muted-fg); }
+
+    // activity scheduler: activity types / plans as chips instead of grey buttons
+    .o_mail_activity_schedule_wizard {
+        .o_selection_badge {
+            border-radius: 999px;
+            padding: 0.25rem 0.875rem;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            &.active {
+                background: var(--cm-primary);
+                border-color: var(--cm-primary);
+                color: var(--cm-primary-fg);
+            }
+        }
+        .o_field_widget[name="summary"] input { font-size: 1.125rem; font-weight: 500; }
+        .oe-bordered-editor { border-color: var(--cm-input); border-radius: var(--cm-radius); }
+        .o_mail_activity_schedule_summary { border: 1px solid var(--cm-border); border-radius: var(--cm-radius); }
+    }
+}
+
+
+// tracked values (Stage: New -> Qualified) use the brand colour instead of Odoo teal;
+// Odoo puts the text-info utility (which is !important) on them
+.o_cm .cm-chatter .o-mail-Message .text-info { color: var(--cm-primary) !important; }
+
+// Pipeline card: closing date colour (late / within 7 days), open deals only.
+.o_cm_deal_kanban .cm-kc-date {
+    border-radius: var(--mt-radius-badge, 0.375rem);
+    &.cm-kc-date--late {
+        padding: 0 0.375rem;
+        background: var(--cm-danger-soft);
+        color: var(--cm-danger);
+        font-weight: 600;
+    }
+    &.cm-kc-date--soon {
+        padding: 0 0.375rem;
+        background: var(--cm-warning-soft);
+        color: var(--cm-warning);
+        font-weight: 600;
+    }
+}
+
+// ---- from crm_modern/static/src/scss/record.scss
+// Compact opportunity / lead page (ui-ux-pro-max: dense dashboard spacing, 8px rhythm,
+// one primary action per area, 150–200ms transitions, visible focus rings).
+.o_cm.o_cm_page.cm-rec {
+    .cm-container { gap: 0.875rem; padding: 1rem 1.25rem 2rem; max-width: none; width: 100%; }
+
+    // ---------- header + stage (one card) ----------
+    .cm-rec-hero {
+        display: grid; gap: 0.75rem; padding: 1rem 1.25rem 1rem;
+    }
+    .cm-rec-head { display: grid; gap: 0.25rem; }
+    .cm-rec-crumb {
+        justify-self: start; display: inline-flex; align-items: center; gap: 0.375rem; height: 1.5rem; padding: 0 0.375rem;
+        margin-left: -0.375rem; border: 0; border-radius: var(--cm-radius-sm); background: none;
+        font-size: 0.75rem; font-weight: 500; color: var(--cm-subtle-fg); cursor: pointer;
+        &:hover { background: var(--cm-muted); color: var(--cm-fg); }
+        &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--cm-ring); }
+    }
+    .cm-rec-titlebar { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+    .cm-rec-title {
+        display: flex; align-items: center; gap: 0.625rem; flex: 1; min-width: 0; flex-wrap: wrap;
+        h1 { margin: 0; font-size: 1.375rem; font-weight: 650; letter-spacing: -0.02em; line-height: 1.25; color: var(--cm-fg); }
+    }
+    .cm-rec-actions { display: flex; align-items: center; gap: 0.375rem; }
+    .cm-rec-actions .cm-btn-primary {
+        border: 0; border-radius: 999px;
+        background: var(--or-save-bg, var(--cm-primary)); color: var(--or-save-fg, var(--cm-primary-fg));
+        &:hover { background: var(--or-save-hover, color-mix(in srgb, var(--cm-primary) 86%, var(--cm-fg))); }
+    }
+    .cm-btn-lost {
+        color: var(--cm-danger); border-color: color-mix(in srgb, var(--cm-danger) 45%, var(--cm-border));
+        &:hover { background: var(--cm-danger-soft); border-color: var(--cm-danger); color: var(--cm-danger); }
+    }
+    .cm-rec-meta {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 1rem; font-size: 0.8125rem; color: var(--cm-muted-fg);
+        .fa { color: var(--cm-subtle-fg); margin-right: 0.125rem; }
+        a { color: var(--cm-muted-fg); &:hover { color: var(--cm-primary); } }
+    }
+
+    // compact stage stepper
+    .cm-rec-hero .cm-stepper-wrap { margin: 0; }
+    .cm-stepper--sm button { height: 2.125rem; min-width: 6rem; padding: 0 0.875rem;
+        transition: background-color 160ms var(--cm-ease), color 160ms var(--cm-ease), box-shadow 160ms var(--cm-ease), border-color 160ms var(--cm-ease);
+        &:hover:not([aria-current="step"]):not(:disabled) {
+            border-color: var(--cm-border);
+            background: var(--cm-muted);
+        }
+    }
+
+    // ---------- layout: deal facts left, chatter right ----------
+    .cm-rec-layout {
+        display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr) minmax(22rem, 28rem); align-items: start;
+        @media (max-width: 1099.98px) { grid-template-columns: minmax(0, 1fr); }
+    }
+    .cm-rec-main { display: flex; flex-direction: column; gap: 0.875rem; min-width: 0;
+        .cm-card { padding: 0.875rem 1rem; }
+    }
+    .cm-rec-feed {
+        display: flex; flex-direction: column; gap: 0; min-width: 0;
+        background: var(--cm-card);
+        border: 1px solid var(--cm-border);
+        border-radius: calc(var(--cm-radius) + 2px);
+        box-shadow: var(--cm-shadow-sm);
+        overflow: hidden;
+        @media (min-width: 1100px) {
+            position: sticky; top: 0.75rem;
+            height: calc(100vh - 5.5rem);
+            max-height: calc(100vh - 5.5rem);
+        }
+        .cm-actions-card, .cm-timeline {
+            border: 0; border-radius: 0; box-shadow: none; background: transparent;
+        }
+        .cm-actions-card { flex: 0 0 auto; border-bottom: 1px solid var(--cm-border); }
+        .cm-timeline {
+            flex: 1 1 auto; min-height: 12rem; overflow: auto;
+            @media (min-width: 1100px) { max-height: none; }
+        }
+        .cm-compose-hint { max-width: 9rem; }
+    }
+    @media (max-width: 1099.98px) {
+        .cm-rec-feed { height: auto; max-height: none; }
+    }
+
+    // ---------- side cards ----------
+    .cm-side-title {
+        display: flex; align-items: center; gap: 0.375rem; margin: 0 0 0.5rem;
+        font-size: 0.75rem; font-weight: 600; color: var(--cm-subtle-fg);
+    }
+    .cm-count { font-size: 0.6875rem; padding: 0 0.375rem; border-radius: 999px; background: var(--cm-primary-soft); color: var(--cm-primary-soft-fg); letter-spacing: 0; }
+
+    .cm-rec-kpis {
+        display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem 1rem;
+        padding-bottom: 0.75rem; border-bottom: 1px solid var(--cm-border);
+        @media (max-width: 639.98px) { grid-template-columns: 1fr 1fr; }
+        .cm-kpi { display: grid; gap: 0.125rem; margin: 0; min-width: 0; cursor: text;
+            > span { font-size: 0.6875rem; font-weight: 500; color: var(--cm-subtle-fg); }
+        }
+        .cm-kpi-money { display: flex; align-items: baseline; gap: 0.375rem; min-width: 0; }
+        .cm-kpi-currency { flex: 0 0 auto; font-size: 0.75rem; font-weight: 650; color: var(--cm-muted-fg); }
+        .cm-kpi-big { font-size: 1.25rem; font-weight: 650; letter-spacing: -0.02em; line-height: 1.6; height: auto;
+            border-color: var(--cm-border); background: var(--cm-card);
+            &[type="number"] { appearance: textfield; -moz-appearance: textfield; }
+            &[type="number"]::-webkit-inner-spin-button, &[type="number"]::-webkit-outer-spin-button { appearance: none; margin: 0; }
+        }
+        .cm-kpi-bar { height: 0.25rem; border-radius: 999px; background: var(--cm-muted); overflow: hidden;
+            span { display: block; height: 100%; border-radius: inherit; background: var(--cm-primary); transition: width 200ms var(--cm-ease); }
+        }
+    }
+
+    // inputs that read as text until hovered / focused
+    .cm-inline-input {
+        width: 100%; min-width: 0; height: 1.875rem; padding: 0 0.375rem; margin-left: -0.375rem;
+        width: calc(100% + 0.75rem);
+        border: 1px solid transparent; border-radius: var(--cm-radius-sm); background: transparent;
+        color: var(--cm-fg); font-size: 0.8125rem; font-family: inherit;
+        transition: border-color 150ms var(--cm-ease), background-color 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease);
+        &:hover { border-color: var(--cm-border); background: var(--cm-card); }
+        &:focus { outline: none; border-color: var(--cm-primary); background: var(--cm-card); box-shadow: 0 0 0 3px var(--cm-ring); }
+        &::placeholder { color: var(--cm-subtle-fg); }
+    }
+    select.cm-inline-input { appearance: none; cursor: pointer; text-overflow: ellipsis; }
+
+    .cm-rec-deal { display: grid; gap: 0.875rem; }
+    .cm-rec-notes .cm-side-title { margin-bottom: 0.375rem; }
+    .cm-rec-props {
+        display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.25rem 1.25rem;
+        @media (max-width: 639.98px) { grid-template-columns: minmax(0, 1fr); }
+        .cm-prop--block { grid-column: 1 / -1; }
+    }
+    .cm-prop {
+        display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); align-items: center; gap: 0.5rem; min-height: 1.875rem;
+        font-size: 0.8125rem;
+        > label, > span:first-child { margin: 0; color: var(--cm-muted-fg); font-weight: 400; }
+        .cm-prop-val { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        &.cm-prop--block { grid-template-columns: minmax(0, 1fr); gap: 0.25rem; margin-top: 0.25rem; }
+    }
+
+    .cm-side-empty {
+        margin: 0; padding: 0.5rem 0.625rem; border-radius: var(--cm-radius-sm); font-size: 0.8125rem;
+        background: var(--cm-warning-soft); color: var(--cm-warning);
+    }
+    .cm-mini-list {
+        list-style: none; margin: 0 -0.5rem; padding: 0; display: grid;
+        li {
+            display: flex; align-items: center; gap: 0.5rem; padding: 0.375rem 0.5rem; border-radius: var(--cm-radius-sm);
+            &:hover { background: var(--cm-muted); .cm-mini-actions { opacity: 1; } }
+        }
+        .cm-mini-body { flex: 1; min-width: 0; }
+        .cm-mini-title { font-size: 0.8125rem; font-weight: 500; }
+        .cm-mini-sub { font-size: 0.6875rem; color: var(--cm-subtle-fg); }
+        .cm-mini-actions { display: flex; gap: 0.125rem; opacity: 0; transition: opacity 150ms var(--cm-ease); }
+        li:focus-within .cm-mini-actions { opacity: 1; }
+        @media (hover: none) { .cm-mini-actions { opacity: 1; } }
+    }
+    .cm-rec-side-fields { display: contents; border: 0; margin: 0; padding: 0; min-width: 0; }
+    .cm-readonly .cm-inline-input { cursor: default; &:hover { border-color: transparent; background: transparent; } }
+    .cm-btn-delete:hover { color: var(--cm-danger); background: var(--cm-danger-soft); }
+    .cm-stepper button:disabled { cursor: default; }
+    .cm-notes { height: auto; min-height: 4rem; padding: 0.375rem; line-height: 1.5; resize: vertical; border-color: var(--cm-border); }
+
+    // ---------- timeline (composer lives in RecordActions above this card) ----------
+    .cm-rec-feed .cm-chatter.cm-timeline {
+        position: static; max-height: none; overflow: auto;
+        // The Send / Log note / Activity card above this timeline is the composer.
+        .o-mail-Chatter-top { display: none; }
+        .o-mail-Thread { padding-top: 0.25rem; }
+    }
+}
+
+// ---------- shared small controls (also used by other addons' tabs) ----------
+.o_cm {
+    .cm-icon-btn {
+        display: inline-grid; place-items: center; width: 1.75rem; height: 1.75rem; padding: 0; flex-shrink: 0;
+        border: 0; border-radius: var(--cm-radius-sm); background: transparent; color: var(--cm-subtle-fg); cursor: pointer;
+        transition: background-color 150ms var(--cm-ease), color 150ms var(--cm-ease);
+        &:hover { background: var(--cm-muted); color: var(--cm-fg); }
+        &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--cm-ring); }
+        &:disabled { opacity: 0.5; cursor: not-allowed; }
+        &.cm-icon-btn--ok:hover { background: var(--cm-success-soft); color: var(--cm-success); }
+        &.cm-icon-btn--danger:hover { background: var(--cm-danger-soft); color: var(--cm-danger); }
+    }
+    .cm-input.cm-input-sm { height: 2rem; font-size: 0.8125rem; padding: 0 0.625rem; }
+
+    .cm-chips {
+        display: flex; flex-wrap: wrap; gap: 0.375rem;
+        > button, > .cm-chip-date {
+            display: inline-flex; align-items: center; gap: 0.375rem; height: 1.875rem; padding: 0 0.75rem;
+            border: 1px solid var(--cm-border); border-radius: 999px; background: var(--cm-card);
+            font-size: 0.8125rem; font-weight: 500; color: var(--cm-muted-fg); cursor: pointer; font-family: inherit;
+            transition: background-color 150ms var(--cm-ease), border-color 150ms var(--cm-ease), color 150ms var(--cm-ease);
+            &:hover { border-color: color-mix(in srgb, var(--cm-primary) 40%, var(--cm-border)); color: var(--cm-fg); }
+            &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--cm-ring); }
+            &.cm-on { background: var(--cm-primary-soft); border-color: var(--cm-primary); color: var(--cm-primary-soft-fg); }
+        }
+        &.cm-chips--sm > button, &.cm-chips--sm > .cm-chip-date { height: 1.75rem; padding: 0 0.625rem; font-size: 0.75rem; }
+        .cm-chip-date { padding-right: 0.375rem; }
+    }
+
+    // ---------- tabbed action card ----------
+    .cm-actions-card { overflow: visible; }
+    .cm-tabs {
+        display: flex; gap: 0.25rem; padding: 0.375rem 0.5rem 0; border-bottom: 1px solid var(--cm-border);
+        overflow-x: auto; scrollbar-width: none;
+        button {
+            position: relative; display: inline-flex; align-items: center; gap: 0.4rem; height: 2.375rem; padding: 0 0.75rem;
+            border: 0; background: none; border-radius: var(--cm-radius-sm) var(--cm-radius-sm) 0 0;
+            font-size: 0.8125rem; font-weight: 500; color: var(--cm-muted-fg); white-space: nowrap; cursor: pointer;
+            transition: color 150ms var(--cm-ease), background-color 150ms var(--cm-ease);
+            &:hover { color: var(--cm-fg); background: var(--cm-muted); }
+            &:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--cm-ring); }
+            &.cm-on { color: var(--cm-primary); &::after { content: ""; position: absolute; left: 0.5rem; right: 0.5rem; bottom: -1px; height: 2px; border-radius: 2px; background: var(--cm-primary); } }
+        }
+    }
+    .cm-tab-panel { padding: 0.75rem; }
+
+    .cm-compose {
+        border: 1px solid var(--cm-input); border-radius: var(--cm-radius); background: var(--cm-card);
+        transition: border-color 150ms var(--cm-ease), box-shadow 150ms var(--cm-ease);
+        &:focus-within { border-color: var(--cm-primary); box-shadow: 0 0 0 3px var(--cm-ring); }
+        &.cm-compose--note { background: color-mix(in srgb, var(--cm-warning-soft) 70%, var(--cm-card)); border-color: color-mix(in srgb, var(--cm-warning) 25%, var(--cm-border));
+            &:focus-within { border-color: var(--cm-warning); box-shadow: 0 0 0 3px color-mix(in srgb, var(--cm-warning) 25%, transparent); }
+        }
+    }
+    .cm-compose-input {
+        display: block; width: 100%; min-height: 3.5rem; max-height: 14rem; padding: 0.625rem 0.75rem; border: 0; background: transparent;
+        resize: vertical; font-size: 0.875rem; line-height: 1.5; color: var(--cm-fg); font-family: inherit;
+        field-sizing: content;
+        &:focus { outline: none; }
+        &::placeholder { color: var(--cm-subtle-fg); }
+    }
+    .cm-compose-bar {
+        display: flex; align-items: center; gap: 0.375rem; padding: 0.375rem 0.375rem 0.375rem 0.75rem;
+        .cm-compose-hint { flex: 1; min-width: 0; font-size: 0.75rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    }
+
+    .cm-quick-act { display: grid; gap: 0.625rem; }
+    .cm-quick-act-row {
+        display: grid; grid-template-columns: minmax(0, 1fr) 12rem; gap: 0.5rem;
+        &.cm-quick-act-row--foot { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+            .cm-chips { flex: 1; min-width: 0; }
+        }
+        @media (max-width: 575.98px) { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 767.98px) { .cm-hide-sm { display: none; } }
+
+    // ---------- record picker (search-as-you-type) ----------
+    .cm-picker {
+        position: relative; min-width: 0;
+        .cm-picker-icon { position: absolute; left: 0.625rem; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: var(--cm-subtle-fg); pointer-events: none; }
+        .cm-input { padding-left: 1.875rem; }
+        .cm-input::placeholder { color: var(--cm-subtle-fg); }
+    }
+    .cm-picker-menu {
+        position: absolute; z-index: 20; top: calc(100% + 0.25rem); left: 0; right: 0; min-width: 14rem; max-height: 16rem; overflow-y: auto;
+        list-style: none; margin: 0; padding: 0.25rem; border: 1px solid var(--cm-border); border-radius: var(--cm-radius);
+        background: var(--cm-card); box-shadow: var(--cm-shadow-lg);
+        li { padding: 0.375rem 0.5rem; border-radius: var(--cm-radius-sm); font-size: 0.8125rem; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+            &.cm-active, &:hover { background: var(--cm-primary-soft); color: var(--cm-primary-soft-fg); }
+        }
+        .cm-picker-empty { color: var(--cm-subtle-fg); cursor: default; &:hover { background: none; color: var(--cm-subtle-fg); } }
+    }
+}
+
+// ============================================================================
+// Pipeline board cards (view crm_modern.crm_lead_kanban_modern)
+// ============================================================================
+.o_cm .cm-native .o_kanban_renderer.o_cm_deal_kanban,
+.o_cm .cm-native .o_cm_deal_kanban {
+    // Lanes, card shell, hover, drag and ribbons come from modern_theme (kanban.scss);
+    // only the inside of the deal card is drawn here.
+    .o_kanban_record:not(.o_kanban_ghost):not(.opacity-50) { cursor: pointer; }
+    .cm-kc-head { padding-right: 1.25rem; }
+    .cm-kc-title { display: block; font-size: 0.875rem; font-weight: 600; line-height: 1.35; color: var(--cm-fg);
+        span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    }
+    .cm-kc-customer {
+        display: flex; align-items: center; gap: 0.375rem; min-width: 0; margin-top: 0.25rem;
+        font-size: 0.75rem; color: var(--cm-muted-fg);
+        .o_avatar img, img.o_avatar { width: 1.125rem; height: 1.125rem; border-radius: 0.25rem; }
+        .fa { width: 1.125rem; text-align: center; color: var(--cm-subtle-fg); }
+    }
+    .cm-kc-money {
+        display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; margin-top: 0.625rem;
+        .cm-kc-amount { font-size: 1rem; font-weight: 650; letter-spacing: -0.01em; color: var(--cm-fg); font-variant-numeric: tabular-nums; }
+        .cm-kc-zero { color: var(--cm-subtle-fg); font-weight: 500; }
+        .cm-kc-recurring { font-size: 0.75rem; font-weight: 500; color: var(--cm-muted-fg); }
+        .cm-kc-prob { font-size: 0.6875rem; font-weight: 600; padding: 0.0625rem 0.4375rem; border-radius: 999px; background: var(--cm-primary-soft); color: var(--cm-primary-soft-fg); font-variant-numeric: tabular-nums; }
+    }
+    .cm-kc-bar { height: 0.25rem; margin-top: 0.375rem; border-radius: 999px; background: color-mix(in srgb, var(--cm-border) 80%, var(--cm-muted)); overflow: hidden;
+        span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--cm-primary), color-mix(in srgb, var(--cm-primary) 60%, var(--cm-success))); }
+    }
+    .cm-kc-tags { margin-top: 0.5rem; .o_tag { font-size: 0.6875rem; border-radius: 999px; } }
+    .cm-kc-foot {
+        display: flex; align-items: center; gap: 0.5rem; margin-top: 0.625rem; padding-top: 0.5rem;
+        border-top: 1px solid color-mix(in srgb, var(--cm-border) 75%, transparent);
+        .cm-kc-foot-left { gap: 0.5rem; min-width: 0; }
+        .o_priority { line-height: 1; }
+        .cm-kc-date { display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.6875rem; color: var(--cm-subtle-fg); white-space: nowrap; }
+        .o_m2o_avatar img, .o_avatar img { width: 1.5rem; height: 1.5rem; border-radius: 50%; box-shadow: 0 0 0 2px var(--cm-card); }
+    }
+    // won / lost cards: subtle tint instead of shouting
+    .o_kanban_record:has(.ribbon .text-bg-success) { background: color-mix(in srgb, var(--cm-success-soft) 60%, var(--cm-card)) !important; }
+    .o_kanban_record:has(.ribbon .text-bg-danger) { opacity: 0.8; }
+}
+
+// Assign team / salesperson on pipeline and campaign cards (click must not open the record)
+.o_cm .cm-native .cm-kc-assign,
+.o_cm .cm-kc-assign {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0.5rem; margin-top: 0.625rem; padding: 0.5rem 0.625rem;
+    border-radius: var(--cm-radius); background: color-mix(in srgb, var(--cm-muted) 70%, transparent);
+    .cm-kc-assign-item { display: grid; gap: 0.125rem; min-width: 0; }
+    // Long campaign / salesperson names are cut with "…" instead of overflowing.
+    .cm-kc-assign-item > .o_field_widget { display: block; min-width: 0; max-width: 100%; overflow: hidden; }
+    .cm-kc-assign-label { font-size: 0.625rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--cm-subtle-fg); }
+    .cm-userpick { width: 100%; height: 1.75rem; padding-inline: 0.25rem 0.375rem; }
+}
+
+// ---- from crm_modern/static/src/scss/list.scss
+// CRM-only list extras. Shared list chrome lives in modern_theme workspace.scss, the
+// kanban board (lanes, cards, drag states) in modern_theme kanban.scss.
+
+// ============================================================================
+// Sales team cards (view crm_modern.crm_team_kanban_modern)
+// ============================================================================
+.o_cm .cm-native .o_cm_team_kanban {
+    &.o_kanban_renderer { --KanbanRecord-width: 22rem; }
+    // card shell (border, radius, shadow, hover) comes from modern_theme kanban.scss
+
+    .cm-tc-head { display: flex; align-items: center; gap: 0.75rem; padding-right: 1.5rem; }
+    .cm-tc-logo {
+        display: grid; place-items: center; flex-shrink: 0; width: 2.5rem; height: 2.5rem; border-radius: 0.75rem;
+        background: var(--cm-primary-soft); color: var(--cm-primary); font-size: 1rem;
+    }
+    .cm-tc-titles { min-width: 0; display: grid; }
+    .cm-tc-title { font-size: 1rem; font-weight: 650; letter-spacing: -0.01em; color: var(--cm-fg); span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; } }
+    .cm-tc-sub { font-size: 0.75rem; color: var(--cm-subtle-fg); }
+    .cm-tc-company::before { content: "·"; margin: 0 0.375rem; }
+
+    .cm-tc-people {
+        display: grid; gap: 0.5rem; margin-top: 0.875rem; padding: 0.625rem 0.75rem;
+        border-radius: var(--cm-radius); background: color-mix(in srgb, var(--cm-muted) 70%, transparent);
+    }
+    .cm-tc-person {
+        display: grid; grid-template-columns: 5.75rem minmax(0, 1fr); align-items: center; gap: 0.5rem; min-height: 1.75rem;
+        .o_field_widget { min-width: 0; }
+        .o_m2o_avatar img, .o_avatar img, img.o_avatar { width: 1.5rem; height: 1.5rem; border-radius: 50%; box-shadow: 0 0 0 2px var(--cm-card); }
+        .o_field_many2one_avatar_user span, .o_field_many2one_avatar span { font-size: 0.8125rem; font-weight: 500; }
+    }
+    .cm-tc-label { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--cm-subtle-fg); }
+    // Odoo's quick-assign button (add / remove salespeople, pick the leader): always
+    // visible as a dashed "+" avatar instead of a pencil that only shows on hover
+    .o_quick_assign {
+        width: 1.5rem; height: 1.5rem; justify-content: center; opacity: 1 !important; visibility: visible !important;
+        border: 1px dashed color-mix(in srgb, var(--cm-primary) 55%, var(--cm-border)) !important; border-radius: 50% !important;
+        background: var(--cm-card) !important; color: var(--cm-primary) !important; font-size: 0.6875rem; text-decoration: none;
+        &::before { content: "+"; font-family: inherit; font-weight: 600; font-size: 0.875rem; }
+        &:hover { background: var(--cm-primary-soft) !important; border-style: solid !important; }
+    }
+    .o_m2m_avatar_empty { min-width: 1.5rem; height: 1.5rem; line-height: 1.5rem; border-radius: 50% !important; font-size: 0.625rem; background: var(--cm-muted) !important; color: var(--cm-muted-fg); }
+    .o_tag.o_avatar img, img.o_m2m_avatar { border-radius: 50% !important; }
+
+    .cm-tc-stats {
+        display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; margin-top: 0.875rem;
+        > div { display: grid; gap: 0.125rem; min-width: 0; }
+        strong, strong .o_field_widget, strong span { font-size: 0.9375rem; line-height: 1.3; font-weight: 650; color: var(--cm-fg); font-variant-numeric: tabular-nums; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .cm-tc-won, .cm-tc-won span { color: var(--cm-success); }
+        span { font-size: 0.6875rem; color: var(--cm-subtle-fg); }
+    }
+    .cm-tc-alerts { display: flex; flex-wrap: wrap; gap: 0.375rem; margin-top: 0.75rem; }
+    .cm-tc-chip {
+        display: inline-flex; align-items: center; gap: 0.3rem; height: 1.5rem; padding: 0 0.5rem; border-radius: 999px;
+        font-size: 0.6875rem; font-weight: 600;
+        &.cm-tc-chip--danger { background: var(--cm-danger-soft); color: var(--cm-danger); }
+        &.cm-tc-chip--warning { background: var(--cm-warning-soft); color: var(--cm-warning); }
+        &.cm-tc-chip--ok { background: var(--cm-success-soft); color: var(--cm-success); }
+    }
+    .cm-tc-foot {
+        display: flex; align-items: center; gap: 0.5rem; margin-top: 0.75rem; padding-top: 0.375rem; border-top: 1px solid var(--cm-border);
+        .cm-tc-link {
+            display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.25rem 0.5rem; margin: 0 -0.25rem;
+            font-size: 0.8125rem; font-weight: 500; color: var(--cm-muted-fg); text-decoration: none; border-radius: var(--cm-radius-sm);
+            &:hover { background: var(--cm-primary-soft); color: var(--cm-primary-soft-fg); }
+        }
+    }
+}
+
+// ---------- user picker field (team leader on the team cards) ----------
+.o_cm .cm-userpick, .cm-userpick {
+    display: inline-flex; align-items: center; gap: 0.5rem; max-width: 100%; min-width: 0; height: 2rem;
+    padding: 0 0.5rem 0 0.25rem; margin-left: -0.25rem;
+    border: 1px solid transparent; border-radius: 999px; background: transparent; color: var(--cm-fg);
+    font-size: 0.8125rem; font-weight: 600; cursor: pointer;
+    transition: background-color 150ms var(--cm-ease), border-color 150ms var(--cm-ease);
+    &:hover { background: var(--cm-card); border-color: var(--cm-border); .cm-userpick-caret { color: var(--cm-primary); } }
+    &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--cm-ring); }
+    &.cm-userpick--ro { cursor: default; &:hover { background: transparent; border-color: transparent; } }
+    &.cm-userpick--empty .cm-userpick-name { color: var(--cm-muted-fg); font-weight: 500; }
+    &:disabled { opacity: 1; }
+    .cm-userpick-avatar { width: 1.5rem; height: 1.5rem; flex-shrink: 0; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 2px var(--cm-card); }
+    .cm-userpick-avatar--empty {
+        display: grid; place-items: center; font-size: 0.6875rem; color: var(--cm-muted-fg);
+        border: 1px dashed color-mix(in srgb, var(--cm-primary) 55%, var(--cm-border)); box-shadow: none; background: var(--cm-card);
+        &.cm-userpick-avatar--filled {
+            color: var(--cm-muted-fg); border-style: solid; border-color: var(--cm-border); background: var(--cm-muted);
+        }
+    }
+    .cm-userpick-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cm-userpick-caret { color: var(--cm-subtle-fg); font-size: 0.875rem; }
+}
+.cm-userpick-pop {
+    display: grid; gap: 0.25rem; width: 16rem; padding: 0.5rem;
+    background: var(--cm-card); color: var(--cm-fg); border: 1px solid var(--cm-border);
+    border-radius: var(--cm-radius); box-shadow: var(--cm-shadow-lg);
+    .cm-picker input { color: var(--cm-fg); background: var(--cm-card); }
+    .cm-picker-menu { position: static; margin-top: 0.25rem; box-shadow: none; border: 0; padding: 0; max-height: 14rem; }
+    .cm-userpick-clear {
+        display: flex; align-items: center; gap: 0.375rem; padding: 0.375rem 0.5rem; border: 0; border-top: 1px solid var(--cm-border);
+        background: none; font-size: 0.8125rem; color: var(--cm-danger); text-align: left; cursor: pointer; border-radius: 0 0 var(--cm-radius-sm) var(--cm-radius-sm);
+        &:hover { background: var(--cm-danger-soft); }
+    }
+}
+
+// read-only form sections (rights from Odoo: e.g. salespeople can't edit teams)
+.o_cm .cm-fieldset { border: 0; margin: 0; min-width: 0; &:disabled { opacity: 0.75; } }
+
+// CRM Simple campaign cards: let the action buttons wrap instead of overflowing on narrow cards
+.o_cm .cm-native .o_kanban_record footer.gap-1 { flex-wrap: wrap; row-gap: 0.375rem; }
+
+.o_cm .cm-cq, .cm-cq, .cm-cc-form-actions .cm-cq {
+    display: flex; flex-wrap: wrap; gap: 0.375rem; align-items: center;
+}
+.o_form_view .cm-cc-form-actions { padding: 0 1.5rem 1rem; }
+
+.o_cm .cm-native .o_cm_campaign_kanban {
+    .cm-cc-head { display: flex; align-items: flex-start; gap: 0.75rem; padding-right: 1.25rem; }
+    .cm-cc-logo {
+        display: grid; place-items: center; flex-shrink: 0; width: 2.25rem; height: 2.25rem; border-radius: 0.75rem;
+        background: var(--cm-primary-soft); color: var(--cm-primary); font-size: 0.9375rem;
+    }
+    .cm-cc-titles { min-width: 0; }
+    .cm-cc-title { font-size: 0.9375rem; font-weight: 650; color: var(--cm-fg); span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } }
+    .cm-cc-tags { margin-top: 0.25rem; .o_tag { font-size: 0.6875rem; border-radius: 999px; } }
+    .cm-kc-assign { margin-top: 0.75rem; }
+    .cm-cc-stats {
+        display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.375rem; margin-top: 0.75rem;
+        .cm-cc-stat, button.cm-cc-stat {
+            display: grid; gap: 0.0625rem; padding: 0.5rem 0.625rem; border: 0; border-radius: var(--cm-radius-sm);
+            background: color-mix(in srgb, var(--cm-muted) 55%, transparent); text-align: start; cursor: pointer; color: inherit;
+            &:hover { background: var(--cm-primary-soft); color: var(--cm-primary-soft-fg); }
+            strong, strong span { font-size: 1rem; font-weight: 650; font-variant-numeric: tabular-nums; line-height: 1.2; }
+            span { font-size: 0.6875rem; color: var(--cm-subtle-fg); font-weight: 600; letter-spacing: 0.02em; }
+        }
+        button.cm-cc-stat { position: relative; padding-right: 1.25rem;
+            &::after { content: "\f105"; font-family: FontAwesome; position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: var(--cm-subtle-fg); }
+            &:hover::after { color: var(--cm-primary); }
+        }
+        div.cm-cc-stat { cursor: default; &:hover { background: color-mix(in srgb, var(--cm-muted) 55%, transparent); color: inherit; } }
+    }
+    .cm-cc-foot { margin-top: 0.625rem; padding-top: 0.5rem; border-top: 1px solid color-mix(in srgb, var(--cm-border) 75%, transparent); }
+}
+
+// ---- from crm_modern/static/src/scss/sale.scss
+// Sales parts of Modern CRM (only used when the Sales app is installed).
+// "Quotation" tab on the opportunity page (uses Modern CRM tokens).
+.o_cm .cm-sale-tab {
+    display: grid; gap: 0.625rem;
+
+    .cm-sale-top { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+    .cm-sale-steps {
+        display: flex; align-items: center; flex-wrap: wrap; gap: 0.25rem; flex: 1; min-width: 0; list-style: none; margin: 0; padding: 0;
+        li {
+            display: inline-flex; align-items: center; gap: 0.375rem; font-size: 0.75rem; font-weight: 500; color: var(--cm-subtle-fg);
+            & + li::before { content: ""; width: 1.25rem; height: 1px; background: var(--cm-border); margin-right: 0.125rem; }
+            &.cm-on { color: var(--cm-success); }
+            &.cm-on + li.cm-on::before { background: var(--cm-success); }
+        }
+        .cm-step-dot {
+            display: inline-grid; place-items: center; width: 1.125rem; height: 1.125rem; border-radius: 50%;
+            font-size: 0.625rem; font-weight: 600; background: var(--cm-muted); color: var(--cm-muted-fg);
+        }
+        li.cm-on .cm-step-dot { background: var(--cm-success); color: var(--cm-primary-fg); }
+    }
+    .cm-sale-total { font-size: 0.75rem; color: var(--cm-muted-fg); strong { color: var(--cm-success); font-size: 0.875rem; } }
+
+    // existing quotations / orders
+    .cm-so-list { list-style: none; margin: 0; padding: 0; border: 1px solid var(--cm-border); border-radius: var(--cm-radius); overflow: hidden; }
+    .cm-so-row {
+        display: flex; align-items: center; gap: 0.625rem; padding: 0.5rem 0.625rem; flex-wrap: wrap;
+        & + .cm-so-row { border-top: 1px solid var(--cm-border); }
+        &:hover { background: color-mix(in srgb, var(--cm-muted) 50%, transparent); }
+    }
+    .cm-sale-icon {
+        display: grid; place-items: center; flex-shrink: 0; width: 1.875rem; height: 1.875rem; border-radius: var(--cm-radius-sm);
+        background: var(--cm-info-soft); color: var(--cm-info); font-size: 0.8125rem;
+        &.cm-sale-icon--order { background: var(--cm-success-soft); color: var(--cm-success); }
+        &.cm-sale-icon--cancel { background: var(--cm-muted); color: var(--cm-subtle-fg); }
+    }
+    .cm-so-main { flex: 1; min-width: 9rem; }
+    .cm-so-name { display: flex; align-items: center; gap: 0.375rem; flex-wrap: wrap; a { font-weight: 600; } .cm-badge { font-size: 0.6875rem; } }
+    .cm-so-sub { font-size: 0.6875rem; color: var(--cm-subtle-fg); }
+    .cm-so-amount { font-size: 0.875rem; font-weight: 600; min-width: 5.5rem; text-align: right; }
+    .cm-so-actions { display: flex; align-items: center; gap: 0.25rem; }
+    .cm-sale-new { justify-self: start; }
+
+    // quick quote builder
+    .cm-quote {
+        display: grid; gap: 0.625rem; padding: 0.75rem; border-radius: var(--cm-radius);
+        border: 1px dashed color-mix(in srgb, var(--cm-primary) 35%, var(--cm-border));
+        background: color-mix(in srgb, var(--cm-primary-soft) 35%, var(--cm-card));
+    }
+    .cm-quote-customer { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+    .cm-quote-label { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--cm-subtle-fg); width: 4.5rem; }
+    .cm-quote-partner { font-weight: 600; .fa { color: var(--cm-subtle-fg); margin-right: 0.25rem; } }
+    .cm-quote-partner-pick { display: flex; align-items: center; gap: 0.5rem; flex: 1; min-width: 14rem; flex-wrap: wrap; .cm-picker { flex: 1; min-width: 12rem; } }
+
+    .cm-quote-lines { display: grid; gap: 0.375rem; }
+    .cm-quote-line {
+        display: grid; grid-template-columns: minmax(10rem, 1fr) 4.5rem 7rem 6.5rem 1.75rem; align-items: center; gap: 0.5rem;
+        &.cm-quote-line--head { font-size: 0.6875rem; font-weight: 500; color: var(--cm-subtle-fg); }
+        .cm-quote-amount { font-size: 0.8125rem; font-weight: 500; }
+        @media (max-width: 575.98px) {
+            grid-template-columns: minmax(0, 1fr) 4rem 5.5rem 1.75rem;
+            .cm-quote-amount { display: none; }
+            &.cm-quote-line--head > :nth-child(4) { display: none; }
+        }
+    }
+    .cm-quote-foot { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; padding-top: 0.5rem; border-top: 1px solid var(--cm-border); }
+    .cm-quote-est {
+        display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; color: var(--cm-muted-fg);
+        strong { color: var(--cm-fg); font-size: 0.9375rem; }
+        .cm-btn-link { margin-left: 0.25rem; }
+    }
+    .cm-quote-cancel { color: var(--cm-muted-fg); }
+    .cm-quote-btns { display: flex; gap: 0.375rem; flex-wrap: wrap; }
+}
+
+.o_cm.o_cm_page .cm-grid-stats.cm-grid-stats--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    @media (max-width: 767.98px) { grid-template-columns: minmax(0, 1fr); }
+}
+
+// Sales figures on the Modern CRM team card
+.o_cm .cm-native .o_cm_team_kanban .cm-tc-target {
+    display: grid; gap: 0.3rem; margin-top: 0.75rem;
+    .cm-tc-target-head { display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.6875rem; color: var(--cm-subtle-fg); }
+    .cm-tc-target-val { font-size: 0.75rem; font-weight: 600; color: var(--cm-fg); font-variant-numeric: tabular-nums; }
+    .cm-tc-target-bar {
+        height: 0.375rem; border-radius: 999px; background: var(--cm-muted); overflow: hidden;
+        span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--cm-success), color-mix(in srgb, var(--cm-success) 70%, var(--cm-primary))); }
+    }
+    .cm-tc-target-orders { font-size: 0.6875rem; color: var(--cm-subtle-fg); }
+}
+
+// ---- from crm_modern/static/src/scss/dash.scss
+// ============================================================================
+// Owner dashboard (shared by CRM Modern and Sales Modern)
+// Calm, full-width layout: matte white cards on a cool grey canvas, one accent per
+// metric, tabular figures, generous line-height. Light and dark through the tokens.
+// ============================================================================
+.o_cm {
+    // Seven distinct, theme-aware tones (they used to collapse to five colours).
+    .od-tone-blue   { --od-c: var(--cm-primary); }
+    .od-tone-teal   { --od-c: color-mix(in oklab, var(--cm-success) 55%, var(--cm-info)); }
+    .od-tone-green, .od-tone-success { --od-c: var(--cm-success); }
+    .od-tone-violet { --od-c: var(--cm-violet, color-mix(in oklab, var(--cm-primary) 55%, #8b5cf6)); }
+    .od-tone-amber, .od-tone-warning { --od-c: var(--cm-warning); }
+    .od-tone-orange { --od-c: color-mix(in oklab, var(--cm-warning) 60%, var(--cm-danger)); }
+    .od-tone-rose   { --od-c: color-mix(in oklab, var(--cm-danger) 70%, var(--cm-violet, #8b5cf6)); }
+    .od-tone-red, .od-tone-danger { --od-c: var(--cm-danger); }
+    .od-tone-sky, .od-tone-info { --od-c: var(--cm-info); }
+    .od-tone-slate, .od-tone-muted { --od-c: var(--cm-muted-fg); }
+    [class*="od-tone-"] { --od-soft: color-mix(in srgb, var(--od-c) 12%, var(--cm-card)); }
+
+    .od-num { font-variant-numeric: tabular-nums; }
+    .od-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+    .od-clickable { cursor: pointer; }
+}
+
+// ---------- page ----------
+.o_cm.od-page {
+    height: auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    font-size: 0.875rem;
+    padding: 1.25rem 1.5rem 2.5rem;
+    background:
+        radial-gradient(1200px 380px at 0% -10%, color-mix(in srgb, var(--cm-primary) 7%, transparent), transparent 70%),
+        var(--cm-card);
+    color: var(--cm-fg);
+
+    .od-head {
+        display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1rem 1.5rem;
+        margin-bottom: 1.25rem;
+    }
+    .od-eyebrow {
+        display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 0.375rem;
+        font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cm-muted-fg);
+        .od-live { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--cm-success); box-shadow: 0 0 0 3px color-mix(in srgb, var(--cm-success) 22%, transparent); }
+    }
+    .od-title { margin: 0; font-size: 1.625rem; font-weight: 750; letter-spacing: -0.025em; line-height: 1.15; }
+    .od-subtitle { margin: 0.375rem 0 0; font-size: 0.8125rem; color: var(--cm-muted-fg); strong { color: var(--cm-fg); font-weight: 600; } }
+    .od-head-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+
+    .od-btn {
+        display: inline-flex; align-items: center; gap: 0.5rem; height: 2.25rem; padding: 0 0.95rem;
+        border-radius: 0.625rem; border: 1px solid var(--cm-border); background: var(--cm-card); color: var(--cm-fg);
+        font-size: 0.8125rem; font-weight: 600; white-space: nowrap; cursor: pointer;
+        box-shadow: inset 0 -1px 0 var(--cm-edge), var(--cm-shadow-xs);
+        transition: background-color 150ms ease, border-color 150ms ease, transform 100ms ease;
+        &:hover { background: var(--cm-card-matte); border-color: color-mix(in srgb, var(--cm-fg) 18%, var(--cm-border)); }
+        &:active { transform: translateY(1px); }
+        &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--cm-ring); }
+        &.od-btn--icon { width: 2.25rem; padding: 0; justify-content: center; color: var(--cm-muted-fg); }
+        &.od-btn--primary {
+            border: 0; border-radius: 999px; height: 2.15rem; padding: 0 1.05rem;
+            background: var(--or-save-bg, var(--cm-primary)); color: var(--or-save-fg, var(--cm-primary-fg));
+            box-shadow: inset 0 1px 0 color-mix(in srgb, var(--cm-primary-fg) 18%, transparent), var(--cm-shadow-xs), 0 4px 10px -4px color-mix(in srgb, var(--cm-primary) 60%, transparent);
+            &:hover { background: var(--or-save-hover, color-mix(in srgb, var(--cm-primary) 86%, var(--cm-fg))); color: var(--or-save-fg, var(--cm-primary-fg)); }
+        }
+        .fa-spin { animation-duration: 0.8s; }
+    }
+
+    // ---------- filters ----------
+    .od-filters { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+    .od-seg {
+        display: inline-flex; padding: 0.1875rem; gap: 0.125rem; border-radius: 0.75rem;
+        background: color-mix(in srgb, var(--cm-muted) 85%, var(--cm-card)); border: 1px solid var(--cm-border);
+        button {
+            height: 1.875rem; padding: 0 0.875rem; border: 0; border-radius: 0.5625rem; background: transparent;
+            font-size: 0.8125rem; font-weight: 500; color: var(--cm-muted-fg); cursor: pointer;
+            transition: background-color 150ms ease, color 150ms ease, box-shadow 150ms ease;
+            &:hover { color: var(--cm-fg); }
+            &.is-active { background: var(--cm-card); color: var(--cm-fg); font-weight: 650; box-shadow: 0 0 0 1px var(--cm-border), var(--cm-shadow-sm); }
+            &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--cm-ring); }
+        }
+    }
+    .od-select {
+        position: relative; display: inline-flex; align-items: center; margin: 0; height: 2.25rem;
+        border: 1px solid var(--cm-border); border-radius: 0.625rem; background: var(--cm-card);
+        box-shadow: inset 0 -1px 0 var(--cm-edge);
+        > .od-select-icon { position: absolute; left: 0.75rem; font-size: 0.75rem; color: var(--cm-muted-fg); pointer-events: none; }
+        .od-select-caret { position: absolute; right: 0.75rem; color: var(--cm-muted-fg); pointer-events: none; }
+        select {
+            appearance: none; height: 100%; padding: 0 2rem 0 2.1rem; border: 0; background: transparent; border-radius: 0.625rem;
+            font-size: 0.8125rem; font-weight: 600; color: var(--cm-fg); cursor: pointer; max-width: 14rem;
+            &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--cm-ring); }
+        }
+    }
+
+    // ---------- layout ----------
+    .od-kpis {
+        display: grid; gap: 1rem; margin-bottom: 1rem;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        @media (max-width: 1279.98px) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        @media (max-width: 639.98px) { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.625rem; }
+    }
+    .od-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+    @for $i from 3 through 12 { .od-span-#{$i} { grid-column: span #{$i}; } }
+    @media (max-width: 1399.98px) {
+        .od-span-3 { grid-column: span 6; }
+        .od-span-4 { grid-column: span 6; }
+        .od-span-5, .od-span-7 { grid-column: span 12; }
+        .od-span-8 { grid-column: span 12; }
+        .od-span-4.od-pair-8 { grid-column: span 12; }
+    }
+    @media (max-width: 991.98px) {
+        & { padding: 1rem; }
+        [class*="od-span-"] { grid-column: span 12; }
+    }
+
+    // ---------- cards ----------
+    .od-card {
+        display: flex; flex-direction: column; min-width: 0;
+        background: var(--cm-card); border: 1px solid var(--cm-border); border-radius: 1rem;
+        box-shadow: var(--cm-shadow-md);
+    }
+    .od-card-head {
+        display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem;
+        padding: 1rem 1.125rem 0.25rem;
+        h3 { margin: 0; font-size: 0.9375rem; font-weight: 700; letter-spacing: -0.01em; color: var(--cm-fg); display: flex; align-items: center; gap: 0.5rem; }
+        p { margin: 0.2rem 0 0; font-size: 0.75rem; color: var(--cm-muted-fg); }
+        .od-card-icon {
+            display: inline-grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 0.5rem;
+            background: color-mix(in srgb, var(--cm-primary) 12%, var(--cm-card)); color: var(--cm-primary); font-size: 0.8125rem;
+        }
+    }
+    .od-card-total { text-align: right; flex-shrink: 0;
+        strong { display: block; font-size: 1.125rem; font-weight: 750; letter-spacing: -0.02em; }
+        span { font-size: 0.6875rem; color: var(--cm-muted-fg); }
+    }
+    .od-card-body { padding: 0.75rem 1.125rem 1.125rem; flex: 1; min-width: 0; }
+    .od-card-body--flush { padding: 0.25rem 0 0.5rem; }
+    .od-link {
+        display: inline-flex; align-items: center; gap: 0.3rem; flex-shrink: 0; padding: 0.25rem 0.5rem; margin: -0.25rem -0.5rem 0 0;
+        border: 0; border-radius: 0.5rem; background: transparent; font-size: 0.75rem; font-weight: 600; color: var(--cm-primary); cursor: pointer;
+        &:hover { background: var(--cm-primary-soft); }
+    }
+    .od-empty {
+        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 0.375rem;
+        min-height: 9rem; padding: 1rem; color: var(--cm-muted-fg); font-size: 0.8125rem;
+        .fa { font-size: 1.25rem; color: var(--cm-subtle-fg); opacity: 0.7; margin-bottom: 0.25rem; }
+        strong { color: var(--cm-fg); font-weight: 600; }
+    }
+
+    // ---------- KPI tile ----------
+    .od-kpi {
+        position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 0.375rem;
+        min-height: 8.5rem; padding: 1rem 1.125rem 0.875rem;
+        background: var(--cm-card); border: 1px solid var(--cm-border); border-radius: 1rem;
+        box-shadow: var(--cm-shadow-md);
+        transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+        &.od-clickable:hover { border-color: color-mix(in srgb, var(--od-c) 35%, var(--cm-border)); transform: translateY(-1px); box-shadow: var(--cm-shadow-lg); }
+        &.od-clickable:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--cm-ring); }
+        &.od-kpi--featured {
+            background: linear-gradient(150deg, color-mix(in srgb, var(--od-c) 9%, var(--cm-card)) 0%, var(--cm-card) 62%);
+            border-color: color-mix(in srgb, var(--od-c) 22%, var(--cm-border));
+            .od-kpi-value { font-size: clamp(1.375rem, 1.9vw, 2rem); }
+        }
+        .od-kpi-top { display: flex; align-items: center; gap: 0.5rem; }
+        .od-kpi-icon {
+            display: inline-grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 0.5rem;
+            background: var(--od-soft); color: var(--od-c); font-size: 0.8125rem;
+        }
+        .od-kpi-label { font-size: 0.75rem; font-weight: 600; color: var(--cm-muted-fg); letter-spacing: 0.01em; }
+        .od-kpi-go { margin-left: auto; font-size: 0.6875rem; color: var(--cm-subtle-fg); opacity: 0; transition: opacity 150ms ease, transform 150ms ease; }
+        &.od-clickable:hover .od-kpi-go { opacity: 1; transform: translateX(2px); }
+        .od-kpi-value { font-size: clamp(1.25rem, 1.6vw, 1.625rem); white-space: nowrap; font-weight: 750; letter-spacing: -0.03em; line-height: 1.15; color: var(--cm-fg); position: relative; z-index: 1; }
+        --od-c: var(--cm-primary);
+        --od-soft: color-mix(in srgb, var(--cm-primary) 12%, var(--cm-card));
+        .od-kpi-foot { display: flex; align-items: center; flex-wrap: wrap; gap: 0.375rem 0.5rem; position: relative; z-index: 1; max-width: 72%; }
+        .od-kpi-hint { font-size: 0.71875rem; color: var(--cm-muted-fg); line-height: 1.35; }
+        .od-spark { position: absolute; right: 0; bottom: 0; width: 46%; height: 2.75rem; color: var(--od-c); opacity: 0.9; }
+    }
+    .od-delta {
+        display: inline-flex; align-items: center; gap: 0.25rem; height: 1.25rem; padding: 0 0.4375rem; border-radius: 999px;
+        font-size: 0.6875rem; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap;
+        .fa { font-size: 0.5625rem; }
+        &.od-delta--good { background: var(--cm-success-soft); color: var(--cm-success); }
+        &.od-delta--bad { background: var(--cm-danger-soft); color: var(--cm-danger); }
+        &.od-delta--flat { background: var(--cm-muted); color: var(--cm-muted-fg); }
+    }
+
+    // ---------- combo chart ----------
+    .od-combo-legend { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; font-size: 0.75rem; color: var(--cm-muted-fg); }
+    .od-legend-item { display: inline-flex; align-items: center; gap: 0.375rem; }
+    .od-swatch { display: inline-block; flex-shrink: 0;
+        &.od-swatch--bar { width: 0.625rem; height: 0.625rem; border-radius: 0.1875rem; background: var(--cm-primary); }
+        &.od-swatch--line { width: 0.875rem; height: 0; border-top: 2px dashed var(--cm-muted-fg); }
+    }
+    .od-chart { position: relative; svg { display: block; width: 100%; height: auto; overflow: visible; } }
+    .od-grid-line { stroke: var(--cm-border); }
+    .od-axis { font-size: 11.5px; fill: var(--cm-muted-fg); font-variant-numeric: tabular-nums; &.od-axis--future { fill: var(--cm-subtle-fg); opacity: 0.6; } }
+    .od-hover-band { fill: color-mix(in srgb, var(--cm-primary) 6%, transparent); }
+    .od-bar { fill: color-mix(in srgb, var(--cm-primary) 82%, var(--cm-card)); transition: fill 150ms ease;
+        &.od-bar--active { fill: var(--cm-primary); }
+        &.od-bar--future { fill: color-mix(in srgb, var(--cm-primary) 12%, var(--cm-card)); }
+    }
+    .od-prev-line { fill: none; stroke: var(--cm-muted-fg); stroke-width: 2; stroke-dasharray: 5 5; stroke-linejoin: round; }
+    .od-prev-dot { fill: var(--cm-card); stroke: var(--cm-muted-fg); stroke-width: 1.75; }
+    .od-tooltip {
+        position: absolute; top: 0.25rem; transform: translateX(-50%); pointer-events: none; z-index: 2;
+        min-width: 11rem; padding: 0.625rem 0.75rem; border-radius: 0.75rem;
+        background: color-mix(in srgb, var(--cm-fg) 94%, transparent); color: var(--cm-card);
+        box-shadow: var(--cm-shadow-lg); font-size: 0.75rem;
+        .od-tooltip-title { font-weight: 700; margin-bottom: 0.375rem; }
+        .od-tooltip-row { display: flex; align-items: center; gap: 0.375rem; line-height: 1.6; strong { margin-left: auto; padding-left: 0.75rem; } }
+        .od-swatch--line { border-top-color: var(--cm-muted-fg); }
+        .od-tooltip-growth { margin-top: 0.375rem; font-weight: 700;
+            &.is-good { color: color-mix(in srgb, var(--cm-success) 65%, var(--cm-card)); }
+            &.is-bad { color: color-mix(in srgb, var(--cm-danger) 65%, var(--cm-card)); }
+        }
+    }
+
+    // ---------- donut ----------
+    .od-donut { display: grid; grid-template-columns: minmax(8.5rem, 10.5rem) 1fr; align-items: center; gap: 1.25rem; }
+    .od-donut-svg { width: 100%; height: auto; }
+    .od-donut-track { fill: none; stroke: var(--cm-muted); stroke-width: 12; }
+    .od-donut-arc { fill: none; stroke: var(--od-c); stroke-width: 12; stroke-linecap: butt; transition: opacity 150ms ease, stroke-width 150ms ease; cursor: default;
+        &.is-dim { opacity: 0.28; }
+    }
+    .od-donut-value { font-size: 12px; font-weight: 750; fill: var(--cm-fg); font-variant-numeric: tabular-nums; }
+    .od-donut-label { font-size: 6.5px; fill: var(--cm-muted-fg); }
+    .od-legend { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.125rem;
+        li {
+            display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 0.5rem;
+            padding: 0.375rem 0.5rem; border-radius: 0.5rem; font-size: 0.8125rem; transition: background-color 150ms ease;
+            &.is-active, &:hover { background: var(--cm-muted); }
+        }
+        .od-legend-share { font-size: 0.75rem; color: var(--cm-muted-fg); }
+        .od-legend-value { font-weight: 600; min-width: 4.5rem; text-align: right; }
+    }
+    .od-dot { display: inline-block; width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--od-c); flex-shrink: 0; }
+
+    // ---------- funnel ----------
+    .od-funnel { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem;
+        li { display: grid; gap: 0.375rem; &.od-clickable:hover .od-funnel-name { color: var(--cm-primary); } }
+        .od-funnel-meta { display: flex; align-items: baseline; gap: 0.75rem; font-size: 0.8125rem; }
+        .od-funnel-name { flex: 1; font-weight: 600; .fa-trophy { color: var(--cm-warning); } }
+        .od-funnel-count { color: var(--cm-muted-fg); small { font-size: 0.6875rem; } }
+        .od-funnel-value { font-weight: 650; min-width: 5.5rem; text-align: right; }
+        .od-funnel-track { height: 0.625rem; border-radius: 999px; background: var(--cm-muted); overflow: hidden;
+            span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, color-mix(in srgb, var(--cm-primary) 70%, var(--cm-info)), var(--cm-primary)); }
+        }
+        li.is-won .od-funnel-track span { background: var(--cm-success); }
+    }
+
+    // ---------- ranking ----------
+    .od-rank { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.25rem;
+        li { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.5rem; border-radius: 0.625rem; transition: background-color 150ms ease;
+            &.od-clickable:hover { background: var(--cm-muted); }
+            &.od-clickable:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--cm-ring); }
+        }
+        .od-rank-no {
+            display: inline-grid; place-items: center; flex-shrink: 0; width: 1.5rem; height: 1.5rem; border-radius: 0.4375rem;
+            background: var(--cm-muted); color: var(--cm-muted-fg); font-size: 0.6875rem; font-weight: 700;
+            &.is-first { background: var(--cm-warning-soft); color: var(--cm-warning); }
+        }
+        .od-rank-avatar { width: 2rem; height: 2rem; border-radius: 50%; object-fit: cover; flex-shrink: 0; box-shadow: 0 0 0 2px var(--cm-card), 0 0 0 3px var(--cm-border); }
+        .od-rank-mono {
+            display: inline-grid; place-items: center; flex-shrink: 0; width: 2rem; height: 2rem; border-radius: 50%;
+            background: var(--od-soft); color: var(--od-c); font-size: 0.6875rem; font-weight: 750; letter-spacing: 0.02em;
+        }
+        .od-rank-body { flex: 1; min-width: 0; }
+        .od-rank-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; font-size: 0.8125rem; margin-bottom: 0.3125rem; }
+        .od-rank-label { font-weight: 600; }
+        .od-rank-value { font-weight: 650; flex-shrink: 0; }
+        .od-rank-bar { height: 0.375rem; border-radius: 999px; background: var(--cm-muted); overflow: hidden;
+            span { display: block; height: 100%; border-radius: 999px; background: var(--od-c); opacity: 0.85; }
+        }
+        .od-rank-sub { margin-top: 0.25rem; font-size: 0.6875rem; color: var(--cm-muted-fg); }
+    }
+
+    // ---------- attention ----------
+    .od-attention { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.375rem;
+        li {
+            display: flex; align-items: center; gap: 0.75rem; padding: 0.625rem 0.75rem; border-radius: 0.75rem;
+            border: 1px solid color-mix(in srgb, var(--od-c) 18%, var(--cm-border)); background: color-mix(in srgb, var(--od-c) 4%, var(--cm-card));
+            transition: border-color 150ms ease, background-color 150ms ease, transform 150ms ease;
+            &.od-clickable:hover { border-color: color-mix(in srgb, var(--od-c) 40%, var(--cm-border)); background: var(--od-soft); }
+            &.od-clickable:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--cm-ring); }
+            &.is-zero { border-color: var(--cm-border); background: var(--cm-card); opacity: 0.6;
+                .od-att-icon { background: var(--cm-muted); color: var(--cm-subtle-fg); }
+                .od-att-count { color: var(--cm-subtle-fg); }
+            }
+        }
+        .od-att-icon { display: inline-grid; place-items: center; flex-shrink: 0; width: 2rem; height: 2rem; border-radius: 0.5625rem; background: var(--od-soft); color: var(--od-c); font-size: 0.875rem; }
+        .od-att-body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+        .od-att-label { font-size: 0.8125rem; font-weight: 600; line-height: 1.3; }
+        .od-att-sub { font-size: 0.6875rem; color: var(--cm-muted-fg); }
+        .od-att-count { font-size: 1.125rem; font-weight: 750; color: var(--od-c); }
+        .od-att-go { color: var(--cm-subtle-fg); }
+    }
+    .od-allclear { display: flex; align-items: center; gap: 0.875rem; padding: 1rem; border-radius: 0.75rem; background: var(--cm-success-soft);
+        .od-allclear-icon { display: inline-grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 50%; background: var(--cm-success); color: var(--cm-primary-fg); }
+        strong { font-size: 0.875rem; } p { margin: 0; font-size: 0.75rem; color: var(--cm-muted-fg); }
+    }
+
+    // ---------- stacked bar (ageing) ----------
+    .od-stack-bar { display: flex; height: 0.875rem; border-radius: 999px; overflow: hidden; background: var(--cm-muted); gap: 2px;
+        span { display: block; height: 100%; background: var(--od-c); }
+        .od-stack-empty { flex: 1; background: transparent; }
+    }
+    .od-stack-legend { list-style: none; margin: 0.875rem 0 0; padding: 0; display: grid; gap: 0.375rem;
+        li { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; strong { margin-left: auto; font-weight: 650; } }
+        .od-stack-label { color: var(--cm-muted-fg); }
+    }
+
+    // ---------- money strip (receivables, cash) ----------
+    .od-money { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.75rem; margin-bottom: 1rem;
+        > div { padding: 0.75rem 0.875rem; border-radius: 0.75rem; background: var(--od-soft); border: 1px solid color-mix(in srgb, var(--od-c) 16%, var(--cm-border)); }
+        span { display: block; font-size: 0.6875rem; font-weight: 600; color: var(--cm-muted-fg); text-transform: uppercase; letter-spacing: 0.05em; }
+        strong { display: block; margin-top: 0.125rem; font-size: 1.125rem; font-weight: 750; letter-spacing: -0.02em; color: var(--cm-fg); }
+        small { font-size: 0.6875rem; color: var(--cm-muted-fg); }
+    }
+
+    // ---------- tables ----------
+    .od-table-wrap { overflow-x: auto; }
+    .od-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.8125rem;
+        th {
+            position: sticky; top: 0; padding: 0.5rem 0.75rem; background: var(--cm-card-matte);
+            border-bottom: 1px solid var(--cm-border); text-align: left; white-space: nowrap;
+            font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--cm-muted-fg);
+        }
+        td { padding: 0.625rem 0.75rem; border-bottom: 1px solid color-mix(in srgb, var(--cm-border) 70%, transparent); vertical-align: middle; }
+        tr:last-child td { border-bottom: 0; }
+        th:first-child, td:first-child { padding-left: 1.125rem; }
+        th:last-child, td:last-child { padding-right: 1.125rem; }
+        .od-r { text-align: right; }
+        tbody tr { transition: background-color 120ms ease; }
+        tbody tr.od-clickable:hover td { background: color-mix(in srgb, var(--cm-muted) 60%, transparent); }
+        .od-cell-main { font-weight: 600; }
+        .od-cell-sub { display: block; font-size: 0.6875rem; color: var(--cm-muted-fg); }
+        .od-person { display: inline-flex; align-items: center; gap: 0.5rem; img { width: 1.5rem; height: 1.5rem; border-radius: 50%; object-fit: cover; } }
+    }
+    .od-pill {
+        display: inline-flex; align-items: center; gap: 0.25rem; height: 1.375rem; padding: 0 0.5rem; border-radius: 999px;
+        font-size: 0.6875rem; font-weight: 650; background: var(--od-soft); color: var(--od-c); white-space: nowrap;
+    }
+    .od-meter { display: flex; align-items: center; gap: 0.5rem; min-width: 8rem;
+        .od-meter-track { flex: 1; height: 0.4375rem; border-radius: 999px; background: var(--cm-muted); overflow: hidden;
+            span { display: block; height: 100%; border-radius: 999px; background: var(--od-c); }
+        }
+        .od-meter-value { font-size: 0.75rem; font-weight: 650; min-width: 2.5rem; text-align: right; }
+    }
+
+    // ---------- forecast & notes ----------
+    .od-forecast-track { position: relative;
+        span { position: absolute; left: 0; top: 0; }
+        .od-forecast-weighted { background: var(--cm-info) !important; }
+    }
+    .od-note {
+        display: flex; align-items: flex-start; gap: 0.5rem; margin-top: 0.875rem; padding: 0.5rem 0.625rem; border-radius: 0.625rem;
+        background: var(--cm-muted); font-size: 0.75rem; color: var(--cm-muted-fg);
+        .fa { margin-top: 0.125rem; }
+    }
+    .od-empty span { font-size: 0.75rem; }
+
+    // Home: one accent, quiet counts, rows with an icon and a trailing pill.
+    &.cm-home {
+        .cm-home-kpis {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 0.75rem; margin-bottom: 1rem;
+            @media (max-width: 639.98px) { grid-template-columns: 1fr; }
+        }
+        .cm-home-kpi {
+            display: flex; align-items: baseline; gap: 0.625rem; height: 3.25rem; padding: 0 1rem;
+            border: 1px solid var(--cm-border); border-radius: 0.875rem; background: var(--cm-card);
+            text-align: start; cursor: pointer; color: var(--cm-fg);
+            strong { font-size: 1.25rem; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; &.is-late { color: var(--cm-danger); } }
+            span { font-size: 0.8125rem; color: var(--cm-muted-fg); }
+            &:hover { border-color: color-mix(in srgb, var(--cm-primary) 35%, var(--cm-border)); }
+            &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--cm-ring); }
+        }
+        .cm-home-stack { display: grid; gap: 1rem; align-content: start; }
+        @media (min-width: 992px) {
+            .od-span-7 { grid-column: span 7; }
+            .od-span-5 { grid-column: span 5; }
+        }
+        .cm-home-list { list-style: none; margin: 0; padding: 0.25rem 0.5rem 0.5rem; }
+        .cm-home-item {
+            display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 0.75rem;
+            width: 100%; padding: 0.625rem 0.625rem; border: 0; border-radius: 0.75rem;
+            background: transparent; color: inherit; text-align: start; cursor: pointer;
+            &:hover { background: color-mix(in srgb, var(--cm-muted) 70%, transparent); }
+            &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--cm-ring); }
+        }
+        .cm-home-ico {
+            display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 0.5rem;
+            background: color-mix(in srgb, var(--cm-primary) 12%, var(--cm-card)); color: var(--cm-primary); font-size: 0.8125rem;
+        }
+        .cm-home-copy { display: grid; min-width: 0; strong { font-size: 0.875rem; font-weight: 600; } small { font-size: 0.75rem; color: var(--cm-muted-fg); } }
+        .cm-truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .cm-home-pill {
+            font-size: 0.75rem; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--cm-muted-fg); white-space: nowrap;
+            &.is-late { color: var(--cm-danger); }
+        }
+    }
+
+    // ---------- loading ----------
+    .od-skel { border-radius: 1rem; background: linear-gradient(90deg, var(--cm-muted) 0%, color-mix(in srgb, var(--cm-muted) 45%, var(--cm-card)) 50%, var(--cm-muted) 100%) 0 0 / 200% 100%;
+        animation: od-shimmer 1.3s ease-in-out infinite; }
+    @media (prefers-reduced-motion: reduce) { .od-skel { animation: none; } .od-kpi, .od-btn { transition: none; } }
+    .od-busy { opacity: 0.55; transition: opacity 150ms ease; pointer-events: none; }
+}
+@keyframes od-shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+// Donut in a narrow card (a third of the row): donut on top, full-width legend below.
+.o_cm.od-page .od-card-body { container-type: inline-size; }
+@container (max-width: 26rem) {
+    .o_cm.od-page .od-donut { grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 0.75rem; }
+    .o_cm.od-page .od-donut-svg { max-width: 9.5rem; }
+    .o_cm.od-page .od-legend { width: 100%; }
+    .o_cm.od-page .od-legend .od-legend-value { min-width: 0; }
+}

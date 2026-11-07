@@ -13,7 +13,7 @@ Adding, viewing and editing all use Odoo's own invoice and payment forms, with a
 * Rights, record rules, journals, taxes, settings and reports are Odoo's own.
   Odoo's Reporting and Configuration menus stay available in the sidebar.
     """,
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.0.1',
     'category': 'Accounting/Accounting',
     'author': 'Olee',
     'license': 'LGPL-3',
@@ -24,13 +24,9 @@ Adding, viewing and editing all use Odoo's own invoice and payment forms, with a
     ],
     'assets': {
         'web.assets_backend': [
-            'invoice_modern/static/src/scss/app.scss',
             'invoice_modern/static/src/js/sidebar/*.js',
             'invoice_modern/static/src/js/pages/*.js',
             'invoice_modern/static/src/xml/*.xml',
-        ],
-        'web.assets_web_dark': [
-            'invoice_modern/static/src/scss/app.dark.scss',
         ],
     },
     'installable': True,

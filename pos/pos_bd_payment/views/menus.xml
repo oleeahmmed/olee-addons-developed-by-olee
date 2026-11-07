@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_reconcile" name="Wallet reconciliation" parent="pos_modern.menu_more" action="action_reconcile" sequence="20"/>
+    <menuitem id="menu_bd_payment_methods" name="Payment methods (BD)" parent="point_of_sale.menu_point_config_product"
+              action="action_bd_payment_methods" sequence="60" groups="point_of_sale.group_pos_manager"/>
+    <menuitem id="menu_sms_settings" name="SMS gateway" parent="point_of_sale.menu_point_config_product"
+              action="action_sms_page" sequence="61" groups="point_of_sale.group_pos_manager"/>
+    <menuitem id="menu_sms_log" name="SMS log" parent="point_of_sale.menu_point_config_product"
+              action="action_sms_log" sequence="62" groups="point_of_sale.group_pos_manager"/>
+</odoo>

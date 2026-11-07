@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pos_config_counter_form_bakery" model="ir.ui.view">
+        <field name="name">pos.config.counter.form.bakery</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="pos_modern.pos_config_counter_form"/>
+        <field name="arch" type="xml">
+            <div name="pm_addons" position="inside">
+                <group string="Bakery" name="bakery">
+                    <field name="bk_bakery"/>
+                    <field name="bk_token" invisible="not bk_bakery"/>
+                    <field name="bk_token_slip" invisible="not bk_bakery or not bk_token"/>
+                </group>
+            </div>
+        </field>
+    </record>
+
+    <record id="pos_bk_cake_list" model="ir.ui.view">
+        <field name="name">pos.bk.cake.list</field>
+        <field name="model">pos.bk.cake</field>
+        <field name="arch" type="xml">
+            <list string="Cake orders" decoration-muted="state in ('delivered', 'cancel')" decoration-warning="state == 'draft'">
+                <field name="delivery_at"/>
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="customer_name"/>
+                <field name="partner_id" optional="hide"/>
+                <field name="phone"/>
+                <field name="flavour"/>
+                <field name="weight"/>
+                <field name="message"/>
+                <field name="price_total" sum="Total"/>
+                <field name="advance" sum="Advance"/>
+                <field name="due" sum="Due"/>
+                <field name="state" widget="badge" decoration-success="state == 'ready'" decoration-info="state == 'confirmed'"/>
+            </list>
+        </field>
+    </record>
+    <record id="pos_bk_cake_form" model="ir.ui.view">
+        <field name="name">pos.bk.cake.form</field>
+        <field name="model">pos.bk.cake</field>
+        <field name="arch" type="xml">
+            <form string="Cake order">
+                <header><field name="state" widget="statusbar" options="{'clickable': '1'}"/></header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="flavour"/>
+                            <field name="weight"/>
+                            <field name="message"/>
+                            <field name="delivery_at"/>
+                        </group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="customer_name"/>
+                            <field name="phone"/>
+                            <field name="price_total"/>
+                            <field name="advance"/>
+                            <field name="due"/>
+                            <field name="config_id"/>
+                        </group>
+                    </group>
+                    <field name="note" placeholder="Design, colour, photo reference…"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_cakes" model="ir.actions.act_window">
+        <field name="name">Cake orders</field>
+        <field name="res_model">pos.bk.cake</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', 'not in', ('delivered', 'cancel'))]</field>
+    </record>
+
+    <record id="pos_bk_batch_list" model="ir.ui.view">
+        <field name="name">pos.bk.batch.list</field>
+        <field name="model">pos.bk.batch</field>
+        <field name="arch" type="xml">
+            <list string="Bakes" create="0">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="config_id"/>
+                <field name="user_id"/>
+                <field name="note"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    <record id="pos_bk_batch_form" model="ir.ui.view">
+        <field name="name">pos.bk.batch.form</field>
+        <field name="model">pos.bk.batch</field>
+        <field name="arch" type="xml">
+            <form string="Bake" create="0">
+                <sheet>
+                    <group><field name="name"/><field name="date"/><field name="config_id"/><field name="note"/></group>
+                    <field name="line_ids">
+                        <list><field name="product_id"/><field name="qty"/><field name="production_id"/></list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_bakes" model="ir.actions.act_window">
+        <field name="name">Bakes</field>
+        <field name="res_model">pos.bk.batch</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_bakery_day" model="ir.actions.client">
+        <field name="name">Bakery day</field>
+        <field name="tag">pos_bakery.day</field>
+        <field name="path">pos-bakery-day</field>
+    </record>
+
+    <menuitem id="menu_bakery_day" name="Bakery day" parent="pos_modern.menu_more" action="action_bakery_day" sequence="70"/>
+    <menuitem id="menu_cakes" name="Cake orders" parent="pos_modern.menu_more" action="action_cakes" sequence="71"/>
+    <menuitem id="menu_bakes" name="Bakes" parent="pos_modern.menu_more" action="action_bakes" sequence="72"/>
+</odoo>

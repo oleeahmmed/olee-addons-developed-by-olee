@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_kds" name="Kitchen" parent="point_of_sale.menu_point_root" action="action_kds" sequence="-124"/>
+    <menuitem id="menu_tickets" name="Kitchen tickets" parent="pos_modern.menu_more" action="action_tickets" sequence="40"/>
+    <menuitem id="menu_staff" name="Waiters &amp; riders" parent="pos_modern.menu_more" action="action_staff" sequence="41"/>
+</odoo>

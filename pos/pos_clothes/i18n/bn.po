@@ -1,0 +1,278 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pos_clothes
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-06 22:24+0000\n"
+"PO-Revision-Date: 2026-11-06 22:24+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: pos_clothes
+#: model:ir.model.fields,field_description:pos_clothes.field_product_product__cl_care
+#: model:ir.model.fields,field_description:pos_clothes.field_product_template__cl_care
+msgid "Care text"
+msgstr "যত্নের লেখা"
+
+#. module: pos_clothes
+#: model_terms:ir.ui.view,arch_db:pos_clothes.pos_config_counter_form_clothes
+msgid "Clothing"
+msgstr "পোশাক"
+
+#. module: pos_clothes
+#: model:ir.model.fields,field_description:pos_clothes.field_pos_config__cl_clothes
+msgid "Clothing counter"
+msgstr "পোশাক কাউন্টার"
+
+#. module: pos_clothes
+#: model:ir.model.fields,help:pos_clothes.field_product_product__cl_fabric
+#: model:ir.model.fields,help:pos_clothes.field_product_template__cl_fabric
+msgid "Cotton, Georgette, Denim…"
+msgstr "সুতি, জর্জেট, ডেনিম…"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/xml/clothes.xml:0
+#: code:addons/pos_clothes/static/src/xml/clothes.xml:0
+msgid "Days left"
+msgstr "আর কত দিন"
+
+#. module: pos_clothes
+#: model:ir.model.fields,field_description:pos_clothes.field_pos_config__cl_care_default
+msgid "Default care text"
+msgstr "ডিফল্ট যত্নের লেখা"
+
+#. module: pos_clothes
+#: model:ir.model.fields,field_description:pos_clothes.field_pos_config__display_name
+#: model:ir.model.fields,field_description:pos_clothes.field_product_template__display_name
+msgid "Display Name"
+msgstr "নাম"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/xml/clothes.xml:0
+#: code:addons/pos_clothes/static/src/xml/clothes.xml:0
+msgid "Done"
+msgstr "শেষ"
+
+#. module: pos_clothes
+#: model:ir.model.fields,help:pos_clothes.field_product_product__cl_season
+#: model:ir.model.fields,help:pos_clothes.field_product_template__cl_season
+msgid "Eid 2026, Puja, Winter…"
+msgstr "ঈদ ২০২৬, পূজা, শীত…"
+
+#. module: pos_clothes
+#: model:ir.model.fields,field_description:pos_clothes.field_product_product__cl_fabric
+#: model:ir.model.fields,field_description:pos_clothes.field_product_template__cl_fabric
+msgid "Fabric"
+msgstr "কাপড়"
+
+#. module: pos_clothes
+#: model:ir.model.fields,field_description:pos_clothes.field_pos_config__id
+#: model:ir.model.fields,field_description:pos_clothes.field_product_template__id
+msgid "ID"
+msgstr "ID"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/xml/clothes.xml:0
+#: code:addons/pos_clothes/static/src/xml/clothes.xml:0
+msgid "No clothing shop"
+msgstr "কোনো পোশাকের শপ নেই"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/xml/clothes.xml:0
+#: code:addons/pos_clothes/static/src/xml/clothes.xml:0
+msgid "No sale of a style with sizes yet"
+msgstr "সাইজসহ কোনো স্টাইলের বিক্রি এখনো নেই"
+
+#. module: pos_clothes
+#: model:ir.model.fields,help:pos_clothes.field_pos_config__cl_clothes
+msgid ""
+"One card per style with a size × colour matrix, hand tags with care text."
+msgstr ""
+"প্রতি স্টাইলে একটি কার্ড, সাইজ × রঙের ম্যাট্রিক্স, যত্নের লেখাসহ হ্যান্ড "
+"ট্যাগ।"
+
+#. module: pos_clothes
+#: model:ir.model,name:pos_clothes.model_pos_config
+msgid "Point of Sale Configuration"
+msgstr "POS কনফিগারেশন"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/js/drawer_forms.js:0
+#: code:addons/pos_clothes/static/src/js/drawer_forms.js:0
+msgid ""
+"Printed on the hand tag. Sizes and colours are the product's variants (full "
+"form)."
+msgstr ""
+"হ্যান্ড ট্যাগে ছাপা হয়। সাইজ ও রং হলো পণ্যের ভ্যারিয়েন্ট (পূর্ণ ফর্মে)।"
+
+#. module: pos_clothes
+#: model:ir.model.fields,help:pos_clothes.field_product_product__cl_care
+#: model:ir.model.fields,help:pos_clothes.field_product_template__cl_care
+msgid "Printed on the hand tag: wash care, fabric, made in…"
+msgstr "হ্যান্ড ট্যাগে ছাপা হয়: ধোয়ার নিয়ম, কাপড়, কোথায় তৈরি…"
+
+#. module: pos_clothes
+#: model:ir.model,name:pos_clothes.model_product_template
+msgid "Product"
+msgstr "পণ্য"
+
+#. module: pos_clothes
+#: model:ir.model.fields,field_description:pos_clothes.field_product_product__cl_season
+#: model:ir.model.fields,field_description:pos_clothes.field_product_template__cl_season
+msgid "Season / campaign"
+msgstr "সিজন / ক্যাম্পেইন"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/xml/clothes.xml:0
+#: code:addons/pos_clothes/static/src/xml/clothes.xml:0
+msgid "Size / colour"
+msgstr "সাইজ / রং"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/xml/clothes.xml:0
+#: code:addons/pos_clothes/static/src/xml/clothes.xml:0
+#: model:ir.actions.client,name:pos_clothes.action_size_report
+#: model:ir.ui.menu,name:pos_clothes.menu_size_report
+msgid "Sizes report"
+msgstr "সাইজ রিপোর্ট"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/xml/clothes.xml:0
+#: code:addons/pos_clothes/static/src/xml/clothes.xml:0
+msgid "Sold"
+msgstr "বিক্রি"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/xml/clothes.xml:0
+#: code:addons/pos_clothes/static/src/xml/clothes.xml:0
+msgid "Stock"
+msgstr "স্টক"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/js/drawer_forms.js:0
+#: code:addons/pos_clothes/static/src/js/drawer_forms.js:0
+msgid "Style"
+msgstr "স্টাইল"
+
+#. module: pos_clothes
+#: model_terms:ir.ui.view,arch_db:pos_clothes.product_template_clothes_list
+msgid "Styles"
+msgstr "স্টাইল"
+
+#. module: pos_clothes
+#: model:ir.actions.act_window,name:pos_clothes.action_styles
+#: model:ir.ui.menu,name:pos_clothes.menu_styles
+msgid "Styles (care & fabric)"
+msgstr "স্টাইল (যত্ন ও কাপড়)"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/xml/clothes.xml:0
+#: code:addons/pos_clothes/static/src/xml/clothes.xml:0
+msgid "This style has no size or colour."
+msgstr "এই স্টাইলের কোনো সাইজ বা রং নেই।"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/xml/clothes.xml:0
+#: code:addons/pos_clothes/static/src/xml/clothes.xml:0
+msgid "Turn on \"Clothing counter\" in a shop's Counter settings."
+msgstr "কোনো শপের কাউন্টার সেটিংসে \"Clothing counter\" চালু করুন।"
+
+#. module: pos_clothes
+#: model_terms:ir.ui.view,arch_db:pos_clothes.pos_config_counter_form_clothes
+msgid ""
+"Use 58 × 40 mm barcode labels for hand tags. Sizes and colours are the "
+"product's attributes (variants)."
+msgstr ""
+"হ্যান্ড ট্যাগের জন্য ৫৮ × ৪০ মিমি লেবেল ব্যবহার করুন। সাইজ ও রং হলো পণ্যের "
+"অ্যাট্রিবিউট (ভ্যারিয়েন্ট)।"
+
+#. module: pos_clothes
+#: model_terms:ir.ui.view,arch_db:pos_clothes.product_template_clothes_list
+msgid "Variants"
+msgstr "ভ্যারিয়েন্ট"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/xml/clothes.xml:0
+#: code:addons/pos_clothes/static/src/xml/clothes.xml:0
+msgid ""
+"Which sizes and colours sell, which run out and which stay on the shelf."
+msgstr "কোন সাইজ ও রং বিক্রি হয়, কোনটা শেষ হচ্ছে, কোনটা তাকে পড়ে থাকে।"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/xml/clothes.xml:0
+#: code:addons/pos_clothes/static/src/xml/clothes.xml:0
+msgid "days"
+msgstr "দিন"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/xml/clothes.xml:0
+#: code:addons/pos_clothes/static/src/xml/clothes.xml:0
+msgid "in stock"
+msgstr "স্টকে"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/xml/clothes.xml:0
+#: code:addons/pos_clothes/static/src/xml/clothes.xml:0
+msgid "left"
+msgstr "বাকি"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/js/clothes.js:0
+#: code:addons/pos_clothes/static/src/js/clothes.js:0
+msgid "not selling"
+msgstr "বিক্রি হচ্ছে না"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/js/clothes.js:0
+#: code:addons/pos_clothes/static/src/js/clothes.js:0
+msgid "running out"
+msgstr "শেষ হয়ে আসছে"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/xml/clothes.xml:0
+#: code:addons/pos_clothes/static/src/xml/clothes.xml:0
+msgid "sizes / colours"
+msgstr "সাইজ / রং"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/js/clothes.js:0
+#: code:addons/pos/pos_clothes/static/src/xml/clothes.xml:0
+#: code:addons/pos_clothes/static/src/js/clothes.js:0
+#: code:addons/pos_clothes/static/src/xml/clothes.xml:0
+msgid "sold out"
+msgstr "শেষ"
+
+#. module: pos_clothes
+#. odoo-javascript
+#: code:addons/pos/pos_clothes/static/src/xml/clothes.xml:0
+#: code:addons/pos_clothes/static/src/xml/clothes.xml:0
+msgid "sold ·"
+msgstr "বিক্রি ·"

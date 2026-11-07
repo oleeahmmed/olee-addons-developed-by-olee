@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Counter settings of a shop: a standalone form of pos.config (not an xpath into
+        Odoo's shop form, so an Odoo update cannot break it). Shop addons add their own
+        groups by inheriting this view (pos_modern.pos_config_counter_form), inside
+        <div name="pm_addons"/>.
+    -->
+    <record id="pos_config_counter_form" model="ir.ui.view">
+        <field name="name">pos.config.counter.form (pos_modern)</field>
+        <field name="model">pos.config</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <form string="Counter settings">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group string="Receipt" name="pm_receipt">
+                            <field name="pm_receipt_width"/>
+                            <field name="pm_auto_print"/>
+                            <field name="pm_label_size"/>
+                            <field name="receipt_header" placeholder="Shop name, address, BIN, hotline…"/>
+                            <field name="receipt_footer" placeholder="Thank you! Exchange within 7 days with this receipt."/>
+                        </group>
+                        <group string="Discounts" name="pm_discount">
+                            <field name="pm_discount_limit"/>
+                            <field name="pm_manager_pin" password="True" groups="point_of_sale.group_pos_manager"/>
+                        </group>
+                        <group string="Stock" name="pm_stock">
+                            <field name="pm_show_stock"/>
+                            <field name="pm_low_stock" invisible="not pm_show_stock"/>
+                            <field name="pm_block_no_stock"/>
+                        </group>
+                        <group string="Counter" name="pm_counter">
+                            <field name="pm_quick_cash"/>
+                            <field name="pm_product_limit"/>
+                            <field name="cash_rounding"/>
+                            <field name="rounding_method" invisible="not cash_rounding" required="cash_rounding"/>
+                        </group>
+                    </group>
+                    <div name="pm_addons"/>
+                </sheet>
+                <footer>
+                    <button string="Save" special="save" class="btn-primary"/>
+                    <button string="Discard" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Modifiers: extras and choices of products (spice, size, toppings, double shot…) -->
+    <record id="pos_modern_modifier_list" model="ir.ui.view">
+        <field name="name">pos.modern.modifier.list</field>
+        <field name="model">pos.modern.modifier</field>
+        <field name="arch" type="xml">
+            <list string="Modifiers" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="group_name" placeholder="Spice, Size…"/>
+                <field name="name"/>
+                <field name="single"/>
+                <field name="price_extra"/>
+                <field name="pos_categ_ids" widget="many2many_tags"/>
+                <field name="product_tmpl_ids" widget="many2many_tags"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_modifiers" model="ir.actions.act_window">
+        <field name="name">Modifiers</field>
+        <field name="res_model">pos.modern.modifier</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Add extras and choices</p>
+            <p>"Less spicy", "Extra cheese +40", "Double shot", "1 pound"… asked at the counter for the products or categories you choose.</p>
+        </field>
+    </record>
+</odoo>

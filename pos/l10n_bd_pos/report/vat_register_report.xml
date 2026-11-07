@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_vat_register" model="ir.actions.report">
+        <field name="name">VAT sales register</field>
+        <field name="model">l10n.bd.pos.vat.register</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_bd_pos.report_vat_register</field>
+        <field name="report_file">l10n_bd_pos.report_vat_register</field>
+        <field name="binding_type">report</field>
+    </record>
+    <record id="action_report_vat_register_html" model="ir.actions.report">
+        <field name="name">VAT sales register (preview)</field>
+        <field name="model">l10n.bd.pos.vat.register</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">l10n_bd_pos.report_vat_register</field>
+        <field name="report_file">l10n_bd_pos.report_vat_register</field>
+    </record>
+
+    <template id="report_vat_register">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="w">
+                <t t-call="web.basic_layout">
+                    <t t-set="d" t-value="w._data()"/>
+                    <t t-set="company" t-value="w.env.company"/>
+                    <div class="page o_mushak">
+                        <div class="mk-gov">
+                            <h2>VAT sales register — Point of Sale</h2>
+                            <div><strong t-esc="company.name"/> · BIN <t t-esc="company.l10n_bd_bin or '—'"/></div>
+                            <div><t t-esc="w.date_from.strftime('%d/%m/%Y')"/> – <t t-esc="w.date_to.strftime('%d/%m/%Y')"/>
+                                <t t-if="w.config_ids"> · <t t-esc="', '.join(w.config_ids.mapped('name'))"/></t></div>
+                        </div>
+                        <table class="mk-lines">
+                            <thead>
+                                <tr><th>Date</th><th>Bills</th><th>Sales without tax</th><th>SD</th><th>VAT</th><th>AT</th><th>Refunds</th><th>Total</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="d['days']" t-as="r">
+                                    <td t-esc="r['day'].strftime('%d/%m/%Y')"/>
+                                    <td class="num" t-esc="int(r['orders'])"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(r['base'])"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(r['sd'])"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(r['vat'])"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(r['at'])"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(r['refunds'])"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(r['total'])"/>
+                                </tr>
+                                <tr class="mk-total">
+                                    <td>Total</td>
+                                    <td class="num" t-esc="int(d['totals']['orders'])"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(d['totals']['base'])"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(d['totals']['sd'])"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(d['totals']['vat'])"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(d['totals']['at'])"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(d['totals']['refunds'])"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(d['totals']['total'])"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h3 style="margin-top:14px">By VAT rate</h3>
+                        <table class="mk-lines" style="width:60%">
+                            <thead><tr><th>VAT rate</th><th>Sales without tax</th><th>VAT</th></tr></thead>
+                            <tbody>
+                                <tr t-foreach="d['rates']" t-as="r">
+                                    <td class="num" t-esc="('%g%%' % r['rate']) if r['rate'] else 'Exempt / 0%'"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(r['base'])"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(r['vat'])"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="mk-note">Use these figures for the sales part of the monthly VAT return (Mushak-9.1). Refunds are already deducted from the totals.</div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

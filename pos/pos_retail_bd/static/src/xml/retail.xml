@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-inherit="pos_modern.Menu" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('ps-hook-cart-foot')]" position="inside">
+            <t t-set="rti" t-value="state.rt and state.rt.info"/>
+            <div t-if="rti and state.partner" class="ps-cart-block">
+                <div class="ps-row ps-row--tight">
+                    <span t-if="features.points" class="ps-tag ps-tag--info"><i class="fa fa-star" aria-hidden="true"/> <t t-esc="rti.points"/> points</span>
+                    <span t-if="features.credit" t-attf-class="ps-tag {{ rti.due > 0 ? 'ps-tag--warning' : '' }}">Due <t t-esc="money(rti.due)"/><t t-if="rti.credit_limit"> / <t t-esc="money(rti.credit_limit)"/></t></span>
+                    <span class="ps-tag"><t t-esc="rti.count"/> bills · <t t-esc="money(rti.spent)"/></span>
+                </div>
+                <div t-if="features.points and rti.points >= (features.min_redeem or 0) and cartLines.length" class="ps-row ps-row--tight">
+                    <label class="ps-field ps-field--inline"><span>Redeem points (1 = <t t-esc="money(features.point_value)"/>)</span>
+                        <input type="number" min="0" t-att-max="rti.points" class="ps-input" t-att-value="state.rt.redeem" t-on-change="(ev) => this.setRedeem(ev.target.value)"/>
+                    </label>
+                </div>
+                <div t-if="features.credit and features.collect_due and rti.due > 0" class="ps-row ps-row--tight">
+                    <input type="number" min="0" class="ps-input" placeholder="Due paid now" t-model="state.rt.collect"/>
+                    <button type="button" class="ps-btn ps-btn--sm" t-att-disabled="state.rt.busy" t-on-click="collectDue"><i class="fa fa-money" aria-hidden="true"/> Collect due</button>
+                </div>
+                <ul t-if="rti.orders.length" class="ps-list">
+                    <li t-foreach="rti.orders" t-as="o" t-key="o.id" class="ps-list-row">
+                        <span class="ps-list-main"><strong t-esc="o.items or o.ref"/><small><t t-esc="o.date"/> · <t t-esc="o.ref"/></small></span>
+                        <span class="ps-list-amount" t-esc="money(o.total)"/>
+                    </li>
+                </ul>
+            </div>
+        </xpath>
+    </t>
+
+    <t t-inherit="pos_modern.Menu" t-inherit-mode="extension">
+        <!-- quick keys: loose items without barcode -->
+        <xpath expr="//div[hasclass('ps-hook-main-top')]" position="inside">
+            <div t-if="quickProducts.length and !state.search" class="ps-quickbar">
+                <t t-foreach="quickProducts" t-as="q" t-key="q.id">
+                    <button type="button" class="ps-quickkey" t-on-click="() => this.onProduct(q)">
+                        <strong t-esc="q.name"/>
+                        <small><t t-esc="money(price(q))"/><t t-if="q.ask_qty"> / <t t-esc="q.uom"/></t></small>
+                    </button>
+                </t>
+            </div>
+        </xpath>
+        <!-- shelf vs godown, pack size -->
+        <xpath expr="//span[hasclass('ps-hook-prod-meta')]" position="inside">
+            <span t-if="p.godown !== undefined" class="ps-prod-meta">Shelf <t t-esc="p.stock === undefined ? '—' : p.stock"/> · Godown <t t-esc="p.godown"/></span>
+            <span t-if="p.pack_qty" class="ps-prod-meta"><t t-esc="p.pack_name"/> of <t t-esc="p.pack_qty"/></span>
+        </xpath>
+    </t>
+
+    <t t-inherit="pos_modern.CustomerPicker" t-inherit-mode="extension">
+        <xpath expr="//span[hasclass('ps-hook-cust-row')]" position="inside">
+            <span t-if="r.due" class="ps-tag ps-tag--warning">due</span>
+        </xpath>
+    </t>
+
+    <t t-inherit="pos_modern.Receipt" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('ps-r-hook-pay')]" position="inside">
+            <div t-if="r.extra.points !== undefined" class="ps-r-kv"><span>Points balance</span><span t-esc="num(r.extra.points)"/></div>
+            <div t-if="r.extra.due !== undefined" class="ps-r-kv"><span>Baki due</span><span t-esc="money(r.extra.due)"/></div>
+        </xpath>
+    </t>
+    <t t-name="pos_retail_bd.SerialDialog">
+        <Dialog title="props.product.name" size="'sm'" contentClass="'o_ps ps-dialog'">
+            <label class="ps-field">
+                <span>IMEI / serial number</span>
+                <input t-ref="input" type="text" class="ps-input ps-input--lg" t-model="state.value" t-on-keydown="onKey" placeholder="Scan the box"/>
+            </label>
+            <t t-set-slot="footer">
+                <button type="button" class="ps-btn ps-btn--primary" t-on-click="ok"><i class="fa fa-cart-plus" aria-hidden="true"/> Add</button>
+                <button type="button" class="ps-btn" t-on-click="props.close">Cancel</button>
+            </t>
+        </Dialog>
+    </t>
+
+    <t t-name="pos_retail_bd.Stock">
+        <div class="o_ps ps-page">
+            <header class="ps-pos-head">
+                <div class="ps-pos-title">
+                    <h1>Stock count &amp; damage</h1>
+                    <div class="ps-muted">Scan the shelf and type what is there, or write off damaged items.</div>
+                </div>
+                <div class="ps-pos-actions">
+                    <select t-if="state.shops.length > 1" class="ps-input ps-input--auto" t-on-change="(ev) => this.setShop(ev.target.value)">
+                        <t t-foreach="state.shops" t-as="s" t-key="s.id"><option t-att-value="s.id" t-esc="s.name"/></t>
+                    </select>
+                    <div class="ps-tabs">
+                        <button type="button" t-att-class="{ 'is-on': state.mode === 'count' }" t-on-click="() => this.state.mode = 'count'">Count</button>
+                        <button type="button" t-att-class="{ 'is-on': state.mode === 'damage' }" t-on-click="() => this.state.mode = 'damage'">Damage</button>
+                    </div>
+                </div>
+            </header>
+            <div t-if="state.loading" class="ps-skel" style="height:16rem"/>
+            <section t-else="" class="ps-panel">
+                <div class="ps-cust">
+                    <label class="ps-search ps-search--block">
+                        <i class="fa fa-barcode" aria-hidden="true"/>
+                        <input type="search" placeholder="Scan or search a product" t-model="state.q" t-on-keydown="onKey"/>
+                    </label>
+                    <ul t-if="matches.length" class="ps-menu ps-menu--down">
+                        <li t-foreach="matches" t-as="p" t-key="p.id" t-on-mousedown.prevent="() => this.add(p)"><strong t-esc="p.name"/><small><t t-esc="p.stock"/> in stock</small></li>
+                    </ul>
+                </div>
+                <table class="ps-table-list">
+                    <thead><tr><th>Product</th><th class="text-end">In the system</th><th t-if="state.mode === 'count'">Counted</th><th t-else="">Damaged</th><th t-if="state.mode === 'count'" class="text-end">Difference</th><th/></tr></thead>
+                    <tbody>
+                        <tr t-foreach="state.rows" t-as="r" t-key="r.id" t-att-class="{ 'is-warning': state.mode === 'count' and diff(r) !== null and diff(r) !== 0 }">
+                            <td t-esc="r.name"/>
+                            <td class="text-end" t-esc="r.stock"/>
+                            <td><input type="number" min="0" step="1" class="ps-input" style="width:7rem" t-model="r.qty"/></td>
+                            <td t-if="state.mode === 'count'" class="text-end" t-esc="diff(r) === null ? '—' : diff(r)"/>
+                            <td><button type="button" class="ps-btn ps-btn--sm ps-btn--ghost" t-on-click="() => this.remove(r)"><i class="fa fa-times" aria-hidden="true"/></button></td>
+                        </tr>
+                        <tr t-if="!state.rows.length"><td colspan="5" class="ps-muted">Scan the products one by one.</td></tr>
+                    </tbody>
+                </table>
+                <div class="ps-row">
+                    <input type="text" class="ps-input" t-model="state.note" t-att-placeholder="state.mode === 'count' ? 'Note (shelf A, weekly count…)' : 'Reason (broken, rat, expired…)'"/>
+                    <button type="button" class="ps-btn ps-btn--primary" t-att-disabled="state.busy or !state.rows.length" t-on-click="apply">
+                        <t t-if="state.mode === 'count'">Apply the count</t><t t-else="">Write off</t>
+                    </button>
+                </div>
+            </section>
+        </div>
+    </t>
+</templates>

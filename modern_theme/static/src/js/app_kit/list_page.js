@@ -4,6 +4,7 @@ import { user } from "@web/core/user";
 import { useService } from "@web/core/utils/hooks";
 import { session } from "@web/session";
 import { NativeView as AppNativeView } from "./native_view";
+import { findDrawerForm, openSmartDrawer } from "./smart_drawer";
 
 const viewIdsPromises = {};
 /**
@@ -81,15 +82,31 @@ export class ListPage extends Component {
     get context() {
         return {};
     }
+    /** Simple records (smart-drawer description) open in the drawer, others as Odoo's full form. */
     open(resId) {
+        const spec = findDrawerForm(this.constructor.resModel, this.context);
+        if (spec) {
+            return this.smartDrawer(spec, resId);
+        }
         return openFullForm(this.action, this.constructor.resModel, resId, { viewId: this.viewId("form") });
     }
-    /** Add, view and edit all use the same full Odoo form, so they look the same. */
+    /** Add, view and edit all use the same form (drawer or full page), so they look the same. */
     create() {
+        const spec = findDrawerForm(this.constructor.resModel, this.context);
+        if (spec) {
+            return this.smartDrawer(spec, false);
+        }
         return openFullForm(this.action, this.constructor.resModel, false, {
             viewId: this.viewId("form"),
             context: this.context,
         });
+    }
+    smartDrawer(spec, resId) {
+        return openSmartDrawer(this.dialog, spec, {
+            resModel: this.constructor.resModel,
+            resId: resId || false,
+            context: this.context,
+        }).then(() => this.refresh());
     }
 
     setup() {

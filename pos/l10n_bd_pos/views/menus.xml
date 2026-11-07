@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_vat_register" name="VAT sales register" parent="point_of_sale.menu_point_rep"
+              action="action_vat_register_wizard" sequence="50"/>
+    <menuitem id="menu_bd_vat" name="Bangladesh VAT" parent="point_of_sale.menu_point_config_product"
+              sequence="70" groups="point_of_sale.group_pos_manager"/>
+    <menuitem id="menu_company_vat" name="VAT registration (BIN)" parent="menu_bd_vat" action="action_company_vat_page" sequence="1"/>
+    <menuitem id="menu_bd_taxes" name="VAT / SD taxes" parent="menu_bd_vat" action="action_bd_taxes" sequence="2"/>
+    <menuitem id="menu_products_bn" name="Bangla names &amp; H.S. codes" parent="menu_bd_vat" action="action_products_bn" sequence="3"/>
+    <menuitem id="menu_partners_bin" name="Customers' BIN" parent="menu_bd_vat" action="action_partners_bin" sequence="4"/>
+</odoo>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_offers" name="Offers" parent="pos_modern.menu_more" action="action_offers" sequence="50"/>
+    <menuitem id="menu_baki" name="Baki &amp; points" parent="pos_modern.menu_more" action="action_baki" sequence="51"/>
+    <menuitem id="menu_points" name="Points history" parent="pos_modern.menu_more" action="action_points" sequence="52"/>
+    <menuitem id="menu_packs" name="Packs &amp; quick keys" parent="pos_modern.menu_more" action="action_packs" sequence="53"/>
+    <menuitem id="menu_stock_count" name="Stock count &amp; damage" parent="pos_modern.menu_more" action="action_stock_count" sequence="54"/>
+</odoo>

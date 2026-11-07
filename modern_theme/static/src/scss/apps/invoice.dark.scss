@@ -1,0 +1,6 @@
+// Modern Theme — invoice_modern: every style of the app lives here (moved out of
+// invoice_modern/static/src/scss so the app ships no stylesheet of its own).
+
+// ---- from invoice_modern/static/src/scss/app.dark.scss
+// Modern Invoicing: dark values of the app tokens (Modern Theme app kit).
+@include mt-app-tokens-dark(iv);

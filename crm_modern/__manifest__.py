@@ -11,7 +11,7 @@ No new tables: everything reads and writes the standard models
 mail.activity.type, mail.activity.plan). Campaigns store a default sales
 team (crm_modern_team_id) so empty campaigns remember who owns uploaded leads.
     """,
-    'version': '19.0.3.1.0',
+    'version': '19.0.3.1.1',
     'category': 'Sales/CRM',
     'author': 'Your Name',
     'license': 'LGPL-3',
@@ -27,12 +27,6 @@ team (crm_modern_team_id) so empty campaigns remember who owns uploaded leads.
     ],
     'assets': {
         'web.assets_backend': [
-            'crm_modern/static/src/scss/tokens.scss',
-            'crm_modern/static/src/scss/pages.scss',
-            'crm_modern/static/src/scss/record.scss',
-            'crm_modern/static/src/scss/list.scss',
-            'crm_modern/static/src/scss/sale.scss',
-            'crm_modern/static/src/scss/dash.scss',
             'crm_modern/static/src/js/core/*.js',
             'crm_modern/static/src/js/components/*.js',
             'crm_modern/static/src/js/sidebar/*.js',
@@ -40,9 +34,6 @@ team (crm_modern_team_id) so empty campaigns remember who owns uploaded leads.
             'crm_modern/static/src/js/pages/*.js',
             'crm_modern/static/src/js/sale/*.js',
             'crm_modern/static/src/xml/*.xml',
-        ],
-        'web.assets_web_dark': [
-            'crm_modern/static/src/scss/tokens.dark.scss',
         ],
     },
     'post_init_hook': 'post_init_hook',

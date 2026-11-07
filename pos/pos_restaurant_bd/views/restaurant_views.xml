@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pos_config_counter_form_restaurant" model="ir.ui.view">
+        <field name="name">pos.config.counter.form.restaurant</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="pos_modern.pos_config_counter_form"/>
+        <field name="arch" type="xml">
+            <div name="pm_addons" position="inside">
+                <group string="Restaurant" name="restaurant">
+                    <field name="rb_restaurant"/>
+                    <field name="rb_default_type" invisible="not rb_restaurant"/>
+                    <field name="rb_kitchen" invisible="not rb_restaurant"/>
+                    <field name="rb_print_kot" invisible="not rb_restaurant or not rb_kitchen"/>
+                    <field name="rb_late_minutes" invisible="not rb_restaurant or not rb_kitchen"/>
+                    <field name="rb_station_split" invisible="not rb_restaurant or not rb_kitchen"/>
+                    <field name="rb_service_pct" invisible="not rb_restaurant"/>
+                    <field name="rb_qr_menu" invisible="not rb_restaurant"/>
+                    <div colspan="2" invisible="not rb_restaurant or not rb_qr_menu">
+                        <button name="action_rb_qr_cards" type="object" string="Print table QR cards" icon="fa-qrcode" class="btn-link"/>
+                    </div>
+                </group>
+            </div>
+        </field>
+    </record>
+
+    <record id="pos_rb_ticket_list" model="ir.ui.view">
+        <field name="name">pos.rb.ticket.list</field>
+        <field name="model">pos.rb.ticket</field>
+        <field name="arch" type="xml">
+            <list string="Kitchen tickets" create="0">
+                <field name="create_date" string="Time"/>
+                <field name="name"/>
+                <field name="config_id"/>
+                <field name="order_type"/>
+                <field name="table_name"/>
+                <field name="customer"/>
+                <field name="state" widget="badge" decoration-info="state == 'new'" decoration-warning="state == 'cooking'" decoration-success="state in ('ready', 'served')"/>
+                <field name="ready_at" optional="hide"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_tickets" model="ir.actions.act_window">
+        <field name="name">Kitchen tickets</field>
+        <field name="res_model">pos.rb.ticket</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="pos_rb_staff_list" model="ir.ui.view">
+        <field name="name">pos.rb.staff.list</field>
+        <field name="model">pos.rb.staff</field>
+        <field name="arch" type="xml">
+            <list string="Waiters &amp; riders" editable="bottom">
+                <field name="name"/>
+                <field name="kind"/>
+                <field name="phone"/>
+                <field name="config_ids" widget="many2many_tags"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_staff" model="ir.actions.act_window">
+        <field name="name">Waiters &amp; riders</field>
+        <field name="res_model">pos.rb.staff</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="action_kds" model="ir.actions.client">
+        <field name="name">Kitchen screen</field>
+        <field name="tag">pos_restaurant_bd.kds</field>
+        <field name="path">pos-kitchen</field>
+    </record>
+</odoo>

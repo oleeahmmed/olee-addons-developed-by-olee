@@ -1,0 +1,581 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pos_pharmacy
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-06 22:24+0000\n"
+"PO-Revision-Date: 2026-11-06 22:24+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: pos_pharmacy
+#. odoo-python
+#: code:addons/pos/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos_pharmacy/models/pos_config.py:0
+msgid "%(n)s %(unit)s"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,help:pos_pharmacy.field_product_product__ph_box_size
+#: model:ir.model.fields,help:pos_pharmacy.field_product_template__ph_box_size
+msgid "0 = not sold by box"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,help:pos_pharmacy.field_product_product__ph_strip_size
+#: model:ir.model.fields,help:pos_pharmacy.field_product_template__ph_strip_size
+msgid "0 = not sold by strip"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,help:pos_pharmacy.field_product_product__ph_strength
+#: model:ir.model.fields,help:pos_pharmacy.field_product_template__ph_strength
+msgid "500 mg, 5 mg/5 ml…"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos/pos_pharmacy/static/src/js/pharmacy.js:0
+#: code:addons/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos_pharmacy/static/src/js/pharmacy.js:0
+msgid ""
+"A prescription medicine is in the cart: type the doctor and the patient."
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Add"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model_terms:ir.actions.act_window,help:pos_pharmacy.action_medicines
+msgid "Add your first medicine"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_order__ph_patient_age
+msgid "Age"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "All pharmacies"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Already expired"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos_pharmacy/static/src/js/drawer_forms.js:0
+msgid "At the counter"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Batch"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-python
+#: code:addons/pos/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos_pharmacy/models/pos_config.py:0
+msgid "Batch %s"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Batches"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid ""
+"Batches in the pharmacy's stock expiring soon: return them to the supplier "
+"or sell them first."
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_config__ph_block_expired
+msgid "Block expired batches"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/pharmacy.js:0
+#: code:addons/pos_pharmacy/static/src/js/pharmacy.js:0
+msgid "Box (%s strips)"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos_pharmacy/static/src/js/drawer_forms.js:0
+msgid "Brand name"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model_terms:ir.actions.act_window,help:pos_pharmacy.action_medicines
+msgid ""
+"Brand, generic name, strength, pieces per strip and strips per box. Batches "
+"and expiry dates come with the purchase receipts."
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Cancel"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__capsule
+msgid "Capsule"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__cream
+msgid "Cream / Ointment"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Days"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__device
+msgid "Device / Surgical"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_config__display_name
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_order__display_name
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_order__ph_doctor
+msgid "Doctor"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,help:pos_pharmacy.field_pos_config__ph_rx_mandatory
+msgid "Doctor and patient must be typed when a prescription medicine is sold."
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_product__ph_dosage_form
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__ph_dosage_form
+#: model_terms:ir.ui.view,arch_db:pos_pharmacy.product_template_medicine_search
+msgid "Dosage form"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__drops
+msgid "Drops"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos/pos_pharmacy/static/src/js/pharmacy.js:0
+#: code:addons/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos_pharmacy/static/src/js/pharmacy.js:0
+msgid "Every batch of %s in stock is expired."
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Expiry"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos_pharmacy/static/src/js/drawer_forms.js:0
+msgid ""
+"Found at the counter by brand or generic name. Batches and expiry come with "
+"each purchase."
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Generic"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_product__ph_generic_name
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__ph_generic_name
+#: model_terms:ir.ui.view,arch_db:pos_pharmacy.product_template_medicine_search
+msgid "Generic name"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,help:pos_pharmacy.field_pos_config__ph_pharmacy
+msgid "Generic search, strip / box selling, batches by expiry, prescriptions."
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_config__id
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_order__id
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__id
+msgid "ID"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__inhaler
+msgid "Inhaler"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__injection
+msgid "Injection"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_product__ph_manufacturer
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__ph_manufacturer
+#: model_terms:ir.ui.view,arch_db:pos_pharmacy.product_template_medicine_search
+msgid "Manufacturer"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_product__ph_is_medicine
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__ph_is_medicine
+msgid "Medicine"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.actions.act_window,name:pos_pharmacy.action_medicines
+#: model:ir.ui.menu,name:pos_pharmacy.menu_medicines
+#: model_terms:ir.ui.view,arch_db:pos_pharmacy.product_template_medicine_list
+#: model_terms:ir.ui.view,arch_db:pos_pharmacy.product_template_medicine_search
+msgid "Medicines"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: model:ir.actions.client,name:pos_pharmacy.action_expiry
+#: model:ir.ui.menu,name:pos_pharmacy.menu_expiry
+msgid "Near expiry"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos_pharmacy/static/src/js/drawer_forms.js:0
+msgid "New medicine"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Nothing expires in the next"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-python
+#: code:addons/pos/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos_pharmacy/models/pos_config.py:0
+msgid "Only %(qty)s of %(product)s in stock."
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__other
+msgid "Other"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_order__ph_patient
+msgid "Patient"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model_terms:ir.ui.view,arch_db:pos_pharmacy.pos_config_counter_form_pharmacy
+msgid "Pharmacy"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_config__ph_pharmacy
+msgid "Pharmacy counter"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_config__ph_fefo
+msgid "Pick batches by expiry (FEFO)"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/pharmacy.js:0
+#: code:addons/pos_pharmacy/static/src/js/pharmacy.js:0
+msgid "Piece"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_product__ph_strip_size
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__ph_strip_size
+msgid "Pieces per strip"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos_pharmacy/static/src/js/drawer_forms.js:0
+msgid "PoS categories"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model,name:pos_pharmacy.model_pos_config
+msgid "Point of Sale Configuration"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model,name:pos_pharmacy.model_pos_order
+msgid "Point of Sale Orders"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__powder
+msgid "Powder / Sachet"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Prescription"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_config__ph_rx_mandatory
+msgid "Prescription details mandatory"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_order__ph_rx_ref
+msgid "Prescription no."
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_product__ph_rx_required
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__ph_rx_required
+#: model_terms:ir.ui.view,arch_db:pos_pharmacy.product_template_medicine_search
+msgid "Prescription required"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model_terms:ir.ui.view,arch_db:pos_pharmacy.product_template_medicine_list
+msgid "Price / piece"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model,name:pos_pharmacy.model_product_template
+msgid "Product"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Qty"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Rack"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_product__ph_rack
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__ph_rack
+msgid "Rack / shelf"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Rx"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Rx no."
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos_pharmacy/static/src/js/drawer_forms.js:0
+msgid "Selling by strip and box"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,help:pos_pharmacy.field_product_product__ph_manufacturer
+#: model:ir.model.fields,help:pos_pharmacy.field_product_template__ph_manufacturer
+msgid "Square, Beximco, Incepta…"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "Stock value"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_product__ph_strength
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__ph_strength
+msgid "Strength"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/pharmacy.js:0
+#: code:addons/pos_pharmacy/static/src/js/pharmacy.js:0
+msgid "Strip (%s pcs)"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_product__ph_box_size
+#: model:ir.model.fields,field_description:pos_pharmacy.field_product_template__ph_box_size
+msgid "Strips per box"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__suppository
+msgid "Suppository"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__syrup
+msgid "Syrup / Suspension"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields.selection,name:pos_pharmacy.selection__product_template__ph_dosage_form__tablet
+msgid "Tablet"
+msgstr ""
+
+#. module: pos_pharmacy
+#: model:ir.model.fields,field_description:pos_pharmacy.field_pos_config__ph_expiry_warn_days
+msgid "Warn when expiring within (days)"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-python
+#: code:addons/pos/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos_pharmacy/models/pos_config.py:0
+msgid "box"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "days"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "days."
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos_pharmacy/static/src/js/drawer_forms.js:0
+msgid "e.g. Napa 500"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/js/drawer_forms.js:0
+#: code:addons/pos_pharmacy/static/src/js/drawer_forms.js:0
+msgid "e.g. Paracetamol"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "exp."
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-python
+#: code:addons/pos/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos_pharmacy/models/pos_config.py:0
+msgid "exp. %s"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-javascript
+#: code:addons/pos/pos_pharmacy/static/src/xml/pharmacy.xml:0
+#: code:addons/pos_pharmacy/static/src/xml/pharmacy.xml:0
+msgid "pieces ·"
+msgstr ""
+
+#. module: pos_pharmacy
+#. odoo-python
+#: code:addons/pos/pos_pharmacy/models/pos_config.py:0
+#: code:addons/pos_pharmacy/models/pos_config.py:0
+msgid "strip"
+msgstr ""

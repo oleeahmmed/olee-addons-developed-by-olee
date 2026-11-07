@@ -1,0 +1,6 @@
+// Modern Theme — purchase_modern: every style of the app lives here (moved out of
+// purchase_modern/static/src/scss so the app ships no stylesheet of its own).
+
+// ---- from purchase_modern/static/src/scss/app.dark.scss
+// Modern Purchase: dark values of the app tokens (Modern Theme app kit).
+@include mt-app-tokens-dark(mp);

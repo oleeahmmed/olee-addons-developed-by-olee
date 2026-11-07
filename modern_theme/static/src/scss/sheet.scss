@@ -992,3 +992,277 @@ select.or-select-card {
         &::after { animation: none !important; }
     }
 }
+
+// ---------------------------------------------------------------------------
+// Smart drawer (app_kit/smart_drawer.js): the drawer built from a description,
+// used by every app for its simple records, and the single-record page.
+// ---------------------------------------------------------------------------
+.mt-picker {
+    position: relative;
+    min-width: 0;
+
+    .mt-picker-icon {
+        position: absolute;
+        left: 0.8rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 0.75rem;
+        color: var(--or-sheet-muted);
+        pointer-events: none;
+        z-index: 3;
+    }
+    .mt-picker-input.or-input { padding-left: 2.1rem; padding-right: 2rem; }
+    .mt-picker-clear {
+        position: absolute;
+        right: 0.55rem;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 3;
+        border: 0;
+        background: none;
+        padding: 0 0.25rem;
+        font-size: 1.125rem;
+        line-height: 1;
+        color: var(--or-sheet-muted);
+        &:hover { color: var(--or-sheet-fg); }
+    }
+    .mt-picker-menu .or-menu-item {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        > span { overflow: hidden; text-overflow: ellipsis; }
+    }
+    .mt-picker-create { color: var(--mt-primary); font-weight: 500; .fa { font-size: 0.7rem; } }
+    .mt-picker-empty { padding: 0.45rem 0.55rem; font-size: 0.8125rem; color: var(--or-sheet-muted); }
+    &.is-disabled .mt-picker-icon { opacity: 0.5; }
+}
+.or-field:has(.mt-picker-menu) { position: relative; z-index: 80; }
+
+.mt-sd-field { grid-template-columns: minmax(0, 1fr); }
+.mt-sd-field.is-readonly .or-label { color: var(--or-sheet-muted); }
+.mt-sd-req { margin-left: 0.2rem; color: var(--mt-destructive, #dc2626); font-weight: 600; }
+
+.mt-sd-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: var(--or-input-height, 2.5rem);
+    height: 100%;
+    padding: 0.4rem 0.75rem 0.4rem 0.875rem;
+    border: 1px solid var(--or-input-border);
+    border-radius: var(--or-input-radius);
+    background: var(--or-input-bg);
+    cursor: default;
+    @include or-control-motion;
+    .or-toggle:not([aria-checked="true"]) { background: color-mix(in srgb, var(--or-sheet-fg) 18%, var(--mt-muted)); }
+    &.is-on { border-color: color-mix(in srgb, var(--or-sheet-fg) 14%, var(--or-input-border)); }
+}
+.mt-sd-toggle-label {
+    min-width: 0;
+    line-height: 1.25;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--or-sheet-fg);
+}
+
+// colour: a swatch that opens the palette (fits half a row)
+.mt-sd-color { position: relative; }
+.mt-sd-color-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: left;
+    cursor: pointer;
+    color: var(--or-sheet-muted);
+}
+.mt-sd-swatch {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mt-foreground) 14%, transparent);
+    &.o_colorlist_item_color_0 { background: var(--mt-muted); }
+}
+.mt-sd-color-menu {
+    position: absolute;
+    top: calc(100% + 0.35rem);
+    left: 0;
+    z-index: 40;
+    display: grid;
+    grid-template-columns: repeat(6, 1.5rem);
+    gap: 0.4rem;
+    padding: 0.6rem;
+    border: 1px solid var(--or-sheet-border);
+    border-radius: 0.75rem;
+    background: var(--mt-card);
+    box-shadow: var(--mt-shadow-lg);
+}
+.or-field:has(.mt-sd-color-menu) { position: relative; z-index: 80; }
+.mt-rail-full { margin-top: auto; .fa { font-size: 0.8rem; } }
+
+// Every drawer (smart drawer, CRM, POS, Project…): title and close only in the head,
+// labels and fields only in the body — no subtitles, links or help lines.
+.modal-content.o_or_sheet,
+.modal-content.o_cm_drawer,
+.modal-content.or-sheet {
+    .or-sheet-subtitle,
+    .cm-drawer-subtitle,
+    .or-sheet-actions,
+    .cm-drawer-actions,
+    .or-hint,
+    .or-section-head p,
+    .cm-drawer-section-head p { display: none !important; }
+
+    .or-sheet-head { align-items: center; padding-bottom: 1rem; }
+    .or-sheet-fields { --or-field-gap: 1rem; }
+}
+
+.mt-sd-chips { margin-bottom: 0; }
+.mt-sd-chip-clear { padding: 0 0.55rem; color: var(--or-sheet-muted); }
+
+.mt-sd-tags {
+    display: grid;
+    gap: 0.5rem;
+    .or-sheet-chips { margin-bottom: 0; }
+}
+.mt-sd-tag {
+    cursor: default;
+    padding-right: 0.35rem;
+    &::after { display: none; }
+}
+.mt-sd-tag-x {
+    display: inline-grid;
+    place-items: center;
+    width: 1.1rem;
+    height: 1.1rem;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--or-sheet-muted);
+    font-size: 0.9rem;
+    line-height: 1;
+    &:hover { background: var(--or-icon-bg); color: var(--or-sheet-fg); }
+}
+
+.mt-sd-names { display: grid; gap: 0.5rem; }
+.mt-sd-name-list {
+    display: grid;
+    gap: 0.3rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: mt-name;
+}
+.mt-sd-name {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-height: 2.25rem;
+    padding: 0.25rem 0.35rem 0.25rem 0.75rem;
+    border: 1px solid var(--or-sheet-border);
+    border-radius: 0.6rem;
+    background: var(--or-sheet-bg);
+    counter-increment: mt-name;
+    font-size: 0.875rem;
+
+    &::before {
+        content: counter(mt-name);
+        min-width: 1.25rem;
+        font-size: 0.7rem;
+        font-variant-numeric: tabular-nums;
+        color: var(--or-sheet-muted);
+    }
+}
+.mt-sd-name-text { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mt-sd-name-btn {
+    display: inline-grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 0.45rem;
+    background: transparent;
+    color: var(--or-sheet-muted);
+    font-size: 0.95rem;
+    line-height: 1;
+    &:hover:not(:disabled) { background: var(--or-icon-bg); color: var(--or-sheet-fg); }
+    &:disabled { opacity: 0.3; }
+    &.is-danger:hover { color: var(--mt-destructive, #dc2626); }
+}
+
+.mt-sd-hexcolor {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.mt-sd-hexcolor-swatch {
+    flex: 0 0 auto;
+    width: var(--or-input-height, 2.5rem);
+    height: var(--or-input-height, 2.5rem);
+    padding: 0.2rem;
+    border: 1px solid var(--or-input-border);
+    border-radius: var(--or-input-radius);
+    background: var(--or-input-bg);
+    cursor: pointer;
+}
+
+.mt-sd-section { margin: 0.5rem 0 -0.25rem; padding-bottom: 0.6rem; margin-bottom: 0; }
+.mt-sd-note {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--or-input-radius);
+    background: var(--or-icon-bg);
+    color: var(--or-sheet-muted);
+    font-size: 0.75rem;
+}
+.mt-sd-skeleton {
+    height: 3.75rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(90deg, var(--or-icon-bg), color-mix(in srgb, var(--or-icon-bg) 40%, transparent), var(--or-icon-bg));
+    background-size: 200% 100%;
+    animation: mt-sd-shimmer 1.2s linear infinite;
+    &.is-short { width: 60%; }
+}
+@keyframes mt-sd-shimmer { to { background-position: -200% 0; } }
+
+// single record as a page (SMS gateway, VAT registration…)
+.o_mt_smart_page {
+    height: 100%;
+    overflow: auto;
+    padding: 2rem 1rem 4rem;
+    background: var(--mt-background);
+}
+.mt-sp-card {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 1.75rem 1.75rem 1.25rem;
+    border: 1px solid var(--or-sheet-border);
+    border-radius: 1rem;
+    background: var(--or-sheet-bg);
+    color: var(--or-sheet-fg);
+    box-shadow: var(--mt-shadow-sm);
+    .or-sheet-head {
+        position: static;
+        margin: 0 0 1.5rem;
+        padding: 0 0 1rem;
+        box-shadow: none;
+        border-bottom: 1px solid var(--or-sheet-border);
+        background: none;
+    }
+}
+.mt-sp-foot {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--or-sheet-border);
+}
+.mt-sp-saved { font-size: 0.8125rem; color: var(--mt-success, #16a34a); }
+.mt-sd-field p.or-hint,
+.mt-sd-section p { margin-bottom: 0; }

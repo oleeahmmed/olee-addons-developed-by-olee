@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- counter: Bangla name on product cards, Mushak-6.3 button after payment -->
+    <t t-inherit="pos_modern.Menu" t-inherit-mode="extension">
+        <xpath expr="//span[hasclass('ps-hook-prod-meta')]" position="inside">
+            <span t-if="p.name_bn" class="ps-prod-meta" t-esc="p.name_bn"/>
+        </xpath>
+        <xpath expr="//div[hasclass('ps-hook-done-extra')]" position="inside">
+            <button t-if="state.done.id" type="button" class="ps-btn ps-btn--block" t-on-click="printMushak">
+                <i class="fa fa-file-text-o" aria-hidden="true"/> Mushak-6.3 (A4)
+            </button>
+        </xpath>
+    </t>
+    <t t-inherit="pos_modern.CustomerPicker" t-inherit-mode="extension">
+        <xpath expr="//span[hasclass('ps-hook-cust-chosen')]" position="inside">
+            <span t-if="props.value.bin" class="ps-tag ps-tag--info">BIN <t t-esc="props.value.bin"/></span>
+        </xpath>
+    </t>
+
+    <!-- thermal receipt: BIN, Mushak number, buyer BIN, VAT / SD, amount in Bangla words -->
+    <t t-inherit="pos_modern.Receipt" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('ps-r-hook-company')]" position="inside">
+            <div t-if="r.company and r.company.bin">BIN: <t t-esc="r.company.bin"/></div>
+        </xpath>
+        <xpath expr="//div[hasclass('ps-r-hook-meta')]" position="inside">
+            <div t-if="r.extra.mushak_no"><span>Mushak no.</span><span t-esc="r.extra.mushak_no"/></div>
+            <div t-if="r.customer and r.customer.bin"><span>Buyer BIN</span><span t-esc="r.customer.bin"/></div>
+        </xpath>
+        <xpath expr="//div[hasclass('ps-r-hook-totals')]" position="inside">
+            <div t-if="r.extra.sd"><span>SD</span><span t-esc="money(r.extra.sd)"/></div>
+        </xpath>
+        <xpath expr="//div[hasclass('ps-r-hook-pay')]" position="inside">
+            <div t-if="r.extra.words_bn" class="ps-r-text ps-r-bn">কথায়: <t t-esc="r.extra.words_bn"/></div>
+        </xpath>
+        <xpath expr="//div[hasclass('ps-r-hook-foot')]" position="inside">
+            <div t-if="r.extra.mushak_no" class="ps-r-sub">VAT included as per Mushak-6.3 · NBR</div>
+        </xpath>
+    </t>
+</templates>

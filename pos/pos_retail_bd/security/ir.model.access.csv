@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pos_bd_offer_user,pos.bd.offer user,model_pos_bd_offer,point_of_sale.group_pos_user,1,0,0,0
+access_pos_bd_offer_manager,pos.bd.offer manager,model_pos_bd_offer,point_of_sale.group_pos_manager,1,1,1,1
+access_pos_bd_points_user,pos.bd.points.move user,model_pos_bd_points_move,point_of_sale.group_pos_user,1,0,1,0
+access_pos_bd_points_manager,pos.bd.points.move manager,model_pos_bd_points_move,point_of_sale.group_pos_manager,1,1,1,1

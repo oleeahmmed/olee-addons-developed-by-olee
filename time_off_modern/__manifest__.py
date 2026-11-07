@@ -10,7 +10,7 @@ Allocations, Team Calendar and My Time. Reporting and Configuration are in the t
 Everything uses Odoo's own hr.leave / hr.leave.allocation views, forms and chatter:
 no new table or field.
     """,
-    'version': '19.0.2.1.0',
+    'version': '19.0.2.1.1',
     'category': 'Human Resources/Time Off',
     'author': 'Olee',
     'license': 'LGPL-3',
@@ -23,7 +23,6 @@ no new table or field.
     ],
     'assets': {
         'web.assets_backend': [
-            'time_off_modern/static/src/scss/*.scss',
             'time_off_modern/static/src/js/*.js',
             'time_off_modern/static/src/xml/*.xml',
         ],

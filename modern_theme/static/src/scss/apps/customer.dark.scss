@@ -1,0 +1,6 @@
+// Modern Theme — customer_modern: every style of the app lives here (moved out of
+// customer_modern/static/src/scss so the app ships no stylesheet of its own).
+
+// ---- from customer_modern/static/src/scss/app.dark.scss
+// Modern Contacts: dark values of the app tokens (Modern Theme app kit).
+@include mt-app-tokens-dark(cu);

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-inherit="pos_modern.Menu" t-inherit-mode="extension">
+        <!-- order type, guests, delivery -->
+        <xpath expr="//div[hasclass('ps-hook-cart-top')]" position="inside">
+            <t t-if="features.rb and sessionOpen and !state.done">
+                <div class="ps-otype" role="radiogroup" aria-label="Order type">
+                    <button type="button" t-att-class="{ 'is-on': orderType === 'dine_in' }" t-on-click="() => this.setOrderType('dine_in')"><i class="fa fa-cutlery" aria-hidden="true"/> Dine-in</button>
+                    <button type="button" t-att-class="{ 'is-on': orderType === 'takeaway' }" t-on-click="() => this.setOrderType('takeaway')"><i class="fa fa-shopping-bag" aria-hidden="true"/> Takeaway</button>
+                    <button type="button" t-att-class="{ 'is-on': orderType === 'delivery' }" t-on-click="() => this.setOrderType('delivery')"><i class="fa fa-motorcycle" aria-hidden="true"/> Delivery</button>
+                </div>
+                <div t-if="orderType === 'dine_in' and (state.tableId or staffWaiters.length)" class="ps-cart-block">
+                    <div class="ps-row ps-row--tight">
+                        <label t-if="state.tableId" class="ps-field ps-field--inline"><span>Guests</span>
+                            <input type="number" min="0" class="ps-input" t-att-value="state.extra.guests or ''" t-on-change="(ev) => this.setExtra('guests', ev.target.value)"/>
+                        </label>
+                        <label t-if="staffWaiters.length" class="ps-field ps-field--inline"><span>Waiter</span>
+                            <select class="ps-input" t-on-change="(ev) => this.setStaff('waiter_id', ev.target.value)">
+                                <option value="">—</option>
+                                <t t-foreach="staffWaiters" t-as="w" t-key="w.id"><option t-att-value="w.id" t-att-selected="w.id == state.extra.waiter_id" t-esc="w.name"/></t>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+                <div t-if="orderType === 'delivery'" class="ps-cart-block">
+                    <div class="ps-row ps-row--tight">
+                        <select class="ps-input" t-on-change="(ev) => this.setExtra('delivery_partner', ev.target.value)" aria-label="Delivered by">
+                            <t t-foreach="features.delivery_partners" t-as="dp" t-key="dp.id">
+                                <option t-att-value="dp.id" t-att-selected="(state.extra.delivery_partner or 'own') === dp.id" t-esc="dp.name"/>
+                            </t>
+                        </select>
+                        <input type="text" class="ps-input" placeholder="Their order no." t-att-value="state.extra.delivery_ref or ''" t-on-change="(ev) => this.setExtra('delivery_ref', ev.target.value)"/>
+                    </div>
+                    <input type="text" class="ps-input" placeholder="Delivery address" t-att-value="state.extra.delivery_address or ''" t-on-change="(ev) => this.setExtra('delivery_address', ev.target.value)"/>
+                    <label t-if="staffRiders.length" class="ps-field ps-field--inline"><span>Rider (cash on delivery: hold the bill until he is back)</span>
+                        <select class="ps-input" t-on-change="(ev) => this.setStaff('rider_id', ev.target.value)">
+                            <option value="">—</option>
+                            <t t-foreach="staffRiders" t-as="w" t-key="w.id"><option t-att-value="w.id" t-att-selected="w.id == state.extra.rider_id" t-esc="w.name"/></t>
+                        </select>
+                    </label>
+                    <label class="ps-field ps-field--inline"><span>Delivery charge</span>
+                        <input type="number" min="0" step="1" class="ps-input" t-att-value="state.extra.delivery_charge or ''" t-on-change="(ev) => this.setExtra('delivery_charge', ev.target.value)"/>
+                    </label>
+                </div>
+            </t>
+        </xpath>
+        <!-- items not sent to the kitchen yet -->
+        <xpath expr="//span[hasclass('ps-hook-line-meta')]" position="inside">
+            <span t-if="features.kitchen and state.extra.sent and l.qty > sentQty(l)" class="ps-tag ps-tag--warning">+<t t-esc="l.qty - sentQty(l)"/> new</span>
+            <span t-elif="features.kitchen and state.extra.sent and sentQty(l)" class="ps-tag ps-tag--success">in kitchen</span>
+        </xpath>
+        <xpath expr="//div[hasclass('ps-hook-cart-foot')]" position="inside">
+            <button t-if="features.kitchen and cartLines.length" type="button" class="ps-btn ps-btn--block" t-att-disabled="!unsentCount or state.rbBusy" t-on-click="sendKitchen">
+                <i class="fa fa-fire" aria-hidden="true"/> Kitchen (KOT)<t t-if="unsentCount"> · <t t-esc="unsentCount"/> new</t>
+            </button>
+            <div t-if="features.rb and state.tableId and cartLines.length" class="ps-row">
+                <button type="button" class="ps-btn" t-att-disabled="state.rbBusy" t-on-click="requestBill" title="Print the guest check; the table waits for payment"><i class="fa fa-file-text-o" aria-hidden="true"/> Bill</button>
+                <button type="button" class="ps-btn" t-on-click="moveTable" title="Move to another table, or merge with its bill"><i class="fa fa-exchange" aria-hidden="true"/> Move / merge</button>
+            </div>
+        </xpath>
+    </t>
+
+    <t t-inherit="pos_modern.Menu" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('ps-hook-line-edit')]" position="inside">
+            <button t-if="features.rb" type="button" class="ps-btn ps-btn--sm" t-on-click="() => this.complimentary(l)">
+                <i class="fa fa-gift" aria-hidden="true"/> <t t-if="l.extra and l.extra.comp">Not complimentary</t><t t-else="">Complimentary</t>
+            </button>
+        </xpath>
+    </t>
+
+    <!-- visual floor plan (Odoo's table positions) -->
+    <t t-inherit="pos_modern.Tables" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('ps-table-grid')]" position="before">
+            <t t-set="plan" t-value="planOf(floor)"/>
+            <t t-if="plan">
+                <div class="ps-legend"><span>Free</span><span class="is-busy">Occupied</span><span class="is-bill">Bill asked</span></div>
+                <div class="ps-floorplan" t-attf-style="height:{{ plan.h }}px">
+                    <t t-foreach="floor.tables" t-as="t" t-key="t.id">
+                        <button type="button" t-attf-class="ps-ftable ps-ftable--{{ t.shape }} {{ t.bill ? 'is-bill' : (t.orders ? 'is-busy' : '') }}"
+                                t-att-style="tableStyle(t)" t-on-click="() => this.openTable(t)">
+                            <strong t-esc="t.number"/>
+                            <small t-if="t.holds and t.holds.length" t-esc="money(t.holds[0].total)"/>
+                            <small t-else=""><i class="fa fa-user-o" aria-hidden="true"/> <t t-esc="t.seats"/></small>
+                            <small t-if="t.waiter" t-esc="t.waiter"/>
+                            <small t-if="t.minutes"><t t-esc="t.minutes"/> min</small>
+                        </button>
+                    </t>
+                </div>
+            </t>
+        </xpath>
+        <xpath expr="//div[hasclass('ps-table-grid')]" position="attributes">
+            <attribute name="t-if">!planOf(floor)</attribute>
+        </xpath>
+    </t>
+
+    <t t-inherit="pos_modern.Receipt" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('ps-r-hook-meta')]" position="inside">
+            <div t-if="r.extra.order_type"><span>Order</span><span><t t-esc="r.extra.order_type"/><t t-if="r.extra.guests"> · <t t-esc="r.extra.guests"/> guests</t></span></div>
+            <t t-if="r.extra.delivery">
+                <div><span>Delivery</span><span><t t-esc="r.extra.delivery.by"/><t t-if="r.extra.delivery.ref"> #<t t-esc="r.extra.delivery.ref"/></t></span></div>
+                <div t-if="r.extra.delivery.address"><span>Address</span><span t-esc="r.extra.delivery.address"/></div>
+            </t>
+            <div t-if="r.extra.waiter"><span>Waiter</span><span t-esc="r.extra.waiter"/></div>
+            <div t-if="r.extra.rider"><span>Rider</span><span t-esc="r.extra.rider"/></div>
+        </xpath>
+    </t>
+
+    <!-- kitchen order ticket (thermal) -->
+    <t t-name="pos_restaurant_bd.Kot">
+        <div class="ps-receipt">
+            <div class="ps-r-title">KITCHEN · <t t-esc="t.name"/></div>
+            <div class="ps-r-meta">
+                <div><span t-esc="t.type_label"/><span t-esc="t.time"/></div>
+                <div t-if="t.table"><span>Table</span><span class="ps-r-big" t-esc="t.table"/></div>
+                <div t-if="t.customer"><span>For</span><span t-esc="t.customer"/></div>
+            </div>
+            <table class="ps-r-lines">
+                <tbody>
+                    <tr t-foreach="t.lines" t-as="l" t-key="l.id">
+                        <td class="ps-r-big" style="text-align:left;width:3em" t-esc="l.qty"/>
+                        <td><strong t-esc="l.name"/><div t-if="l.note" class="ps-r-sub">» <t t-esc="l.note"/></div></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div t-if="t.note" class="ps-r-text" t-esc="t.note"/>
+        </div>
+    </t>
+
+    <!-- kitchen display -->
+    <t t-name="pos_restaurant_bd.Kds">
+        <div class="o_ps ps-page">
+            <header class="ps-pos-head">
+                <div class="ps-pos-title">
+                    <h1>Kitchen</h1>
+                    <div class="ps-muted">New tickets arrive by themselves (every 8 seconds).</div>
+                </div>
+                <div class="ps-pos-actions">
+                    <select t-if="state.shops.length > 1" class="ps-input ps-input--auto" t-on-change="(ev) => this.setShop(ev.target.value)">
+                        <t t-foreach="state.shops" t-as="s" t-key="s.id"><option t-att-value="s.id" t-att-selected="s.id === state.configId" t-esc="s.name"/></t>
+                    </select>
+                    <select t-if="stations.length" class="ps-input ps-input--auto" t-on-change="(ev) => this.state.station = ev.target.value" aria-label="Station">
+                        <option value="">All stations</option>
+                        <t t-foreach="stations" t-as="st" t-key="st"><option t-att-value="st" t-att-selected="st === state.station" t-esc="st"/></t>
+                    </select>
+                    <div class="ps-tabs">
+                        <button type="button" t-att-class="{ 'is-on': state.filter === 'all' }" t-on-click="() => this.state.filter = 'all'">All</button>
+                        <button type="button" t-att-class="{ 'is-on': state.filter === 'new' }" t-on-click="() => this.state.filter = 'new'">New (<t t-esc="count('new')"/>)</button>
+                        <button type="button" t-att-class="{ 'is-on': state.filter === 'cooking' }" t-on-click="() => this.state.filter = 'cooking'">Cooking (<t t-esc="count('cooking')"/>)</button>
+                        <button type="button" t-att-class="{ 'is-on': state.filter === 'ready' }" t-on-click="() => this.state.filter = 'ready'">Ready (<t t-esc="count('ready')"/>)</button>
+                    </div>
+                </div>
+            </header>
+            <div t-if="state.loading" class="ps-skel" style="height:20rem"/>
+            <div t-elif="!state.configId" class="ps-pos-empty ps-pos-empty--inline">
+                <i class="fa fa-fire" aria-hidden="true"/><strong>No restaurant shop</strong>
+                <span>Turn on "Restaurant counter" in a shop's Counter settings.</span>
+            </div>
+            <div t-elif="!tickets.length" class="ps-pos-empty ps-pos-empty--inline">
+                <i class="fa fa-check-circle-o" aria-hidden="true"/><strong>All clear</strong><span>No ticket waiting.</span>
+            </div>
+            <div t-else="" class="ps-kds">
+                <t t-foreach="tickets" t-as="t" t-key="t.id">
+                    <article t-attf-class="ps-ticket is-{{ t.state }}" t-att-class="{ 'is-late': t.late }">
+                        <div class="ps-ticket-head">
+                            <strong t-esc="t.name"/>
+                            <span class="ps-tag" t-esc="t.type_label"/>
+                            <span t-if="t.station" class="ps-tag ps-tag--info" t-esc="t.station"/>
+                            <small><t t-esc="t.time"/> · <t t-esc="t.age"/> min</small>
+                        </div>
+                        <div t-if="t.table or t.customer" class="ps-muted"><t t-esc="t.table"/><t t-if="t.table and t.customer"> · </t><t t-esc="t.customer"/></div>
+                        <ul class="ps-ticket-lines">
+                            <li t-foreach="t.lines" t-as="l" t-key="l.id" t-att-class="{ 'is-done': l.done }" t-on-click="() => this.toggleLine(l)" style="cursor:pointer">
+                                <b t-esc="l.qty"/>
+                                <span><t t-esc="l.name"/><em t-if="l.note" t-esc="l.note"/></span>
+                            </li>
+                        </ul>
+                        <div t-if="t.note" class="ps-note" t-esc="t.note"/>
+                        <div class="ps-row">
+                            <button t-if="t.state === 'new'" type="button" class="ps-btn ps-btn--primary" t-on-click="() => this.setState(t, 'cooking')">Start</button>
+                            <button t-if="t.state === 'cooking'" type="button" class="ps-btn ps-btn--primary" t-on-click="() => this.setState(t, 'ready')">Ready</button>
+                            <button t-if="t.state === 'ready'" type="button" class="ps-btn ps-btn--primary" t-on-click="() => this.setState(t, 'served')">Served</button>
+                            <button type="button" class="ps-btn ps-btn--ghost ps-btn--sm" t-on-click="() => this.setState(t, 'cancel')" title="Cancel"><i class="fa fa-times" aria-hidden="true"/></button>
+                        </div>
+                    </article>
+                </t>
+            </div>
+        </div>
+    </t>
+    <t t-inherit="pos_modern.SessionReport" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('ps-r-hook-report')]" position="inside">
+            <t t-if="r.extra.restaurant">
+                <div class="ps-r-section">Restaurant</div>
+                <div class="ps-r-pay">
+                    <div><span>Covers</span><span t-esc="r.extra.restaurant.covers"/></div>
+                    <div><span>Per cover (dine-in)</span><span t-esc="money(r.extra.restaurant.per_cover)"/></div>
+                    <div t-foreach="r.extra.restaurant.types" t-as="ty" t-key="ty.name"><span><t t-esc="ty.name"/> (<t t-esc="ty.count"/>)</span><span t-esc="money(ty.amount)"/></div>
+                    <div t-foreach="r.extra.restaurant.waiters" t-as="w" t-key="w.name"><span><t t-esc="w.name"/> (<t t-esc="w.count"/>)</span><span t-esc="money(w.amount)"/></div>
+                </div>
+            </t>
+        </xpath>
+    </t>
+    <t t-inherit="pos_modern.DayEndDialog" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('ps-hook-dayend-methods')]" position="inside">
+            <t t-if="r.extra.restaurant">
+                <h3>Restaurant · <t t-esc="r.extra.restaurant.covers"/> covers · <t t-esc="money(r.extra.restaurant.per_cover)"/> per cover</h3>
+                <table class="ps-table-list">
+                    <tbody>
+                        <tr t-foreach="r.extra.restaurant.types" t-as="ty" t-key="ty.name"><td><t t-esc="ty.name"/> <small class="ps-muted">(<t t-esc="ty.count"/>)</small></td><td class="text-end" t-esc="money(ty.amount)"/></tr>
+                        <tr t-foreach="r.extra.restaurant.waiters" t-as="w" t-key="w.name"><td><i class="fa fa-id-badge" aria-hidden="true"/> <t t-esc="w.name"/> <small class="ps-muted">(<t t-esc="w.count"/>)</small></td><td class="text-end" t-esc="money(w.amount)"/></tr>
+                    </tbody>
+                </table>
+            </t>
+        </xpath>
+    </t>
+
+    <!-- guest check (bill asked, not paid yet) -->
+    <t t-name="pos_restaurant_bd.GuestCheck">
+        <div class="ps-receipt">
+            <div class="ps-r-head">
+                <div class="ps-r-company" t-esc="company ? company.name : shop"/>
+                <div t-if="company and company.bin">BIN: <t t-esc="company.bin"/></div>
+            </div>
+            <div class="ps-r-title">BILL · <t t-esc="table"/></div>
+            <div class="ps-r-meta">
+                <div><span>Date</span><span t-esc="date"/></div>
+                <div t-if="waiter"><span>Waiter</span><span t-esc="waiter"/></div>
+            </div>
+            <table class="ps-r-lines">
+                <tbody>
+                    <tr t-foreach="q.lines" t-as="l" t-key="l.key">
+                        <td><t t-esc="l.name"/><div t-if="l.label" class="ps-r-sub" t-esc="l.label"/></td>
+                        <td class="ps-r-num" t-esc="l.qty"/>
+                        <td class="ps-r-num" t-esc="money(l.total)"/>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="ps-r-totals">
+                <div><span>Subtotal</span><span t-esc="money(q.untaxed)"/></div>
+                <div t-foreach="q.taxes" t-as="tx" t-key="tx_index"><span t-esc="tx.name"/><span t-esc="money(tx.amount)"/></div>
+                <div t-if="q.discount"><span>Discount</span><span>−<t t-esc="money(q.discount)"/></span></div>
+                <div class="ps-r-grand"><span>TOTAL</span><span t-esc="money(q.payable, true)"/></div>
+            </div>
+            <div class="ps-r-foot">Not a receipt · please pay at the counter</div>
+        </div>
+    </t>
+
+    <t t-name="pos_restaurant_bd.TablePicker">
+        <Dialog title="'Move to table'" size="'lg'" contentClass="'o_ps ps-dialog'">
+            <div t-if="state.loading" class="ps-skel" style="height:10rem"/>
+            <t t-else="">
+                <nav class="ps-floors">
+                    <t t-foreach="state.data.floors" t-as="f" t-key="f.id">
+                        <button type="button" class="ps-floor" t-att-class="{ 'is-on': state.floorId === f.id }" t-on-click="() => this.state.floorId = f.id" t-esc="f.name"/>
+                    </t>
+                </nav>
+                <p class="ps-muted">A table that already has a bill: both bills are merged.</p>
+                <div class="ps-table-grid">
+                    <t t-foreach="floor ? floor.tables : []" t-as="t" t-key="t.id">
+                        <button type="button" t-attf-class="ps-table ps-table--{{ t.shape }} {{ t.orders ? 'is-busy' : '' }}" t-att-disabled="t.id === props.current" t-on-click="() => this.pick(t)">
+                            <span class="ps-table-no" t-esc="t.number"/>
+                            <span class="ps-table-state"><t t-if="t.id === props.current">This table</t><t t-elif="t.orders">Merge</t><t t-else="">Free</t></span>
+                        </button>
+                    </t>
+                </div>
+            </t>
+        </Dialog>
+    </t>
+</templates>

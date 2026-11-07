@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-inherit="pos_modern.Menu" t-inherit-mode="extension">
+        <xpath expr="//span[hasclass('ps-hook-prod-meta')]" position="inside">
+            <span t-if="p._style" class="ps-prod-meta"><t t-esc="p._variantIds.length"/> sizes / colours</span>
+            <span t-elif="features.clothes and p.attrs_text" class="ps-prod-meta" t-esc="p.attrs_text"/>
+        </xpath>
+    </t>
+
+    <t t-name="pos_clothes.MatrixDialog">
+        <Dialog title="props.title" size="'lg'" contentClass="'o_ps ps-dialog'">
+            <div t-if="!axes.colAttr" class="ps-muted">This style has no size or colour.</div>
+            <div t-else="" class="ps-matrix-wrap">
+                <table class="ps-matrix">
+                    <thead>
+                        <tr>
+                            <th/>
+                            <th t-foreach="cols" t-as="c" t-key="c" t-esc="c"/>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="rows" t-as="r" t-key="r">
+                            <th t-esc="r"/>
+                            <td t-foreach="cols" t-as="c" t-key="c">
+                                <t t-set="v" t-value="cell(r, c)"/>
+                                <button t-if="v" type="button" class="ps-cell"
+                                        t-att-class="{ 'is-in': inCart(v), 'is-low': props.showStock and v.stock !== undefined and v.stock &lt;= props.lowStock }"
+                                        t-att-disabled="soldOut(v)" t-on-click="() => this.pick(v)" t-att-title="v.name">
+                                    <strong><t t-esc="c"/><t t-if="inCart(v)"> ×<t t-esc="inCart(v)"/></t></strong>
+                                    <small t-if="props.showStock and v.stock !== undefined"><t t-if="soldOut(v)">sold out</t><t t-else=""><t t-esc="v.stock"/> left</t></small>
+                                    <small t-else="" t-esc="props.money(props.price(v))"/>
+                                </button>
+                                <span t-else="" class="ps-cell-none"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <t t-set-slot="footer">
+                <button type="button" class="ps-btn ps-btn--primary" t-on-click="props.close"><i class="fa fa-check" aria-hidden="true"/> Done</button>
+            </t>
+        </Dialog>
+    </t>
+
+    <t t-name="pos_clothes.Sizes">
+        <div class="o_ps ps-page">
+            <header class="ps-pos-head">
+                <div class="ps-pos-title">
+                    <h1>Sizes report</h1>
+                    <div class="ps-muted">Which sizes and colours sell, which run out and which stay on the shelf.</div>
+                </div>
+                <div class="ps-pos-actions">
+                    <select t-if="state.shops.length > 1" class="ps-input ps-input--auto" t-on-change="(ev) => this.setShop(ev.target.value)">
+                        <t t-foreach="state.shops" t-as="s" t-key="s.id"><option t-att-value="s.id" t-esc="s.name"/></t>
+                    </select>
+                    <div class="ps-tabs">
+                        <t t-foreach="[7, 30, 90]" t-as="d" t-key="d">
+                            <button type="button" t-att-class="{ 'is-on': state.days === d }" t-on-click="() => this.setDays(d)"><t t-esc="d"/> days</button>
+                        </t>
+                    </div>
+                </div>
+            </header>
+            <div t-if="state.loading" class="ps-skel" style="height:20rem"/>
+            <div t-elif="!state.configId" class="ps-pos-empty ps-pos-empty--inline">
+                <i class="fa fa-th" aria-hidden="true"/><strong>No clothing shop</strong>
+                <span>Turn on "Clothing counter" in a shop's Counter settings.</span>
+            </div>
+            <div t-elif="!state.data.rows.length" class="ps-pos-empty ps-pos-empty--inline">
+                <i class="fa fa-th" aria-hidden="true"/><strong>No sale of a style with sizes yet</strong>
+            </div>
+            <div t-else="" class="ps-cols">
+                <section t-foreach="state.data.rows" t-as="r" t-key="r.id" class="ps-panel">
+                    <h3><t t-esc="r.name"/> <small class="ps-muted">· <t t-esc="r.sold"/> sold · <t t-esc="r.stock"/> in stock</small></h3>
+                    <table class="ps-table-list">
+                        <thead><tr><th>Size / colour</th><th class="text-end">Sold</th><th class="text-end">Stock</th><th>Days left</th></tr></thead>
+                        <tbody>
+                            <tr t-foreach="r.cells" t-as="c" t-key="c.id">
+                                <td><t t-esc="c.name"/> <span t-if="c.flag" t-attf-class="ps-tag {{ flagClass(c.flag) }}" t-esc="flagLabel(c.flag)"/></td>
+                                <td class="text-end" t-esc="c.sold"/>
+                                <td class="text-end" t-esc="c.stock"/>
+                                <td t-esc="c.days_left === null ? '—' : c.days_left"/>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+    </t>
+</templates>

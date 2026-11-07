@@ -14,7 +14,7 @@ Adding, viewing and editing all use Odoo's own contact form, with a modern look.
 * Rights, record rules and settings are Odoo's own; Odoo's Configuration menu stays
   available in the sidebar.
     """,
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.0.1',
     'category': 'Sales/CRM',
     'author': 'Olee',
     'license': 'LGPL-3',
@@ -25,13 +25,9 @@ Adding, viewing and editing all use Odoo's own contact form, with a modern look.
     ],
     'assets': {
         'web.assets_backend': [
-            'customer_modern/static/src/scss/app.scss',
             'customer_modern/static/src/js/sidebar/*.js',
             'customer_modern/static/src/js/pages/*.js',
             'customer_modern/static/src/xml/*.xml',
-        ],
-        'web.assets_web_dark': [
-            'customer_modern/static/src/scss/app.dark.scss',
         ],
     },
     'installable': True,

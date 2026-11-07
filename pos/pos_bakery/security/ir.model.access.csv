@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pos_bk_batch_user,pos.bk.batch user,model_pos_bk_batch,point_of_sale.group_pos_user,1,1,1,0
+access_pos_bk_batch_line_user,pos.bk.batch.line user,model_pos_bk_batch_line,point_of_sale.group_pos_user,1,1,1,1
+access_pos_bk_cake_user,pos.bk.cake user,model_pos_bk_cake,point_of_sale.group_pos_user,1,1,1,0
+access_pos_bk_batch_manager,pos.bk.batch manager,model_pos_bk_batch,point_of_sale.group_pos_manager,1,1,1,1
+access_pos_bk_cake_manager,pos.bk.cake manager,model_pos_bk_cake,point_of_sale.group_pos_manager,1,1,1,1

@@ -1,0 +1,909 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pos_retail_bd
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-06 22:24+0000\n"
+"PO-Revision-Date: 2026-11-06 22:24+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields.selection,name:pos_retail_bd.selection__pos_bd_offer__kind__percent
+msgid "% off products / categories"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model_terms:ir.actions.act_window,help:pos_retail_bd.action_offers
+msgid ""
+"% off products or categories, buy 2 get 1 free, ৳100 off bills from ৳1,000…"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/retail.js:0
+#: code:addons/pos_retail_bd/static/src/js/retail.js:0
+msgid "%(amount)s received (%(ref)s)"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "%(name)s has only %(points)s points."
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "%s has no baki limit. Set one on the customer first."
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/retail.js:0
+#: code:addons/pos_retail_bd/static/src/js/retail.js:0
+msgid "%s is already in the cart."
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "%s points"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/retail.js:0
+#: code:addons/pos_retail_bd/static/src/js/retail.js:0
+msgid "%s product(s) updated."
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_points_per
+msgid "1 point for every"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_point_value
+msgid "1 point is worth"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_product_product__rt_quick
+#: model:ir.model.fields,help:pos_retail_bd.field_product_template__rt_quick
+msgid "A big button on top of the counter (loose items without barcode)."
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__active
+msgid "Active"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Add"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_config_counter_form_retail
+msgid ""
+"Add Odoo's \"Customer Account\" payment method to the shop, and a baki limit"
+" on each customer."
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+msgid "Applied by itself at the counter while it runs."
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Apply the count"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_ask_serial
+msgid "Ask the IMEI / serial number"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.actions.act_window,name:pos_retail_bd.action_baki
+#: model:ir.ui.menu,name:pos_retail_bd.menu_baki
+msgid "Baki & points"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_credit
+msgid "Baki (customer account)"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Baki collected at %s"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Baki due"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_res_partner__rt_credit_limit
+#: model:ir.model.fields,field_description:pos_retail_bd.field_res_users__rt_credit_limit
+msgid "Baki limit"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Baki limit reached: %(name)s owes %(due)s, limit %(limit)s."
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/retail.js:0
+#: code:addons/pos_retail_bd/static/src/js/retail.js:0
+msgid "Baki limit reached: due %(due)s, limit %(limit)s."
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__min_amount
+msgid "Bill from"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__buy_qty
+msgid "Buy"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields.selection,name:pos_retail_bd.selection__pos_bd_offer__kind__bogo
+msgid "Buy X get Y free"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/offer.py:0
+#: code:addons/pos_retail_bd/models/offer.py:0
+msgid "Buy and Get of %s must be at least 1."
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Cancel"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.product_template_retail_list
+msgid "Carton"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_product_product__rt_pack_name
+#: model:ir.model.fields,help:pos_retail_bd.field_product_template__rt_pack_name
+msgid "Carton, Box, Dozen, Sack… sold whole at the counter."
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Choose the customer and type the amount."
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Choose the customer to redeem points."
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos/pos_retail_bd/static/src/js/retail.js:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/static/src/js/retail.js:0
+msgid "Choose the customer to sell on credit (baki)."
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Choose the journal for dues in the Counter settings."
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Collect due"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_due_journal_id
+msgid "Collect dues in"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__company_id
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__company_id
+msgid "Company"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model,name:pos_retail_bd.model_res_partner
+msgid "Contact"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Count"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Counted"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model_terms:ir.actions.act_window,help:pos_retail_bd.action_offers
+msgid "Create your first offer"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__create_uid
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__create_date
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.res_partner_baki_list
+msgid "Customers: baki and points"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Damage"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Damaged"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_bd_points_list
+msgid "Date"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Difference"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__percent
+msgid "Discount %"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__display_name
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__display_name
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__display_name
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_order__display_name
+#: model:ir.model.fields,field_description:pos_retail_bd.field_product_template__display_name
+#: model:ir.model.fields,field_description:pos_retail_bd.field_res_partner__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Due"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.res_partner_baki_list
+msgid "Due (posted)"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Due paid now"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_pos_config__rt_scale_prefixes
+msgid ""
+"EAN-13 barcodes of the weighing scale: 2 prefix digits, 5-digit product code"
+" (internal reference), 5-digit value, check digit."
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Earned on %s"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_bd_offer_form
+msgid "Eid offer 10%"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_pos_bd_offer__config_ids
+msgid "Empty = every shop"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_bd_offer_form
+msgid "Every product if empty"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_bd_offer_form
+msgid "Every shop"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__date_from
+msgid "From"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__get_qty
+msgid "Get free"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_godown_location_id
+msgid "Godown (back store)"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__id
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__id
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__id
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_order__id
+#: model:ir.model.fields,field_description:pos_retail_bd.field_product_template__id
+#: model:ir.model.fields,field_description:pos_retail_bd.field_res_partner__id
+msgid "ID"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "IMEI / SN %s"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "IMEI / serial %(sn)s of %(product)s was already sold."
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "IMEI / serial number"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "In the system"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_pos_config__rt_godown_location_id
+msgid "Its stock shows on the product cards next to the shelf stock."
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__kind
+msgid "Kind"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__write_uid
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__write_date
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_points
+#: model:ir.model.fields,field_description:pos_retail_bd.field_res_partner__rt_points
+#: model:ir.model.fields,field_description:pos_retail_bd.field_res_users__rt_points
+msgid "Loyalty points"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model,name:pos_retail_bd.model_pos_bd_points_move
+msgid "Loyalty points (POS)"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__amount
+msgid "Money off"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields.selection,name:pos_retail_bd.selection__pos_bd_offer__kind__bill
+msgid "Money off the bill"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_res_partner__rt_credit_limit
+#: model:ir.model.fields,help:pos_retail_bd.field_res_users__rt_credit_limit
+msgid "Most a customer may owe the shop. 0 = no credit."
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__name
+msgid "Name"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+msgid "New offer"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+msgid "Nothing picked = every product."
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_bd_offer_form
+msgid "Offer"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.actions.act_window,name:pos_retail_bd.action_offers
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_offers
+#: model:ir.ui.menu,name:pos_retail_bd.menu_offers
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_bd_offer_list
+msgid "Offers"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_bd_offer_form
+msgid "On"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__order_id
+msgid "Order"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model,name:pos_retail_bd.model_pos_bd_offer
+msgid "POS offer"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Pack"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_product_product__rt_pack_name
+#: model:ir.model.fields,field_description:pos_retail_bd.field_product_template__rt_pack_name
+msgid "Pack name"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.actions.act_window,name:pos_retail_bd.action_packs
+#: model:ir.ui.menu,name:pos_retail_bd.menu_packs
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.product_template_retail_list
+msgid "Packs & quick keys"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__partner_id
+msgid "Partner"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/retail.js:0
+#: code:addons/pos_retail_bd/static/src/js/retail.js:0
+msgid "Piece"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_product_product__rt_pack_qty
+#: model:ir.model.fields,field_description:pos_retail_bd.field_product_template__rt_pack_qty
+msgid "Pieces per pack"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__pos_categ_ids
+msgid "PoS categories"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model,name:pos_retail_bd.model_pos_config
+msgid "Point of Sale Configuration"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model,name:pos_retail_bd.model_pos_order
+msgid "Point of Sale Orders"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__points
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_bd_points_list
+msgid "Points"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Points balance"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Points can be redeemed from %s points."
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.actions.act_window,name:pos_retail_bd.action_points
+#: model:ir.model.fields,field_description:pos_retail_bd.field_res_partner__rt_points_move_ids
+#: model:ir.model.fields,field_description:pos_retail_bd.field_res_users__rt_points_move_ids
+#: model:ir.ui.menu,name:pos_retail_bd.menu_points
+msgid "Points history"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Points: %s"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_pos_bd_points_move__points
+msgid "Positive: earned, negative: redeemed"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields.selection,name:pos_retail_bd.selection__pos_config__rt_scale_mode__price
+msgid "Price in poisha"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+#: model:ir.model,name:pos_retail_bd.model_product_template
+msgid "Product"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__product_ids
+msgid "Products"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_pos_config__rt_ask_serial
+msgid ""
+"Products tracked by serial number (mobiles, electronics) ask it at the "
+"counter."
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_product_product__rt_quick
+#: model:ir.model.fields,field_description:pos_retail_bd.field_product_template__rt_quick
+msgid "Quick key"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__name
+msgid "Reason"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_min_redeem
+msgid "Redeem from (points)"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Redeem points (1 ="
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Redeemed on %s"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_config_counter_form_retail
+msgid "Retail"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_scale_prefixes
+msgid "Scale barcode prefixes"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_scale_mode
+msgid "Scale barcode value"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Scan or search a product"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Scan the box"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Scan the products one by one."
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Scan the shelf and type what is there, or write off damaged items."
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_pos_config__rt_credit
+msgid ""
+"Sell on credit with Odoo's 'Customer Account' payment method, up to each "
+"customer's limit."
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__sequence
+msgid "Sequence"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Shelf"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__config_ids
+msgid "Shops"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_pos_bd_offer__name
+msgid "Shown under the line: 'Eid offer 10%', 'Buy 2 get 1'…"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+#: model:ir.actions.client,name:pos_retail_bd.action_stock_count
+#: model:ir.ui.menu,name:pos_retail_bd.menu_stock_count
+msgid "Stock count & damage"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_pos_config__rt_point_value
+msgid "Taka off when a point is redeemed."
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_pos_config__rt_points_per
+msgid "Taka spent for one point."
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/offer.py:0
+#: code:addons/pos_retail_bd/models/offer.py:0
+msgid "The discount of %s must be between 0 and 100%%."
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+msgid "The offer ends before it starts."
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "This shop has no stock location."
+msgstr ""
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_bd_points_list
+msgid "Total"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Type the IMEI / serial number of %s."
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__date_to
+msgid "Until"
+msgstr ""
+
+#. module: pos_retail_bd
+#: model:ir.model.fields.selection,name:pos_retail_bd.selection__pos_config__rt_scale_mode__weight
+msgid "Weight in grams"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+msgid "When and where"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+msgid "Which products"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Write off"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "bills ·"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "due"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+msgid "e.g. Eid offer 10%"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "in stock"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "of"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "points"
+msgstr ""
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "· Godown"
+msgstr ""

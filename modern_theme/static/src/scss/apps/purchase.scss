@@ -1,0 +1,13 @@
+// Modern Theme — purchase_modern: every style of the app lives here (moved out of
+// purchase_modern/static/src/scss so the app ships no stylesheet of its own).
+
+// ---- from purchase_modern/static/src/scss/app.scss
+// Modern Purchase: pages, lists, dashboards and controls come from Modern Theme's shared
+// app kit (modern_theme/static/src/scss/kit/). This app only passes its prefix,
+// so .o_mp pages and --mp-* tokens get the same look as every other modern app.
+@include mt-app-tokens(mp);
+@include mt-app-pages(mp);
+@include mt-app-list(mp);
+@include mt-app-controls(mp);
+@include mt-app-helpers(mp);
+@include mt-app-dash(mp);

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_mushak" model="ir.actions.report">
+        <field name="name">Mushak-6.3 / 6.7 (VAT invoice)</field>
+        <field name="model">pos.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_bd_pos.report_mushak</field>
+        <field name="report_file">l10n_bd_pos.report_mushak</field>
+        <field name="print_report_name">'Mushak-%s' % (object.l10n_bd_mushak_no or object.pos_reference or object.name).replace('/', '-')</field>
+        <field name="binding_model_id" ref="point_of_sale.model_pos_order"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!--
+        Mushak-6.3 (কর চালানপত্র) — VAT and SD Rules 2016, rule 40(1)(c)(f); Mushak-6.7
+        (ক্রেডিট নোট) for refunds — rule 40(1)(g). Columns as in the NBR form; check with
+        your VAT consultant if NBR changes the form.
+    -->
+    <template id="report_mushak">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <t t-set="m" t-value="o._l10n_bd_mushak_data()"/>
+                    <t t-set="company" t-value="o.company_id"/>
+                    <t t-set="cur" t-value="o.currency_id"/>
+                    <div class="page o_mushak">
+                        <div class="mk-top">
+                            <div style="width:25%"/>
+                            <div class="mk-gov" style="width:50%">
+                                <div>গণপ্রজাতন্ত্রী বাংলাদেশ সরকার</div>
+                                <div>জাতীয় রাজস্ব বোর্ড</div>
+                                <h2 t-if="m['refund']">ক্রেডিট নোট</h2>
+                                <h2 t-else="">কর চালানপত্র</h2>
+                                <div class="mk-sub" t-if="m['refund']">[বিধি ৪০ এর উপ-বিধি (১) এর দফা (ছ) দ্রষ্টব্য]</div>
+                                <div class="mk-sub" t-else="">[বিধি ৪০ এর উপ-বিধি (১) এর দফা (গ) ও দফা (চ) দ্রষ্টব্য]</div>
+                            </div>
+                            <div class="mk-form" style="width:25%">
+                                <t t-if="m['refund']">মূসক-৬.৭</t><t t-else="">মূসক-৬.৩</t>
+                            </div>
+                        </div>
+                        <div class="mk-gov">
+                            <div>নিবন্ধিত ব্যক্তির নাম: <strong t-esc="company.name"/></div>
+                            <div>নিবন্ধিত ব্যক্তির বিআইএন: <strong t-esc="company.l10n_bd_bin or '—'"/></div>
+                            <div>চালানপত্র ইস্যুর ঠিকানা: <t t-esc="', '.join(x for x in [company.street, company.street2, company.city] if x)"/>
+                                <t t-if="o.config_id"> (<t t-esc="o.config_id.name"/>)</t></div>
+                        </div>
+                        <table class="mk-parties">
+                            <tr>
+                                <td>
+                                    <div><span class="mk-label">ক্রেতার নাম:</span> <t t-esc="o.partner_id.name or '—'"/></div>
+                                    <div><span class="mk-label">ক্রেতার বিআইএন:</span> <t t-esc="o.partner_id.l10n_bd_bin or '—'"/></div>
+                                    <div><span class="mk-label">ক্রেতার ঠিকানা:</span> <t t-esc="', '.join(x for x in [o.partner_id.street, o.partner_id.city] if x) or '—'"/></div>
+                                    <div><span class="mk-label">সরবরাহের গন্তব্যস্থল:</span> <t t-esc="o.config_id.name"/></div>
+                                    <div><span class="mk-label">যানবাহনের প্রকৃতি ও নম্বর:</span> —</div>
+                                </td>
+                                <td>
+                                    <t t-if="m['refund']">
+                                        <div><span class="mk-label">ক্রেডিট নোট নম্বর:</span> <strong t-esc="m['number']"/></div>
+                                        <div><span class="mk-label">ইস্যুর তারিখ:</span> <t t-esc="m['date'].strftime('%d/%m/%Y')"/></div>
+                                        <div><span class="mk-label">মূল কর চালানপত্র নম্বর:</span> <t t-esc="m['origin'] or '—'"/></div>
+                                        <div t-if="m['origin_date']"><span class="mk-label">মূল চালানপত্রের তারিখ:</span> <t t-esc="m['origin_date'].strftime('%d/%m/%Y')"/></div>
+                                        <div><span class="mk-label">ফেরতের কারণ:</span> <t t-esc="o.general_customer_note or '—'"/></div>
+                                    </t>
+                                    <t t-else="">
+                                        <div><span class="mk-label">চালানপত্র নম্বর:</span> <strong t-esc="m['number']"/></div>
+                                        <div><span class="mk-label">ইস্যুর তারিখ:</span> <t t-esc="m['date'].strftime('%d/%m/%Y')"/></div>
+                                        <div><span class="mk-label">ইস্যুর সময়:</span> <t t-esc="m['date'].strftime('%H:%M')"/></div>
+                                        <div><span class="mk-label">POS রসিদ:</span> <t t-esc="o.pos_reference or o.name"/></div>
+                                    </t>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="mk-lines">
+                            <thead>
+                                <tr>
+                                    <th>ক্রমিক সংখ্যা</th>
+                                    <th>পণ্য বা সেবার বর্ণনা (প্রযোজ্য ক্ষেত্রে ব্র্যান্ড নামসহ)</th>
+                                    <th>সরবরাহের একক</th>
+                                    <th>পরিমাণ</th>
+                                    <th>একক মূল্য¹ (টাকায়)</th>
+                                    <th>মোট মূল্য¹ (টাকায়)</th>
+                                    <th>সম্পূরক শুল্কের হার</th>
+                                    <th>সম্পূরক শুল্কের পরিমাণ (টাকায়)</th>
+                                    <th>মূল্য সংযোজন করের হার / সুনির্দিষ্ট কর</th>
+                                    <th>মূল্য সংযোজন কর / সুনির্দিষ্ট কর এর পরিমাণ (টাকায়)</th>
+                                    <th>সকল প্রকার শুল্ক ও করসহ মূল্য</th>
+                                </tr>
+                                <tr class="mk-idx">
+                                    <td>(১)</td><td>(২)</td><td>(৩)</td><td>(৪)</td><td>(৫)</td><td>(৬)</td><td>(৭)</td><td>(৮)</td><td>(৯)</td><td>(১০)</td><td>(১১)</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="m['lines']" t-as="l">
+                                    <td class="num" t-esc="l['index']"/>
+                                    <td><t t-esc="l['name']"/><div t-if="l['name_bn']" t-esc="l['name_bn']"/></td>
+                                    <td t-esc="l['uom']"/>
+                                    <td class="num" t-esc="'%g' % l['qty']"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(l['unit_price'])"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(l['base'])"/>
+                                    <td class="num" t-esc="('%g%%' % l['sd_rate']) if l['sd_rate'] else '—'"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(l['sd'])"/>
+                                    <td class="num" t-esc="('%g%%' % l['vat_rate']) if l['vat_rate'] else '—'"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(l['vat'])"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(l['total'])"/>
+                                </tr>
+                                <tr class="mk-total">
+                                    <td colspan="5" style="text-align:right">সর্বমোট</td>
+                                    <td class="num" t-esc="'{:,.2f}'.format(m['totals'].get('base', 0))"/>
+                                    <td/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(m['totals'].get('sd', 0))"/>
+                                    <td/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(m['totals'].get('vat', 0))"/>
+                                    <td class="num" t-esc="'{:,.2f}'.format(m['totals'].get('total', 0))"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="mk-words">কথায়: <t t-esc="m['words']"/></div>
+                        <div class="mk-sign">
+                            <div>
+                                <div>প্রতিষ্ঠান কর্তৃপক্ষের দায়িত্বপ্রাপ্ত ব্যক্তির নাম: <t t-esc="o.user_id.name"/></div>
+                                <div>পদবি:</div>
+                            </div>
+                            <div style="text-align:right"><span class="mk-line">স্বাক্ষর ও সিল</span></div>
+                        </div>
+                        <div class="mk-note">¹ সকল প্রকার কর ব্যতীত মূল্য। এই চালানপত্র POS থেকে তৈরি (<t t-esc="o.config_id.name"/>)।</div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

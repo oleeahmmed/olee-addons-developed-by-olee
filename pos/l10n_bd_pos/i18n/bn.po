@@ -1,0 +1,696 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_bd_pos
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-06 22:24+0000\n"
+"PO-Revision-Date: 2026-11-06 22:24+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: l10n_bd_pos
+#: model:ir.actions.report,print_report_name:l10n_bd_pos.action_report_mushak
+msgid ""
+"'Mushak-%s' % (object.l10n_bd_mushak_no or object.pos_reference or "
+"object.name).replace('/', '-')"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "<span class=\"mk-label\">POS রসিদ:</span>"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "<span class=\"mk-label\">ইস্যুর তারিখ:</span>"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "<span class=\"mk-label\">ইস্যুর সময়:</span>"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "<span class=\"mk-label\">ক্রেডিট নোট নম্বর:</span>"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "<span class=\"mk-label\">ক্রেতার ঠিকানা:</span>"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "<span class=\"mk-label\">ক্রেতার নাম:</span>"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "<span class=\"mk-label\">ক্রেতার বিআইএন:</span>"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "<span class=\"mk-label\">চালানপত্র নম্বর:</span>"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "<span class=\"mk-label\">ফেরতের কারণ:</span>"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "<span class=\"mk-label\">মূল কর চালানপত্র নম্বর:</span>"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "<span class=\"mk-label\">মূল চালানপত্রের তারিখ:</span>"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "<span class=\"mk-label\">যানবাহনের প্রকৃতি ও নম্বর:</span> —"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "<span class=\"mk-label\">সরবরাহের গন্তব্যস্থল:</span>"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "<span class=\"mk-line\">স্বাক্ষর ও সিল</span>"
+msgstr ""
+
+#. module: l10n_bd_pos
+#. odoo-python
+#: code:addons/l10n_bd_pos/models/res_company.py:0
+#: code:addons/pos/l10n_bd_pos/models/res_company.py:0
+msgid "A BIN has 13 digits (or 9 digits without the branch code)."
+msgstr "BIN-এ ১৩টি সংখ্যা থাকে (ব্রাঞ্চ কোড ছাড়া ৯টি)।"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_vat_register
+msgid "AT"
+msgstr "AT"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields.selection,name:l10n_bd_pos.selection__account_tax__l10n_bd_kind__at
+msgid "Advance Tax (AT)"
+msgstr "অগ্রিম কর (AT)"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.vat_register_wizard_form
+msgid "All shops"
+msgstr "সব শপ"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_account_tax__l10n_bd_kind
+msgid "BD tax kind"
+msgstr "BD করের ধরন"
+
+#. module: l10n_bd_pos
+#. odoo-javascript
+#: code:addons/l10n_bd_pos/static/src/xml/l10n_bd.xml:0
+#: code:addons/pos/l10n_bd_pos/static/src/xml/l10n_bd.xml:0
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_res_company__l10n_bd_bin
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_res_partner__l10n_bd_bin
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_res_users__l10n_bd_bin
+msgid "BIN"
+msgstr "বিআইএন"
+
+#. module: l10n_bd_pos
+#. odoo-javascript
+#: code:addons/l10n_bd_pos/static/src/xml/l10n_bd.xml:0
+#: code:addons/pos/l10n_bd_pos/static/src/xml/l10n_bd.xml:0
+msgid "BIN:"
+msgstr "বিআইএন:"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields.selection,name:l10n_bd_pos.selection__pos_config__l10n_bd_receipt_lang__bn
+msgid "Bangla"
+msgstr "বাংলা"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_pos_config__l10n_bd_digits
+msgid "Bangla digits on the receipt"
+msgstr "রসিদে বাংলা সংখ্যা"
+
+#. module: l10n_bd_pos
+#: model:ir.actions.act_window,name:l10n_bd_pos.action_products_bn
+#: model:ir.ui.menu,name:l10n_bd_pos.menu_products_bn
+msgid "Bangla names & H.S. codes"
+msgstr "বাংলা নাম ও এইচ.এস. কোড"
+
+#. module: l10n_bd_pos
+#: model:ir.ui.menu,name:l10n_bd_pos.menu_bd_vat
+msgid "Bangladesh VAT"
+msgstr "বাংলাদেশ ভ্যাট"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.pos_config_counter_form_l10n_bd
+msgid "Bangladesh VAT (Mushak)"
+msgstr "বাংলাদেশ ভ্যাট (মূসক)"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_vat_register
+msgid "Bills"
+msgstr "বিল"
+
+#. module: l10n_bd_pos
+#. odoo-javascript
+#: code:addons/l10n_bd_pos/static/src/xml/l10n_bd.xml:0
+#: code:addons/pos/l10n_bd_pos/static/src/xml/l10n_bd.xml:0
+msgid "Buyer BIN"
+msgstr "ক্রেতার বিআইএন"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_vat_register
+msgid "By VAT rate"
+msgstr "ভ্যাট হার অনুযায়ী"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.vat_register_wizard_form
+msgid "Cancel"
+msgstr "বাতিল"
+
+#. module: l10n_bd_pos
+#: model:ir.model,name:l10n_bd_pos.model_res_company
+msgid "Companies"
+msgstr "কোম্পানি"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.pos_config_counter_form_l10n_bd
+msgid "Company BIN"
+msgstr "কোম্পানির বিআইএন"
+
+#. module: l10n_bd_pos
+#: model:ir.model,name:l10n_bd_pos.model_res_partner
+msgid "Contact"
+msgstr "কন্টাক্ট"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_l10n_bd_pos_vat_register__create_uid
+msgid "Created by"
+msgstr "তৈরি করেছেন"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_l10n_bd_pos_vat_register__create_date
+msgid "Created on"
+msgstr "তৈরির সময়"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,help:l10n_bd_pos.field_res_partner__l10n_bd_bin
+#: model:ir.model.fields,help:l10n_bd_pos.field_res_users__l10n_bd_bin
+msgid "Customer's VAT Business Identification Number, printed on Mushak-6.3."
+msgstr "কাস্টমারের ভ্যাট বিআইএন, মূসক-৬.৩-এ ছাপা হয়।"
+
+#. module: l10n_bd_pos
+#: model:ir.actions.act_window,name:l10n_bd_pos.action_partners_bin
+#: model:ir.ui.menu,name:l10n_bd_pos.menu_partners_bin
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.res_partner_bd_list
+msgid "Customers' BIN"
+msgstr "কাস্টমারের বিআইএন"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_vat_register
+msgid "Date"
+msgstr "তারিখ"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_l10n_bd_pos_vat_register__date_from
+msgid "Date From"
+msgstr "তারিখ থেকে"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_l10n_bd_pos_vat_register__date_to
+msgid "Date To"
+msgstr "তারিখ পর্যন্ত"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_account_tax__display_name
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_l10n_bd_pos_vat_register__display_name
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_pos_config__display_name
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_pos_order__display_name
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_product_template__display_name
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_res_company__display_name
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_res_partner__display_name
+msgid "Display Name"
+msgstr "নাম"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,help:l10n_bd_pos.field_l10n_bd_pos_vat_register__config_ids
+msgid "Empty = every shop"
+msgstr "খালি = সব শপ"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields.selection,name:l10n_bd_pos.selection__pos_config__l10n_bd_receipt_lang__en
+msgid "English"
+msgstr "ইংরেজি"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields.selection,name:l10n_bd_pos.selection__pos_config__l10n_bd_receipt_lang__both
+msgid "English + Bangla"
+msgstr "ইংরেজি + বাংলা"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_product_product__l10n_bd_hs_code
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_product_template__l10n_bd_hs_code
+msgid "H.S. code"
+msgstr "এইচ.এস. কোড"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,help:l10n_bd_pos.field_account_tax__l10n_bd_kind
+msgid "How Mushak-6.3 and the VAT register show this tax. Empty = VAT."
+msgstr "মূসক-৬.৩ ও ভ্যাট রেজিস্টারে এই কর কীভাবে দেখাবে। খালি = ভ্যাট।"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_account_tax__id
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_l10n_bd_pos_vat_register__id
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_pos_config__id
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_pos_order__id
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_product_template__id
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_res_company__id
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_res_partner__id
+msgid "ID"
+msgstr "ID"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_l10n_bd_pos_vat_register__write_uid
+msgid "Last Updated by"
+msgstr "শেষ আপডেট করেছেন"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_l10n_bd_pos_vat_register__write_date
+msgid "Last Updated on"
+msgstr "শেষ আপডেট"
+
+#. module: l10n_bd_pos
+#. odoo-python
+#: code:addons/l10n_bd_pos/models/pos_order.py:0
+#: code:addons/pos/l10n_bd_pos/models/pos_order.py:0
+msgid "MUSHAK-6.3 · TAX INVOICE"
+msgstr "মূসক-৬.৩ · কর চালানপত্র"
+
+#. module: l10n_bd_pos
+#. odoo-python
+#: code:addons/l10n_bd_pos/models/pos_order.py:0
+#: code:addons/pos/l10n_bd_pos/models/pos_order.py:0
+msgid "MUSHAK-6.7 · CREDIT NOTE"
+msgstr "মূসক-৬.৭ · ক্রেডিট নোট"
+
+#. module: l10n_bd_pos
+#. odoo-javascript
+#: code:addons/l10n_bd_pos/static/src/xml/l10n_bd.xml:0
+#: code:addons/pos/l10n_bd_pos/static/src/xml/l10n_bd.xml:0
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_pos_order__l10n_bd_mushak_no
+msgid "Mushak no."
+msgstr "মূসক নং"
+
+#. module: l10n_bd_pos
+#. odoo-javascript
+#: code:addons/l10n_bd_pos/static/src/xml/l10n_bd.xml:0
+#: code:addons/pos/l10n_bd_pos/static/src/xml/l10n_bd.xml:0
+msgid "Mushak-6.3 (A4)"
+msgstr "মূসক-৬.৩ (A4)"
+
+#. module: l10n_bd_pos
+#: model:ir.actions.report,name:l10n_bd_pos.action_report_mushak
+msgid "Mushak-6.3 / 6.7 (VAT invoice)"
+msgstr "মূসক-৬.৩ / ৬.৭ (ভ্যাট চালান)"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_pos_config__l10n_bd_mushak
+msgid "Mushak-6.3 on receipts"
+msgstr "রসিদে মূসক-৬.৩"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_product_product__l10n_bd_name_bn
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_product_template__l10n_bd_name_bn
+msgid "Name in Bangla"
+msgstr "বাংলা নাম"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,help:l10n_bd_pos.field_pos_order__l10n_bd_mushak_no
+msgid "Number of the Mushak-6.3 tax invoice (or Mushak-6.7 credit note)."
+msgstr "মূসক-৬.৩ কর চালানপত্রের (বা মূসক-৬.৭ ক্রেডিট নোটের) নম্বর।"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields.selection,name:l10n_bd_pos.selection__account_tax__l10n_bd_kind__other
+msgid "Other"
+msgstr "অন্যান্য"
+
+#. module: l10n_bd_pos
+#: model:ir.model,name:l10n_bd_pos.model_pos_config
+msgid "Point of Sale Configuration"
+msgstr "POS কনফিগারেশন"
+
+#. module: l10n_bd_pos
+#: model:ir.model,name:l10n_bd_pos.model_pos_order
+msgid "Point of Sale Orders"
+msgstr "POS অর্ডার"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.vat_register_wizard_form
+msgid "Preview"
+msgstr "প্রিভিউ"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.pos_config_counter_form_l10n_bd
+msgid "Prices shown"
+msgstr "দাম দেখানো"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.vat_register_wizard_form
+msgid "Print PDF"
+msgstr "PDF প্রিন্ট"
+
+#. module: l10n_bd_pos
+#. odoo-javascript
+#: code:addons/l10n_bd_pos/static/src/js/drawer_forms.js:0
+#: code:addons/pos/l10n_bd_pos/static/src/js/drawer_forms.js:0
+msgid "Printed on every Mushak-6.3 and on the receipts."
+msgstr "প্রতিটি মূসক-৬.৩ ও রসিদে ছাপা হয়।"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,help:l10n_bd_pos.field_product_product__l10n_bd_name_bn
+#: model:ir.model.fields,help:l10n_bd_pos.field_product_template__l10n_bd_name_bn
+msgid "Printed on the receipt and searched at the counter."
+msgstr "রসিদে ছাপা হয় ও কাউন্টারে খোঁজা যায়।"
+
+#. module: l10n_bd_pos
+#: model:ir.model,name:l10n_bd_pos.model_product_template
+msgid "Product"
+msgstr "পণ্য"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.product_template_bd_list
+msgid "Product names in Bangla"
+msgstr "পণ্যের বাংলা নাম"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_pos_config__l10n_bd_receipt_lang
+msgid "Product names on the receipt"
+msgstr "রসিদে পণ্যের নাম"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_vat_register
+msgid "Refunds"
+msgstr "রিফান্ড"
+
+#. module: l10n_bd_pos
+#. odoo-javascript
+#: code:addons/l10n_bd_pos/static/src/xml/l10n_bd.xml:0
+#: code:addons/pos/l10n_bd_pos/static/src/xml/l10n_bd.xml:0
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_vat_register
+msgid "SD"
+msgstr "SD"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_vat_register
+msgid "Sales without tax"
+msgstr "কর ছাড়া বিক্রি"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_l10n_bd_pos_vat_register__config_ids
+msgid "Shops"
+msgstr "শপ"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields.selection,name:l10n_bd_pos.selection__account_tax__l10n_bd_kind__sd
+msgid "Supplementary Duty (SD)"
+msgstr "সম্পূরক শুল্ক (SD)"
+
+#. module: l10n_bd_pos
+#. odoo-javascript
+#: code:addons/l10n_bd_pos/static/src/js/drawer_forms.js:0
+#: code:addons/pos/l10n_bd_pos/static/src/js/drawer_forms.js:0
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.res_company_vat_form
+msgid "TIN / VAT"
+msgstr "TIN / ভ্যাট"
+
+#. module: l10n_bd_pos
+#: model:ir.model,name:l10n_bd_pos.model_account_tax
+msgid "Tax"
+msgstr "ট্যাক্স"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.account_tax_bd_list
+msgid "Taxes (Bangladesh)"
+msgstr "কর (বাংলাদেশ)"
+
+#. module: l10n_bd_pos
+#. odoo-python
+#: code:addons/l10n_bd_pos/wizard/vat_register.py:0
+#: code:addons/pos/l10n_bd_pos/wizard/vat_register.py:0
+msgid "The end date is before the start date."
+msgstr "শেষ তারিখ শুরুর তারিখের আগে।"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,help:l10n_bd_pos.field_pos_config__l10n_bd_mushak
+msgid "Title the receipt 'Mushak-6.3', print the BIN and number every sale."
+msgstr "রসিদের শিরোনাম 'মূসক-৬.৩', BIN ছাপা ও প্রতিটি বিক্রিতে নম্বর।"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_vat_register
+msgid "Total"
+msgstr "মোট"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_vat_register
+msgid ""
+"Use these figures for the sales part of the monthly VAT return (Mushak-9.1)."
+" Refunds are already deducted from the totals."
+msgstr ""
+"মাসিক ভ্যাট রিটার্নের (মূসক-৯.১) বিক্রয় অংশে এই সংখ্যাগুলো ব্যবহার করুন। "
+"রিফান্ড আগেই বাদ দেওয়া।"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields.selection,name:l10n_bd_pos.selection__account_tax__l10n_bd_kind__vat
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_vat_register
+msgid "VAT"
+msgstr "ভ্যাট"
+
+#. module: l10n_bd_pos
+#: model:ir.actions.act_window,name:l10n_bd_pos.action_bd_taxes
+#: model:ir.ui.menu,name:l10n_bd_pos.menu_bd_taxes
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.pos_config_counter_form_l10n_bd
+msgid "VAT / SD taxes"
+msgstr "ভ্যাট / SD কর"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,help:l10n_bd_pos.field_res_company__l10n_bd_bin
+msgid "VAT Business Identification Number (13 digits, or 9 + branch)."
+msgstr "ভ্যাট বিজনেস আইডেন্টিফিকেশন নম্বর (১৩ সংখ্যা, বা ৯ + ব্রাঞ্চ)।"
+
+#. module: l10n_bd_pos
+#: model:ir.model.fields,field_description:l10n_bd_pos.field_res_company__l10n_bd_vat_area
+msgid "VAT division / circle"
+msgstr "ভ্যাট বিভাগ / সার্কেল"
+
+#. module: l10n_bd_pos
+#. odoo-javascript
+#: code:addons/l10n_bd_pos/static/src/xml/l10n_bd.xml:0
+#: code:addons/pos/l10n_bd_pos/static/src/xml/l10n_bd.xml:0
+msgid "VAT included as per Mushak-6.3 · NBR"
+msgstr "মূসক-৬.৩ অনুযায়ী ভ্যাটসহ · NBR"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_vat_register
+msgid "VAT rate"
+msgstr "ভ্যাট হার"
+
+#. module: l10n_bd_pos
+#. odoo-javascript
+#: code:addons/l10n_bd_pos/static/src/js/drawer_forms.js:0
+#: code:addons/pos/l10n_bd_pos/static/src/js/drawer_forms.js:0
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.res_company_vat_form
+msgid "VAT registration"
+msgstr "ভ্যাট নিবন্ধন"
+
+#. module: l10n_bd_pos
+#. odoo-javascript
+#: code:addons/l10n_bd_pos/static/src/js/drawer_forms.js:0
+#: code:addons/pos/l10n_bd_pos/static/src/js/drawer_forms.js:0
+#: model:ir.actions.client,name:l10n_bd_pos.action_company_vat_page
+#: model:ir.actions.server,name:l10n_bd_pos.action_company_vat
+#: model:ir.ui.menu,name:l10n_bd_pos.menu_company_vat
+msgid "VAT registration (BIN)"
+msgstr "ভ্যাট নিবন্ধন (BIN)"
+
+#. module: l10n_bd_pos
+#: model:ir.actions.act_window,name:l10n_bd_pos.action_vat_register_wizard
+#: model:ir.actions.report,name:l10n_bd_pos.action_report_vat_register
+#: model:ir.ui.menu,name:l10n_bd_pos.menu_vat_register
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.vat_register_wizard_form
+msgid "VAT sales register"
+msgstr "ভ্যাট বিক্রয় রেজিস্টার"
+
+#. module: l10n_bd_pos
+#: model:ir.model,name:l10n_bd_pos.model_l10n_bd_pos_vat_register
+msgid "VAT sales register (POS)"
+msgstr "ভ্যাট বিক্রয় রেজিস্টার (POS)"
+
+#. module: l10n_bd_pos
+#: model:ir.actions.report,name:l10n_bd_pos.action_report_vat_register_html
+msgid "VAT sales register (preview)"
+msgstr "ভ্যাট বিক্রয় রেজিস্টার (প্রিভিউ)"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_vat_register
+msgid "VAT sales register — Point of Sale"
+msgstr "ভ্যাট বিক্রয় রেজিস্টার — পয়েন্ট অব সেল"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "[বিধি ৪০ এর উপ-বিধি (১) এর দফা (গ) ও দফা (চ) দ্রষ্টব্য]"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "[বিধি ৪০ এর উপ-বিধি (১) এর দফা (ছ) দ্রষ্টব্য]"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_vat_register
+msgid "· BIN"
+msgstr "· বিআইএন"
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "¹ সকল প্রকার কর ব্যতীত মূল্য। এই চালানপত্র POS থেকে তৈরি ("
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "একক মূল্য¹ (টাকায়)"
+msgstr ""
+
+#. module: l10n_bd_pos
+#. odoo-javascript
+#: code:addons/l10n_bd_pos/static/src/xml/l10n_bd.xml:0
+#: code:addons/pos/l10n_bd_pos/static/src/xml/l10n_bd.xml:0
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "কথায়:"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "কর চালানপত্র"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "ক্রমিক সংখ্যা"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "ক্রেডিট নোট"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "গণপ্রজাতন্ত্রী বাংলাদেশ সরকার"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "চালানপত্র ইস্যুর ঠিকানা:"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "জাতীয় রাজস্ব বোর্ড"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "নিবন্ধিত ব্যক্তির নাম:"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "নিবন্ধিত ব্যক্তির বিআইএন:"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "পণ্য বা সেবার বর্ণনা (প্রযোজ্য ক্ষেত্রে ব্র্যান্ড নামসহ)"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "পদবি:"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "পরিমাণ"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "প্রতিষ্ঠান কর্তৃপক্ষের দায়িত্বপ্রাপ্ত ব্যক্তির নাম:"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "মূল্য সংযোজন কর / সুনির্দিষ্ট কর এর পরিমাণ (টাকায়)"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "মূল্য সংযোজন করের হার / সুনির্দিষ্ট কর"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "মূসক-৬.৩"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "মূসক-৬.৭"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "মোট মূল্য¹ (টাকায়)"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "সকল প্রকার শুল্ক ও করসহ মূল্য"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "সম্পূরক শুল্কের পরিমাণ (টাকায়)"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "সম্পূরক শুল্কের হার"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "সরবরাহের একক"
+msgstr ""
+
+#. module: l10n_bd_pos
+#: model_terms:ir.ui.view,arch_db:l10n_bd_pos.report_mushak
+msgid "সর্বমোট"
+msgstr ""

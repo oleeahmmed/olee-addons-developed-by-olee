@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pos_config_counter_form_retail" model="ir.ui.view">
+        <field name="name">pos.config.counter.form.retail</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="pos_modern.pos_config_counter_form"/>
+        <field name="arch" type="xml">
+            <div name="pm_addons" position="inside">
+                <group string="Retail" name="retail">
+                    <group>
+                        <field name="rt_offers"/>
+                        <field name="rt_points"/>
+                        <field name="rt_points_per" invisible="not rt_points"/>
+                        <field name="rt_point_value" invisible="not rt_points"/>
+                        <field name="rt_min_redeem" invisible="not rt_points"/>
+                    </group>
+                    <group>
+                        <field name="rt_credit"/>
+                        <field name="rt_due_journal_id" invisible="not rt_credit"/>
+                        <div colspan="2" class="text-muted" invisible="not rt_credit">
+                            Add Odoo's "Customer Account" payment method to the shop, and a baki limit on each customer.
+                        </div>
+                        <field name="rt_godown_location_id"/>
+                        <field name="rt_ask_serial"/>
+                        <field name="rt_scale_prefixes"/>
+                        <field name="rt_scale_mode"/>
+                    </group>
+                </group>
+            </div>
+        </field>
+    </record>
+
+    <record id="product_template_retail_list" model="ir.ui.view">
+        <field name="name">product.template.list.retail</field>
+        <field name="model">product.template</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <list string="Packs &amp; quick keys" editable="bottom" create="0">
+                <field name="default_code" readonly="1" optional="show"/>
+                <field name="name" readonly="1"/>
+                <field name="barcode" optional="show"/>
+                <field name="uom_id" readonly="1" optional="show"/>
+                <field name="rt_pack_name" placeholder="Carton"/>
+                <field name="rt_pack_qty"/>
+                <field name="rt_quick"/>
+                <field name="tracking" optional="hide"/>
+                <field name="list_price" readonly="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_packs" model="ir.actions.act_window">
+        <field name="name">Packs &amp; quick keys</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="product_template_retail_list"/>
+        <field name="domain">[('available_in_pos', '=', True)]</field>
+    </record>
+    <record id="action_stock_count" model="ir.actions.client">
+        <field name="name">Stock count &amp; damage</field>
+        <field name="tag">pos_retail_bd.stock</field>
+        <field name="path">pos-stock-count</field>
+    </record>
+
+    <record id="pos_bd_offer_list" model="ir.ui.view">
+        <field name="name">pos.bd.offer.list</field>
+        <field name="model">pos.bd.offer</field>
+        <field name="arch" type="xml">
+            <list string="Offers">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="kind"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="config_ids" widget="many2many_tags" optional="show"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="pos_bd_offer_form" model="ir.ui.view">
+        <field name="name">pos.bd.offer.form</field>
+        <field name="model">pos.bd.offer</field>
+        <field name="arch" type="xml">
+            <form string="Offer">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" placeholder="Eid offer 10%"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="kind" widget="radio"/>
+                            <field name="percent" invisible="kind != 'percent'" required="kind == 'percent'"/>
+                            <field name="buy_qty" invisible="kind != 'bogo'"/>
+                            <field name="get_qty" invisible="kind != 'bogo'"/>
+                            <field name="min_amount" invisible="kind != 'bill'"/>
+                            <field name="amount" invisible="kind != 'bill'"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="config_ids" widget="many2many_tags" placeholder="Every shop"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="On" invisible="kind == 'bill'">
+                        <field name="product_ids" widget="many2many_tags" placeholder="Every product if empty"/>
+                        <field name="pos_categ_ids" widget="many2many_tags"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_offers" model="ir.actions.act_window">
+        <field name="name">Offers</field>
+        <field name="res_model">pos.bd.offer</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first offer</p>
+            <p>% off products or categories, buy 2 get 1 free, ৳100 off bills from ৳1,000…</p>
+        </field>
+    </record>
+
+    <record id="res_partner_baki_list" model="ir.ui.view">
+        <field name="name">res.partner.list.baki</field>
+        <field name="model">res.partner</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <list string="Customers: baki and points" editable="bottom" create="0">
+                <field name="name" readonly="1"/>
+                <field name="phone" readonly="1"/>
+                <field name="rt_credit_limit"/>
+                <field name="credit" string="Due (posted)" readonly="1"/>
+                <field name="rt_points" readonly="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_baki" model="ir.actions.act_window">
+        <field name="name">Baki &amp; points</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="res_partner_baki_list"/>
+        <field name="domain">[('customer_rank', '>', 0)]</field>
+    </record>
+
+    <record id="pos_bd_points_list" model="ir.ui.view">
+        <field name="name">pos.bd.points.move.list</field>
+        <field name="model">pos.bd.points.move</field>
+        <field name="arch" type="xml">
+            <list string="Points" create="0">
+                <field name="create_date" string="Date"/>
+                <field name="partner_id"/>
+                <field name="points" sum="Total"/>
+                <field name="order_id"/>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_points" model="ir.actions.act_window">
+        <field name="name">Points history</field>
+        <field name="res_model">pos.bd.points.move</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

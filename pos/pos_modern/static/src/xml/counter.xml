@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- ============================================================ customer picker -->
+    <t t-name="pos_modern.CustomerPicker">
+        <div class="ps-cust">
+            <div t-if="props.value" class="ps-cust-chosen">
+                <span class="ps-cust-avatar"><i class="fa fa-user" aria-hidden="true"/></span>
+                <span class="ps-cust-text">
+                    <strong t-esc="props.value.name"/>
+                    <small t-if="props.value.phone" t-esc="props.value.phone"/>
+                </span>
+                <span class="ps-hook-cust-chosen"/>
+                <button type="button" class="ps-link" t-on-click="clear" aria-label="Remove the customer">&#215;</button>
+            </div>
+            <div t-else="" class="ps-cust-search">
+                <label class="ps-search ps-search--block">
+                    <i class="fa fa-user-o" aria-hidden="true"/>
+                    <input type="search" placeholder="Customer: name or mobile (F6)" t-att-value="state.q"
+                           t-on-input="onInput" t-on-focus="onFocus" t-on-blur="onBlur" t-on-keydown="onKeydown" autocomplete="off"/>
+                </label>
+                <ul t-if="state.open" class="ps-menu" role="listbox">
+                    <t t-foreach="state.results" t-as="r" t-key="r.id">
+                        <li role="option" t-att-class="{ 'is-active': r_index === state.active }" t-on-mousedown.prevent="() => this.pick(r)">
+                            <strong t-esc="r.name"/>
+                            <small t-if="r.phone" t-esc="r.phone"/>
+                            <span class="ps-hook-cust-row"/>
+                        </li>
+                    </t>
+                    <li t-if="!state.loading and !state.results.length and !state.q" class="ps-menu-empty">Type a name or a mobile number</li>
+                    <li t-if="state.q" class="ps-menu-create" t-on-mousedown.prevent="create">
+                        <i class="fa fa-plus" aria-hidden="true"/> Create “<t t-esc="state.q"/>”
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </t>
+
+    <!-- ============================================================ held bills -->
+    <t t-name="pos_modern.HeldDialog">
+        <Dialog title="'Held bills'" size="'md'" contentClass="'o_ps ps-dialog'">
+            <div t-if="state.loading" class="ps-skel" style="height:8rem"/>
+            <div t-elif="!state.rows.length" class="ps-pos-empty ps-pos-empty--inline">
+                <i class="fa fa-pause-circle-o" aria-hidden="true"/>
+                <strong>No held bill</strong>
+                <span>“Hold” (F4) puts the cart aside so you can serve the next customer.</span>
+            </div>
+            <ul t-else="" class="ps-list">
+                <t t-foreach="state.rows" t-as="r" t-key="r.id">
+                    <li class="ps-list-row">
+                        <button type="button" class="ps-list-main" t-on-click="() => this.take(r)">
+                            <strong t-esc="r.name"/>
+                            <small><t t-esc="r.items"/> items · <t t-esc="r.user"/><t t-if="r.table_name"> · <t t-esc="r.table_name"/></t></small>
+                        </button>
+                        <span class="ps-list-amount" t-esc="money(r.total)"/>
+                        <button type="button" class="ps-btn ps-btn--sm" t-on-click="() => this.take(r)">Resume</button>
+                        <button type="button" class="ps-btn ps-btn--sm ps-btn--ghost" t-on-click="() => this.drop(r)" title="Delete"><i class="fa fa-trash-o" aria-hidden="true"/></button>
+                    </li>
+                </t>
+            </ul>
+            <t t-set-slot="footer">
+                <button type="button" class="ps-btn" t-on-click="props.close">Close</button>
+            </t>
+        </Dialog>
+    </t>
+
+    <!-- ============================================================ manager PIN -->
+    <t t-name="pos_modern.PinDialog">
+        <Dialog title="'Manager PIN'" size="'sm'" contentClass="'o_ps ps-dialog'">
+            <div class="ps-pin" t-on-keydown="onKey" tabindex="0">
+                <p class="ps-muted">The discount is over the cashier's limit. A manager types the PIN.</p>
+                <div class="ps-pin-dots"><t t-foreach="state.pin.split('')" t-as="c" t-key="c_index"><span/></t></div>
+                <div t-if="state.error" class="ps-error" t-esc="state.error"/>
+                <div class="ps-pad">
+                    <t t-foreach="['1','2','3','4','5','6','7','8','9','del','0','ok']" t-as="k" t-key="k">
+                        <button t-if="k === 'ok'" type="button" class="ps-pad-key ps-pad-key--ok" t-on-click="ok"><i class="fa fa-check" aria-hidden="true"/></button>
+                        <button t-elif="k === 'del'" type="button" class="ps-pad-key" t-on-click="() => this.press('del')"><i class="fa fa-long-arrow-left" aria-hidden="true"/></button>
+                        <button t-else="" type="button" class="ps-pad-key" t-on-click="() => this.press(k)" t-esc="k"/>
+                    </t>
+                </div>
+            </div>
+            <t t-set-slot="footer">
+                <button type="button" class="ps-btn" t-on-click="props.close">Cancel</button>
+            </t>
+        </Dialog>
+    </t>
+
+    <!-- ============================================================ day end -->
+    <t t-name="pos_modern.DayEndDialog">
+        <Dialog title="'Day end'" size="'lg'" contentClass="'o_ps ps-dialog'">
+            <div t-if="state.loading" class="ps-skel" style="height:16rem"/>
+            <t t-else="">
+                <t t-set="r" t-value="state.report"/>
+                <div class="ps-kpis">
+                    <div class="ps-kpi"><span>Orders</span><strong t-esc="r.orders"/></div>
+                    <div class="ps-kpi"><span>Sales</span><strong t-esc="money(r.sales)"/></div>
+                    <div class="ps-kpi"><span>Refunds</span><strong t-esc="money(r.refunds)"/></div>
+                    <div class="ps-kpi"><span>Discounts</span><strong t-esc="money(r.discount)"/></div>
+                    <div class="ps-kpi"><span>Tax</span><strong t-esc="money(r.tax)"/></div>
+                    <div class="ps-kpi"><span>Average bill</span><strong t-esc="money(r.average)"/></div>
+                </div>
+                <div class="ps-cols">
+                    <section class="ps-panel">
+                        <h3>By payment method</h3>
+                        <table class="ps-table-list">
+                            <tbody>
+                                <tr t-foreach="r.methods" t-as="m" t-key="m.id">
+                                    <td><t t-esc="m.name"/> <small class="ps-muted">(<t t-esc="m.count"/>)</small></td>
+                                    <td class="text-end" t-esc="money(m.amount)"/>
+                                </tr>
+                                <tr t-if="!r.methods.length"><td colspan="2" class="ps-muted">No payment yet</td></tr>
+                            </tbody>
+                        </table>
+                        <div class="ps-hook-dayend-methods"/>
+                        <h3>By cashier</h3>
+                        <table class="ps-table-list">
+                            <tbody>
+                                <tr t-foreach="r.cashiers" t-as="c" t-key="c.name">
+                                    <td><t t-esc="c.name"/> <small class="ps-muted">(<t t-esc="c.count"/>)</small></td>
+                                    <td class="text-end" t-esc="money(c.amount)"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                    <section class="ps-panel">
+                        <h3>Cash drawer</h3>
+                        <dl class="ps-sum">
+                            <div><dt>Opening</dt><dd t-esc="money(r.cash.opening)"/></div>
+                            <div><dt>Cash sales</dt><dd t-esc="money(r.cash.sales)"/></div>
+                            <div><dt>Cash in / out</dt><dd t-esc="money(r.cash.moves_total)"/></div>
+                            <div class="ps-sum-total"><dt>Expected</dt><dd t-esc="money(r.cash.expected)"/></div>
+                        </dl>
+                        <t t-if="!state.closed and r.state !== 'closed'">
+                            <div class="ps-row ps-row--tight">
+                                <select class="ps-input ps-input--auto" t-model="state.move.kind" aria-label="Cash in or out">
+                                    <option value="out">Cash out</option>
+                                    <option value="in">Cash in</option>
+                                </select>
+                                <input type="number" min="0" step="0.01" class="ps-input" placeholder="Amount" t-model="state.move.amount"/>
+                                <input type="text" class="ps-input" placeholder="Reason (tea, change…)" t-model="state.move.reason"/>
+                                <button type="button" class="ps-btn" t-att-disabled="state.busy" t-on-click="cashMove">Save</button>
+                            </div>
+                            <label t-if="r.cash_control" class="ps-field">
+                                <span>Cash counted in the drawer</span>
+                                <input type="number" min="0" step="0.01" inputmode="decimal" class="ps-input ps-input--lg" t-model="state.counted" placeholder="0"/>
+                            </label>
+                            <div t-if="difference !== null" t-attf-class="ps-note {{ differenceOk ? 'ps-note--success' : 'ps-note--warning' }}">
+                                Difference: <strong t-esc="money(difference)"/>
+                            </div>
+                            <label class="ps-field">
+                                <span>Closing note</span>
+                                <input type="text" class="ps-input" t-model="state.notes" placeholder="Optional"/>
+                            </label>
+                        </t>
+                        <t t-else="">
+                            <dl class="ps-sum">
+                                <div><dt>Counted</dt><dd t-esc="money(r.cash.counted)"/></div>
+                                <div><dt>Difference</dt><dd t-esc="money(r.cash.difference)"/></div>
+                            </dl>
+                            <div class="ps-note ps-note--success"><i class="fa fa-check" aria-hidden="true"/> Session closed. The Z report was printed.</div>
+                        </t>
+                        <div t-if="r.open_orders" class="ps-note ps-note--warning"><t t-esc="r.open_orders"/> order(s) not paid yet in this session.</div>
+                        <div t-if="state.message" class="ps-error" t-esc="state.message"/>
+                    </section>
+                </div>
+                <div class="ps-hook-dayend-extra"/>
+            </t>
+            <t t-set-slot="footer">
+                <button type="button" class="ps-btn" t-att-disabled="state.loading" t-on-click="printX"><i class="fa fa-print" aria-hidden="true"/> Print <t t-esc="state.report ? state.report.kind : 'X'"/> report</button>
+                <button t-if="state.report and !state.closed and state.report.state !== 'closed'" type="button" class="ps-btn ps-btn--primary" t-att-disabled="state.busy" t-on-click="closeSession">
+                    <i class="fa fa-lock" aria-hidden="true"/> Close the session (Z)
+                </button>
+                <button type="button" class="ps-btn" t-on-click="props.close">Close</button>
+            </t>
+        </Dialog>
+    </t>
+
+    <!-- ============================================================ receipt (58 / 80 mm)
+         Context: r = pos.order._pos_modern_receipt_data(), money(value, symbol=false), num(value). -->
+    <t t-name="pos_modern.Receipt">
+        <div t-attf-class="ps-receipt ps-receipt--{{ r.width or '80' }}" t-att-class="{ 'is-refund': r.refund }">
+            <div class="ps-r-head">
+                <img t-if="r.company and r.company.logo" class="ps-r-logo" t-attf-src="/web/binary/company_logo?company={{ r.company.id }}" alt=""/>
+                <div class="ps-r-company" t-esc="r.company ? r.company.name : ''"/>
+                <div t-if="r.company and r.company.address" t-esc="r.company.address"/>
+                <div t-if="r.company and r.company.phone">Phone: <t t-esc="r.company.phone"/></div>
+                <div class="ps-r-hook-company"/>
+                <div t-if="r.header" class="ps-r-text" t-esc="r.header"/>
+            </div>
+            <div class="ps-r-title">
+                <t t-if="r.extra and r.extra.title" t-esc="r.extra.title"/>
+                <t t-elif="r.exchange">EXCHANGE</t>
+                <t t-elif="r.refund">REFUND</t>
+                <t t-else="">RECEIPT</t>
+            </div>
+            <div class="ps-r-meta">
+                <div><span>Bill</span><span t-esc="r.ref"/></div>
+                <div><span>Date</span><span t-esc="r.date"/></div>
+                <div><span>Shop</span><span t-esc="r.shop"/></div>
+                <div><span>Cashier</span><span t-esc="r.cashier"/></div>
+                <div t-if="r.table"><span>Table</span><span t-esc="r.table"/></div>
+                <t t-if="r.customer">
+                    <div><span>Customer</span><span t-esc="r.customer.name"/></div>
+                    <div t-if="r.customer.phone"><span>Mobile</span><span t-esc="r.customer.phone"/></div>
+                </t>
+                <div class="ps-r-hook-meta"/>
+            </div>
+            <table class="ps-r-lines">
+                <thead><tr><th>Item</th><th class="ps-r-num">Qty</th><th class="ps-r-num">Price</th><th class="ps-r-num">Total</th></tr></thead>
+                <tbody>
+                    <t t-foreach="r.lines" t-as="l" t-key="l_index">
+                        <tr class="ps-r-line">
+                            <td>
+                                <t t-esc="l.name_print or l.name"/>
+                                <div t-if="l.name_bn" class="ps-r-sub ps-r-bn" t-esc="l.name_bn"/>
+                                <div t-if="l.discount" class="ps-r-sub">Discount <t t-esc="num(l.discount)"/>%</div>
+                                <div t-if="l.lots and l.lots.length" class="ps-r-sub">Lot: <t t-esc="l.lots.join(', ')"/></div>
+                                <div t-if="l.note" class="ps-r-sub" t-esc="l.note"/>
+                                <div class="ps-r-hook-line"/>
+                            </td>
+                            <td class="ps-r-num" t-esc="num(l.qty)"/>
+                            <td class="ps-r-num" t-esc="money(l.price_display !== undefined ? l.price_display : l.price_unit)"/>
+                            <td class="ps-r-num" t-esc="money(l.total_display !== undefined ? l.total_display : l.total)"/>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+            <div class="ps-r-totals">
+                <div><span>Subtotal</span><span t-esc="money(r.untaxed)"/></div>
+                <div t-if="r.discount"><span>Discount</span><span>−<t t-esc="money(r.discount)"/></span></div>
+                <t t-if="r.taxes and r.taxes.length">
+                    <div t-foreach="r.taxes" t-as="tx" t-key="tx_index"><span t-esc="tx.name"/><span t-esc="money(tx.amount)"/></div>
+                </t>
+                <div t-else=""><span>Tax</span><span t-esc="money(r.tax)"/></div>
+                <div class="ps-r-hook-totals"/>
+                <div class="ps-r-grand"><span>TOTAL</span><span t-esc="money(r.total, true)"/></div>
+            </div>
+            <div class="ps-r-pay">
+                <div t-foreach="r.payments" t-as="p" t-key="p_index">
+                    <span><t t-esc="p.name"/><t t-if="p.ref"> · <t t-esc="p.ref"/></t></span><span t-esc="money(p.amount)"/>
+                </div>
+                <div t-if="r.change" class="ps-r-change"><span>Change</span><span t-esc="money(r.change)"/></div>
+            </div>
+            <div class="ps-r-hook-pay"/>
+            <div t-if="r.note" class="ps-r-text" t-esc="r.note"/>
+            <div class="ps-r-foot">
+                <div t-if="r.footer" class="ps-r-text" t-esc="r.footer"/>
+                <div t-else="">Thank you, come again!</div>
+                <div class="ps-r-hook-foot"/>
+                <div t-if="r.offline" class="ps-r-offline">Saved offline — will be synced</div>
+            </div>
+        </div>
+    </t>
+
+    <!-- ============================================================ X / Z report (thermal) -->
+    <t t-name="pos_modern.SessionReport">
+        <div t-attf-class="ps-receipt ps-receipt--{{ r.width or '80' }}">
+            <div class="ps-r-head">
+                <div class="ps-r-company" t-esc="r.company.name"/>
+                <div t-esc="r.shop"/>
+            </div>
+            <div class="ps-r-title"><t t-esc="r.kind"/> REPORT</div>
+            <div class="ps-r-meta">
+                <div><span>Session</span><span t-esc="r.name"/></div>
+                <div><span>Opened</span><span t-esc="r.start_at"/></div>
+                <div t-if="r.stop_at"><span>Closed</span><span t-esc="r.stop_at"/></div>
+                <div><span>Printed</span><span t-esc="r.printed_at"/></div>
+                <div><span>Opened by</span><span t-esc="r.user"/></div>
+            </div>
+            <div class="ps-r-totals">
+                <div><span>Orders</span><span t-esc="r.orders"/></div>
+                <div><span>Sales</span><span t-esc="money(r.sales)"/></div>
+                <div><span>Refunds (<t t-esc="r.refund_count"/>)</span><span>−<t t-esc="money(r.refunds)"/></span></div>
+                <div><span>Discounts</span><span t-esc="money(r.discount)"/></div>
+                <div t-foreach="r.taxes" t-as="tx" t-key="tx_index"><span t-esc="tx.name"/><span t-esc="money(tx.amount)"/></div>
+                <div class="ps-r-grand"><span>NET</span><span t-esc="money(r.net, true)"/></div>
+            </div>
+            <div class="ps-r-section">Payments</div>
+            <div class="ps-r-pay">
+                <div t-foreach="r.methods" t-as="m" t-key="m.id"><span><t t-esc="m.name"/> (<t t-esc="m.count"/>)</span><span t-esc="money(m.amount)"/></div>
+            </div>
+            <div class="ps-r-hook-report"/>
+            <div class="ps-r-section">Cash drawer</div>
+            <div class="ps-r-pay">
+                <div><span>Opening</span><span t-esc="money(r.cash.opening)"/></div>
+                <div><span>Cash sales</span><span t-esc="money(r.cash.sales)"/></div>
+                <div><span>Cash in / out</span><span t-esc="money(r.cash.moves_total)"/></div>
+                <div><span>Expected</span><span t-esc="money(r.cash.expected)"/></div>
+                <t t-if="r.cash.counted !== false">
+                    <div><span>Counted</span><span t-esc="money(r.cash.counted)"/></div>
+                    <div class="ps-r-change"><span>Difference</span><span t-esc="money(r.cash.difference)"/></div>
+                </t>
+            </div>
+            <div class="ps-r-section">Cashiers</div>
+            <div class="ps-r-pay">
+                <div t-foreach="r.cashiers" t-as="c" t-key="c.name"><span><t t-esc="c.name"/> (<t t-esc="c.count"/>)</span><span t-esc="money(c.amount)"/></div>
+            </div>
+            <div class="ps-r-section">Best sellers</div>
+            <div class="ps-r-pay">
+                <div t-foreach="r.products" t-as="p" t-key="p_index"><span><t t-esc="p.name"/> × <t t-esc="p.qty"/></span><span t-esc="money(p.amount)"/></div>
+            </div>
+            <div class="ps-r-foot"><div>Signature: ____________________</div></div>
+        </div>
+    </t>
+
+    <!-- ============================================================ quantity pad -->
+    <t t-name="pos_modern.QtyDialog">
+        <Dialog title="props.title" size="'sm'" contentClass="'o_ps ps-dialog'">
+            <div class="ps-pin">
+                <label class="ps-field">
+                    <span>Quantity<t t-if="props.unit"> (<t t-esc="props.unit"/>)</t></span>
+                    <input t-ref="input" type="number" min="0" step="0.001" inputmode="decimal" class="ps-input ps-input--lg"
+                           t-att-value="state.value" t-on-input="(ev) => this.state.value = ev.target.value" t-on-keydown="onKey"/>
+                </label>
+                <div class="ps-pad">
+                    <t t-foreach="['1','2','3','4','5','6','7','8','9','.','0','del']" t-as="k" t-key="k">
+                        <button t-if="k === 'del'" type="button" class="ps-pad-key" t-on-click="() => this.press('del')"><i class="fa fa-long-arrow-left" aria-hidden="true"/></button>
+                        <button t-else="" type="button" class="ps-pad-key" t-on-click="() => this.press(k)" t-esc="k"/>
+                    </t>
+                </div>
+                <div t-if="props.price" class="ps-muted"><t t-esc="qty"/> × <t t-esc="props.money(props.price)"/> = <strong t-esc="props.money(qty * props.price)"/></div>
+            </div>
+            <t t-set-slot="footer">
+                <button type="button" class="ps-btn ps-btn--primary" t-att-disabled="!qty" t-on-click="ok"><i class="fa fa-cart-plus" aria-hidden="true"/> Add</button>
+                <button type="button" class="ps-btn" t-on-click="props.close">Cancel</button>
+            </t>
+        </Dialog>
+    </t>
+
+    <!-- ============================================================ modifiers -->
+    <t t-name="pos_modern.ModifierDialog">
+        <Dialog title="props.product.name" size="'md'" contentClass="'o_ps ps-dialog'">
+            <t t-foreach="groups" t-as="g" t-key="g_index">
+                <h3 t-if="g.name" class="ps-dialog-h"><t t-esc="g.name"/><small t-if="g.single" class="ps-muted"> · pick one</small></h3>
+                <div class="ps-choices">
+                    <t t-foreach="g.items" t-as="m" t-key="m.id">
+                        <button type="button" class="ps-choice" t-att-class="{ 'is-on': isOn(m) }" t-on-click="() => this.toggle(g, m)">
+                            <strong t-esc="m.name"/>
+                            <small t-if="m.price">+<t t-esc="props.money(m.price)"/></small>
+                        </button>
+                    </t>
+                </div>
+            </t>
+            <t t-set-slot="footer">
+                <button type="button" class="ps-btn ps-btn--primary" t-on-click="ok"><i class="fa fa-cart-plus" aria-hidden="true"/> Add<t t-if="extra"> · +<t t-esc="props.money(extra)"/></t></button>
+                <button type="button" class="ps-btn" t-on-click="props.close">Cancel</button>
+            </t>
+        </Dialog>
+    </t>
+
+    <!-- ============================================================ generic choice -->
+    <t t-name="pos_modern.ChoiceDialog">
+        <Dialog title="props.title" size="'md'" contentClass="'o_ps ps-dialog'">
+            <p t-if="props.subtitle" class="ps-muted" t-esc="props.subtitle"/>
+            <div class="ps-choices">
+                <t t-foreach="props.choices" t-as="c" t-key="c.id">
+                    <button type="button" class="ps-choice" t-att-class="{ 'is-on': state.id === c.id }" t-att-disabled="c.disabled" t-on-click="() => this.pick(c)">
+                        <strong t-esc="c.label"/>
+                        <small t-if="c.sub" t-esc="c.sub"/>
+                    </button>
+                </t>
+            </div>
+            <div t-if="props.withCount" class="ps-row" style="margin-top:1rem">
+                <span class="ps-step">
+                    <button type="button" t-on-click="() => this.step(-1)">−</button>
+                    <span t-esc="state.count"/>
+                    <button type="button" t-on-click="() => this.step(1)">+</button>
+                </span>
+            </div>
+            <t t-set-slot="footer">
+                <button t-if="props.withCount" type="button" class="ps-btn ps-btn--primary" t-on-click="ok"><i class="fa fa-cart-plus" aria-hidden="true"/> Add</button>
+                <button type="button" class="ps-btn" t-on-click="props.close">Cancel</button>
+            </t>
+        </Dialog>
+    </t>
+
+    <!-- ============================================================ return / exchange -->
+    <t t-name="pos_modern.ReturnDialog">
+        <Dialog title="'Return / exchange'" size="'lg'" contentClass="'o_ps ps-dialog'">
+            <div class="ps-row ps-row--tight">
+                <label class="ps-search ps-search--block" style="flex:1">
+                    <i class="fa fa-barcode" aria-hidden="true"/>
+                    <input t-ref="input" type="search" placeholder="Scan or type the receipt number" t-model="state.ref" t-on-keydown="onKey"/>
+                </label>
+                <button type="button" class="ps-btn" t-att-disabled="state.loading" t-on-click="find">Find</button>
+            </div>
+            <div t-if="state.error" class="ps-note ps-note--warning" style="margin-top:.75rem" t-esc="state.error"/>
+            <t t-if="state.order and state.order.lines.length">
+                <p class="ps-muted" style="margin:.75rem 0 .5rem">
+                    <strong t-esc="state.order.ref"/> · <t t-esc="state.order.date"/> · <t t-esc="state.order.shop"/>
+                    <t t-if="state.order.partner"> · <t t-esc="state.order.partner.name"/></t>
+                </p>
+                <ul class="ps-list">
+                    <li t-foreach="state.order.lines" t-as="l" t-key="l.id" class="ps-list-row">
+                        <span class="ps-list-main"><strong t-esc="l.name"/><small><t t-esc="l.left"/> of <t t-esc="l.qty"/> can come back · <t t-esc="money(l.price)"/></small></span>
+                        <span class="ps-step">
+                            <button type="button" t-on-click="() => this.step(l, -1)">−</button>
+                            <span t-esc="qtyOf(l)"/>
+                            <button type="button" t-on-click="() => this.step(l, 1)">+</button>
+                        </span>
+                        <button type="button" class="ps-btn ps-btn--sm ps-btn--ghost" t-on-click="() => this.all(l)">All</button>
+                    </li>
+                </ul>
+                <p class="ps-muted" style="margin-top:.75rem">Taken back items go into the cart with a minus. Add the new items for an exchange: only the difference is paid or given back.</p>
+            </t>
+            <t t-set-slot="footer">
+                <button type="button" class="ps-btn ps-btn--primary" t-att-disabled="!total" t-on-click="add"><i class="fa fa-undo" aria-hidden="true"/> Take back<t t-if="total"> · <t t-esc="money(total)"/></t></button>
+                <button type="button" class="ps-btn" t-on-click="props.close">Cancel</button>
+            </t>
+        </Dialog>
+    </t>
+
+    <!-- ============================================================ barcode labels -->
+    <t t-name="pos_modern.LabelsDialog">
+        <Dialog title="'Barcode labels'" size="'lg'" contentClass="'o_ps ps-dialog'">
+            <div class="ps-cust">
+                <label class="ps-search ps-search--block">
+                    <i class="fa fa-search" aria-hidden="true"/>
+                    <input type="search" placeholder="Add a product: name, code or barcode" t-model="state.q"/>
+                </label>
+                <ul t-if="matches.length" class="ps-menu ps-menu--down">
+                    <li t-foreach="matches" t-as="p" t-key="p.id" t-on-mousedown.prevent="() => this.addRow(p)"><strong t-esc="p.name"/><small t-esc="p.barcode or p.code"/></li>
+                </ul>
+            </div>
+            <ul class="ps-list" style="margin-top:.75rem">
+                <li t-foreach="state.rows" t-as="r" t-key="r.id" class="ps-list-row">
+                    <span class="ps-list-main"><strong t-esc="r.name"/><small><t t-if="r.barcode" t-esc="r.barcode"/><t t-else="">no barcode</t></small></span>
+                    <span class="ps-step">
+                        <button type="button" t-on-click="() => this.stepRow(r, -1)">−</button>
+                        <span t-esc="r.copies"/>
+                        <button type="button" t-on-click="() => this.stepRow(r, 1)">+</button>
+                    </span>
+                    <button type="button" class="ps-btn ps-btn--sm ps-btn--ghost" t-on-click="() => this.remove(r)"><i class="fa fa-times" aria-hidden="true"/></button>
+                </li>
+                <li t-if="!state.rows.length" class="ps-muted">Search a product above, or open this from a cart to print its items.</li>
+            </ul>
+            <div t-if="missing" class="ps-note ps-note--warning" style="margin-top:.75rem">
+                <t t-esc="missing"/> product(s) have no barcode.
+                <button type="button" class="ps-btn ps-btn--sm ms-auto" t-on-click="generate">Create in-store barcodes</button>
+            </div>
+            <t t-set-slot="footer">
+                <button type="button" class="ps-btn ps-btn--primary" t-att-disabled="!state.rows.length or state.busy" t-on-click="print"><i class="fa fa-print" aria-hidden="true"/> Print labels</button>
+                <button type="button" class="ps-btn" t-on-click="props.close">Close</button>
+            </t>
+        </Dialog>
+    </t>
+
+    <!-- labels (printed): context labels, shop, money(v), barcodeUrl(code) -->
+    <t t-name="pos_modern.Labels">
+        <div class="ps-labels">
+            <t t-foreach="labels" t-as="l" t-key="l_index">
+                <div class="ps-label">
+                    <div class="ps-label-shop" t-esc="shop"/>
+                    <div class="ps-label-name" t-esc="l.name"/>
+                    <div t-if="l.attrs" class="ps-label-attrs" t-esc="l.attrs"/>
+                    <div class="ps-label-hook"/>
+                    <img t-if="l.barcode or l.code" class="ps-label-code" t-att-src="barcodeUrl(l.barcode or l.code)" alt=""/>
+                    <div t-if="l.barcode or l.code" class="ps-label-num" t-esc="l.barcode or l.code"/>
+                    <div class="ps-label-price" t-esc="money(l.price)"/>
+                    <div t-if="l.extra" class="ps-label-extra" t-esc="l.extra"/>
+                </div>
+            </t>
+        </div>
+    </t>
+
+</templates>

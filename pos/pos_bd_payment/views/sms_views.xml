@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_company_sms_form" model="ir.ui.view">
+        <field name="name">res.company.form.bd.sms</field>
+        <field name="model">res.company</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <form string="SMS gateway">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group string="Gateway">
+                            <field name="bd_sms_provider"/>
+                            <field name="bd_sms_api_key" password="True" invisible="bd_sms_provider == 'none'"/>
+                            <field name="bd_sms_sender" invisible="bd_sms_provider == 'none'"/>
+                            <field name="bd_sms_url" invisible="bd_sms_provider != 'custom'"
+                                   placeholder="https://api.example.com/send?key={api_key}&amp;to={to}&amp;from={sender}&amp;text={message}"/>
+                        </group>
+                        <group string="Receipt SMS" invisible="bd_sms_provider == 'none'">
+                            <field name="bd_sms_auto"/>
+                            <field name="bd_sms_template" nolabel="1" colspan="2"/>
+                            <div colspan="2" class="text-muted">{shop} {ref} {total} {date} {customer} {extra}</div>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_sms_settings" model="ir.actions.server">
+        <field name="name">SMS gateway</field>
+        <field name="model_id" ref="base.model_res_company"/>
+        <field name="group_ids" eval="[(4, ref('point_of_sale.group_pos_manager'))]"/>
+        <field name="state">code</field>
+        <!-- kept for the buttons that call it: opens the page below -->
+        <field name="code">action = env['ir.actions.actions']._for_xml_id('pos_bd_payment.action_sms_page')</field>
+    </record>
+
+    <!-- SMS gateway: the company's gateway as a simple page in the drawer style (modern_theme.smart_form) -->
+    <record id="action_sms_page" model="ir.actions.client">
+        <field name="name">SMS gateway</field>
+        <field name="tag">modern_theme.smart_form</field>
+        <field name="path">pos-sms-gateway</field>
+        <field name="context">{'smart_form': 'res.company:sms', 'smart_form_res_id': 'company'}</field>
+    </record>
+
+    <record id="pos_bd_sms_list" model="ir.ui.view">
+        <field name="name">pos.bd.sms.list</field>
+        <field name="model">pos.bd.sms</field>
+        <field name="arch" type="xml">
+            <list string="SMS" create="0" decoration-danger="state == 'error'" decoration-muted="state == 'queued'">
+                <field name="create_date" string="Date"/>
+                <field name="to"/>
+                <field name="partner_id" optional="show"/>
+                <field name="order_id" optional="show"/>
+                <field name="body"/>
+                <field name="state" widget="badge" decoration-success="state == 'sent'" decoration-danger="state == 'error'"/>
+                <field name="attempts" optional="hide"/>
+                <button name="action_retry" type="object" string="Retry" icon="fa-repeat" invisible="state == 'sent'"/>
+            </list>
+        </field>
+    </record>
+    <record id="pos_bd_sms_form" model="ir.ui.view">
+        <field name="name">pos.bd.sms.form</field>
+        <field name="model">pos.bd.sms</field>
+        <field name="arch" type="xml">
+            <form string="SMS" create="0">
+                <header>
+                    <button name="action_send_now" type="object" string="Send now" class="btn-primary" invisible="state != 'queued'"/>
+                    <button name="action_retry" type="object" string="Retry" invisible="state != 'error'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="to"/>
+                        <field name="partner_id"/>
+                        <field name="order_id"/>
+                        <field name="body"/>
+                        <field name="sent_at"/>
+                        <field name="response"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_sms_log" model="ir.actions.act_window">
+        <field name="name">SMS log</field>
+        <field name="res_model">pos.bd.sms</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

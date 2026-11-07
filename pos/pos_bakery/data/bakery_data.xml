@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_cake" model="ir.sequence">
+        <field name="name">Cake order</field>
+        <field name="code">pos_bakery.cake</field>
+        <field name="prefix">CAKE/</field>
+        <field name="padding">4</field>
+    </record>
+</odoo>

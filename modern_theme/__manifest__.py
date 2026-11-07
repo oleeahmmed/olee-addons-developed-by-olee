@@ -17,7 +17,7 @@ Modern Theme turns the Odoo 19 backend into a clean admin dashboard:
 * Company defaults in Settings > Modern Theme (live preview, JSON export/import, reset)
   and a personal override for every user (Appearance menu).
     """,
-    "version": "19.0.5.4.0",
+    "version": "19.0.6.2.0",
     "category": "Themes/Backend",
     "author": "Olee",
     "license": "LGPL-3",
@@ -67,8 +67,26 @@ Modern Theme turns the Odoo 19 backend into a clean admin dashboard:
         "web._assets_backend_helpers": [
             "modern_theme/static/src/scss/kit/*.scss",
         ],
+        # Every modern app of custom-addons ships NO stylesheet: all their styles live here,
+        # in scss/apps/<app>.scss (light) and <app>.dark.scss (dark). Scoped by each app's
+        # root class (.o_cm, .o_ss, .o_ps…), so an app that is not installed costs nothing.
+        # POS: pos_modern and every shop addon of custom-addons/pos use apps/pos.scss.
+        "web.assets_backend": [
+            "modern_theme/static/src/scss/apps/crm.scss",
+            "modern_theme/static/src/scss/apps/customer.scss",
+            "modern_theme/static/src/scss/apps/employee.scss",
+            "modern_theme/static/src/scss/apps/inventory.scss",
+            "modern_theme/static/src/scss/apps/invoice.scss",
+            "modern_theme/static/src/scss/apps/accounting.scss",
+            "modern_theme/static/src/scss/apps/mrp.scss",
+            "modern_theme/static/src/scss/apps/project.scss",
+            "modern_theme/static/src/scss/apps/purchase.scss",
+            "modern_theme/static/src/scss/apps/sales.scss",
+            "modern_theme/static/src/scss/apps/pos.scss",
+        ],
         "web.report_assets_common": [
             "modern_theme/static/src/scss/report_modern.scss",
+            "modern_theme/static/src/scss/apps/pos_report.scss",
         ],
         "web.assets_backend_lazy": [
             "modern_theme/static/src/js/graph_colors.js",
@@ -76,12 +94,24 @@ Modern Theme turns the Odoo 19 backend into a clean admin dashboard:
         "web.assets_web_dark": [
             "modern_theme/static/src/scss/tokens.dark.scss",
             "modern_theme/static/src/scss/dark.scss",
+            "modern_theme/static/src/scss/apps/crm.dark.scss",
+            "modern_theme/static/src/scss/apps/customer.dark.scss",
+            "modern_theme/static/src/scss/apps/employee.dark.scss",
+            "modern_theme/static/src/scss/apps/inventory.dark.scss",
+            "modern_theme/static/src/scss/apps/invoice.dark.scss",
+            "modern_theme/static/src/scss/apps/accounting.dark.scss",
+            "modern_theme/static/src/scss/apps/mrp.dark.scss",
+            "modern_theme/static/src/scss/apps/project.dark.scss",
+            "modern_theme/static/src/scss/apps/purchase.dark.scss",
+            "modern_theme/static/src/scss/apps/sales.dark.scss",
+            "modern_theme/static/src/scss/apps/pos.dark.scss",
         ],
         "web.assets_frontend": [
             "modern_theme/static/src/scss/mt_maps.scss",
             "modern_theme/static/src/scss/fonts.scss",
             "modern_theme/static/src/scss/tokens.scss",
             "modern_theme/static/src/scss/login.scss",
+            "modern_theme/static/src/scss/apps/pos_frontend.scss",
         ],
     },
     "installable": True,

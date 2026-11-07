@@ -12,7 +12,7 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
 * Rights, record rules, settings, mail templates and invoicing are Odoo's own.
   Odoo's original Purchase menus stay available in the sidebar.
     """,
-    'version': '19.0.2.1.0',
+    'version': '19.0.2.1.1',
     'category': 'Inventory/Purchase',
     'author': 'Olee',
     'license': 'LGPL-3',
@@ -23,13 +23,9 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
     ],
     'assets': {
         'web.assets_backend': [
-            'purchase_modern/static/src/scss/app.scss',
             'purchase_modern/static/src/js/sidebar/*.js',
             'purchase_modern/static/src/js/pages/*.js',
             'purchase_modern/static/src/xml/dashboard.xml',
-        ],
-        'web.assets_web_dark': [
-            'purchase_modern/static/src/scss/app.dark.scss',
         ],
     },
     'installable': True,

@@ -9,7 +9,7 @@ Sidebar of the Attendances app: Dashboard, At Work, Attendances and Extra Hours 
 refuse). Kiosk Mode, Reporting and Configuration are in the top bar. Everything uses
 Odoo's own hr.attendance views, forms and chatter: no new table or field.
     """,
-    'version': '19.0.2.1.0',
+    'version': '19.0.2.1.1',
     'category': 'Human Resources/Attendances',
     'author': 'Olee',
     'license': 'LGPL-3',
@@ -22,7 +22,6 @@ Odoo's own hr.attendance views, forms and chatter: no new table or field.
     ],
     'assets': {
         'web.assets_backend': [
-            'attendance_modern/static/src/scss/*.scss',
             'attendance_modern/static/src/js/*.js',
             'attendance_modern/static/src/xml/*.xml',
         ],

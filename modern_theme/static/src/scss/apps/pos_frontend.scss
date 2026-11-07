@@ -1,0 +1,30 @@
+// Modern Theme — Point of Sale public pages (QR menu of pos_restaurant_bd). Uses the
+// theme tokens of the frontend bundle (tokens.scss), with plain fallbacks.
+.o_ps_qr {
+    min-height: 100vh; margin: 0; padding: 0 0 3rem;
+    background: var(--mt-background, #f6f7f9); color: var(--mt-foreground, #0f172a);
+    font-family: var(--mt-font, "Inter"), "Noto Sans Bengali", "Hind Siliguri", system-ui, sans-serif;
+    .qr-head { position: sticky; top: 0; z-index: 5; padding: 1rem 1.25rem 0.75rem; background: var(--mt-card, #fff); border-bottom: 1px solid var(--mt-border, #e5e7eb); }
+    .qr-head h1 { margin: 0; font-size: 1.25rem; font-weight: 700; }
+    .qr-head p { margin: 0.125rem 0 0; font-size: 0.8125rem; color: var(--mt-muted-foreground, #64748b); }
+    .qr-cats { display: flex; gap: 0.5rem; overflow-x: auto; padding: 0.75rem 0 0; scrollbar-width: none; }
+    .qr-cats a { flex: 0 0 auto; padding: 0.375rem 0.875rem; border: 1px solid var(--mt-border, #e5e7eb); border-radius: 999px; color: inherit; font-size: 0.8125rem; font-weight: 600; text-decoration: none; white-space: nowrap; }
+    .qr-section { padding: 1rem 1.25rem 0; }
+    .qr-section h2 { margin: 0.5rem 0 0.75rem; font-size: 1rem; font-weight: 700; }
+    .qr-items { display: grid; gap: 0.75rem; }
+    .qr-item { display: flex; gap: 0.75rem; padding: 0.75rem; border: 1px solid var(--mt-border, #e5e7eb); border-radius: 0.875rem; background: var(--mt-card, #fff); }
+    .qr-item img { width: 4.5rem; height: 4.5rem; flex: 0 0 auto; border-radius: 0.625rem; object-fit: cover; background: var(--mt-muted, #f1f5f9); }
+    .qr-item-body { display: grid; align-content: center; gap: 0.25rem; min-width: 0; }
+    .qr-item-name { font-weight: 600; }
+    .qr-item-desc { font-size: 0.8125rem; color: var(--mt-muted-foreground, #64748b); }
+    .qr-item-price { font-weight: 700; font-variant-numeric: tabular-nums; }
+    .qr-foot { padding: 1.5rem 1.25rem; text-align: center; font-size: 0.75rem; color: var(--mt-muted-foreground, #64748b); }
+}
+// printable QR cards of the tables (one per table)
+.o_ps_qr_cards {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(62mm, 1fr)); gap: 6mm; padding: 8mm; font-family: system-ui, sans-serif;
+    .qr-card { display: grid; justify-items: center; gap: 2mm; padding: 6mm; border: 1px dashed #999; border-radius: 4mm; text-align: center; break-inside: avoid; }
+    .qr-card img { width: 44mm; height: 44mm; }
+    .qr-card strong { font-size: 16px; }
+    .qr-card small { font-size: 11px; color: #555; }
+}

@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pos_rb_ticket_user,pos.rb.ticket user,model_pos_rb_ticket,point_of_sale.group_pos_user,1,1,1,1
+access_pos_rb_ticket_line_user,pos.rb.ticket.line user,model_pos_rb_ticket_line,point_of_sale.group_pos_user,1,1,1,1
+access_pos_rb_staff_user,pos.rb.staff user,model_pos_rb_staff,point_of_sale.group_pos_user,1,0,0,0
+access_pos_rb_staff_manager,pos.rb.staff manager,model_pos_rb_staff,point_of_sale.group_pos_manager,1,1,1,1

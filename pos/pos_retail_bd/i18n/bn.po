@@ -1,0 +1,919 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pos_retail_bd
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-06 22:24+0000\n"
+"PO-Revision-Date: 2026-11-06 22:24+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields.selection,name:pos_retail_bd.selection__pos_bd_offer__kind__percent
+msgid "% off products / categories"
+msgstr "পণ্য / ক্যাটাগরিতে % ছাড়"
+
+#. module: pos_retail_bd
+#: model_terms:ir.actions.act_window,help:pos_retail_bd.action_offers
+msgid ""
+"% off products or categories, buy 2 get 1 free, ৳100 off bills from ৳1,000…"
+msgstr ""
+"পণ্য বা ক্যাটাগরিতে % ছাড়, ২টা কিনলে ১টা ফ্রি, ৳১,০০০-এর বিলে ৳১০০ ছাড়…"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/retail.js:0
+#: code:addons/pos_retail_bd/static/src/js/retail.js:0
+msgid "%(amount)s received (%(ref)s)"
+msgstr "%(amount)s পাওয়া গেছে (%(ref)s)"
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "%(name)s has only %(points)s points."
+msgstr "%(name)s-এর মাত্র %(points)s পয়েন্ট আছে।"
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "%s has no baki limit. Set one on the customer first."
+msgstr "%s-এর বাকির সীমা নেই। আগে কাস্টমারে সীমা দিন।"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/retail.js:0
+#: code:addons/pos_retail_bd/static/src/js/retail.js:0
+msgid "%s is already in the cart."
+msgstr "%s আগেই কার্টে আছে।"
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "%s points"
+msgstr "%s পয়েন্ট"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/retail.js:0
+#: code:addons/pos_retail_bd/static/src/js/retail.js:0
+msgid "%s product(s) updated."
+msgstr "%s টি পণ্য আপডেট হয়েছে।"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_points_per
+msgid "1 point for every"
+msgstr "১ পয়েন্ট প্রতি"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_point_value
+msgid "1 point is worth"
+msgstr "১ পয়েন্টের মূল্য"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_product_product__rt_quick
+#: model:ir.model.fields,help:pos_retail_bd.field_product_template__rt_quick
+msgid "A big button on top of the counter (loose items without barcode)."
+msgstr "কাউন্টারের উপরে বড় বাটন (বারকোড ছাড়া খোলা পণ্য)।"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__active
+msgid "Active"
+msgstr "চালু"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Add"
+msgstr "যোগ করুন"
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_config_counter_form_retail
+msgid ""
+"Add Odoo's \"Customer Account\" payment method to the shop, and a baki limit"
+" on each customer."
+msgstr ""
+"শপে Odoo-এর \"Customer Account\" পেমেন্ট মেথড যোগ করুন, আর প্রতিটি কাস্টমারে"
+" বাকির সীমা দিন।"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+msgid "Applied by itself at the counter while it runs."
+msgstr "চালু থাকা অবস্থায় কাউন্টারে নিজে থেকেই প্রযোজ্য হয়।"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Apply the count"
+msgstr "গণনা প্রয়োগ করুন"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_ask_serial
+msgid "Ask the IMEI / serial number"
+msgstr "IMEI / সিরিয়াল নম্বর চাইবে"
+
+#. module: pos_retail_bd
+#: model:ir.actions.act_window,name:pos_retail_bd.action_baki
+#: model:ir.ui.menu,name:pos_retail_bd.menu_baki
+msgid "Baki & points"
+msgstr "বাকি ও পয়েন্ট"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_credit
+msgid "Baki (customer account)"
+msgstr "বাকি (কাস্টমার অ্যাকাউন্ট)"
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Baki collected at %s"
+msgstr "%s-এ বাকি আদায়"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Baki due"
+msgstr "বাকি"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_res_partner__rt_credit_limit
+#: model:ir.model.fields,field_description:pos_retail_bd.field_res_users__rt_credit_limit
+msgid "Baki limit"
+msgstr "বাকির সীমা"
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Baki limit reached: %(name)s owes %(due)s, limit %(limit)s."
+msgstr "বাকির সীমা শেষ: %(name)s-এর বাকি %(due)s, সীমা %(limit)s।"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/retail.js:0
+#: code:addons/pos_retail_bd/static/src/js/retail.js:0
+msgid "Baki limit reached: due %(due)s, limit %(limit)s."
+msgstr "বাকির সীমা শেষ: বাকি %(due)s, সীমা %(limit)s।"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__min_amount
+msgid "Bill from"
+msgstr "বিল কমপক্ষে"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__buy_qty
+msgid "Buy"
+msgstr "কিনলে"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields.selection,name:pos_retail_bd.selection__pos_bd_offer__kind__bogo
+msgid "Buy X get Y free"
+msgstr "X কিনলে Y ফ্রি"
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/offer.py:0
+#: code:addons/pos_retail_bd/models/offer.py:0
+msgid "Buy and Get of %s must be at least 1."
+msgstr "%s-এর কেনা ও ফ্রি কমপক্ষে ১ হতে হবে।"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Cancel"
+msgstr "বাতিল"
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.product_template_retail_list
+msgid "Carton"
+msgstr "কার্টন"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_product_product__rt_pack_name
+#: model:ir.model.fields,help:pos_retail_bd.field_product_template__rt_pack_name
+msgid "Carton, Box, Dozen, Sack… sold whole at the counter."
+msgstr "কার্টন, বক্স, ডজন, বস্তা… কাউন্টারে পুরোটা বিক্রি।"
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Choose the customer and type the amount."
+msgstr "কাস্টমার বাছুন ও পরিমাণ লিখুন।"
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Choose the customer to redeem points."
+msgstr "পয়েন্ট ব্যবহার করতে কাস্টমার বাছুন।"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos/pos_retail_bd/static/src/js/retail.js:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/static/src/js/retail.js:0
+msgid "Choose the customer to sell on credit (baki)."
+msgstr "বাকিতে বিক্রির জন্য কাস্টমার বাছুন।"
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Choose the journal for dues in the Counter settings."
+msgstr "কাউন্টার সেটিংসে বাকি আদায়ের জার্নাল বাছুন।"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Collect due"
+msgstr "বাকি আদায়"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_due_journal_id
+msgid "Collect dues in"
+msgstr "বাকি আদায় হবে এই জার্নালে"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__company_id
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__company_id
+msgid "Company"
+msgstr "কোম্পানি"
+
+#. module: pos_retail_bd
+#: model:ir.model,name:pos_retail_bd.model_res_partner
+msgid "Contact"
+msgstr "কন্টাক্ট"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Count"
+msgstr "গণনা"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Counted"
+msgstr "গোনা হয়েছে"
+
+#. module: pos_retail_bd
+#: model_terms:ir.actions.act_window,help:pos_retail_bd.action_offers
+msgid "Create your first offer"
+msgstr "প্রথম অফার তৈরি করুন"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__create_uid
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__create_uid
+msgid "Created by"
+msgstr "তৈরি করেছেন"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__create_date
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__create_date
+msgid "Created on"
+msgstr "তৈরির সময়"
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.res_partner_baki_list
+msgid "Customers: baki and points"
+msgstr "কাস্টমার: বাকি ও পয়েন্ট"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Damage"
+msgstr "নষ্ট"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Damaged"
+msgstr "নষ্ট হয়েছে"
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_bd_points_list
+msgid "Date"
+msgstr "তারিখ"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Difference"
+msgstr "পার্থক্য"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__percent
+msgid "Discount %"
+msgstr "ছাড় %"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__display_name
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__display_name
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__display_name
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_order__display_name
+#: model:ir.model.fields,field_description:pos_retail_bd.field_product_template__display_name
+#: model:ir.model.fields,field_description:pos_retail_bd.field_res_partner__display_name
+msgid "Display Name"
+msgstr "নাম"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Due"
+msgstr "বাকি"
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.res_partner_baki_list
+msgid "Due (posted)"
+msgstr "বাকি (পোস্ট হওয়া)"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Due paid now"
+msgstr "এখন দেওয়া বাকি"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_pos_config__rt_scale_prefixes
+msgid ""
+"EAN-13 barcodes of the weighing scale: 2 prefix digits, 5-digit product code"
+" (internal reference), 5-digit value, check digit."
+msgstr ""
+"ওজন স্কেলের EAN-13 বারকোড: ২ সংখ্যার প্রিফিক্স, ৫ সংখ্যার পণ্য কোড "
+"(ইন্টারনাল কোড), ৫ সংখ্যার মান, চেক ডিজিট।"
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Earned on %s"
+msgstr "%s-এ অর্জিত"
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_bd_offer_form
+msgid "Eid offer 10%"
+msgstr "ঈদ অফার ১০%"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_pos_bd_offer__config_ids
+msgid "Empty = every shop"
+msgstr "খালি = সব শপ"
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_bd_offer_form
+msgid "Every product if empty"
+msgstr "খালি থাকলে সব পণ্য"
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_bd_offer_form
+msgid "Every shop"
+msgstr "সব শপ"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__date_from
+msgid "From"
+msgstr "থেকে"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__get_qty
+msgid "Get free"
+msgstr "ফ্রি"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_godown_location_id
+msgid "Godown (back store)"
+msgstr "গোডাউন (পিছনের স্টোর)"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__id
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__id
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__id
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_order__id
+#: model:ir.model.fields,field_description:pos_retail_bd.field_product_template__id
+#: model:ir.model.fields,field_description:pos_retail_bd.field_res_partner__id
+msgid "ID"
+msgstr "ID"
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "IMEI / SN %s"
+msgstr "IMEI / SN %s"
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "IMEI / serial %(sn)s of %(product)s was already sold."
+msgstr "%(product)s-এর IMEI / সিরিয়াল %(sn)s আগেই বিক্রি হয়েছে।"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "IMEI / serial number"
+msgstr "IMEI / সিরিয়াল নম্বর"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "In the system"
+msgstr "সিস্টেমে"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_pos_config__rt_godown_location_id
+msgid "Its stock shows on the product cards next to the shelf stock."
+msgstr "এর স্টক পণ্য কার্ডে তাকের স্টকের পাশে দেখায়।"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__kind
+msgid "Kind"
+msgstr "ধরন"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__write_uid
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__write_uid
+msgid "Last Updated by"
+msgstr "শেষ আপডেট করেছেন"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__write_date
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__write_date
+msgid "Last Updated on"
+msgstr "শেষ আপডেট"
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_points
+#: model:ir.model.fields,field_description:pos_retail_bd.field_res_partner__rt_points
+#: model:ir.model.fields,field_description:pos_retail_bd.field_res_users__rt_points
+msgid "Loyalty points"
+msgstr "লয়ালটি পয়েন্ট"
+
+#. module: pos_retail_bd
+#: model:ir.model,name:pos_retail_bd.model_pos_bd_points_move
+msgid "Loyalty points (POS)"
+msgstr "লয়ালটি পয়েন্ট (POS)"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__amount
+msgid "Money off"
+msgstr "টাকা ছাড়"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields.selection,name:pos_retail_bd.selection__pos_bd_offer__kind__bill
+msgid "Money off the bill"
+msgstr "বিলে টাকা ছাড়"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_res_partner__rt_credit_limit
+#: model:ir.model.fields,help:pos_retail_bd.field_res_users__rt_credit_limit
+msgid "Most a customer may owe the shop. 0 = no credit."
+msgstr "কাস্টমার সর্বোচ্চ কত বাকি রাখতে পারবেন। ০ = বাকি নয়।"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__name
+msgid "Name"
+msgstr "নাম"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+msgid "New offer"
+msgstr "নতুন অফার"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+msgid "Nothing picked = every product."
+msgstr "কিছু না বাছলে = সব পণ্য।"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_bd_offer_form
+msgid "Offer"
+msgstr "অফার"
+
+#. module: pos_retail_bd
+#: model:ir.actions.act_window,name:pos_retail_bd.action_offers
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_offers
+#: model:ir.ui.menu,name:pos_retail_bd.menu_offers
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_bd_offer_list
+msgid "Offers"
+msgstr "অফার"
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_bd_offer_form
+msgid "On"
+msgstr "প্রযোজ্য"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__order_id
+msgid "Order"
+msgstr "অর্ডার"
+
+#. module: pos_retail_bd
+#: model:ir.model,name:pos_retail_bd.model_pos_bd_offer
+msgid "POS offer"
+msgstr "POS অফার"
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Pack"
+msgstr "প্যাক"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_product_product__rt_pack_name
+#: model:ir.model.fields,field_description:pos_retail_bd.field_product_template__rt_pack_name
+msgid "Pack name"
+msgstr "প্যাকের নাম"
+
+#. module: pos_retail_bd
+#: model:ir.actions.act_window,name:pos_retail_bd.action_packs
+#: model:ir.ui.menu,name:pos_retail_bd.menu_packs
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.product_template_retail_list
+msgid "Packs & quick keys"
+msgstr "প্যাক ও কুইক কি"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__partner_id
+msgid "Partner"
+msgstr "পার্টনার"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/retail.js:0
+#: code:addons/pos_retail_bd/static/src/js/retail.js:0
+msgid "Piece"
+msgstr "পিস"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_product_product__rt_pack_qty
+#: model:ir.model.fields,field_description:pos_retail_bd.field_product_template__rt_pack_qty
+msgid "Pieces per pack"
+msgstr "প্রতি প্যাকে পিস"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__pos_categ_ids
+msgid "PoS categories"
+msgstr "POS ক্যাটাগরি"
+
+#. module: pos_retail_bd
+#: model:ir.model,name:pos_retail_bd.model_pos_config
+msgid "Point of Sale Configuration"
+msgstr "POS কনফিগারেশন"
+
+#. module: pos_retail_bd
+#: model:ir.model,name:pos_retail_bd.model_pos_order
+msgid "Point of Sale Orders"
+msgstr "POS অর্ডার"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__points
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_bd_points_list
+msgid "Points"
+msgstr "পয়েন্ট"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Points balance"
+msgstr "পয়েন্ট ব্যালান্স"
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Points can be redeemed from %s points."
+msgstr "%s পয়েন্ট থেকে ব্যবহার করা যাবে।"
+
+#. module: pos_retail_bd
+#: model:ir.actions.act_window,name:pos_retail_bd.action_points
+#: model:ir.model.fields,field_description:pos_retail_bd.field_res_partner__rt_points_move_ids
+#: model:ir.model.fields,field_description:pos_retail_bd.field_res_users__rt_points_move_ids
+#: model:ir.ui.menu,name:pos_retail_bd.menu_points
+msgid "Points history"
+msgstr "পয়েন্টের ইতিহাস"
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Points: %s"
+msgstr "পয়েন্ট: %s"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_pos_bd_points_move__points
+msgid "Positive: earned, negative: redeemed"
+msgstr "ধনাত্মক: অর্জিত, ঋণাত্মক: ব্যবহৃত"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields.selection,name:pos_retail_bd.selection__pos_config__rt_scale_mode__price
+msgid "Price in poisha"
+msgstr "দাম পয়সায়"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+#: model:ir.model,name:pos_retail_bd.model_product_template
+msgid "Product"
+msgstr "পণ্য"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__product_ids
+msgid "Products"
+msgstr "পণ্য"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_pos_config__rt_ask_serial
+msgid ""
+"Products tracked by serial number (mobiles, electronics) ask it at the "
+"counter."
+msgstr ""
+"সিরিয়াল নম্বরে ট্র্যাক করা পণ্য (মোবাইল, ইলেকট্রনিক্স) কাউন্টারে নম্বর "
+"চাইবে।"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_product_product__rt_quick
+#: model:ir.model.fields,field_description:pos_retail_bd.field_product_template__rt_quick
+msgid "Quick key"
+msgstr "কুইক কি"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_points_move__name
+msgid "Reason"
+msgstr "কারণ"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_min_redeem
+msgid "Redeem from (points)"
+msgstr "কমপক্ষে এত পয়েন্টে ব্যবহার"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Redeem points (1 ="
+msgstr "পয়েন্ট ব্যবহার (১ ="
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Redeemed on %s"
+msgstr "%s-এ ব্যবহৃত"
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_config_counter_form_retail
+msgid "Retail"
+msgstr "রিটেইল"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_scale_prefixes
+msgid "Scale barcode prefixes"
+msgstr "স্কেল বারকোড প্রিফিক্স"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_config__rt_scale_mode
+msgid "Scale barcode value"
+msgstr "স্কেল বারকোডের মান"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Scan or search a product"
+msgstr "পণ্য স্ক্যান বা খুঁজুন"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Scan the box"
+msgstr "বাক্স স্ক্যান করুন"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Scan the products one by one."
+msgstr "পণ্যগুলো একে একে স্ক্যান করুন।"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Scan the shelf and type what is there, or write off damaged items."
+msgstr "তাক স্ক্যান করে যা আছে লিখুন, বা নষ্ট আইটেম বাদ দিন।"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_pos_config__rt_credit
+msgid ""
+"Sell on credit with Odoo's 'Customer Account' payment method, up to each "
+"customer's limit."
+msgstr ""
+"Odoo-এর 'Customer Account' পেমেন্ট মেথডে বাকিতে বিক্রি, প্রতিটি কাস্টমারের "
+"সীমা পর্যন্ত।"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__sequence
+msgid "Sequence"
+msgstr "ক্রম"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Shelf"
+msgstr "তাক"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__config_ids
+msgid "Shops"
+msgstr "শপ"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_pos_bd_offer__name
+msgid "Shown under the line: 'Eid offer 10%', 'Buy 2 get 1'…"
+msgstr "লাইনের নিচে দেখায়: 'ঈদ অফার ১০%', '২টায় ১টা ফ্রি'…"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+#: model:ir.actions.client,name:pos_retail_bd.action_stock_count
+#: model:ir.ui.menu,name:pos_retail_bd.menu_stock_count
+msgid "Stock count & damage"
+msgstr "স্টক গণনা ও নষ্ট"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_pos_config__rt_point_value
+msgid "Taka off when a point is redeemed."
+msgstr "এক পয়েন্ট ব্যবহারে কত টাকা ছাড়।"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,help:pos_retail_bd.field_pos_config__rt_points_per
+msgid "Taka spent for one point."
+msgstr "এক পয়েন্টের জন্য কত টাকা খরচ।"
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/offer.py:0
+#: code:addons/pos_retail_bd/models/offer.py:0
+msgid "The discount of %s must be between 0 and 100%%."
+msgstr "%s-এর ছাড় ০ থেকে ১০০%% এর মধ্যে হতে হবে।"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+msgid "The offer ends before it starts."
+msgstr "অফার শুরু হওয়ার আগেই শেষ হয়ে যাচ্ছে।"
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "This shop has no stock location."
+msgstr "এই শপের কোনো স্টক লোকেশন নেই।"
+
+#. module: pos_retail_bd
+#: model_terms:ir.ui.view,arch_db:pos_retail_bd.pos_bd_points_list
+msgid "Total"
+msgstr "মোট"
+
+#. module: pos_retail_bd
+#. odoo-python
+#: code:addons/pos/pos_retail_bd/models/pos_config.py:0
+#: code:addons/pos_retail_bd/models/pos_config.py:0
+msgid "Type the IMEI / serial number of %s."
+msgstr "%s-এর IMEI / সিরিয়াল নম্বর লিখুন।"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields,field_description:pos_retail_bd.field_pos_bd_offer__date_to
+msgid "Until"
+msgstr "পর্যন্ত"
+
+#. module: pos_retail_bd
+#: model:ir.model.fields.selection,name:pos_retail_bd.selection__pos_config__rt_scale_mode__weight
+msgid "Weight in grams"
+msgstr "ওজন গ্রামে"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+msgid "When and where"
+msgstr "কখন ও কোথায়"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+msgid "Which products"
+msgstr "কোন পণ্য"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "Write off"
+msgstr "বাদ দিন"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "bills ·"
+msgstr "বিল ·"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "due"
+msgstr "বাকি"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/js/drawer_forms.js:0
+#: code:addons/pos_retail_bd/static/src/js/drawer_forms.js:0
+msgid "e.g. Eid offer 10%"
+msgstr "যেমন ঈদ অফার ১০%"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "in stock"
+msgstr "স্টকে"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "of"
+msgstr "এর মধ্যে"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "points"
+msgstr "পয়েন্ট"
+
+#. module: pos_retail_bd
+#. odoo-javascript
+#: code:addons/pos/pos_retail_bd/static/src/xml/retail.xml:0
+#: code:addons/pos_retail_bd/static/src/xml/retail.xml:0
+msgid "· Godown"
+msgstr "· গোডাউন"

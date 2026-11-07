@@ -1,0 +1,6 @@
+// Modern Theme — sales_modern: every style of the app lives here (moved out of
+// sales_modern/static/src/scss so the app ships no stylesheet of its own).
+
+// ---- from sales_modern/static/src/scss/app.dark.scss
+// Sales Modern: dark values of the app tokens (Modern Theme app kit).
+@include mt-app-tokens-dark(ss);

@@ -1,0 +1,6 @@
+// Modern Theme — project_modern: every style of the app lives here (moved out of
+// project_modern/static/src/scss so the app ships no stylesheet of its own).
+
+// ---- from project_modern/static/src/scss/app.dark.scss
+// Modern Project: dark values of the app tokens (Modern Theme app kit).
+@include mt-app-tokens-dark(pm);

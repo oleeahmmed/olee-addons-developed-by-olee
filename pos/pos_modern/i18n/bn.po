@@ -1,0 +1,3106 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pos_modern
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-06 23:37+0000\n"
+"PO-Revision-Date: 2026-11-06 23:37+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: pos_modern
+#: model_terms:ir.actions.act_window,help:pos_modern.action_modifiers
+msgid ""
+"\"Less spicy\", \"Extra cheese +40\", \"Double shot\", \"1 pound\"… asked at"
+" the counter for the products or categories you choose."
+msgstr ""
+"\"ঝাল কম\", \"এক্সট্রা চিজ +৪০\", \"ডাবল শট\", \"১ পাউন্ড\"… বাছাই করা পণ্য "
+"বা ক্যাটাগরির জন্য কাউন্টারে জিজ্ঞেস করা হয়।"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_menu.py:0
+#: code:addons/pos_modern/models/pos_menu.py:0
+msgid "%(back)s to give back, %(paid)s entered."
+msgstr "ফেরত দিতে হবে %(back)s, লেখা হয়েছে %(paid)s।"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_menu.py:0
+#: code:addons/pos_modern/models/pos_menu.py:0
+msgid "%(paid)s paid, %(due)s still due."
+msgstr "%(paid)s পরিশোধ, এখনো বাকি %(due)s।"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_counter.py:0
+#: code:addons/pos_modern/models/pos_counter.py:0
+msgid "%s has no session yet."
+msgstr "%s-এর এখনো কোনো সেশন নেই।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+msgid "%s is out of stock."
+msgstr "%s স্টকে নেই।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+msgid "%s offline order(s) sent to the server."
+msgstr "অফলাইনের %s টি অর্ডার সার্ভারে পাঠানো হয়েছে।"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_order.py:0
+#: code:addons/pos_modern/models/pos_order.py:0
+msgid "%s orders"
+msgstr "%s টি অর্ডার"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_order.py:0
+#: code:addons/pos_modern/models/pos_order.py:0
+msgid "%s sold"
+msgstr "%s বিক্রি"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+msgid "%s still due."
+msgstr "এখনো বাকি %s।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid ", compared with"
+msgstr ", তুলনায়"
+
+#. module: pos_modern
+#: model:ir.model.fields.selection,name:pos_modern.selection__pos_config__pm_label_size__38x25
+msgid "38 × 25 mm"
+msgstr "৩৮ × ২৫ মিমি"
+
+#. module: pos_modern
+#: model:ir.model.fields.selection,name:pos_modern.selection__pos_config__pm_label_size__50x30
+msgid "50 × 30 mm"
+msgstr "৫০ × ৩০ মিমি"
+
+#. module: pos_modern
+#: model:ir.model.fields.selection,name:pos_modern.selection__pos_config__pm_receipt_width__58
+msgid "58 mm"
+msgstr "৫৮ মিমি"
+
+#. module: pos_modern
+#: model:ir.model.fields.selection,name:pos_modern.selection__pos_config__pm_label_size__58x40
+msgid "58 × 40 mm (hand tag)"
+msgstr "৫৮ × ৪০ মিমি (হ্যান্ড ট্যাগ)"
+
+#. module: pos_modern
+#: model:ir.model.fields.selection,name:pos_modern.selection__pos_config__pm_receipt_width__80
+msgid "80 mm"
+msgstr "৮০ মিমি"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.order_kanban
+msgid "<i class=\"fa fa-calendar-o\" title=\"Date\"/>"
+msgstr "<i class=\"fa fa-calendar-o\" title=\"তারিখ\"/>"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "<i class=\"fa fa-circle\" title=\"Open\"/> Open"
+msgstr "<i class=\"fa fa-circle\" title=\"খোলা\"/> খোলা"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "<i class=\"fa fa-life-ring\" title=\"Rescue session\"/>"
+msgstr "<i class=\"fa fa-life-ring\" title=\"রেসকিউ সেশন\"/>"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "<i class=\"fa fa-lock\" title=\"Close\"/> Close"
+msgstr "<i class=\"fa fa-lock\" title=\"বন্ধ\"/> বন্ধ করুন"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "<i class=\"fa fa-play\" title=\"Continue\"/> Continue Selling"
+msgstr "<i class=\"fa fa-play\" title=\"চালিয়ে যান\"/> বিক্রি চালিয়ে যান"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.order_kanban
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "<i class=\"fa fa-shopping-basket\" title=\"Shop\"/>"
+msgstr "<i class=\"fa fa-shopping-basket\" title=\"শপ\"/>"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "<i class=\"fa fa-unlock\" title=\"Open\"/> Open Register"
+msgstr "<i class=\"fa fa-unlock\" title=\"খুলুন\"/> রেজিস্টার খুলুন"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.order_kanban
+msgid "<i class=\"fa fa-user-o\" title=\"Customer\"/>"
+msgstr "<i class=\"fa fa-user-o\" title=\"কাস্টমার\"/>"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "<span class=\"ps-kc-assign-label\">Cashier</span>"
+msgstr "<span class=\"ps-kc-assign-label\">ক্যাশিয়ার</span>"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "<span class=\"ps-kc-assign-label\">Session</span>"
+msgstr "<span class=\"ps-kc-assign-label\">সেশন</span>"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "<span>Cash in drawer</span>"
+msgstr "<span>ড্রয়ারে ক্যাশ</span>"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "<span>Last closing</span>"
+msgstr "<span>শেষ ক্লোজিং</span>"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "<span>Ongoing</span>"
+msgstr "<span>চলমান</span>"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "<span>Opening cash</span>"
+msgstr "<span>শুরুর ক্যাশ</span>"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "<span>Sold</span>"
+msgstr "<span>বিক্রি</span>"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_menu.py:0
+#: code:addons/pos_modern/models/pos_menu.py:0
+msgid "A discount of %s%% needs a manager: type the manager PIN."
+msgstr "%s%% ছাড়ে ম্যানেজার লাগবে: ম্যানেজার PIN দিন।"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_menu.py:0
+#: code:addons/pos_modern/models/pos_menu.py:0
+msgid "A product of the cart cannot be sold in the Point of Sale any more."
+msgstr "কার্টের একটি পণ্য আর POS-এ বিক্রি করা যায় না।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos_modern/static/src/js/drawer.js:0
+msgid ""
+"A register of your shop or restaurant. Odoo sets the default payment "
+"methods; adjust them in its settings."
+msgstr ""
+"আপনার দোকান বা রেস্টুরেন্টের একটি রেজিস্টার। Odoo ডিফল্ট পেমেন্ট মেথড দেয়; "
+"সেটিংসে বদলান।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid ""
+"A room of the restaurant. Draw its tables from the register's floor plan."
+msgstr "রেস্টুরেন্টের একটি ঘর। টেবিলগুলো কাউন্টারের ফ্লোর প্ল্যান থেকে আঁকুন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+msgid "A session starts when a register is opened and ends when it is closed."
+msgstr "রেজিস্টার খুললে সেশন শুরু, বন্ধ করলে শেষ।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+msgid ""
+"A shop is a register: open it to start selling, close it at the end of the "
+"day."
+msgstr "শপ মানে একটি রেজিস্টার: বিক্রি শুরু করতে খুলুন, দিনশেষে বন্ধ করুন।"
+
+#. module: pos_modern
+#: model:ir.model.fields.selection,name:pos_modern.selection__pos_config__pm_receipt_width__a4
+msgid "A4 / Letter"
+msgstr "A4 / লেটার"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_modifier__active
+msgid "Active"
+msgstr "চালু"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Add"
+msgstr "যোগ করুন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Add a product: name, code or barcode"
+msgstr "পণ্য যোগ করুন: নাম, কোড বা বারকোড"
+
+#. module: pos_modern
+#: model_terms:ir.actions.act_window,help:pos_modern.action_modifiers
+msgid "Add extras and choices"
+msgstr "এক্সট্রা ও পছন্দ যোগ করুন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+msgid "Add your first customer"
+msgstr "প্রথম কাস্টমার যোগ করুন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+msgid "Add your first product"
+msgstr "প্রথম পণ্য যোগ করুন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Address"
+msgstr "ঠিকানা"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "After saving, open its register from its card on the Shops page."
+msgstr "সেভ করার পর শপ পেজে এর কার্ড থেকে রেজিস্টার খুলুন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "All"
+msgstr "সব"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "All orders"
+msgstr "সব অর্ডার"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Amount"
+msgstr "পরিমাণ (টাকা)"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "Asked at the counter for the products or categories you pick."
+msgstr "যে পণ্য বা ক্যাটাগরি বাছবেন, কাউন্টারে সেগুলোর জন্য জিজ্ঞেস করা হবে।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Average bill"
+msgstr "গড় বিল"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+msgid "Back"
+msgstr "ফিরে যান"
+
+#. module: pos_modern
+#: model:ir.model.fields,help:pos_modern.field_pos_config__pm_quick_cash
+msgid ""
+"Bank notes shown as one-tap buttons on the payment panel, comma separated."
+msgstr "পেমেন্ট প্যানেলে এক ট্যাপের নোট বাটন, কমা দিয়ে লিখুন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Barcode"
+msgstr "বারকোড"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+#: model:ir.model.fields,field_description:pos_modern.field_pos_config__pm_label_size
+msgid "Barcode labels"
+msgstr "বারকোড লেবেল"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "Best sellers"
+msgstr "বেস্ট সেলার"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Bill"
+msgstr "বিল"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_counter.py:0
+#: code:addons/pos_modern/models/pos_counter.py:0
+msgid "Bill #%s"
+msgstr "বিল #%s"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+msgid "Bill discount"
+msgstr "বিল ডিসকাউন্ট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Bill discount %"
+msgstr "বিল ডিসকাউন্ট %"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+msgid "Bill held: %s"
+msgstr "বিল হোল্ড হয়েছে: %s"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_config__pm_block_no_stock
+msgid "Block selling without stock"
+msgstr "স্টক ছাড়া বিক্রি বন্ধ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "By cashier"
+msgstr "ক্যাশিয়ার অনুযায়ী"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "By payment method"
+msgstr "পেমেন্ট মেথড অনুযায়ী"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "By shop"
+msgstr "শপ অনুযায়ী"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Cancel"
+msgstr "বাতিল"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos_modern/static/src/js/dashboard.js:0
+msgid "Cancelled"
+msgstr "বাতিল হয়েছে"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_menu.py:0
+#: code:addons/pos_modern/models/pos_menu.py:0
+msgid ""
+"Card and mobile payments cannot be more than the bill: only cash gives "
+"change."
+msgstr "কার্ড ও মোবাইল পেমেন্ট বিলের বেশি হতে পারে না: চেঞ্জ শুধু ক্যাশে।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_hold__payload
+msgid "Cart"
+msgstr "কার্ট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Cash counted in the drawer"
+msgstr "ড্রয়ারে গোনা ক্যাশ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Cash drawer"
+msgstr "ক্যাশ ড্রয়ার"
+
+#. module: pos_modern
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_counter.py:0
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/models/pos_counter.py:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Cash in"
+msgstr "ক্যাশ ইন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Cash in / out"
+msgstr "ক্যাশ ইন / আউট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Cash in or out"
+msgstr "ক্যাশ ইন না আউট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Cash in the drawer"
+msgstr "ড্রয়ারে ক্যাশ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/counter/dialogs.js:0
+#: code:addons/pos_modern/static/src/js/counter/dialogs.js:0
+msgid "Cash move saved"
+msgstr "ক্যাশ মুভ সেভ হয়েছে"
+
+#. module: pos_modern
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_counter.py:0
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/models/pos_counter.py:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Cash out"
+msgstr "ক্যাশ আউট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Cash sales"
+msgstr "ক্যাশ বিক্রি"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "Cash, card, customer account…"
+msgstr "ক্যাশ, কার্ড, কাস্টমার অ্যাকাউন্ট…"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_hold__user_id
+msgid "Cashier"
+msgstr "ক্যাশিয়ার"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_config__pm_discount_limit
+msgid "Cashier discount limit (%)"
+msgstr "ক্যাশিয়ারের ছাড়ের সীমা (%)"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Cashiers"
+msgstr "ক্যাশিয়ার"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Categories"
+msgstr "ক্যাটাগরি"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+msgid ""
+"Categories are the tabs of the register's product screen: Drinks, Food, "
+"Desserts…"
+msgstr ""
+"ক্যাটাগরি হলো রেজিস্টারের পণ্য স্ক্রিনের ট্যাব: পানীয়, খাবার, ডেজার্ট…"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos_modern/static/src/js/drawer.js:0
+#: model_terms:ir.ui.view,arch_db:pos_modern.category_list
+msgid "Category"
+msgstr "ক্যাটাগরি"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Category name"
+msgstr "ক্যাটাগরির নাম"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Change"
+msgstr "চেঞ্জ (ফেরত)"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "Choice"
+msgstr "পছন্দ"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_menu.py:0
+#: code:addons/pos_modern/models/pos_menu.py:0
+msgid "Choose a payment method of this shop."
+msgstr "এই শপের একটি পেমেন্ট মেথড বাছুন।"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_menu.py:0
+#: code:addons/pos_modern/models/pos_menu.py:0
+msgid "Choose how the customer pays."
+msgstr "কাস্টমার কীভাবে দেবেন বাছুন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "City"
+msgstr "শহর"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Clear"
+msgstr "মুছুন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Close"
+msgstr "বন্ধ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Close the session (Z)"
+msgstr "সেশন বন্ধ করুন (Z)"
+
+#. module: pos_modern
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_order.py:0
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/models/pos_order.py:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "Closed"
+msgstr "বন্ধ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Closing"
+msgstr "বন্ধ হচ্ছে"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "Closing control"
+msgstr "ক্লোজিং কন্ট্রোল"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Closing note"
+msgstr "ক্লোজিং নোট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "Coin / note"
+msgstr "কয়েন / নোট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Colour"
+msgstr "রং"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_hold__company_id
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_modifier__company_id
+msgid "Company"
+msgstr "কোম্পানি"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Company name"
+msgstr "কোম্পানির নাম"
+
+#. module: pos_modern
+#: model:ir.model,name:pos_modern.model_res_config_settings
+msgid "Config Settings"
+msgstr "কনফিগ সেটিংস"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "Configure"
+msgstr "কনফিগার"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Counted"
+msgstr "গোনা হয়েছে"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.pos_config_counter_form
+msgid "Counter"
+msgstr "কাউন্টার"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+#: model_terms:ir.ui.view,arch_db:pos_modern.pos_config_counter_form
+msgid "Counter settings"
+msgstr "কাউন্টার সেটিংস"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_menu.py:0
+#: code:addons/pos_modern/models/pos_menu.py:0
+msgid "Counter settings · %s"
+msgstr "কাউন্টার সেটিংস · %s"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+msgid "Create a category"
+msgstr "ক্যাটাগরি তৈরি করুন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Create a shop (a register) to start selling."
+msgstr "বিক্রি শুরু করতে একটি শপ (রেজিস্টার) তৈরি করুন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Create in-store barcodes"
+msgstr "দোকানের নিজস্ব বারকোড তৈরি করুন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+msgid "Create your first shop"
+msgstr "প্রথম শপ তৈরি করুন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Create “"
+msgstr "তৈরি করুন “"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_hold__create_uid
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_modifier__create_uid
+msgid "Created by"
+msgstr "তৈরি করেছেন"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_hold__create_date
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_modifier__create_date
+msgid "Created on"
+msgstr "তৈরির সময়"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_hold__currency_id
+msgid "Currency"
+msgstr "মুদ্রা"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_hold__partner_id
+msgid "Customer"
+msgstr "কাস্টমার"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/counter/dialogs.js:0
+#: code:addons/pos_modern/static/src/js/counter/dialogs.js:0
+msgid "Customer %s created"
+msgstr "কাস্টমার %s তৈরি হয়েছে"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Customer: name or mobile (F6)"
+msgstr "কাস্টমার: নাম বা মোবাইল (F6)"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+#: model:ir.actions.client,name:pos_modern.action_customers
+#: model:ir.ui.menu,name:pos_modern.menu_customers
+msgid "Customers"
+msgstr "কাস্টমার"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+msgid ""
+"Customers can be picked at the register, for invoices, loyalty and their "
+"history."
+msgstr "রেজিস্টারে কাস্টমার বাছা যায় — ইনভয়েস, লয়ালটি ও আগের কেনার জন্য।"
+
+#. module: pos_modern
+#: model:ir.actions.client,name:pos_modern.action_dashboard
+#: model:ir.ui.menu,name:pos_modern.menu_dashboard
+msgid "Dashboard"
+msgstr "ড্যাশবোর্ড"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Date"
+msgstr "তারিখ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Day end"
+msgstr "দিনশেষ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Decrease"
+msgstr "কমান"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Delete"
+msgstr "মুছে ফেলুন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Difference"
+msgstr "পার্থক্য"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Difference:"
+msgstr "পার্থক্য:"
+
+#. module: pos_modern
+#: model:ir.model.fields,help:pos_modern.field_pos_config__pm_manager_pin
+msgid "Digits typed by a manager at the counter to approve a big discount."
+msgstr "বড় ছাড় অনুমোদনে ম্যানেজার কাউন্টারে যে সংখ্যা টাইপ করেন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "Dine in, takeaway, delivery… each with its own pricelist and taxes."
+msgstr "ডাইন-ইন, টেকঅ্যাওয়ে, ডেলিভারি… প্রত্যেকটির নিজস্ব প্রাইসলিস্ট ও কর।"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.pos_config_counter_form
+msgid "Discard"
+msgstr "বাতিল"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Discount"
+msgstr "ছাড়"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Discount %"
+msgstr "ছাড় %"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: model_terms:ir.ui.view,arch_db:pos_modern.pos_config_counter_form
+msgid "Discounts"
+msgstr "ছাড়"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_ir_ui_menu__display_name
+#: model:ir.model.fields,field_description:pos_modern.field_pos_config__display_name
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_hold__display_name
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_modifier__display_name
+#: model:ir.model.fields,field_description:pos_modern.field_pos_order__display_name
+#: model:ir.model.fields,field_description:pos_modern.field_pos_session__display_name
+#: model:ir.model.fields,field_description:pos_modern.field_res_config_settings__display_name
+msgid "Display Name"
+msgstr "নাম"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Drawer actions"
+msgstr "ড্রয়ার অ্যাকশন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "EXCHANGE"
+msgstr "বদল (এক্সচেঞ্জ)"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Email"
+msgstr "ইমেইল"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+msgid ""
+"Every payment taken at the register, by method: cash, card, customer "
+"account…"
+msgstr ""
+"রেজিস্টারে নেওয়া সব পেমেন্ট, মেথড অনুযায়ী: ক্যাশ, কার্ড, কাস্টমার "
+"অ্যাকাউন্ট…"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/counter/tools.js:0
+#: code:addons/pos_modern/static/src/js/counter/tools.js:0
+msgid "Everything of this bill was already returned."
+msgstr "এই বিলের সব কিছু আগেই ফেরত হয়েছে।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Exact"
+msgstr "ঠিক টাকা"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Expected"
+msgstr "প্রত্যাশিত"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_modifier__price_extra
+msgid "Extra price"
+msgstr "বাড়তি দাম"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Find"
+msgstr "খুঁজুন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Finish closing it (Day end), then open a new one."
+msgstr "আগে বন্ধ করা শেষ করুন (দিনশেষ), তারপর নতুন খুলুন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "Floor"
+msgstr "ফ্লোর"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Floors"
+msgstr "ফ্লোর"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos_modern/static/src/js/drawer.js:0
+msgid ""
+"Found at the register by name, phone or email. Everything else is on the "
+"contact's page."
+msgstr "নাম, ফোন বা ইমেইলে রেজিস্টারে খোঁজা যায়। বাকি সব কন্টাক্টের পেজে।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Free"
+msgstr "ফ্রি"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Full name"
+msgstr "পুরো নাম"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+msgid "Give back exactly %s."
+msgstr "ঠিক %s ফেরত দিন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Give back ·"
+msgstr "ফেরত দিন ·"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos_modern/static/src/js/drawer.js:0
+msgid "Give the category a name."
+msgstr "ক্যাটাগরির নাম দিন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos_modern/static/src/js/drawer.js:0
+msgid "Give the customer a name."
+msgstr "কাস্টমারের নাম দিন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos_modern/static/src/js/drawer.js:0
+msgid "Give the product a name."
+msgstr "পণ্যের নাম দিন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos_modern/static/src/js/drawer.js:0
+msgid "Give the shop a name."
+msgstr "শপের নাম দিন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Go to Shops"
+msgstr "শপে যান"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_modifier__group_name
+msgid "Group"
+msgstr "গ্রুপ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Held"
+msgstr "হোল্ড"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Held bill"
+msgstr "হোল্ড বিল"
+
+#. module: pos_modern
+#: model:ir.model,name:pos_modern.model_pos_modern_hold
+msgid "Held bill (Modern POS)"
+msgstr "হোল্ড বিল (Modern POS)"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+msgid "Held bills"
+msgstr "হোল্ড করা বিল"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Held bills (F7)"
+msgstr "হোল্ড করা বিল (F7)"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Hold"
+msgstr "হোল্ড"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_ir_ui_menu__id
+#: model:ir.model.fields,field_description:pos_modern.field_pos_config__id
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_hold__id
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_modifier__id
+#: model:ir.model.fields,field_description:pos_modern.field_pos_order__id
+#: model:ir.model.fields,field_description:pos_modern.field_pos_session__id
+#: model:ir.model.fields,field_description:pos_modern.field_res_config_settings__id
+msgid "ID"
+msgstr "ID"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Increase"
+msgstr "বাড়ান"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Internal reference"
+msgstr "ইন্টারনাল কোড"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos_modern/static/src/js/dashboard.js:0
+msgid "Invoiced"
+msgstr "ইনভয়েস হয়েছে"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Item"
+msgstr "আইটেম"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_hold__item_count
+msgid "Items"
+msgstr "আইটেম"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "Journal"
+msgstr "জার্নাল"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Kept offline"
+msgstr "অফলাইনে রাখা হয়েছে"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "Key figures"
+msgstr "মূল হিসাব"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_hold__name
+msgid "Label"
+msgstr "লেবেল"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_hold__write_uid
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_modifier__write_uid
+msgid "Last Updated by"
+msgstr "শেষ আপডেট করেছেন"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_hold__write_date
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_modifier__write_date
+msgid "Last Updated on"
+msgstr "শেষ আপডেট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "Latest orders"
+msgstr "সাম্প্রতিক অর্ডার"
+
+#. module: pos_modern
+#: model:ir.model.fields,help:pos_modern.field_pos_config__pm_discount_limit
+msgid ""
+"Line or bill discounts above this need a manager (Point of Sale "
+"administrator) or the manager PIN. 100 = no limit."
+msgstr ""
+"এর বেশি লাইন বা বিল ছাড়ে ম্যানেজার (POS অ্যাডমিন) বা ম্যানেজার PIN লাগবে। "
+"১০০ = সীমা নেই।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Lot:"
+msgstr "লট:"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_config__pm_low_stock
+msgid "Low stock under"
+msgstr "কম স্টক (এর নিচে)"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Lower numbers come first at the register."
+msgstr "ছোট সংখ্যা রেজিস্টারে আগে আসে।"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_config__pm_manager_pin
+msgid "Manager PIN"
+msgstr "ম্যানেজার PIN"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+#: model:ir.actions.client,name:pos_modern.action_menu
+#: model:ir.model,name:pos_modern.model_ir_ui_menu
+#: model:ir.ui.menu,name:pos_modern.menu_menu
+msgid "Menu"
+msgstr "মেনু"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Mobile"
+msgstr "মোবাইল"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "Modifier"
+msgstr "মডিফায়ার"
+
+#. module: pos_modern
+#: model:ir.actions.act_window,name:pos_modern.action_modifiers
+#: model:ir.ui.menu,name:pos_modern.menu_modifiers
+#: model_terms:ir.ui.view,arch_db:pos_modern.pos_modern_modifier_list
+msgid "Modifiers"
+msgstr "মডিফায়ার"
+
+#. module: pos_modern
+#: model:ir.ui.menu,name:pos_modern.menu_more
+msgid "More"
+msgstr "আরও"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "More fields"
+msgstr "আরও ফিল্ড"
+
+#. module: pos_modern
+#: model:ir.model.fields,help:pos_modern.field_pos_config__pm_product_limit
+msgid "More products are still found by the search box (from the server)."
+msgstr "বাকি পণ্য সার্চ বক্সে (সার্ভার থেকে) পাওয়া যাবে।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "NET"
+msgstr "নিট"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_modifier__name
+msgid "Name"
+msgstr "নাম"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "Needs your attention"
+msgstr "আপনার মনোযোগ দরকার"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos/pos_modern/static/src/js/sidebar.js:0
+#: code:addons/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/sidebar.js:0
+msgid "New category"
+msgstr "নতুন ক্যাটাগরি"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "New coin / note"
+msgstr "নতুন কয়েন / নোট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos/pos_modern/static/src/js/sidebar.js:0
+#: code:addons/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/sidebar.js:0
+msgid "New customer"
+msgstr "নতুন কাস্টমার"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "New floor"
+msgstr "নতুন ফ্লোর"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "New modifier"
+msgstr "নতুন মডিফায়ার"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "New note model"
+msgstr "নতুন নোট মডেল"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "New order"
+msgstr "নতুন অর্ডার"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "New payment method"
+msgstr "নতুন পেমেন্ট পদ্ধতি"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "New preset"
+msgstr "নতুন প্রিসেট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos/pos_modern/static/src/js/sidebar.js:0
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/sidebar.js:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "New product"
+msgstr "নতুন পণ্য"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos_modern/static/src/js/drawer.js:0
+msgid "New record"
+msgstr "নতুন রেকর্ড"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos/pos_modern/static/src/js/sidebar.js:0
+#: code:addons/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/sidebar.js:0
+msgid "New shop"
+msgstr "নতুন শপ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+msgid "No connection: the order is kept and will be sent automatically."
+msgstr "সংযোগ নেই: অর্ডার রাখা হয়েছে, নিজে থেকেই পাঠানো হবে।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "No held bill"
+msgstr "কোনো হোল্ড বিল নেই"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "No match"
+msgstr "মিল নেই"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+msgid "No ongoing order"
+msgstr "চলমান অর্ডার নেই"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "No open session"
+msgstr "কোনো খোলা সেশন নেই"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+msgid "No order yet"
+msgstr "এখনো অর্ডার নেই"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/counter/tools.js:0
+#: code:addons/pos_modern/static/src/js/counter/tools.js:0
+msgid "No paid bill found for “%s”."
+msgstr "“%s”-এর কোনো পরিশোধিত বিল পাওয়া যায়নি।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "No payment yet"
+msgstr "এখনো পেমেন্ট নেই"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+msgid "No product found for “%s”"
+msgstr "“%s”-এর জন্য কোনো পণ্য নেই"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "No product here"
+msgstr "এখানে কোনো পণ্য নেই"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+msgid "No refund"
+msgstr "কোনো রিফান্ড নেই"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "No sale yet"
+msgstr "এখনো বিক্রি নেই"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+msgid "No session yet"
+msgstr "এখনো সেশন নেই"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "No shop yet"
+msgstr "এখনো কোনো শপ নেই"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "No sugar, gift wrap…"
+msgstr "চিনি ছাড়া, গিফট র‍্যাপ…"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "No table yet"
+msgstr "এখনো টেবিল নেই"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "None picked = every shop."
+msgstr "কিছু না বাছলে = সব শপ।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Note"
+msgstr "নোট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "Note model"
+msgstr "নোট মডেল"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+msgid "OFFLINE-%s"
+msgstr "অফলাইন-%s"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Occupied"
+msgstr "ভরা"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Offline"
+msgstr "অফলাইন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos_modern/static/src/js/dashboard.js:0
+msgid "Ongoing"
+msgstr "চলমান"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+#: model:ir.actions.client,name:pos_modern.action_ongoing
+#: model:ir.ui.menu,name:pos_modern.menu_ongoing
+msgid "Ongoing Orders"
+msgstr "চলমান অর্ডার"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_order.py:0
+#: code:addons/pos_modern/models/pos_order.py:0
+msgid "Ongoing orders (not paid yet)"
+msgstr "চলমান অর্ডার (এখনো পরিশোধ হয়নি)"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_menu.py:0
+#: code:addons/pos_modern/models/pos_menu.py:0
+msgid "Only %(qty)s of %(product)s can still be returned from %(order)s."
+msgstr "%(order)s থেকে %(product)s আর মাত্র %(qty)s টি ফেরত নেওয়া যাবে।"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_menu.py:0
+#: code:addons/pos_modern/models/pos_menu.py:0
+msgid "Only cash gives change: lower the amount."
+msgstr "চেঞ্জ শুধু ক্যাশে: পরিমাণ কমান।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Open"
+msgstr "খোলা"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "Open a register"
+msgstr "একটি রেজিস্টার খুলুন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "Open a shop and start selling."
+msgstr "শপ খুলে বিক্রি শুরু করুন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Open full form"
+msgstr "পুরো ফর্ম খুলুন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Open session"
+msgstr "সেশন খুলুন"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_menu.py:0
+#: code:addons/pos_modern/models/pos_menu.py:0
+msgid "Open the session of %s first."
+msgstr "আগে %s-এর সেশন খুলুন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Open the shop to sell"
+msgstr "বিক্রি করতে শপ খুলুন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Opened"
+msgstr "খোলা হয়েছে"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "Opened by"
+msgstr "খুলেছেন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Opening"
+msgstr "শুরু"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "Opening control"
+msgstr "ওপেনিং কন্ট্রোল"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Optional"
+msgstr "ঐচ্ছিক"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Order"
+msgstr "অর্ডার"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_menu.py:0
+#: code:addons/pos_modern/models/pos_menu.py:0
+msgid "Order %s"
+msgstr "অর্ডার %s"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+msgid "Order %s paid"
+msgstr "অর্ডার %s পরিশোধিত"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Order note"
+msgstr "অর্ডার নোট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Order paid"
+msgstr "অর্ডার পরিশোধিত"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: model:ir.actions.client,name:pos_modern.action_orders
+#: model:ir.ui.menu,name:pos_modern.menu_orders
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "Orders"
+msgstr "অর্ডার"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "Orders <i class=\"fa fa-angle-right\" title=\"Orders\"/>"
+msgstr "অর্ডার <i class=\"fa fa-angle-right\" title=\"অর্ডার\"/>"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+msgid "Orders are made at the register. Open a shop and start selling."
+msgstr "অর্ডার হয় রেজিস্টারে। একটি শপ খুলে বিক্রি শুরু করুন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+msgid "Orders refunded at the register (negative amounts) show up here."
+msgstr "রেজিস্টারে রিফান্ড করা অর্ডার (ঋণাত্মক) এখানে দেখাবে।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+msgid "Orders started at the register and not paid yet show up here."
+msgstr "রেজিস্টারে শুরু হয়ে এখনো পরিশোধ হয়নি এমন অর্ডার এখানে দেখাবে।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos_modern/static/src/js/dashboard.js:0
+msgid "Orders with a customer"
+msgstr "কাস্টমারসহ অর্ডার"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+msgid "Out of stock"
+msgstr "স্টক শেষ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Paid"
+msgstr "পরিশোধ"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_order.py:0
+#: code:addons/pos_modern/models/pos_order.py:0
+msgid "Paid orders not posted yet"
+msgstr "পরিশোধিত কিন্তু পোস্ট হয়নি"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "Paid orders per month, with last year for comparison"
+msgstr "মাসে পরিশোধিত অর্ডার, গত বছরের সাথে তুলনা"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Parent category"
+msgstr "মূল ক্যাটাগরি"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Pay"
+msgstr "পেমেন্ট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Payer's mobile number"
+msgstr "পেয়ারের মোবাইল নম্বর"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Payment"
+msgstr "পেমেন্ট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "Payment method"
+msgstr "পেমেন্ট পদ্ধতি"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Payment methods"
+msgstr "পেমেন্ট মেথড"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: model:ir.actions.client,name:pos_modern.action_payments
+#: model:ir.ui.menu,name:pos_modern.menu_payments
+msgid "Payments"
+msgstr "পেমেন্ট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Person"
+msgstr "ব্যক্তি"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Phone"
+msgstr "ফোন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Phone:"
+msgstr "ফোন:"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid ""
+"Pick at least one PoS category or product: that is where the counter asks "
+"for it."
+msgstr ""
+"অন্তত একটি POS ক্যাটাগরি বা পণ্য বাছুন: সেগুলোতেই কাউন্টার জিজ্ঞেস করবে।"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_modifier__single
+msgid "Pick one in the group"
+msgstr "গ্রুপে একটি বাছাই"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+#: model:ir.ui.menu,name:pos_modern.menu_categories
+msgid "PoS Product Categories"
+msgstr "POS পণ্য ক্যাটাগরি"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_modifier__pos_categ_ids
+msgid "PoS categories"
+msgstr "POS ক্যাটাগরি"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/sidebar.js:0
+#: code:addons/pos_modern/static/src/js/sidebar.js:0
+msgid "PoS order"
+msgstr "POS অর্ডার"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Point of Sale"
+msgstr "পয়েন্ট অব সেল"
+
+#. module: pos_modern
+#: model:ir.model,name:pos_modern.model_pos_config
+msgid "Point of Sale Configuration"
+msgstr "POS কনফিগারেশন"
+
+#. module: pos_modern
+#: model:ir.model,name:pos_modern.model_pos_order
+msgid "Point of Sale Orders"
+msgstr "POS অর্ডার"
+
+#. module: pos_modern
+#: model:ir.model,name:pos_modern.model_pos_session
+msgid "Point of Sale Session"
+msgstr "POS সেশন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos_modern/static/src/js/dashboard.js:0
+msgid "Posted"
+msgstr "পোস্ট হয়েছে"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "Preset"
+msgstr "প্রিসেট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Press Enter to search all the products."
+msgstr "সব পণ্যে খুঁজতে Enter চাপুন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Price"
+msgstr "দাম"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Print"
+msgstr "প্রিন্ট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Print labels"
+msgstr "লেবেল প্রিন্ট"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_config__pm_auto_print
+msgid "Print the receipt after payment"
+msgstr "পেমেন্টের পর রিসিট প্রিন্ট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Printed"
+msgstr "প্রিন্ট সময়"
+
+#. module: pos_modern
+#: model:ir.actions.client,name:pos_modern.action_categories
+#: model_terms:ir.ui.view,arch_db:pos_modern.category_list
+msgid "Product Categories"
+msgstr "পণ্য ক্যাটাগরি"
+
+#. module: pos_modern
+#: model:ir.model.fields,help:pos_modern.field_pos_config__pm_low_stock
+msgid "Product cards turn amber when the stock is at or under this quantity."
+msgstr "স্টক এই পরিমাণ বা তার কম হলে পণ্য কার্ড হলুদ হবে।"
+
+#. module: pos_modern
+#: model:ir.model,name:pos_modern.model_pos_modern_modifier
+msgid "Product modifier (Modern POS)"
+msgstr "পণ্য মডিফায়ার (Modern POS)"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Product name"
+msgstr "পণ্যের নাম"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+#: model:ir.actions.client,name:pos_modern.action_products
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_modifier__product_tmpl_ids
+#: model:ir.ui.menu,name:pos_modern.menu_products
+msgid "Products"
+msgstr "পণ্য"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Products \"Available in POS\" show up on this menu."
+msgstr "\"POS-এ পাওয়া যায়\" পণ্য এই মেনুতে দেখাবে।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+msgid ""
+"Products available in the Point of Sale are the ones the cashier can sell."
+msgstr "POS-এ পাওয়া যায় এমন পণ্যই ক্যাশিয়ার বিক্রি করতে পারেন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "Products by revenue"
+msgstr "আয় অনুযায়ী পণ্য"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_config__pm_product_limit
+msgid "Products loaded on the counter"
+msgstr "কাউন্টারে লোড হওয়া পণ্য"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Put the bill aside (F4)"
+msgstr "বিল সরিয়ে রাখুন (F4)"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Qty"
+msgstr "পরিমাণ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Quantity"
+msgstr "পরিমাণ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "Quick cash buttons and the cash count at closing: ৳1000, ৳500, ৳100…"
+msgstr "কুইক ক্যাশ বাটন ও ক্লোজিংয়ে ক্যাশ গোনা: ৳১০০০, ৳৫০০, ৳১০০…"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_config__pm_quick_cash
+msgid "Quick cash notes"
+msgstr "কুইক ক্যাশ নোট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "RECEIPT"
+msgstr "রসিদ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "REFUND"
+msgstr "রিফান্ড"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "REPORT"
+msgstr "রিপোর্ট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "Ready-made notes the cashier adds in one tap: less spicy, no onion…"
+msgstr "এক ট্যাপে যোগ করার তৈরি নোট: ঝাল কম, পেঁয়াজ ছাড়া…"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Reason (tea, change…)"
+msgstr "কারণ (চা, খুচরা…)"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+#: model_terms:ir.ui.view,arch_db:pos_modern.pos_config_counter_form
+msgid "Receipt"
+msgstr "রসিদ"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_config__pm_receipt_width
+msgid "Receipt paper"
+msgstr "রসিদের কাগজ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "Refresh"
+msgstr "রিফ্রেশ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: model:ir.actions.client,name:pos_modern.action_refunds
+#: model:ir.ui.menu,name:pos_modern.menu_refunds
+msgid "Refunds"
+msgstr "রিফান্ড"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Refunds ("
+msgstr "রিফান্ড ("
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_order.py:0
+#: code:addons/pos_modern/models/pos_order.py:0
+msgid "Refunds in the last 7 days"
+msgstr "গত ৭ দিনের রিফান্ড"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Remove"
+msgstr "সরান"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Remove the customer"
+msgstr "কাস্টমার সরান"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Remove the table"
+msgstr "টেবিল সরান"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+msgid "Reprint"
+msgstr "আবার প্রিন্ট"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_order.py:0
+#: code:addons/pos_modern/models/pos_order.py:0
+msgid "Rescue sessions"
+msgstr "রেসকিউ সেশন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Resume"
+msgstr "আবার শুরু"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Return"
+msgstr "ফেরত"
+
+#. module: pos_modern
+#. odoo-javascript
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_menu.py:0
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/models/pos_menu.py:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+msgid "Return from %s"
+msgstr "%s থেকে ফেরত"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Return or exchange an earlier bill"
+msgstr "আগের বিল ফেরত বা বদল"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "Revenue in"
+msgstr "আয়"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "Revenue of each register"
+msgstr "প্রতিটি রেজিস্টারের আয়"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Rounding"
+msgstr "রাউন্ডিং"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Sales"
+msgstr "বিক্রি"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "Sales analysis"
+msgstr "বিক্রি বিশ্লেষণ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "Sales at your registers"
+msgstr "আপনার রেজিস্টারের বিক্রি"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Sales price"
+msgstr "বিক্রয় মূল্য"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+#: model_terms:ir.ui.view,arch_db:pos_modern.pos_config_counter_form
+msgid "Save"
+msgstr "সেভ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Saved offline — will be synced"
+msgstr "অফলাইনে সেভ — পরে সিঙ্ক হবে"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Saving…"
+msgstr "সেভ হচ্ছে…"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Scan or type the barcode"
+msgstr "বারকোড স্ক্যান বা টাইপ করুন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Scan or type the receipt number"
+msgstr "রসিদ নম্বর স্ক্যান বা টাইপ করুন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Scanning it at the register adds the product to the order."
+msgstr "রেজিস্টারে স্ক্যান করলে পণ্য অর্ডারে যোগ হয়।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+msgid "Search"
+msgstr "খুঁজুন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Search a product above, or open this from a cart to print its items."
+msgstr "উপরে পণ্য খুঁজুন, অথবা কার্ট থেকে খুললে কার্টের আইটেম প্রিন্ট হবে।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Search or scan… (F2)"
+msgstr "খুঁজুন বা স্ক্যান… (F2)"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Search products"
+msgstr "পণ্য খুঁজুন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Send the orders kept offline"
+msgstr "অফলাইনের অর্ডার পাঠান"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_modifier__sequence
+msgid "Sequence"
+msgstr "ক্রম"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Session"
+msgstr "সেশন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Session closed. The Z report was printed."
+msgstr "সেশন বন্ধ হয়েছে। Z রিপোর্ট প্রিন্ট হয়েছে।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "Session status and orders in the current session"
+msgstr "সেশনের অবস্থা ও চলতি সেশনের অর্ডার"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+#: model:ir.actions.client,name:pos_modern.action_sessions
+#: model:ir.ui.menu,name:pos_modern.menu_sessions
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "Sessions"
+msgstr "সেশন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "Sessions and orders · click a line to see them"
+msgstr "সেশন ও অর্ডার · দেখতে লাইনে ক্লিক করুন"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_order.py:0
+#: code:addons/pos_modern/models/pos_order.py:0
+msgid "Sessions open for more than a day"
+msgstr "এক দিনের বেশি খোলা সেশন"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_order.py:0
+#: code:addons/pos_modern/models/pos_order.py:0
+msgid "Sessions waiting to be closed"
+msgstr "বন্ধের অপেক্ষায় সেশন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos/pos_modern/static/src/js/sidebar.js:0
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/sidebar.js:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_hold__config_id
+msgid "Shop"
+msgstr "শপ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Shop name"
+msgstr "শপের নাম"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.pos_config_counter_form
+msgid "Shop name, address, BIN, hotline…"
+msgstr "শপের নাম, ঠিকানা, BIN, হটলাইন…"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/pages.js:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+#: model:ir.actions.client,name:pos_modern.action_shops
+#: model:ir.ui.menu,name:pos_modern.menu_shops
+msgid "Shops"
+msgstr "শপ"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_config__pm_show_stock
+msgid "Show stock on product cards"
+msgstr "পণ্য কার্ডে স্টক দেখান"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Signature: ____________________"
+msgstr "স্বাক্ষর: ____________________"
+
+#. module: pos_modern
+#: model:ir.model.fields,help:pos_modern.field_pos_config__pm_label_size
+msgid "Size of the barcode labels / hand tags printed from the counter."
+msgstr "কাউন্টার থেকে প্রিন্ট হওয়া বারকোড লেবেল / হ্যান্ড ট্যাগের মাপ।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos_modern/static/src/js/drawer.js:0
+msgid ""
+"Sold at the register right away. Taxes, variants, stock and pictures are on "
+"the product's page."
+msgstr ""
+"সাথে সাথে রেজিস্টারে বিক্রি। ট্যাক্স, ভ্যারিয়েন্ট, স্টক ও ছবি পণ্যের পেজে।"
+
+#. module: pos_modern
+#: model:ir.model.fields,help:pos_modern.field_pos_modern_modifier__group_name
+msgid "Spice, Size, Toppings… one choice per group when 'Pick one' is set."
+msgstr "ঝাল, সাইজ, টপিং… 'একটি বাছাই' চালু থাকলে গ্রুপে একটিই।"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.pos_modern_modifier_list
+msgid "Spice, Size…"
+msgstr "ঝাল, সাইজ…"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Start the session of"
+msgstr "সেশন শুরু করুন:"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos_modern/static/src/js/dashboard.js:0
+msgid "Status"
+msgstr "অবস্থা"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Still due"
+msgstr "এখনো বাকি"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.pos_config_counter_form
+msgid "Stock"
+msgstr "স্টক"
+
+#. module: pos_modern
+#: model:ir.model.fields,help:pos_modern.field_pos_config__pm_block_no_stock
+msgid "Storable products with no stock left cannot be added to the cart."
+msgstr "স্টক শেষ এমন পণ্য কার্টে যোগ করা যাবে না।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Street"
+msgstr "রাস্তা"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Subtotal"
+msgstr "সাবটোটাল"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "TOTAL"
+msgstr "মোট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_hold__table_ref
+msgid "Table"
+msgstr "টেবিল"
+
+#. module: pos_modern
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_hold__table_name
+msgid "Table name"
+msgstr "টেবিলের নাম"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+#: model:ir.actions.client,name:pos_modern.action_tables
+#: model:ir.ui.menu,name:pos_modern.menu_tables
+msgid "Tables"
+msgstr "টেবিল"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Take back"
+msgstr "ফেরত নিন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid ""
+"Taken back items go into the cart with a minus. Add the new items for an "
+"exchange: only the difference is paid or given back."
+msgstr ""
+"ফেরত নেওয়া আইটেম কার্টে মাইনাসে যায়। বদলের জন্য নতুন আইটেম যোগ করুন: শুধু "
+"পার্থক্য নেওয়া বা ফেরত দেওয়া হবে।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Tap a product or scan a barcode."
+msgstr "পণ্যে ট্যাপ করুন বা বারকোড স্ক্যান করুন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Tax"
+msgstr "ট্যাক্স"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Tax ID"
+msgstr "ট্যাক্স আইডি"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.pos_config_counter_form
+msgid "Thank you! Exchange within 7 days with this receipt."
+msgstr "ধন্যবাদ! এই রসিদসহ ৭ দিনের মধ্যে বদলানো যাবে।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Thank you, come again!"
+msgstr "ধন্যবাদ, আবার আসবেন!"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_menu.py:0
+#: code:addons/pos_modern/models/pos_menu.py:0
+msgid "The cart is empty."
+msgstr "কার্ট খালি।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "The discount is over the cashier's limit. A manager types the PIN."
+msgstr "ছাড় ক্যাশিয়ারের সীমার বেশি। ম্যানেজার PIN দিন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "The discount is over your limit: a manager PIN is asked."
+msgstr "ছাড় আপনার সীমার বেশি: ম্যানেজার PIN লাগবে।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "The most recent sales at your registers · click one to open it"
+msgstr "রেজিস্টারের সাম্প্রতিক বিক্রি · খুলতে ক্লিক করুন"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_menu.py:0
+#: code:addons/pos_modern/models/pos_menu.py:0
+msgid "The order could not be saved."
+msgstr "অর্ডার সেভ করা যায়নি।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos_modern/static/src/js/drawer.js:0
+msgid "The price cannot be negative."
+msgstr "দাম ঋণাত্মক হতে পারে না।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "The server cannot be reached: orders are kept in this browser"
+msgstr "সার্ভারে পৌঁছানো যাচ্ছে না: অর্ডার এই ব্রাউজারে রাখা হচ্ছে"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/counter/dialogs.js:0
+#: code:addons/pos_modern/static/src/js/counter/dialogs.js:0
+msgid "The session could not be closed."
+msgstr "সেশন বন্ধ করা যায়নি।"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid ""
+"The session has been opened for an unusually long period. Please consider "
+"closing."
+msgstr "সেশনটি অস্বাভাবিক দীর্ঘ সময় খোলা। বন্ধ করার কথা ভাবুন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "The session is being closed"
+msgstr "সেশন বন্ধ হচ্ছে"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos_modern/static/src/js/drawer.js:0
+msgid "The tabs of the register's product screen."
+msgstr "রেজিস্টারের পণ্য স্ক্রিনের ট্যাব।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "The tabs where the cashier finds it."
+msgstr "যে ট্যাবে ক্যাশিয়ার এটা পাবেন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer.js:0
+#: code:addons/pos_modern/static/src/js/drawer.js:0
+msgid "This email address does not look right."
+msgstr "এই ইমেইল ঠিক মনে হচ্ছে না।"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_menu.py:0
+#: code:addons/pos_modern/models/pos_menu.py:0
+msgid "This item cannot be returned: the original sale was not found."
+msgstr "এই আইটেম ফেরত নেওয়া যাবে না: আসল বিক্রি পাওয়া যায়নি।"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "To close"
+msgstr "বন্ধ করতে হবে"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "To give back"
+msgstr "ফেরত দিতে হবে"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "To pay"
+msgstr "দিতে হবে"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+#: model:ir.model.fields,field_description:pos_modern.field_pos_modern_hold__amount_total
+msgid "Total"
+msgstr "মোট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid ""
+"Turn on \"Is a Bar/Restaurant\" in the shop's settings and add floors and "
+"tables."
+msgstr "শপের সেটিংসে \"Is a Bar/Restaurant\" চালু করে ফ্লোর ও টেবিল যোগ করুন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "Type"
+msgstr "ধরন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "Type a name or a mobile number"
+msgstr "নাম বা মোবাইল নম্বর লিখুন"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_counter.py:0
+#: code:addons/pos_modern/models/pos_counter.py:0
+msgid "Type an amount."
+msgstr "পরিমাণ লিখুন।"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_menu.py:0
+#: code:addons/pos_modern/models/pos_menu.py:0
+msgid "Type the customer's name or mobile number."
+msgstr "কাস্টমারের নাম বা মোবাইল নম্বর লিখুন।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/menu.js:0
+#: code:addons/pos_modern/static/src/js/menu.js:0
+msgid "Type the transaction ID of %s."
+msgstr "%s-এর ট্রানজেকশন আইডি লিখুন।"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_counter.py:0
+#: code:addons/pos_modern/models/pos_counter.py:0
+msgid "Unknown"
+msgstr "অজানা"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Validate (F9)"
+msgstr "নিশ্চিত করুন (F9)"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "View order"
+msgstr "অর্ডার দেখুন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/dashboard.js:0
+#: code:addons/pos_modern/static/src/js/dashboard.js:0
+msgid "Walk-in customer"
+msgstr "সাধারণ কাস্টমার"
+
+#. module: pos_modern
+#: model:ir.model.fields,help:pos_modern.field_pos_config__pm_receipt_width
+msgid "Width of the thermal receipt printed from the counter."
+msgstr "কাউন্টার থেকে প্রিন্ট হওয়া থার্মাল রসিদের প্রস্থ।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/counter/dialogs.js:0
+#: code:addons/pos_modern/static/src/js/counter/dialogs.js:0
+msgid "Wrong PIN"
+msgstr "ভুল PIN"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "X / Z report, cash in / out, close the day"
+msgstr "X / Z রিপোর্ট, ক্যাশ ইন / আউট, দিন বন্ধ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Your Cart"
+msgstr "আপনার কার্ট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "Your cart is empty."
+msgstr "আপনার কার্ট খালি।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "Your shops now"
+msgstr "এখন আপনার শপগুলো"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "can come back ·"
+msgstr "টি ফেরত নেওয়া যায় ·"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "e.g. CAP-01"
+msgstr "যেমন CAP-01"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "e.g. Cappuccino"
+msgstr "যেমন ক্যাপুচিনো"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "e.g. Cash"
+msgstr "যেমন ক্যাশ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "e.g. Drinks"
+msgstr "যেমন পানীয়"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "e.g. Ground floor"
+msgstr "যেমন নিচতলা"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "e.g. Gulshan Outlet"
+msgstr "যেমন গুলশান আউটলেট"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "e.g. Gulshan branch"
+msgstr "যেমন গুলশান শাখা"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "e.g. Less spicy"
+msgstr "যেমন ঝাল কম"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "e.g. Spice"
+msgstr "যেমন ঝাল"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/js/drawer_forms.js:0
+#: code:addons/pos_modern/static/src/js/drawer_forms.js:0
+msgid "e.g. Takeaway"
+msgstr "যেমন টেকঅ্যাওয়ে"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_counter.py:0
+#: code:addons/pos_modern/models/pos_counter.py:0
+msgid "in"
+msgstr "ইন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "items ·"
+msgstr "আইটেম ·"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/drawer.xml:0
+#: code:addons/pos_modern/static/src/xml/drawer.xml:0
+msgid "name@example.com"
+msgstr "name@example.com"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "no barcode"
+msgstr "বারকোড নেই"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "of"
+msgstr "এর মধ্যে"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "order(s) not paid yet in this session."
+msgstr "টি অর্ডার এই সেশনে এখনো পরিশোধ হয়নি।"
+
+#. module: pos_modern
+#. odoo-python
+#: code:addons/pos/pos_modern/models/pos_counter.py:0
+#: code:addons/pos_modern/models/pos_counter.py:0
+msgid "out"
+msgstr "আউট"
+
+#. module: pos_modern
+#: model_terms:ir.ui.view,arch_db:pos_modern.shop_kanban
+msgid "outstanding rescue session"
+msgstr "বাকি রেসকিউ সেশন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "product(s) have no barcode."
+msgstr "টি পণ্যের বারকোড নেই।"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "report"
+msgstr "রিপোর্ট"
+
+#. module: pos_modern
+#: model:ir.model.fields,help:pos_modern.field_pos_modern_hold__table_ref
+msgid "restaurant.table id (restaurant shops)"
+msgstr "restaurant.table id (রেস্টুরেন্ট শপ)"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/menu.xml:0
+#: code:addons/pos_modern/static/src/xml/menu.xml:0
+msgid "to send"
+msgstr "পাঠাতে বাকি"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "year to date"
+msgstr "বছরের শুরু থেকে"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/dashboard.xml:0
+#: code:addons/pos_modern/static/src/xml/dashboard.xml:0
+msgid "· Point of Sale overview"
+msgstr "· পয়েন্ট অব সেল সারসংক্ষেপ"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "· pick one"
+msgstr "· একটি বাছুন"
+
+#. module: pos_modern
+#. odoo-javascript
+#: code:addons/pos/pos_modern/static/src/xml/counter.xml:0
+#: code:addons/pos_modern/static/src/xml/counter.xml:0
+msgid "“Hold” (F4) puts the cart aside so you can serve the next customer."
+msgstr ""
+"“হোল্ড” (F4) কার্ট সরিয়ে রাখে, যাতে পরের কাস্টমারকে সার্ভ করতে পারেন।"
