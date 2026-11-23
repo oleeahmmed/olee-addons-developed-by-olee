@@ -7,8 +7,9 @@ Modern Theme turns the Odoo 19 backend into a clean admin dashboard:
 * One global sidebar for every app, in four styles (classic shadcn/ui sidebar, tree,
   icon rail + panel, floating glass), with pinned and recent menus, counters, keyboard
   navigation and a mobile drawer. An apps menu is always in the top bar.
-* shadcn/ui neutral surfaces in light and dark (as on shadcnuikit.com): a colour preset
-  only changes the accent, never the page, sidebar, top bar or cards.
+* shadcn/ui base-colour surfaces in light and dark: Neutral (default) uses the neutral
+  grey scale, Slate/Zinc/Stone/Gray use their own tinted greys; coloured presets change
+  only the accent, never the page, sidebar, top bar or cards.
 * Ctrl+K command palette: apps, menus, records and quick theme actions.
 * Light, dark and auto (follow the system) modes, switched instantly without reloading.
 * 17 contrast-checked palettes (WCAG AA) or your own brand colour, 9 fonts with full

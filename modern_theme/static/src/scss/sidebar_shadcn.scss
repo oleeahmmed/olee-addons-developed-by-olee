@@ -47,42 +47,42 @@ html[data-mt-sidebar-style="classic"][data-mt-sidebar-width="normal"] { --mt-sb-
 }
 // Solid background (every sidebar style): the shadcn neutral sidebar colour.
 html[data-mt-sidebar-bg="solid"]:not(#mt-np) {
-    --mt-sidebar-bg: #f7f6f6;   // also paints the placeholder under the sidebar on load
+    --mt-sidebar-bg: var(--mt-sidebar-base);   // also paints the placeholder under the sidebar on load
     --mt-sidebar-bg-image: none;
 }
 html[data-mt-sidebar-bg="solid"] .o_mt_sidebar[data-style="classic"] {
-    --sc-bg: #f7f6f6;
-    --sc-fg: #646464;
-    --sc-strong: #0a0a0a;
-    --sc-label: rgba(100, 100, 100, 0.7);
-    --sc-accent: #e1e1e1;
-    --sc-accent-fg: #000000;
-    --sc-border: #e5e5e5;
-    --sc-input-bg: #ffffff;
-    --sc-input-border: #e5e5e5;
-    --sc-kbd-bg: #f5f5f5;
-    --sc-muted-fg: #737373;
-    --sc-ring: rgba(161, 161, 161, 0.5);
+    --sc-bg: var(--mt-sidebar-base);
+    --sc-fg: var(--mt-sidebar-fg-base);
+    --sc-strong: var(--mt-foreground);
+    --sc-label: color-mix(in srgb, var(--mt-sidebar-fg-base) 70%, transparent);
+    --sc-accent: var(--mt-sidebar-accent-base);
+    --sc-accent-fg: var(--mt-foreground);
+    --sc-border: var(--mt-border-base);
+    --sc-input-bg: var(--mt-card);
+    --sc-input-border: var(--mt-input);
+    --sc-kbd-bg: var(--mt-muted);
+    --sc-muted-fg: var(--mt-muted-foreground);
+    --sc-ring: var(--mt-ring-base);
 }
 html[data-mt-scheme="dark"][data-mt-sidebar-bg="solid"]:not(#mt-np) {
-    --mt-sidebar-bg: #171717;
+    --mt-sidebar-bg: var(--mt-sidebar-base);
 }
 html[data-mt-scheme="dark"] .o_mt_sidebar[data-style="classic"] {
     --sc-active-bg: color-mix(in srgb, var(--mt-primary) 24%, var(--sc-bg));
 }
 html[data-mt-scheme="dark"][data-mt-sidebar-bg="solid"] .o_mt_sidebar[data-style="classic"] {
-    --sc-bg: #171717;
-    --sc-fg: #b0b0b0;
-    --sc-strong: #fafafa;
-    --sc-label: rgba(176, 176, 176, 0.7);
-    --sc-accent: #2c2c2c;
-    --sc-accent-fg: #ffffff;
-    --sc-border: rgba(255, 255, 255, 0.1);
-    --sc-input-bg: rgba(255, 255, 255, 0.045);
-    --sc-input-border: rgba(255, 255, 255, 0.15);
-    --sc-kbd-bg: #262626;
-    --sc-muted-fg: #a1a1a1;
-    --sc-ring: rgba(115, 115, 115, 0.5);
+    --sc-bg: var(--mt-sidebar-base);
+    --sc-fg: var(--mt-sidebar-fg-base);
+    --sc-strong: var(--mt-foreground);
+    --sc-label: color-mix(in srgb, var(--mt-sidebar-fg-base) 70%, transparent);
+    --sc-accent: var(--mt-sidebar-accent-base);
+    --sc-accent-fg: var(--mt-foreground);
+    --sc-border: var(--mt-border-base);
+    --sc-input-bg: color-mix(in srgb, var(--mt-sidebar-fg-base) 6%, transparent);
+    --sc-input-border: var(--mt-input);
+    --sc-kbd-bg: color-mix(in srgb, var(--mt-sidebar-fg-base) 8%, transparent);
+    --sc-muted-fg: var(--mt-muted-foreground);
+    --sc-ring: var(--mt-ring-base);
 }
 
 // Hover / active, exactly as shadcnuikit's colour presets do it: the default (neutral)
@@ -92,13 +92,13 @@ html[data-mt-sidebar-bg="solid"]:not(#mt-np) .o_mt_sidebar[data-style="classic"]
     --sc-active-bg: var(--sc-accent);
     --sc-active-fg: var(--sc-accent-fg);
 }
-html[data-mt-sidebar-bg="solid"]:not([data-mt-theme="once"]):not([data-mt-theme="neutral"]):not(#mt-np) .o_mt_sidebar[data-style="classic"] {
+html[data-mt-sidebar-bg="solid"]:not([data-mt-theme="once"]):not([data-mt-theme="neutral"]):not([data-mt-theme="slate"]):not([data-mt-theme="zinc"]):not([data-mt-theme="stone"]):not([data-mt-theme="gray"]):not(#mt-np) .o_mt_sidebar[data-style="classic"] {
     --sc-accent: color-mix(in srgb, var(--mt-primary) 15%, transparent);
     --sc-accent-fg: #000000;
     --sc-active-bg: var(--sc-accent);
     --sc-active-fg: #000000;
 }
-html[data-mt-scheme="dark"][data-mt-sidebar-bg="solid"]:not([data-mt-theme="once"]):not([data-mt-theme="neutral"]):not(#mt-np) .o_mt_sidebar[data-style="classic"] {
+html[data-mt-scheme="dark"][data-mt-sidebar-bg="solid"]:not([data-mt-theme="once"]):not([data-mt-theme="neutral"]):not([data-mt-theme="slate"]):not([data-mt-theme="zinc"]):not([data-mt-theme="stone"]):not([data-mt-theme="gray"]):not(#mt-np) .o_mt_sidebar[data-style="classic"] {
     --sc-accent-fg: #ffffff;
     --sc-active-fg: #ffffff;
 }
@@ -478,73 +478,15 @@ html[data-mt-sidebar-style="classic"][data-mt-topbar-height="normal"] { --mt-top
 }
 
 // ---------------------------------------------------------------------------
-// One neutral palette for EVERY sidebar style and EVERY colour preset (the shadcn
-// neutrals): page, top bar, cards, popovers, fields, text and borders never take a
-// tint of the brand colour. The brand colour stays for accents only: buttons, links,
-// focus, active menu, badges, progress. Derived tokens (hover, soft colours, field
-// backgrounds, app-addon --xx-* tokens, border / top bar options) follow on their own.
-// :not(#mt-np) adds id-level weight, so this wins over every preset block, light
-// and dark, whatever the asset order. The Classic style adds the inset frame below.
+// Inset frame tokens. Page, top bar, cards, fields, text and borders come from
+// the active preset (tokens.scss / tokens.dark.scss), grey base colours included.
 // ---------------------------------------------------------------------------
 html[data-mt-theme]:not(#mt-np) {
-    --mt-background: #ffffff;
-    --mt-foreground: #0a0a0a;
-    --mt-card: #ffffff;
-    --mt-card-foreground: #0a0a0a;
-    --mt-canvas-base: #ffffff;
-    --mt-muted: #f5f5f5;
-    --mt-muted-foreground: #737373;
-    --mt-secondary: #f5f5f5;
-    --mt-secondary-foreground: #171717;
-    --mt-accent: #f5f5f5;
-    --mt-accent-foreground: #171717;
-    --mt-border-base: #e5e5e5;
-    --mt-input: #e5e5e5;
-    --mt-content-bg: #ffffff;
-    --mt-canvas: #ffffff;
-    --mt-content-bg-accent: #f5f5f5;
-    --mt-card-matte: #fafafa;
-    --mt-popover: #ffffff;
-    --mt-hover: rgba(10, 10, 10, 0.04);
-    --mt-selected: #f5f5f5;
-    --mt-topbar-fg: #0a0a0a;
-    --mt-field-bg: transparent;
-    --mt-focus-border: #a1a1a1;
-    --mt-focus-ring: rgba(161, 161, 161, 0.5);
-    --mt-placeholder: #737373;
-    --mt-stitch-bg: #ffffff;
-    // inset frame
     --sc-inset-gap: 0.5rem;
     --sc-inset-radius: 0.875rem;
     --sc-inset-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
 }
 html[data-mt-theme][data-mt-scheme="dark"]:not(#mt-np) {
-    --mt-background: #0a0a0a;
-    --mt-foreground: #fafafa;
-    --mt-card: #171717;           // shadcn --card (cards, popovers, sidebar: one surface)
-    --mt-card-foreground: #fafafa;
-    --mt-canvas-base: #0a0a0a;
-    --mt-muted: #262626;
-    --mt-muted-foreground: #a1a1a1;
-    --mt-secondary: #262626;
-    --mt-secondary-foreground: #fafafa;
-    --mt-accent: #262626;
-    --mt-accent-foreground: #fafafa;
-    --mt-border-base: rgba(255, 255, 255, 0.1);
-    --mt-input: rgba(255, 255, 255, 0.15);
-    --mt-content-bg: #0a0a0a;
-    --mt-canvas: #0a0a0a;
-    --mt-content-bg-accent: #171717;
-    --mt-card-matte: #141414;
-    --mt-popover: #171717;
-    --mt-hover: rgba(255, 255, 255, 0.06);
-    --mt-selected: #262626;
-    --mt-topbar-fg: #fafafa;
-    --mt-field-bg: rgba(255, 255, 255, 0.045);
-    --mt-focus-border: #737373;
-    --mt-focus-ring: rgba(115, 115, 115, 0.5);
-    --mt-placeholder: #a1a1a1;
-    --mt-stitch-bg: #0a0a0a;
     --sc-inset-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
 }
 

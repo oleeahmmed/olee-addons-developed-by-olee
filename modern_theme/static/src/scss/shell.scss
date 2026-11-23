@@ -140,7 +140,7 @@ html[data-mt-theme] {
     // hairline around the group, no nested input or caret borders.
     .o_cp_searchview {
         min-height: 2rem;
-        height: 2rem;
+        height: auto;
         border-radius: 0.5rem;
         overflow: hidden;
     }

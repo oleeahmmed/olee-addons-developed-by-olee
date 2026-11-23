@@ -327,7 +327,7 @@
             .o_cp_searchview { min-width: 0; }
             .o_searchview {
                 min-height: 2rem;
-                height: 2rem;
+                height: auto;
                 border: 0;
                 border-radius: 0;
                 background: transparent;
@@ -341,7 +341,7 @@
             }
             .o_searchview_dropdown_toggler {
                 min-height: 2rem;
-                height: 2rem;
+                height: auto;
                 border: 0;
                 border-left: 1px solid var(--#{$p}-input);
                 border-radius: 0;

@@ -112,3 +112,5 @@ html[data-mt-theme="once"] {
     --mt-field-bg: color-mix(in srgb, #ffffff 4.5%, var(--mt-card));   // shadcn dark:bg-input/30
     --mt-field-shadow: none;
 }
+
+// Palette patch: force a fresh dark bundle build (2026-11-23).

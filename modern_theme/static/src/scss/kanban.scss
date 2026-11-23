@@ -383,24 +383,6 @@ html[data-mt-theme] {
     --kb-ring: color-mix(in srgb, var(--mt-foreground) 10%, transparent);
     --kb-ring-hover: color-mix(in srgb, var(--mt-foreground) 20%, transparent);
 }
-html[data-mt-theme]:not(#mt-kb) {
-    --kb-lane: #f5f5f5;
-    --kb-card: #ffffff;
-    --kb-fg: #0a0a0a;
-    --kb-muted-fg: #737373;
-    --kb-border: #e5e5e5;
-    --kb-ring: rgba(10, 10, 10, 0.1);
-    --kb-ring-hover: rgba(10, 10, 10, 0.2);
-}
-html[data-mt-theme][data-mt-scheme="dark"]:not(#mt-kb) {
-    --kb-lane: #262626;
-    --kb-card: #171717;
-    --kb-fg: #fafafa;
-    --kb-muted-fg: #a1a1a1;
-    --kb-border: rgba(255, 255, 255, 0.1);
-    --kb-ring: rgba(255, 255, 255, 0.1);
-    --kb-ring-hover: rgba(255, 255, 255, 0.2);
-}
 
 #{$kb} {
     // ---------------------------------------------------------------- board

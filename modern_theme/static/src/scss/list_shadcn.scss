@@ -21,12 +21,12 @@ $lt-check-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg
 // Tokens (shadcn neutral)
 // ---------------------------------------------------------------------------
 #{$lt} {
-    --lt-fg: #0a0a0a;
-    --lt-muted-fg: #737373;
-    --lt-border: #e5e5e5;
-    --lt-ring: rgba(10, 10, 10, 0.1);
-    --lt-hover: rgba(245, 245, 245, 0.5);   // hover:bg-muted/50
-    --lt-selected: #f5f5f5;                 // data-[state=selected]:bg-muted
+    --lt-fg: var(--mt-foreground);
+    --lt-muted-fg: var(--mt-muted-foreground);
+    --lt-border: var(--mt-border-base);
+    --lt-ring: color-mix(in srgb, var(--mt-foreground) 10%, transparent);
+    --lt-hover: color-mix(in srgb, var(--mt-muted) 50%, transparent);   // hover:bg-muted/50
+    --lt-selected: var(--mt-muted);                 // data-[state=selected]:bg-muted
     --lt-card: var(--mt-card);
     // "+ New" follows the colour theme (preset / custom colour), like shadcnuikit's presets
     --lt-primary: var(--mt-primary);
@@ -35,13 +35,6 @@ $lt-check-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg
     --lt-check: #{$lt-check};
 }
 html:is(.mt-app-modern, [data-mt-app="base"])[data-mt-theme][data-mt-scheme="dark"]:not(#mt-lt) {
-    --lt-fg: #fafafa;
-    --lt-muted-fg: #a1a1a1;
-    --lt-border: rgba(255, 255, 255, 0.1);
-    --lt-ring: rgba(255, 255, 255, 0.1);
-    --lt-hover: rgba(38, 38, 38, 0.5);
-    --lt-selected: #262626;
-
     --lt-check: #{$lt-check-dark};
 }
 

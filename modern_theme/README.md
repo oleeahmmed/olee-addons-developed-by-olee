@@ -91,12 +91,13 @@ All four share:
   page title (lists, kanban, forms), or top right on home pages and dashboards.
 * Menus come from `ir.ui.menu`: Odoo's groups and installed modules decide what shows.
 
-## Look: shadcn/ui neutral (every preset, light and dark)
+## Look: shadcn/ui base colours (light and dark)
 
-Surfaces are the shadcn/ui "neutral" theme exactly as shadcnuikit.com renders it, and
-they are the same for every colour preset, so switching the preset only changes the
-accent (buttons, links, focus ring, active menu tint), never the page, sidebar, top bar
-or cards (`scss/mt_maps.scss`):
+Surfaces follow the shadcn/ui base colour. Neutral (and the default "Once" preset) use
+shadcn's neutral grey scale below; Slate, Zinc, Stone and Gray use their own tinted
+greys (page, cards, sidebar, borders, text). The coloured presets (Indigo, Blue, Red…)
+keep the neutral surfaces and only change the accent (buttons, links, focus ring,
+active menu tint), exactly like shadcnuikit (`scss/mt_maps.scss`):
 
 | Token | Light | Dark |
 |---|---|---|
@@ -107,6 +108,11 @@ or cards (`scss/mt_maps.scss`):
 | border / input | `#e5e5e5` | white 10% / white 15% |
 | sidebar text / hover | `#646464` / `#e1e1e1` | `#b0b0b0` / `#2c2c2c` |
 | top bar | page colour + hairline | page colour + hairline |
+
+Slate / Zinc / Stone / Gray replace these surfaces with their own base palette (for
+example Slate: muted `#f1f5f9` and border `#e2e8f0` in light, page `#020618`, card
+`#0f172b` and muted `#1d293d` in dark). The exact values live in `$mt-neutrals`
+(`scss/mt_maps.scss`).
 
 The default preset is shadcn's own: near-black primary in light (`#171717`), near-white
 in dark (`#e5e5e5`). The colour presets are shadcnuikit's theme colours (Tailwind

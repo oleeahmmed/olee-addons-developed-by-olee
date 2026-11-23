@@ -38,6 +38,9 @@ $mt: 'html[data-mt-theme]';
     }
     .o_searchview {
         min-height: 0;
+        height: auto;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
         align-items: center;
         border: 0 !important;
         border-radius: 0;
@@ -45,6 +48,9 @@ $mt: 'html[data-mt-theme]';
         box-shadow: none !important;
     }
     .o_searchview_dropdown_toggler {
+        align-self: stretch;
+        height: auto;
+        min-height: var(--mt-control-h);
         border: 0;
         border-inline-start: 1px solid var(--mt-border);
         border-radius: 0;
