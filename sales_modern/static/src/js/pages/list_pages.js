@@ -134,6 +134,8 @@ class TeamsPage extends ListPage {
     static resModel = "crm.team";
     static prefix = "team";
     static types = ["kanban", "list"];
+    // Modern CRM's Sales Teams page look (cm-tc-* cards and its cm page styles)
+    static cssPrefix = "cm";
 }
 
 class SalespeoplePage extends ListPage {

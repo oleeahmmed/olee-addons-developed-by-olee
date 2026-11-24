@@ -12,7 +12,7 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
 * Rights, record rules, settings, mail templates, taxes, pricelists and invoicing
   are Odoo's own. Odoo's original Sales menus stay available in the sidebar.
     """,
-    'version': '19.0.2.1.1',
+    'version': '19.0.2.1.2',
     'category': 'Sales/Sales',
     'author': 'Your Name',
     'license': 'LGPL-3',
@@ -27,7 +27,9 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
         'web.assets_backend': [
             'sales_modern/static/src/js/sidebar/*.js',
             'sales_modern/static/src/js/pages/*.js',
+            'sales_modern/static/src/js/fields/*.js',
             'sales_modern/static/src/xml/dashboard.xml',
+            'sales_modern/static/src/xml/user_pick_field.xml',
         ],
     },
     'post_init_hook': 'post_init_hook',

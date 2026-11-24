@@ -14,6 +14,7 @@ class CrmTeam(models.Model):
     sales_modern_quotation_amount = fields.Monetary('Quoted', compute='_compute_sales_modern_stats', currency_field='currency_id')
     sales_modern_month_amount = fields.Monetary('Sold this month', compute='_compute_sales_modern_stats', currency_field='currency_id')
     sales_modern_member_count = fields.Integer('Salespeople', compute='_compute_sales_modern_stats')
+    sales_modern_overdue_count = fields.Integer('Overdue quotations', compute='_compute_sales_modern_stats')
 
     def _compute_sales_modern_stats(self):
         month_start = date_utils.start_of(fields.Date.context_today(self), 'month')
@@ -28,11 +29,17 @@ class CrmTeam(models.Model):
         quote_count = by_team(self.env['sale.order'], [('state', 'in', QUOTATION_STATES)], '__count')
         quote_amount = by_team(Report, [('state', 'in', QUOTATION_STATES)], 'price_subtotal:sum')
         month_amount = by_team(Report, [('state', '=', 'sale'), ('date', '>=', month_start)], 'price_subtotal:sum')
+        overdue = by_team(
+            self.env['sale.order'],
+            [('state', '=', 'sent'), ('validity_date', '<', fields.Date.context_today(self))],
+            '__count',
+        )
         for team in self:
             team.sales_modern_quotation_count = quote_count.get(team.id, 0)
             team.sales_modern_quotation_amount = quote_amount.get(team.id) or 0.0
             team.sales_modern_month_amount = month_amount.get(team.id) or 0.0
             team.sales_modern_member_count = len(team.member_ids)
+            team.sales_modern_overdue_count = overdue.get(team.id, 0)
 
     def sales_modern_open_quotations(self):
         """Card button: this team's open quotations on the Sales Modern page."""

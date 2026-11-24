@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="sales_modern.M2oPickField">
+        <button type="button" t-attf-class="cm-userpick {{ editable ? '' : 'cm-userpick--ro' }} {{ value ? '' : 'cm-userpick--empty' }}"
+                t-att-disabled="!editable &amp;&amp; !value" t-att-title="editable ? placeholder : (value ? value.display_name : '')"
+                t-att-aria-haspopup="editable ? 'listbox' : undefined" t-on-click.stop.prevent="toggle">
+            <img t-if="showAvatar and value" class="cm-userpick-avatar" t-attf-src="/web/image/res.users/{{ value.id }}/avatar_128" alt=""/>
+            <span t-else="" t-attf-class="cm-userpick-avatar cm-userpick-avatar--empty {{ value ? 'cm-userpick-avatar--filled' : '' }}" aria-hidden="true">
+                <i t-attf-class="fa {{ icon }}"/>
+            </span>
+            <span class="cm-userpick-name" t-esc="value ? value.display_name : placeholder"/>
+            <i t-if="editable" class="fa fa-angle-down cm-userpick-caret" aria-hidden="true"/>
+        </button>
+    </t>
+
+    <t t-name="sales_modern.M2oPickPopover">
+        <div class="o_cm cm-userpick-pop" t-on-click.stop="">
+            <RecordPicker resModel="props.resModel" domain="props.domain" autofocus="true"
+                          placeholder="props.placeholder" onSelect.bind="pick"/>
+            <button t-if="props.value" type="button" class="cm-userpick-clear" t-on-click="() => this.pick(false)">
+                <i class="fa fa-times" aria-hidden="true"/> Remove <t t-esc="props.value[1]"/>
+            </button>
+        </div>
+    </t>
+
+    <t t-name="sales_modern.RecordPicker">
+        <div class="cm-picker">
+            <div class="cm-picker-box">
+                <i class="fa fa-search cm-picker-icon" aria-hidden="true"/>
+                <input t-att-id="props.id" t-ref="input" type="text" class="cm-input cm-input-sm" autocomplete="off"
+                       t-att-placeholder="label or props.placeholder" t-att-value="state.editing ? state.q : label"
+                       role="combobox" t-att-aria-expanded="state.open ? 'true' : 'false'"
+                       t-on-input="onInput" t-on-focus="onFocus" t-on-blur="onBlur" t-on-keydown="onKeydown"/>
+            </div>
+            <ul t-if="state.open and (state.results.length or !state.loading)" class="cm-picker-menu" role="listbox">
+                <t t-foreach="state.results" t-as="r" t-key="r[0]">
+                    <li role="option" t-att-aria-selected="r_index === state.active ? 'true' : 'false'"
+                        t-att-class="{ 'cm-active': r_index === state.active }"
+                        t-on-mousedown.prevent="noop" t-on-click="() => this.pick(r)" t-esc="r[1]"/>
+                </t>
+                <li t-if="!state.results.length" class="cm-picker-empty">No match</li>
+            </ul>
+        </div>
+    </t>
+
+</templates>
