@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="rule_payment_method_company" model="ir.rule">
+        <field name="name">Document payment methods: own companies</field>
+        <field name="model_id" ref="model_modern_reports_payment_method"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+</odoo>

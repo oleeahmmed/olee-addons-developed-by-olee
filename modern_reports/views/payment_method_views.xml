@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="payment_method_view_list" model="ir.ui.view">
+        <field name="name">modern.reports.payment.method.list</field>
+        <field name="model">modern.reports.payment.method</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" string="Payment Methods on Documents">
+                <field name="sequence" widget="handle"/>
+                <field name="name" placeholder="Bank Transfer"/>
+                <field name="kind"/>
+                <field name="detail" placeholder="Dutch-Bangla Bank PLC"/>
+                <field name="value" placeholder="123-110-0045678"/>
+                <field name="highlight"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_payment_methods" model="ir.actions.act_window">
+        <field name="name">Payment Methods on Documents</field>
+        <field name="res_model">modern.reports.payment.method</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Add the payment methods printed on invoices and quotations</p>
+            <p>e.g. Bank Transfer, bKash, Nagad, Cash. Without any, the company bank accounts are printed.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_payment_methods" name="Document Payment Methods"
+              parent="account.account_invoicing_menu" action="action_payment_methods"
+              groups="account.group_account_manager" sequence="90"/>
+
+</odoo>

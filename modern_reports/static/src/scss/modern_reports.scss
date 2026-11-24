@@ -1,0 +1,340 @@
+// Modern Reports print design. Accent colours are inlined by the template (wkhtmltopdf's WebKit has
+// no CSS variables); the neutrals below follow the shadcn zinc palette of the reference design.
+$mr-fg: #09090b;
+$mr-muted: #71717a;
+$mr-line: #d6d6db;
+$mr-line-soft: #e4e4e7;
+$mr-pad-x: 9px;
+
+// Roboto ships with Odoo (Inter does not) and is the closest match to the reference design.
+@font-face { font-family: 'MR Sans'; font-weight: 400; font-style: normal; src: url('/web/static/fonts/google/Roboto/Roboto-Regular.ttf') format('truetype'); }
+@font-face { font-family: 'MR Sans'; font-weight: 400; font-style: italic; src: url('/web/static/fonts/google/Roboto/Roboto-Italic.ttf') format('truetype'); }
+@font-face { font-family: 'MR Sans'; font-weight: 500; font-style: normal; src: url('/web/static/fonts/google/Roboto/Roboto-Medium.ttf') format('truetype'); }
+@font-face { font-family: 'MR Sans'; font-weight: 500; font-style: italic; src: url('/web/static/fonts/google/Roboto/Roboto-MediumItalic.ttf') format('truetype'); }
+@font-face { font-family: 'MR Sans'; font-weight: 700; font-style: normal; src: url('/web/static/fonts/google/Roboto/Roboto-Bold.ttf') format('truetype'); }
+@font-face { font-family: 'MR Sans'; font-weight: 700; font-style: italic; src: url('/web/static/fonts/google/Roboto/Roboto-BoldItalic.ttf') format('truetype'); }
+
+.o_mr, .o_mr_footer {
+    font-family: 'MR Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    color: $mr-fg;
+    -webkit-print-color-adjust: exact;
+}
+
+.o_mr {
+    font-size: 11px;
+    line-height: 1.38;
+
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 0;
+    }
+    td, th {
+        padding: 0;
+        vertical-align: top;
+        // Bootstrap's reboot gives cells `border-style: solid; border-width: 0`, which this WebKit
+        // paints as hairline grids. No style unless a rule sets a real border.
+        border-style: none;
+        border-color: $mr-line;
+    }
+    tr {
+        page-break-inside: avoid;
+    }
+
+    .o_mr_taka {
+        display: inline-block;
+        width: 0.62em;
+        height: 0.82em;
+        vertical-align: baseline;
+        margin-bottom: -0.05em;
+    }
+    .o_mr_muted { color: $mr-muted; }
+    .o_mr_fg { color: $mr-fg; }
+    .o_mr_strong { font-weight: 600; }
+    .o_mr_medium { font-weight: 500; }
+    .o_mr_italic { font-style: italic; }
+    .o_mr_r { text-align: right; }
+    .o_mr_l { text-align: left; }
+    .o_mr_c { text-align: center; }
+
+    .o_mr_caption {
+        font-size: 9.5px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .o_mr_box {
+        border: 1px solid $mr-line;
+    }
+
+    .o_mr_grid > tbody > tr > td,
+    .o_mr_grid > tr > td {
+        border-bottom: 1px solid $mr-line;
+    }
+
+    // ---- header -------------------------------------------------------------
+    .o_mr_head {
+        .o_mr_logo {
+            width: 30mm;
+            border-right: 1px solid $mr-line;
+            text-align: center;
+            vertical-align: middle;
+            padding: 8px;
+
+            img {
+                max-width: 26mm;
+                max-height: 18mm;
+            }
+        }
+        .o_mr_monogram {
+            display: inline-block;
+            width: 56px;
+            height: 56px;
+            line-height: 56px;
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+        }
+        .o_mr_company {
+            text-align: center;
+            vertical-align: middle;
+            padding: 10px 12px;
+        }
+        .o_mr_company_name {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        .o_mr_company_vat {
+            margin-top: 2px;
+            font-weight: 500;
+        }
+    }
+
+    .o_mr_side {
+        width: 52mm;
+        border-left: 1px solid $mr-line;
+        font-size: 10.5px;
+        vertical-align: top;
+    }
+
+    .o_mr_kv {
+        td {
+            padding: 6px $mr-pad-x;
+            border-bottom: 1px solid $mr-line;
+            white-space: nowrap;
+        }
+        tr.o_mr_kv_last td {
+            border-bottom: none;
+        }
+    }
+
+    // ---- title band ---------------------------------------------------------
+    .o_mr_band {
+        border-bottom: 1px solid $mr-line;
+        padding: 6px 0;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 600;
+        color: #ffffff;
+    }
+
+    // ---- party --------------------------------------------------------------
+    .o_mr_party {
+        padding: 8px $mr-pad-x;
+    }
+    .o_mr_party_name {
+        margin-top: 2px;
+        font-weight: 600;
+    }
+
+    // ---- items --------------------------------------------------------------
+    .o_mr_items {
+        thead {
+            display: table-header-group;
+        }
+        th {
+            font-size: 10px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        th, td {
+            padding: 5px 8px;
+            border-bottom: 1px solid $mr-line;
+            vertical-align: top;
+        }
+        td {
+            white-space: nowrap;
+        }
+        td.o_mr_desc {
+            white-space: normal;
+            width: 100%;
+        }
+        .o_mr_no {
+            width: 8mm;
+        }
+        tr.o_mr_section td {
+            font-weight: 600;
+            background-color: #fafafa;
+        }
+        tr.o_mr_note td {
+            font-style: italic;
+            color: $mr-muted;
+            white-space: normal;
+        }
+    }
+
+    // ---- bottom -------------------------------------------------------------
+    .o_mr_bottom {
+        > tbody > tr > td, > tr > td {
+            border-bottom: none;
+        }
+        .o_mr_bottom_left {
+            padding: 9px $mr-pad-x;
+        }
+        .o_mr_bottom_right {
+            width: 68mm;
+            border-left: 1px solid $mr-line;
+        }
+    }
+
+    .o_mr_block + .o_mr_block {
+        margin-top: 10px;
+    }
+
+    .o_mr_methods {
+        margin-top: 6px;
+
+        td.o_mr_method {
+            width: 32%;
+            border: 1px solid $mr-line;
+            border-radius: 6px;
+            padding: 7px 8px;
+        }
+        td.o_mr_method_gap {
+            width: 6px;
+        }
+        td.o_mr_method_empty {
+            width: 32%;
+        }
+    }
+    .o_mr_method_head {
+        width: auto !important;
+
+        td {
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+    }
+    td.o_mr_method_icon {
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+        text-align: center;
+        line-height: 0;
+        padding: 4px !important;
+
+        svg {
+            display: inline-block;
+        }
+    }
+    .o_mr_method_head td + td {
+        padding-left: 6px;
+    }
+    .o_mr_method_detail {
+        margin-top: 4px;
+        font-size: 9.5px;
+        line-height: 1.2;
+        color: $mr-muted;
+    }
+    .o_mr_method_value {
+        font-size: 10px;
+        font-weight: 500;
+    }
+
+    .o_mr_payref {
+        margin-top: 6px;
+        border-left: 2px solid;
+        border-radius: 6px;
+
+        td {
+            padding: 6px $mr-pad-x;
+            white-space: nowrap;
+        }
+    }
+
+    .o_mr_terms {
+        margin: 2px 0 0 0;
+        padding-left: 16px;
+        font-size: 10px;
+        color: $mr-muted;
+    }
+
+    .o_mr_totals {
+        td {
+            padding: 6px $mr-pad-x;
+            border-bottom: 1px solid $mr-line;
+            white-space: nowrap;
+        }
+        tr.o_mr_total td {
+            padding-top: 8px;
+            padding-bottom: 8px;
+            color: #ffffff;
+            font-weight: 600;
+        }
+        .o_mr_total_amount {
+            font-size: 14px;
+            font-weight: 700;
+        }
+        tr.o_mr_due td {
+            padding-top: 8px;
+            padding-bottom: 8px;
+            font-weight: 600;
+        }
+        .o_mr_due_amount {
+            font-size: 12px;
+            font-weight: 700;
+        }
+    }
+
+    .o_mr_words {
+        padding: 8px $mr-pad-x;
+    }
+    .o_mr_words_text {
+        margin-top: 2px;
+        font-size: 10.5px;
+        font-weight: 500;
+        font-style: italic;
+    }
+
+    // ---- signatures ---------------------------------------------------------
+    .o_mr_sign {
+        border-top: 1px solid $mr-line;
+
+        > tbody > tr > td, > tr > td {
+            border-bottom: none;
+            padding: 48px 24px 10px 24px;
+            text-align: center;
+            font-size: 10px;
+            font-weight: 500;
+        }
+        td.o_mr_sign_gap {
+            width: 10mm;
+            padding: 0;
+        }
+    }
+    .o_mr_sign_line {
+        height: 1px;
+        margin-bottom: 4px;
+        background-color: #84848a;
+    }
+}
+
+.o_mr_footer {
+    text-align: center;
+    font-size: 8.5px;
+    color: $mr-muted;
+}

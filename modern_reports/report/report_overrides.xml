@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Point the core print loops at the Modern Reports documents. These are plain view
+        inheritances, so uninstalling the addon brings the standard Odoo layouts back.
+        Localisation-specific invoice layouts (_get_name_invoice_report) are left untouched.
+    -->
+
+    <template id="report_invoice" inherit_id="account.report_invoice">
+        <xpath expr="//t[@t-call='account.report_invoice_document']" position="attributes">
+            <attribute name="t-call">modern_reports.report_invoice_document</attribute>
+        </xpath>
+    </template>
+
+    <template id="report_saleorder_raw" inherit_id="sale.report_saleorder_raw">
+        <xpath expr="//t[@t-call='sale.report_saleorder_document']" position="attributes">
+            <attribute name="t-call">modern_reports.report_saleorder_document</attribute>
+        </xpath>
+    </template>
+
+    <template id="report_saleorder_pro_forma" inherit_id="sale.report_saleorder_pro_forma">
+        <xpath expr="//t[@t-call='sale.report_saleorder_document']" position="attributes">
+            <attribute name="t-call">modern_reports.report_saleorder_document</attribute>
+        </xpath>
+    </template>
+
+    <template id="report_purchaseorder" inherit_id="purchase.report_purchaseorder">
+        <xpath expr="//t[@t-call='purchase.report_purchaseorder_document']" position="attributes">
+            <attribute name="t-call">modern_reports.report_purchaseorder_document</attribute>
+        </xpath>
+    </template>
+
+    <template id="report_purchasequotation" inherit_id="purchase.report_purchasequotation">
+        <xpath expr="//t[@t-call='purchase.report_purchasequotation_document']" position="attributes">
+            <attribute name="t-call">modern_reports.report_purchasequotation_document</attribute>
+        </xpath>
+    </template>
+
+    <!-- Use the Modern Reports paper margins. When the addon is uninstalled the paper format is
+         deleted and these actions fall back to the company default again. -->
+    <record id="account.account_invoices" model="ir.actions.report">
+        <field name="paperformat_id" ref="paperformat_modern"/>
+    </record>
+    <record id="account.account_invoices_without_payment" model="ir.actions.report">
+        <field name="paperformat_id" ref="paperformat_modern"/>
+    </record>
+    <record id="sale.action_report_saleorder" model="ir.actions.report">
+        <field name="paperformat_id" ref="paperformat_modern"/>
+    </record>
+    <record id="sale.action_report_pro_forma_invoice" model="ir.actions.report">
+        <field name="paperformat_id" ref="paperformat_modern"/>
+    </record>
+    <record id="purchase.action_report_purchase_order" model="ir.actions.report">
+        <field name="paperformat_id" ref="paperformat_modern"/>
+    </record>
+    <record id="purchase.report_purchase_quotation" model="ir.actions.report">
+        <field name="paperformat_id" ref="paperformat_modern"/>
+    </record>
+
+</odoo>

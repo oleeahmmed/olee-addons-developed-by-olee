@@ -1,32 +1,34 @@
 {
     'name': 'Modern Reports',
-    'summary': 'Modern printed documents for invoices, proformas, sales orders and purchase orders',
+    'summary': 'One clean print design for invoices, bills, quotations, sales and purchase orders',
     'description': """
-Modern print design shared by invoices, proforma invoices, sales orders and purchase orders:
-logo / company / copy-label letterhead, accent title band, meta grid, parties, per-tax item
-columns, totals from Odoo's computed amounts, bank details, terms and signature.
+Install to switch every customer invoice, credit note, vendor bill, quotation, sales order,
+pro-forma invoice, RFQ and purchase order PDF to the Modern Reports design:
+logo / company / document-info header, accent title band, compact party row, item table,
+totals with paid / amount due, amount in words (lakh / crore for BDT and INR),
+payment method cards, terms and signatures.
 
-Accent colour and page background follow the Modern Theme brand colour and can be overridden
-per company in Settings > Modern Theme > Documents.
+Uninstall to get the standard Odoo layouts back.
+
+Settings > Invoicing > Modern Reports: accent colour and payment methods.
     """,
-    'version': '19.0.1.0.0',
-    'category': 'Sales/Sales',
+    'version': '19.0.2.0.0',
+    'category': 'Accounting/Accounting',
     'author': 'Olee',
     'license': 'LGPL-3',
-    'depends': ['modern_theme', 'account', 'sale', 'purchase'],
+    'depends': ['account', 'sale', 'purchase'],
     'data': [
-        'views/res_config_settings_views.xml',
+        'security/ir.model.access.csv',
+        'security/security.xml',
         'report/paperformat.xml',
-        'report/document_page.xml',
-        'report/document_invoice.xml',
-        'report/document_sale_order.xml',
-        'report/document_purchase_order.xml',
-        'report/copy_wrappers.xml',
-        'report/report_actions.xml',
+        'report/layout.xml',
+        'report/report_overrides.xml',
+        'views/payment_method_views.xml',
+        'views/res_config_settings_views.xml',
     ],
     'assets': {
         'web.report_assets_common': [
-            'modern_reports/static/src/scss/document.scss',
+            'modern_reports/static/src/scss/modern_reports.scss',
         ],
     },
     'installable': True,
