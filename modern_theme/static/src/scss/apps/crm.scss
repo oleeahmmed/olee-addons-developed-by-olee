@@ -1024,6 +1024,9 @@
     // ---------- record picker (search-as-you-type) ----------
     .cm-picker {
         position: relative; min-width: 0;
+        // The icon belongs to the input only: the results menu is part of .cm-picker,
+        // so centering on the whole block put the magnifier between the two.
+        .cm-picker-box { position: relative; }
         .cm-picker-icon { position: absolute; left: 0.625rem; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: var(--cm-subtle-fg); pointer-events: none; }
         .cm-input { padding-left: 1.875rem; }
         .cm-input::placeholder { color: var(--cm-subtle-fg); }

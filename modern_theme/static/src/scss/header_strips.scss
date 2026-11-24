@@ -1,0 +1,40 @@
+// Modern Theme: native top bars drawn as card-header strips.
+//
+// The reference kit gives every card a header that sits in its own rounded,
+// hairline-bordered surface, separate from the body. Odoo's own chrome gets
+// that same surface, so these strips read as card headers instead of
+// full-bleed bars. The form header, action bar and chatter toolbar live in
+// form.scss (where their layout rules already are); this file covers the
+// list / kanban / calendar / graph / pivot headers and the notebook tabs.
+// Only CSS on Odoo's markup; tokens keep it in sync with light and dark.
+
+$cs-html: 'html[data-mt-theme]';
+$cs-apps: '#{$cs-html} .o_web_client';
+
+// ---- 1. Page header: breadcrumb, title, search, New, view switcher ----
+// Modern apps inset their lists / boards, so the header is a card of the same
+// width. Base-app pages (Contacts, …) draw full-bleed tables: there the header
+// stays full-bleed too, otherwise its rounded card would float inside the table.
+#{$cs-apps} .o_view_controller > .o_control_panel {
+    margin: 0.75rem 1rem 0 !important;
+    padding: 0.5rem 0.875rem !important;
+    background: var(--mt-card) !important;
+    border: 1px solid var(--mt-border) !important;
+    border-radius: 0.75rem !important;
+    box-shadow: var(--mt-card-shadow) !important;
+}
+
+html[data-mt-theme]:not(.mt-app-modern) .o_web_client .o_view_controller > .o_control_panel {
+    margin: 0 !important;
+    padding: 0.625rem 1rem 0.75rem !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--mt-border) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+// ---- 2. Notebook tabs: same 14px semibold labels as the card headers ----
+#{$cs-apps} .o_form_view .o_notebook .nav-link {
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+}

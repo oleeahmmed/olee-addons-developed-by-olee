@@ -111,11 +111,12 @@ $mt-bar-height: 3.5rem;
 // ===========================================================================
 #{$mt-form} .o_control_panel {
     flex-shrink: 0;
-    margin: 0 !important;
-    padding: 0.875rem 1.5rem !important;
+    margin: 0.75rem 1rem 0 !important;
+    padding: 0.5rem 0.875rem !important;
     background: var(--mt-card) !important;
-    border-bottom: 1px solid var(--mt-border) !important;
-    box-shadow: none !important;
+    border: 1px solid var(--mt-border) !important;
+    border-radius: 0.75rem !important;
+    box-shadow: var(--mt-card-shadow) !important;
 
     .o_control_panel_main {
         align-items: center !important;
@@ -309,15 +310,16 @@ $mt-bar-height: 3.5rem;
         top: 0;
         // above the notebook tabs and list headers that scroll underneath it
         z-index: 10;
-        min-height: $mt-bar-height;
-        margin: 0 !important;
-        padding: 0.6875rem 1.5rem !important;
+        min-height: 0;
+        margin: 0.75rem 1rem 0 !important;
+        padding: 0.375rem 0.5rem !important;
         gap: 0;
         align-items: center;
         flex-wrap: wrap;
         background: var(--mt-card) !important;
-        border-bottom: 1px solid var(--mt-border);
-        box-shadow: none !important;
+        border: 1px solid var(--mt-border);
+        border-radius: 0.75rem;
+        box-shadow: var(--mt-card-shadow);
     }
 
     // One joined control. A real primary action (Send, Confirm once sent) sits
@@ -1365,18 +1367,17 @@ $mt-bar-height: 3.5rem;
     // ---- Header: Send message · Log note · Activity tabs, tools on the right ----------
     .o-mail-Chatter-top {
         container: mt-chatter-top / inline-size;
-        margin: 0;
-        padding: 0;
-        border: 0 !important;
-        border-radius: 0;
+        margin: 0.75rem 0.75rem 0 !important;
+        padding: 0 !important;
+        border: 1px solid var(--mt-border) !important;
+        border-radius: 0.75rem !important;
         background: var(--mt-card) !important;
-        box-shadow: none !important;
+        box-shadow: var(--mt-card-shadow) !important;
+        overflow: hidden;
         z-index: 2;
 
-        // pinned while the timeline scrolls under it: a hairline shadow instead of Odoo's box
-        &.shadow-sm { box-shadow: 0 6px 12px -10px color-mix(in srgb, var(--mt-foreground) 35%, transparent) !important; }
         // composer open: it sits in the white header, separated from the lane
-        &:has(.o-mail-Composer) { border-bottom: 1px solid var(--mt-border) !important; padding-bottom: 0.75rem; }
+        &:has(.o-mail-Composer) { border-bottom: 1px solid var(--mt-border) !important; padding-bottom: 0.75rem !important; }
     }
 
     .o-mail-Chatter-topbar {

@@ -3,11 +3,13 @@
 
     <t t-name="crm_modern.RecordPicker">
         <div class="cm-picker">
-            <i class="fa fa-search cm-picker-icon" aria-hidden="true"/>
-            <input t-att-id="props.id" t-ref="input" type="text" class="cm-input cm-input-sm" autocomplete="off"
-                   t-att-placeholder="label or props.placeholder" t-att-value="state.editing ? state.q : label"
-                   role="combobox" t-att-aria-expanded="state.open ? 'true' : 'false'"
-                   t-on-input="onInput" t-on-focus="onFocus" t-on-blur="onBlur" t-on-keydown="onKeydown"/>
+            <div class="cm-picker-box">
+                <i class="fa fa-search cm-picker-icon" aria-hidden="true"/>
+                <input t-att-id="props.id" t-ref="input" type="text" class="cm-input cm-input-sm" autocomplete="off"
+                       t-att-placeholder="label or props.placeholder" t-att-value="state.editing ? state.q : label"
+                       role="combobox" t-att-aria-expanded="state.open ? 'true' : 'false'"
+                       t-on-input="onInput" t-on-focus="onFocus" t-on-blur="onBlur" t-on-keydown="onKeydown"/>
+            </div>
             <ul t-if="state.open and (state.results.length or !state.loading)" class="cm-picker-menu" role="listbox">
                 <t t-foreach="state.results" t-as="r" t-key="r[0]">
                     <li role="option" t-att-aria-selected="r_index === state.active ? 'true' : 'false'"
