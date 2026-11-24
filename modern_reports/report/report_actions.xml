@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Core document print entries print on the modern paperformat. -->
+
+    <record id="account.account_invoices" model="ir.actions.report">
+        <field name="paperformat_id" ref="paperformat_modern_documents"/>
+    </record>
+    <record id="account.account_invoices_without_payment" model="ir.actions.report">
+        <field name="paperformat_id" ref="paperformat_modern_documents"/>
+    </record>
+    <record id="sale.action_report_saleorder" model="ir.actions.report">
+        <field name="paperformat_id" ref="paperformat_modern_documents"/>
+    </record>
+    <record id="sale.action_report_pro_forma_invoice" model="ir.actions.report">
+        <field name="paperformat_id" ref="paperformat_modern_documents"/>
+    </record>
+    <record id="purchase.action_report_purchase_order" model="ir.actions.report">
+        <field name="paperformat_id" ref="paperformat_modern_documents"/>
+    </record>
+
+    <!-- Invoice copies -->
+
+    <record id="action_report_invoice_original" model="ir.actions.report">
+        <field name="name">Invoice – Original</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">modern_reports.report_invoice_original</field>
+        <field name="report_file">modern_reports.report_invoice_original</field>
+        <field name="print_report_name">'%s' % object._get_report_base_filename()</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_modern_documents"/>
+        <field name="group_ids" eval="[(6, 0, [ref('account.group_account_invoice'), ref('account.group_account_readonly')])]"/>
+        <field name="domain">[('move_type', 'in', ('out_invoice', 'out_refund'))]</field>
+    </record>
+
+    <record id="action_report_invoice_duplicate" model="ir.actions.report">
+        <field name="name">Invoice – Duplicate</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">modern_reports.report_invoice_duplicate</field>
+        <field name="report_file">modern_reports.report_invoice_duplicate</field>
+        <field name="print_report_name">'%s_duplicate' % object._get_report_base_filename()</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_modern_documents"/>
+        <field name="group_ids" eval="[(6, 0, [ref('account.group_account_invoice'), ref('account.group_account_readonly')])]"/>
+        <field name="domain">[('move_type', 'in', ('out_invoice', 'out_refund'))]</field>
+    </record>
+
+    <record id="action_report_invoice_triplicate" model="ir.actions.report">
+        <field name="name">Invoice – Triplicate</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">modern_reports.report_invoice_triplicate</field>
+        <field name="report_file">modern_reports.report_invoice_triplicate</field>
+        <field name="print_report_name">'%s_triplicate' % object._get_report_base_filename()</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_modern_documents"/>
+        <field name="group_ids" eval="[(6, 0, [ref('account.group_account_invoice'), ref('account.group_account_readonly')])]"/>
+        <field name="domain">[('move_type', 'in', ('out_invoice', 'out_refund'))]</field>
+    </record>
+
+    <!-- Proforma invoice copies -->
+
+    <record id="action_report_invoice_proforma_original" model="ir.actions.report">
+        <field name="name">Proforma Invoice – Original</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">modern_reports.report_invoice_proforma_original</field>
+        <field name="report_file">modern_reports.report_invoice_proforma_original</field>
+        <field name="print_report_name">'%s_proforma' % object._get_report_base_filename()</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_modern_documents"/>
+        <field name="group_ids" eval="[(6, 0, [ref('account.group_account_invoice'), ref('account.group_account_readonly')])]"/>
+        <field name="domain">[('move_type', 'in', ('out_invoice', 'out_refund'))]</field>
+    </record>
+
+    <record id="action_report_invoice_proforma_duplicate" model="ir.actions.report">
+        <field name="name">Proforma Invoice – Duplicate</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">modern_reports.report_invoice_proforma_duplicate</field>
+        <field name="report_file">modern_reports.report_invoice_proforma_duplicate</field>
+        <field name="print_report_name">'%s_proforma_duplicate' % object._get_report_base_filename()</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_modern_documents"/>
+        <field name="group_ids" eval="[(6, 0, [ref('account.group_account_invoice'), ref('account.group_account_readonly')])]"/>
+        <field name="domain">[('move_type', 'in', ('out_invoice', 'out_refund'))]</field>
+    </record>
+
+    <record id="action_report_invoice_proforma_triplicate" model="ir.actions.report">
+        <field name="name">Proforma Invoice – Triplicate</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">modern_reports.report_invoice_proforma_triplicate</field>
+        <field name="report_file">modern_reports.report_invoice_proforma_triplicate</field>
+        <field name="print_report_name">'%s_proforma_triplicate' % object._get_report_base_filename()</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_modern_documents"/>
+        <field name="group_ids" eval="[(6, 0, [ref('account.group_account_invoice'), ref('account.group_account_readonly')])]"/>
+        <field name="domain">[('move_type', 'in', ('out_invoice', 'out_refund'))]</field>
+    </record>
+
+</odoo>
