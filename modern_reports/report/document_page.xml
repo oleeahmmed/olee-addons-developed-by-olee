@@ -9,7 +9,7 @@
 
         <div class="header o_mr_header"
              t-att-style="'border-bottom: 2pt solid %s; padding-bottom: 4pt;' % mr_style['accent']">
-            <table style="width: 100%; border-collapse: collapse;">
+            <table style="width: 100%; border-collapse: separate; border-spacing: 0;">
                 <tbody>
                     <tr>
                         <td style="width: 22%; vertical-align: middle;">

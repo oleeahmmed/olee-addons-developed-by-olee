@@ -35,7 +35,8 @@
     .o_mr_payments,
     .o_mr_bottom {
         width: 100%;
-        border-collapse: collapse;
+        border-collapse: separate;
+        border-spacing: 0;
     }
 
     .o_mr_meta {
@@ -60,6 +61,10 @@
             padding: 6pt 8pt;
             vertical-align: top;
             font-size: 8.5pt;
+        }
+
+        td.o_mr_party + td.o_mr_party {
+            border-left: none;
         }
     }
 
