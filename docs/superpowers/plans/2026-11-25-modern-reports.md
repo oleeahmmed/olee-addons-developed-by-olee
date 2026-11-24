@@ -2475,6 +2475,22 @@ column). `Page X / Y` placeholders stay empty in HTML by design; repeat
 letterhead on page 2 and footer page numbers still need a real PDF check,
 which is only possible on the production server.
 
+**Production PDF result (2026-11-25):** after installing wkhtmltopdf 0.12.6.1 on
+72.62.198.140, real PDFs from DB `crm` showed three fixes were needed:
+`border-collapse: separate` for hairline-free grids (`5e17bec`), and the
+letterhead. The letterhead could not stay in the wkhtmltopdf header sheet —
+it was mis-placed over the title band no matter the margin/spacing. Root
+cause of the final fix: `_prepare_html` (`ir_actions_report.py`) only keeps
+`div.header`, `div.footer` and `div.article` nodes, so the letterhead now
+lives inside `div.article` as a white strip above the band (`f0b7db0`,
+`a24723b`), the top margin is 14 mm, and page numbers stay in the footer
+sheet. Verified on prod: invoice, duplicate copy (highlight moves), proforma
+and sales order render correctly; a 60-line rolled-back SO repeats the item
+table header on page 2 with `Page 2 / 2`. Letterhead prints on page 1 only,
+matching the XLSX layout. Purchase order could not be rendered visually
+(no PO records on `crm`); its tests still pass. The stock `Your logo`
+placeholder is replaced by the initials monogram via `uses_default_logo`.
+
 ---
 
 **Out of scope for this plan:** deployment. When the user explicitly approves, the release step is: commit → push `origin main` → `ssh root@72.62.198.140 "bash /var/www/odoo/update.sh"`, then a one-time install of `modern_reports` on the production databases (`crm`, `olee`, `rebelsoft`) and a visual check of the four documents on `crm.ibitltd.com`.
