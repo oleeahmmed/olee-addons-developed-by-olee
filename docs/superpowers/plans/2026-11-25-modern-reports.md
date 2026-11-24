@@ -4,7 +4,7 @@
 
 **Goal:** Ship the `modern_reports` Odoo 19 addon: one modern print layout (logo | company | copy labels, accent band, meta grid, parties, per-tax item table, Odoo-computed totals, bank/terms/signature) for invoices, invoice proformas, sales orders and purchase orders, with per-company accent/background and no "Powered by".
 
-**Architecture:** The addon inherits each core document template (`account.report_invoice_document`, `sale.report_saleorder_document`, `purchase.report_purchaseorder_document`) and replaces only its `t-call="web.external_layout"` node with `modern_reports.document_page`. The page is model-agnostic: it renders chrome (header/band/footer) and dispatches a body partial via `mr_doc._mr_document_kind()`. All data access goes through a shared abstract mixin (`modern.reports.document.mixin`) with per-model hooks. Colours are resolved in Python (`res.company._mr_doc_style()`) and injected as concrete hex inline styles because wkhtmltopdf has no CSS-variable support.
+**Architecture:** The addon ships its own document and wrapper templates (`modern_reports.report_invoice`, `..._saleorder`, `..._purchaseorder`) and retargets the existing `ir.actions.report` records to them, leaving every core QWeb view untouched. (Modifying `account.report_invoice_document` — even by retargeting its `web.external_layout` call — makes Odoo re-validate sibling primary views such as `account.report_invoice_document_preview` and `account_edi_ubl_cii.report_invoice_document`, which xpath inside that call and then fail.) The page is model-agnostic: it renders chrome (header/band/footer) and dispatches a body partial via `mr_doc._mr_document_kind()`. All data access goes through a shared abstract mixin (`modern.reports.document.mixin`) with per-model hooks. Colours are resolved in Python (`res.company._mr_doc_style()`) and injected as concrete hex inline styles because wkhtmltopdf has no CSS-variable support.
 
 **Tech Stack:** Odoo 19 CE (Python 3.12, QWeb, SCSS in `web.report_assets_common`, wkhtmltopdf), Odoo `TransactionCase` / `AccountTestInvoicingCommon`. No new Python dependencies (`res.currency.amount_to_text` already wraps `num2words`).
 
@@ -1164,12 +1164,35 @@ Expected: `TestInvoiceDocument` FAILS — rendered invoice HTML contains Odoo's 
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <template id="report_invoice_document_modern" inherit_id="account.report_invoice_document">
-        <xpath expr="//t[@t-call='web.external_layout']" position="replace">
-            <t t-call="modern_reports.document_page">
-                <t t-set="mr_doc" t-value="o"/>
+    <record id="account.account_invoices" model="ir.actions.report">
+        <field name="report_name">modern_reports.report_invoice_with_payments</field>
+        <field name="report_file">modern_reports.report_invoice_with_payments</field>
+    </record>
+
+    <record id="account.account_invoices_without_payment" model="ir.actions.report">
+        <field name="report_name">modern_reports.report_invoice</field>
+        <field name="report_file">modern_reports.report_invoice</field>
+    </record>
+
+    <template id="report_invoice_document">
+        <t t-call="modern_reports.document_page">
+            <t t-set="mr_doc" t-value="o"/>
+        </t>
+    </template>
+
+    <template id="report_invoice">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="lang" t-value="o.partner_id.lang"/>
+                <t t-call="modern_reports.report_invoice_document" t-lang="lang"/>
             </t>
-        </xpath>
+        </t>
+    </template>
+
+    <template id="report_invoice_with_payments">
+        <t t-call="modern_reports.report_invoice">
+            <t t-set="print_with_payments" t-value="True"/>
+        </t>
     </template>
 
     <template id="body_account_move">
@@ -1457,9 +1480,9 @@ Update `modern_reports/__manifest__.py` data/assets:
 
 - [ ] **Step 4: Run the tests to verify they pass**
 
-Run: `cd C:/odoo19 && ./venv/Scripts/python.exe odoo-src/odoo-bin -c odoo-local.conf -d odoo_local -u modern_reports --test-enable --test-tags /modern_reports --stop-after-init`
+Run: `cd C:/odoo19 && MSYS_NO_PATHCONV=1 ./venv/Scripts/python.exe odoo-src/odoo-bin -c odoo-local.conf -d odoo_local -u modern_reports --test-enable --test-tags /modern_reports --stop-after-init`
 
-Expected: all four `TestInvoiceDocument` tests pass. If the xpath fails with "Element cannot be located in parent", inspect the installed template (`SELECT arch_db FROM ir_ui_view WHERE key='account.report_invoice_document'`) — the anchor must be `<t t-call="web.external_layout">` inside that template; do not change the anchor strategy.
+Expected: all four `TestInvoiceDocument` tests pass. If a `ParseError` appears while loading `document_invoice.xml`, it comes from trying to inherit `account.report_invoice_document`: sibling primary views (`report_invoice_document_preview`, `account_edi_ubl_cii.report_invoice_document`) xpath nodes *inside* `web.external_layout`, so the core view must not be altered. Keep the standalone-template strategy and retarget the report actions instead.
 
 - [ ] **Step 5: Commit**
 
