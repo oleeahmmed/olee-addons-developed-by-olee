@@ -14,7 +14,8 @@
                     <tbody>
                         <tr>
                             <td style="width: 22%; vertical-align: middle;">
-                                <img t-if="mr_company.logo" t-att-src="image_data_uri(mr_company.logo)" alt="Logo"
+                                <img t-if="mr_company.logo and not mr_company.uses_default_logo"
+                                     t-att-src="image_data_uri(mr_company.logo)" alt="Logo"
                                      style="max-height: 18mm; max-width: 100%;"/>
                                 <div t-else="" class="o_mr_monogram"
                                      t-att-style="'display: inline-block; width: 16mm; height: 16mm; line-height: 16mm; text-align: center; font-size: 15pt; font-weight: 700; border-radius: 4pt; color: %s; border: 1.5pt solid %s;' % (mr_style['accent'], mr_style['accent'])">

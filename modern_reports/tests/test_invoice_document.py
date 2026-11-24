@@ -40,6 +40,19 @@ class TestInvoiceDocument(ModernReportTestCommon):
         html = self._render('account.account_invoices', self.invoice)
         self.assertNotIn('powered by', html.lower())
 
+    def test_letterhead_logo_fallback(self):
+        self.company.partner_id.image_1920 = False
+        html = self._render('account.account_invoices', self.invoice)
+        self.assertIn('o_mr_monogram', html)
+        self.assertNotIn('alt="Logo"', html)
+        self.company.partner_id.image_1920 = (
+            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk'
+            'YPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=='
+        )
+        html = self._render('account.account_invoices', self.invoice)
+        self.assertIn('alt="Logo"', html)
+        self.assertNotIn('o_mr_monogram', html)
+
     def test_amount_in_words_row(self):
         html = self._render('account.account_invoices', self.invoice)
         self.assertIn('in words', html)
