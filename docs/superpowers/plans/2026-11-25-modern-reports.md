@@ -2464,6 +2464,17 @@ cd C:/odoo19/extra-addons && git add modern_reports && git commit -m "fix(modern
 
 (If Step 4/5 needed no changes, skip the commit — the tree is already clean.)
 
+**Result (2026-11-25):** wkhtmltopdf is not installed on this workstation, so
+Step 3/5 PDFs could not be produced locally. Verification was done on the
+rendered report HTML (`_render_qweb_html`) screenshotted in headless Chrome at
+A4 width for invoice, duplicate, proforma, quotation, purchase order and the
+amber-accent/tint variant — all matched the checklist. Fixes committed in
+`78d4e01`: the item table now uses a fixed column grid (description keeps the
+remaining width, numeric headers wrap instead of bleeding into the next
+column). `Page X / Y` placeholders stay empty in HTML by design; repeat
+letterhead on page 2 and footer page numbers still need a real PDF check,
+which is only possible on the production server.
+
 ---
 
 **Out of scope for this plan:** deployment. When the user explicitly approves, the release step is: commit → push `origin main` → `ssh root@72.62.198.140 "bash /var/www/odoo/update.sh"`, then a one-time install of `modern_reports` on the production databases (`crm`, `olee`, `rebelsoft`) and a visual check of the four documents on `crm.ibitltd.com`.
