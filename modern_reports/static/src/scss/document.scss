@@ -1,12 +1,3 @@
-// wkhtmltopdf renders the letterhead document inside a 0-height body, which
-// pushes the header down onto the first page content. Anchor it to the top.
-.o_body_pdf .o_mr_header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-}
-
 .o_mr_doc {
     font-family: Helvetica, Arial, sans-serif;
     font-size: 9pt;
