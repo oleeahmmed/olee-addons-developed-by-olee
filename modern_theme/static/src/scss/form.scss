@@ -2038,15 +2038,35 @@ $mt-bar-height: 3.5rem;
     }
 
     // Inside a tab the page is the card already: named sections are plain blocks
-    // (no card in a card), and a section holding a table takes the full width.
+    // (no card in a card). They flow down two balanced columns, so a short section
+    // ("Invoicing") is followed directly by the next one instead of being stretched
+    // to its neighbour's height and leaving a hollow block. A section holding a
+    // table or rich text keeps the full-width grid.
     .o_notebook .o_group.row:has(> .o_inner_group .o_horizontal_separator) {
-        gap: 1.25rem 2rem;
-
         > .o_inner_group:has(.o_horizontal_separator) {
             padding: 0 !important;
             border: 0;
             border-radius: 0;
             background: transparent;
+        }
+
+        &:not(:has(.o_field_x2many, .o_field_html, .oe_subtotal_footer)):has(> .o_inner_group ~ .o_inner_group) {
+            display: block !important;
+            columns: 2;
+            column-gap: 2rem;
+            margin: 0 !important;
+            align-items: initial !important;
+
+            @media (max-width: 991.98px) { columns: 1; }
+
+            > .o_inner_group {
+                break-inside: avoid;
+                width: 100% !important;
+                max-width: none !important;
+                margin: 0 0 1.25rem !important;
+            }
+
+            > .o_inner_group:last-child { margin-bottom: 0 !important; }
         }
 
         &:has(.o_field_x2many) { grid-template-columns: minmax(0, 1fr); }
