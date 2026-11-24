@@ -71,13 +71,32 @@ $mt: 'html[data-mt-theme]';
     border-radius: var(--mt-radius-badge);
     background: var(--mt-muted);
     color: var(--mt-foreground);
-    overflow: hidden;
+    // never clip the facet icon: the label draws its own rounded corner
+    overflow: visible;
     .o_searchview_facet_label {
         background: var(--mt-primary-soft) !important;
         color: var(--mt-primary-text) !important;
-        border-radius: 0;
+        border: 0 !important;
+        box-shadow: none !important;
+        border-start-start-radius: var(--mt-radius-badge);
+        border-end-start-radius: var(--mt-radius-badge);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        align-self: stretch;
+        min-width: 1.875rem;
+        min-height: 1.5rem;
+        padding-inline: 0.5rem !important;
+        line-height: 1;
+        > i { font-size: 0.75rem; line-height: 1; }
     }
-    .o_facet_values { color: var(--mt-foreground); }
+    .o_facet_values {
+        color: var(--mt-foreground);
+        border-start-end-radius: var(--mt-radius-badge);
+        border-end-end-radius: var(--mt-radius-badge);
+        overflow: hidden;
+    }
     .o_facet_remove { color: var(--mt-muted-foreground); &:hover { color: var(--mt-destructive); } }
 }
 #{$mt} .o_search_bar_menu, #{$mt} .o-dropdown--menu.o_search_bar_menu {

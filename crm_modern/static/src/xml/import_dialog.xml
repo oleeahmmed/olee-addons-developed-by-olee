@@ -37,6 +37,7 @@
                             <option value="column">From the “Salesperson” column</option>
                             <option value="me">Assign everything to me</option>
                         </select>
+                        <span class="cm-hint">Every new record gets exactly one owner</span>
                     </div>
                 </div>
 

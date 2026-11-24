@@ -28,6 +28,25 @@ const PIN_COOKIE = "mt_sb_pinned";
 const MAX_RECENT = 6;
 const BADGE_TTL = 60_000;
 
+// Sidebar "+ New" labels per page (keyed by menu name), so the button reads like
+// the page's own action ("New Campaign", "New Lead", …) instead of a bare "New".
+const CREATE_LABELS = {
+    campaigns: "New Campaign",
+    leads: "New Lead",
+    pipeline: "New Opportunity",
+    activities: "New Activity",
+    users: "New User",
+    quotations: "New Quotation",
+    "sales orders": "New Sales Order",
+    customers: "New Customer",
+    "sales teams": "New Sales Team",
+    "pipeline stages": "New Stage",
+    "activity types": "New Activity Type",
+    "activity plans": "New Activity Plan",
+    tags: "New Tag",
+    "lost reasons": "New Lost Reason",
+};
+
 function readJSON(key, fallback) {
     try {
         return JSON.parse(browser.localStorage.getItem(key)) ?? fallback;
@@ -73,7 +92,6 @@ export class MtSidebar extends Component {
             lastClicked: null,
             flyout: null,
             badges: {},
-            rights: {},
         });
         this.badgeStamp = {};
         this.flyoutTimer = null;
@@ -91,6 +109,8 @@ export class MtSidebar extends Component {
                 this.state.fullscreen = mode === "fullscreen";
             }
             refresh();
+            // the control panel DOM is patched after this event: re-read it once more
+            browser.setTimeout(refresh, 0);
             this.rememberRecent();
             this.state.mobileOpen = false;
         });
@@ -520,65 +540,34 @@ export class MtSidebar extends Component {
     }
 
     // ------------------------------------------------------------------
-    // "+ New": no longer drawn in the sidebar (each page has one "New" button, top
-    // left of the page title). The helpers stay so app addons that register
-    // createTargets / onCreate keep working without changes.
+    // "+ New" in the sidebar footer: the page's own New button is hidden in the
+    // control panel (list_shadcn.scss); this one clicks it, so ACL, view type
+    // and defaults stay exactly the same as Odoo's.
     // ------------------------------------------------------------------
-    get createSpec() {
-        const config = this.config;
-        if (!config?.createTargets) {
-            return null;
-        }
-        const active = this.activeLeaf;
-        if (active) {
-            for (const node of [active.node, ...active.parents.slice().reverse()]) {
-                const spec = registryGet(config.createTargets, node.xmlid);
-                if (spec) {
-                    return spec;
-                }
-            }
-        }
-        const controllerAction = this.action.currentController?.action;
-        const model = controllerAction?.res_model;
-        const noCreate = new Set(config.noCreate || ["mail.activity"]);
-        if (model && !noCreate.has(model) && controllerAction.context?.create !== false) {
-            const all = config.createTargets.getAll ? config.createTargets.getAll() : Object.values(config.createTargets);
-            const known = all.find((spec) => spec.resModel === model);
-            if (known) {
-                return known;
-            }
-        }
-        return registryGet(config.createTargets, config.defaultCreate);
-    }
-    async loadRights() {
-        const spec = this.createSpec;
-        const model = spec?.resModel;
-        if (model && !(model in this.state.rights)) {
-            this.state.rights[model] = await user.checkAccessRight(model, "create").catch(() => false);
-        }
+    get createButton() {
+        const selector =
+            ".o_action_manager .o_control_panel .o_list_button_add, " +
+            ".o_action_manager .o_control_panel .o-kanban-button-new, " +
+            ".o_action_manager .o_control_panel .o_form_button_create";
+        return [...document.querySelectorAll(selector)].find(
+            (el) => !el.disabled && !el.classList.contains("d-none")
+        ) || null;
     }
     get canCreate() {
-        const model = this.createSpec?.resModel;
-        return Boolean(model) && this.state.rights[model] === true;
+        this.state.rev;
+        return Boolean(this.createButton);
     }
-    async onCreate() {
-        const spec = this.createSpec;
-        if (!spec) {
-            return;
-        }
+    // "New Campaign" on Campaigns, "New Lead" on Leads… ; plain "New" elsewhere.
+    get createLabel() {
+        const name = (this.activeLeaf?.node?.name || "").toLowerCase();
+        return CREATE_LABELS[name] || "New";
+    }
+    onCreate() {
         this.state.mobileOpen = false;
-        const handled = this.config?.onCreate ? await this.config.onCreate(spec, this.env) : false;
-        if (handled) {
-            return;
+        const btn = this.createButton;
+        if (btn) {
+            btn.click();
         }
-        await this.action.doAction({
-            type: "ir.actions.act_window",
-            name: spec.label,
-            res_model: spec.resModel,
-            views: [[false, "form"]],
-            target: "current",
-            context: { ...(spec.context || {}) },
-        });
     }
 
     // ------------------------------------------------------------------

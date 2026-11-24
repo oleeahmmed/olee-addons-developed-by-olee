@@ -249,3 +249,13 @@ html:is(.mt-app-modern, [data-mt-app="base"])[data-mt-theme][data-mt-list-style=
     // icon-only create button: keep it square
     .mt-btn-create { width: 2rem; padding: 0 !important; }
 }
+
+// ---------------------------------------------------------------------------
+// "+ New" lives in the sidebar footer now, above the user card. The control
+// panel keeps its button in the DOM (the sidebar clicks it, so ACL, defaults
+// and view type stay Odoo's) but never shows it.
+// ---------------------------------------------------------------------------
+html:is(.mt-app-modern, [data-mt-app="base"])[data-mt-theme]:not(#mt-lt) .o_control_panel_main_buttons :is(.o_list_button_add, .o-kanban-button-new, .o_form_button_create),
+html[data-mt-theme]:not(#mt-lt) .o_control_panel .o_control_panel_main_buttons :is(.o_list_button_add, .o-kanban-button-new, .o_form_button_create) {
+    display: none !important;
+}

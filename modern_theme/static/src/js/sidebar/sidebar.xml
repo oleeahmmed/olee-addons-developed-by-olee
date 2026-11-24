@@ -80,10 +80,10 @@
     </t>
 
     <t t-name="modern_theme.Sidebar.Create">
-        <button t-if="createSpec and canCreate" type="button" class="mt-sb-new mt-sb-focusable"
-                t-att-title="createSpec.label" t-att-aria-label="createSpec.label" t-on-click="onCreate">
+        <button t-if="canCreate" type="button" class="mt-sb-new mt-sb-focusable"
+                t-att-title="createLabel" t-att-aria-label="createLabel" t-on-click="onCreate">
             <i class="fa fa-plus" aria-hidden="true"/>
-            <span class="mt-sb-label" t-esc="createSpec.label"/>
+            <span class="mt-sb-label" t-esc="createLabel"/>
         </button>
     </t>
 
@@ -184,6 +184,7 @@
 
     <t t-name="modern_theme.Sidebar.User">
         <div class="mt-sb-user">
+            <t t-call="modern_theme.Sidebar.Create"/>
             <Dropdown position="'top-start'" menuClass="'mt-sb-user-menu'">
                 <button type="button" class="mt-sb-user-btn mt-sb-focusable" t-att-title="user.name" aria-label="Account menu">
                     <img class="mt-sb-avatar" t-att-src="avatar" alt=""/>
@@ -333,8 +334,9 @@
                 </div>
             </nav>
 
-            <!-- footer: user -->
+            <!-- footer: new record + user -->
             <div class="mt-sc-footer">
+                <t t-call="modern_theme.Sidebar.Create"/>
                 <Dropdown position="ui.isSmall ? 'top-start' : 'right-end'" menuClass="'mt-sb-user-menu'">
                     <button type="button" class="mt-sc-btn mt-sc-btn-lg mt-sc-user mt-sb-focusable" t-att-title="user.name" aria-label="Account menu">
                         <img class="mt-sc-avatar" t-att-src="avatar" alt=""/>
