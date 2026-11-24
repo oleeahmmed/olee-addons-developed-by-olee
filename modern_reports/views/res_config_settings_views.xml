@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.modern.reports</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="modern_theme.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='modern_theme']" position="inside">
+                <block title="Documents" name="mr_documents">
+                    <setting id="mr_doc_accent_color" string="Document accent colour"
+                             help="Leave empty to use the brand colour. Used for the title band, table headers and accents on printed documents.">
+                        <field name="mr_doc_accent_color" widget="color" class="mt-color-field"/>
+                    </setting>
+                    <setting id="mr_doc_background" string="Document background"
+                             help="White, a soft tint of the accent colour, or a custom colour.">
+                        <field name="mr_doc_background"/>
+                        <div class="mt-setting-row" invisible="mr_doc_background != 'custom'">
+                            <field name="mr_doc_background_color" widget="color" class="mt-color-field"/>
+                        </div>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
