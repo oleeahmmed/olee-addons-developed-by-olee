@@ -110,7 +110,8 @@ $rh-form: 'html[data-mt-theme] .o_web_client .o_form_view:not(.o_base_settings):
     padding: 0.75rem 1rem !important;
     border: 1px solid var(--mt-border);
     border-radius: 0.75rem;
-    background: color-mix(in srgb, var(--mt-muted) 30%, var(--mt-card));
+    // Same tinted surface as the action bar, so totals read as a summary panel.
+    background: var(--mt-muted);
     font-variant-numeric: tabular-nums;
 
     .o_form_label { color: var(--mt-muted-foreground); font-size: 0.8125rem; font-weight: 500 !important; }

@@ -316,7 +316,9 @@ $mt-bar-height: 3.5rem;
         gap: 0;
         align-items: center;
         flex-wrap: wrap;
-        background: var(--mt-card) !important;
+        // A tinted toolbar, so the white outline buttons and the stage pills
+        // read as controls on it instead of blending into the sheet.
+        background: var(--mt-muted) !important;
         border: 1px solid var(--mt-border);
         border-radius: 0.75rem;
         box-shadow: var(--mt-card-shadow);
