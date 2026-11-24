@@ -57,13 +57,13 @@ modern_reports/
 ├── __manifest__.py, __init__.py
 ├── models/
 │   ├── __init__.py
+│   ├── document_mixin.py         # abstract helpers shared by the three models
 │   ├── res_company.py            # colours, effective style helper
 │   ├── res_config_settings.py    # related settings fields
-│   ├── account_move.py           # helpers: titles, rows, tax columns, words, optional l10n fields
-│   ├── sale_order.py             # same helpers for sale.order
-│   └── purchase_order.py         # same helpers for purchase.order
+│   ├── account_move.py           # per-model hooks: titles, lines, taxes, parties
+│   ├── sale_order.py             # same hooks for sale.order
+│   └── purchase_order.py         # same hooks for purchase.order
 ├── views/
-│   ├── res_company_views.xml
 │   └── res_config_settings_views.xml
 ├── report/
 │   ├── paperformat.xml
@@ -74,7 +74,13 @@ modern_reports/
 │   ├── copy_wrappers.xml         # proforma + copy templates
 │   └── report_actions.xml        # paperformats on core actions + 6 new print actions
 ├── static/src/scss/document.scss # in web.report_assets_common
-└── tests/test_document_helpers.py
+└── tests/
+    ├── test_company_style.py
+    ├── test_document_helpers.py
+    ├── test_invoice_document.py
+    ├── test_document_copies.py
+    ├── test_sale_document.py
+    └── test_purchase_document.py
 ```
 
 ## 5. Template architecture
@@ -90,8 +96,8 @@ document body is replaced, by inheriting each core document template and replaci
 
 The replacement is a `position="replace"` xpath on that node: it drops the core body and calls
 `modern_reports.document_page` with `mr_doc` (the document), `copy_label` and `proforma`
-template variables. The page dispatches its body partial on `mr_doc._name`, so the same page
-serves all models.
+template variables. The page dispatches its body partial on `mr_doc._mr_document_kind()`
+(`account_move` / `sale_order` / `purchase_order`), so the same page serves all models.
 
 Page chrome (`modern_reports.document_page`) renders:
 
@@ -103,7 +109,7 @@ Page chrome (`modern_reports.document_page`) renders:
 3. `.footer` — head office / tax IDs, `Page X/Y` (`.page` / `.topage`), repeated on every page.
 
 Title: because Odoo renders its own `layout_document_title` inside the replaced layout node, the
-title comes from a small helper `mr_document_title()` per model, replicating Odoo's exact rules
+title comes from a small helper `_mr_document_title()` per model, replicating Odoo's exact rules
 (same English wording, translated):
 
 - Invoice: Invoice / Draft Invoice / Cancelled Invoice, Credit Note variants, Vendor Bill /
@@ -125,7 +131,7 @@ chain without any Python changes.
 - Invoice copy N: `t-call="account.report_invoice_with_payments"` + `copy_label`
   (keeps the payment box and all core filters).
 - Proforma copy N: `t-call="account.report_invoice"` + `copy_label` + `proforma = True`
-  (no payment box; proforma titles from core template logic).
+  (no payment box; the title helper prefixes the proforma wording).
 
 New print actions (bound to `account.move`, domain `move_type in (out_invoice, out_refund)`,
 groups `account.group_account_invoice` + `account.group_account_readonly`):
@@ -161,7 +167,7 @@ new copy actions.
 
 ### Body
 
-1. **Title band** — accent background, white centered text, 14–16 pt: `layout_document_title`.
+1. **Title band** — accent background, white centered text, 14–16 pt: `_mr_document_title()`.
 2. **Meta grid** — bordered 2-column table, labels uppercase micro-text:
 
 | Document | Fields |
@@ -195,8 +201,8 @@ new copy actions.
 | One Rate %/Amount pair per tax group | tax groups exist; ordered by first appearance; per-line rate is that line's percentage for the group |
 | Total | always (`price_total`, incl. tax) |
 
-Column widths via `<colgroup>`; the layout must stay on one A4 width in the worst case
-(3 tax pairs + discount + HSN) by using compact cells.
+Column widths live in the report SCSS (compact cells, right-aligned numbers); the layout must
+stay on one A4 width in the worst case (3 tax pairs + discount + HSN).
 
 5. **Totals** — left: "Total invoice amount in words" box (hidden when the helper returns "");
    right: rows built only from Odoo's computed `tax_totals`:
@@ -219,14 +225,13 @@ New fields on `res.company`:
   `custom`.
 - `mr_doc_background_color` — char hex, default `#ffffff`, used when `custom`.
 
-`res.config.settings` gets the three related fields (readonly=False) inside the existing theme
-colours block so they appear in Settings ▸ Companies. A constraint validates hex values, mirroring
-`modern_theme`'s colour constraint.
+`res.config.settings` gets the three related fields (readonly=False) in a "Documents" block
+inside the existing Modern Theme app in Settings ▸ Companies. A constraint validates hex values,
+mirroring `modern_theme`'s colour constraint.
 
-`res.company.mr_doc_style()` returns plain hex values (accent, background, soft tint, border,
+`res.company._mr_doc_style()` returns plain hex values (accent, background, soft tint, border,
 muted text) computed in Python. wkhtmltopdf has no CSS-variable support, so the page template
-injects them with `t-att-style` / a generated `<style>` block; the shared SCSS handles layout,
-typography and spacing only.
+injects them with `t-att-style`; the shared SCSS handles layout, typography and spacing only.
 
 ## 8. Print constraints (wkhtmltopdf)
 
@@ -244,8 +249,9 @@ typography and spacing only.
   the same variables core uses).
 - Money values come only from Odoo's computed totals (`tax_totals`, `amount_residual`,
   `price_subtotal`, `price_total`); nothing is recalculated in QWeb.
-- Amount in words uses `num2words` (already an Odoo dependency) plus the currency's
-  unit/subunit labels; empty string disables the row.
+- Amount in words uses Odoo's built-in `res.currency.amount_to_text` (the same helper behind
+  `account.move.amount_total_words`, which wraps `num2words`) plus an " Only" suffix; an empty
+  return disables the row.
 - Optional `l10n_in` fields (HSN, reverse charge, vehicle, place of supply) are read only when
   the field exists on the model (`'field' in model._fields`), so the addon never depends on the
   Indian localisation.
