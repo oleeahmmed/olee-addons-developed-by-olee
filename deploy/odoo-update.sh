@@ -11,7 +11,7 @@ BIN="${ODOO_BIN:-$ROOT/odoo/odoo-bin}"
 SERVICE="${ODOO_SERVICE:-odoo19}"
 FS="${ODOO_FILESTORE:-$ROOT/filestore/filestore}"
 KNOWN_DBS="${ODOO_DBS:-rebelsoft crm olee}"
-KNOWN_MODS="modern_theme,crm_modern,sales_modern,inventory_modern,purchase_modern,mrp_modern"
+KNOWN_MODS="modern_theme,modern_reports,crm_modern,sales_modern,inventory_modern,purchase_modern,mrp_modern"
 
 SKIP_PULL=0
 if [[ "${1:-}" == "--skip-pull" ]]; then
