@@ -1221,7 +1221,8 @@ $mt-bar-height: 3.5rem;
         .tab-pane { padding: 0.75rem 1rem 1rem; }
 
         .tab-pane:has(> .o_field_x2many),
-        .tab-pane:has(> .o_field_sol_o2m) {
+        .tab-pane:has(> [class*="o2m"]),
+        .tab-pane:has(> [class*="one2many"]) {
             padding: 0;
         }
     }
@@ -1304,9 +1305,12 @@ $mt-bar-height: 3.5rem;
         border: 0;
         border-radius: 0;
         background: transparent;
+        overflow: auto;
     }
 
     .o_notebook .tab-pane:has(> .o_field_sol_o2m),
+    .o_notebook .tab-pane:has(> [class*="o2m"]),
+    .o_notebook .tab-pane:has(> [class*="one2many"]),
     .o_notebook .tab-pane:has(> .o_field_x2many) {
         > [name="so_button_below_order_lines"]:not(:has(.btn)) { display: none; }
 

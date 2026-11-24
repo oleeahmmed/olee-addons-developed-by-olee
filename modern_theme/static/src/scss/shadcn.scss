@@ -220,25 +220,49 @@ html[data-mt-scheme="dark"] {
 }
 
 // ---------------------------------------------------------------------------
-// 5. Tabs (form notebooks): a muted tab list with the open tab raised
+// 5. Tabs (form notebooks): the notebook is one card — the tab strip is its
+//    header, so the tabs touch the lines below with no gap.
 // ---------------------------------------------------------------------------
-#{$sc-apps} .o_form_view.o_form_view .o_notebook.o_notebook.o_notebook {
-    .nav-tabs {
-        display: inline-flex !important;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 0.125rem;
-        padding: 0.1875rem !important;
-        margin: 0 0 0.75rem !important;
-        border-radius: 0.625rem;
-        background: var(--mt-muted) !important;
-    }
-    .nav-link {
-        height: 1.875rem;
+#{$sc-apps} .o_form_view.o_form_view .o_notebook.o_notebook.o_notebook:not(.vertical):not(.o_base_settings) {
+    --Notebook-margin-x: 0;
+    margin: 0.75rem 0 0 !important;
+    background: var(--mt-card) !important;
+    border: 1px solid var(--mt-border-base) !important;
+    border-radius: 0.75rem !important;
+    box-shadow: none !important;
+    overflow: hidden;
+
+    .o_notebook_headers {
         margin: 0 !important;
-        padding: 0 0.75rem !important;
-        border: 1px solid transparent !important;
-        border-radius: 0.5rem !important;
+        padding: 0 0.875rem !important;
+        border: 0 !important;
+        border-bottom: 1px solid var(--mt-border-base) !important;
+        background: var(--mt-card) !important;
+        overflow: visible !important;
+    }
+
+    .nav-tabs {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: stretch;
+        gap: 0.25rem;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
+    }
+
+    .nav-item { margin: 0 !important; }
+
+    .nav-link {
+        height: 2.625rem;
+        margin: 0 !important;
+        padding: 0 0.625rem !important;
+        display: inline-flex;
+        align-items: center;
+        border: 0 !important;
+        border-bottom: 2px solid transparent !important;
+        border-radius: 0 !important;
         background: transparent !important;
         color: var(--mt-muted-foreground) !important;
         font-size: 0.8125rem;
@@ -246,21 +270,40 @@ html[data-mt-scheme="dark"] {
         box-shadow: none !important;
         &:hover { color: var(--mt-foreground) !important; }
         &.active {
-            background: var(--mt-card) !important;
-            border-color: var(--mt-border-base) !important;
+            background: transparent !important;
+            border-color: transparent !important;
+            border-bottom-color: var(--mt-primary) !important;
             color: var(--mt-foreground) !important;
-            font-weight: 500;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06) !important;
+            font-weight: 600;
+            box-shadow: none !important;
         }
     }
+
+    // The notebook card is the frame: the content pane adds no second one.
     .o_notebook_content,
     &:not(:has(.nav-item:first-child > .nav-link.active)) .o_notebook_content {
-        border-radius: 0.75rem;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: transparent !important;
     }
-}
-html[data-mt-scheme="dark"] .o_web_client .o_form_view.o_form_view .o_notebook.o_notebook.o_notebook .nav-link.active {
-    background: color-mix(in srgb, var(--mt-input) 45%, var(--mt-card)) !important;
-    border-color: transparent !important;
+
+    .tab-pane { padding: 0.75rem 1rem 1rem; }
+
+    // A pane that starts with a line table sits flush under the tabs; the totals
+    // block that follows keeps its own padding. Line widgets end in _o2m /
+    // _one2many (sale: sol_o2m, purchase: …_o2m, stock: stock_move_one2many).
+    .tab-pane:has(> [class*="o2m"]),
+    .tab-pane:has(> [class*="one2many"]),
+    .tab-pane:has(> .o_field_x2many) {
+        padding: 0;
+
+        > .o_group {
+            margin: 0 !important;
+            padding: 0.875rem 1rem 1rem;
+        }
+    }
 }
 
 // ---------------------------------------------------------------------------

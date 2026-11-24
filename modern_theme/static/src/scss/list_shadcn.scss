@@ -40,9 +40,10 @@ html:is(.mt-app-modern, [data-mt-app="base"])[data-mt-theme][data-mt-scheme="dar
 
 // ---------------------------------------------------------------------------
 // Table: a rounded card, 40px header with 14px medium dark labels, 12px row padding,
-// hairline row borders, muted hover / selected rows.
+// hairline row borders, muted hover / selected rows. Page-level list views only:
+// a form's order / invoice lines sit flush inside the notebook card.
 // ---------------------------------------------------------------------------
-#{$lt} .o_action_manager .o_list_renderer {
+#{$lt} .o_action_manager .o_list_view:not(.o_field_x2many_list) .o_list_renderer {
     --ListRenderer-thead-bg-color: var(--lt-card);
     --ListRenderer-tfoot-bg-color: var(--lt-card);
     flex: 0 1 auto !important;    // the card ends after the last row; long lists scroll inside
@@ -191,7 +192,7 @@ html:is(.mt-app-modern, [data-mt-app="base"])[data-mt-theme][data-mt-list-style=
 }
 // Empty list: the card keeps room for Odoo's "no records" helper (it is drawn over
 // the renderer, absolutely), instead of shrinking to the header row and clipping it.
-#{$lt} .o_action_manager .o_list_renderer:has(> .o_view_nocontent) {
+#{$lt} .o_action_manager .o_list_view:not(.o_field_x2many_list) .o_list_renderer:has(> .o_view_nocontent) {
     flex: 1 1 auto !important;
     min-height: 22rem;
     > .o_view_nocontent { top: 2.5rem; }          // below the header row
@@ -199,7 +200,7 @@ html:is(.mt-app-modern, [data-mt-app="base"])[data-mt-theme][data-mt-list-style=
 
 // Phones: full width, no side margins
 @media (max-width: 767.98px) {
-    #{$lt} .o_action_manager .o_list_renderer { margin: 0.5rem !important; }
+    #{$lt} .o_action_manager .o_list_view:not(.o_field_x2many_list) .o_list_renderer { margin: 0.5rem !important; }
 }
 
 // ---------------------------------------------------------------------------
