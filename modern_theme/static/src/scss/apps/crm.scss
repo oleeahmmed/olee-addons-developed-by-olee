@@ -1044,53 +1044,69 @@
 // ============================================================================
 .o_cm .cm-native .o_kanban_renderer.o_cm_deal_kanban,
 .o_cm .cm-native .o_cm_deal_kanban {
-    // Lanes, card shell, hover, drag and ribbons come from modern_theme (kanban.scss);
-    // only the inside of the deal card is drawn here.
+    // Lanes, card shell, hover, drag and ribbons come from modern_theme (kanban.scss).
+    // The lane header is just the stage name and its count pill, like the reference.
+    .o_kanban_counter { display: none !important; }
+
     .o_kanban_record:not(.o_kanban_ghost):not(.opacity-50) { cursor: pointer; }
     .cm-kc-head { padding-right: 1.25rem; }
-    .cm-kc-title { display: block; font-size: 0.875rem; font-weight: 600; line-height: 1.35; color: var(--cm-fg);
+    .cm-kc-title { display: block; font-size: 1rem; font-weight: 600; line-height: 1.375; color: var(--cm-fg);
         span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     }
+    .cm-kc-desc {
+        display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        margin: 0.25rem 0 0; font-size: 0.8125rem; line-height: 1.45; color: var(--cm-muted-fg);
+    }
     .cm-kc-customer {
-        display: flex; align-items: center; gap: 0.375rem; min-width: 0; margin-top: 0.25rem;
+        display: flex; align-items: center; gap: 0.3125rem; min-width: 0; max-width: 100%; margin-top: 0.5rem;
         font-size: 0.75rem; color: var(--cm-muted-fg);
-        .o_avatar img, img.o_avatar { width: 1.125rem; height: 1.125rem; border-radius: 0.25rem; }
+        .o_field_widget { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .o_avatar img, .o_m2o_avatar img, img.o_avatar { width: 1.125rem; height: 1.125rem; border-radius: 50%; }
         .fa { width: 1.125rem; text-align: center; color: var(--cm-subtle-fg); }
-    }
-    .cm-kc-money {
-        display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; margin-top: 0.625rem;
-        .cm-kc-amount { font-size: 1rem; font-weight: 650; letter-spacing: -0.01em; color: var(--cm-fg); font-variant-numeric: tabular-nums; }
-        .cm-kc-zero { color: var(--cm-subtle-fg); font-weight: 500; }
-        .cm-kc-recurring { font-size: 0.75rem; font-weight: 500; color: var(--cm-muted-fg); }
-        .cm-kc-prob { font-size: 0.6875rem; font-weight: 600; padding: 0.0625rem 0.4375rem; border-radius: 999px; background: var(--cm-primary-soft); color: var(--cm-primary-soft-fg); font-variant-numeric: tabular-nums; }
-    }
-    .cm-kc-bar { height: 0.25rem; margin-top: 0.375rem; border-radius: 999px; background: color-mix(in srgb, var(--cm-border) 80%, var(--cm-muted)); overflow: hidden;
-        span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--cm-primary), color-mix(in srgb, var(--cm-primary) 60%, var(--cm-success))); }
     }
     .cm-kc-tags { margin-top: 0.5rem; .o_tag { font-size: 0.6875rem; border-radius: 999px; } }
     .cm-kc-foot {
-        display: flex; align-items: center; gap: 0.5rem; margin-top: 0.625rem; padding-top: 0.5rem;
-        border-top: 1px solid color-mix(in srgb, var(--cm-border) 75%, transparent);
-        .cm-kc-foot-left { gap: 0.5rem; min-width: 0; }
-        .o_priority { line-height: 1; }
-        .cm-kc-date { display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.6875rem; color: var(--cm-subtle-fg); white-space: nowrap; }
-        .o_m2o_avatar img, .o_avatar img { width: 1.5rem; height: 1.5rem; border-radius: 50%; box-shadow: 0 0 0 2px var(--cm-card); }
+        display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.375rem; margin-top: 0.75rem; padding-top: 0.625rem;
+        border-top: 1px solid var(--cm-border); font-size: 0.75rem; color: var(--cm-muted-fg);
+        .cm-kc-foot-left { flex-wrap: wrap; gap: 0.375rem; min-width: 0; }
+        .cm-kc-foot-right { gap: 0.375rem; flex-shrink: 0; }
+        .o-mail-ActivityButton { line-height: 1; }
+        .o-mail-ActivityButton i { font-size: 0.75rem !important; color: var(--cm-muted-fg) !important; }
+        .cm-kc-prio { display: inline-flex; align-items: center; gap: 0.3125rem; font-weight: 500; white-space: nowrap; }
+        .cm-kc-dot { flex-shrink: 0; width: 0.375rem; height: 0.375rem; border-radius: 50%; background: var(--cm-subtle-fg); }
+        .cm-kc-prio--high .cm-kc-dot { background: var(--cm-danger); }
+        .cm-kc-prio--med .cm-kc-dot { background: var(--cm-warning); }
+        .cm-kc-date { display: inline-flex; align-items: center; gap: 0.3125rem; color: var(--cm-muted-fg); white-space: nowrap; }
+        .cm-kc-date--late { color: var(--cm-danger); }
+        .cm-kc-date--soon { color: var(--cm-warning); }
+        .cm-kc-amount { font-size: 0.6875rem; font-weight: 600; color: var(--cm-fg); font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .cm-kc-zero { color: var(--cm-subtle-fg); font-weight: 500; }
+        .cm-kc-prob { display: inline-flex; align-items: center; height: 1.25rem; padding: 0 0.375rem;
+            border-radius: 999px; box-shadow: inset 0 0 0 1px var(--cm-border); background: transparent;
+            font-size: 0.6875rem; font-weight: 600; color: var(--cm-muted-fg); font-variant-numeric: tabular-nums; }
     }
     // won / lost cards: subtle tint instead of shouting
     .o_kanban_record:has(.ribbon .text-bg-success) { background: color-mix(in srgb, var(--cm-success-soft) 60%, var(--cm-card)) !important; }
     .o_kanban_record:has(.ribbon .text-bg-danger) { opacity: 0.8; }
 }
 
-// Assign team / salesperson on pipeline and campaign cards (click must not open the record)
+// Assign campaign / salesperson on pipeline and campaign cards (click must not open the record).
+// Shown as two outline chips in the card, like the reference's meta row.
 .o_cm .cm-native .cm-kc-assign,
 .o_cm .cm-kc-assign {
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0.5rem; margin-top: 0.625rem; padding: 0.5rem 0.625rem;
-    border-radius: var(--cm-radius); background: color-mix(in srgb, var(--cm-muted) 70%, transparent);
-    .cm-kc-assign-item { display: grid; gap: 0.125rem; min-width: 0; }
-    // Long campaign / salesperson names are cut with "…" instead of overflowing.
-    .cm-kc-assign-item > .o_field_widget { display: block; min-width: 0; max-width: 100%; overflow: hidden; }
-    .cm-kc-assign-label { font-size: 0.625rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--cm-subtle-fg); }
-    .cm-userpick { width: 100%; height: 1.75rem; padding-inline: 0.25rem 0.375rem; }
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; gap: 0.375rem;
+    margin-top: 0.625rem; padding: 0; border-radius: 0; background: none;
+    .cm-kc-assign-item { display: flex; min-width: 0; max-width: 100%; }
+    .cm-kc-assign-item > .o_field_widget { display: block; min-width: 0; max-width: 100%; width: 100%; }
+    .cm-kc-assign-label { display: none; }
+    .cm-userpick {
+        width: 100%; max-width: 100%; height: 1.5rem; padding: 0 0.5rem 0 0.25rem; margin: 0;
+        border: 1px solid var(--cm-border); border-radius: 999px; background: transparent;
+        font-size: 0.75rem; font-weight: 500; color: var(--cm-muted-fg);
+        &:hover { background: var(--cm-muted); border-color: var(--cm-border); color: var(--cm-fg); }
+        .cm-userpick-avatar { width: 1rem; height: 1rem; font-size: 0.5rem; }
+        .cm-userpick-caret { font-size: 0.6875rem; }
+    }
 }
 
 // ---- from crm_modern/static/src/scss/list.scss

@@ -24,6 +24,7 @@
                 <field name="expected_revenue"/>
                 <field name="date_deadline"/>
                 <field name="partner_id"/>
+                <field name="priority"/>
                 <field name="is_rotting"/>
                 <progressbar field="activity_state" colors='{"planned": "success", "today": "warning", "overdue": "danger"}'
                              sum_field="expected_revenue" recurring_revenue_sum_field="recurring_revenue_monthly"
@@ -44,6 +45,7 @@
                         <div class="cm-kc-head">
                             <field name="name" class="cm-kc-title"/>
                         </div>
+                        <field name="cm_description_preview" class="cm-kc-desc" invisible="not cm_description_preview"/>
 
                         <div class="cm-kc-customer" invisible="not partner_id">
                             <field name="partner_id" widget="many2one_avatar" readonly="1" options="{'no_create': 1, 'no_open': 1}"/>
@@ -55,22 +57,6 @@
                             <field name="partner_name" class="text-truncate" invisible="contact_name"/>
                         </div>
 
-                        <div class="cm-kc-money">
-                            <span t-attf-class="cm-kc-amount {{ record.expected_revenue.raw_value ? '' : 'cm-kc-zero' }}">
-                                <field name="expected_revenue" widget="monetary" options="{'currency_field': 'company_currency'}"/>
-                                <t t-if="record.recurring_revenue and record.recurring_revenue.raw_value">
-                                    <span class="cm-kc-recurring" groups="crm.group_use_recurring_revenues">
-                                        + <field name="recurring_revenue" widget="monetary" options="{'currency_field': 'company_currency'}"/>
-                                        <field name="recurring_plan"/>
-                                    </span>
-                                </t>
-                            </span>
-                            <span class="cm-kc-prob"><t t-esc="Math.round(record.probability.raw_value or 0)"/>%</span>
-                        </div>
-                        <div class="cm-kc-bar" aria-hidden="true">
-                            <span t-attf-style="width: {{ Math.min(100, Math.round(record.probability.raw_value or 0)) }}%"/>
-                        </div>
-
                         <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}" class="cm-kc-tags"/>
                         <field name="lead_properties" widget="properties"/>
 
@@ -78,30 +64,38 @@
                             <div class="cm-kc-assign-item">
                                 <span class="cm-kc-assign-label">Campaign</span>
                                 <field name="campaign_id" widget="crm_modern_m2o_pick"
-                                       options="{'placeholder': 'Assign campaign', 'icon': 'fa-bullhorn', 'searchPlaceholder': 'Search a campaign…'}"/>
+                                       options="{'placeholder': 'Campaign', 'icon': 'fa-bullhorn', 'searchPlaceholder': 'Search a campaign…'}"/>
                             </div>
                             <div class="cm-kc-assign-item">
                                 <span class="cm-kc-assign-label">Salesperson</span>
                                 <field name="user_id" widget="crm_modern_user_pick"
-                                       options="{'placeholder': 'Assign salesperson', 'searchPlaceholder': 'Search a salesperson…'}"
+                                       options="{'placeholder': 'Salesperson', 'searchPlaceholder': 'Search a salesperson…'}"
                                        domain="[('share', '=', False)]"/>
                             </div>
                         </div>
 
                         <footer class="cm-kc-foot">
                             <div class="d-flex align-items-center cm-kc-foot-left">
-                                <field name="priority" widget="priority" groups="base.group_user"/>
+                                <t t-set="cm_prio" t-value="Math.round(record.priority.raw_value or 0)"/>
+                                <span t-attf-class="cm-kc-prio cm-kc-prio--{{ cm_prio >= 2 ? 'high' : (cm_prio >= 1 ? 'med' : 'low') }}" title="Priority">
+                                    <i class="cm-kc-dot" aria-hidden="true"/>
+                                    <t t-esc="cm_prio >= 2 ? 'High' : (cm_prio >= 1 ? 'Medium' : 'Low')"/>
+                                </span>
                                 <field name="activity_ids" widget="kanban_activity"/>
                                 <t t-set="cm_deadline" t-value="record.date_deadline.raw_value"/>
                                 <t t-set="cm_today" t-value="luxon.DateTime.now().startOf('day')"/>
                                 <span invisible="not date_deadline" title="Expected closing"
                                       t-attf-class="cm-kc-date {{ cm_deadline and won_status_open and cm_deadline &lt; cm_today ? 'cm-kc-date--late' : (cm_deadline and won_status_open and cm_deadline &lt;= cm_today.plus({ days: 7 }) ? 'cm-kc-date--soon' : '') }}">
                                     <i class="fa fa-calendar-o" aria-hidden="true"/>
-                                    <field name="date_deadline" widget="date"/>
+                                    <t t-esc="cm_deadline ? luxon.DateTime.fromISO(cm_deadline).toFormat('LLL d') : ''"/>
                                 </span>
-                            </div>
-                            <div class="ms-auto d-flex align-items-center">
                                 <field name="rotting_days" class="d-flex" widget="rotting"/>
+                            </div>
+                            <div class="ms-auto d-flex align-items-center cm-kc-foot-right">
+                                <span t-attf-class="cm-kc-amount {{ record.expected_revenue.raw_value ? '' : 'cm-kc-zero' }}">
+                                    <field name="expected_revenue" widget="monetary" options="{'currency_field': 'company_currency'}"/>
+                                </span>
+                                <span class="cm-kc-prob"><t t-esc="Math.round(record.probability.raw_value or 0)"/>%</span>
                             </div>
                         </footer>
                     </t>

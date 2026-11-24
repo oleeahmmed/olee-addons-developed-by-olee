@@ -5,7 +5,7 @@ from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
 from odoo.exceptions import UserError
-from odoo.tools import date_utils, plaintext2html
+from odoo.tools import date_utils, html2plaintext, plaintext2html
 from odoo.tools.sql import escape_psql
 
 
@@ -16,6 +16,14 @@ LIVE_OR_CLOSED = ['|', ('active', '=', True), ('won_status', '!=', 'pending')]
 
 class CrmLead(models.Model):
     _inherit = 'crm.lead'
+
+    cm_description_preview = fields.Char(compute='_compute_cm_description_preview')
+
+    @api.depends('description')
+    def _compute_cm_description_preview(self):
+        for lead in self:
+            text = ' '.join(html2plaintext(lead.description or '').split())
+            lead.cm_description_preview = text[:157].rstrip() + '…' if len(text) > 160 else text
 
     @api.model_create_multi
     def create(self, vals_list):

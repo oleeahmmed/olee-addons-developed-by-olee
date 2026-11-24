@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Lane header, shadcn kanban: title, then the record count in an outline pill.
+         Odoo only prints its own "(count)" when no progress bar is configured, so the
+         pill is rendered here for every board; kanban.scss hides the legacy span.
+         CRM boards use mail's rotting header, a primary copy of web.KanbanHeader, so
+         that template needs the same extension. -->
+    <t t-inherit="web.KanbanHeader" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_column_title')]/span[hasclass('text-truncate')]" position="after">
+            <span class="mt-kb-count" t-if="!props.list.model.useSampleModel" t-esc="group.count"/>
+        </xpath>
+    </t>
+    <t t-inherit="mail.RottingKanbanHeader" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_column_title')]/span[hasclass('text-truncate')]" position="after">
+            <span class="mt-kb-count" t-if="!props.list.model.useSampleModel" t-esc="group.count"/>
+        </xpath>
+    </t>
+
+</templates>

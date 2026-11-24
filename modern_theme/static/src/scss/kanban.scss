@@ -439,21 +439,26 @@ html[data-mt-theme] {
             font-size: 0.875rem !important;
             font-weight: 600 !important;
             letter-spacing: normal;
-            // the count after the name: an outline pill (h-5, px-2, 12px medium)
-            > span:not(.text-truncate) {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                height: 1.25rem;
-                padding: 0.125rem 0.5rem;
-                border: 1px solid var(--kb-border);
-                border-radius: 999px;
-                background: transparent;
-                color: var(--kb-fg);
-                font-size: 0.75rem;
-                font-weight: 500;
-                line-height: 1rem;
-            }
+            // the legacy "(4)" Odoo prints when no progress bar is set
+            > span:not(.text-truncate):not(.mt-kb-count) { display: none !important; }
+        }
+        // the count after the name: an outline pill (h-5, px-2, 12px medium)
+        .mt-kb-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            min-width: 1.25rem;
+            height: 1.25rem;
+            padding: 0.125rem 0.5rem;
+            border: 1px solid var(--kb-border);
+            border-radius: 999px;
+            background: transparent;
+            color: var(--kb-muted-fg);
+            font-size: 0.75rem;
+            font-weight: 500;
+            line-height: 1rem;
+            font-variant-numeric: tabular-nums;
         }
         :is(.o_kanban_quick_add, .o_group_config .btn, .o_kanban_config .btn) {
             display: inline-grid;
