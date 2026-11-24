@@ -40,23 +40,53 @@ body.o_mt_login {
         width: 100%;
         max-width: 25rem !important;
         border: 1px solid var(--mt-border-base) !important;
-        border-radius: calc(var(--mt-radius-card) + 0.25rem);
+        border-radius: var(--mt-radius-card);
         background: var(--mt-card) !important;
-        box-shadow: var(--mt-shadow-xl);
+        box-shadow: var(--mt-shadow-sm), 0 18px 40px -28px rgba(15, 23, 42, 0.35);
         color: var(--mt-foreground);
         animation: mt-pop-in 260ms var(--mt-ease);
         > .card-body {
-            padding: 2rem;
+            padding: 1.5rem;
             // Odoo paints the card body white: let the themed card show through.
             background: transparent !important;
             color: var(--mt-foreground);
+        }
+        // Compact logo mark above the card header instead of a full-width banner.
+        > .card-body > .text-center:first-child {
+            padding-bottom: 1rem !important;
+            margin-bottom: 1.25rem !important;
+            border-bottom: 0 !important;
+            img { max-height: 2.75rem !important; }
         }
         .border-bottom, .border-top { border-color: var(--mt-border-base) !important; }
         // "Powered by" is removed: no dangling separator after "Manage Databases".
         .border-end { border-inline-end: 0 !important; padding-inline-end: 0 !important; margin-inline-end: 0 !important; }
         img { max-height: 72px !important; }
+        // CardFooter: separated, muted links.
+        > .card-body > .text-center.small {
+            margin-top: 1.5rem !important;
+            padding-top: 1rem !important;
+            color: var(--mt-muted-foreground) !important;
+            a { color: var(--mt-muted-foreground); text-decoration: none; &:hover { color: var(--mt-primary-text); text-decoration: underline; } }
+        }
+    }
+    // CardHeader (title + description), inserted by login_form_modern.
+    .o_mt_login_header {
+        margin-bottom: 1.5rem;
+        .o_mt_login_title {
+            margin: 0 0 0.375rem;
+            font-size: 1.5rem;
+            line-height: 1.25;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+            color: var(--mt-foreground);
+        }
+        .o_mt_login_desc { margin: 0; font-size: 0.875rem; line-height: 1.45; color: var(--mt-muted-foreground); }
     }
     label, .form-label, .col-form-label { color: var(--mt-foreground); font-weight: 500; font-size: 0.875rem; }
+    .form-label { margin-bottom: 0.5rem; }
+    .oe_login_form .field-login { margin-bottom: 1rem !important; }
+    .oe_login_form .o_caps_lock_warning { margin-bottom: 1rem; }
     .form-control, .form-select {
         height: calc(var(--mt-control-h) + 0.375rem);
         border: 1px solid var(--mt-input);
@@ -67,6 +97,51 @@ body.o_mt_login {
         &:focus { border-color: var(--mt-primary); box-shadow: 0 0 0 3px var(--mt-ring); outline: 0; }
     }
     .input-group .btn { border-color: var(--mt-input); color: var(--mt-muted-foreground); background: var(--mt-card); }
+    // Password field: the eye toggle sits inside the control, shadcn style.
+    .o_caps_lock_warning .input-group {
+        position: relative;
+        > .form-control { padding-inline-end: 2.5rem; }
+        > .btn.o_show_password {
+            position: absolute;
+            inset-block: 0;
+            inset-inline-end: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.5rem;
+            padding: 0;
+            border: 0 !important;
+            border-radius: 0 var(--mt-radius-control) var(--mt-radius-control) 0 !important;
+            background: transparent !important;
+            color: var(--mt-muted-foreground) !important;
+            &:hover { color: var(--mt-foreground) !important; }
+        }
+    }
+    // Password label row: "Reset Password" sits on the right as a compact link.
+    .o_caps_lock_warning > .d-flex {
+        align-items: center;
+        label { margin-bottom: 0 !important; }
+        .btn-link {
+            padding: 0;
+            border: 0;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--mt-primary-text);
+            text-decoration: none;
+            &:hover { text-decoration: underline; text-underline-offset: 4px; }
+        }
+    }
+    // Footer actions under the main button (sign up / superuser login).
+    .oe_login_buttons > .btn-link.btn-sm {
+        margin-top: 0.75rem;
+        justify-self: center;
+        border: 0 !important;
+        background: transparent !important;
+        color: var(--mt-muted-foreground) !important;
+        font-size: 0.875rem;
+        font-weight: 400;
+        &:hover { color: var(--mt-foreground) !important; text-decoration: underline; }
+    }
     .btn-primary {
         height: calc(var(--mt-btn-h) + 0.375rem);
         border: 0;
@@ -94,6 +169,32 @@ body.o_mt_login {
     .alert { border-radius: var(--mt-radius-lg); }
     .alert-danger { background: var(--mt-destructive-soft); color: var(--mt-foreground); border-color: color-mix(in srgb, var(--mt-destructive) 30%, transparent); }
     .alert-success { background: var(--mt-success-soft); color: var(--mt-foreground); border-color: color-mix(in srgb, var(--mt-success) 30%, transparent); }
+    .o_login_auth {
+        .o_mt_login_divider {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1.25rem 0 0.25rem;
+            color: var(--mt-muted-foreground);
+            font-size: 0.75rem;
+            line-height: 1;
+            &::before, &::after { content: ""; flex: 1 1 auto; height: 1px; background: var(--mt-border-base); }
+        }
+        .list-group { gap: 0.5rem; }
+        .list-group-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--mt-input) !important;
+            border-radius: var(--mt-radius-btn) !important;
+            background: var(--mt-card) !important;
+            color: var(--mt-foreground) !important;
+            font-size: 0.875rem;
+            font-weight: 500;
+            &:hover { background: var(--mt-muted) !important; color: var(--mt-foreground) !important; }
+        }
+    }
     .o_login_auth .btn, .o_auth_oauth_providers .btn {
         border: 1px solid var(--mt-input);
         border-radius: var(--mt-radius-btn);
@@ -148,8 +249,8 @@ body.o_mt_login {
 }
 @media (min-width: 992px) {
     .o_mt_login--split .o_mt_login_hero { display: block; }
-    .o_mt_login--split .card.o_database_list { box-shadow: none; border: 0 !important; background: transparent !important; }
-    .o_mt_login--split .card.o_database_list > .card-body > .text-center:first-child { display: none; }
+    // On the login card the hero already carries the branding: hide the logo mark.
+    .o_mt_login--split .card.o_database_list:has(.o_mt_login_header) > .card-body > .text-center:first-child { display: none; }
 }
 
 // Centered card over a picture

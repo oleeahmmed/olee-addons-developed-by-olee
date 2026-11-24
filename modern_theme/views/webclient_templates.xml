@@ -55,4 +55,26 @@
         <xpath expr="//a[contains(@href, 'utm_medium=auth')]" position="replace"/>
     </template>
 
+    <!--
+        Login form: shadcn-style card header. Only a header block is inserted
+        next to Odoo's own form, so the CSRF token, database selector, fields,
+        alerts, buttons, OAuth call, account switcher and hidden inputs are
+        never touched and keep working after an Odoo upgrade.
+    -->
+    <template id="login_form_modern" inherit_id="web.login" priority="20">
+        <xpath expr="//div[@id='oe_structure_login_top']" position="after">
+            <div class="o_mt_login_header">
+                <h1 class="o_mt_login_title">Login to your account</h1>
+                <p class="o_mt_login_desc">Enter your email below to login to your account.</p>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Replace the "- or -" separator with text / hairline dividers (CSS in login.scss). -->
+    <template id="login_oauth_modern" inherit_id="web.login_oauth" priority="20">
+        <xpath expr="//em" position="replace">
+            <div class="o_mt_login_divider"><span>Or continue with</span></div>
+        </xpath>
+    </template>
+
 </odoo>
