@@ -75,22 +75,72 @@
 
     .o_mr_items {
         margin-bottom: 8pt;
+        table-layout: fixed;
+
+        .o_mr_col_sno {
+            width: 10mm;
+        }
+
+        .o_mr_col_hsn {
+            width: 11mm;
+        }
+
+        .o_mr_col_uom {
+            width: 10mm;
+        }
+
+        .o_mr_col_qty {
+            width: 10mm;
+        }
+
+        .o_mr_col_price {
+            width: 16mm;
+        }
+
+        .o_mr_col_amount {
+            width: 17mm;
+        }
+
+        .o_mr_col_disc {
+            width: 10mm;
+        }
+
+        .o_mr_col_taxable {
+            width: 17mm;
+        }
+
+        .o_mr_col_tax_rate {
+            width: 11mm;
+        }
+
+        .o_mr_col_tax_amount {
+            width: 17mm;
+        }
+
+        .o_mr_col_total {
+            width: 17mm;
+        }
 
         th {
-            padding: 4pt 5pt;
+            padding: 4pt 3pt;
             text-align: left;
-            font-size: 7.5pt;
+            font-size: 7pt;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.3pt;
+            letter-spacing: 0.2pt;
             border-bottom: 1pt solid #cbd5e1;
         }
 
+        th.o_mr_num {
+            white-space: normal;
+        }
+
         td {
-            padding: 4pt 5pt;
+            padding: 4pt 3pt;
             border-bottom: 1pt solid #e2e8f0;
             vertical-align: top;
             font-size: 8.5pt;
+            overflow-wrap: break-word;
         }
 
         tr {

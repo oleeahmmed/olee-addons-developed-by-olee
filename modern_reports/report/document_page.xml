@@ -67,6 +67,22 @@
         <t t-set="mr_show_discount" t-value="mr_doc._mr_has_discount()"/>
         <t t-set="mr_show_hsn" t-value="mr_doc._mr_has_hsn()"/>
         <table class="o_mr_items">
+            <colgroup>
+                <col class="o_mr_col_sno"/>
+                <col class="o_mr_col_desc"/>
+                <col t-if="mr_show_hsn" class="o_mr_col_hsn"/>
+                <col class="o_mr_col_uom"/>
+                <col class="o_mr_col_qty"/>
+                <col class="o_mr_col_price"/>
+                <col class="o_mr_col_amount"/>
+                <col t-if="mr_show_discount" class="o_mr_col_disc"/>
+                <col t-if="mr_show_discount" class="o_mr_col_taxable"/>
+                <t t-foreach="mr_tax_columns" t-as="mr_column">
+                    <col class="o_mr_col_tax_rate"/>
+                    <col class="o_mr_col_tax_amount"/>
+                </t>
+                <col class="o_mr_col_total"/>
+            </colgroup>
             <thead t-att-style="'background-color: %s;' % mr_style['accent_soft']">
                 <tr>
                     <th class="o_mr_num">S.No</th>
