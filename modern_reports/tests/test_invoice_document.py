@@ -1,3 +1,4 @@
+from odoo import fields
 from odoo.tests import tagged
 
 from .common import ModernReportTestCommon
@@ -38,3 +39,37 @@ class TestInvoiceDocument(ModernReportTestCommon):
     def test_no_powered_by(self):
         html = self._render('account.account_invoices', self.invoice)
         self.assertNotIn('powered by', html.lower())
+
+    def test_amount_in_words_row(self):
+        html = self._render('account.account_invoices', self.invoice)
+        self.assertIn('in words', html)
+        self.assertIn('Only', html)
+
+    def test_payment_rows_for_paid_invoice(self):
+        register = self.env['account.payment.register'].with_context(
+            active_model='account.move', active_ids=self.invoice.ids,
+        ).create({'payment_date': fields.Date.today()})
+        register._create_payments()
+        html = self._render('account.account_invoices', self.invoice)
+        self.assertIn('Amount Due', html)
+        self.assertIn('Paid on', html)
+
+    def test_vendor_bill_render(self):
+        bill = self._create_invoice(move_type='in_invoice')
+        html = self._render('account.account_invoices_without_payment', bill)
+        self.assertIn('Vendor Bill', html)
+        self.assertIn('Vendor', html)
+        self.assertIn('Bill Reference', html)
+
+    def test_background_custom_colour(self):
+        self.company.write({'mr_doc_background': 'custom', 'mr_doc_background_color': '#f1f5f9'})
+        html = self._render('account.account_invoices', self.invoice)
+        self.assertIn('#f1f5f9', html)
+        self.company.write({'mr_doc_background': 'white', 'mr_doc_background_color': '#ffffff'})
+
+    def test_bank_and_signature_blocks(self):
+        self.company.write({'bank_ids': [(0, 0, {'acc_number': '123456789'})]})
+        html = self._render('account.account_invoices', self.invoice)
+        self.assertIn('Bank Details', html)
+        self.assertIn('123456789', html)
+        self.assertIn('Authorised Signatory', html)

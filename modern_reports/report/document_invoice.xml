@@ -83,13 +83,44 @@
         <table class="o_mr_totals">
             <tbody>
                 <tr>
-                    <td class="o_mr_words"></td>
+                    <td class="o_mr_words">
+                        <t t-if="mr_doc._mr_amount_in_words()">
+                            <span class="o_mr_label">Total in words</span>
+                            <span t-out="mr_doc._mr_amount_in_words()"/>
+                        </t>
+                    </td>
                     <td class="o_mr_totals_cell">
                         <t t-call="modern_reports.totals_table"/>
                     </td>
                 </tr>
             </tbody>
         </table>
+
+        <t t-if="print_with_payments">
+            <t t-if="mr_doc.payment_state != 'invoicing_legacy'">
+                <t t-set="payments_vals" t-value="mr_doc.sudo().invoice_payments_widget and mr_doc.sudo().invoice_payments_widget['content'] or []"/>
+                <table class="o_mr_payments" t-if="payments_vals">
+                    <tbody>
+                        <tr t-foreach="payments_vals" t-as="payment_vals" t-if="payment_vals['is_exchange'] == 0">
+                            <td>
+                                <t t-if="payment_vals['is_refund']">Reversed on </t><t t-else="">Paid on </t>
+                                <t t-out="payment_vals['date']" t-options='{"widget": "date"}'/>
+                            </td>
+                            <td class="o_mr_num">
+                                <span t-out="payment_vals['amount']" t-options='{"widget": "monetary", "display_currency": mr_doc.currency_id}'/>
+                            </td>
+                        </tr>
+                        <tr class="o_mr_payment_total">
+                            <td><strong>Amount Due</strong></td>
+                            <td class="o_mr_num">
+                                <strong t-out="mr_doc.amount_residual" t-options='{"widget": "monetary", "display_currency": mr_doc.currency_id}'/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </t>
+        </t>
+        <t t-call="modern_reports.bottom_blocks"/>
     </template>
 
 </odoo>

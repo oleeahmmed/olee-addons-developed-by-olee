@@ -148,4 +148,31 @@
         </table>
     </template>
 
+    <template id="bottom_blocks">
+        <table class="o_mr_bottom">
+            <tbody>
+                <tr>
+                    <td class="o_mr_bottom_left">
+                        <t t-if="mr_doc._mr_company().bank_ids">
+                            <div class="o_mr_bottom_title">Bank Details</div>
+                            <div t-foreach="mr_doc._mr_company().bank_ids" t-as="mr_bank">
+                                <span t-if="mr_bank.bank_id.name" t-out="mr_bank.bank_id.name + ' — '"/>
+                                <span t-out="mr_bank.acc_number or ''"/>
+                            </div>
+                        </t>
+                        <t t-if="mr_doc._mr_terms_text()">
+                            <div class="o_mr_bottom_title" style="margin-top: 6pt;">Terms &amp; Conditions</div>
+                            <div t-out="mr_doc._mr_terms_text()" style="white-space: pre-line;"/>
+                        </t>
+                    </td>
+                    <td class="o_mr_bottom_right">
+                        <div>Certified that the particulars given above are true and correct.</div>
+                        <div style="margin-top: 6pt;">For <span t-out="mr_doc._mr_company().name"/></div>
+                        <div class="o_mr_sign_line">Authorised Signatory</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </template>
+
 </odoo>
