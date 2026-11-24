@@ -19,6 +19,7 @@ per company in Settings > Modern Theme > Documents.
         'report/paperformat.xml',
         'report/document_page.xml',
         'report/document_invoice.xml',
+        'report/document_sale_order.xml',
         'report/copy_wrappers.xml',
         'report/report_actions.xml',
     ],
