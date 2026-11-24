@@ -40,48 +40,51 @@ class ModernReportTestCommon(AccountTestInvoicingCommon):
             'supplier_rank': 1,
         })
 
-    def _create_invoice(self, move_type='out_invoice', post=True, discount=0.0):
+    @classmethod
+    def _create_invoice(cls, move_type='out_invoice', post=True, discount=0.0):
         is_vendor = move_type in ('in_invoice', 'in_refund')
-        move = self.env['account.move'].create({
+        move = cls.env['account.move'].create({
             'move_type': move_type,
-            'partner_id': (self.vendor if is_vendor else self.partner_a).id,
+            'partner_id': (cls.vendor if is_vendor else cls.partner_a).id,
             'invoice_date': fields.Date.today(),
             'invoice_line_ids': [(0, 0, {
                 'name': 'Modern Widget',
-                'product_id': self.product.id,
+                'product_id': cls.product.id,
                 'quantity': 2.0,
                 'price_unit': 100.0,
                 'discount': discount,
-                'tax_ids': [(6, 0, (self.tax_purchase if is_vendor else self.tax_sale).ids)],
+                'tax_ids': [(6, 0, (cls.tax_purchase if is_vendor else cls.tax_sale).ids)],
             })],
         })
         if post:
             move.action_post()
         return move
 
-    def _create_sale_order(self, confirm=False):
-        order = self.env['sale.order'].create({
-            'partner_id': self.partner_a.id,
+    @classmethod
+    def _create_sale_order(cls, confirm=False):
+        order = cls.env['sale.order'].create({
+            'partner_id': cls.partner_a.id,
             'order_line': [(0, 0, {
-                'product_id': self.product.id,
+                'product_id': cls.product.id,
                 'product_uom_qty': 2.0,
                 'price_unit': 100.0,
-                'tax_ids': [(6, 0, self.tax_sale.ids)],
+                'tax_ids': [(6, 0, cls.tax_sale.ids)],
             })],
         })
         if confirm:
             order.action_confirm()
         return order
 
-    def _create_purchase_order(self, confirm=False):
-        order = self.env['purchase.order'].create({
-            'partner_id': self.vendor.id,
+    @classmethod
+    def _create_purchase_order(cls, confirm=False):
+        order = cls.env['purchase.order'].create({
+            'partner_id': cls.vendor.id,
             'order_line': [(0, 0, {
-                'product_id': self.product.id,
+                'product_id': cls.product.id,
                 'product_qty': 2.0,
                 'price_unit': 100.0,
                 'date_planned': fields.Datetime.now(),
-                'tax_ids': [(6, 0, self.tax_purchase.ids)],
+                'tax_ids': [(6, 0, cls.tax_purchase.ids)],
             })],
         })
         if confirm:

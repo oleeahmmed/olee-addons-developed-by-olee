@@ -16,7 +16,14 @@ per company in Settings > Modern Theme > Documents.
     'depends': ['modern_theme', 'account', 'sale', 'purchase'],
     'data': [
         'views/res_config_settings_views.xml',
+        'report/document_page.xml',
+        'report/document_invoice.xml',
     ],
+    'assets': {
+        'web.report_assets_common': [
+            'modern_reports/static/src/scss/document.scss',
+        ],
+    },
     'installable': True,
     'application': False,
 }

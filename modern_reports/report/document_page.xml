@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="document_page">
+        <t t-set="mr_doc" t-value="mr_doc.with_context(lang=mr_doc._mr_partner().lang or mr_doc.env.lang)"/>
+        <t t-set="mr_company" t-value="mr_doc._mr_company()"/>
+        <t t-set="mr_style" t-value="mr_company._mr_doc_style()"/>
+        <t t-set="mr_copy" t-value="copy_label or 'Original'"/>
+
+        <div class="header o_mr_header"
+             t-att-style="'border-bottom: 2pt solid %s; padding-bottom: 4pt;' % mr_style['accent']">
+            <table style="width: 100%; border-collapse: collapse;">
+                <tbody>
+                    <tr>
+                        <td style="width: 22%; vertical-align: middle;">
+                            <img t-if="mr_company.logo" t-att-src="image_data_uri(mr_company.logo)" alt="Logo"
+                                 style="max-height: 18mm; max-width: 100%;"/>
+                            <div t-else="" class="o_mr_monogram"
+                                 t-att-style="'display: inline-block; width: 16mm; height: 16mm; line-height: 16mm; text-align: center; font-size: 15pt; font-weight: 700; border-radius: 4pt; color: %s; border: 1.5pt solid %s;' % (mr_style['accent'], mr_style['accent'])">
+                                <span t-out="mr_company.name[:2].upper()"/>
+                            </div>
+                        </td>
+                        <td style="width: 56%; vertical-align: middle; text-align: center; padding: 0 6pt;">
+                            <div t-out="mr_company.name" style="font-weight: 700; font-size: 13pt;"/>
+                            <div t-out="mr_company._mr_address_line()" style="font-size: 8pt; color: #64748b;"/>
+                            <div t-if="mr_company.phone" t-out="mr_company.phone" style="font-size: 8pt; color: #64748b;"/>
+                            <div t-if="mr_company.email" t-out="mr_company.email" style="font-size: 8pt; color: #64748b;"/>
+                            <div t-if="mr_company.vat"
+                                 t-out="'%s: %s' % (mr_company.account_fiscal_country_id.vat_label or 'Tax ID', mr_company.vat)"
+                                 style="font-size: 8pt; color: #64748b;"/>
+                            <div t-if="mr_company.company_registry" t-out="mr_company.company_registry"
+                                 style="font-size: 8pt; color: #64748b;"/>
+                        </td>
+                        <td style="width: 22%; vertical-align: middle; text-align: right;">
+                            <t t-foreach="('Original', 'Duplicate', 'Triplicate')" t-as="mr_copy_item">
+                                <t t-if="mr_copy_item == mr_copy">
+                                    <div t-out="mr_copy_item" class="o_mr_copy o_mr_copy_active"
+                                         t-att-style="'font-size: 8pt; padding: 1pt 4pt 1pt 0; font-weight: 700; border-right: 3pt solid %s; color: %s;' % (mr_style['accent'], mr_style['accent'])"/>
+                                </t>
+                                <t t-else="">
+                                    <div t-out="mr_copy_item" class="o_mr_copy"
+                                         style="font-size: 8pt; padding: 1pt 0; color: #94a3b8;"/>
+                                </t>
+                            </t>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="article o_mr_doc" t-att-style="'background-color: %s;' % mr_style['background']">
+            <div class="o_mr_band" t-att-style="'background-color: %s;' % mr_style['accent']">
+                <span class="o_mr_band_title" t-out="mr_doc._mr_document_title(proforma=proforma or False)"/>
+            </div>
+            <t t-call="{{ 'modern_reports.body_%s' % mr_doc._mr_document_kind() }}"/>
+        </div>
+
+        <div class="footer o_mr_footer"
+             t-att-style="'border-top: 0.5pt solid %s; padding-top: 3pt; font-size: 7.5pt; color: #64748b;' % mr_style['border']">
+            <span t-out="mr_company._mr_footer_line()"/>
+            <span style="float: right;">Page <span class="page"/> / <span class="topage"/></span>
+        </div>
+    </template>
+
+    <template id="items_table">
+        <t t-set="mr_tax_columns" t-value="mr_doc._mr_tax_columns()"/>
+        <t t-set="mr_show_discount" t-value="mr_doc._mr_has_discount()"/>
+        <t t-set="mr_show_hsn" t-value="mr_doc._mr_has_hsn()"/>
+        <table class="o_mr_items">
+            <thead t-att-style="'background-color: %s;' % mr_style['accent_soft']">
+                <tr>
+                    <th class="o_mr_num">S.No</th>
+                    <th>Description</th>
+                    <th t-if="mr_show_hsn">HSN</th>
+                    <th>UOM</th>
+                    <th class="o_mr_num">Qty</th>
+                    <th class="o_mr_num">Unit Price</th>
+                    <th class="o_mr_num">Amount</th>
+                    <th t-if="mr_show_discount" class="o_mr_num">Disc %</th>
+                    <th t-if="mr_show_discount" class="o_mr_num">Taxable</th>
+                    <t t-foreach="mr_tax_columns" t-as="mr_column">
+                        <th class="o_mr_num" t-out="mr_column['name']"/>
+                        <th class="o_mr_num">Amount</th>
+                    </t>
+                    <th class="o_mr_num">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr t-foreach="mr_doc._mr_lines()" t-as="mr_line">
+                    <td class="o_mr_num"><span t-out="mr_line_index + 1"/></td>
+                    <td><span t-out="mr_doc._mr_line_description(mr_line)"/></td>
+                    <td t-if="mr_show_hsn" t-out="mr_doc._mr_line_hsn(mr_line)"/>
+                    <td t-out="mr_doc._mr_line_uom_name(mr_line)"/>
+                    <td class="o_mr_num">
+                        <span t-out="mr_doc._mr_line_qty(mr_line)" t-options='{"widget": "float", "precision": 2}'/>
+                    </td>
+                    <td class="o_mr_num">
+                        <span t-out="mr_doc._mr_line_price(mr_line)" t-options='{"widget": "monetary", "display_currency": mr_doc.currency_id}'/>
+                    </td>
+                    <td class="o_mr_num">
+                        <span t-out="mr_doc._mr_line_amount(mr_line)" t-options='{"widget": "monetary", "display_currency": mr_doc.currency_id}'/>
+                    </td>
+                    <t t-if="mr_show_discount">
+                        <td class="o_mr_num">
+                            <span t-out="mr_doc._mr_line_discount(mr_line)" t-options='{"widget": "float", "precision": 2}'/>
+                        </td>
+                        <td class="o_mr_num">
+                            <span t-out="mr_doc._mr_line_subtotal(mr_line)" t-options='{"widget": "monetary", "display_currency": mr_doc.currency_id}'/>
+                        </td>
+                    </t>
+                    <t t-foreach="mr_tax_columns" t-as="mr_column">
+                        <td class="o_mr_num">
+                            <span t-out="mr_doc._mr_line_tax_rate(mr_line, mr_column['id'])" t-options='{"widget": "float", "precision": 2}'/>%
+                        </td>
+                        <td class="o_mr_num">
+                            <span t-out="mr_doc._mr_line_tax_amount(mr_line, mr_column['id'])" t-options='{"widget": "monetary", "display_currency": mr_doc.currency_id}'/>
+                        </td>
+                    </t>
+                    <td class="o_mr_num">
+                        <span t-out="mr_doc._mr_line_total(mr_line)" t-options='{"widget": "monetary", "display_currency": mr_doc.currency_id}'/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </template>
+
+    <template id="totals_table">
+        <table class="o_mr_totals_table">
+            <tbody>
+                <tr t-foreach="mr_doc._mr_totals_rows()" t-as="mr_row" t-att-class="'o_mr_total_%s' % mr_row['kind']">
+                    <td>
+                        <span t-out="mr_row['label']"/>
+                        <t t-if="mr_row['base']">
+                            on <span t-out="mr_row['base']" t-options='{"widget": "monetary", "display_currency": mr_doc.currency_id}'/>
+                        </t>
+                    </td>
+                    <td class="o_mr_num">
+                        <span t-out="mr_row['amount']" t-options='{"widget": "monetary", "display_currency": mr_doc.currency_id}'/>
+                    </td>
+                </tr>
+                <tr class="o_mr_grand_total">
+                    <td>Total</td>
+                    <td class="o_mr_num">
+                        <span t-out="mr_doc._mr_total()" t-options='{"widget": "monetary", "display_currency": mr_doc.currency_id}'/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </template>
+
+</odoo>

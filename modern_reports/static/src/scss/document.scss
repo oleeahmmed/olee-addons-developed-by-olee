@@ -1,0 +1,200 @@
+.o_mr_doc {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 9pt;
+    line-height: 1.35;
+    color: #0f172a;
+
+    .o_mr_band {
+        padding: 7pt 10pt;
+        margin-bottom: 8pt;
+        border-radius: 4pt;
+        color: #ffffff;
+    }
+
+    .o_mr_band_title {
+        font-size: 14pt;
+        font-weight: 700;
+        letter-spacing: 0.6pt;
+        text-transform: uppercase;
+    }
+
+    .o_mr_label {
+        display: block;
+        color: #64748b;
+        font-size: 7pt;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4pt;
+    }
+
+    .o_mr_meta,
+    .o_mr_parties,
+    .o_mr_items,
+    .o_mr_totals,
+    .o_mr_totals_table,
+    .o_mr_payments,
+    .o_mr_bottom {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .o_mr_meta {
+        margin-bottom: 8pt;
+
+        td {
+            border-top: 1pt solid #e2e8f0;
+            border-bottom: 1pt solid #e2e8f0;
+            padding: 4pt 6pt;
+            vertical-align: top;
+            font-size: 8.5pt;
+        }
+    }
+
+    .o_mr_parties {
+        margin-bottom: 8pt;
+
+        td.o_mr_party {
+            width: 50%;
+            border: 1pt solid #e2e8f0;
+            border-radius: 4pt;
+            padding: 6pt 8pt;
+            vertical-align: top;
+            font-size: 8.5pt;
+        }
+    }
+
+    .o_mr_party_title {
+        font-weight: 700;
+        font-size: 9pt;
+        margin-bottom: 2pt;
+    }
+
+    .o_mr_party_name {
+        font-weight: 700;
+    }
+
+    .o_mr_items {
+        margin-bottom: 8pt;
+
+        th {
+            padding: 4pt 5pt;
+            text-align: left;
+            font-size: 7.5pt;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3pt;
+            border-bottom: 1pt solid #cbd5e1;
+        }
+
+        td {
+            padding: 4pt 5pt;
+            border-bottom: 1pt solid #e2e8f0;
+            vertical-align: top;
+            font-size: 8.5pt;
+        }
+
+        tr {
+            page-break-inside: avoid;
+        }
+
+        .o_mr_num {
+            text-align: right;
+            white-space: nowrap;
+        }
+    }
+
+    .o_mr_totals {
+        margin-bottom: 8pt;
+
+        td {
+            vertical-align: top;
+        }
+
+        .o_mr_words {
+            width: 55%;
+            padding-right: 10pt;
+            font-size: 8pt;
+        }
+
+        .o_mr_totals_cell {
+            width: 45%;
+        }
+    }
+
+    .o_mr_totals_table {
+        td {
+            padding: 3pt 6pt;
+            font-size: 8.5pt;
+            border-bottom: 1pt solid #e2e8f0;
+        }
+
+        .o_mr_num {
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        tr.o_mr_total_subtotal td,
+        tr.o_mr_total_total_tax td {
+            font-weight: 700;
+        }
+
+        tr.o_mr_grand_total td {
+            font-size: 10pt;
+            font-weight: 700;
+            border-top: 1.5pt solid #0f172a;
+            border-bottom: none;
+        }
+    }
+
+    .o_mr_payments {
+        margin-bottom: 8pt;
+
+        td {
+            padding: 3pt 6pt;
+            border-bottom: 1pt solid #e2e8f0;
+            font-size: 8.5pt;
+        }
+
+        .o_mr_num {
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        tr.o_mr_payment_total td {
+            font-weight: 700;
+        }
+    }
+
+    .o_mr_bottom {
+        margin-top: 4pt;
+
+        td {
+            vertical-align: top;
+            padding: 4pt 8pt 0 0;
+            font-size: 8pt;
+        }
+
+        .o_mr_bottom_left {
+            width: 55%;
+        }
+
+        .o_mr_bottom_right {
+            width: 45%;
+            text-align: right;
+        }
+
+        .o_mr_bottom_title {
+            font-weight: 700;
+            margin-bottom: 2pt;
+        }
+
+        .o_mr_sign_line {
+            margin-top: 26pt;
+            margin-left: auto;
+            width: 150pt;
+            border-top: 1pt solid #0f172a;
+            padding-top: 3pt;
+            font-size: 8pt;
+        }
+    }
+}
