@@ -77,6 +77,29 @@ const REPLACED = new Set([
     "sale_crm.sale_order_menu_quotations_crm",
     "crm.res_partner_menu_customer",
 ]);
+// Where a pinned / recent shortcut of a replaced entry should go instead: the same
+// records on the CRM Modern page (Odoo's "Quotations" action starts on "My
+// Quotations", which hides quotations owned by another salesperson).
+const REPLACEMENTS = {
+    "crm.menu_crm_opportunities": "crm_modern.menu_pipeline",
+    "crm.crm_menu_leads": "crm_modern.menu_leads",
+    "crm.crm_lead_menu_my_activities": "crm_modern.menu_activities",
+    "crm.sales_team_menu_team_pipeline": "crm_modern.menu_teams",
+    "crm.crm_menu_forecast": "crm_modern.menu_forecast",
+    "crm.crm_opportunity_report_menu": "crm_modern.menu_report_pipeline",
+    "crm.crm_opportunity_report_menu_lead": "crm_modern.menu_report_leads",
+    "crm.crm_activity_report_menu": "crm_modern.menu_report_activities",
+    "crm.crm_config_settings_menu": "crm_modern.menu_settings",
+    "crm.crm_team_config": "crm_modern.menu_teams",
+    "crm.crm_team_member_config": "crm_modern.menu_salespeople",
+    "crm.crm_team_menu_config_activity_types": "crm_modern.menu_activity_types",
+    "crm.mail_activity_plan_menu_config_lead": "crm_modern.menu_activity_plans",
+    "crm.menu_crm_lead_stage_act": "crm_modern.menu_stages",
+    "crm.menu_crm_lead_categ": "crm_modern.menu_tags",
+    "crm.menu_crm_lost_reason": "crm_modern.menu_lost_reasons",
+    "sale_crm.sale_order_menu_quotations_crm": "crm_modern.menu_quotations",
+    "crm.res_partner_menu_customer": "crm_modern.menu_customers",
+};
 
 /** Font Awesome icon per menu xmlid (Odoo ships FA 4.7). Other addons may add entries. */
 export const menuIcons = registry.category("crm_modern.menu_icons");
@@ -215,6 +238,7 @@ registry.category("modern_theme.sidebar_apps").add(APP_XMLID, {
     ownPrefixes: OWN_PREFIXES,
     mergeInto: MERGE_INTO,
     replaced: REPLACED,
+    replacements: REPLACEMENTS,
     secondary: TOP_GROUPS,
     order: SIDEBAR_ORDER,
     childOrder: GROUP_CHILD_ORDER,

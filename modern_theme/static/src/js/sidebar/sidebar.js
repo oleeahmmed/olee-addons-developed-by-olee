@@ -253,21 +253,55 @@ export class MtSidebar extends Component {
     appIcon(app) {
         return appIcon(app);
     }
+    /**
+     * Menu a pinned / recent entry should open. An app can replace a stock Odoo
+     * menu with its own page (e.g. Sales Modern's Quotations): a shortcut pinned
+     * before that would still fire Odoo's action — including its default filters,
+     * such as "My Quotations" — so it is pointed at the replacing page instead.
+     */
+    resolveMenu(id) {
+        const menu = this.menu.getMenu(id);
+        if (!menu) {
+            return null;
+        }
+        const config = registryGet(sidebarApps, this.menu.getMenu(menu.appID)?.xmlid);
+        if (!config?.replaced) {
+            return menu;
+        }
+        const replaced = config.replaced instanceof Set ? config.replaced : new Set(config.replaced);
+        if (!replaced.has(menu.xmlid)) {
+            return menu;
+        }
+        const target = config.replacements?.[menu.xmlid];
+        return target ? this.menu.getAll().find((m) => m.xmlid === target) || null : null;
+    }
     get favorites() {
         this.state.rev;
-        return this.themeState.favorites
-            .map((id) => this.menu.getMenu(id))
-            .filter((m) => m && (m.actionID || m.actionPath))
-            .map((m) => this.leafFromMenu(m));
+        const menus = [];
+        for (const id of this.themeState.favorites) {
+            const menu = this.resolveMenu(id);
+            if (menu && (menu.actionID || menu.actionPath) && !menus.some((m) => m.id === menu.id)) {
+                menus.push(menu);
+            }
+        }
+        return menus.map((m) => this.leafFromMenu(m));
     }
     get recent() {
         this.state.rev;
-        return this.state.recent
-            .filter((id) => !this.themeState.favorites.includes(id))
-            .map((id) => this.menu.getMenu(id))
-            .filter((m) => m && (m.actionID || m.actionPath))
-            .slice(0, 5)
-            .map((m) => this.leafFromMenu(m));
+        const shown = new Set(this.favorites.map((f) => f.id));
+        const menus = [];
+        for (const id of this.state.recent) {
+            const menu = this.resolveMenu(id);
+            if (
+                menu &&
+                (menu.actionID || menu.actionPath) &&
+                !shown.has(menu.id) &&
+                !menus.some((m) => m.id === menu.id)
+            ) {
+                menus.push(menu);
+            }
+        }
+        return menus.slice(0, 5).map((m) => this.leafFromMenu(m));
     }
     leafFromMenu(m) {
         const app = this.menu.getMenu(m.appID);

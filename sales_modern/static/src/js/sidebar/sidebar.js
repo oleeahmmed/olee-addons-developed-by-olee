@@ -27,6 +27,19 @@ const REPLACED = new Set([
     "sale.report_sales_team",
     "sale.sales_team_config",
 ]);
+// Where a pinned / recent shortcut of a replaced entry should go instead: the same
+// page, opened on its own records (Odoo's "Quotations" action starts on "My Quotations",
+// which hides quotations owned by another salesperson).
+const REPLACEMENTS = {
+    "sale.menu_sale_quotations": "sales_modern.menu_quotations",
+    "sale.menu_sale_order": "sales_modern.menu_orders",
+    "sale.menu_sale_order_invoice": "sales_modern.menu_to_invoice",
+    "sale.res_partner_menu": "sales_modern.menu_customers",
+    "sale.menu_product_template_action": "sales_modern.menu_products",
+    "sale.menu_product_pricelist_main": "sales_modern.menu_pricelists",
+    "sale.report_sales_team": "sales_modern.menu_teams",
+    "sale.sales_team_config": "sales_modern.menu_teams",
+};
 
 /** Font Awesome icon per menu xmlid (Odoo ships FA 4.7). Other addons may add entries. */
 export const menuIcons = registry.category("sales_modern.menu_icons");
@@ -91,6 +104,7 @@ registry.category("modern_theme.sidebar_apps").add(APP_XMLID, {
     ownPrefixes: ["sales_modern."],
     mergeInto: MERGE_INTO,
     replaced: REPLACED,
+    replacements: REPLACEMENTS,
     secondary: SECONDARY,
     icons: menuIcons,
 });
