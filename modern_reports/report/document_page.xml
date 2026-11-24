@@ -7,48 +7,47 @@
         <t t-set="mr_style" t-value="mr_company._mr_doc_style()"/>
         <t t-set="mr_copy" t-value="copy_label or 'Original'"/>
 
-        <div class="o_mr_letterhead"
-             t-att-style="'border-bottom: 2pt solid %s; padding-bottom: 4pt; margin-bottom: 8pt;' % mr_style['accent']">
-            <table style="width: 100%; border-collapse: separate; border-spacing: 0;">
-                <tbody>
-                    <tr>
-                        <td style="width: 22%; vertical-align: middle;">
-                            <img t-if="mr_company.logo" t-att-src="image_data_uri(mr_company.logo)" alt="Logo"
-                                 style="max-height: 18mm; max-width: 100%;"/>
-                            <div t-else="" class="o_mr_monogram"
-                                 t-att-style="'display: inline-block; width: 16mm; height: 16mm; line-height: 16mm; text-align: center; font-size: 15pt; font-weight: 700; border-radius: 4pt; color: %s; border: 1.5pt solid %s;' % (mr_style['accent'], mr_style['accent'])">
-                                <span t-out="mr_company.name[:2].upper()"/>
-                            </div>
-                        </td>
-                        <td style="width: 56%; vertical-align: middle; text-align: center; padding: 0 6pt;">
-                            <div t-out="mr_company.name" style="font-weight: 700; font-size: 13pt;"/>
-                            <div t-out="mr_company._mr_address_line()" style="font-size: 8pt; color: #64748b;"/>
-                            <div t-if="mr_company.phone" t-out="mr_company.phone" style="font-size: 8pt; color: #64748b;"/>
-                            <div t-if="mr_company.email" t-out="mr_company.email" style="font-size: 8pt; color: #64748b;"/>
-                            <div t-if="mr_company.vat"
-                                 t-out="'%s: %s' % (mr_company.account_fiscal_country_id.vat_label or 'Tax ID', mr_company.vat)"
-                                 style="font-size: 8pt; color: #64748b;"/>
-                            <div t-if="mr_company.company_registry" t-out="mr_company.company_registry"
-                                 style="font-size: 8pt; color: #64748b;"/>
-                        </td>
-                        <td style="width: 22%; vertical-align: middle; text-align: right;">
-                            <t t-foreach="('Original', 'Duplicate', 'Triplicate')" t-as="mr_copy_item">
-                                <t t-if="mr_copy_item == mr_copy">
-                                    <div t-out="mr_copy_item" class="o_mr_copy o_mr_copy_active"
-                                         t-att-style="'font-size: 8pt; padding: 1pt 4pt 1pt 0; font-weight: 700; border-right: 3pt solid %s; color: %s;' % (mr_style['accent'], mr_style['accent'])"/>
-                                </t>
-                                <t t-else="">
-                                    <div t-out="mr_copy_item" class="o_mr_copy"
-                                         style="font-size: 8pt; padding: 1pt 0; color: #94a3b8;"/>
-                                </t>
-                            </t>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
         <div class="article o_mr_doc" t-att-style="'background-color: %s;' % mr_style['background']">
+            <div class="o_mr_letterhead"
+                 t-att-style="'background-color: #ffffff; border-bottom: 2pt solid %s; padding-bottom: 4pt; margin-bottom: 8pt;' % mr_style['accent']">
+                <table style="width: 100%; border-collapse: separate; border-spacing: 0;">
+                    <tbody>
+                        <tr>
+                            <td style="width: 22%; vertical-align: middle;">
+                                <img t-if="mr_company.logo" t-att-src="image_data_uri(mr_company.logo)" alt="Logo"
+                                     style="max-height: 18mm; max-width: 100%;"/>
+                                <div t-else="" class="o_mr_monogram"
+                                     t-att-style="'display: inline-block; width: 16mm; height: 16mm; line-height: 16mm; text-align: center; font-size: 15pt; font-weight: 700; border-radius: 4pt; color: %s; border: 1.5pt solid %s;' % (mr_style['accent'], mr_style['accent'])">
+                                    <span t-out="mr_company.name[:2].upper()"/>
+                                </div>
+                            </td>
+                            <td style="width: 56%; vertical-align: middle; text-align: center; padding: 0 6pt;">
+                                <div t-out="mr_company.name" style="font-weight: 700; font-size: 13pt; color: #0f172a;"/>
+                                <div t-out="mr_company._mr_address_line()" style="font-size: 8pt; color: #64748b;"/>
+                                <div t-if="mr_company.phone" t-out="mr_company.phone" style="font-size: 8pt; color: #64748b;"/>
+                                <div t-if="mr_company.email" t-out="mr_company.email" style="font-size: 8pt; color: #64748b;"/>
+                                <div t-if="mr_company.vat"
+                                     t-out="'%s: %s' % (mr_company.account_fiscal_country_id.vat_label or 'Tax ID', mr_company.vat)"
+                                     style="font-size: 8pt; color: #64748b;"/>
+                                <div t-if="mr_company.company_registry" t-out="mr_company.company_registry"
+                                     style="font-size: 8pt; color: #64748b;"/>
+                            </td>
+                            <td style="width: 22%; vertical-align: middle; text-align: right;">
+                                <t t-foreach="('Original', 'Duplicate', 'Triplicate')" t-as="mr_copy_item">
+                                    <t t-if="mr_copy_item == mr_copy">
+                                        <div t-out="mr_copy_item" class="o_mr_copy o_mr_copy_active"
+                                             t-att-style="'font-size: 8pt; padding: 1pt 4pt 1pt 0; font-weight: 700; border-right: 3pt solid %s; color: %s;' % (mr_style['accent'], mr_style['accent'])"/>
+                                    </t>
+                                    <t t-else="">
+                                        <div t-out="mr_copy_item" class="o_mr_copy"
+                                             style="font-size: 8pt; padding: 1pt 0; color: #94a3b8;"/>
+                                    </t>
+                                </t>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             <div class="o_mr_band" t-att-style="'background-color: %s;' % mr_style['accent']">
                 <span class="o_mr_band_title" t-out="mr_doc._mr_document_title(proforma=proforma or False)"/>
             </div>
