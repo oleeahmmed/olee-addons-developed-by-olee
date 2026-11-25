@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Quotation / sales order (Odoo's own form, used by Sales and Modern CRM alike):
+        the details card keeps only what is needed to write the quotation (customer,
+        dates, payment terms). The pricelist moves to Other Info > Sales.
+        Extension of sale.view_order_form, so every app still opens the same form.
+    -->
+    <record id="view_order_form_modern_details" model="ir.ui.view">
+        <field name="name">sale.order.form.modern.details</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='sales_person']" position="inside">
+                <xpath expr="//group[@name='order_details']/label[@for='pricelist_id']" position="move"/>
+                <xpath expr="//group[@name='order_details']/div[field[@name='pricelist_id']]" position="move"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

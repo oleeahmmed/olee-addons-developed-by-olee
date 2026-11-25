@@ -4,9 +4,9 @@
     <t t-name="purchase_modern.Dashboard">
         <div class="o_mp od-page">
             <t t-if="state.loading">
-                <div class="od-head"><div class="od-skel" style="height:3.75rem;width:22rem"/><div class="od-skel" style="height:2.25rem;width:20rem"/></div>
-                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel" style="height:8.5rem"/></t></div>
-                <div class="od-grid"><div class="od-skel od-span-8" style="height:22rem"/><div class="od-skel od-span-4" style="height:22rem"/></div>
+                <div class="od-head"><div class="od-skel od-skel-title"/><div class="od-skel od-skel-sub"/></div>
+                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel od-skel-kpi"/></t></div>
+                <div class="od-grid"><div class="od-skel od-span-8 od-skel-panel"/><div class="od-skel od-span-4 od-skel-panel"/></div>
             </t>
             <t t-elif="state.error and !state.data">
                 <OdError message="state.error" onRetry.bind="load"/>
@@ -132,9 +132,9 @@
                                             <small t-else="">cash out, this period</small></div>
                                         <div class="od-tone-violet" t-else=""><span>To bill</span><strong class="od-num" t-esc="ms(k.to_bill_amount)"/><small><t t-esc="k.to_bill_count"/> orders</small></div>
                                     </div>
-                                    <div class="d-flex justify-content-between align-items-baseline mb-2" style="font-size:0.8125rem">
-                                        <span style="font-weight:650">We owe vendors</span>
-                                        <span class="od-num"><strong t-esc="m(f.payable)"/> <span class="text-muted" style="font-size:0.75rem">· <t t-esc="f.open_count"/> bills</span></span>
+                                    <div class="d-flex justify-content-between align-items-baseline mb-2 od-text-sm">
+                                        <span class="od-strong">We owe vendors</span>
+                                        <span class="od-num"><strong t-esc="m(f.payable)"/> <span class="text-muted od-text-xs">· <t t-esc="f.open_count"/> bills</span></span>
                                     </div>
                                     <OdStack items="f.ageing" format="ms"/>
                                 </t>
@@ -143,7 +143,7 @@
                                         <div class="od-tone-violet"><span>To bill</span><strong class="od-num" t-esc="ms(k.to_bill_amount)"/><small><t t-esc="k.to_bill_count"/> orders</small></div>
                                         <div class="od-tone-slate"><span>Open RFQs</span><strong class="od-num" t-esc="ms(k.open_amount)"/><small><t t-esc="k.open_rfqs"/> RFQs</small></div>
                                     </div>
-                                    <p class="text-muted" style="font-size:0.75rem;margin:0">Payables and cash show here for users with access to Invoicing.</p>
+                                    <p class="text-muted od-fine">Payables and cash show here for users with access to Invoicing.</p>
                                 </t>
                             </div>
                         </section>
@@ -179,7 +179,7 @@
                                                 <span class="od-att-label"><t t-esc="o.name"/> · <t t-esc="o.partner_id ? o.partner_id[1] : ''"/></span>
                                                 <span class="od-att-sub">Sent <t t-esc="shortDate(o.date_order)"/></span>
                                             </div>
-                                            <span class="od-num" style="font-weight:650;font-size:0.8125rem" t-esc="msr(o, o.amount_untaxed)"/>
+                                            <span class="od-num od-strong od-text-sm" t-esc="msr(o, o.amount_untaxed)"/>
                                         </li>
                                     </t>
                                 </ul>

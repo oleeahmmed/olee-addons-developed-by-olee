@@ -115,18 +115,18 @@
 
     <t t-name="crm_modern.MarkDoneDialog">
         <Dialog title="'Mark as done'" size="'md'" contentClass="'o_cm o_cm_dialog'">
-            <div class="d-flex align-items-center" style="gap:0.75rem;margin-bottom:1rem">
+            <div class="d-flex align-items-center u-gap-0_75 u-mb-1">
                 <ActivityIcon type="props.type"/>
                 <div class="cm-truncate">
                     <strong class="cm-truncate d-block" t-esc="props.activity.summary or (props.type and props.type.name) or 'Activity'"/>
-                    <span class="cm-muted" style="font-size:0.75rem">Feedback is logged in the chatter.</span>
+                    <span class="cm-muted od-text-xs">Feedback is logged in the chatter.</span>
                 </div>
             </div>
-            <div class="d-grid" style="gap:1rem">
+            <div class="d-grid u-gap-1">
                 <div t-if="state.error" class="cm-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
                 <div t-if="needsFile" class="cm-field">
                     <span class="cm-label">Document *</span>
-                    <label for="cm_md_file" class="cm-input d-flex align-items-center" style="gap:0.5rem;cursor:pointer;border-style:dashed">
+                    <label for="cm_md_file" class="cm-input d-flex align-items-center u-gap-0_5 u-cursor-pointer u-border-dashed">
                         <i class="fa fa-paperclip" aria-hidden="true"/>
                         <span class="cm-truncate" t-esc="state.file ? state.file.name : 'Choose a file…'"/>
                     </label>

@@ -1,0 +1,183 @@
+// Compact document header (js/views/compact_form_head.js adds .mt-compact-head on
+// quotation / order, RFQ / purchase order, invoice / bill and transfer forms).
+//
+//   [‹ Quotations / S00010 ⚙]  [Send][Print|Confirm|Preview|Cancel]  [Quotation|Sent|Sales Order] [smart buttons] [1/2 ‹ ›]
+//
+// One row instead of three: the breadcrumb is one small line, the form <header> sits
+// in the control panel, and the number is a read-only "Number" field in the sheet.
+
+// same weight as form.scss's $mt-form, plus .mt-compact-head, so these rules win
+$ch-form: 'html[data-mt-theme] .o_web_client > .o_action_manager > .o_form_view.mt-compact-head:not(.o_base_settings):not(.o_base_settings_view)';
+
+#{$ch-form} {
+    // ---- one-line breadcrumb: "‹ Quotations / S00010" --------------------------------
+    .o_control_panel {
+        padding-top: 0.625rem !important;
+        padding-bottom: 0.625rem !important;
+    }
+    .o_control_panel_main { align-items: center !important; flex-wrap: nowrap !important; }
+    // the number is in the sheet: a long name may be cut here to leave room for the actions
+    .o_control_panel_breadcrumbs { flex: 0 1 auto; min-width: 0; max-width: unquote("min(20rem, 28%)") !important; height: auto !important; }
+    .o_last_breadcrumb_item { min-width: 0; overflow: hidden; }
+    .o_last_breadcrumb_item span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .o_breadcrumb {
+        flex-direction: row !important;
+        align-items: center !important;
+        align-self: center !important;
+        gap: 0.375rem !important;
+        min-width: 0;
+
+        // a long back link ("Requests for Quotation") gives way before the number does
+        > .breadcrumb { flex: 0 1 auto; min-width: 2.5rem; overflow: hidden; }
+        > .breadcrumb .breadcrumb-item { min-width: 0; }
+        > .breadcrumb .breadcrumb-item a {
+            display: block !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 0.8125rem;
+        }
+
+        > div { flex: 0 0 auto; max-width: 11rem; align-items: center; min-width: 0; }
+        > div::before {
+            content: "/";
+            margin-right: 0.25rem;
+            color: var(--mt-border);
+            font-size: 0.8125rem;
+        }
+        .o_last_breadcrumb_item,
+        .o_last_breadcrumb_item span {
+            font-size: 0.8125rem !important;
+            font-weight: 600 !important;
+            letter-spacing: 0 !important;
+            line-height: 1.75rem;
+            color: var(--mt-foreground);
+        }
+    }
+    // no record before (direct link): only the number, still small
+    .o_breadcrumb:not(:has(.breadcrumb .breadcrumb-item)) > div::before { content: none; }
+    .o_form_status_indicator { align-self: center !important; }
+
+    // ---- actions + steps in the control panel ------------------------------------------
+    .o_control_panel_actions {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        width: auto !important;
+        justify-content: flex-start !important;
+        gap: 0.5rem;
+    }
+    .mt-head-actions {
+        flex: 1 1 auto;
+        min-width: 0;
+
+        .o_form_statusbar {
+            position: static !important;
+            flex: 1 1 auto;
+            // a full header (invoices: Send, Print, Pay, Credit Note…) wraps under
+            // itself inside the panel instead of running over the steps
+            flex-wrap: wrap !important;
+            gap: 0.375rem 0.75rem !important;
+            min-width: 0;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+        .o_statusbar_buttons { flex-wrap: wrap !important; row-gap: 0.375rem; min-width: 0; }
+        .o_field_statusbar { margin-left: auto; }
+        // one solid action (the next step Odoo highlights); other highlighted ones are outline
+        .o_statusbar_buttons > .btn-primary ~ .btn-primary,
+        .o_statusbar_buttons > .btn.oe_highlight ~ .btn.oe_highlight {
+            @include mt-pill-outline;
+            margin: 0 0.375rem 0 0;
+            border-radius: 0.5rem;
+        }
+    }
+    // smart buttons (Invoices, Delivery…) after the steps, before the pager
+    .o_control_panel_actions .o-form-buttonbox {
+        flex: 0 0 auto;
+        justify-content: flex-end;
+        flex-wrap: nowrap;
+        gap: 0.25rem;
+
+        // one-line stat buttons: icon, value, label
+        .oe_stat_button {
+            height: 2rem !important;
+            min-height: 0 !important;
+            padding: 0 0.625rem !important;
+            flex: 0 0 auto !important;
+            .o_button_icon { margin: 0 0.375rem 0 0 !important; font-size: 0.875rem; }
+        }
+        .o_stat_info {
+            flex-direction: row-reverse !important;
+            align-items: center !important;
+            gap: 0.25rem;
+            line-height: 1;
+            .o_stat_value { font-size: 0.8125rem; font-weight: 600; }
+            .o_stat_text { font-size: 0.8125rem; }
+        }
+    }
+    .o_control_panel_navigation { flex: 0 0 auto !important; }
+
+    // ---- the number is in the breadcrumb: no extra strip in the sheet ------------------
+    // (kept only while it can be typed, e.g. a manual invoice number)
+    .o_form_sheet > .oe_title:not(:has(input:not([type="checkbox"]))):not(#mt-ch) { display: none !important; }
+
+    // ---- details card: the key fields side by side, 3-4 per line ------------------------
+    // Odoo's two field columns are flattened into one grid; each field keeps its small
+    // label above the input. Fields holding two widgets (due date + terms…) take two cells.
+    .o_form_sheet > .o_group:not(#mt-ch) {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+        gap: 0.75rem 1rem !important;
+        align-items: start !important;
+        padding: 1rem 1.125rem !important;
+
+        > .o_inner_group {
+            display: contents !important;
+        }
+        > .o_inner_group > .g-col-sm-2 { display: none !important; }
+        > .o_inner_group > .mt-row {
+            grid-column: auto !important;
+            width: auto !important;
+            min-width: 0;
+            margin: 0 !important;
+        }
+        // inputs fill their cell; a cell with two inputs (due date + payment terms) puts
+        // them side by side when there is room, one under the other when not
+        > .o_inner_group > .mt-row .o_field_widget:not(.o_field_boolean) { width: 100%; }
+        > .o_inner_group > .mt-row .o_row,
+        > .o_inner_group > .mt-row [name="due_date"] {
+            display: flex !important;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.375rem !important;
+            > .o_field_widget { flex: 1 1 7rem; min-width: 0; margin: 0 !important; }
+            > span.o_form_label { flex: 0 0 auto; margin: 0 !important; font-size: 0.75rem; color: var(--mt-muted-foreground); }
+        }
+
+        // invoice currency: the code, and the rate as one quiet line of text under it
+        [name="journal_div"] { display: block !important; }
+        [name="currency_conversion_div"] {
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 0.25rem !important;
+            margin-top: 0.25rem;
+            font-size: 0.75rem;
+            color: var(--mt-muted-foreground) !important;
+
+            .o_field_widget {
+                width: auto !important;
+                min-height: 0 !important;
+                padding: 0 !important;
+                border: 0 !important;
+                background: transparent !important;
+                box-shadow: none !important;
+                font-size: inherit !important;
+                color: inherit !important;
+            }
+        }
+    }
+}

@@ -90,7 +90,7 @@
                     </div>
                 </div>
             </header>
-            <div t-if="state.loading" class="ps-skel" style="height:16rem"/>
+            <div t-if="state.loading" class="ps-skel u-h-16"/>
             <section t-else="" class="ps-panel">
                 <div class="ps-cust">
                     <label class="ps-search ps-search--block">
@@ -107,7 +107,7 @@
                         <tr t-foreach="state.rows" t-as="r" t-key="r.id" t-att-class="{ 'is-warning': state.mode === 'count' and diff(r) !== null and diff(r) !== 0 }">
                             <td t-esc="r.name"/>
                             <td class="text-end" t-esc="r.stock"/>
-                            <td><input type="number" min="0" step="1" class="ps-input" style="width:7rem" t-model="r.qty"/></td>
+                            <td><input type="number" min="0" step="1" class="ps-input u-w-7" t-model="r.qty"/></td>
                             <td t-if="state.mode === 'count'" class="text-end" t-esc="diff(r) === null ? '—' : diff(r)"/>
                             <td><button type="button" class="ps-btn ps-btn--sm ps-btn--ghost" t-on-click="() => this.remove(r)"><i class="fa fa-times" aria-hidden="true"/></button></td>
                         </tr>

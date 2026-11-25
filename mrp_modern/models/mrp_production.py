@@ -1,4 +1,5 @@
 from odoo import api, models
+from odoo.addons.modern_theme.models.shared_views import PRODUCT_FORM
 
 
 class MrpProduction(models.Model):
@@ -44,6 +45,6 @@ class MrpProduction(models.Model):
             'product_list': ref('product.product_template_tree_view'),
             'product_kanban': ref('product.product_template_kanban_view'),
             'product_search': ref('mrp.mrp_product_template_search_view') or ref('product.product_template_search_view'),
-            'product_form': ref('product.product_template_form_view'),
+            'product_form': ref(PRODUCT_FORM),
         })
         return ids

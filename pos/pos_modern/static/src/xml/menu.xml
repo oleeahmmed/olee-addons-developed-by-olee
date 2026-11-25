@@ -8,8 +8,8 @@
     <t t-name="pos_modern.Menu">
         <div class="o_ps ps-pos" t-att-class="{ 'is-paying': state.mode === 'pay' }">
             <t t-if="state.loading">
-                <div class="ps-pos-main"><div class="ps-skel" style="height:3rem;width:18rem"/><div class="ps-skel" style="height:6rem;margin-top:1rem"/><div class="ps-skel" style="height:24rem;margin-top:1rem"/></div>
-                <aside class="ps-cart"><div class="ps-skel" style="height:100%"/></aside>
+                <div class="ps-pos-main"><div class="ps-skel u-h-3 u-w-18"/><div class="ps-skel u-h-6 u-mt-1"/><div class="ps-skel u-h-24 u-mt-1"/></div>
+                <aside class="ps-cart"><div class="ps-skel u-h-100pct"/></aside>
             </t>
             <t t-elif="!state.data.config_id">
                 <div class="ps-pos-empty">
@@ -324,8 +324,8 @@
     <t t-name="pos_modern.Tables">
         <div class="o_ps ps-tables">
             <t t-if="state.loading">
-                <div class="ps-skel" style="height:3rem;width:18rem"/>
-                <div class="ps-skel" style="height:24rem;margin-top:1rem"/>
+                <div class="ps-skel u-h-3 u-w-18"/>
+                <div class="ps-skel u-h-24 u-mt-1"/>
             </t>
             <t t-else="">
                 <header class="ps-pos-head">

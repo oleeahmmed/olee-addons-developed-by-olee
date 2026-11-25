@@ -5,8 +5,8 @@
         <div class="o_cm o_cm_page cm-rec">
             <div class="cm-container">
                 <t t-if="state.loading">
-                    <div class="cm-skeleton" style="height:3rem"/>
-                    <div class="cm-skeleton" style="height:14rem"/>
+                    <div class="cm-skeleton u-h-3"/>
+                    <div class="cm-skeleton u-h-14"/>
                 </t>
                 <EmptyState t-elif="!state.rec" icon="'fa-compass'" title="'Record not found'" description="'It may have been deleted, or you no longer have access.'"/>
                 <t t-else="">

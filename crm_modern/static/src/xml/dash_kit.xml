@@ -51,7 +51,7 @@
                     <t t-esc="(tot.growth >= 0 ? '+' : '') + tot.growth.toFixed(1) + '%'"/> year to date
                 </span>
             </div>
-            <figure class="od-chart" style="margin:0">
+            <figure class="od-chart u-m-0">
                 <svg t-attf-viewBox="0 0 {{ W }} {{ H }}" role="img" t-att-aria-label="props.label"
                      t-on-pointermove="onMove" t-on-pointerleave="() => this.state.hover = null">
                     <t t-foreach="ticks" t-as="tick" t-key="tick_index">

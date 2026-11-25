@@ -6,16 +6,39 @@ $mr-line: #d6d6db;
 $mr-line-soft: #e4e4e7;
 $mr-pad-x: 9px;
 
-// Roboto ships with Odoo (Inter does not) and is the closest match to the reference design.
-@font-face { font-family: 'MR Sans'; font-weight: 400; font-style: normal; src: url('/web/static/fonts/google/Roboto/Roboto-Regular.ttf') format('truetype'); }
-@font-face { font-family: 'MR Sans'; font-weight: 400; font-style: italic; src: url('/web/static/fonts/google/Roboto/Roboto-Italic.ttf') format('truetype'); }
-@font-face { font-family: 'MR Sans'; font-weight: 500; font-style: normal; src: url('/web/static/fonts/google/Roboto/Roboto-Medium.ttf') format('truetype'); }
-@font-face { font-family: 'MR Sans'; font-weight: 500; font-style: italic; src: url('/web/static/fonts/google/Roboto/Roboto-MediumItalic.ttf') format('truetype'); }
-@font-face { font-family: 'MR Sans'; font-weight: 700; font-style: normal; src: url('/web/static/fonts/google/Roboto/Roboto-Bold.ttf') format('truetype'); }
-@font-face { font-family: 'MR Sans'; font-weight: 700; font-style: italic; src: url('/web/static/fonts/google/Roboto/Roboto-BoldItalic.ttf') format('truetype'); }
+// Odoo's document layout fonts, with real medium / bold / italic faces where Odoo ships them
+// (Odoo itself only declares the regular face, so wkhtmltopdf would fake the bold).
+$mr-font-faces: (
+    'Roboto': (400 normal Regular, 400 italic Italic, 500 normal Medium, 500 italic MediumItalic, 700 normal Bold, 700 italic BoldItalic),
+    'Montserrat': (400 normal Regular, 400 italic Italic, 500 normal Medium, 500 italic MediumItalic, 700 normal Bold, 700 italic BoldItalic),
+    'Raleway': (400 normal Regular, 400 italic Italic, 500 normal Medium, 500 italic MediumItalic, 700 normal Bold, 700 italic BoldItalic),
+    'Open_Sans': (400 normal Regular, 400 italic Italic, 700 normal Bold, 700 italic BoldItalic),
+    'Oswald': (400 normal Regular, 500 normal Medium, 700 normal Bold),
+    'Tajawal': (400 normal Regular, 500 normal Medium, 700 normal Bold),
+    'Fira_Mono': (400 normal Regular, 500 normal Medium, 700 normal Bold),
+);
+@each $family, $faces in $mr-font-faces {
+    @each $face in $faces {
+        @font-face {
+            font-family: 'MR #{$family}';
+            font-weight: nth($face, 1);
+            font-style: nth($face, 2);
+            src: url('/web/static/fonts/google/#{$family}/#{$family}-#{nth($face, 3)}.ttf') format('truetype');
+        }
+    }
+    .o_mr_font_#{$family} {
+        font-family: 'MR #{$family}', 'Roboto', 'Helvetica Neue', Arial, sans-serif !important;
+    }
+}
+@font-face { font-family: 'MR Lato'; font-weight: 400; font-style: normal; src: url('/web/static/fonts/lato/Lato-Reg-webfont.ttf') format('truetype'); }
+@font-face { font-family: 'MR Lato'; font-weight: 400; font-style: italic; src: url('/web/static/fonts/lato/Lato-RegIta-webfont.ttf') format('truetype'); }
+@font-face { font-family: 'MR Lato'; font-weight: 700; font-style: normal; src: url('/web/static/fonts/lato/Lato-Bol-webfont.ttf') format('truetype'); }
+@font-face { font-family: 'MR Lato'; font-weight: 700; font-style: italic; src: url('/web/static/fonts/lato/Lato-BolIta-webfont.ttf') format('truetype'); }
+.o_mr_font_Lato {
+    font-family: 'MR Lato', 'Lato', 'Helvetica Neue', Arial, sans-serif !important;
+}
 
 .o_mr, .o_mr_footer {
-    font-family: 'MR Sans', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
     color: $mr-fg;
     -webkit-print-color-adjust: exact;
 }
@@ -54,6 +77,8 @@ $mr-pad-x: 9px;
     .o_mr_strong { font-weight: 600; }
     .o_mr_medium { font-weight: 500; }
     .o_mr_italic { font-style: italic; }
+    .o_mr_small { font-size: 9px; font-weight: 400; }
+    .o_mr_small_text { font-size: 10px; }
     .o_mr_r { text-align: right; }
     .o_mr_l { text-align: left; }
     .o_mr_c { text-align: center; }
@@ -107,6 +132,10 @@ $mr-pad-x: 9px;
             font-size: 18px;
             font-weight: 700;
             line-height: 1.3;
+        }
+        .o_mr_tagline {
+            font-size: 10px;
+            font-weight: 500;
         }
         .o_mr_company_vat {
             margin-top: 2px;
@@ -176,9 +205,20 @@ $mr-pad-x: 9px;
         .o_mr_no {
             width: 8mm;
         }
+        td.o_mr_indent {
+            padding-left: 18px;
+        }
         tr.o_mr_section td {
+            font-weight: 700;
+            background-color: rgba(0, 0, 0, 0.025);
+        }
+        tr.o_mr_subsection td {
             font-weight: 600;
-            background-color: #fafafa;
+        }
+        tr.o_mr_filler td {
+            padding-top: 0;
+            padding-bottom: 0;
+            line-height: 1;
         }
         tr.o_mr_note td {
             font-style: italic;
@@ -266,6 +306,40 @@ $mr-pad-x: 9px;
         }
     }
 
+    .o_mr_payref + *, .o_mr_block_table + *, .o_mr_block + .o_mr_block_table {
+        margin-top: 10px;
+    }
+    .o_mr_block + .o_mr_payref {
+        margin-top: 6px;
+    }
+    .o_mr_qr {
+        width: auto !important;
+        margin-top: 10px;
+
+        td {
+            vertical-align: middle;
+        }
+        td.o_mr_qr_img img {
+            width: 26mm;
+            height: 26mm;
+        }
+        td.o_mr_qr_text {
+            padding: 0 14px 0 8px;
+            font-size: 9.5px;
+            font-style: italic;
+            width: 30mm;
+        }
+    }
+    .o_mr_notes {
+        font-size: 9.5px;
+        color: $mr-muted;
+    }
+    .o_mr_mini td {
+        padding: 2px 0;
+        font-size: 10px;
+        white-space: nowrap;
+    }
+
     .o_mr_terms {
         margin: 2px 0 0 0;
         padding-left: 16px;
@@ -312,19 +386,27 @@ $mr-pad-x: 9px;
 
     // ---- signatures ---------------------------------------------------------
     .o_mr_sign {
-        border-top: 1px solid $mr-line;
 
         > tbody > tr > td, > tr > td {
             border-bottom: none;
-            padding: 48px 24px 10px 24px;
+            padding: 40px 24px 8px 24px;
             text-align: center;
+            vertical-align: bottom;
             font-size: 10px;
             font-weight: 500;
         }
         td.o_mr_sign_gap {
             width: 10mm;
-            padding: 0;
+            padding: 0 !important;
         }
+    }
+    // the item table's last row already draws the line when there is no totals grid
+    .o_mr_bottom + .o_mr_sign {
+        border-top: 1px solid $mr-line;
+    }
+    .o_mr_signature_img img {
+        max-height: 16mm;
+        max-width: 60mm;
     }
     .o_mr_sign_line {
         height: 1px;
@@ -333,8 +415,25 @@ $mr-pad-x: 9px;
     }
 }
 
+.o_mr.o_mr_has_bg {
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.o_mr_tail {
+    page-break-inside: avoid;
+}
+.o_mr_spacer {
+    height: 0;
+}
+
 .o_mr_footer {
     text-align: center;
     font-size: 8.5px;
     color: $mr-muted;
+
+    .o_mr_footer_company {
+        margin-bottom: 1px;
+    }
 }

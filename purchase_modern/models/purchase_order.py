@@ -1,4 +1,5 @@
 from odoo import api, models
+from odoo.addons.modern_theme.models.shared_views import PRODUCT_FORM
 
 
 class PurchaseOrder(models.Model):
@@ -36,7 +37,7 @@ class PurchaseOrder(models.Model):
             'product_list': ref('account.product_template_list_view_purchasable_inherit') or ref('product.product_template_tree_view'),
             'product_kanban': ref('product.product_template_kanban_view'),
             'product_search': ref('product.product_template_search_view'),
-            'product_form': ref('product.product_template_form_view'),
+            'product_form': ref(PRODUCT_FORM),
         }
         for prefix in ('rfq', 'order', 'bill'):
             for view_type, view_id in order_views.items():

@@ -39,7 +39,7 @@
     <!-- ============================================================ held bills -->
     <t t-name="pos_modern.HeldDialog">
         <Dialog title="'Held bills'" size="'md'" contentClass="'o_ps ps-dialog'">
-            <div t-if="state.loading" class="ps-skel" style="height:8rem"/>
+            <div t-if="state.loading" class="ps-skel u-h-8"/>
             <div t-elif="!state.rows.length" class="ps-pos-empty ps-pos-empty--inline">
                 <i class="fa fa-pause-circle-o" aria-hidden="true"/>
                 <strong>No held bill</strong>
@@ -88,7 +88,7 @@
     <!-- ============================================================ day end -->
     <t t-name="pos_modern.DayEndDialog">
         <Dialog title="'Day end'" size="'lg'" contentClass="'o_ps ps-dialog'">
-            <div t-if="state.loading" class="ps-skel" style="height:16rem"/>
+            <div t-if="state.loading" class="ps-skel u-h-16"/>
             <t t-else="">
                 <t t-set="r" t-value="state.report"/>
                 <div class="ps-kpis">
@@ -360,7 +360,7 @@
                     </button>
                 </t>
             </div>
-            <div t-if="props.withCount" class="ps-row" style="margin-top:1rem">
+            <div t-if="props.withCount" class="ps-row u-mt-1">
                 <span class="ps-step">
                     <button type="button" t-on-click="() => this.step(-1)">−</button>
                     <span t-esc="state.count"/>
@@ -378,15 +378,15 @@
     <t t-name="pos_modern.ReturnDialog">
         <Dialog title="'Return / exchange'" size="'lg'" contentClass="'o_ps ps-dialog'">
             <div class="ps-row ps-row--tight">
-                <label class="ps-search ps-search--block" style="flex:1">
+                <label class="ps-search ps-search--block u-flex-1">
                     <i class="fa fa-barcode" aria-hidden="true"/>
                     <input t-ref="input" type="search" placeholder="Scan or type the receipt number" t-model="state.ref" t-on-keydown="onKey"/>
                 </label>
                 <button type="button" class="ps-btn" t-att-disabled="state.loading" t-on-click="find">Find</button>
             </div>
-            <div t-if="state.error" class="ps-note ps-note--warning" style="margin-top:.75rem" t-esc="state.error"/>
+            <div t-if="state.error" class="ps-note ps-note--warning u-mt-0_75" t-esc="state.error"/>
             <t t-if="state.order and state.order.lines.length">
-                <p class="ps-muted" style="margin:.75rem 0 .5rem">
+                <p class="ps-muted u-m-0_75-0-_5">
                     <strong t-esc="state.order.ref"/> · <t t-esc="state.order.date"/> · <t t-esc="state.order.shop"/>
                     <t t-if="state.order.partner"> · <t t-esc="state.order.partner.name"/></t>
                 </p>
@@ -401,7 +401,7 @@
                         <button type="button" class="ps-btn ps-btn--sm ps-btn--ghost" t-on-click="() => this.all(l)">All</button>
                     </li>
                 </ul>
-                <p class="ps-muted" style="margin-top:.75rem">Taken back items go into the cart with a minus. Add the new items for an exchange: only the difference is paid or given back.</p>
+                <p class="ps-muted u-mt-0_75">Taken back items go into the cart with a minus. Add the new items for an exchange: only the difference is paid or given back.</p>
             </t>
             <t t-set-slot="footer">
                 <button type="button" class="ps-btn ps-btn--primary" t-att-disabled="!total" t-on-click="add"><i class="fa fa-undo" aria-hidden="true"/> Take back<t t-if="total"> · <t t-esc="money(total)"/></t></button>
@@ -422,7 +422,7 @@
                     <li t-foreach="matches" t-as="p" t-key="p.id" t-on-mousedown.prevent="() => this.addRow(p)"><strong t-esc="p.name"/><small t-esc="p.barcode or p.code"/></li>
                 </ul>
             </div>
-            <ul class="ps-list" style="margin-top:.75rem">
+            <ul class="ps-list u-mt-0_75">
                 <li t-foreach="state.rows" t-as="r" t-key="r.id" class="ps-list-row">
                     <span class="ps-list-main"><strong t-esc="r.name"/><small><t t-if="r.barcode" t-esc="r.barcode"/><t t-else="">no barcode</t></small></span>
                     <span class="ps-step">
@@ -434,7 +434,7 @@
                 </li>
                 <li t-if="!state.rows.length" class="ps-muted">Search a product above, or open this from a cart to print its items.</li>
             </ul>
-            <div t-if="missing" class="ps-note ps-note--warning" style="margin-top:.75rem">
+            <div t-if="missing" class="ps-note ps-note--warning u-mt-0_75">
                 <t t-esc="missing"/> product(s) have no barcode.
                 <button type="button" class="ps-btn ps-btn--sm ms-auto" t-on-click="generate">Create in-store barcodes</button>
             </div>

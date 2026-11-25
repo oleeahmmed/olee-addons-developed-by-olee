@@ -1,0 +1,101 @@
+// Form tabs (Order Lines · Other Info…) as folder tabs: slanted sides with rounded top
+// corners, the open tab solid in the theme colour, the others soft, all standing on a
+// line in the theme colour.
+//
+//    ╱‾‾‾‾‾‾‾‾‾╲╱‾‾‾‾‾‾‾‾‾‾╲╱‾‾‾‾‾‾‾‾‾╲
+//   ╱ ORDER    ╱  OTHER     ╲  NOTES    ╲
+//  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//
+// Each tab shape is two halves skewed outwards from the bottom (::before / ::after),
+// so the corners stay rounded and the label never gets distorted. Colours are theme
+// tokens, so presets and dark mode follow. :not(#mt-tabs) adds an id's weight over
+// form.scss's tab rules.
+
+$nt-form: 'html[data-mt-theme] .o_web_client .o_form_view:not(.o_base_settings):not(.o_base_settings_view)';
+$nt-slant: 18deg;
+
+#{$nt-form} .o_notebook:not(#mt-tabs) {
+    > .o_notebook_headers {
+        padding: 0.625rem 1rem 0 !important;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+    }
+
+    > .o_notebook_headers > .nav-tabs {
+        flex-wrap: nowrap;
+        gap: 0 !important;
+        padding: 0 0 0 0.5rem !important;
+        border: 0 !important;
+        border-bottom: 2px solid var(--mt-primary) !important;
+    }
+
+    > .o_notebook_headers > .nav-tabs > .nav-item {
+        position: relative;
+        margin: 0 -0.25rem 0 0 !important;
+
+        // earlier tabs sit above later ones, the open tab above all
+        @for $i from 1 through 8 {
+            &:nth-child(#{$i}) { z-index: #{10 - $i}; }
+        }
+        &:has(> .nav-link.active) { z-index: 20; }
+    }
+
+    > .o_notebook_headers > .nav-tabs .nav-link {
+        position: relative;
+        isolation: isolate;
+        height: 2.125rem;
+        margin: 0 !important;
+        padding: 0 1.75rem !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        color: var(--mt-muted-foreground) !important;
+        font-size: 0.75rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        white-space: nowrap;
+
+        // the two halves of the tab shape
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            z-index: -1;
+            width: 62%;
+            background: var(--mt-muted);
+            border: 0;
+            border-radius: 0.5rem 0.5rem 0 0;
+            box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.06);
+            transition: background-color 150ms ease;
+            pointer-events: none;
+        }
+        &::before { left: 0; transform: skewX(-$nt-slant); transform-origin: bottom left; }
+        &::after { right: 0; transform: skewX($nt-slant); transform-origin: bottom right; }
+
+        &:hover {
+            color: var(--mt-foreground) !important;
+            &::before,
+            &::after { background: color-mix(in srgb, var(--mt-muted) 70%, var(--mt-border)); }
+        }
+        &:focus-visible { outline: none; }
+        &:focus-visible::before,
+        &:focus-visible::after { box-shadow: 0 0 0 2px var(--mt-ring, var(--mt-primary)); }
+
+        &.active {
+            color: var(--mt-primary-foreground) !important;
+            &::before,
+            &::after {
+                background: var(--mt-primary);
+                box-shadow: none;
+            }
+        }
+    }
+
+    // the page content starts right under the line
+    > .o_notebook_content { border-top: 0 !important; }
+}

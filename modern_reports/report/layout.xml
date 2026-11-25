@@ -16,17 +16,25 @@
     <!--
         The shared document. Expects `mr`: the dict returned by `<record>._mr_values()`.
         Built from tables only: wkhtmltopdf's WebKit has no grid / modern flexbox / CSS variables.
+        `modern_reports/static/src/js/page_fill.js` pads the item table with empty rows in the PDF so
+        that `.o_mr_tail` (totals, payment details, signatures) ends at the bottom of the last page.
     -->
     <template id="document">
-        <t t-set="mr_accent" t-value="mr['style']['accent']"/>
-        <t t-set="mr_soft" t-value="mr['style']['soft']"/>
+        <t t-set="mr_style" t-value="mr['style']"/>
+        <t t-set="mr_accent" t-value="mr_style['accent']"/>
+        <t t-set="mr_on_accent" t-value="mr_style['on_accent']"/>
+        <t t-set="mr_caption" t-value="mr_style['caption']"/>
+        <t t-set="mr_soft" t-value="mr_style['soft']"/>
         <t t-set="mr_company" t-value="mr['company']"/>
         <t t-set="mr_party" t-value="mr['party']"/>
         <t t-set="mr_doc" t-value="mr['doc']"/>
 
-        <div class="article o_mr"
+        <div t-attf-class="article o_mr {{ mr_style['font_class'] }} {{ mr_style['background_class'] }}"
+             t-att-style="mr_style['background'] or None"
              t-att-data-oe-model="mr_doc._name" t-att-data-oe-id="mr_doc.id"
-             t-att-data-oe-lang="mr_doc.env.context.get('lang')">
+             t-att-data-oe-lang="mr_doc.env.context.get('lang')"
+             t-att-data-mr-page-w="mr['page']['width']" t-att-data-mr-page-h="mr['page']['height']"
+             t-att-data-mr-cols="mr['columns']" t-att-data-mr-fill="'1' if mr_style['fill_page'] else '0'">
             <div class="o_mr_box">
 
                 <!-- Header: logo | company | document info -->
@@ -34,14 +42,20 @@
                     <tr>
                         <td class="o_mr_logo">
                             <img t-if="mr_company['logo']" t-att-src="image_data_uri(mr_company['logo'])" alt="Logo"/>
-                            <div t-else="" class="o_mr_monogram" t-attf-style="background-color: {{ mr_accent }};"
+                            <div t-else="" class="o_mr_monogram"
+                                 t-attf-style="background-color: {{ mr_accent }}; color: {{ mr_on_accent }};"
                                  t-out="mr_company['monogram']"/>
                         </td>
                         <td class="o_mr_company">
                             <div class="o_mr_company_name" t-out="mr_company['name']"/>
+                            <div t-if="mr_company['tagline']" class="o_mr_tagline" t-attf-style="color: {{ mr_caption }};" t-out="mr_company['tagline']"/>
                             <div t-if="mr_company['address']" class="o_mr_muted" t-out="mr_company['address']"/>
                             <div t-if="mr_company['contact']" class="o_mr_muted" t-out="mr_company['contact']"/>
-                            <div t-if="mr_company['vat']" class="o_mr_company_vat" t-out="mr_company['vat']"/>
+                            <div t-if="mr_company['vat'] or mr_company['registry']" class="o_mr_company_vat">
+                                <t t-out="mr_company['vat']"/>
+                                <t t-if="mr_company['vat'] and mr_company['registry']"> · </t>
+                                <t t-out="mr_company['registry']"/>
+                            </div>
                         </td>
                         <td class="o_mr_side">
                             <t t-call="modern_reports.kv_rows">
@@ -53,13 +67,13 @@
                 </table>
 
                 <!-- Title band -->
-                <div class="o_mr_band" t-attf-style="background-color: {{ mr_accent }};" t-out="mr['title']"/>
+                <div class="o_mr_band" t-attf-style="background-color: {{ mr_accent }}; color: {{ mr_on_accent }};" t-out="mr['title']"/>
 
                 <!-- Party + references -->
                 <table class="o_mr_grid o_mr_partyrow">
                     <tr>
                         <td class="o_mr_party">
-                            <div class="o_mr_caption" t-attf-style="color: {{ mr_accent }};" t-out="mr_party['label']"/>
+                            <div class="o_mr_caption" t-attf-style="color: {{ mr_caption }};" t-out="mr_party['label']"/>
                             <div class="o_mr_party_name" t-out="mr_party['name']"/>
                             <div t-if="mr_party['contact']" class="o_mr_muted" t-out="mr_party['contact']"/>
                             <div t-if="mr_party['vat']" class="o_mr_muted"><t t-out="mr_party['vat_label']"/>: <span class="o_mr_fg" t-out="mr_party['vat']"/></div>
@@ -75,10 +89,10 @@
                 </table>
 
                 <!-- Lines -->
-                <t t-set="mr_cols" t-value="3 + (mr['show_prices'] and 2 or 0) + (mr['show_discount'] and 1 or 0) + (mr['show_taxes'] and 1 or 0)"/>
+                <t t-set="mr_cols" t-value="mr['columns']"/>
                 <table class="o_mr_items">
                     <thead>
-                        <tr t-attf-style="background-color: {{ mr_soft }}; color: {{ mr_accent }};">
+                        <tr t-attf-style="background-color: {{ mr_soft }}; color: {{ mr_caption }};">
                             <th class="o_mr_c o_mr_no">#</th>
                             <th class="o_mr_l">Description</th>
                             <th class="o_mr_r">Quantity</th>
@@ -90,8 +104,11 @@
                     </thead>
                     <tbody>
                         <t t-foreach="mr['lines']" t-as="mr_line">
-                            <tr t-if="mr_line['type'] == 'section'" class="o_mr_section">
-                                <td t-att-colspan="mr_cols" t-out="mr_line['name']"/>
+                            <tr t-if="mr_line['type'] in ('section', 'subsection')"
+                                t-att-class="'o_mr_section' if mr_line['type'] == 'section' else 'o_mr_subsection'">
+                                <td/>
+                                <td t-att-colspan="mr_cols - (2 if mr['show_prices'] else 1)" t-out="mr_line['name']"/>
+                                <td t-if="mr['show_prices']" class="o_mr_r" t-out="mr_line['amount']"/>
                             </tr>
                             <tr t-elif="mr_line['type'] == 'note'" class="o_mr_note">
                                 <td/>
@@ -99,8 +116,8 @@
                             </tr>
                             <tr t-else="">
                                 <td class="o_mr_c o_mr_muted" t-out="mr_line['number']"/>
-                                <td class="o_mr_desc">
-                                    <span class="o_mr_strong" t-out="mr_line['title']"/>
+                                <td t-attf-class="o_mr_desc {{ mr_line['indent'] and 'o_mr_indent' or '' }}">
+                                    <span class="o_mr_medium" t-out="mr_line['title']"/>
                                     <span t-if="mr_line['extra']" class="o_mr_muted"> — <t t-out="mr_line['extra']"/></span>
                                 </td>
                                 <td class="o_mr_r" t-out="mr_line['qty']"/>
@@ -113,91 +130,155 @@
                     </tbody>
                 </table>
 
-                <!-- Bottom: payment methods + terms | totals + words -->
-                <table class="o_mr_grid o_mr_bottom" t-if="mr['payment_methods'] or mr['terms'] or mr['total']">
-                    <tr>
-                        <td class="o_mr_bottom_left">
-                            <div t-if="mr['payment_methods']" class="o_mr_block">
-                                <div class="o_mr_caption" t-attf-style="color: {{ mr_accent }};">Payment Method</div>
-                                <table class="o_mr_methods" t-foreach="mr['payment_method_rows']" t-as="mr_method_row">
-                                    <tr>
-                                        <t t-foreach="mr_method_row" t-as="mr_method">
-                                            <td class="o_mr_method_gap" t-if="not mr_method_first"/>
-                                            <td class="o_mr_method"
-                                                t-attf-style="{{ mr_method['highlight'] and 'background-color: %s; border-color: %s;' % (mr_soft, mr['style']['soft_border']) or '' }}">
-                                                <table class="o_mr_method_head"><tr>
-                                                    <td class="o_mr_method_icon"
-                                                        t-attf-style="background-color: {{ mr_accent if mr_method['highlight'] else mr_soft }};">
-                                                        <t t-call="modern_reports.payment_icon">
-                                                            <t t-set="mr_icon_color" t-value="'#ffffff' if mr_method['highlight'] else mr_accent"/>
-                                                        </t>
-                                                    </td>
-                                                    <td class="o_mr_strong" t-out="mr_method['name']"/>
-                                                </tr></table>
-                                                <div t-if="mr_method['detail']" class="o_mr_method_detail" t-out="mr_method['detail']"/>
-                                                <div t-if="mr_method['value']" class="o_mr_method_value" t-out="mr_method['value']"/>
-                                            </td>
-                                        </t>
-                                        <t t-foreach="range(3 - len(mr_method_row))" t-as="mr_pad">
-                                            <td class="o_mr_method_gap"/><td class="o_mr_method_empty"/>
-                                        </t>
-                                    </tr>
-                                </table>
-                                <table t-if="mr['payment_reference']" class="o_mr_payref"
-                                       t-attf-style="background-color: {{ mr_soft }}; border-left-color: {{ mr_accent }};">
-                                    <tr>
-                                        <td class="o_mr_muted">Payment reference</td>
-                                        <td class="o_mr_r o_mr_strong" t-attf-style="color: {{ mr_accent }};" t-out="mr['payment_reference']"/>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div t-if="mr['terms']" class="o_mr_block">
-                                <div class="o_mr_caption" t-attf-style="color: {{ mr_accent }};">Terms &amp; Conditions</div>
-                                <ol class="o_mr_terms">
-                                    <li t-foreach="mr['terms']" t-as="mr_term" t-out="mr_term"/>
-                                </ol>
-                            </div>
-                        </td>
-                        <td class="o_mr_bottom_right" t-if="mr['total']">
-                            <table class="o_mr_totals">
-                                <tr t-foreach="mr['totals']" t-as="mr_row">
-                                    <td class="o_mr_muted" t-out="mr_row[0]"/>
-                                    <td class="o_mr_r o_mr_medium" t-out="mr_row[1]"/>
-                                </tr>
-                                <tr class="o_mr_total" t-attf-style="background-color: {{ mr_accent }};">
-                                    <td>Total</td>
-                                    <td class="o_mr_r o_mr_total_amount" t-out="mr['total']"/>
-                                </tr>
-                                <tr t-foreach="mr['payments']" t-as="mr_payment">
-                                    <td class="o_mr_muted o_mr_italic" t-out="mr_payment[0]"/>
-                                    <td class="o_mr_r o_mr_medium" t-out="mr_payment[1]"/>
-                                </tr>
-                                <tr t-if="mr['amount_due']" class="o_mr_due" t-attf-style="background-color: {{ mr_soft }};">
-                                    <td t-attf-style="color: {{ mr_accent }};">Amount Due</td>
-                                    <td class="o_mr_r o_mr_due_amount" t-out="mr['amount_due']"/>
-                                </tr>
-                            </table>
-                            <div t-if="mr['words']" class="o_mr_words">
-                                <div class="o_mr_caption" t-attf-style="color: {{ mr_accent }};">Amount in Words</div>
-                                <div class="o_mr_words_text" t-out="mr['words']"/>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+                <!-- Tail: kept together and pushed to the bottom of the last page -->
+                <div class="o_mr_tail">
+                    <table class="o_mr_grid o_mr_bottom" t-if="mr['has_left'] or mr['total'] or mr['company_totals']">
+                        <tr>
+                            <td class="o_mr_bottom_left">
+                                <t t-call="modern_reports.document_left"/>
+                            </td>
+                            <td class="o_mr_bottom_right" t-if="mr['total']">
+                                <t t-call="modern_reports.document_totals"/>
+                            </td>
+                        </tr>
+                    </table>
 
-                <!-- Signatures -->
-                <table class="o_mr_grid o_mr_sign">
-                    <tr>
-                        <td><div class="o_mr_sign_line"/><div t-out="mr['signatures'][0]"/></td>
-                        <td class="o_mr_sign_gap"/>
-                        <td><div class="o_mr_sign_line"/><div t-out="mr['signatures'][1]"/></td>
-                    </tr>
-                </table>
+                    <table class="o_mr_grid o_mr_sign" t-if="mr_style['signatures']">
+                        <tr>
+                            <td>
+                                <div class="o_mr_spacer"/>
+                                <t t-set="mr_signature" t-value="mr['customer_signature']"/>
+                                <div t-if="mr_signature" class="o_mr_signature_img">
+                                    <img t-att-src="image_data_uri(mr_signature['image'])" alt="Signature"/>
+                                </div>
+                                <div class="o_mr_sign_line"/>
+                                <div t-out="mr['signatures'][0]"/>
+                                <div class="o_mr_muted o_mr_small">
+                                    <t t-if="mr_signature and (mr_signature['name'] or mr_signature['date'])">
+                                        <t t-out="mr_signature['name']"/><t t-if="mr_signature['name'] and mr_signature['date']"> · </t><t t-out="mr_signature['date']"/>
+                                    </t>
+                                    <t t-else="">&#160;</t>
+                                </div>
+                            </td>
+                            <td class="o_mr_sign_gap"/>
+                            <td>
+                                <div class="o_mr_sign_line"/>
+                                <div t-out="mr['signatures'][1]"/>
+                                <div class="o_mr_muted o_mr_small">For <t t-out="mr_company['name']"/></div>
+                            </td>
+                        </tr>
+                    </table>
+                    <div t-else="" class="o_mr_spacer"/>
+                </div>
             </div>
         </div>
 
-        <div class="footer o_mr_footer">
-            <t t-out="mr['footer_note']"/> · Page <span class="page"/> of <span class="topage"/>
+        <div t-attf-class="footer o_mr_footer {{ mr_style['font_class'] }}">
+            <div t-if="mr['footer_text']" class="o_mr_footer_company" t-out="mr['footer_text']"/>
+            <div><t t-out="mr['footer_note']"/> · Page <span class="page"/> of <span class="topage"/></div>
+        </div>
+    </template>
+
+    <!-- Left half of the tail: payment methods, reference, QR codes, schedule, notes, terms -->
+    <template id="document_left">
+        <div t-if="mr['payment_methods']" class="o_mr_block">
+            <div class="o_mr_caption" t-attf-style="color: {{ mr_caption }};">Payment Method</div>
+            <table class="o_mr_methods" t-foreach="mr['payment_method_rows']" t-as="mr_method_row">
+                <tr>
+                    <t t-foreach="mr_method_row" t-as="mr_method">
+                        <td class="o_mr_method_gap" t-if="not mr_method_first"/>
+                        <td class="o_mr_method"
+                            t-att-style="mr_method['highlight'] and 'background-color: %s; border-color: %s;' % (mr_soft, mr_style['soft_border']) or None">
+                            <table class="o_mr_method_head"><tr>
+                                <td class="o_mr_method_icon"
+                                    t-attf-style="background-color: {{ mr_accent if mr_method['highlight'] else mr_soft }};">
+                                    <t t-call="modern_reports.payment_icon">
+                                        <t t-set="mr_icon_color" t-value="mr_on_accent if mr_method['highlight'] else mr_accent"/>
+                                    </t>
+                                </td>
+                                <td class="o_mr_strong" t-out="mr_method['name']"/>
+                            </tr></table>
+                            <div t-if="mr_method['detail']" class="o_mr_method_detail" t-out="mr_method['detail']"/>
+                            <div t-if="mr_method['value']" class="o_mr_method_value" t-out="mr_method['value']"/>
+                        </td>
+                    </t>
+                    <t t-foreach="range(3 - len(mr_method_row))" t-as="mr_pad">
+                        <td class="o_mr_method_gap"/><td class="o_mr_method_empty"/>
+                    </t>
+                </tr>
+            </table>
+        </div>
+        <table t-if="mr['payment_reference']" class="o_mr_payref"
+               t-attf-style="background-color: {{ mr_soft }}; border-left-color: {{ mr_accent }};">
+            <tr>
+                <td class="o_mr_muted">Payment reference</td>
+                <td class="o_mr_r o_mr_strong" t-attf-style="color: {{ mr_accent }};" t-out="mr['payment_reference']"/>
+            </tr>
+            <tr t-if="mr['bank_account']">
+                <td class="o_mr_muted">On account</td>
+                <td class="o_mr_r o_mr_medium" t-out="mr['bank_account']"/>
+            </tr>
+        </table>
+        <table t-if="mr['qr_codes']" class="o_mr_qr o_mr_block_table">
+            <tr>
+                <t t-foreach="mr['qr_codes']" t-as="mr_qr">
+                    <td class="o_mr_qr_img"><img t-att-src="mr_qr['src']" alt="QR"/></td>
+                    <td class="o_mr_qr_text o_mr_muted" t-out="mr_qr['caption']"/>
+                </t>
+                <td class="o_mr_qr_fill"/>
+            </tr>
+        </table>
+        <div t-if="mr['schedule']" class="o_mr_block">
+            <div class="o_mr_caption" t-attf-style="color: {{ mr_caption }};">Payment Terms</div>
+            <div t-foreach="mr['schedule']" t-as="mr_item" class="o_mr_small_text" t-out="mr_item"/>
+        </div>
+        <div t-if="mr['terms']" class="o_mr_block">
+            <div class="o_mr_caption" t-attf-style="color: {{ mr_caption }};">Terms &amp; Conditions</div>
+            <ol class="o_mr_terms">
+                <li t-foreach="mr['terms']" t-as="mr_term" t-out="mr_term"/>
+            </ol>
+        </div>
+        <div t-if="mr['notes']" class="o_mr_block o_mr_notes">
+            <div t-foreach="mr['notes']" t-as="mr_note" t-out="mr_note"/>
+        </div>
+    </template>
+
+    <!-- Right half of the tail: totals, payments, amount due, words, company-currency taxes -->
+    <template id="document_totals">
+        <table class="o_mr_totals">
+            <tr t-foreach="mr['totals']" t-as="mr_row">
+                <td class="o_mr_muted" t-out="mr_row[0]"/>
+                <td class="o_mr_r o_mr_medium" t-out="mr_row[1]"/>
+            </tr>
+            <tr class="o_mr_total" t-attf-style="background-color: {{ mr_accent }}; color: {{ mr_on_accent }};">
+                <td>Total</td>
+                <td class="o_mr_r o_mr_total_amount" t-out="mr['total']"/>
+            </tr>
+            <tr t-foreach="mr['payments']" t-as="mr_payment">
+                <td class="o_mr_muted o_mr_italic" t-out="mr_payment[0]"/>
+                <td class="o_mr_r o_mr_medium" t-out="mr_payment[1]"/>
+            </tr>
+            <tr t-if="mr['amount_due']" class="o_mr_due" t-attf-style="background-color: {{ mr_soft }};">
+                <td t-attf-style="color: {{ mr_accent }};">Amount Due</td>
+                <td class="o_mr_r o_mr_due_amount" t-out="mr['amount_due']"/>
+            </tr>
+        </table>
+        <div t-if="mr['words']" class="o_mr_words">
+            <div class="o_mr_caption" t-attf-style="color: {{ mr_caption }};">Amount in Words</div>
+            <div class="o_mr_words_text" t-out="mr['words']"/>
+        </div>
+        <div t-if="mr['company_totals']" class="o_mr_words">
+            <div class="o_mr_caption" t-attf-style="color: {{ mr_caption }};" t-out="mr['company_totals']['title']"/>
+            <table class="o_mr_mini">
+                <tr t-foreach="mr['company_totals']['rows']" t-as="mr_row">
+                    <td class="o_mr_muted" t-out="mr_row[0]"/>
+                    <td class="o_mr_r" t-out="mr_row[1]"/>
+                </tr>
+                <tr class="o_mr_strong">
+                    <td>Total</td>
+                    <td class="o_mr_r" t-out="mr['company_totals']['total']"/>
+                </tr>
+            </table>
         </div>
     </template>
 
@@ -215,7 +296,7 @@
 
     <template id="report_invoice_document">
         <t t-call="modern_reports.document">
-            <t t-set="mr" t-value="o.with_context(lang=lang or o.partner_id.lang)._mr_values(with_payments=print_with_payments)"/>
+            <t t-set="mr" t-value="o.with_context(lang=lang or o.partner_id.lang)._mr_values(with_payments=print_with_payments, proforma=proforma)"/>
         </t>
     </template>
 

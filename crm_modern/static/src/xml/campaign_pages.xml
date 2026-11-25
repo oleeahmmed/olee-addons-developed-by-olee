@@ -4,7 +4,7 @@
     <t t-name="crm_modern.CampaignDetail">
         <div class="o_cm o_cm_page">
             <div class="cm-container">
-                <div class="cm-skeleton" style="height:8rem"/>
+                <div class="cm-skeleton u-h-8"/>
             </div>
         </div>
     </t>

@@ -4,9 +4,9 @@
     <t t-name="invoice_modern.Dashboard">
         <div class="o_iv od-page">
             <t t-if="state.loading">
-                <div class="od-head"><div class="od-skel" style="height:3.75rem;width:22rem"/><div class="od-skel" style="height:2.25rem;width:20rem"/></div>
-                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel" style="height:8.5rem"/></t></div>
-                <div class="od-grid"><div class="od-skel od-span-8" style="height:22rem"/><div class="od-skel od-span-4" style="height:22rem"/></div>
+                <div class="od-head"><div class="od-skel od-skel-title"/><div class="od-skel od-skel-sub"/></div>
+                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel od-skel-kpi"/></t></div>
+                <div class="od-grid"><div class="od-skel od-span-8 od-skel-panel"/><div class="od-skel od-span-4 od-skel-panel"/></div>
             </t>
             <t t-elif="state.error and !state.data">
                 <OdError message="state.error" onRetry.bind="load"/>
@@ -108,9 +108,9 @@
                                 <button type="button" class="od-link" t-on-click="openReceivable">Open invoices <i class="fa fa-angle-right" aria-hidden="true"/></button>
                             </div>
                             <div class="od-card-body">
-                                <div class="d-flex justify-content-between align-items-baseline mb-2" style="font-size:0.8125rem">
-                                    <span style="font-weight:650">Customers owe us</span>
-                                    <span class="od-num"><strong t-esc="m(k.receivable)"/> <span class="text-muted" style="font-size:0.75rem">· <t t-esc="k.receivable_count"/> invoices</span></span>
+                                <div class="d-flex justify-content-between align-items-baseline mb-2 od-text-sm">
+                                    <span class="od-strong">Customers owe us</span>
+                                    <span class="od-num"><strong t-esc="m(k.receivable)"/> <span class="text-muted od-text-xs">· <t t-esc="k.receivable_count"/> invoices</span></span>
                                 </div>
                                 <OdStack items="d.ageing_out" format="ms"/>
                                 <h4 class="od-subhead">Most overdue customers</h4>
@@ -127,9 +127,9 @@
                                 <button type="button" class="od-link" t-on-click="openPayable">Open bills <i class="fa fa-angle-right" aria-hidden="true"/></button>
                             </div>
                             <div class="od-card-body">
-                                <div class="d-flex justify-content-between align-items-baseline mb-2" style="font-size:0.8125rem">
-                                    <span style="font-weight:650">We owe vendors</span>
-                                    <span class="od-num"><strong t-esc="m(k.payable)"/> <span class="text-muted" style="font-size:0.75rem">· <t t-esc="k.payable_count"/> bills</span></span>
+                                <div class="d-flex justify-content-between align-items-baseline mb-2 od-text-sm">
+                                    <span class="od-strong">We owe vendors</span>
+                                    <span class="od-num"><strong t-esc="m(k.payable)"/> <span class="text-muted od-text-xs">· <t t-esc="k.payable_count"/> bills</span></span>
                                 </div>
                                 <OdStack items="d.ageing_in" format="ms"/>
                                 <h4 class="od-subhead">Vendors we owe the most</h4>

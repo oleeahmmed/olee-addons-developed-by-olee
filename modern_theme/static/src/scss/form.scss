@@ -544,8 +544,9 @@ $mt-bar-height: 3.5rem;
     }
 
     // The order / RFQ number is the page title already: don't repeat it in the sheet.
-    &.o_sale_order .o_form_sheet .oe_title:has(.o_field_widget[name="name"]),
-    &.o_purchase_order .o_form_sheet .oe_title:has(.o_field_widget[name="name"]) { display: none; }
+    // (compact-head forms show it as a "Number" field instead: compact_form_head.scss)
+    &.o_sale_order:not(.mt-compact-head) .o_form_sheet .oe_title:has(.o_field_widget[name="name"]),
+    &.o_purchase_order:not(.mt-compact-head) .o_form_sheet .oe_title:has(.o_field_widget[name="name"]) { display: none; }
 }
 
 // ===========================================================================

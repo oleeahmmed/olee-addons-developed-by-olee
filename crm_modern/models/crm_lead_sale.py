@@ -4,6 +4,8 @@ from odoo import Command, api, fields, models
 from odoo.exceptions import UserError
 from odoo.tools import date_utils
 
+from odoo.addons.modern_theme.models.shared_views import shared_view_ids
+
 QUOTATION_STATES = ('draft', 'sent')
 ORDER_STATES = ('sale',)
 ORDER_FIELDS = [
@@ -32,25 +34,8 @@ class CrmLead(models.Model):
         if not has_sale(self.env):
             return ids
 
-        def ref(xmlid):
-            record = self.env.ref(xmlid, raise_if_not_found=False)
-            return record.id if record else False
-
-        ids.update({
-            'quotation_search': ref('sale.sale_order_view_search_inherit_quotation'),
-            'quotation_list': ref('sale.view_quotation_tree_with_onboarding'),
-            'order_search': ref('sale.sale_order_view_search_inherit_sale'),
-            'order_list': ref('sale.view_order_tree'),
-        })
-        for prefix in ('quotation', 'order'):
-            ids.update({
-                f'{prefix}_kanban': ref('sale.view_sale_order_kanban'),
-                f'{prefix}_calendar': ref('sale.view_sale_order_calendar'),
-                f'{prefix}_pivot': ref('sale.view_sale_order_pivot'),
-                f'{prefix}_graph': ref('sale.view_sale_order_graph'),
-                f'{prefix}_activity': ref('sale.sale_order_view_activity'),
-                f'{prefix}_form': ref('sale.view_order_form'),
-            })
+        # the quotation / sales order views every modern app shares
+        ids.update(shared_view_ids(self.env))
         return ids
 
     @api.model

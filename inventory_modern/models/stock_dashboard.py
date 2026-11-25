@@ -10,6 +10,7 @@ from datetime import datetime, time, timedelta
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
+from odoo.addons.modern_theme.models.shared_views import PRODUCT_FORM
 from odoo.addons.modern_theme.tools import local_midnight
 from odoo.tools import date_utils
 
@@ -300,7 +301,7 @@ class StockPicking(models.Model):
             'product_kanban': ref('stock.product_template_kanban_stock_view'),
             'product_list': ref('stock.view_stock_product_template_tree'),
             'product_search': ref('stock.product_template_search_form_view_stock'),
-            'product_form': ref('product.product_template_form_view'),
+            'product_form': ref(PRODUCT_FORM),
             'quant_list': ref('stock.view_stock_quant_tree'),
             'quant_pivot': ref('stock.view_stock_quant_pivot'),
             'quant_search': ref('stock.quant_search_view'),

@@ -6,8 +6,8 @@
         <div class="o_cm o_cm_page o_cm_page--native">
             <div class="cm-container cm-container--native">
                 <div t-if="!state.ready" class="cm-card cm-native">
-                    <div class="cm-skeleton" style="height:3.5rem;margin:1rem 1.25rem"/>
-                    <div class="cm-skeleton" style="height:16rem;margin:0 1.25rem 1.25rem"/>
+                    <div class="cm-skeleton u-h-3_5 u-m-1-1_25"/>
+                    <div class="cm-skeleton u-h-16 u-m-0-1_25-1_25"/>
                 </div>
                 <div t-elif="state.unavailable" class="cm-card">
                     <EmptyState icon="'fa-puzzle-piece'" title="page.unavailableTitle" description="page.unavailableDescription"/>

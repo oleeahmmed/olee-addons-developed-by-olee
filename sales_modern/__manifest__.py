@@ -20,6 +20,7 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
     'data': [
         'views/report_layout.xml',
         'views/sales_modern_team_views.xml',
+        'views/sale_order_views.xml',
         'views/sales_modern_actions.xml',
         'views/sales_modern_menus.xml',
     ],

@@ -37,10 +37,10 @@
                     <li t-foreach="matches" t-as="p" t-key="p.id" t-on-mousedown.prevent="() => this.add(p)"><strong t-esc="p.name"/><small t-if="p.stock !== undefined"><t t-esc="p.stock"/> in stock</small></li>
                 </ul>
             </div>
-            <ul class="ps-list" style="margin-top:.75rem">
+            <ul class="ps-list u-mt-0_75">
                 <li t-foreach="state.rows" t-as="r" t-key="r.id" class="ps-list-row">
                     <span class="ps-list-main"><strong t-esc="r.name"/></span>
-                    <input type="number" min="0" step="1" class="ps-input" style="width:7rem" placeholder="Qty" t-model="r.qty"/>
+                    <input type="number" min="0" step="1" class="ps-input u-w-7" placeholder="Qty" t-model="r.qty"/>
                     <button type="button" class="ps-btn ps-btn--sm ps-btn--ghost" t-on-click="() => this.remove(r)"><i class="fa fa-times" aria-hidden="true"/></button>
                 </li>
                 <li t-if="!state.rows.length" class="ps-muted">
@@ -76,7 +76,7 @@
                     </ul>
                 </t>
             </div>
-            <div class="ps-grid-form" style="margin-top:.75rem">
+            <div class="ps-grid-form u-mt-0_75">
                 <label class="ps-field"><span>Flavour</span><input type="text" class="ps-input" t-model="state.flavour" placeholder="Chocolate, vanilla…"/></label>
                 <label class="ps-field"><span>Weight</span><input type="text" class="ps-input" t-model="state.weight" placeholder="1 pound, 2 kg"/></label>
                 <label class="ps-field"><span>Delivery</span><input type="datetime-local" class="ps-input" t-model="state.delivery_at"/></label>
@@ -97,7 +97,7 @@
 
     <t t-name="pos_bakery.CakesDialog">
         <Dialog title="'Cake orders'" size="'lg'" contentClass="'o_ps ps-dialog'">
-            <div t-if="state.loading" class="ps-skel" style="height:8rem"/>
+            <div t-if="state.loading" class="ps-skel u-h-8"/>
             <div t-elif="!state.rows.length" class="ps-pos-empty ps-pos-empty--inline">
                 <i class="fa fa-birthday-cake" aria-hidden="true"/><strong>No cake order to deliver</strong>
             </div>
@@ -134,7 +134,7 @@
                     <input type="date" class="ps-input ps-input--auto" t-att-value="state.day" t-on-change="(ev) => this.setDay(ev.target.value)"/>
                 </div>
             </header>
-            <div t-if="state.loading" class="ps-skel" style="height:20rem"/>
+            <div t-if="state.loading" class="ps-skel u-h-20"/>
             <div t-elif="!state.configId" class="ps-pos-empty ps-pos-empty--inline">
                 <i class="fa fa-birthday-cake" aria-hidden="true"/><strong>No bakery shop</strong>
                 <span>Turn on "Bakery counter" in a shop's Counter settings.</span>

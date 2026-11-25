@@ -1,0 +1,115 @@
+// Utility classes for the modern apps' own templates (CRM pages and dialogs, POS screens).
+// They replace the inline style="" those templates used to carry, so every bit of design
+// lives in modern_theme. Generated from the templates; !important keeps the inline-style
+// priority the templates were written for. Values are rem unless the name says otherwise.
+
+.u-ac-end { align-content: end !important; }
+.u-bg-cm-muted { background: var(--cm-muted) !important; }
+.u-bg-cm-warning-soft { background: var(--cm-warning-soft) !important; }
+.u-border-dashed { border-style: dashed !important; }
+.u-c-cm-chart-3 { color: var(--cm-chart-3) !important; }
+.u-c-cm-danger { color: var(--cm-danger) !important; }
+.u-c-cm-fg { color: var(--cm-fg) !important; }
+.u-c-cm-muted-fg { color: var(--cm-muted-fg) !important; }
+.u-c-cm-primary { color: var(--cm-primary) !important; }
+.u-c-cm-success { color: var(--cm-success) !important; }
+.u-c-cm-warning { color: var(--cm-warning) !important; }
+.u-c-inherit { color: inherit !important; }
+.u-cols-12x1_25 { grid-template-columns: repeat(12, 1.25rem) !important; }
+.u-cols-12x1_5 { grid-template-columns: repeat(12, 1.5rem) !important; }
+.u-cursor-pointer { cursor: pointer !important; }
+.u-cursor-text { cursor: text !important; }
+.u-d-grid { display: grid !important; }
+.u-flex-1 { flex: 1 !important; }
+.u-fs-0_6875 { font-size: 0.6875rem !important; }
+.u-fs-0_75 { font-size: 0.75rem !important; }
+.u-fs-0_875 { font-size: 0.875rem !important; }
+.u-fs-1_25 { font-size: 1.25rem !important; }
+.u-fw-400 { font-weight: 400 !important; }
+.u-fw-500 { font-weight: 500 !important; }
+.u-fw-600 { font-weight: 600 !important; }
+.u-gap-0_125 { gap: 0.125rem !important; }
+.u-gap-0_25 { gap: 0.25rem !important; }
+.u-gap-0_375 { gap: 0.375rem !important; }
+.u-gap-0_5 { gap: 0.5rem !important; }
+.u-gap-0_625 { gap: 0.625rem !important; }
+.u-gap-0_75 { gap: 0.75rem !important; }
+.u-gap-1 { gap: 1rem !important; }
+.u-gap-1_25 { gap: 1.25rem !important; }
+.u-h-0_625 { height: 0.625rem !important; }
+.u-h-0_75 { height: 0.75rem !important; }
+.u-h-10 { height: 10rem !important; }
+.u-h-100pct { height: 100% !important; }
+.u-h-12 { height: 12rem !important; }
+.u-h-14 { height: 14rem !important; }
+.u-h-16 { height: 16rem !important; }
+.u-h-18 { height: 18rem !important; }
+.u-h-1_25 { height: 1.25rem !important; }
+.u-h-1_5 { height: 1.5rem !important; }
+.u-h-1_75 { height: 1.75rem !important; }
+.u-h-2 { height: 2rem !important; }
+.u-h-20 { height: 20rem !important; }
+.u-h-22 { height: 22rem !important; }
+.u-h-24 { height: 24rem !important; }
+.u-h-2_75 { height: 2.75rem !important; }
+.u-h-3 { height: 3rem !important; }
+.u-h-3_5 { height: 3.5rem !important; }
+.u-h-5 { height: 5rem !important; }
+.u-h-6 { height: 6rem !important; }
+.u-h-8 { height: 8rem !important; }
+.u-h-auto { height: auto !important; }
+.u-jc-flex-start { justify-content: flex-start !important; }
+.u-m-0 { margin: 0 !important; }
+.u-m-0-1_25-1_25 { margin: 0 1.25rem 1.25rem !important; }
+.u-m-0_75-0-_5 { margin: .75rem 0 .5rem !important; }
+.u-m-1-1_25 { margin: 1rem 1.25rem !important; }
+.u-maxw-100pct { max-width: 100% !important; }
+.u-maxw-16 { max-width: 16rem !important; }
+.u-maxw-18 { max-width: 18rem !important; }
+.u-maxw-22 { max-width: 22rem !important; }
+.u-mb-0_5 { margin-bottom: 0.5rem !important; }
+.u-mb-1 { margin-bottom: 1rem !important; }
+.u-minh-2_5 { min-height: 2.5rem !important; }
+.u-minw-0 { min-width: 0 !important; }
+.u-minw-14 { min-width: 14rem !important; }
+.u-minw-6 { min-width: 6rem !important; }
+.u-ml-0_375 { margin-left: 0.375rem !important; }
+.u-mt-0_125 { margin-top: 0.125rem !important; }
+.u-mt-0_5 { margin-top: 0.5rem !important; }
+.u-mt-0_75 { margin-top: .75rem !important; }
+.u-mt-1 { margin-top: 1rem !important; }
+.u-outline-none { outline: none !important; }
+.u-p-0 { padding: 0 !important; }
+.u-p-0_35-0_75 { padding: 0.35rem 0.75rem !important; }
+.u-p-0_75-1 { padding: 0.75rem 1rem !important; }
+.u-p-1 { padding: 1rem !important; }
+.u-p-1_5 { padding: 1.5rem !important; }
+.u-pl-0_25 { padding-left: 0.25rem !important; }
+.u-place-center { place-items: center !important; }
+.u-pos-relative { position: relative !important; }
+.u-pt-0_5 { padding-top: 0.5rem !important; }
+.u-r-50pct { border-radius: 50% !important; }
+.u-shrink-0 { flex-shrink: 0 !important; }
+.u-ta-left { text-align: left !important; }
+.u-ta-right { text-align: right !important; }
+.u-w-0_625 { width: 0.625rem !important; }
+.u-w-0_75 { width: 0.75rem !important; }
+.u-w-10 { width: 10rem !important; }
+.u-w-11 { width: 11rem !important; }
+.u-w-12 { width: 12rem !important; }
+.u-w-13 { width: 13rem !important; }
+.u-w-16 { width: 16rem !important; }
+.u-w-17_5 { width: 17.5rem !important; }
+.u-w-18 { width: 18rem !important; }
+.u-w-1_25 { width: 1.25rem !important; }
+.u-w-1_5 { width: 1.5rem !important; }
+.u-w-1_75 { width: 1.75rem !important; }
+.u-w-2_75 { width: 2.75rem !important; }
+.u-w-3em { width: 3em !important; }
+.u-w-4_5 { width: 4.5rem !important; }
+.u-w-7 { width: 7rem !important; }
+.u-w-8 { width: 8rem !important; }
+.u-w-9 { width: 9rem !important; }
+.u-wrap-wrap { flex-wrap: wrap !important; }
+.u-ws-nowrap { white-space: nowrap !important; }
+.u-z-1 { z-index: 1 !important; }

@@ -12,6 +12,7 @@ import { patch } from "@web/core/utils/patch";
 import { useService } from "@web/core/utils/hooks";
 import { FormCompiler } from "@web/views/form/form_compiler";
 import { StatusBarButtons } from "@web/views/form/status_bar_buttons/status_bar_buttons";
+import { COMPACT_HEAD_MODELS } from "@modern_theme/js/views/compact_form_head";
 
 const MAIN_BUTTONS = new Set([
     "action_confirm",
@@ -82,7 +83,9 @@ if (!StatusBarButtons.__modernHeader) {
             this.actionService = useService("action");
         },
         get modernHeader() {
-            return !this.env.isSmall && isModernApp();
+            // modern apps, and the compact document header everywhere (sales, purchase,
+            // invoices, transfers), which needs the short button row to fit in one line
+            return !this.env.isSmall && (isModernApp() || Boolean(COMPACT_HEAD_MODELS[this.env.model?.root?.resModel]));
         },
         get modernGroups() {
             const main = [];

@@ -10,9 +10,13 @@ payment method cards, terms and signatures.
 
 Uninstall to get the standard Odoo layouts back.
 
-Settings > Invoicing > Modern Reports: accent colour and payment methods.
+Colours, font and background follow Odoo's Document Layout (or the Modern Theme brand colour,
+or a custom colour). Empty item rows fill the page so totals and signatures always sit at the
+bottom of the last page.
+
+Settings > Invoicing > Modern Reports.
     """,
-    'version': '19.0.2.0.0',
+    'version': '19.0.2.1.0',
     'category': 'Accounting/Accounting',
     'author': 'Olee',
     'license': 'LGPL-3',
@@ -29,6 +33,9 @@ Settings > Invoicing > Modern Reports: accent colour and payment methods.
     'assets': {
         'web.report_assets_common': [
             'modern_reports/static/src/scss/modern_reports.scss',
+        ],
+        'web.report_assets_pdf': [
+            'modern_reports/static/src/js/page_fill.js',
         ],
     },
     'installable': True,

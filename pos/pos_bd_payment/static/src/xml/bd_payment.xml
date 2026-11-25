@@ -68,7 +68,7 @@
                     <button type="button" class="ps-btn" t-on-click="() => this.state.showPaste = !state.showPaste"><i class="fa fa-paste" aria-hidden="true"/> Paste statement</button>
                 </div>
             </header>
-            <t t-if="state.loading"><div class="ps-skel" style="height:20rem"/></t>
+            <t t-if="state.loading"><div class="ps-skel u-h-20"/></t>
             <t t-else="">
                 <t t-set="d" t-value="state.data"/>
                 <div class="ps-toolbar">
@@ -97,7 +97,7 @@
                         <div class="ps-kpi"><span><t t-esc="t.name"/> (<t t-esc="t.count"/>)</span><strong t-esc="money(t.amount)"/></div>
                     </t>
                 </div>
-                <section t-if="state.showPaste" class="ps-panel" style="margin-bottom:1rem">
+                <section t-if="state.showPaste" class="ps-panel u-mb-1">
                     <h3>Merchant statement</h3>
                     <p class="ps-muted">Paste the statement (bKash / Nagad merchant portal, SMS list…). Every TrxID found is ticked.</p>
                     <textarea class="ps-input" rows="6" t-model="state.statement" placeholder="9C4A7B2D1E  1,250.00&#10;8F3K2L9Q0P  560.00"/>

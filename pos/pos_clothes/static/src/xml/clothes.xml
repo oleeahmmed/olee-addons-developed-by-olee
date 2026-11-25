@@ -61,7 +61,7 @@
                     </div>
                 </div>
             </header>
-            <div t-if="state.loading" class="ps-skel" style="height:20rem"/>
+            <div t-if="state.loading" class="ps-skel u-h-20"/>
             <div t-elif="!state.configId" class="ps-pos-empty ps-pos-empty--inline">
                 <i class="fa fa-th" aria-hidden="true"/><strong>No clothing shop</strong>
                 <span>Turn on "Clothing counter" in a shop's Counter settings.</span>

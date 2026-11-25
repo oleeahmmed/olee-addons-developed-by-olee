@@ -5,6 +5,7 @@ import { user } from "@web/core/user";
 import { useService } from "@web/core/utils/hooks";
 import { session } from "@web/session";
 import { ListPage as KitListPage, loadViewIds as kitLoadViewIds, openFullForm } from "@modern_theme/js/app_kit/list_page";
+import { SaleOrdersPage, SaleQuotationsPage } from "@modern_theme/js/app_kit/sale_pages";
 
 export { openFullForm };
 
@@ -27,8 +28,6 @@ export class ListPage extends KitListPage {
 
 // --------------------------------------------------------------------------- pages
 
-const ORDER_VIEWS = ["list", "kanban", "calendar", "pivot", "graph", "activity"];
-
 /** Opened from a team card: only that team's records, and new ones belong to it. */
 function teamDomain(ctx) {
     return ctx.sales_modern_team_id ? [["team_id", "=", Number(ctx.sales_modern_team_id)]] : [];
@@ -37,41 +36,16 @@ function teamContext(ctx) {
     return ctx.sales_modern_team_id ? { default_team_id: Number(ctx.sales_modern_team_id) } : {};
 }
 
-class QuotationsPage extends ListPage {
-    static title = _t("Quotations");
-    static emptyTitle = _t("No open quotation");
-    static emptyText = _t("Create one in a few seconds: pick the customer, add products, send it.");
-    static subtitle = _t("Offers waiting for the customer — send, follow up, confirm");
-    static icon = "fa-file-text-o";
-    static newLabel = _t("New quotation");
-    static resModel = "sale.order";
-    static prefix = "quotation";
-    static types = ORDER_VIEWS;
-    get domain() {
-        return [["state", "in", ["draft", "sent"]], ...teamDomain(this.ctx)];
-    }
-    get context() {
-        return teamContext(this.ctx);
-    }
+// Quotations / Sales Orders: the shared pages of modern_theme (also used by Modern CRM)
+class QuotationsPage extends SaleQuotationsPage {
+    static cssPrefix = "ss";
+    static storagePrefix = "sales_modern";
 }
 
-class OrdersPage extends ListPage {
-    static title = _t("Sales Orders");
-    static emptyTitle = _t("No sales order yet");
-    static emptyText = _t("Confirmed quotations become sales orders and show up here.");
-    static subtitle = _t("Confirmed orders — deliver, invoice and follow payment");
-    static icon = "fa-shopping-cart";
-    static newLabel = _t("New order");
-    static resModel = "sale.order";
-    static prefix = "order";
-    static types = ORDER_VIEWS;
+class OrdersPage extends SaleOrdersPage {
+    static cssPrefix = "ss";
+    static storagePrefix = "sales_modern";
     static viewKey = "sales_modern.view.order.list";
-    get domain() {
-        return [["state", "=", "sale"], ...teamDomain(this.ctx)];
-    }
-    get context() {
-        return teamContext(this.ctx);
-    }
 }
 
 class ToInvoicePage extends ListPage {

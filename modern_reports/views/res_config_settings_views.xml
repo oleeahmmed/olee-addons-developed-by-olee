@@ -8,9 +8,28 @@
         <field name="arch" type="xml">
             <xpath expr="//block[@id='invoicing_settings']" position="after">
                 <block title="Modern Reports" id="modern_reports_settings">
-                    <setting id="mr_accent_color" string="Document accent colour"
-                             help="Title band, table header and totals colour on invoices, quotations and orders.">
-                        <field name="mr_accent_color" widget="color"/>
+                    <setting id="mr_colors" string="Document colours"
+                             help="Title band, table header, captions and total on invoices, quotations and orders.">
+                        <field name="mr_color_source" widget="radio"/>
+                        <div invisible="mr_color_source != 'custom'" class="mt-2">
+                            <field name="mr_accent_color" widget="color"/>
+                        </div>
+                        <div invisible="mr_color_source != 'document'" class="mt-2">
+                            <button name="%(web.action_base_document_layout_configurator)d" type="action"
+                                    string="Configure Document Layout" class="btn-link" icon="oi-arrow-right"/>
+                        </div>
+                    </setting>
+                    <setting id="mr_background" string="Document background"
+                             help="Background behind the printed page. The font always follows the Document Layout font.">
+                        <field name="mr_background" widget="radio"/>
+                    </setting>
+                    <setting id="mr_fill_page" string="Fill page with item rows"
+                             help="Empty rows fill the item table so the totals, payment details and signatures always sit at the bottom of the last page.">
+                        <field name="mr_fill_page"/>
+                    </setting>
+                    <setting id="mr_show_signatures" string="Signature lines"
+                             help="Print customer / authorised signatory lines at the bottom.">
+                        <field name="mr_show_signatures"/>
                     </setting>
                     <setting id="mr_payment_methods" string="Payment methods"
                              help="Bank, mobile wallet and cash cards printed on customer documents.">

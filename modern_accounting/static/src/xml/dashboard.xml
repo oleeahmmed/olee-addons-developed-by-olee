@@ -4,9 +4,9 @@
     <t t-name="modern_accounting.Dashboard">
         <div class="o_ac od-page">
             <t t-if="state.loading">
-                <div class="od-head"><div class="od-skel" style="height:3.75rem;width:22rem"/><div class="od-skel" style="height:2.25rem;width:20rem"/></div>
-                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel" style="height:8.5rem"/></t></div>
-                <div class="od-grid"><div class="od-skel od-span-8" style="height:22rem"/><div class="od-skel od-span-4" style="height:22rem"/></div>
+                <div class="od-head"><div class="od-skel od-skel-title"/><div class="od-skel od-skel-sub"/></div>
+                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel od-skel-kpi"/></t></div>
+                <div class="od-grid"><div class="od-skel od-span-8 od-skel-panel"/><div class="od-skel od-span-4 od-skel-panel"/></div>
             </t>
             <t t-elif="state.error and !state.data">
                 <OdError message="state.error" onRetry.bind="load"/>
@@ -108,7 +108,7 @@
                                                     </span>
                                                     <t t-esc="j.label"/> <span class="text-muted ms-1" t-esc="j.code"/>
                                                 </td>
-                                                <td t-attf-class="od-r od-num {{ j.value &lt; 0 ? 'ac-negative' : '' }}" style="font-weight:650" t-esc="m(j.value)"/>
+                                                <td class="od-strong" t-attf-class="od-r od-num {{ j.value &lt; 0 ? 'ac-negative' : '' }}" t-esc="m(j.value)"/>
                                             </tr>
                                         </tbody>
                                         <tfoot><tr><td>Total</td><td class="od-r od-num" t-esc="m(liquidityTotal)"/></tr></tfoot>

@@ -18,6 +18,7 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
     'license': 'LGPL-3',
     'depends': ['modern_theme', 'purchase', 'mail'],
     'data': [
+        'views/purchase_order_views.xml',
         'views/purchase_modern_actions.xml',
         'views/purchase_modern_menus.xml',
     ],

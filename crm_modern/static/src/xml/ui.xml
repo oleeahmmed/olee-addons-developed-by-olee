@@ -74,7 +74,7 @@
     </t>
 
     <t t-name="crm_modern.DueLabel">
-        <span t-if="info.label" t-attf-class="cm-due-{{ info.state }}" style="font-size:0.75rem;font-weight:500" t-esc="info.label"/>
+        <span class="u-fs-0_75 u-fw-500" t-if="info.label" t-attf-class="cm-due-{{ info.state }}" t-esc="info.label"/>
     </t>
 
     <t t-name="crm_modern.Avatar">
@@ -100,7 +100,7 @@
                 </div>
             </header>
 
-            <div t-if="state.loading" class="cm-skeleton" style="height:16rem"/>
+            <div t-if="state.loading" class="cm-skeleton u-h-16"/>
             <t t-else="">
                 <section class="cm-home-kpis" aria-label="Today">
                     <button type="button" class="cm-home-kpi" t-on-click="() => this.open('crm_modern.action_activities')">
@@ -204,7 +204,7 @@
             <span class="cm-empty-icon" aria-hidden="true"><i t-attf-class="fa {{ props.icon }}"/></span>
             <strong t-esc="props.title"/>
             <p t-if="props.description" t-esc="props.description"/>
-            <div t-if="props.slots and props.slots.default" style="margin-top:0.5rem"><t t-slot="default"/></div>
+            <div class="u-mt-0_5" t-if="props.slots and props.slots.default" ><t t-slot="default"/></div>
         </div>
     </t>
 

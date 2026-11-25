@@ -34,7 +34,7 @@
                                     t-att-class="{ 'is-on': state.use_opportunities }" t-on-click="() => this.state.use_opportunities = !this.state.use_opportunities"/>
                         </div>
                     </div>
-                    <div class="or-field-row" style="margin-top:0.75rem">
+                    <div class="or-field-row u-mt-0_75">
                         <div>
                             <span class="or-label">Skip auto-assignment</span>
                             <button type="button" class="or-toggle" t-att-aria-checked="state.assignment_optout ? 'true' : 'false'"
@@ -54,7 +54,7 @@
     <t t-name="crm_modern.TeamDetail">
         <div class="o_cm o_cm_page">
             <div class="cm-container">
-                <div t-if="state.loading" class="cm-skeleton" style="height:20rem"/>
+                <div t-if="state.loading" class="cm-skeleton u-h-20"/>
                 <EmptyState t-elif="!state.data" icon="'fa-users'" title="'Team not found'" description="'It may have been deleted.'"/>
                 <t t-else="">
                     <t t-set="team" t-value="state.data.team"/>
@@ -94,16 +94,16 @@
                             <div class="cm-field"><label class="cm-label" for="cm_t_alias">Email alias</label>
                                 <input id="cm_t_alias" class="cm-input" placeholder="e.g. sales" t-att-value="team.alias_name or ''" t-on-change="onAlias"/>
                                 <span class="cm-hint" t-esc="team.alias_email ? 'Incoming emails to ' + team.alias_email + ' create leads for this team.' : 'Set an alias to turn emails into leads.'"/></div>
-                            <div class="d-grid" style="gap:0.625rem;align-content:end;font-size:0.875rem">
-                                <label class="d-flex align-items-center" style="gap:0.5rem;cursor:pointer">
+                            <div class="d-grid u-gap-0_625 u-ac-end u-fs-0_875">
+                                <label class="d-flex align-items-center u-gap-0_5 u-cursor-pointer">
                                     <input type="checkbox" class="cm-check" t-att-checked="team.use_leads" t-on-change="(ev) => this.write({ use_leads: ev.target.checked })"/>
                                     Qualify leads before the pipeline
                                 </label>
-                                <label class="d-flex align-items-center" style="gap:0.5rem;cursor:pointer">
+                                <label class="d-flex align-items-center u-gap-0_5 u-cursor-pointer">
                                     <input type="checkbox" class="cm-check" t-att-checked="team.use_opportunities" t-on-change="(ev) => this.write({ use_opportunities: ev.target.checked })"/>
                                     Use the pipeline
                                 </label>
-                                <label class="d-flex align-items-center" style="gap:0.5rem;cursor:pointer">
+                                <label class="d-flex align-items-center u-gap-0_5 u-cursor-pointer">
                                     <input type="checkbox" class="cm-check" t-att-checked="team.assignment_optout" t-on-change="(ev) => this.write({ assignment_optout: ev.target.checked })"/>
                                     Skip automatic lead assignment
                                 </label>
@@ -111,7 +111,7 @@
                         </fieldset>
                     </section>
 
-                    <div t-if="team.member_warning" class="cm-banner" style="background:var(--cm-warning-soft);color:var(--cm-warning)" role="status">
+                    <div t-if="team.member_warning" class="cm-banner u-bg-cm-warning-soft u-c-cm-warning" role="status">
                         <i class="fa fa-exclamation-triangle" aria-hidden="true"/> <t t-esc="team.member_warning"/>
                     </div>
 
@@ -125,7 +125,7 @@
                                 <thead><tr>
                                     <th class="cm-first">Salesperson</th>
                                     <th class="cm-num">Open</th><th class="cm-num">Pipeline</th><th class="cm-num">Won</th>
-                                    <th class="cm-num">Leads (30 days)</th><th style="width:8rem">Capacity / 30 days</th><th>Pause assignment</th><th/>
+                                    <th class="cm-num">Leads (30 days)</th><th class="u-w-8" >Capacity / 30 days</th><th>Pause assignment</th><th/>
                                 </tr></thead>
                                 <tbody>
                                     <t t-foreach="state.data.members" t-as="mem" t-key="mem.id">
@@ -134,25 +134,23 @@
                                                 <span class="cm-person">
                                                     <Avatar id="mem.user_id and mem.user_id[0]" name="mem.user_id and mem.user_id[1]"/>
                                                     <span>
-                                                        <span class="d-flex align-items-center" style="gap:0.375rem;font-weight:500">
+                                                        <span class="d-flex align-items-center u-gap-0_375 u-fw-500">
                                                             <t t-esc="mem.user_id ? mem.user_id[1] : '—'"/>
-                                                            <i t-if="team.user_id and mem.user_id and team.user_id[0] === mem.user_id[0]" class="fa fa-star" style="color:var(--cm-chart-3)" aria-label="Team leader" title="Team leader"/>
+                                                            <i t-if="team.user_id and mem.user_id and team.user_id[0] === mem.user_id[0]" class="fa fa-star u-c-cm-chart-3" aria-label="Team leader" title="Team leader"/>
                                                         </span>
-                                                        <span class="cm-muted d-block" style="font-size:0.75rem" t-esc="mem.email or mem.phone or ''"/>
+                                                        <span class="cm-muted d-block od-text-xs" t-esc="mem.email or mem.phone or ''"/>
                                                     </span>
                                                 </span>
                                             </td>
                                             <td class="cm-num" t-esc="mem.open_count"/>
                                             <td class="cm-num" t-esc="m(mem.pipeline)"/>
-                                            <td class="cm-num" style="font-weight:500" t-esc="m(mem.won)"/>
+                                            <td class="cm-num u-fw-500" t-esc="m(mem.won)"/>
                                             <td class="cm-num" t-esc="mem.lead_month_count"/>
-                                            <td><input type="number" min="0" class="cm-input cm-tabular" t-att-disabled="!canEdit" style="height:2rem;text-align:right"
-                                                       t-att-value="mem.assignment_max" t-attf-aria-label="Lead capacity of {{ mem.user_id and mem.user_id[1] }}"
-                                                       t-on-change="(ev) => this.onCapacity(mem, ev)"/></td>
+                                            <td><input type="number" min="0" class="cm-input cm-tabular u-h-2 u-ta-right" t-att-disabled="!canEdit" t-att-value="mem.assignment_max" t-attf-aria-label="Lead capacity of {{ mem.user_id and mem.user_id[1] }}" t-on-change="(ev) => this.onCapacity(mem, ev)"/></td>
                                             <td><input type="checkbox" class="cm-check" t-att-disabled="!canEdit" t-att-checked="mem.assignment_optout"
                                                        t-attf-aria-label="Pause assignment for {{ mem.user_id and mem.user_id[1] }}"
                                                        t-on-change="(ev) => this.writeMember(mem, { assignment_optout: ev.target.checked })"/></td>
-                                            <td class="text-end" style="white-space:nowrap">
+                                            <td class="text-end u-ws-nowrap">
                                                 <button class="cm-btn cm-btn-ghost cm-btn-sm" t-on-click="() => this.openPipeline(mem.user_id and mem.user_id[0])">Pipeline</button>
                                                 <button t-if="canEdit" class="cm-btn cm-btn-danger-ghost cm-btn-icon cm-btn-sm" title="Remove from team"
                                                         t-attf-aria-label="Remove {{ mem.user_id and mem.user_id[1] }} from the team"
@@ -162,12 +160,12 @@
                                             </td>
                                         </tr>
                                     </t>
-                                    <tr t-if="!state.data.members.length"><td colspan="8" class="cm-muted text-center" style="padding:1.5rem">No salespeople in this team yet.</td></tr>
+                                    <tr t-if="!state.data.members.length"><td colspan="8" class="cm-muted text-center u-p-1_5">No salespeople in this team yet.</td></tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div t-if="canEdit" class="cm-card-footer" style="justify-content:flex-start;gap:0.5rem;flex-wrap:wrap">
-                            <select class="cm-select" style="max-width:18rem" aria-label="Salesperson to add" t-model="state.newUser">
+                        <div t-if="canEdit" class="cm-card-footer u-jc-flex-start u-gap-0_5 u-wrap-wrap">
+                            <select class="cm-select u-maxw-18" aria-label="Salesperson to add" t-model="state.newUser">
                                 <option value="">Add a salesperson…</option>
                                 <t t-foreach="candidates" t-as="u" t-key="u.id"><option t-att-value="u.id" t-esc="u.name"/></t>
                             </select>

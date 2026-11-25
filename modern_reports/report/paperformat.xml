@@ -14,6 +14,8 @@
         <field name="header_spacing">0</field>
         <field name="css_margins" eval="False"/>
         <field name="dpi">96</field>
+        <!-- 1 CSS px = 1/96 inch on paper: the page-filling script relies on it -->
+        <field name="disable_shrinking" eval="True"/>
     </record>
 
 </odoo>

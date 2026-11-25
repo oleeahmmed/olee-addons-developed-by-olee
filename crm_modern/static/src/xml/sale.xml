@@ -127,7 +127,7 @@
                 </t>
             </div>
         </div>
-        <div t-else="" class="cm-skeleton" style="height:5rem"/>
+        <div t-else="" class="cm-skeleton u-h-5"/>
     </t>
 
     <t t-name="crm_modern.SaleDashboardSection">
@@ -146,7 +146,7 @@
                         <h3><span class="od-card-icon od-tone-blue"><i class="fa fa-file-text-o" aria-hidden="true"/></span> Latest quotations &amp; orders from CRM</h3>
                         <p>Created from opportunities</p>
                     </div>
-                    <div class="d-flex" style="gap:0.25rem">
+                    <div class="d-flex u-gap-0_25">
                         <button type="button" class="od-link" t-on-click="() => this.go('crm_modern.action_quotations')">Quotations</button>
                         <button type="button" class="od-link" t-on-click="() => this.go('crm_modern.action_sale_orders')">Orders <i class="fa fa-angle-right" aria-hidden="true"/></button>
                     </div>
@@ -160,12 +160,12 @@
                                 <t t-foreach="state.data.recent" t-as="o" t-key="o.id">
                                     <tr class="od-clickable" t-on-click="() => this.openOrder(o)">
                                         <td class="od-cell-main" t-esc="o.name"/>
-                                        <td class="od-truncate" style="max-width:16rem" t-esc="o.opportunity_id ? o.opportunity_id[1] : '—'"/>
+                                        <td class="od-truncate u-maxw-16" t-esc="o.opportunity_id ? o.opportunity_id[1] : '—'"/>
                                         <td t-esc="o.partner_id ? o.partner_id[1] : '—'"/>
                                         <td><span t-attf-class="od-pill od-tone-{{ o.state === 'sale' ? 'green' : (o.state === 'sent' ? 'sky' : (o.state === 'cancel' ? 'rose' : 'slate')) }}"
                                                   t-esc="stateBadge[o.state] ? stateBadge[o.state].label : o.state"/></td>
                                         <td class="text-muted" t-esc="shortDate(o.date_order)"/>
-                                        <td class="od-r od-num" style="font-weight:650" t-esc="m(o.amount_total)"/>
+                                        <td class="od-r od-num od-strong" t-esc="m(o.amount_total)"/>
                                     </tr>
                                 </t>
                             </tbody>

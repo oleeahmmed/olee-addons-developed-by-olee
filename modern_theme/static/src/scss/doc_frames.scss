@@ -1,0 +1,168 @@
+// Compact-head document forms (quotations / orders, purchase, invoices / bills,
+// transfers): ONE soft frame (the grey canvas behind the whole form) holds white cards
+// with light hairline borders - header row, details card, tabs card, chatter. Inside the
+// cards, the summary (totals) and the Other Info sections keep their tinted card look.
+// :not(#mt-df) adds an id's weight over the theme's generic form rules.
+
+$df-form: 'html[data-mt-theme] .o_web_client > .o_action_manager > .o_form_view.mt-compact-head:not(.o_base_settings):not(.o_base_settings_view)';
+$df-line: unquote("color-mix(in srgb, var(--mt-border) 80%, transparent)");
+$df-lift: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.02);
+
+// the frame colour: a soft grey in light mode (dark mode sets it in dark.scss)
+html[data-mt-theme] { --mt-df-canvas: color-mix(in srgb, var(--mt-muted) 75%, var(--mt-card)); }
+
+#{$df-form}:not(#mt-df) {
+    // ---- the one frame: a soft canvas behind everything --------------------------------
+    background: var(--mt-df-canvas) !important;
+
+    .o_form_view_container,
+    .o_content,
+    .o_form_renderer,
+    .o_form_sheet_bg,
+    .o_form_sheet,
+    .o-mail-Form-chatter,
+    .o-mail-Form-chatter .o-mail-Chatter {
+        background: transparent !important;
+    }
+    .o-mail-Form-chatter.o-aside { border-left: 0 !important; }
+    .o-mail-Chatter { --mt-chatter-lane: transparent; }
+
+    // ---- header row: a white card with a light border ----------------------------------
+    .o_control_panel {
+        padding: 0.375rem 0.5rem 0.375rem 0.875rem !important;
+        background: var(--mt-card) !important;
+        border: 1px solid #{$df-line} !important;
+        border-radius: 0.875rem !important;
+        box-shadow: #{$df-lift} !important;
+
+        > .o_control_panel_main {
+            min-height: 2.5rem;
+            padding: 0;
+            background: transparent;
+            border: 0;
+            box-shadow: none;
+        }
+    }
+
+    // ---- details card and tabs card: white cards, light border -------------------------
+    .o_form_sheet > .o_group {
+        margin: 0 0 1rem !important;
+        border: 1px solid #{$df-line} !important;
+        border-radius: 0.875rem !important;
+        background: var(--mt-card) !important;
+        box-shadow: #{$df-lift} !important;
+    }
+    .o_form_sheet > .o_notebook {
+        margin-top: 0 !important;
+        border: 1px solid #{$df-line} !important;
+        border-radius: 0.875rem !important;
+        background: var(--mt-card) !important;
+        box-shadow: #{$df-lift} !important;
+    }
+
+    // ---- chatter header: a white card like the others ---------------------------------
+    .o-mail-Chatter-top {
+        border: 1px solid #{$df-line} !important;
+        box-shadow: #{$df-lift} !important;
+    }
+}
+
+#{$df-form} {
+    // ---- chatter bar: a segmented control in a soft frame ----------------------------
+    .o-mail-Chatter-topbar:not(#mt-df) {
+        min-height: 0;
+        margin: 0.375rem;
+        padding: 0.25rem !important;
+        align-items: center;
+        gap: 0.125rem;
+        background: var(--mt-muted);
+        border: 0 !important;
+        border-radius: 0.625rem;
+
+        .o-mail-Chatter-sendMessage,
+        .o-mail-Chatter-logNote,
+        .o-mail-Chatter-activity {
+            height: 2rem !important;
+            padding: 0 0.75rem !important;
+            border-radius: 0.5rem !important;
+            color: var(--mt-muted-foreground) !important;
+
+            &:hover { background: color-mix(in srgb, var(--mt-card) 60%, transparent) !important; color: var(--mt-foreground) !important; }
+            &::after { display: none !important; }
+
+            &.active,
+            &.btn-primary {
+                background: var(--mt-card) !important;
+                color: var(--mt-foreground) !important;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08), 0 0 0 1px var(--mt-border) !important;
+            }
+        }
+        .o-mail-Chatter-logNote.btn-primary { color: var(--mt-warning) !important; }
+
+        // search, attachments, followers: quiet square buttons
+        > .btn-link,
+        .o-mail-Chatter-attachFiles,
+        .o-mail-Followers-button {
+            height: 2rem;
+            min-width: 2rem;
+            margin: 0 !important;
+            padding: 0 0.5rem !important;
+            border-radius: 0.5rem !important;
+            color: var(--mt-muted-foreground) !important;
+            &:hover { background: var(--mt-card) !important; color: var(--mt-foreground) !important; }
+        }
+    }
+    // the bar has its own frame now: no extra rule under it
+    .o-mail-Chatter-top:not(#mt-df) { border-bottom: 0 !important; }
+
+    // ---- "Add a product · Add a section · Add a note · Catalog": compact buttons -----
+    .o_field_x2many_list tbody tr:has(.o_field_x2many_list_row_add):not(#mt-df) > td {
+        padding: 0.5rem 0.625rem !important;
+        background: transparent !important;
+        border-bottom: 0 !important;
+        border-top: 1px solid var(--mt-border) !important;
+    }
+    .o_field_x2many_list_row_add:not(#mt-df) {
+        > a,
+        > button {
+            display: inline-flex !important;
+            align-items: center;
+            gap: 0.375rem;
+            height: 1.875rem;
+            margin: 0 0.375rem 0 0 !important;
+            padding: 0 0.625rem !important;
+            border: 1px solid var(--mt-border) !important;
+            border-radius: 0.5rem !important;
+            background: var(--mt-card) !important;
+            color: var(--mt-foreground) !important;
+            font-size: 0.8125rem !important;
+            font-weight: 500 !important;
+            line-height: 1;
+            text-decoration: none !important;
+            vertical-align: middle;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+            transition: background-color 120ms ease, border-color 120ms ease;
+
+            &::before {
+                font-family: FontAwesome;
+                font-size: 0.75rem;
+                font-weight: normal;
+                color: var(--mt-muted-foreground);
+            }
+            &:hover { background: var(--mt-muted) !important; }
+            &:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--mt-focus-ring, var(--mt-ring)) !important; }
+        }
+        // the main one (Add a product / Add a line): solid
+        > a:first-child {
+            background: var(--mt-primary) !important;
+            border-color: var(--mt-primary) !important;
+            color: var(--mt-primary-foreground) !important;
+            &::before { content: "\f067"; color: inherit; }
+            &:hover { background: color-mix(in srgb, var(--mt-primary) 88%, var(--mt-foreground)) !important; }
+        }
+        > a:nth-of-type(2)::before { content: "\f0c9"; } // section: bars
+        > a:nth-of-type(3)::before { content: "\f249"; } // note: sticky note
+        > button[name="action_add_from_catalog"]::before { content: "\f009"; } // catalog: grid
+        > button[name="action_add_from_catalog"] span { line-height: 1; }
+    }
+}

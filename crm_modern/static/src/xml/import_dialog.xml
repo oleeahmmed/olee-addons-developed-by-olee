@@ -4,7 +4,7 @@
     <t t-name="crm_modern.ImportDialog">
         <Dialog title="'Upload CSV'" size="'lg'" contentClass="'o_cm o_cm_dialog'">
             <p class="cm-dialog-desc">Import records into <strong t-esc="props.campaign.title"/>. They are linked to this campaign and its sales team.</p>
-            <div class="d-grid" style="gap:1.25rem">
+            <div class="d-grid u-gap-1_25">
                 <div t-if="state.error" class="cm-error" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="state.error"/></div>
 
                 <fieldset>
@@ -44,20 +44,20 @@
                 <div t-if="!state.file" t-attf-class="cm-drop-zone {{ state.over ? 'cm-over' : '' }}"
                      t-on-dragover.prevent="() => this.state.over = true" t-on-dragleave="() => this.state.over = false"
                      t-on-drop.prevent="onDrop">
-                    <span class="cm-empty-icon" style="display:grid;place-items:center;width:2.75rem;height:2.75rem;border-radius:50%;background:var(--cm-muted);color:var(--cm-muted-fg)">
+                    <span class="cm-empty-icon u-d-grid u-place-center u-w-2_75 u-h-2_75 u-r-50pct u-bg-cm-muted u-c-cm-muted-fg">
                         <i class="fa fa-file-excel-o" aria-hidden="true"/>
                     </span>
-                    <strong style="font-size:0.875rem">Drag a CSV file here</strong>
-                    <span class="cm-muted" style="font-size:0.75rem">or</span>
+                    <strong class="u-fs-0_875" >Drag a CSV file here</strong>
+                    <span class="cm-muted od-text-xs">or</span>
                     <button type="button" class="cm-btn cm-btn-outline cm-btn-sm" t-on-click="() => this.fileInput.el.click()"><i class="fa fa-upload" aria-hidden="true"/> Choose file</button>
                     <input t-ref="file" type="file" accept=".csv,text/csv" class="cm-sr-only" aria-label="CSV file" t-on-change="onPick"/>
-                    <button type="button" class="cm-btn cm-btn-link" style="font-size:0.75rem;margin-top:0.5rem" t-on-click="downloadTemplate">
+                    <button type="button" class="cm-btn cm-btn-link u-fs-0_75 u-mt-0_5" t-on-click="downloadTemplate">
                         <i class="fa fa-download" aria-hidden="true"/> Download <t t-esc="state.kind === 'lead' ? 'lead' : 'opportunity'"/> template
                     </button>
                 </div>
 
                 <t t-else="">
-                    <div class="d-flex flex-wrap align-items-center" style="gap:0.5rem;font-size:0.875rem">
+                    <div class="d-flex flex-wrap align-items-center u-gap-0_5 u-fs-0_875">
                         <i class="fa fa-file-text-o cm-muted" aria-hidden="true"/>
                         <strong t-esc="state.file.name"/>
                         <span class="cm-muted">· <t t-esc="state.file.rows.length"/> rows</span>
@@ -83,14 +83,14 @@
                                 </div>
                             </t>
                         </div>
-                        <p t-if="missing.length" class="cm-hint" style="color:var(--cm-danger);font-weight:500">
+                        <p t-if="missing.length" class="cm-hint u-c-cm-danger u-fw-500">
                             Map a column to: <t t-esc="missing.map((f) => f.label).join(', ')"/>
                         </p>
                     </div>
 
                     <div>
-                        <div class="d-flex align-items-center" style="gap:0.5rem;margin-bottom:0.5rem">
-                            <span class="cm-label" style="margin:0">Preview</span>
+                        <div class="d-flex align-items-center u-gap-0_5 u-mb-0_5">
+                            <span class="cm-label u-m-0">Preview</span>
                             <span class="cm-badge cm-badge-success"><i class="fa fa-check-circle" aria-hidden="true"/><t t-esc="valid.length"/> ready</span>
                             <span t-if="rows.length - valid.length" class="cm-badge cm-badge-danger"><i class="fa fa-exclamation-circle" aria-hidden="true"/><t t-esc="rows.length - valid.length"/> will be skipped</span>
                         </div>
@@ -106,11 +106,11 @@
                                         <tr t-att-class="{ 'cm-invalid': r.errors.length }">
                                             <td class="cm-muted cm-tabular" t-esc="r_index + 1"/>
                                             <t t-foreach="mappedFields" t-as="f" t-key="f.key">
-                                                <td class="cm-truncate" style="max-width:10rem" t-esc="r.row[f.key] or '—'"/>
+                                                <td class="cm-truncate od-w-10" t-esc="r.row[f.key] or '—'"/>
                                             </t>
                                             <td>
-                                                <span t-if="r.errors.length" style="color:var(--cm-danger);font-size:0.75rem" t-esc="r.errors.join(', ')"/>
-                                                <i t-else="" class="fa fa-check-circle" style="color:var(--cm-success)" aria-label="OK"/>
+                                                <span class="u-c-cm-danger u-fs-0_75" t-if="r.errors.length" t-esc="r.errors.join(', ')"/>
+                                                <i t-else="" class="fa fa-check-circle u-c-cm-success" aria-label="OK"/>
                                             </td>
                                         </tr>
                                     </t>

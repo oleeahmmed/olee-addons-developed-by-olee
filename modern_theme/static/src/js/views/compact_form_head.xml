@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- Compact document header: see compact_form_head.js -->
+    <t t-inherit="web.FormView" t-inherit-mode="extension">
+        <xpath expr="//div[@t-ref='root']" position="attributes">
+            <attribute name="t-att-style">mtNumberLabel ? '--mt-number-label:' + mtNumberLabel : undefined</attribute>
+        </xpath>
+        <xpath expr="//t[@t-set-slot='layout-actions']/t" position="before">
+            <div t-if="mtHeaderTemplate" class="mt-head-actions d-flex align-items-center min-w-0">
+                <t t-call="{{ mtHeaderTemplate }}" t-call-context="{ __comp__: mtHeaderContext }"/>
+            </div>
+        </xpath>
+    </t>
+</templates>

@@ -18,3 +18,6 @@ html[data-mt-theme] {
     .table-light, .table-light > th, .table-light > td { --table-bg: var(--mt-muted); --table-color: var(--mt-foreground); }
     .o_pivot .o_pivot_cell_value.bg-100, .o_pivot th.bg-100 { background: var(--mt-muted) !important; }
 }
+
+// Document forms (doc_frames.scss): the frame behind the cards is the darker page canvas.
+html[data-mt-theme] { --mt-df-canvas: var(--mt-background); }

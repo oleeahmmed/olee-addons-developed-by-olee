@@ -1,5 +1,7 @@
 from odoo import api, models
 
+from odoo.addons.modern_theme.models.shared_views import SALE_ORDER_VIEWS, shared_view_ids
+
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -15,19 +17,7 @@ class SaleOrder(models.Model):
             record = self.env.ref(xmlid, raise_if_not_found=False)
             return record.id if record else False
 
-        order_views = {
-            'kanban': ref('sale.view_sale_order_kanban'),
-            'calendar': ref('sale.view_sale_order_calendar'),
-            'pivot': ref('sale.view_sale_order_pivot'),
-            'graph': ref('sale.view_sale_order_graph'),
-            'activity': ref('sale.sale_order_view_activity'),
-            'form': ref('sale.view_order_form'),
-        }
         ids = {
-            'quotation_list': ref('sale.view_quotation_tree_with_onboarding'),
-            'quotation_search': ref('sale.sale_order_view_search_inherit_quotation'),
-            'order_list': ref('sale.view_order_tree'),
-            'order_search': ref('sale.sale_order_view_search_inherit_sale'),
             'invoice_list': ref('sale.view_order_tree'),
             'invoice_search': ref('sale.view_sales_order_filter'),
             'customer_list': ref('base.view_partner_tree'),
@@ -45,9 +35,9 @@ class SaleOrder(models.Model):
             'product_list': ref('product.product_template_tree_view'),
             'product_kanban': ref('product.product_template_kanban_view'),
             'product_search': ref('product.product_template_search_view'),
-            'product_form': ref('product.product_template_form_view'),
         }
-        for prefix in ('quotation', 'order', 'invoice'):
-            for view_type, view_id in order_views.items():
-                ids[f'{prefix}_{view_type}'] = view_id
+        # quotation_* / order_* / product_form: the forms shared by every modern app
+        ids.update(shared_view_ids(self.env))
+        for view_type, xmlid in SALE_ORDER_VIEWS.items():
+            ids[f'invoice_{view_type}'] = ref(xmlid)
         return ids

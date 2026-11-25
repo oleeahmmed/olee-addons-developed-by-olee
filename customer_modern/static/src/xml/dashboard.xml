@@ -4,9 +4,9 @@
     <t t-name="customer_modern.Dashboard">
         <div class="o_cu od-page">
             <t t-if="state.loading">
-                <div class="od-head"><div class="od-skel" style="height:3.75rem;width:22rem"/><div class="od-skel" style="height:2.25rem;width:20rem"/></div>
-                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel" style="height:8.5rem"/></t></div>
-                <div class="od-grid"><div class="od-skel od-span-8" style="height:22rem"/><div class="od-skel od-span-4" style="height:22rem"/></div>
+                <div class="od-head"><div class="od-skel od-skel-title"/><div class="od-skel od-skel-sub"/></div>
+                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel od-skel-kpi"/></t></div>
+                <div class="od-grid"><div class="od-skel od-span-8 od-skel-panel"/><div class="od-skel od-span-4 od-skel-panel"/></div>
             </t>
             <t t-elif="state.error and !state.data">
                 <OdError message="state.error" onRetry.bind="load"/>

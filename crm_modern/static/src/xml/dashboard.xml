@@ -4,9 +4,9 @@
     <t t-name="crm_modern.Dashboard">
         <div class="o_cm od-page">
             <t t-if="state.loading">
-                <div class="od-head"><div class="od-skel" style="height:3.75rem;width:22rem"/><div class="od-skel" style="height:2.25rem;width:20rem"/></div>
-                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel" style="height:8.5rem"/></t></div>
-                <div class="od-grid"><div class="od-skel od-span-8" style="height:22rem"/><div class="od-skel od-span-4" style="height:22rem"/></div>
+                <div class="od-head"><div class="od-skel od-skel-title"/><div class="od-skel od-skel-sub"/></div>
+                <div class="od-kpis"><t t-foreach="[1,2,3,4,5,6]" t-as="i" t-key="i"><div class="od-skel od-skel-kpi"/></t></div>
+                <div class="od-grid"><div class="od-skel od-span-8 od-skel-panel"/><div class="od-skel od-span-4 od-skel-panel"/></div>
             </t>
             <t t-elif="state.data">
                 <t t-set="d" t-value="state.data"/>
@@ -144,7 +144,7 @@
                                                             <span><span class="od-cell-main" t-esc="r.name"/><span class="od-cell-sub"><t t-esc="r.won_count"/> won · <t t-esc="r.open_count"/> open</span></span>
                                                         </span>
                                                     </td>
-                                                    <td class="od-r od-num" style="font-weight:650" t-esc="ms(r.won)"/>
+                                                    <td class="od-r od-num od-strong" t-esc="ms(r.won)"/>
                                                     <td class="od-r">
                                                         <span t-if="r.win_rate !== null" t-attf-class="od-pill od-tone-{{ r.win_rate >= 50 ? 'green' : (r.win_rate >= 25 ? 'amber' : 'rose') }}" t-esc="r.win_rate + '%'"/>
                                                         <span t-else="" class="text-muted">—</span>
@@ -213,7 +213,7 @@
                                                         <span t-if="t.leader" class="od-person"><img t-attf-src="/web/image/res.users/{{ t.leader_id }}/avatar_128" alt="" loading="lazy"/><t t-esc="t.leader"/></span>
                                                         <span t-else="" class="text-muted">—</span>
                                                     </td>
-                                                    <td class="od-r od-num" style="font-weight:650" t-esc="ms(t.won)"/>
+                                                    <td class="od-r od-num od-strong" t-esc="ms(t.won)"/>
                                                     <td class="od-r"><span class="od-num" t-esc="ms(t.pipeline)"/><span class="od-cell-sub"><t t-esc="t.open_count"/> deals</span></td>
                                                 </tr>
                                             </t>
@@ -242,7 +242,7 @@
                                                     <td t-if="useLeads" class="od-r od-num" t-esc="c.lead_count"/>
                                                     <td class="od-r od-num" t-esc="c.opportunity_count"/>
                                                     <td class="od-r"><span class="od-pill od-tone-green od-num" t-esc="c.won_count"/></td>
-                                                    <td class="od-r od-num" style="font-weight:650" t-esc="ms(c.won_revenue)"/>
+                                                    <td class="od-r od-num od-strong" t-esc="ms(c.won_revenue)"/>
                                                 </tr>
                                             </t>
                                         </tbody>
@@ -278,7 +278,7 @@
                                                 <span class="od-att-label od-truncate" t-esc="s.name"/>
                                                 <span class="od-att-sub"><t t-esc="s.stage_id ? s.stage_id[1] : ''"/> · <t t-esc="daysSince(s.date_last_stage_update)"/> · <t t-esc="s.user_id ? s.user_id[1] : 'Unassigned'"/></span>
                                             </div>
-                                            <span class="od-num" style="font-weight:650;font-size:0.8125rem" t-esc="ms(s.expected_revenue)"/>
+                                            <span class="od-num od-strong od-text-sm" t-esc="ms(s.expected_revenue)"/>
                                         </li>
                                     </t>
                                 </ul>

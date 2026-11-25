@@ -11,6 +11,7 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
+from odoo.addons.modern_theme.models.shared_views import PRODUCT_FORM
 from odoo.addons.modern_theme.tools import PERIODS, growth, local_midnight, month_key, period_bounds
 from odoo.tools import date_utils
 
@@ -87,7 +88,7 @@ class PosOrder(models.Model):
             'payment_search': ref('point_of_sale.view_pos_payment_search'),
             'product_kanban': ref('product.product_template_kanban_view'),
             'product_list': ref('point_of_sale.product_template_tree_view_point_of_sale'),
-            'product_form': ref('product.product_template_only_form_view'),
+            'product_form': ref(PRODUCT_FORM),
             'product_search': ref('product.product_template_search_view'),
             'customer_kanban': ref('base.res_partner_kanban_view'),
             'customer_list': ref('base.view_partner_tree'),

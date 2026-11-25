@@ -118,7 +118,7 @@
             <table class="ps-r-lines">
                 <tbody>
                     <tr t-foreach="t.lines" t-as="l" t-key="l.id">
-                        <td class="ps-r-big" style="text-align:left;width:3em" t-esc="l.qty"/>
+                        <td class="ps-r-big u-ta-left u-w-3em" t-esc="l.qty"/>
                         <td><strong t-esc="l.name"/><div t-if="l.note" class="ps-r-sub">» <t t-esc="l.note"/></div></td>
                     </tr>
                 </tbody>
@@ -151,7 +151,7 @@
                     </div>
                 </div>
             </header>
-            <div t-if="state.loading" class="ps-skel" style="height:20rem"/>
+            <div t-if="state.loading" class="ps-skel u-h-20"/>
             <div t-elif="!state.configId" class="ps-pos-empty ps-pos-empty--inline">
                 <i class="fa fa-fire" aria-hidden="true"/><strong>No restaurant shop</strong>
                 <span>Turn on "Restaurant counter" in a shop's Counter settings.</span>
@@ -170,7 +170,7 @@
                         </div>
                         <div t-if="t.table or t.customer" class="ps-muted"><t t-esc="t.table"/><t t-if="t.table and t.customer"> · </t><t t-esc="t.customer"/></div>
                         <ul class="ps-ticket-lines">
-                            <li t-foreach="t.lines" t-as="l" t-key="l.id" t-att-class="{ 'is-done': l.done }" t-on-click="() => this.toggleLine(l)" style="cursor:pointer">
+                            <li class="u-cursor-pointer" t-foreach="t.lines" t-as="l" t-key="l.id" t-att-class="{ 'is-done': l.done }" t-on-click="() => this.toggleLine(l)" >
                                 <b t-esc="l.qty"/>
                                 <span><t t-esc="l.name"/><em t-if="l.note" t-esc="l.note"/></span>
                             </li>
@@ -247,7 +247,7 @@
 
     <t t-name="pos_restaurant_bd.TablePicker">
         <Dialog title="'Move to table'" size="'lg'" contentClass="'o_ps ps-dialog'">
-            <div t-if="state.loading" class="ps-skel" style="height:10rem"/>
+            <div t-if="state.loading" class="ps-skel u-h-10"/>
             <t t-else="">
                 <nav class="ps-floors">
                     <t t-foreach="state.data.floors" t-as="f" t-key="f.id">
