@@ -34,6 +34,8 @@
              t-att-data-oe-model="mr_doc._name" t-att-data-oe-id="mr_doc.id"
              t-att-data-oe-lang="mr_doc.env.context.get('lang')"
              t-att-data-mr-page-w="mr['page']['width']" t-att-data-mr-page-h="mr['page']['height']"
+             t-att-data-mr-margin-t="mr['page']['margin_top']" t-att-data-mr-margin-b="mr['page']['margin_bottom']"
+             t-att-data-mr-margin-l="mr['page']['margin_left']" t-att-data-mr-margin-r="mr['page']['margin_right']"
              t-att-data-mr-cols="mr['columns']" t-att-data-mr-fill="'1' if mr_style['fill_page'] else '0'">
             <div class="o_mr_box">
 
@@ -106,9 +108,12 @@
                     <tbody>
                         <t t-foreach="mr['lines']" t-as="mr_line">
                             <tr t-if="mr_line['type'] in ('section', 'subsection')"
-                                t-att-class="'o_mr_section' if mr_line['type'] == 'section' else 'o_mr_subsection'">
-                                <td t-if="mr['show_numbers']"/>
-                                <td t-att-colspan="mr['section_span']" t-out="mr_line['name']"/>
+                                t-att-class="'o_mr_section' if mr_line['type'] == 'section' else 'o_mr_subsection'"
+                                t-att-style="'background-color: %s;' % mr_soft if mr_line['type'] == 'section' else None">
+                                <td t-if="mr['show_numbers']"
+                                    t-att-style="'border-left: 2px solid %s;' % mr_accent if mr_line['type'] == 'section' else None"/>
+                                <td t-att-colspan="mr['section_span']" t-out="mr_line['name']"
+                                    t-att-style="'border-left: 2px solid %s;' % mr_accent if mr_line['type'] == 'section' and not mr['show_numbers'] else None"/>
                                 <td t-if="mr['show_prices']" class="o_mr_r" t-out="mr_line['amount']"/>
                             </tr>
                             <tr t-elif="mr_line['type'] == 'note'" class="o_mr_note">
@@ -177,7 +182,7 @@
 
         <div t-attf-class="footer o_mr_footer {{ mr_style['font_class'] }}">
             <div t-if="mr['footer_text']" class="o_mr_footer_company" t-out="mr['footer_text']"/>
-            <div><t t-out="mr['footer_note']"/> · Page <span class="page"/> of <span class="topage"/></div>
+            <div><t t-out="mr['footer_note']"/><span class="o_mr_pageinfo"> · Page <span class="page"/> of <span class="topage"/></span></div>
         </div>
     </template>
 
@@ -265,7 +270,8 @@
                 <td class="o_mr_r o_mr_due_amount" t-out="mr['amount_due']"/>
             </tr>
         </table>
-        <div t-if="mr['words']" class="o_mr_words">
+        <div t-if="mr['words']" class="o_mr_words"
+             t-attf-style="background-color: {{ mr_soft }}; border-left: 2px solid {{ mr_accent }};">
             <div class="o_mr_caption" t-attf-style="color: {{ mr_caption }};">Amount in Words</div>
             <div class="o_mr_words_text" t-out="mr['words']"/>
         </div>

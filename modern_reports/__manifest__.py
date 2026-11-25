@@ -20,7 +20,7 @@ Delivery slips follow the same design when Inventory is installed (modern_report
 
 Settings > Invoicing > Modern Reports.
     """,
-    'version': '19.0.2.2.0',
+    'version': '19.0.2.3.0',
     'category': 'Accounting/Accounting',
     'author': 'Olee',
     'license': 'LGPL-3',
@@ -35,8 +35,10 @@ Settings > Invoicing > Modern Reports.
         'views/res_config_settings_views.xml',
     ],
     'assets': {
+        # preview HTML loads the common bundle, the PDF body loads the pdf bundle: both need it
         'web.report_assets_common': [
             'modern_reports/static/src/scss/modern_reports.scss',
+            'modern_reports/static/src/js/page_fill.js',
         ],
         'web.report_assets_pdf': [
             'modern_reports/static/src/js/page_fill.js',

@@ -243,7 +243,7 @@ class ModernReportsDocument(models.AbstractModel):
         paper = report.get_paperformat() if report else self.company_id.paperformat_id
         if not paper or not paper.disable_shrinking:
             # with smart shrinking the CSS px -> paper scale is unknown: no page filling
-            return {'width': 0, 'height': 0}
+            return {'width': 0, 'height': 0, 'margin_top': 0, 'margin_bottom': 0, 'margin_left': 0, 'margin_right': 0}
         if paper.format == 'custom' and paper.page_width and paper.page_height:
             width, height = paper.page_width, paper.page_height
         else:
@@ -254,6 +254,11 @@ class ModernReportsDocument(models.AbstractModel):
         return {
             'width': round(width - paper.margin_left - paper.margin_right, 2),
             'height': round(height - paper.margin_top - paper.margin_bottom, 2),
+            # the paper margins, so the web preview can draw the A4 sheet exactly
+            'margin_top': paper.margin_top,
+            'margin_bottom': paper.margin_bottom,
+            'margin_left': paper.margin_left,
+            'margin_right': paper.margin_right,
         }
 
     # ---- assembly ---------------------------------------------------------
