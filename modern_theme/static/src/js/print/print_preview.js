@@ -62,8 +62,21 @@ export class ModernPrintPreview extends Component {
         }
         doc.body.classList.add("o_in_iframe", "container-fluid", "o_mp_doc");
         doc.body.classList.remove("container");
+        // Modern Reports prints its own A4 sheet (paper margins included): give it the whole
+        // paper instead of padding it again, and keep the print 1:1 with that sheet.
+        const ownSheet = !!doc.querySelector(".o_mr");
         const style = doc.createElement("style");
-        style.textContent = `
+        style.textContent = ownSheet ? `
+            html, body { background: #ffffff !important; }
+            body.o_mp_doc { margin: 0 !important; padding: 0 !important; min-height: 0 !important; }
+            @media print {
+                @page { size: A4; margin: 0; }
+                /* the border and shadow only draw the sheet on screen */
+                .o_mr { border: 0 !important; box-shadow: none !important; }
+                thead { display: table-header-group; }
+                tr { break-inside: avoid; }
+            }
+        ` : `
             html, body { background: #ffffff !important; }
             body.o_mp_doc { margin: 0 !important; padding: 13mm 13mm 10mm !important; min-height: 297mm; box-sizing: border-box; }
             body.o_mp_doc > .container, body.o_mp_doc main > .container { max-width: none !important; padding: 0 !important; }
@@ -79,7 +92,7 @@ export class ModernPrintPreview extends Component {
         `;
         doc.head.appendChild(style);
         // "Quotation # S00023": the title the layout prints, also the browser's PDF file name
-        const titles = [...doc.querySelectorAll(".o_ml_title, .article h2, .page h2")]
+        const titles = [...doc.querySelectorAll(".o_ml_title, .o_mr_band, .article h2, .page h2")]
             .map((el) => el.textContent.replace(/\s+/g, " ").trim())
             .filter(Boolean);
         this.state.title = titles.length > 1 ? `${titles[0]} +${titles.length - 1}` : titles[0] || "";

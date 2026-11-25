@@ -119,6 +119,15 @@
 
     // ---- web preview: draw the A4 sheet, fill it like the print -------------------------
 
+    function hostedOnPaper() {
+        // the Modern Theme print preview already shows an A4 paper: the sheet fills it exactly
+        try {
+            return window.self !== window.top && !!window.parent.document.querySelector('.o_mp_paper');
+        } catch (error) {
+            return false; // cross-origin host
+        }
+    }
+
     function preview(article, footer) {
         var pageWidth = num(article, 'data-mr-page-w');
         var pageHeight = num(article, 'data-mr-page-h');
@@ -134,8 +143,7 @@
         article.style.width = (pageWidth + left + right) + 'mm';
         article.style.minHeight = (pageHeight + top + bottom) + 'mm';
         article.style.padding = top + 'mm ' + right + 'mm ' + bottom + 'mm ' + left + 'mm';
-        article.style.marginLeft = 'auto';
-        article.style.marginRight = 'auto';
+        article.style.margin = hostedOnPaper() ? '0 auto' : '24px auto';
         article.style.position = 'relative';
 
         // the footer sits in the bottom margin, like wkhtmltopdf's --footer-html
@@ -157,6 +165,7 @@
         var columns = parseInt(article.getAttribute('data-mr-cols'), 10) || 1;
         var contentTop = article.getBoundingClientRect().top + top * MM;
         var contentBottom = contentTop + pageHeight * MM;
+        var info = footer && footer.querySelector('.o_mr_pageinfo');
         if (parts.tail.getBoundingClientRect().bottom > contentBottom) {
             // the document runs on several pages: keep the natural flow
             return;
@@ -168,11 +177,20 @@
                 break;
             }
         }
+        if (info) {
+            // one sheet: the numbers wkhtmltopdf prints in the PDF footer
+            info.querySelector('.page').textContent = '1';
+            info.querySelector('.topage').textContent = '1';
+            info.style.display = 'inline';
+        }
     }
 
     // ---- harness ------------------------------------------------------------------------
 
     function run() {
+        // Bootstrap's `.container` pads the body in: drop it so the sheet spans the printable width,
+        // exactly like the web preview (which drops it too).
+        document.body.classList.remove('container');
         var articles = document.querySelectorAll('.o_mr[data-mr-fill]');
         for (var i = 0; i < articles.length; i++) {
             var article = articles[i];
