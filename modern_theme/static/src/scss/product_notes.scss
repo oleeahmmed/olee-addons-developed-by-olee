@@ -1,0 +1,221 @@
+// Product page notes: the internal notes (General Information) and every description block
+// (Sales, Purchase, Inventory) become one card each, in the same card language as the
+// quotation summary: a soft tinted frame with a white writing card inside. The General
+// Information notes fill the empty cell under the facts card, so the page has no hole.
+//
+//   ┌ facts ─────────────────┐ ┌ pricing ──────────────────┐
+//   │ Product Type …         │ │ Sales Price …             │
+//   └────────────────────────┘ │ Sales Taxes …             │
+//   ┌ Internal Notes ────────┐ │ Cost …                    │
+//   │ ┌────────────────────┐ │ │ Category …                │
+//   │ │ white writing card │ │ └───────────────────────────┘
+//   │ └────────────────────┘ │
+//   └────────────────────────┘
+//
+// Pure CSS on Odoo's own markup: the group holding the field is the frame, the field's
+// editor is the white card. Product forms only (sheet with the image + the notebook).
+
+$pn-sheet: 'html[data-mt-theme] .o_web_client > .o_action_manager > .o_form_view.mt-compact-head:not(.o_base_settings):not(.o_base_settings_view) .o_form_sheet:has(> .oe_avatar):has(> .o_notebook)';
+$pn-line: unquote("color-mix(in srgb, var(--mt-border) 80%, transparent)");
+$pn-note: ':has([name="description"], [name="description_sale"], [name="description_purchase"], [name="description_pickingin"], [name="description_pickingout"], [name="description_picking"])';
+
+#{$pn-sheet} .o_notebook .tab-pane {
+    // ---- one framed card per notes / description block --------------------------------
+    .o_inner_group#{$pn-note}:not(#mt-pn) {
+        display: flex !important;
+        flex-direction: column !important;
+        width: auto !important;
+        max-width: none !important;
+        min-width: 0;
+        margin: 0 !important;
+        padding: 0 0.5rem 0.5rem !important;
+        border: 1px solid $pn-line !important;
+        border-radius: 0.875rem !important;
+        background: var(--mt-muted) !important;
+        box-shadow: none !important;
+
+        // title: in the frame, like the section cards
+        > .g-col-sm-2 {
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .o_horizontal_separator {
+            margin: 0 !important;
+            padding: 0.5rem 0.625rem !important;
+            border: 0 !important;
+            background: transparent !important;
+            font-size: 0.8125rem !important;
+            font-weight: 600 !important;
+            line-height: 1.25rem;
+            color: var(--mt-foreground) !important;
+        }
+
+        > .mt-row { display: contents !important; }
+        > .mt-row > .o_cell {
+            display: flex !important;
+            flex: 1 1 auto;
+            flex-direction: column;
+            width: 100%;
+            min-height: 0;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+        > .mt-row > .o_cell > * { width: 100% !important; }
+
+        // ---- text notes: the white card is the writing area
+        .o_field_text {
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 auto;
+            width: 100%;
+
+            > div {
+                flex: 1 1 auto;
+                height: auto !important;
+                min-height: 5.25rem;
+            }
+            textarea.o_input {
+                height: 100% !important;
+                min-height: 5.25rem;
+                padding: 0.75rem 0.875rem !important;
+                border: 1px solid $pn-line !important;
+                border-radius: 0.625rem !important;
+                background: var(--mt-card) !important;
+                box-shadow: none !important;
+                font-size: 0.875rem !important;
+                line-height: 1.5;
+                transition: border-color 120ms ease, box-shadow 120ms ease;
+
+                &::placeholder { color: color-mix(in srgb, var(--mt-muted-foreground) 70%, transparent); }
+                &:hover { border-color: var(--mt-border) !important; }
+                &:focus {
+                    border-color: var(--mt-focus-border) !important;
+                    box-shadow: 0 0 0 3px var(--mt-focus-ring) !important;
+                }
+            }
+        }
+
+        // ---- rich text notes: the white card is the editor
+        .o_field_html {
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 auto;
+            width: 100%;
+
+            > .o_field_translate {
+                display: flex;
+                flex-direction: column;
+                flex: 1 1 auto;
+                height: auto !important;
+            }
+            .o-wysiwyg { flex: 1 1 auto; }
+            .o-wysiwyg > .flex-grow-1 {
+                display: flex;
+                flex-direction: column;
+                flex: 1 1 auto;
+            }
+            .note-editable,
+            .odoo-editor-editable {
+                flex: 1 1 auto;
+                min-height: 5.25rem;
+                padding: 0.75rem 0.875rem !important;
+                border: 1px solid $pn-line !important;
+                border-radius: 0.625rem !important;
+                background: var(--mt-card) !important;
+                font-size: 0.875rem;
+                line-height: 1.5;
+                transition: border-color 120ms ease, box-shadow 120ms ease;
+
+                &:focus {
+                    border-color: var(--mt-focus-border) !important;
+                    box-shadow: 0 0 0 3px var(--mt-focus-ring) !important;
+                    outline: none;
+                }
+            }
+        }
+    }
+    // a notes card in a row of section cards fills its column (a row with only one → all of it)
+    .o_group.row > .o_inner_group#{$pn-note}:not(#mt-pn) {
+        flex: 1 1 0 !important;
+        align-self: stretch;
+    }
+
+    // ---- vertical rhythm: one thin gap between stacked cards, nothing trailing --------
+    &:not(#mt-pn) {
+        > .o_group.row > .o_inner_group { margin-bottom: 0.5rem !important; }
+        > .o_group.row:last-child > .o_inner_group { margin-bottom: 0 !important; }
+    }
+
+    // ---- General Information: facts | pricing, notes filling the cell under the facts ---
+    &:has(> .o_inner_group [name="description"]):not(#mt-pn) {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: auto 1fr;
+        gap: 0.5rem 1rem !important;
+        align-items: start !important;
+
+        // the two facts cards become grid items of the page
+        > .o_group.row { display: contents !important; }
+        > .o_group.row > .o_inner_group {
+            grid-column: auto !important;
+            width: 100% !important;
+            max-width: none !important;
+            margin: 0 !important;
+        }
+        // the tall pricing card runs along both rows on the right
+        > .o_group.row > .o_inner_group ~ .o_inner_group {
+            grid-column: 2 !important;
+            grid-row: 1 / span 2 !important;
+            align-self: stretch !important;
+        }
+        // properties (only when the product has any) take a full row at the end
+        > .o_group.row > .o_field_properties {
+            grid-column: 1 / -1 !important;
+            grid-row: 3 !important;
+        }
+        > .o_group.row > .o_field_properties:not(:has(.o_property_field, .o_field_property_add > button)) {
+            display: none !important;
+        }
+        // the notes card fills the empty cell under the facts card
+        > .o_inner_group:has([name="description"]) {
+            grid-column: 1 !important;
+            grid-row: 2 !important;
+            align-self: stretch !important;
+            margin: 0 !important;
+        }
+        // narrow screens: plain stacking, cards keep their natural height
+        @media (max-width: 991.98px) {
+            display: block !important;
+
+            > .o_inner_group:has([name="description"]) {
+                margin-top: 1rem !important;
+            }
+        }
+    }
+
+    // ---- Sales: the quotation description runs the full width under the two cards ------
+    .o_group.row:has(> .o_inner_group [name="description_sale"]):not(#mt-pn) {
+        display: block !important;
+
+        > .o_inner_group {
+            width: 100% !important;
+            max-width: none !important;
+            margin: 0 !important;
+        }
+    }
+
+    // ---- Purchase: the description shares the row with Vendor Bills (no nested width) ---
+    .o_group.row:has(> .o_group.row > .o_inner_group [name="description_purchase"]):not(#mt-pn) {
+        align-items: start !important;
+
+        > .o_group.row { display: contents !important; }
+    }
+
+    // ---- Inventory: receipts and delivery notes share one card height -------------------
+    .o_group.row:has(> .o_inner_group [name="description_pickingin"]):has(> .o_inner_group [name="description_pickingout"]):not(#mt-pn) {
+        align-items: stretch !important;
+    }
+}

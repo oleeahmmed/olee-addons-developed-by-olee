@@ -13,10 +13,10 @@ $mt-kb: 'html[data-mt-theme] .o_web_client';
 
 html[data-mt-theme] {
     --mt-board-bg: var(--mt-content-bg);
-    --mt-board-dot: color-mix(in srgb, var(--mt-foreground) 13%, transparent);
+    --mt-board-dot: color-mix(in srgb, var(--mt-foreground) 8%, transparent);
     --mt-board-dot-size: 16px;
-    --mt-lane-bg: color-mix(in srgb, var(--mt-muted) 55%, var(--mt-content-bg));
-    --mt-lane-border: color-mix(in srgb, var(--mt-border) 70%, transparent);
+    --mt-lane-bg: var(--mt-muted);
+    --mt-lane-border: color-mix(in srgb, var(--mt-border) 75%, transparent);
     --mt-lane-radius: calc(var(--mt-radius-card) + 0.25rem);
     --mt-card-gap: calc(var(--mt-gap) * 0.6);
     --mt-kanban-card-radius: var(--mt-radius-card);
@@ -24,6 +24,7 @@ html[data-mt-theme] {
 html[data-mt-scheme="dark"] {
     --mt-board-dot: color-mix(in srgb, var(--mt-foreground) 10%, transparent);
     --mt-lane-bg: color-mix(in srgb, var(--mt-card) 55%, var(--mt-content-bg));
+    --mt-lane-border: color-mix(in srgb, var(--mt-border) 70%, transparent);
 }
 
 @mixin mt-board-canvas {
@@ -361,10 +362,10 @@ html[data-mt-scheme="dark"] {
 // app addons' card rules) through :not(#mt-kb), which adds id-level weight.
 //
 //   board : plain page background, 16px between lanes
-//   lane  : muted surface, 10px radius, 10px padding, 8px between cards, no border
+//   lane  : muted surface, 12px radius, hairline border, 10px padding, 8px between cards
 //   header: 14px semibold title + count in an outline pill, buttons on the right
-//   card  : card surface, 12px radius, hairline ring, 16px padding, 16px semibold
-//           title, muted 14px text, footer under a hairline, outline pill badges
+//   card  : white surface, 12px radius, 1px border + xs shadow, 16px padding, 16px
+//           semibold title, muted 14px text, footer under a hairline, outline pill badges
 //
 // Only the look changes: drag and drop, quick create, folding, progress bars,
 // colour tags and ribbons keep Odoo's behaviour.
@@ -395,7 +396,7 @@ html[data-mt-theme] {
         --KanbanRecord-padding-h: 1rem;
         --KanbanRecord-margin-v: 0.5rem;
         --KanbanRecord-margin-h: 0;
-        background: var(--mt-content-bg) !important;
+        background: var(--mt-board-bg) !important;
         background-image: none !important;
     }
     .o_kanban_renderer.o_kanban_grouped {
@@ -417,20 +418,21 @@ html[data-mt-theme] {
     // ---------------------------------------------------------------- lanes
     .o_kanban_group:not(.o_column_folded) {
         padding: 0.625rem !important;
-        border: 0 !important;
-        border-radius: 0.625rem !important;
+        border: 1px solid var(--mt-lane-border) !important;
+        border-radius: var(--mt-kanban-card-radius) !important;
         background: var(--kb-lane) !important;
         box-shadow: none !important;
         &.o_kanban_hover {
             background: color-mix(in srgb, var(--mt-primary) 8%, var(--kb-lane)) !important;
-            box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mt-primary) 40%, transparent) !important;
+            border-color: color-mix(in srgb, var(--mt-primary) 40%, var(--mt-lane-border)) !important;
+            box-shadow: none !important;
         }
     }
     .o_kanban_group .o_kanban_header {
         background: inherit !important;
         margin: 0 0 0.5rem !important;
         padding: 0 !important;
-        border-radius: 0.625rem 0.625rem 0 0;
+        border-radius: var(--mt-kanban-card-radius) var(--mt-kanban-card-radius) 0 0;
         .o_kanban_header_title { align-items: center; min-height: 2rem; line-height: 1.25rem !important; }
         .o_column_title {
             align-items: center;
@@ -480,28 +482,32 @@ html[data-mt-theme] {
         }
     }
     .o_kanban_group.o_column_folded {
-        border: 0 !important;
-        border-radius: 0.625rem !important;
+        border: 1px solid var(--mt-lane-border) !important;
+        border-radius: var(--mt-kanban-card-radius) !important;
         background: var(--kb-lane) !important;
         .o_column_title { color: var(--kb-muted-fg) !important; font-size: 0.875rem !important; font-weight: 600; }
     }
 
     // ---------------------------------------------------------------- cards
     .o_kanban_record:not(.o_kanban_ghost):not(.o_kanban_quick_create):not(.o-kanban-button-new) {
-        border: 0 !important;
-        border-radius: 0.75rem !important;
+        border: 1px solid var(--kb-border) !important;
+        border-radius: var(--mt-kanban-card-radius) !important;
         background-color: var(--kb-card) !important;
         color: var(--kb-fg);
-        box-shadow: 0 0 0 1px var(--kb-ring), 0 1px 0 rgba(0, 0, 0, 0.05) !important;
+        box-shadow: var(--mt-shadow-xs, 0 1px 2px rgba(0, 0, 0, 0.05)) !important;
         font-size: 0.875rem;
         line-height: 1.25rem;
         transform: none;
-        &:hover { box-shadow: 0 0 0 1px var(--kb-ring-hover), 0 1px 0 rgba(0, 0, 0, 0.05) !important; }
+        &:hover {
+            border-color: color-mix(in srgb, var(--mt-foreground) 18%, var(--kb-border)) !important;
+            box-shadow: var(--mt-shadow-md, 0 4px 12px -4px rgba(0, 0, 0, 0.12)) !important;
+        }
         &.o_kanban_global_click:hover { transform: none; }
-        &:focus-visible { outline: none; box-shadow: 0 0 0 1px var(--kb-ring-hover), 0 0 0 4px var(--mt-focus-ring) !important; }
+        &:focus-visible { outline: none; border-color: var(--mt-ring); box-shadow: 0 0 0 3px var(--mt-focus-ring) !important; }
         &.o_record_selected {
             background-color: var(--kb-card) !important;
-            box-shadow: 0 0 0 2px var(--mt-primary) !important;
+            border-color: var(--mt-primary) !important;
+            box-shadow: 0 0 0 1px var(--mt-primary) !important;
         }
 
         // title 16px semibold, muted 14px text

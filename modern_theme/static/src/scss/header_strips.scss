@@ -12,16 +12,49 @@ $cs-html: 'html[data-mt-theme]';
 $cs-apps: '#{$cs-html} .o_web_client';
 
 // ---- 1. Page header: breadcrumb, title, search, New, view switcher ----
-// Modern apps inset their lists / boards, so the header is a card of the same
-// width. Base-app pages (Contacts, …) draw full-bleed tables: there the header
-// stays full-bleed too, otherwise its rounded card would float inside the table.
-#{$cs-apps} .o_view_controller > .o_control_panel {
+// Modern apps: the header is the first row of the page's section card — rounded
+// top corners, a hairline above the body, no shadow — and the list / board below
+// it carries the same outer border (rules 1b), so header and content read as one
+// surface instead of two floating cards with a gap between them.
+// Base-app pages (Contacts, …) draw full-bleed tables: there the header stays
+// full-bleed too, otherwise its rounded card would float inside the table.
+$cs-modern: 'html[data-mt-theme].mt-app-modern .o_web_client:not(#mt-cs)';
+
+#{$cs-modern} .o_view_controller > .o_control_panel {
     margin: 0.75rem 1rem 0 !important;
     padding: 0.5rem 0.875rem !important;
     background: var(--mt-card) !important;
     border: 1px solid var(--mt-border) !important;
-    border-radius: 0.75rem !important;
-    box-shadow: var(--mt-card-shadow) !important;
+    border-radius: 0.75rem 0.75rem 0 0 !important;
+    box-shadow: none !important;
+}
+
+// 1b. The body of that section: the table card / board card hangs from the header.
+#{$cs-modern} .o_view_controller.o_list_view:not(.o_field_x2many_list) > .o_content > .o_list_renderer {
+    margin: 0 1rem 1rem !important;
+    border: 1px solid var(--mt-border) !important;
+    border-top: 0 !important;
+    border-radius: 0 0 0.75rem 0.75rem !important;
+    box-shadow: none !important;
+}
+#{$cs-modern} .o_view_controller.o_kanban_view > .o_content {
+    margin: 0 1rem 1rem !important;
+    border: 1px solid var(--mt-border) !important;
+    border-top: 0 !important;
+    border-radius: 0 0 0.75rem 0.75rem !important;
+    background: var(--mt-card) !important;
+}
+
+// Phones: list_shadcn.scss drops the table card to 0.5rem side margins, so the
+// header must follow or the section edges no longer line up.
+@media (max-width: 767.98px) {
+    #{$cs-modern} .o_view_controller > .o_control_panel {
+        margin: 0.5rem 0.5rem 0 !important;
+    }
+    #{$cs-modern} .o_view_controller.o_list_view:not(.o_field_x2many_list) > .o_content > .o_list_renderer,
+    #{$cs-modern} .o_view_controller.o_kanban_view > .o_content {
+        margin: 0 0.5rem 0.5rem !important;
+    }
 }
 
 html[data-mt-theme]:not(.mt-app-modern) .o_web_client .o_view_controller > .o_control_panel {

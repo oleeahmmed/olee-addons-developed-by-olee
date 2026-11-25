@@ -136,8 +136,8 @@ $ds-section: '.o_notebook .tab-pane .o_group.row > .o_inner_group:not(.oe_subtot
         > .mt-row .o_row > .o_field_widget { flex: 1 1 4.5rem; }
         > .mt-row .o_field_many2many_tags .o_tag { flex-shrink: 0; max-width: none; }
 
-        // money: Odoo lays a "$ 120.00" overlay (span.o_input) over the real input; both get
-        // the same box so the symbol and the digits line up
+        // money: Odoo lays a "$ 120.00" overlay (span.o_input) over the real input; the
+        // widget's own box is the control here, the inputs inside stay bare
         > .mt-row .o_field_monetary > div { align-items: center !important; }
         > .mt-row .o_field_monetary span.o_input {
             top: 0;
@@ -176,6 +176,34 @@ $ds-section: '.o_notebook .tab-pane .o_group.row > .o_inner_group:not(.oe_subtot
             background: var(--mt-card) !important;
             box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-ring, var(--mt-primary)) 18%, transparent) !important;
         }
+        // money already has its own frame (form.scss boxes the widget); one box only:
+        // the frame takes the hover / focus state and the inputs inside never draw one
+        > .mt-row .o_field_monetary > div {
+            min-width: 0 !important;
+            min-height: 2rem !important;
+            padding: 0 !important;
+            border: 1px solid transparent !important;
+            border-radius: 0.5rem !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+
+            &:hover { background: var(--mt-muted) !important; }
+            &:focus-within {
+                border-color: var(--mt-ring, var(--mt-border)) !important;
+                background: var(--mt-card) !important;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-ring, var(--mt-primary)) 18%, transparent) !important;
+            }
+        }
+        // must outweigh `> .mt-row .o_field_widget:focus-within .o_input` above (same
+        // element count, later in the file) — the overlay span and the real input both
+        // carry .o_input, so both have to be stripped
+        > .mt-row .o_field_widget.o_field_monetary .o_input,
+        > .mt-row .o_field_widget.o_field_monetary:focus-within .o_input {
+            border-color: transparent !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
         // field wrappers the theme boxes elsewhere: flat here
         > .mt-row .o_field_widget:not(.o_field_boolean) {
             border: 0 !important;
@@ -191,14 +219,34 @@ $ds-section: '.o_notebook .tab-pane .o_group.row > .o_inner_group:not(.oe_subtot
         > .mt-row .o_field_many2one_avatar .o_m2o_avatar,
         > .mt-row .o_field_many2one_avatar img { width: 1.375rem; height: 1.375rem; }
 
-        // tags: same height as the other values
+        // tags: same height as the other values; the tag list is the control, so it —
+        // not the text input inside it — takes the ring
         > .mt-row .o_field_many2many_tags .o_field_tags {
             min-height: 2rem !important;
             padding: 0.125rem 0.5rem !important;
             border: 1px solid transparent !important;
             border-radius: 0.5rem !important;
             background: transparent !important;
+            transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+
             &:hover { background: var(--mt-muted) !important; }
+            &:focus-within {
+                border-color: var(--mt-ring, var(--mt-border)) !important;
+                background: var(--mt-card) !important;
+                box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-ring, var(--mt-primary)) 18%, transparent) !important;
+            }
+            .o_input {
+                border-color: transparent !important;
+                background: transparent !important;
+                box-shadow: none !important;
+            }
+        }
+        // the text input lives inside the tag list; strip the generic ring it inherits
+        // (same element count as the focus rule above, later in the file)
+        > .mt-row .o_field_widget.o_field_many2many_tags:focus-within .o_field_tags .o_input {
+            border-color: transparent !important;
+            background: transparent !important;
+            box-shadow: none !important;
         }
 
         // switches sit at the start of the value column

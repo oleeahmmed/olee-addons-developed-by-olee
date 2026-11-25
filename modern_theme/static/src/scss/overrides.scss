@@ -419,6 +419,32 @@ a:where(:not(.btn):not(.dropdown-item):not(.nav-link)) {
     box-shadow: 0 0 0 0.2rem rgba(var(--mt-primary-rgb), 0.2);
 }
 
+// The language switch Odoo floats inside a translatable field: a quiet text button on
+// the input's own surface — a boxed control here reads as a second input inside the first.
+.o_field_input_buttons .btn.o_field_translate,
+.o_field_widget > .o_field_translate.btn,
+.btn.o_field_translate {
+    height: auto;
+    min-height: 0;
+    padding: 0.125rem 0.375rem !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: var(--mt-muted-foreground) !important;
+    font-size: 0.6875rem !important;
+    font-weight: 600 !important;
+    line-height: 1 !important;
+    opacity: 1;
+
+    &:hover,
+    &:focus,
+    &:active {
+        background: var(--mt-muted) !important;
+        color: var(--mt-foreground) !important;
+        box-shadow: none !important;
+    }
+}
+
 // --- Checkboxes / switches ------------------------------------------------
 .form-check-input:checked,
 .o_switch_value:checked ~ .o_switch {
