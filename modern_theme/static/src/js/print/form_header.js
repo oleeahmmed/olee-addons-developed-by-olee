@@ -12,7 +12,6 @@ import { patch } from "@web/core/utils/patch";
 import { useService } from "@web/core/utils/hooks";
 import { FormCompiler } from "@web/views/form/form_compiler";
 import { StatusBarButtons } from "@web/views/form/status_bar_buttons/status_bar_buttons";
-import { COMPACT_HEAD_MODELS } from "@modern_theme/js/views/compact_form_head";
 
 const MAIN_BUTTONS = new Set([
     "action_confirm",
@@ -85,15 +84,29 @@ if (!StatusBarButtons.__modernHeader) {
         get modernHeader() {
             // modern apps, and the compact document header everywhere (sales, purchase,
             // invoices, transfers), which needs the short button row to fit in one line
-            return !this.env.isSmall && (isModernApp() || Boolean(COMPACT_HEAD_MODELS[this.env.model?.root?.resModel]));
+            return !this.env.isSmall && (isModernApp() || (!this.env.inDialog && Boolean(this.env.model?.root)));
         },
         get modernGroups() {
             const main = [];
             const more = [];
+            // forms without a known main action keep their first two buttons in view
+            const known = this.visibleSlotNames.some((name) => {
+                const slot = this.props.slots[name];
+                return slot.buttonPrimary || MAIN_BUTTONS.has(buttonName(slot.buttonKey));
+            });
+            let spare = known ? 0 : 2;
             for (const name of this.visibleSlotNames) {
                 const slot = this.props.slots[name];
-                const keep = slot.buttonPrimary || MAIN_BUTTONS.has(buttonName(slot.buttonKey));
+                let keep = slot.buttonPrimary || MAIN_BUTTONS.has(buttonName(slot.buttonKey));
+                if (!keep && spare > 0) {
+                    keep = true;
+                    spare--;
+                }
                 (keep ? main : more).push(name);
+            }
+            // a single extra button is not worth a menu
+            if (more.length === 1) {
+                main.push(more.pop());
             }
             return { main, more };
         },

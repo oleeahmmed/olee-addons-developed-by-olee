@@ -121,14 +121,19 @@ $ch-form: 'html[data-mt-theme] .o_web_client > .o_action_manager > .o_form_view.
     }
     .o_control_panel_navigation { flex: 0 0 auto !important; }
 
-    // ---- the number is in the breadcrumb: no extra strip in the sheet ------------------
-    // (kept only while it can be typed, e.g. a manual invoice number)
-    .o_form_sheet > .oe_title:not(:has(input:not([type="checkbox"]), textarea)):not(#mt-ch) { display: none !important; }
+    // ---- documents: the number is in the breadcrumb, no extra strip in the sheet --------
+    &.mt-doc .o_form_sheet > .oe_title:not(#mt-ch) { display: none !important; }
+
+    // ---- empty blocks (a group whose fields are all hidden) leave no empty card ---------
+    .o_form_sheet > .o_inner_group:not(:has(.o_field_widget, .o_form_label, button, .o_widget)):not(#mt-ch),
+    .o_form_sheet > .o_group:not(:has(.o_field_widget, .o_form_label, button, .o_widget)):not(#mt-ch) {
+        display: none !important;
+    }
 
     // ---- details card: the key fields side by side, 3-4 per line ------------------------
     // Odoo's two field columns are flattened into one grid; each field keeps its small
     // label above the input. Fields holding two widgets (due date + terms…) take two cells.
-    .o_form_sheet > .o_group:not(#mt-ch) {
+    &.mt-doc .o_form_sheet > .o_group:not(#mt-ch) {
         display: grid !important;
         grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
         gap: 0.75rem 1rem !important;
@@ -159,7 +164,21 @@ $ch-form: 'html[data-mt-theme] .o_web_client > .o_action_manager > .o_form_view.
         }
 
         // invoice currency: the code, and the rate as one quiet line of text under it
-        [name="journal_div"] { display: block !important; }
+        // journal "in" currency on one line, the rate (when shown) under them
+        [name="journal_div"] {
+            display: flex !important;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.25rem 0.375rem;
+            > .o_field_widget { flex: 1 1 5rem; min-width: 0; }
+            > [name="in_and_refresh_button_div"] {
+                flex: 0 0 auto;
+                margin: 0 !important;
+                font-size: 0.75rem;
+                color: var(--mt-muted-foreground);
+            }
+            > [name="currency_div"] { flex: 1 1 4.5rem; width: auto !important; min-width: 0; }
+        }
         [name="currency_conversion_div"] {
             align-items: baseline;
             flex-wrap: wrap;

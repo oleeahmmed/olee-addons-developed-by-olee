@@ -19,16 +19,23 @@ import { FormCompiler } from "@web/views/form/form_compiler";
 import { useViewCompiler } from "@web/views/view_compiler";
 import { StatusBarButtons } from "@web/views/form/status_bar_buttons/status_bar_buttons";
 
-/** Models whose main form gets the compact header, with the label of their number field. */
+/**
+ * Documents: forms whose title is just their sequence number (S00010, INV/…, WH/OUT/…).
+ * The number already shows in the breadcrumb, so the sheet hides it and lays the key
+ * fields out as a column grid (.mt-doc). Every other main form (customers, products,
+ * leads, employees…) gets the same page design but keeps its editable title.
+ */
 export const COMPACT_HEAD_MODELS = {
     "sale.order": _t("Number"),
     "purchase.order": _t("Number"),
     "account.move": _t("Number"),
+    "account.payment": _t("Number"),
     "stock.picking": _t("Reference"),
-    // products: one product page for every app (Sales, Purchase, Inventory, POS, MRP…)
-    "product.template": _t("Product"),
-    "product.product": _t("Product"),
+    "mrp.production": _t("Reference"),
+    "pos.order": _t("Reference"),
 };
+/** Forms that keep Odoo's own layout (two-pane settings). */
+const EXCLUDED_MODELS = new Set(["res.config.settings"]);
 
 FormController.components = { ...FormController.components, StatusBarButtons };
 
@@ -37,13 +44,16 @@ patch(FormController.prototype, {
         super.setup(...arguments);
         this.mtHeaderTemplate = null;
         this.mtCompact = false;
-        const label = COMPACT_HEAD_MODELS[this.props.resModel];
-        if (!label || this.env.inDialog || this.env.isSmall) {
+        this.mtDoc = false;
+        const embedded = (this.props.className || "").includes("_native_view");
+        if (this.env.inDialog || this.env.isSmall || embedded || EXCLUDED_MODELS.has(this.props.resModel)) {
             return;
         }
-        // the page design (cards, tabs, sections) applies even without a <header> to move
+        // every main form gets the page design (cards, tabs, sections, header row)
         this.mtCompact = true;
-        this.mtNumberLabel = JSON.stringify(String(label));
+        const label = COMPACT_HEAD_MODELS[this.props.resModel];
+        this.mtDoc = Boolean(label);
+        this.mtNumberLabel = label ? JSON.stringify(String(label)) : "";
         const header = this.archInfo.xmlDoc.querySelector(":scope > header");
         if (!header) {
             return;
@@ -70,8 +80,9 @@ patch(FormController.prototype, {
         if (!this.mtCompact) {
             return className;
         }
+        const extra = this.mtDoc ? "mt-compact-head mt-doc" : "mt-compact-head";
         return typeof className === "string"
-            ? `${className} mt-compact-head`
-            : { ...className, "mt-compact-head": true };
+            ? `${className} ${extra}`
+            : { ...className, [extra]: true };
     },
 });

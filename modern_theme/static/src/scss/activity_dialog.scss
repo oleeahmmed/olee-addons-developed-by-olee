@@ -1,0 +1,153 @@
+// "Schedule Activity" dialog (mail.activity.schedule wizard, and the mail.activity form when
+// an activity is edited). CSS only, keyed on Odoo's own classes / field names, so Odoo
+// updates of the view do not break it.
+//
+//   [✓ To-Do] [✉ Email] [☎ Call] [👥 Meeting] [⬆ Document]      activity type chips
+//   Summary ________________________________________________       full width
+//   Due Date ______________________   Assigned to ______________   side by side
+//   ┌ note ──────────────────────────────────────────────────┐   its own box
+//   └────────────────────────────────────────────────────────┘
+//   [Save] [Mark Done] [Discard]
+
+$ad-modal: 'html[data-mt-theme] .modal:has(.o_mail_activity_schedule_wizard, .o_form_view .o_field_selection_badge_icons[name="activity_type_id"])';
+
+#{$ad-modal}:not(#mt-ad) {
+    .modal-content { border-radius: 1rem !important; overflow: hidden; }
+
+    .modal-header {
+        padding: 1rem 1.5rem !important;
+        border-bottom: 1px solid var(--mt-border) !important;
+        .modal-title { font-size: 1.0625rem !important; font-weight: 650 !important; letter-spacing: -0.01em; }
+    }
+
+    .o_form_sheet_bg { padding: 0 !important; background: var(--mt-card) !important; }
+    .o_form_sheet {
+        padding: 1.25rem 1.5rem 1.5rem !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        background: transparent !important;
+
+        > br { display: none; }
+    }
+
+    // ---- activity type: soft chips, the chosen one tinted ------------------------------
+    .o_field_selection_badge_icons[name="activity_type_id"] {
+        margin-bottom: 1.25rem !important;
+        > div { gap: 0.375rem !important; margin: 0 !important; }
+
+        .o_selection_badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            height: 2.125rem;
+            margin: 0 !important;
+            padding: 0 0.875rem !important;
+            border: 1px solid var(--mt-border) !important;
+            border-radius: 999px !important;
+            background: var(--mt-card) !important;
+            color: var(--mt-muted-foreground) !important;
+            font-size: 0.8125rem !important;
+            font-weight: 500 !important;
+            box-shadow: none !important;
+            transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+
+            .fa { padding: 0 !important; font-size: 0.8125rem; }
+            &:hover { background: var(--mt-muted) !important; color: var(--mt-foreground) !important; }
+            &.active {
+                border-color: color-mix(in srgb, var(--mt-primary) 45%, var(--mt-border)) !important;
+                background: color-mix(in srgb, var(--mt-primary) 10%, var(--mt-card)) !important;
+                color: var(--mt-primary) !important;
+                font-weight: 600 !important;
+            }
+        }
+    }
+
+    // ---- fields: summary full width, the others two per line, the note in its own box --
+    .o_form_sheet > .o_group {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem 1rem !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+
+        @media (max-width: 575.98px) { grid-template-columns: minmax(0, 1fr); }
+
+        > .o_inner_group {
+            width: auto !important;
+            max-width: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        // the group holding the summary spans the dialog
+        > .o_inner_group:has([name="summary"]) { grid-column: 1 / -1; }
+        // the other groups dissolve: each of their fields is one cell of the grid
+        > .o_inner_group:not(:has([name="summary"])) { display: contents !important; }
+        > .o_inner_group:not(:has([name="summary"])) > .mt-row { margin: 0 !important; min-width: 0; }
+
+        // the note (and any other full-width field) spans the dialog, with clear space above
+        > .o_field_widget,
+        > .o_field_html { grid-column: 1 / -1; }
+    }
+
+    // labels: one small size (Odoo sets the summary label to fs-3)
+    .o_form_label.fs-3,
+    .o_form_label {
+        font-size: 0.75rem !important;
+        font-weight: 500 !important;
+    }
+    [name="summary"].fs-3,
+    [name="summary"] .o_input {
+        font-size: 0.9375rem !important;
+        font-weight: 500 !important;
+    }
+
+    // note: a soft editor box
+    .o_field_html[name="note"] {
+        margin-top: 0.25rem !important;
+        min-height: 6.5rem;
+        border: 1px solid var(--mt-border) !important;
+        border-radius: 0.75rem !important;
+        background: color-mix(in srgb, var(--mt-muted) 45%, var(--mt-card)) !important;
+        transition: border-color 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+
+        &:focus-within {
+            border-color: color-mix(in srgb, var(--mt-primary) 55%, var(--mt-border)) !important;
+            background: var(--mt-card) !important;
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-primary) 14%, transparent) !important;
+        }
+        .note-editable,
+        .odoo-editor-editable {
+            min-height: 6rem;
+            padding: 0.75rem 0.875rem !important;
+            border: 0 !important;
+            background: transparent !important;
+            font-size: 0.875rem;
+        }
+    }
+
+    // ---- footer: same button sizes, Discard quiet ---------------------------------------
+    .modal-footer {
+        gap: 0.5rem;
+        padding: 0.875rem 1.5rem !important;
+        border-top: 1px solid var(--mt-border) !important;
+        background: color-mix(in srgb, var(--mt-muted) 35%, var(--mt-card));
+
+        > .btn, > button {
+            height: 2.25rem;
+            margin: 0 !important;
+            padding: 0 1rem !important;
+            border-radius: 0.5rem !important;
+            font-size: 0.8125rem !important;
+            font-weight: 600 !important;
+        }
+        > .btn-secondary:last-child {
+            border-color: transparent !important;
+            background: transparent !important;
+            color: var(--mt-muted-foreground) !important;
+            &:hover { background: var(--mt-muted) !important; color: var(--mt-foreground) !important; }
+        }
+    }
+}

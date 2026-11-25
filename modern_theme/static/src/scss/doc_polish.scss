@@ -30,7 +30,7 @@ $dp-form: 'html[data-mt-theme] .o_web_client > .o_action_manager > .o_form_view.
     // ======================================================================
     // Info card
     // ======================================================================
-    .o_form_sheet > .o_group {
+    &.mt-doc .o_form_sheet > .o_group {
         grid-template-columns: minmax(0, 1fr) !important;
         gap: 0.875rem 1rem !important;
     }
@@ -220,8 +220,8 @@ $dp-form: 'html[data-mt-theme] .o_web_client > .o_action_manager > .o_form_view.
 
 // info card columns follow the sheet's width: 1 → 2 → 4
 @container mt-sheet (min-width: 30rem) {
-    #{$dp-form}:not(#mt-dp) .o_form_sheet > .o_group { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    #{$dp-form}.mt-doc:not(#mt-dp) .o_form_sheet > .o_group { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
 }
-@container mt-sheet (min-width: 44rem) {
-    #{$dp-form}:not(#mt-dp) .o_form_sheet > .o_group { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+@container mt-sheet (min-width: 38rem) {
+    #{$dp-form}.mt-doc:not(#mt-dp) .o_form_sheet > .o_group { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
 }
