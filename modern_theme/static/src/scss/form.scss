@@ -1986,9 +1986,9 @@ $mt-bar-height: 3.5rem;
         gap: 1rem;
         overflow: visible !important;
         margin: 0 !important;
-        > .o_inner_group.col-lg-8 { flex: 1 1 18rem; width: auto; max-width: none; padding: 0; }
+        > .o_inner_group.col-lg-8 { flex: 1 1 18rem; width: auto; max-width: none; margin: 0 !important; padding: 0; }
         > .o_group.col-lg-4,
-        > .col-lg-4 { flex: 0 1 22rem; width: auto; max-width: 100%; margin-left: auto; padding: 0; }
+        > .col-lg-4 { flex: 0 1 22rem; width: auto; max-width: 100%; margin: 0 0 0 auto !important; padding: 0; }
         .oe_subtotal_footer { width: 100% !important; max-width: none !important; }
     }
 
@@ -2156,5 +2156,40 @@ $mt-bar-height: 3.5rem;
         .o_setting_left_pane { order: 2; margin-left: auto; width: auto; padding: 0; }
         .o_setting_right_pane { order: 1; margin: 0; padding: 0; border: 0; }
         .o_form_label { font-size: 0.875rem; color: var(--mt-foreground); font-weight: 500 !important; }
+    }
+}
+
+// Access Rights (user / group forms): in debug mode Odoo appends an "Extra Rights"
+// section — a heading followed by two checkbox cards. Its group keeps the row's
+// negative gutter, so the heading hung off the tab edge with a full-width hairline
+// and the cards did not line up with the category cards above.
+#{$mt-form} .o_field_res_user_group_ids { display: block !important; margin-bottom: 0 !important; }
+
+#{$mt-form} .o_extra_rights_group {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 1rem;
+    margin: 0.75rem 0 0 !important;
+    align-items: start !important;
+
+    > .o_horizontal_separator {
+        grid-column: 1 / -1;
+        margin: 0 0 0.625rem !important;
+        padding: 0 0.875rem !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        text-transform: none !important;
+        letter-spacing: 0 !important;
+        color: var(--mt-foreground) !important;
+    }
+    > .o_inner_group {
+        width: auto !important;
+        max-width: none !important;
+        min-width: 0;
+        margin: 0 0 0.75rem !important;
+    }
+
+    @media (max-width: 991.98px) {
+        grid-template-columns: minmax(0, 1fr);
     }
 }

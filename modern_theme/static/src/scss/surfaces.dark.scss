@@ -336,17 +336,6 @@ hr { color: var(--mt-border); }
     }
 }
 
-// Purchase / Sales "My …" KPI strip above lists.
-.purchase-dashboard-card,
-.o_sale_dashboard .btn,
-.o_purchase_dashboard .btn {
-    background-color: var(--mt-muted) !important;
-    color: var(--mt-foreground) !important;
-    border-color: var(--mt-border) !important;
-
-    &:hover { background-color: color-mix(in srgb, var(--mt-muted) 85%, var(--mt-foreground)) !important; }
-}
-
 // Odoo compiles many surfaces from the light Sass $o-view-background-color (white).
 // Remap those leftovers so dialogs, statusbars, sheets and tags follow the theme.
 .o_form_view,

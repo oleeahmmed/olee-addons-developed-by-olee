@@ -120,14 +120,30 @@ $dp-form: 'html[data-mt-theme] .o_web_client > .o_action_manager > .o_form_view.
         }
     }
 
-    // terms: a quiet dashed box; totals aligned to its top, the total stands out
+    // terms: one soft memo block; the html editor must not draw its own white,
+    // rounded box inside it (that second frame read as an empty phantom card)
     .o_notebook .o_field_html[name="note"],
     .o_notebook .o_field_html[name="narration"],
     .o_notebook .o_field_html[name="notes"] {
-        border: 1px dashed var(--mt-border) !important;
+        border: 1px solid var(--mt-border) !important;
         border-radius: 0.75rem !important;
-        background: transparent !important;
+        background: color-mix(in srgb, var(--mt-muted) 45%, var(--mt-card)) !important;
         box-shadow: none !important;
+
+        .o-wysiwyg,
+        .note-editable,
+        .odoo-editor-editable {
+            border: 0 !important;
+            border-radius: inherit;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+        .note-editable,
+        .odoo-editor-editable {
+            min-height: 0 !important;
+            padding: 0.75rem 0.875rem !important;
+        }
+        > span { display: block; padding: 0.75rem 0.875rem !important; }
     }
     .o_notebook .o_group.row:has(.oe_subtotal_footer) { align-items: flex-start !important; }
     .oe_subtotal_footer {
