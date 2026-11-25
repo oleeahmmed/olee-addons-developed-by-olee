@@ -29,7 +29,7 @@
         <t t-set="mr_party" t-value="mr['party']"/>
         <t t-set="mr_doc" t-value="mr['doc']"/>
 
-        <div t-attf-class="article o_mr {{ mr_style['font_class'] }} {{ mr_style['background_class'] }}"
+        <div t-attf-class="article o_mr {{ mr_style['font_class'] }} {{ mr_style['background_class'] }} {{ mr_style['classes'] }}"
              t-att-style="mr_style['background'] or None"
              t-att-data-oe-model="mr_doc._name" t-att-data-oe-id="mr_doc.id"
              t-att-data-oe-lang="mr_doc.env.context.get('lang')"
@@ -67,7 +67,7 @@
                 </table>
 
                 <!-- Title band -->
-                <div class="o_mr_band" t-attf-style="background-color: {{ mr_accent }}; color: {{ mr_on_accent }};" t-out="mr['title']"/>
+                <div class="o_mr_band" t-att-style="mr_style['band_style']" t-out="mr['title']"/>
 
                 <!-- Party + references -->
                 <table class="o_mr_grid o_mr_partyrow">
@@ -92,35 +92,37 @@
                 <t t-set="mr_cols" t-value="mr['columns']"/>
                 <table class="o_mr_items">
                     <thead>
-                        <tr t-attf-style="background-color: {{ mr_soft }}; color: {{ mr_caption }};">
-                            <th class="o_mr_c o_mr_no">#</th>
-                            <th class="o_mr_l">Description</th>
-                            <th class="o_mr_r">Quantity</th>
-                            <th t-if="mr['show_prices']" class="o_mr_r">Unit Price</th>
-                            <th t-if="mr['show_discount']" class="o_mr_r">Disc.%</th>
-                            <th t-if="mr['show_taxes']" class="o_mr_c">Taxes</th>
-                            <th t-if="mr['show_prices']" class="o_mr_r">Amount</th>
+                        <tr t-att-style="mr_style['thead_style']">
+                            <th t-if="mr['show_numbers']" class="o_mr_c o_mr_no" t-att-style="mr_style['th_style']">#</th>
+                            <th class="o_mr_l" t-att-style="mr_style['th_style']">Description</th>
+                            <th class="o_mr_r" t-att-style="mr_style['th_style']" t-out="mr['qty_label']"/>
+                            <th t-if="mr['qty2_label']" class="o_mr_r" t-att-style="mr_style['th_style']" t-out="mr['qty2_label']"/>
+                            <th t-if="mr['show_prices']" class="o_mr_r" t-att-style="mr_style['th_style']">Unit Price</th>
+                            <th t-if="mr['show_discount']" class="o_mr_r" t-att-style="mr_style['th_style']">Disc.%</th>
+                            <th t-if="mr['show_taxes']" class="o_mr_c" t-att-style="mr_style['th_style']">Taxes</th>
+                            <th t-if="mr['show_prices']" class="o_mr_r" t-att-style="mr_style['th_style']">Amount</th>
                         </tr>
                     </thead>
                     <tbody>
                         <t t-foreach="mr['lines']" t-as="mr_line">
                             <tr t-if="mr_line['type'] in ('section', 'subsection')"
                                 t-att-class="'o_mr_section' if mr_line['type'] == 'section' else 'o_mr_subsection'">
-                                <td/>
-                                <td t-att-colspan="mr_cols - (2 if mr['show_prices'] else 1)" t-out="mr_line['name']"/>
+                                <td t-if="mr['show_numbers']"/>
+                                <td t-att-colspan="mr['section_span']" t-out="mr_line['name']"/>
                                 <td t-if="mr['show_prices']" class="o_mr_r" t-out="mr_line['amount']"/>
                             </tr>
                             <tr t-elif="mr_line['type'] == 'note'" class="o_mr_note">
-                                <td/>
-                                <td t-att-colspan="mr_cols - 1" t-out="mr_line['name']"/>
+                                <td t-if="mr['show_numbers']"/>
+                                <td t-att-colspan="mr['note_span']" t-out="mr_line['name']"/>
                             </tr>
-                            <tr t-else="">
-                                <td class="o_mr_c o_mr_muted" t-out="mr_line['number']"/>
+                            <tr t-else="" class="o_mr_item" t-att-style="mr_line.get('style')">
+                                <td t-if="mr['show_numbers']" class="o_mr_c o_mr_muted" t-out="mr_line['number']"/>
                                 <td t-attf-class="o_mr_desc {{ mr_line['indent'] and 'o_mr_indent' or '' }}">
                                     <span class="o_mr_medium" t-out="mr_line['title']"/>
                                     <span t-if="mr_line['extra']" class="o_mr_muted"> — <t t-out="mr_line['extra']"/></span>
                                 </td>
                                 <td class="o_mr_r" t-out="mr_line['qty']"/>
+                                <td t-if="mr['qty2_label']" class="o_mr_r o_mr_strong" t-out="mr_line['qty2']"/>
                                 <td t-if="mr['show_prices']" class="o_mr_r" t-out="mr_line['price']"/>
                                 <td t-if="mr['show_discount']" class="o_mr_r" t-out="mr_line['discount_str']"/>
                                 <td t-if="mr['show_taxes']" class="o_mr_c" t-out="mr_line['taxes']"/>

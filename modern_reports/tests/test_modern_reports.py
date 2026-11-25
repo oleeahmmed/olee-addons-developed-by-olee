@@ -54,3 +54,35 @@ class TestModernReports(TransactionCase):
         html = self.env['ir.actions.report']._render_qweb_html('account.account_invoices', move.ids)[0]
         self.assertIn(b'data-mr-fill="1"', html)
         self.assertIn(b'o_mr_tail', html)
+
+    def test_design_options(self):
+        company = self.env.company
+        company.write({
+            'mr_table_style': 'grid', 'mr_table_header': 'solid', 'mr_title_style': 'plain',
+            'mr_density': 'compact', 'mr_font_size': 'large', 'mr_frame': False,
+            'mr_show_line_numbers': False, 'mr_show_amount_words': False,
+        })
+        partner = self.env['res.partner'].create({'name': 'MR Customer'})
+        move = self.env['account.move'].create({
+            'move_type': 'out_invoice',
+            'partner_id': partner.id,
+            'invoice_line_ids': [(0, 0, {'name': 'Item', 'quantity': 2, 'price_unit': 50, 'tax_ids': False})],
+        })
+        values = move._mr_values()
+        self.assertFalse(values['show_numbers'])
+        self.assertEqual(values['words'], '')
+        # description, quantity, unit price, amount
+        self.assertEqual(values['columns'], 4)
+        classes = values['style']['classes']
+        for css_class in ('o_mr_tbl_grid', 'o_mr_head_solid', 'o_mr_title_plain', 'o_mr_density_compact',
+                          'o_mr_fs_large', 'o_mr_noframe'):
+            self.assertIn(css_class, classes)
+        html = self.env['ir.actions.report']._render_qweb_html('account.account_invoices', move.ids)[0]
+        self.assertIn(b'o_mr_tbl_grid', html)
+        self.assertNotIn(b'o_mr_no"', html)
+
+        company.write({'mr_table_style': 'striped', 'mr_show_line_numbers': True})
+        move.write({'invoice_line_ids': [(0, 0, {'name': 'Item 2', 'quantity': 1, 'price_unit': 5, 'tax_ids': False})]})
+        rows = [row for row in move._mr_values()['lines'] if row['type'] == 'product']
+        self.assertFalse(rows[0]['style'])
+        self.assertIn('background-color', rows[1]['style'])

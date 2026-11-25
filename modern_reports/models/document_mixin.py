@@ -266,6 +266,9 @@ class ModernReportsDocument(models.AbstractModel):
             'company': self._mr_company_values(),
             'page': self._mr_page_values(),
             'show_prices': True,
+            # quantity column header, and an optional second quantity column (e.g. Delivered)
+            'qty_label': self.env._('Quantity'),
+            'qty2_label': '',
             'totals': [],
             'total': '',
             'company_totals': None,
@@ -284,6 +287,12 @@ class ModernReportsDocument(models.AbstractModel):
         }
 
     def _mr_finish(self, values):
+        style = values['style']
+        if not style['amount_words']:
+            values['words'] = ''
+        if not style['payment_methods']:
+            values['payment_methods'] = []
+        values['show_numbers'] = style['line_numbers']
         rows = values['lines']
         number = 0
         for row in rows:
@@ -293,7 +302,17 @@ class ModernReportsDocument(models.AbstractModel):
         products = [row for row in rows if row['type'] == 'product']
         values['show_discount'] = values['show_prices'] and any(row['discount'] for row in products)
         values['show_taxes'] = values['show_prices'] and any(row['taxes'] for row in products)
-        values['columns'] = 3 + (2 if values['show_prices'] else 0) + values['show_discount'] + values['show_taxes']
+        values['columns'] = (
+            values['show_numbers'] + 2 + bool(values['qty2_label'])
+            + (2 if values['show_prices'] else 0) + values['show_discount'] + values['show_taxes']
+        )
+        # cells a section / note row spans after the optional "#" cell
+        values['section_span'] = values['columns'] - values['show_numbers'] - (1 if values['show_prices'] else 0)
+        values['note_span'] = values['columns'] - values['show_numbers']
+        stripe = style['stripe_style']
+        for row in products:
+            row['style'] = stripe if stripe and row['number'] % 2 == 0 else None
+            row.setdefault('qty2', '')
         values['payment_method_rows'] = [
             values['payment_methods'][index:index + 3]
             for index in range(0, len(values['payment_methods']), 3)

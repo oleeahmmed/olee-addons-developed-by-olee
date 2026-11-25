@@ -63,6 +63,36 @@ class ResCompany(models.Model):
              'bottom of the last page.',
     )
     mr_show_signatures = fields.Boolean(string='Print Signature Lines', default=True)
+
+    # ---- design options ---------------------------------------------------
+    mr_table_style = fields.Selection(
+        [('rows', 'Row lines'), ('grid', 'All borders'), ('striped', 'Striped rows'), ('minimal', 'Minimal')],
+        string='Item Table Borders', default='rows', required=True,
+        help='Row lines: a line under every row.\n'
+             'All borders: every cell boxed.\n'
+             'Striped rows: alternate rows tinted, no lines.\n'
+             'Minimal: only the header line.',
+    )
+    mr_table_header = fields.Selection(
+        [('tint', 'Soft tint'), ('solid', 'Solid colour'), ('plain', 'Plain, underlined')],
+        string='Item Table Header', default='tint', required=True,
+    )
+    mr_title_style = fields.Selection(
+        [('band', 'Solid band'), ('soft', 'Soft band'), ('plain', 'Plain title')],
+        string='Document Title', default='band', required=True,
+    )
+    mr_density = fields.Selection(
+        [('compact', 'Compact'), ('normal', 'Normal'), ('comfortable', 'Comfortable')],
+        string='Row Spacing', default='normal', required=True,
+    )
+    mr_font_size = fields.Selection(
+        [('small', 'Small'), ('normal', 'Normal'), ('large', 'Large')],
+        string='Text Size', default='normal', required=True,
+    )
+    mr_frame = fields.Boolean(string='Frame Around the Page', default=True)
+    mr_show_line_numbers = fields.Boolean(string='Line Numbers', default=True)
+    mr_show_amount_words = fields.Boolean(string='Amount in Words', default=True)
+    mr_show_payment_methods = fields.Boolean(string='Payment Method Cards', default=True)
     mr_payment_method_ids = fields.One2many('modern.reports.payment.method', 'company_id')
 
     @api.constrains('mr_accent_color')
@@ -117,16 +147,54 @@ class ResCompany(models.Model):
         accent, secondary = self._mr_colors()
         background, background_class = self._mr_background_values()
         font = self.font if self.font in DOCUMENT_FONTS else 'Roboto'
+        soft = mix_colors(accent, '#ffffff', 0.07)
+        on_accent = readable_on(accent)
+        caption = secondary if _luminance(secondary) < 0.55 else accent
+        # item table header row (tr) and cells (th): wkhtmltopdf has no CSS variables, so the
+        # accent-dependent parts are inlined
+        header = self.mr_table_header
+        if header == 'solid':
+            thead_style, th_style = 'background-color: %s; color: %s;' % (accent, on_accent), ''
+        elif header == 'plain':
+            thead_style, th_style = 'color: %s;' % caption, 'border-bottom: 1.5px solid %s;' % accent
+        else:
+            thead_style, th_style = 'background-color: %s; color: %s;' % (soft, caption), ''
+        title = self.mr_title_style
+        if title == 'soft':
+            band_style = 'background-color: %s; color: %s;' % (soft, accent)
+        elif title == 'plain':
+            band_style = 'color: %s;' % accent
+        else:
+            band_style = 'background-color: %s; color: %s;' % (accent, on_accent)
+        classes = ' '.join([
+            'o_mr_tbl_%s' % self.mr_table_style,
+            'o_mr_head_%s' % header,
+            'o_mr_title_%s' % title,
+            'o_mr_density_%s' % self.mr_density,
+            'o_mr_fs_%s' % self.mr_font_size,
+            '' if self.mr_frame else 'o_mr_noframe',
+        ]).strip()
         return {
             'accent': accent,
-            'on_accent': readable_on(accent),
+            'on_accent': on_accent,
             # captions / table head text: the secondary colour when it is dark enough to read
-            'caption': secondary if _luminance(secondary) < 0.55 else accent,
-            'soft': mix_colors(accent, '#ffffff', 0.07),
+            'caption': caption,
+            'soft': soft,
             'soft_border': mix_colors(accent, '#ffffff', 0.4),
             'background': background,
             'background_class': background_class,
             'font_class': 'o_mr_font_%s' % font,
             'fill_page': self.mr_fill_page,
             'signatures': self.mr_show_signatures,
+            # design options
+            'classes': classes,
+            'thead_style': thead_style,
+            'th_style': th_style or None,
+            'band_style': band_style,
+            # striped rows: every other item row tinted with the accent
+            'stripe_style': 'background-color: %s;' % mix_colors(accent, '#ffffff', 0.045)
+                            if self.mr_table_style == 'striped' else '',
+            'line_numbers': self.mr_show_line_numbers,
+            'amount_words': self.mr_show_amount_words,
+            'payment_methods': self.mr_show_payment_methods,
         }

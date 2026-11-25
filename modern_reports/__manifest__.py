@@ -14,9 +14,13 @@ Colours, font and background follow Odoo's Document Layout (or the Modern Theme 
 or a custom colour). Empty item rows fill the page so totals and signatures always sit at the
 bottom of the last page.
 
+Design options: item table borders (row lines, all borders, striped, minimal), table header,
+title style, row spacing, text size, page frame, line numbers, amount in words, payment cards.
+Delivery slips follow the same design when Inventory is installed (modern_reports_stock).
+
 Settings > Invoicing > Modern Reports.
     """,
-    'version': '19.0.2.1.0',
+    'version': '19.0.2.2.0',
     'category': 'Accounting/Accounting',
     'author': 'Olee',
     'license': 'LGPL-3',

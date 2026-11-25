@@ -415,6 +415,77 @@ $mr-font-faces: (
     }
 }
 
+// ---- design options (Settings > Modern Reports) ---------------------------------------
+// Classes set on .o_mr by res.company._mr_style(); accent colours stay inline in the template.
+
+// item table borders
+.o_mr.o_mr_tbl_grid .o_mr_items {
+    th, td { border-right: 1px solid $mr-line; }
+    th:last-child, td:last-child { border-right: none; }
+}
+.o_mr.o_mr_tbl_striped .o_mr_items td,
+.o_mr.o_mr_tbl_minimal .o_mr_items td {
+    border-bottom: none;
+}
+.o_mr.o_mr_tbl_striped .o_mr_items tr.o_mr_section td,
+.o_mr.o_mr_tbl_minimal .o_mr_items tr.o_mr_section td {
+    border-top: 1px solid $mr-line-soft;
+    border-bottom: 1px solid $mr-line-soft;
+}
+
+// item table header: plain = no fill, an accent line under the labels (inline on th)
+.o_mr.o_mr_head_plain .o_mr_items th {
+    padding-bottom: 6px;
+}
+.o_mr.o_mr_head_solid .o_mr_items th {
+    border-bottom-color: transparent;
+}
+
+// document title
+.o_mr.o_mr_title_soft .o_mr_band {
+    font-weight: 700;
+}
+.o_mr.o_mr_title_plain .o_mr_band {
+    padding: 9px 0 7px;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+// row spacing
+.o_mr.o_mr_density_compact {
+    .o_mr_items th, .o_mr_items td { padding: 3px 7px; }
+    .o_mr_totals td, .o_mr_kv td { padding-top: 4px; padding-bottom: 4px; }
+}
+.o_mr.o_mr_density_comfortable {
+    .o_mr_items th, .o_mr_items td { padding: 8px 10px; }
+    .o_mr_totals td, .o_mr_kv td { padding-top: 8px; padding-bottom: 8px; }
+}
+// page-filler rows keep their own (tight) padding whatever the spacing
+.o_mr .o_mr_items tr.o_mr_filler td {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+// text size
+.o_mr.o_mr_fs_small {
+    font-size: 10px;
+    .o_mr_items td { font-size: 10px; }
+    .o_mr_items th { font-size: 9px; }
+}
+.o_mr.o_mr_fs_large {
+    font-size: 12px;
+    .o_mr_items td { font-size: 12px; }
+    .o_mr_items th { font-size: 11px; }
+    .o_mr_side { font-size: 11.5px; }
+}
+
+// no frame around the page
+.o_mr.o_mr_noframe .o_mr_box {
+    border: none;
+}
+
 .o_mr.o_mr_has_bg {
     background-size: contain;
     background-position: center;

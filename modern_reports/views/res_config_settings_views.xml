@@ -33,8 +33,45 @@
                     </setting>
                     <setting id="mr_payment_methods" string="Payment methods"
                              help="Bank, mobile wallet and cash cards printed on customer documents.">
-                        <button name="action_mr_payment_methods" type="object" string="Payment Methods"
-                                class="btn-link" icon="oi-arrow-right"/>
+                        <field name="mr_show_payment_methods"/>
+                        <div invisible="not mr_show_payment_methods">
+                            <button name="action_mr_payment_methods" type="object" string="Payment Methods"
+                                    class="btn-link" icon="oi-arrow-right"/>
+                        </div>
+                    </setting>
+                </block>
+                <block title="Modern Reports: print design" id="modern_reports_design"
+                       help="Same design for invoices, bills, quotations, sales and purchase orders and delivery slips.">
+                    <setting id="mr_table_style" string="Item table borders"
+                             help="Lines of the product table.">
+                        <field name="mr_table_style" widget="radio"/>
+                    </setting>
+                    <setting id="mr_table_header" string="Item table header"
+                             help="Fill of the product table's header row.">
+                        <field name="mr_table_header" widget="radio"/>
+                    </setting>
+                    <setting id="mr_title_style" string="Document title"
+                             help="The band under the header (Sales Invoice, Quotation, Delivery Slip…).">
+                        <field name="mr_title_style" widget="radio"/>
+                    </setting>
+                    <setting id="mr_density" string="Row spacing"
+                             help="Padding of the item, totals and information rows.">
+                        <field name="mr_density" widget="radio"/>
+                    </setting>
+                    <setting id="mr_font_size" string="Text size">
+                        <field name="mr_font_size" widget="radio"/>
+                    </setting>
+                    <setting id="mr_frame" string="Frame around the page"
+                             help="A thin border around the whole document.">
+                        <field name="mr_frame"/>
+                    </setting>
+                    <setting id="mr_show_line_numbers" string="Line numbers"
+                             help="The # column in front of each item.">
+                        <field name="mr_show_line_numbers"/>
+                    </setting>
+                    <setting id="mr_show_amount_words" string="Amount in words"
+                             help="The total written out under the totals.">
+                        <field name="mr_show_amount_words"/>
                     </setting>
                 </block>
             </xpath>
