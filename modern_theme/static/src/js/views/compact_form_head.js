@@ -25,6 +25,9 @@ export const COMPACT_HEAD_MODELS = {
     "purchase.order": _t("Number"),
     "account.move": _t("Number"),
     "stock.picking": _t("Reference"),
+    // products: one product page for every app (Sales, Purchase, Inventory, POS, MRP…)
+    "product.template": _t("Product"),
+    "product.product": _t("Product"),
 };
 
 FormController.components = { ...FormController.components, StatusBarButtons };
@@ -33,10 +36,14 @@ patch(FormController.prototype, {
     setup() {
         super.setup(...arguments);
         this.mtHeaderTemplate = null;
+        this.mtCompact = false;
         const label = COMPACT_HEAD_MODELS[this.props.resModel];
         if (!label || this.env.inDialog || this.env.isSmall) {
             return;
         }
+        // the page design (cards, tabs, sections) applies even without a <header> to move
+        this.mtCompact = true;
+        this.mtNumberLabel = JSON.stringify(String(label));
         const header = this.archInfo.xmlDoc.querySelector(":scope > header");
         if (!header) {
             return;
@@ -47,7 +54,6 @@ patch(FormController.prototype, {
         this.archInfo = { ...this.archInfo, xmlDoc, arch: xmlDoc.outerHTML };
         const templates = useViewCompiler(this.props.Compiler || FormCompiler, { MtHeader: header }, { isSubView: true });
         this.mtHeaderTemplate = templates.MtHeader;
-        this.mtNumberLabel = JSON.stringify(String(label));
     },
 
     /** Rendering context of the header template (same as the smart buttons'). */
@@ -61,7 +67,7 @@ patch(FormController.prototype, {
 
     get className() {
         const className = super.className;
-        if (!this.mtHeaderTemplate) {
+        if (!this.mtCompact) {
             return className;
         }
         return typeof className === "string"

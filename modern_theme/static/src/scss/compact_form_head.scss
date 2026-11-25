@@ -123,7 +123,7 @@ $ch-form: 'html[data-mt-theme] .o_web_client > .o_action_manager > .o_form_view.
 
     // ---- the number is in the breadcrumb: no extra strip in the sheet ------------------
     // (kept only while it can be typed, e.g. a manual invoice number)
-    .o_form_sheet > .oe_title:not(:has(input:not([type="checkbox"]))):not(#mt-ch) { display: none !important; }
+    .o_form_sheet > .oe_title:not(:has(input:not([type="checkbox"]), textarea)):not(#mt-ch) { display: none !important; }
 
     // ---- details card: the key fields side by side, 3-4 per line ------------------------
     // Odoo's two field columns are flattened into one grid; each field keeps its small

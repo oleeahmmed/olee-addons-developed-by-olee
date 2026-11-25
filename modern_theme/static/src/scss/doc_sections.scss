@@ -129,7 +129,24 @@ $ds-section: '.o_notebook .tab-pane .o_group.row > .o_inner_group:not(.oe_subtot
             min-width: 0;
             margin: 0 !important;
         }
-        > .mt-row .o_row { width: 100%; gap: 0.5rem; margin: 0 !important; }
+        > .mt-row .o_row { width: 100%; gap: 0.25rem 0.5rem; margin: 0 !important; flex-wrap: wrap; }
+        // whatever sits in a value cell (field, row of fields) fills the cell
+        > .mt-row > .o_cell:not(.o_wrap_label) > * { flex: 1 1 auto; min-width: 0; }
+        // a field next to a hint ("= $138 incl. taxes"): the field keeps its room, the hint wraps
+        > .mt-row .o_row > .o_field_widget { flex: 1 1 4.5rem; }
+        > .mt-row .o_field_many2many_tags .o_tag { flex-shrink: 0; max-width: none; }
+
+        // money: Odoo lays a "$ 120.00" overlay (span.o_input) over the real input; both get
+        // the same box so the symbol and the digits line up
+        > .mt-row .o_field_monetary > div { align-items: center !important; }
+        > .mt-row .o_field_monetary span.o_input {
+            top: 0;
+            height: 2rem !important;
+            align-items: center;
+            padding: 0 0.5rem !important;
+            border-color: transparent !important;
+            background: transparent !important;
+        }
         > .mt-row .o_row > span.text-muted { font-size: 0.75rem; white-space: nowrap; }
 
         > .mt-row .o_input,
