@@ -145,7 +145,7 @@ registry.category("modern_theme.menu_badges").add("crm_modern.menu_activities",
     (env) => env.services.orm.searchCount("mail.activity", [/* … */]));
 
 // An Odoo menu another app now shows: hidden from every other app while that app is visible
-registry.category("modern_theme.moved_menus").add("account.menu_finance_entries", "modern_accounting.menu_root");
+registry.category("modern_theme.moved_menus").add("some.addon_menu", "other_app.menu_root");
 
 // Records the Ctrl+K palette searches (name_search, read access checked first)
 registry.category("modern_theme.palette_models").add("crm.lead", { label: "Opportunity", icon: "fa-handshake-o" });

@@ -1,9 +1,9 @@
-// Modern Theme — modern_accounting: every style of the app lives here (moved out of
-// modern_accounting/static/src/scss so the app ships no stylesheet of its own).
+// Modern Theme — the accounting pages of Modern Invoicing: every style lives here
+// so the app ships no stylesheet of its own.
 
-// ---- from modern_accounting/static/src/scss/app.scss
-// Modern Accounting: pages, lists, dashboards and controls come from Modern Theme's shared
-// app kit (modern_theme/static/src/scss/kit/). This app only passes its prefix.
+// ---- accounting pages
+// Pages, lists, dashboards and controls come from Modern Theme's shared app kit
+// (modern_theme/static/src/scss/kit/). The app only passes its prefix.
 @include mt-app-tokens(ac);
 @include mt-app-pages(ac);
 @include mt-app-list(ac);

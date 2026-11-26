@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Accounting pages live inside Odoo's Invoicing app, in its own "Accounting" group
+        (account.menu_finance_entries), as one flat, short list:
+        Journal Entries, General Ledger, Trial Balance, P&L, Balance Sheet, Tax Report.
+        The other accounting pages stay one click away in the top bar ("More").
+        Every entry opens Odoo's own records, views and wizards, with Odoo's own groups:
+        an accountant sees what Odoo lets them see, nothing more.
+    -->
+    <menuitem id="menu_acct_entries" name="Journal Entries" parent="account.menu_finance_entries"
+              action="acct_action_entries" sequence="1" groups="account.group_account_readonly"/>
+    <menuitem id="menu_acct_general_ledger" name="General Ledger" parent="account.menu_finance_entries"
+              action="acct_action_general_ledger" sequence="2" groups="account.group_account_readonly"/>
+    <menuitem id="menu_acct_trial_balance" name="Trial Balance" parent="account.menu_finance_entries"
+              action="acct_action_trial_balance" sequence="3" groups="account.group_account_readonly"/>
+    <menuitem id="menu_acct_profit_loss" name="Profit &amp; Loss" parent="account.menu_finance_entries"
+              action="acct_action_profit_loss" sequence="10" groups="account.group_account_readonly"/>
+    <menuitem id="menu_acct_balance_sheet" name="Balance Sheet" parent="account.menu_finance_entries"
+              action="acct_action_balance_sheet" sequence="11" groups="account.group_account_readonly"/>
+    <menuitem id="menu_acct_tax_report" name="Tax Report" parent="account.menu_finance_entries"
+              action="acct_action_tax_report" sequence="12" groups="account.group_account_readonly"/>
+
+    <!-- Less used pages: top bar ("More") -->
+    <menuitem id="menu_acct_items" name="Journal Items" parent="account.menu_finance_entries"
+              action="acct_action_items" sequence="20" groups="account.group_account_readonly"/>
+    <menuitem id="menu_acct_payments" name="All Payments" parent="account.menu_finance_entries"
+              action="acct_action_payments" sequence="21" groups="account.group_account_readonly"/>
+    <menuitem id="menu_acct_journals" name="Journals Overview" parent="account.menu_finance_entries"
+              action="account.open_account_journal_dashboard_kanban" sequence="22"
+              groups="account.group_account_basic"/>
+    <menuitem id="menu_acct_analytic_items" name="Analytic Items" parent="account.menu_finance_entries"
+              action="analytic.account_analytic_line_action_entries" sequence="23"
+              groups="analytic.group_analytic_accounting"/>
+    <menuitem id="menu_acct_accounts" name="Chart of Accounts" parent="account.menu_finance_entries"
+              action="acct_action_accounts" sequence="24" groups="account.group_account_readonly"/>
+    <menuitem id="menu_acct_partner_ledger" name="Partner Ledger" parent="account.menu_finance_entries"
+              action="acct_action_partner_ledger" sequence="25" groups="account.group_account_readonly"/>
+    <menuitem id="menu_acct_cash_book" name="Cash &amp; Bank Book" parent="account.menu_finance_entries"
+              action="acct_action_cash_book" sequence="26" groups="account.group_account_readonly"/>
+    <menuitem id="menu_acct_invoice_analysis" name="Invoice Analysis" parent="account.menu_finance_entries"
+              action="account.action_account_invoice_report_all" sequence="30"
+              groups="account.group_account_readonly"/>
+    <menuitem id="menu_acct_analytic_report" name="Analytic Report" parent="account.menu_finance_entries"
+              action="account.action_analytic_reporting" sequence="31"
+              groups="analytic.group_analytic_accounting"/>
+    <menuitem id="menu_acct_audit_trail" name="Audit Trail" parent="account.menu_finance_entries"
+              action="account.action_account_audit_trail_report" sequence="32"
+              groups="account.group_account_readonly"/>
+</odoo>

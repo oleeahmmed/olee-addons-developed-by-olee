@@ -1,22 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!--
-        No app of its own: everything lives inside Odoo's Invoicing app (account.menu_finance).
-        The Dashboard comes first, so opening Invoicing from the home screen opens it.
-        Odoo's own Customers / Vendors menus are merged into these groups in the sidebar
-        (Products, customer and vendor lists stay one click away); Reporting, Configuration
-        and the accountant menus stay at the bottom. Same groups as Odoo's own menus.
+        One simple app: everything lives inside Odoo's Invoicing app (account.menu_finance).
+        Opening it opens Invoices. The sidebar keeps only the everyday pages:
+        Invoices, Bills, Payments (Received / Made), Contacts (Customers / Vendors),
+        Products (For Sale / For Purchase) and the Accounting group.
+        Credit Notes and Refunds stay one click away in the top bar ("More");
+        Odoo's own partner and product lists are re-opened from the menus below.
     -->
-    <menuitem id="menu_dashboard" name="Dashboard" parent="account.menu_finance" action="action_dashboard"
+    <menuitem id="menu_invoices" name="Invoices" parent="account.menu_finance" action="action_invoices"
               sequence="-110" groups="account.group_account_readonly,account.group_account_invoice"/>
-    <menuitem id="menu_customers" name="Customers" parent="account.menu_finance" sequence="-90"
-              groups="account.group_account_readonly,account.group_account_invoice"/>
-    <menuitem id="menu_invoices" name="Invoices" parent="menu_customers" action="action_invoices" sequence="1"/>
-    <menuitem id="menu_credit_notes" name="Credit Notes" parent="menu_customers" action="action_credit_notes" sequence="2"/>
-    <menuitem id="menu_payments_in" name="Payments Received" parent="menu_customers" action="action_payments_in" sequence="3"/>
-    <menuitem id="menu_vendors" name="Vendors" parent="account.menu_finance" sequence="-80"
-              groups="account.group_account_readonly,account.group_account_invoice"/>
-    <menuitem id="menu_bills" name="Bills" parent="menu_vendors" action="action_bills" sequence="1"/>
-    <menuitem id="menu_refunds" name="Refunds" parent="menu_vendors" action="action_refunds" sequence="2"/>
-    <menuitem id="menu_payments_out" name="Payments Made" parent="menu_vendors" action="action_payments_out" sequence="3"/>
+    <menuitem id="menu_bills" name="Bills" parent="account.menu_finance" action="action_bills"
+              sequence="-100" groups="account.group_account_readonly,account.group_account_invoice"/>
+    <menuitem id="menu_credit_notes" name="Credit Notes" parent="account.menu_finance" action="action_credit_notes"
+              sequence="-90" groups="account.group_account_readonly,account.group_account_invoice"/>
+    <menuitem id="menu_refunds" name="Refunds" parent="account.menu_finance" action="action_refunds"
+              sequence="-80" groups="account.group_account_readonly,account.group_account_invoice"/>
+
+    <menuitem id="menu_payments" name="Payments" parent="account.menu_finance" sequence="-70"
+              groups="account.group_account_readonly,account.group_account_invoice">
+        <menuitem id="menu_payments_in" name="Received" action="action_payments_in" sequence="1"/>
+        <menuitem id="menu_payments_out" name="Made" action="action_payments_out" sequence="2"/>
+    </menuitem>
+
+    <menuitem id="menu_contacts" name="Contacts" parent="account.menu_finance" sequence="-60"
+              groups="account.group_account_readonly,account.group_account_invoice">
+        <menuitem id="menu_contacts_customers" name="Customers" action="account.res_partner_action_customer" sequence="1"/>
+        <menuitem id="menu_contacts_vendors" name="Vendors" action="account.res_partner_action_supplier" sequence="2"/>
+    </menuitem>
+
+    <menuitem id="menu_products" name="Products" parent="account.menu_finance" sequence="-50"
+              groups="account.group_account_readonly,account.group_account_invoice">
+        <menuitem id="menu_products_sale" name="For Sale" action="account.product_product_action_sellable" sequence="1"/>
+        <menuitem id="menu_products_purchase" name="For Purchase" action="account.product_product_action_purchasable"
+                  sequence="2"/>
+    </menuitem>
 </odoo>

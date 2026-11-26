@@ -4,7 +4,7 @@ import { ListPage as KitListPage, loadViewIds as kitLoadViewIds, openFullForm } 
 
 export { openFullForm };
 
-const VIEW_IDS = { model: "account.move.line", method: "modern_accounting_view_ids" };
+const VIEW_IDS = { model: "account.move.line", method: "invoice_modern_acct_view_ids" };
 /** View ids of this app's pages (fetched once per page load). */
 export function loadViewIds(orm) {
     return kitLoadViewIds(orm, VIEW_IDS);
@@ -22,7 +22,7 @@ const ITEM_TYPES = ["list", "pivot", "graph"];
  */
 export class ListPage extends KitListPage {
     static cssPrefix = "ac";
-    static storagePrefix = "modern_accounting";
+    static storagePrefix = "invoice_modern.acct";
     static viewIds = VIEW_IDS;
     static resModel = "account.move.line";
     static types = ITEM_TYPES;
@@ -202,14 +202,14 @@ class TaxReportPage extends StatementPage {
 }
 
 const actions = registry.category("actions");
-actions.add("modern_accounting.entries", JournalEntriesPage);
-actions.add("modern_accounting.items", JournalItemsPage);
-actions.add("modern_accounting.payments", PaymentsPage);
-actions.add("modern_accounting.accounts", AccountsPage);
-actions.add("modern_accounting.general_ledger", GeneralLedgerPage);
-actions.add("modern_accounting.partner_ledger", PartnerLedgerPage);
-actions.add("modern_accounting.cash_book", CashBookPage);
-actions.add("modern_accounting.trial_balance", TrialBalancePage);
-actions.add("modern_accounting.profit_loss", ProfitLossPage);
-actions.add("modern_accounting.balance_sheet", BalanceSheetPage);
-actions.add("modern_accounting.tax_report", TaxReportPage);
+actions.add("invoice_modern.acct_entries", JournalEntriesPage);
+actions.add("invoice_modern.acct_items", JournalItemsPage);
+actions.add("invoice_modern.acct_payments", PaymentsPage);
+actions.add("invoice_modern.acct_accounts", AccountsPage);
+actions.add("invoice_modern.acct_general_ledger", GeneralLedgerPage);
+actions.add("invoice_modern.acct_partner_ledger", PartnerLedgerPage);
+actions.add("invoice_modern.acct_cash_book", CashBookPage);
+actions.add("invoice_modern.acct_trial_balance", TrialBalancePage);
+actions.add("invoice_modern.acct_profit_loss", ProfitLossPage);
+actions.add("invoice_modern.acct_balance_sheet", BalanceSheetPage);
+actions.add("invoice_modern.acct_tax_report", TaxReportPage);
