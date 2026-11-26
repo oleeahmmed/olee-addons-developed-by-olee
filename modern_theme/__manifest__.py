@@ -69,6 +69,7 @@ Modern Theme turns the Odoo 19 backend into a clean admin dashboard:
             "modern_theme/static/src/scss/partner_kanban.scss",
             "modern_theme/static/src/scss/product_notes.scss",
             "modern_theme/static/src/scss/form_global.scss",
+            "modern_theme/static/src/scss/chatter.scss",
             "modern_theme/static/src/scss/activity_dialog.scss",
             "modern_theme/static/src/scss/utilities.scss",
             "modern_theme/static/src/js/**/*",
