@@ -22,7 +22,7 @@ Modern Theme turns the Odoo 19 backend into a clean admin dashboard:
     "category": "Themes/Backend",
     "author": "Olee",
     "license": "LGPL-3",
-    "depends": ["web", "base_setup"],
+    "depends": ["web", "base_setup", "mail"],
     "data": [
         "views/webclient_templates.xml",
         "views/res_config_settings_views.xml",

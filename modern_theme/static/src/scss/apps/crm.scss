@@ -1027,6 +1027,14 @@
         }
         @media (max-width: 575.98px) { grid-template-columns: minmax(0, 1fr); }
     }
+    .cm-act-note {
+        width: 100%; min-height: 2.25rem; max-height: 10rem; padding: 0.4375rem 0.625rem;
+        border: 1px solid var(--cm-input); border-radius: var(--cm-radius-sm); background: var(--cm-card);
+        color: var(--cm-fg); font-family: inherit; font-size: 0.8125rem; line-height: 1.45;
+        resize: vertical; field-sizing: content;
+        &::placeholder { color: var(--cm-subtle-fg); }
+        &:focus { outline: none; border-color: var(--cm-primary); box-shadow: 0 0 0 3px var(--cm-ring); }
+    }
     @media (max-width: 767.98px) { .cm-hide-sm { display: none; } }
 
     // ---------- record picker (search-as-you-type) ----------

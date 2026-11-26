@@ -74,6 +74,8 @@
                         </t>
                     </select>
                 </div>
+                <textarea class="cm-act-note" rows="1" t-model="state.act.note" aria-label="Note"
+                          placeholder="Log a note with this activity (optional)…"/>
                 <div class="cm-quick-act-row cm-quick-act-row--foot">
                     <div class="cm-chips cm-chips--sm" role="radiogroup" aria-label="Due">
                         <t t-foreach="whenOptions" t-as="o" t-key="o.key">

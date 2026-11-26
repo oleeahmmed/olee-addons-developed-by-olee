@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Schedule activity: the panel opens inside the chatter header (inline, never as a
+         dialog). Logic in chatter_activity.js, styling in chatter.scss (.mt-act). -->
+    <t t-inherit="mail.Chatter" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o-mail-Chatter-top')]" position="inside">
+            <div t-if="state.mtAct and state.mtAct.open" class="mt-act" role="group" aria-label="Schedule activity"
+                 t-on-keydown="(ev) => ev.key === 'Escape' and this.mtCloseActivity()">
+                <div class="mt-act-types" role="radiogroup" aria-label="Activity type">
+                    <button t-foreach="state.mtAct.types" t-as="type" t-key="type.id" type="button" role="radio"
+                            t-att-aria-checked="state.mtAct.typeId === type.id ? 'true' : 'false'"
+                            t-att-class="{ 'mt-on': state.mtAct.typeId === type.id }"
+                            t-on-click="() => this.mtPickActType(type)">
+                        <i t-attf-class="fa {{ type.icon or 'fa-tasks' }}" aria-hidden="true"/>
+                        <span t-esc="type.name"/>
+                    </button>
+                </div>
+                <div class="mt-act-row">
+                    <input type="text" class="mt-act-input" t-ref="mtActInput" t-model="state.mtAct.summary" aria-label="Summary"
+                           t-att-placeholder="mtActType and mtActType.summary or 'Summary'"
+                           t-on-keydown="(ev) => ev.key === 'Enter' and this.mtScheduleActivity()"/>
+                    <select class="mt-act-select" t-on-change="mtPickActUser" aria-label="Assigned to">
+                        <option t-foreach="state.mtAct.users" t-as="user" t-key="user.id"
+                                t-att-value="user.id" t-att-selected="state.mtAct.userId === user.id" t-esc="user.name"/>
+                    </select>
+                </div>
+                <div class="mt-act-row mt-act-when" role="radiogroup" aria-label="Due date">
+                    <button t-foreach="mtActWhenOptions" t-as="option" t-key="option.key" type="button" role="radio"
+                            t-att-aria-checked="state.mtAct.when === option.key ? 'true' : 'false'"
+                            t-att-class="{ 'mt-on': state.mtAct.when === option.key }"
+                            t-on-click="() => this.mtPickActWhen(option.key)" t-esc="option.label"/>
+                    <input type="date" class="mt-act-date" aria-label="Pick a date"
+                           t-att-value="state.mtAct.date"
+                           t-att-class="{ 'mt-on': state.mtAct.when === 'date' }"
+                           t-on-change="mtPickActDate"/>
+                </div>
+                <textarea class="mt-act-note" rows="1" t-model="state.mtAct.note" aria-label="Note"
+                          placeholder="Log a note with this activity (optional)…"/>
+                <div class="mt-act-actions">
+                    <button type="button" class="mt-act-btn mt-act-more" t-on-click="mtOpenFullScheduler"
+                            title="Odoo scheduler: activity plans and details">
+                        <i class="fa fa-list-ol" aria-hidden="true"/>
+                    </button>
+                    <button type="button" class="mt-act-btn mt-act-cancel" t-on-click="() => this.state.mtAct.open = false">
+                        <span>Cancel</span>
+                    </button>
+                    <button type="button" class="mt-act-btn mt-act-submit"
+                            t-att-disabled="state.mtAct.busy or !state.mtAct.typeId"
+                            t-on-click="mtScheduleActivity">
+                        <i class="fa fa-calendar-check-o" aria-hidden="true"/>
+                        <span>Schedule</span>
+                    </button>
+                </div>
+            </div>
+        </xpath>
+    </t>
+
+</templates>
