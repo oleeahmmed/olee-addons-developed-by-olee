@@ -1,29 +1,11 @@
-// Modern Theme: login page (frontend bundle). Three styles: split / centered / minimal.
-// Dark palettes are emitted here too: the dark backend bundle is not loaded on /web/login.
-
-html[data-mt-scheme="dark"] {
-    @each $key, $preset in $mt-presets {
-        &[data-mt-theme="#{$key}"] { @include mt-preset-vars($key, dark); }
-    }
-}
-@media (prefers-color-scheme: dark) {
-    html[data-mt-scheme="auto"] {
-        @each $key, $preset in $mt-presets {
-            &[data-mt-theme="#{$key}"] { @include mt-preset-vars($key, dark); }
-        }
-    }
-}
+// Modern Theme: login page (frontend bundle). One shadcn/ui card on a soft grey page.
 
 body.o_mt_login {
-    --mt-login-bg: none;
     min-height: 100%;
     margin: 0;
     font-family: var(--mt-font-family);
     color: var(--mt-foreground);
-    background:
-        radial-gradient(60rem 40rem at 110% -10%, color-mix(in srgb, var(--mt-primary) 14%, transparent), transparent 60%),
-        radial-gradient(50rem 36rem at -10% 110%, color-mix(in srgb, var(--mt-brand-accent) 10%, transparent), transparent 60%),
-        var(--mt-content-bg);
+    background: var(--mt-muted);
     -webkit-font-smoothing: antialiased;
 
     #wrapwrap { min-height: 100vh; display: flex; flex-direction: column; background: transparent; }
@@ -38,15 +20,14 @@ body.o_mt_login {
     }
     .card.o_database_list {
         width: 100%;
-        max-width: 25rem !important;
+        max-width: 24rem !important;
         border: 1px solid var(--mt-border-base) !important;
         border-radius: var(--mt-radius-card);
         background: var(--mt-card) !important;
-        box-shadow: var(--mt-shadow-sm), 0 18px 40px -28px rgba(15, 23, 42, 0.35);
+        box-shadow: none;
         color: var(--mt-foreground);
-        animation: mt-pop-in 260ms var(--mt-ease);
         > .card-body {
-            padding: 1.5rem;
+            padding: 1.75rem;
             // Odoo paints the card body white: let the themed card show through.
             background: transparent !important;
             color: var(--mt-foreground);
@@ -56,23 +37,24 @@ body.o_mt_login {
             padding-bottom: 1rem !important;
             margin-bottom: 1.25rem !important;
             border-bottom: 0 !important;
-            img { max-height: 2.75rem !important; }
+            img { max-height: 2.5rem !important; }
         }
         .border-bottom, .border-top { border-color: var(--mt-border-base) !important; }
         // "Powered by" is removed: no dangling separator after "Manage Databases".
         .border-end { border-inline-end: 0 !important; padding-inline-end: 0 !important; margin-inline-end: 0 !important; }
-        img { max-height: 72px !important; }
+        img { max-height: 64px !important; }
         // CardFooter: separated, muted links.
         > .card-body > .text-center.small {
             margin-top: 1.5rem !important;
             padding-top: 1rem !important;
             color: var(--mt-muted-foreground) !important;
-            a { color: var(--mt-muted-foreground); text-decoration: none; &:hover { color: var(--mt-primary-text); text-decoration: underline; } }
+            a { color: var(--mt-muted-foreground); text-decoration: none; &:hover { color: var(--mt-foreground); text-decoration: underline; } }
         }
     }
     // CardHeader (title + description), inserted by login_form_modern.
     .o_mt_login_header {
         margin-bottom: 1.5rem;
+        text-align: center;
         .o_mt_login_title {
             margin: 0 0 0.375rem;
             font-size: 1.5rem;
@@ -94,7 +76,7 @@ body.o_mt_login {
         background: var(--mt-card);
         color: var(--mt-foreground);
         &::placeholder { color: var(--mt-placeholder); }
-        &:focus { border-color: var(--mt-primary); box-shadow: 0 0 0 3px var(--mt-ring); outline: 0; }
+        &:focus { border-color: var(--mt-ring-base); box-shadow: 0 0 0 3px var(--mt-focus-ring); outline: 0; }
     }
     .input-group .btn { border-color: var(--mt-input); color: var(--mt-muted-foreground); background: var(--mt-card); }
     // Password field: the eye toggle sits inside the control, shadcn style.
@@ -126,7 +108,7 @@ body.o_mt_login {
             border: 0;
             font-size: 0.8125rem;
             font-weight: 500;
-            color: var(--mt-primary-text);
+            color: var(--mt-foreground);
             text-decoration: none;
             &:hover { text-decoration: underline; text-underline-offset: 4px; }
         }
@@ -148,13 +130,11 @@ body.o_mt_login {
         border-radius: var(--mt-radius-btn);
         background: var(--mt-primary);
         color: var(--mt-primary-foreground);
-        font-weight: 600;
-        box-shadow: 0 6px 18px -8px var(--mt-primary);
-        transition: filter var(--mt-duration) var(--mt-ease), transform var(--mt-duration) var(--mt-ease);
-        &:hover, &:focus { background: var(--mt-primary); color: var(--mt-primary-foreground); filter: brightness(1.06); }
-        &:active { transform: translateY(1px); }
+        font-weight: 500;
+        transition: background var(--mt-duration) var(--mt-ease);
+        &:hover, &:focus { background: var(--mt-primary-hover); color: var(--mt-primary-foreground); }
     }
-    .btn-link { color: var(--mt-primary-text); }
+    .btn-link { color: var(--mt-foreground); }
     .btn-light, .btn-secondary, .btn-outline-secondary, .btn-outline-primary, .o_login_auth .btn {
         border: 1px solid var(--mt-input) !important;
         border-radius: var(--mt-radius-btn);
@@ -164,7 +144,7 @@ body.o_mt_login {
     }
     .input-group > .btn { border-start-start-radius: 0; border-end-start-radius: 0; }
     em, .text-black-50, .o_login_auth em { color: var(--mt-muted-foreground) !important; }
-    a { color: var(--mt-primary-text); }
+    a { color: var(--mt-foreground); text-decoration: underline; text-underline-offset: 4px; }
     .text-muted, small { color: var(--mt-muted-foreground) !important; }
     .alert { border-radius: var(--mt-radius-lg); }
     .alert-danger { background: var(--mt-destructive-soft); color: var(--mt-foreground); border-color: color-mix(in srgb, var(--mt-destructive) 30%, transparent); }
@@ -201,74 +181,4 @@ body.o_mt_login {
         background: var(--mt-card);
         color: var(--mt-foreground);
     }
-}
-
-// Split screen: brand panel on the left, form on the right.
-.o_mt_login_hero {
-    position: relative;
-    display: none;
-    flex: 0 0 46%;
-    max-width: 46rem;
-    overflow: hidden;
-    color: var(--mt-primary-foreground);
-    background:
-        linear-gradient(160deg, color-mix(in oklab, var(--mt-primary) 82%, transparent), color-mix(in oklab, var(--mt-primary) 92%, #000000)),
-        var(--mt-login-bg) center / cover no-repeat,
-        var(--mt-primary);
-    &::after {
-        content: "";
-        position: absolute;
-        inset: auto -20% -30% auto;
-        width: 30rem;
-        height: 30rem;
-        border-radius: 50%;
-        background: radial-gradient(circle, color-mix(in srgb, var(--mt-primary-foreground) 14%, transparent), transparent 70%);
-    }
-}
-.o_mt_login_hero_inner {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    gap: 0.75rem;
-    height: 100%;
-    padding: 3.5rem;
-    h1 { margin: 0; font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 700; letter-spacing: -0.03em; color: inherit; }
-    p { margin: 0; max-width: 28rem; font-size: 1.0625rem; opacity: 0.9; }
-}
-.o_mt_login_hero_logo {
-    position: absolute;
-    top: 3rem;
-    inset-inline-start: 3.5rem;
-    max-height: 3rem;
-    max-width: 12rem;
-    padding: 0.5rem 0.75rem;
-    border-radius: var(--mt-radius);
-    background: color-mix(in srgb, #ffffff 92%, transparent);
-}
-@media (min-width: 992px) {
-    .o_mt_login--split .o_mt_login_hero { display: block; }
-    // On the login card the hero already carries the branding: hide the logo mark.
-    .o_mt_login--split .card.o_database_list:has(.o_mt_login_header) > .card-body > .text-center:first-child { display: none; }
-}
-
-// Centered card over a picture
-.o_mt_login_bg {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background:
-        linear-gradient(color-mix(in srgb, var(--mt-content-bg) 55%, transparent), color-mix(in srgb, var(--mt-content-bg) 75%, transparent)),
-        var(--mt-login-bg) center / cover no-repeat;
-}
-.o_mt_login--centered .card.o_database_list {
-    backdrop-filter: blur(14px) saturate(1.3);
-    background: color-mix(in srgb, var(--mt-card) 88%, transparent) !important;
-}
-
-// Minimal: no card, just the form on the canvas
-body.o_mt_login--minimal {
-    background: var(--mt-card);
-    .card.o_database_list { border: 0 !important; box-shadow: none; background: transparent !important; }
 }

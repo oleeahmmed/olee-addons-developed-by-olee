@@ -4,25 +4,15 @@
 :root {
     @include mt-preset-vars(once, dark);
 }
-@each $key, $preset in $mt-presets {
-    html[data-mt-theme="#{$key}"] {
-        @include mt-preset-vars($key, dark);
-    }
-}
-html[data-mt-theme="custom"] {
-    // A lighter tone of the brand colour reads well on dark surfaces.
-    --mt-primary: color-mix(in oklab, var(--mt-custom-primary, #4f46e5) 72%, #ffffff);
-    --mt-primary-foreground: #0b0f17;
-    --mt-primary-text: color-mix(in oklab, var(--mt-custom-primary, #4f46e5) 55%, #ffffff);
-}
 
 html[data-mt-theme] {
     color-scheme: dark;
     --mt-field-bg: color-mix(in srgb, #ffffff 4.5%, var(--mt-card));   // shadcn dark:bg-input/30
     --mt-field-shadow: none;
-    --mt-ring: color-mix(in srgb, var(--mt-primary) 50%, transparent);
-    --mt-primary-soft: color-mix(in srgb, var(--mt-primary) 16%, var(--mt-card));
-    // shadcn dark: hover = primary/90 over the page (a shade deeper, no glow)
+    --mt-ring: var(--mt-ring-base);
+    --mt-focus-border: var(--mt-ring-base);
+    --mt-focus-ring: color-mix(in srgb, var(--mt-ring-base) 50%, transparent);
+    --mt-primary-soft: color-mix(in srgb, var(--mt-primary) 10%, var(--mt-card));
     --mt-primary-hover: color-mix(in srgb, var(--mt-primary) 90%, var(--mt-background));
     --mt-primary-active: color-mix(in srgb, var(--mt-primary) 80%, var(--mt-background));
     --mt-success-soft: color-mix(in srgb, var(--mt-success) 16%, var(--mt-card));
@@ -31,9 +21,9 @@ html[data-mt-theme] {
     --mt-info-soft: color-mix(in srgb, var(--mt-info) 16%, var(--mt-card));
     --mt-placeholder: color-mix(in srgb, var(--mt-muted-foreground) 80%, var(--mt-card));
     --mt-hover: color-mix(in srgb, var(--mt-foreground) 7%, transparent);
-    --mt-selected: color-mix(in srgb, var(--mt-primary) 16%, var(--mt-card));
+    --mt-selected: color-mix(in srgb, var(--mt-foreground) 10%, var(--mt-card));
 
-    // shadcn dark surfaces, the same for every preset: page #0a0a0a, card / popover #171717
+    // shadcn dark surfaces: page #0a0a0a with #171717 cards.
     --mt-content-bg: var(--mt-canvas-base);
     --mt-canvas: var(--mt-canvas-base);
     --mt-content-bg-accent: var(--mt-card);
@@ -53,64 +43,14 @@ html[data-mt-theme] {
     --mt-chrome-bg: var(--mt-card);
     --mt-topbar-bg: var(--mt-background);
     --mt-topbar-border: rgba(255, 255, 255, 0.1);
-    --mt-sidebar-bg: var(--mt-sidebar-base, var(--mt-card));
-    --mt-sidebar-fg: var(--mt-sidebar-fg-base, var(--mt-foreground));
-    --mt-sidebar-accent: var(--mt-sidebar-accent-base, var(--mt-hover));
-    --mt-sidebar-active-bg: color-mix(in srgb, var(--mt-primary) 15%, transparent);
+    --mt-sidebar-bg: var(--mt-sidebar-base);
+    --mt-sidebar-fg: var(--mt-sidebar-fg-base);
+    --mt-sidebar-accent: var(--mt-sidebar-accent-base);
+    --mt-sidebar-active-bg: var(--mt-sidebar-accent-base);
     --mt-sidebar-active-fg: #ffffff;
     --mt-sidebar-border: rgba(255, 255, 255, 0.1);
-}
-// Option blocks re-declared so they still win over the derived block above.
-html[data-mt-border="subtle"] { --mt-border: color-mix(in srgb, var(--mt-border-base) 80%, transparent); }
-html[data-mt-sidebar-bg="tinted"] {
-    --mt-sidebar-bg: color-mix(in srgb, var(--mt-primary) 7%, var(--mt-card));
-    --mt-sidebar-active-bg: color-mix(in srgb, var(--mt-primary) 20%, var(--mt-card));
-}
-html[data-mt-sidebar-bg="gradient"] {
-    // Dark mode: a deep, low-glare brand gradient with light text.
-    --mt-sidebar-bg: color-mix(in oklab, var(--mt-primary) 22%, var(--mt-card));
-    --mt-sidebar-bg-image: linear-gradient(165deg,
-        color-mix(in oklab, var(--mt-primary) 30%, var(--mt-card)) 0%,
-        color-mix(in oklab, var(--mt-primary) 14%, var(--mt-card)) 100%);
-    --mt-sidebar-fg: var(--mt-foreground);
-    --mt-sidebar-muted-fg: var(--mt-muted-foreground);
-    --mt-sidebar-accent: color-mix(in srgb, var(--mt-foreground) 8%, transparent);
-    --mt-sidebar-accent-fg: var(--mt-foreground);
-    --mt-sidebar-active-bg: color-mix(in srgb, var(--mt-primary) 28%, transparent);
-    --mt-sidebar-active-fg: var(--mt-foreground);
-    --mt-sidebar-indicator: var(--mt-primary);
-    --mt-sidebar-guide: color-mix(in srgb, var(--mt-foreground) 14%, transparent);
-}
-html[data-mt-sidebar-bg="glass"] {
-    --mt-sidebar-bg: color-mix(in srgb, var(--mt-card) 62%, transparent);
-}
-html[data-mt-topbar-style="blend"] { --mt-topbar-bg: var(--mt-content-bg); }
-html[data-mt-theme] {
+    --mt-card-shadow: none;
+    --mt-card-shadow-hover: 0 1px 2px rgba(0, 0, 0, 0.35);
+    --mt-shell-shadow: none;
     --or-overlay: var(--mt-overlay);
 }
-html[data-mt-theme="custom"] {
-    --mt-solid: var(--mt-primary);
-    --mt-solid-fg: var(--mt-primary-foreground);
-    --mt-solid-hover: var(--mt-primary-hover);
-}
-// Default preset, dark: shadcn neutral (#0a0a0a page, #171717 cards, white/10% hairlines).
-html[data-mt-theme="once"] {
-    --mt-content-bg: var(--mt-canvas-base);
-    --mt-canvas: var(--mt-canvas-base);
-    --mt-popover: var(--mt-card);
-    --mt-card-matte: #141414;
-    --mt-hover: color-mix(in srgb, var(--mt-foreground) 6%, transparent);
-    --mt-selected: var(--mt-muted);
-    --mt-primary-soft: color-mix(in srgb, var(--mt-primary) 14%, var(--mt-card));
-    --mt-sidebar-active-bg: var(--mt-sidebar-accent-base);   // shadcn --sidebar-accent #2c2c2c
-    --mt-sidebar-active-fg: #ffffff;
-    --mt-sidebar-indicator: var(--mt-primary);
-    --mt-ring: color-mix(in srgb, var(--mt-ring-base) 50%, transparent);
-    --mt-overlay: color-mix(in srgb, #000000 65%, transparent);
-    --mt-focus-border: var(--mt-ring-base);
-    --mt-focus-ring: color-mix(in srgb, var(--mt-ring-base) 50%, transparent);
-    --mt-field-bg: color-mix(in srgb, #ffffff 4.5%, var(--mt-card));   // shadcn dark:bg-input/30
-    --mt-field-shadow: none;
-}
-
-// Palette patch: force a fresh dark bundle build (2026-11-23).

@@ -14,17 +14,8 @@ html[data-mt-sidebar-style] {
     --mt-sb-offset: 0px;
 }
 @media (min-width: $mt-desktop) {
-    html[data-mt-sidebar-style="classic"],
-    html[data-mt-sidebar-style="tree"] { --mt-sb-offset: var(--mt-sb-w); }
-    html[data-mt-sidebar-style="classic"][data-mt-sidebar-collapsed="1"],
-    html[data-mt-sidebar-style="tree"][data-mt-sidebar-collapsed="1"] { --mt-sb-offset: var(--mt-sb-collapsed-w); }
-
-    html[data-mt-sidebar-style="rail"] { --mt-sb-offset: calc(var(--mt-sb-rail-w) + var(--mt-sb-panel-w)); }
-    html[data-mt-sidebar-style="rail"][data-mt-sb-pinned="0"],
-    html[data-mt-sidebar-style="rail"][data-mt-sb-panel="0"] { --mt-sb-offset: var(--mt-sb-rail-w); }
-
-    html[data-mt-sidebar-style="floating"] { --mt-sb-offset: calc(var(--mt-sb-w) + var(--mt-sb-float-gap)); }
-    html[data-mt-sidebar-style="floating"][data-mt-sidebar-collapsed="1"] { --mt-sb-offset: calc(var(--mt-sb-collapsed-w) + var(--mt-sb-float-gap)); }
+    html[data-mt-sidebar-style="classic"] { --mt-sb-offset: var(--mt-sb-w); }
+    html[data-mt-sidebar-style="classic"][data-mt-sidebar-collapsed="1"] { --mt-sb-offset: var(--mt-sb-collapsed-w); }
 
     #{$mt}[data-mt-sidebar-style] .o_web_client {
         padding-inline-start: var(--mt-sb-offset);
@@ -86,17 +77,6 @@ html.mt-fullscreen { --mt-sb-offset: 0px !important; }
         box-shadow: 0 0 0 2px var(--mt-topbar-bg);
     }
 }
-html[data-mt-topbar-style="floating"] .o_navbar {
-    padding: var(--mt-shell-gap) var(--mt-shell-gap) 0;
-    background: var(--mt-content-bg);
-    .o_main_navbar {
-        border: 1px solid var(--mt-border);
-        border-radius: var(--mt-radius-card);
-        box-shadow: var(--mt-card-shadow);
-    }
-}
-html[data-mt-topbar-style="blend"] .o_main_navbar { border-bottom-color: transparent; }
-
 // The sidebar replaces Odoo's app switcher, app name and section menus.
 html[data-mt-sidebar-style] .o_main_navbar {
     .o_navbar_apps_menu,
@@ -148,7 +128,7 @@ html[data-mt-sidebar-style] .o_main_navbar {
     padding: 0 0.5rem 0 0.75rem;
     border: 1px solid var(--mt-border-base);
     border-radius: var(--mt-radius-control);
-    background: var(--mt-content-bg);
+    background: var(--mt-muted);
     color: var(--mt-muted-foreground);
     font-size: 0.8125rem;
     transition: border-color var(--mt-duration) var(--mt-ease), background var(--mt-duration) var(--mt-ease);
@@ -232,16 +212,12 @@ html[data-mt-sidebar-style] .o_main_navbar {
         &.is-active { background: var(--mt-primary-soft); color: var(--mt-primary-text); .fa { color: inherit; } }
     }
 }
-// The sidebar already shows the app name in the classic/floating styles.
+// The sidebar already shows the app name in the classic style.
 @media (min-width: $mt-desktop) {
-    html[data-mt-sidebar-style="classic"]:not([data-mt-sidebar-collapsed="1"]) .mt-topbar-app,
-    html[data-mt-sidebar-style="tree"]:not([data-mt-sidebar-collapsed="1"]) .mt-topbar-app,
-    html[data-mt-sidebar-style="rail"][data-mt-sb-panel="1"] .mt-topbar-app {
+    html[data-mt-sidebar-style="classic"]:not([data-mt-sidebar-collapsed="1"]) .mt-topbar-app {
         display: none;
     }
-    html[data-mt-sidebar-style="classic"]:not([data-mt-sidebar-collapsed="1"]) .mt-topbar-search,
-    html[data-mt-sidebar-style="tree"]:not([data-mt-sidebar-collapsed="1"]) .mt-topbar-search,
-    html[data-mt-sidebar-style="rail"][data-mt-sb-panel="1"] .mt-topbar-search {
+    html[data-mt-sidebar-style="classic"]:not([data-mt-sidebar-collapsed="1"]) .mt-topbar-search {
         margin-inline-start: 0;
     }
 }
@@ -352,18 +328,10 @@ html[data-mt-sidebar-style] .o_main_navbar {
             box-shadow: var(--mt-shell-shadow);
             overflow: hidden;
         }
-        // Views whose own background is the canvas keep it inside the card.
+        // Views keep the card's white surface inside the frame.
         > .o_action > .o_content,
-        > .o_action .o_form_view_container { background: var(--mt-content-bg); }
+        > .o_action .o_form_view_container { background: var(--mt-card); }
         > .o_action > .o_control_panel { border-radius: var(--mt-shell-radius) var(--mt-shell-radius) 0 0; }
-    }
-    html[data-mt-content-frame="card"][data-mt-topbar-style="floating"] .o_web_client > .o_action_manager {
-        padding-top: calc(var(--mt-shell-gap) * 0.75);
-    }
-    html[data-mt-content-width="boxed"] .o_web_client > .o_action_manager > .o_action {
-        width: 100%;
-        max-width: 90rem;
-        margin-inline: auto;
     }
 }
 // Fullscreen actions (kiosks, POS…) keep Odoo's own full-bleed layout.
@@ -483,7 +451,6 @@ html.mt-scheme-switching * { transition: none !important; }
         background-image: var(--mt-sidebar-bg-image);
         pointer-events: none;
     }
-    html[data-mt-sidebar-style="floating"] body::before { background: var(--mt-content-bg); }
     // The web client paints only the content area, so the placeholder shows through.
     html[data-mt-sidebar-style] .o_web_client { background-clip: content-box; }
     html.mt-fullscreen body::before { display: none; }

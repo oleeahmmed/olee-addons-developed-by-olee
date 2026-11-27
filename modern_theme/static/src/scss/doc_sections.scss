@@ -16,6 +16,8 @@
 // wrapper element is needed and every field widget keeps working.
 
 $ds-form: 'html[data-mt-theme] .o_web_client > .o_action_manager > .o_form_view.mt-compact-head:not(.o_base_settings):not(.o_base_settings_view)';
+// the hairline of the tinted frames, a touch softer than the border tokens
+$ds-line: unquote("color-mix(in srgb, var(--mt-border) 80%, transparent)");
 // :not(#mt-ds) adds an id's weight: the theme's generic field rules (long :not() chains)
 // must not win inside these cards.
 // Every field group of a tab (titled or not); not the ones holding a table or rich text.
@@ -134,6 +136,8 @@ $ds-section: '.o_notebook .tab-pane .o_group.row > .o_inner_group:not(.oe_subtot
         > .mt-row > .o_cell:not(.o_wrap_label) > * { flex: 1 1 auto; min-width: 0; }
         // a field next to a hint ("= $138 incl. taxes"): the field keeps its room, the hint wraps
         > .mt-row .o_row > .o_field_widget { flex: 1 1 4.5rem; }
+        // a switch next to its own label: both on one line, the switch at its own size
+        > .mt-row .o_row > .o_field_boolean { flex: 0 0 auto; width: auto !important; }
         > .mt-row .o_field_many2many_tags .o_tag { flex-shrink: 0; max-width: none; }
 
         // money: Odoo lays a "$ 120.00" overlay (span.o_input) over the real input; the
@@ -156,9 +160,9 @@ $ds-section: '.o_notebook .tab-pane .o_group.row > .o_inner_group:not(.oe_subtot
             height: 2rem !important;
             min-height: 2rem !important;
             padding: 0 0.5rem !important;
-            border: 1px solid transparent !important;
+            border: 1px solid var(--mt-input) !important;
             border-radius: 0.5rem !important;
-            background: transparent !important;
+            background: var(--mt-card) !important;
             box-shadow: none !important;
             font-size: 0.875rem !important;
             color: var(--mt-foreground) !important;
@@ -168,13 +172,13 @@ $ds-section: '.o_notebook .tab-pane .o_group.row > .o_inner_group:not(.oe_subtot
         }
         > .mt-row .o_field_widget:hover .o_input,
         > .mt-row .o_input:hover {
-            background: var(--mt-muted) !important;
+            border-color: color-mix(in srgb, var(--mt-foreground) 25%, var(--mt-input)) !important;
         }
         > .mt-row .o_input:focus,
         > .mt-row .o_field_widget:focus-within .o_input {
-            border-color: var(--mt-ring, var(--mt-border)) !important;
+            border-color: var(--mt-foreground) !important;
             background: var(--mt-card) !important;
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-ring, var(--mt-primary)) 18%, transparent) !important;
+            box-shadow: 0 0 0 3px var(--mt-ring) !important;
         }
         // money already has its own frame (form.scss boxes the widget); one box only:
         // the frame takes the hover / focus state and the inputs inside never draw one
@@ -182,17 +186,17 @@ $ds-section: '.o_notebook .tab-pane .o_group.row > .o_inner_group:not(.oe_subtot
             min-width: 0 !important;
             min-height: 2rem !important;
             padding: 0 !important;
-            border: 1px solid transparent !important;
+            border: 1px solid var(--mt-input) !important;
             border-radius: 0.5rem !important;
-            background: transparent !important;
+            background: var(--mt-card) !important;
             box-shadow: none !important;
             transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
 
-            &:hover { background: var(--mt-muted) !important; }
+            &:hover { border-color: color-mix(in srgb, var(--mt-foreground) 25%, var(--mt-input)) !important; }
             &:focus-within {
-                border-color: var(--mt-ring, var(--mt-border)) !important;
+                border-color: var(--mt-foreground) !important;
                 background: var(--mt-card) !important;
-                box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-ring, var(--mt-primary)) 18%, transparent) !important;
+                box-shadow: 0 0 0 3px var(--mt-ring) !important;
             }
         }
         // must outweigh `> .mt-row .o_field_widget:focus-within .o_input` above (same
@@ -224,16 +228,16 @@ $ds-section: '.o_notebook .tab-pane .o_group.row > .o_inner_group:not(.oe_subtot
         > .mt-row .o_field_many2many_tags .o_field_tags {
             min-height: 2rem !important;
             padding: 0.125rem 0.5rem !important;
-            border: 1px solid transparent !important;
+            border: 1px solid var(--mt-input) !important;
             border-radius: 0.5rem !important;
-            background: transparent !important;
+            background: var(--mt-card) !important;
             transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
 
-            &:hover { background: var(--mt-muted) !important; }
+            &:hover { border-color: color-mix(in srgb, var(--mt-foreground) 25%, var(--mt-input)) !important; }
             &:focus-within {
-                border-color: var(--mt-ring, var(--mt-border)) !important;
+                border-color: var(--mt-foreground) !important;
                 background: var(--mt-card) !important;
-                box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-ring, var(--mt-primary)) 18%, transparent) !important;
+                box-shadow: 0 0 0 3px var(--mt-ring) !important;
             }
             .o_input {
                 border-color: transparent !important;
@@ -265,6 +269,194 @@ $ds-section: '.o_notebook .tab-pane .o_group.row > .o_inner_group:not(.oe_subtot
             grid-template-columns: minmax(0, 1fr);
             > .mt-row > .o_wrap_label { min-height: 0; padding-top: 0.5rem !important; }
             > .mt-row + .mt-row > .o_cell:not(.o_wrap_label) { box-shadow: none; }
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Line tables, totals and terms: the same card language as the sections above
+// (tinted frame holding a white card), so the whole tab reads as stacked cards.
+// ---------------------------------------------------------------------------
+#{$ds-form} {
+    // ---- terms + totals: two cards on one row, tops aligned -------------------------
+    .o_notebook .tab-pane > .o_group.row:has(> .o_inner_group.oe_subtotal_footer) {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) minmax(17rem, auto);
+        column-gap: 0.75rem;
+        align-items: start !important;
+        margin: 0 !important;
+        padding: 0 !important;
+
+        > .o_inner_group {
+            width: auto !important;
+            max-width: none !important;
+            min-width: 0;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        > .o_inner_group.oe_subtotal_footer {
+            grid-column: 2;
+            justify-self: end;
+            margin: 0 !important;
+        }
+        @media (max-width: 767.98px) {
+            grid-template-columns: minmax(0, 1fr);
+            > .o_inner_group.oe_subtotal_footer { grid-column: auto; justify-self: stretch; }
+        }
+    }
+
+    // ---- order lines: tinted frame, white table card --------------------------------
+    // fill the tab's content box, so the frame's edges line up with the section cards
+    .o_notebook .tab-pane > .o_field_widget > .o_field_x2many_list {
+        margin: 0 !important;
+        border-radius: 0.875rem !important;
+    }
+    .o_notebook .tab-pane > .o_field_widget > .o_field_x2many_list:not(#mt-ds) {
+        padding: 0.25rem !important;
+        border: 1px solid #{$ds-line} !important;
+        background: var(--mt-muted) !important;
+    }
+    .o_notebook .o_field_x2many_list .o_x2m_control_panel:empty {
+        display: none !important;
+        margin: 0 !important;
+    }
+    .o_notebook .tab-pane > .o_field_widget > .o_field_x2many_list .o_list_renderer:not(#mt-ds) {
+        border: 0 !important;
+        border-radius: 0.625rem !important;
+        background: var(--mt-card) !important;
+    }
+    // the header sits on the white card: muted text, one hairline
+    .o_notebook .tab-pane > .o_field_widget > .o_field_x2many_list .o_list_table:not(#mt-ds) {
+        background: transparent !important;
+        > thead th {
+            background: transparent !important;
+            border-bottom: 1px solid #{$ds-line} !important;
+            border-top: 0 !important;
+            padding-top: 0.625rem !important;
+            padding-bottom: 0.625rem !important;
+        }
+    }
+
+    // ---- totals: tinted frame, white summary card -----------------------------------
+    .oe_subtotal_footer:not(#mt-ds) {
+        margin: 0 0 0 auto !important;
+        padding: 0.25rem !important;
+        border: 1px solid #{$ds-line} !important;
+        border-radius: 0.875rem !important;
+        background: var(--mt-muted) !important;
+        font-variant-numeric: tabular-nums;
+
+        .o_field_widget { margin: 0 !important; }
+
+        // the white summary card exists only when the footer holds the totals table
+        // (POS order forms use a plain group of fields: the frame alone is enough)
+        &:has(.o_field_account-tax-totals-field) {
+            > .mt-row { margin: 0 !important; }
+            .o_cell { margin: 0 !important; padding: 0 !important; }
+
+        table.float-end,
+        .o_field_account-tax-totals-field > table {
+            display: table !important;
+            width: 100% !important;
+            min-width: 16rem;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: 0 !important;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            border-radius: 0.625rem !important;
+            background: var(--mt-card) !important;
+            box-shadow: none !important;
+
+            > tbody > tr {
+                > td {
+                    padding: 0.4375rem 0.875rem !important;
+                    border: 0 !important;
+                    background: transparent !important;
+                    vertical-align: middle;
+                }
+                + tr > td { box-shadow: inset 0 1px 0 #{$ds-line}; }
+                > td.o_td_label { padding-right: 2rem !important; }
+                > td.o_list_monetary,
+                > td.o_tax_group { text-align: right; white-space: nowrap; }
+
+                .o_form_label {
+                    margin: 0 !important;
+                    font-size: 0.8125rem !important;
+                    font-weight: 500 !important;
+                    line-height: 1.25rem;
+                    color: var(--mt-muted-foreground) !important;
+                }
+                > td:not(.o_td_label) {
+                    font-size: 0.875rem;
+                    font-weight: 500 !important;
+                    color: var(--mt-foreground);
+                }
+            }
+            // the card's rounded corners live on its first and last row
+            > tbody > tr:first-child > td:first-child { border-top-left-radius: 0.625rem; }
+            > tbody > tr:first-child > td:last-child { border-top-right-radius: 0.625rem; }
+            > tbody > tr:last-child > td:first-child { border-bottom-left-radius: 0.625rem; }
+            > tbody > tr:last-child > td:last-child { border-bottom-right-radius: 0.625rem; }
+
+            // the Total row: dark label, large amount, one stronger hairline above
+            > tbody > tr:last-child > td {
+                padding-top: 0.625rem !important;
+                padding-bottom: 0.625rem !important;
+                box-shadow: inset 0 1px 0 var(--mt-border);
+            }
+            > tbody > tr:last-child .o_form_label {
+                color: var(--mt-foreground) !important;
+                font-weight: 600 !important;
+            }
+            > tbody > tr:last-child [name="amount_total"],
+            > tbody > tr:last-child .oe_subtotal_footer_separator {
+                font-size: 1.25rem !important;
+                font-weight: 700 !important;
+                letter-spacing: -0.01em;
+            }
+        }
+
+        // rows printed after the totals table (invoice "Amount Due", payments): they
+        // continue the white card, one hairline above, rounded bottom corners
+        > .mt-row:not(:has(.o_field_account-tax-totals-field)) {
+            display: flex !important;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin: 0 !important;
+            padding: 0.5rem 0.875rem !important;
+            border-radius: 0 0 0.625rem 0.625rem !important;
+            background: var(--mt-card) !important;
+            box-shadow: inset 0 1px 0 #{$ds-line} !important;
+
+            .o_cell {
+                width: auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .o_form_label {
+                margin: 0 !important;
+                font-size: 0.8125rem !important;
+                font-weight: 600 !important;
+                color: var(--mt-foreground) !important;
+            }
+            .o_field_monetary,
+            .o_field_widget {
+                margin: 0 !important;
+                font-size: 1.25rem !important;
+                font-weight: 700 !important;
+                letter-spacing: -0.01em;
+                color: var(--mt-foreground);
+            }
+        }
+        // the table's bottom corners are square when a row follows it
+        > .mt-row:has(.o_field_account-tax-totals-field):not(:last-child) {
+            table.float-end,
+            .o_field_account-tax-totals-field > table { border-radius: 0.625rem 0.625rem 0 0 !important; }
+            > .o_cell > .o_field_widget > table > tbody > tr:last-child > td:first-child { border-bottom-left-radius: 0 !important; }
+            > .o_cell > .o_field_widget > table > tbody > tr:last-child > td:last-child { border-bottom-right-radius: 0 !important; }
+        }
         }
     }
 }

@@ -23,13 +23,13 @@ $st-frame: 'color-mix(in srgb, var(--mt-muted) 40%, var(--mt-background))';
     --settings__tab-bg--active: var(--mt-muted);
     --settings__tab-color: var(--mt-foreground);
     --settings__title-bg: transparent;
-    background: var(--mt-background);
+    background: var(--mt-content-bg);
 }
 
 #{$st} .o_setting_container {
     gap: 1.5rem;
     padding: 1.5rem;
-    background: var(--mt-background);
+    background: var(--mt-content-bg);
 
     // ------------------------------------------------------------------
     // Left: the app list as a nav card
@@ -97,21 +97,22 @@ $st-frame: 'color-mix(in srgb, var(--mt-muted) 40%, var(--mt-background))';
         > .app_settings_block > div:has(> .o_settings_container),
         > .app_settings_block > div:has(> h2) {
             margin-bottom: 1.25rem;
-            border-radius: 0.875rem;
-            background: #{$st-frame};
-            box-shadow: 0 0 0 1px #{$st-ring};
+            border-radius: 0.75rem;
+            background: var(--mt-card);
+            box-shadow: 0 0 0 1px #{$st-ring}, 0 1px 0 0 rgba(0, 0, 0, 0.03);
             overflow: hidden;
         }
         > .app_settings_block h2 {
             margin: 0 !important;
-            padding: 0.875rem 1rem 0.75rem;
+            padding: 1rem 1.25rem;
             border: 0;
+            border-bottom: 1px solid var(--mt-border-base);
             background: transparent;
             color: var(--mt-foreground);
-            font-size: 0.875rem;
+            font-size: 0.9375rem;
             font-weight: 600;
-            line-height: 1.25rem;
-            letter-spacing: 0;
+            line-height: 1.35;
+            letter-spacing: -0.01em;
         }
         > .app_settings_block h3 {
             padding: 0.5rem 1rem;
@@ -145,9 +146,9 @@ $st-frame: 'color-mix(in srgb, var(--mt-muted) 40%, var(--mt-background))';
         margin: 0 !important;
         padding: 0 !important;
         border: 0 !important;
-        border-radius: 0.625rem;
-        background: var(--mt-card);
-        box-shadow: 0 0 0 1px #{$st-ring-soft}, 0 1px 0 0 rgba(0, 0, 0, 0.05);
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
         overflow: hidden;
     }
 

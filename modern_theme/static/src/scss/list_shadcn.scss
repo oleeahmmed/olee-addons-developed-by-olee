@@ -1,16 +1,14 @@
-// Modern Theme: list tables and the "+ New" button of the modern app addons
-// (CRM, Sales, Inventory, Purchase, Manufacturing, Contacts, Invoicing, Accounting),
-// copied from the shadcn/ui table (shadcnuikit.com "Products" page).
+// Modern Theme: every Odoo list view, copied from the shadcn/ui table
+// (shadcnuikit.com "Products" page).
 //
 // Only the look changes: these are still Odoo's own list views, so record selection
 // (and its action buttons), sorting, grouping, search filters, inline edit, the pager
-// and the view switcher all keep working. Scoped to html.mt-app-modern (set while a
-// modern app is open), loaded last so it wins over the older per-app list rules.
+// and the view switcher all keep working. Loaded last so it wins over the older
+// per-app list rules.
 
 // :not(#mt-lt) adds id-level weight, so these rules beat the per-app list rules
 // (some use !important with long class chains) without more !important here.
-// Modern apps, plus the Settings app's own lists (Users, Companies, Languages…)
-$lt: 'html:is(.mt-app-modern, [data-mt-app="base"])[data-mt-theme]:not(#mt-lt)';
+$lt: 'html[data-mt-theme]:not(#mt-lt)';
 
 // Lucide "plus", painted with the text colour
 $lt-plus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3Cpath d='M12 5v14'/%3E%3C/svg%3E");
@@ -34,7 +32,7 @@ $lt-check-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg
     --lt-primary-hover: var(--mt-primary-hover);
     --lt-check: #{$lt-check};
 }
-html:is(.mt-app-modern, [data-mt-app="base"])[data-mt-theme][data-mt-scheme="dark"]:not(#mt-lt) {
+html[data-mt-theme][data-mt-scheme="dark"]:not(#mt-lt) {
     --lt-check: #{$lt-check-dark};
 }
 
@@ -185,11 +183,6 @@ html:is(.mt-app-modern, [data-mt-app="base"])[data-mt-theme][data-mt-scheme="dar
         line-height: 1rem;
     }
 }
-// Bordered list option: keep its column lines in the new colour
-html:is(.mt-app-modern, [data-mt-app="base"])[data-mt-theme][data-mt-list-style="bordered"]:not(#mt-lt) .o_list_renderer .o_list_table {
-    > thead > tr > th:not(:last-child),
-    > tbody > tr > td:not(:last-child) { border-inline-end: 1px solid var(--lt-border) !important; }
-}
 // Empty list: the card keeps room for Odoo's "no records" helper (it is drawn over
 // the renderer, absolutely), instead of shrinking to the header row and clipping it.
 #{$lt} .o_action_manager .o_list_view:not(.o_field_x2many_list) .o_list_renderer:has(> .o_view_nocontent) {
@@ -252,11 +245,5 @@ html:is(.mt-app-modern, [data-mt-app="base"])[data-mt-theme][data-mt-list-style=
 }
 
 // ---------------------------------------------------------------------------
-// "+ New" lives in the sidebar footer now, above the user card. The control
-// panel keeps its button in the DOM (the sidebar clicks it, so ACL, defaults
-// and view type stay Odoo's) but never shows it.
+// "+ New" sits on the page itself, left of the list/kanban view switch.
 // ---------------------------------------------------------------------------
-html:is(.mt-app-modern, [data-mt-app="base"])[data-mt-theme]:not(#mt-lt) .o_control_panel_main_buttons :is(.o_list_button_add, .o-kanban-button-new, .o_form_button_create),
-html[data-mt-theme]:not(#mt-lt) .o_control_panel .o_control_panel_main_buttons :is(.o_list_button_add, .o-kanban-button-new, .o_form_button_create) {
-    display: none !important;
-}

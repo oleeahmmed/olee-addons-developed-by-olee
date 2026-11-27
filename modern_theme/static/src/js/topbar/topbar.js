@@ -3,15 +3,11 @@ import { browser } from "@web/core/browser/browser";
 import { routerBus } from "@web/core/browser/router";
 import { Dropdown } from "@web/core/dropdown/dropdown";
 import { DropdownItem } from "@web/core/dropdown/dropdown_item";
-import { _t } from "@web/core/l10n/translation";
 import { registry } from "@web/core/registry";
 import { useBus, useService } from "@web/core/utils/hooks";
 import { NavBar } from "@web/webclient/navbar/navbar";
 
 import { openCommandPalette } from "../palette/command_palette";
-import { openAppearanceDialog } from "../settings/appearance_dialog";
-import { PRESET_LABELS } from "../settings/options";
-import { PRESET_SWATCHES } from "../theme/theme_service";
 import {
     appIcon,
     buildAppTree,
@@ -35,7 +31,6 @@ export class MtTopbarStart extends Component {
         this.menu = useService("menu");
         this.ui = useState(useService("ui"));
         this.themeService = useService("mt_theme");
-        this.theme = useState(this.themeService.state);
         this.state = useState({ rev: 0 });
         const refresh = () => this.state.rev++;
         useBus(this.env.bus, "MENUS:APP-CHANGED", refresh);
@@ -124,7 +119,7 @@ export class MtTopbarStart extends Component {
     }
     /** Classic (shadcn) style: the collapse button sits in the top bar, like shadcn's SidebarTrigger. */
     get showCollapse() {
-        return !this.ui.isSmall && (this.theme.values.sidebar_style || "classic") === "classic";
+        return !this.ui.isSmall;
     }
     toggleCollapse() {
         const collapsed = !this.themeService.isCollapsed();
@@ -139,37 +134,22 @@ export class MtTopbarStart extends Component {
 NavBar.components = { ...NavBar.components, MtTopbarStart };
 
 /**
- * Systray: quick appearance switcher (mode, brand colour, sidebar style).
- * Everything is a personal choice; administrators set the company defaults in Settings.
+ * Systray: the light/dark switch. The look itself is fixed (shadcn/ui);
+ * the choice is remembered per browser in the color_scheme cookie.
  */
 export class MtThemeSwitcher extends Component {
     static template = "modern_theme.ThemeSwitcher";
-    static components = { Dropdown };
     static props = {};
 
     setup() {
         this.theme = useService("mt_theme");
         this.state = useState(this.theme.state);
-        this.presets = PRESET_LABELS;
-        this.swatches = PRESET_SWATCHES;
-        this.styles = [
-            ["classic", _t("Classic")],
-            ["tree", _t("Tree")],
-            ["rail", _t("Rail")],
-            ["floating", _t("Floating")],
-        ];
     }
     get isDark() {
         return this.state.scheme === "dark";
     }
-    set(key, value) {
-        return this.theme.setUser({ [key]: value });
-    }
     toggleDark() {
-        return this.set("color_mode", this.isDark ? "light" : "dark");
-    }
-    openMore() {
-        openAppearanceDialog(this.env);
+        return this.theme.toggleScheme();
     }
 }
 

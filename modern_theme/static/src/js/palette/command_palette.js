@@ -8,7 +8,6 @@ import { fuzzyLookup } from "@web/core/utils/search";
 import { debounce } from "@web/core/utils/timing";
 import { user } from "@web/core/user";
 
-import { openAppearanceDialog } from "../settings/appearance_dialog";
 import { appIcon, buildAppTree, flattenLeaves, paletteModels, registryGet, sidebarApps } from "../sidebar/menu_model";
 
 const RECENT_KEY = "modern_theme.sidebar.recent";
@@ -69,24 +68,20 @@ export class MtCommandPalette extends Component {
     }
 
     get themeActions() {
-        const values = this.theme.state.values;
-        const actions = [
-            { key: "mode-light", label: _t("Light mode"), icon: "fa-sun-o", run: () => this.theme.setUser({ color_mode: "light" }), on: values.color_mode === "light" },
-            { key: "mode-dark", label: _t("Dark mode"), icon: "fa-moon-o", run: () => this.theme.setUser({ color_mode: "dark" }), on: values.color_mode === "dark" },
-            { key: "mode-auto", label: _t("Follow system theme"), icon: "fa-desktop", run: () => this.theme.setUser({ color_mode: "auto" }), on: values.color_mode === "auto" },
-            { key: "sb-classic", label: _t("Sidebar: classic tree"), icon: "fa-list", run: () => this.theme.setUser({ sidebar_style: "classic" }), on: values.sidebar_style === "classic" },
-            { key: "sb-rail", label: _t("Sidebar: icon rail + panel"), icon: "fa-columns", run: () => this.theme.setUser({ sidebar_style: "rail" }), on: values.sidebar_style === "rail" },
-            { key: "sb-floating", label: _t("Sidebar: floating glass"), icon: "fa-clone", run: () => this.theme.setUser({ sidebar_style: "floating" }), on: values.sidebar_style === "floating" },
-            { key: "dens-compact", label: _t("Density: compact"), icon: "fa-compress", run: () => this.theme.setUser({ density: "compact" }), on: values.density === "compact" },
-            { key: "dens-comfortable", label: _t("Density: comfortable"), icon: "fa-arrows-v", run: () => this.theme.setUser({ density: "comfortable" }), on: values.density === "comfortable" },
-            { key: "dens-spacious", label: _t("Density: spacious"), icon: "fa-expand", run: () => this.theme.setUser({ density: "spacious" }), on: values.density === "spacious" },
-            { key: "my-appearance", label: _t("My appearance…"), icon: "fa-paint-brush", run: () => this.openMyAppearance() },
-        ];
-        if (this.theme.state.canAdmin) {
-            actions.push({ key: "theme-settings", label: _t("Theme settings (company)"), icon: "fa-sliders", run: () => this.openThemeSettings() });
-        }
-        actions.push({ key: "odoo-commands", label: _t("Odoo commands…"), icon: "fa-terminal", run: () => this.command.openMainPalette() });
-        return actions.map((a) => ({ type: "action", id: `x${a.key}`, hint: a.on ? _t("Current") : _t("Action"), ...a }));
+        const dark = this.theme.state.scheme === "dark";
+        return [{
+            key: "toggle-dark",
+            label: dark ? _t("Light mode") : _t("Dark mode"),
+            icon: dark ? "fa-sun-o" : "fa-moon-o",
+            run: () => this.theme.toggleScheme(),
+            hint: _t("Action"),
+        }, {
+            key: "odoo-commands",
+            label: _t("Odoo commands…"),
+            icon: "fa-terminal",
+            run: () => this.command.openMainPalette(),
+            hint: _t("Action"),
+        }];
     }
 
     get pinned() {
@@ -228,21 +223,6 @@ export class MtCommandPalette extends Component {
         } else if (item.type === "action") {
             await item.run();
         }
-    }
-
-    openThemeSettings() {
-        return this.action.doAction({
-            type: "ir.actions.act_window",
-            name: _t("Settings"),
-            res_model: "res.config.settings",
-            views: [[false, "form"]],
-            target: "inline",
-            context: { module: "modern_theme", bin_size: false },
-        });
-    }
-
-    openMyAppearance() {
-        openAppearanceDialog(this.env);
     }
 }
 

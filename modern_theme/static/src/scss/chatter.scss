@@ -17,16 +17,19 @@ $chatter: 'html[data-mt-theme] .o_web_client';
         max-width: 40%;
         margin: 1rem 1rem 1rem 0 !important;
     }
-    &:not(.o-aside) { margin: 0 1rem 1rem !important; }
+    // stacked under the sheet (narrow screens): fill the column minus its margins
+    &:not(.o-aside) { width: auto !important; margin: 0 1rem 1rem !important; }
 
     > .o-mail-Chatter {
         // Odoo scrolls the aside chatter on this element (overflow-auto); the card's
         // radius clips through that overflow, so no overflow of our own here
         height: 100%;
-        border: 1px solid color-mix(in srgb, var(--mt-border) 80%, transparent);
+        // the same tinted frame ring as the form's top info and tabs cards
+        border: 4px solid var(--mt-muted);
         border-radius: 1rem;
         background: var(--mt-card) !important;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.02);
+        box-shadow: 0 0 0 1px color-mix(in srgb, var(--mt-border) 80%, transparent),
+            0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.02);
         overscroll-behavior: contain;
     }
 }

@@ -166,19 +166,6 @@ $mt: 'html[data-mt-theme]';
     }
     .o_field_badge, .badge { font-weight: 500; }
 }
-// List styles (option)
-html[data-mt-list-style="striped"] .o_list_renderer .o_list_table > tbody > tr.o_data_row:nth-child(even) > td {
-    background-color: color-mix(in srgb, var(--mt-muted) 45%, var(--mt-card));
-}
-html[data-mt-list-style="bordered"] .o_list_renderer .o_list_table {
-    > thead > tr > th:not(:last-child),
-    > tbody > tr > td:not(:last-child) {
-        border-inline-end: 1px solid var(--mt-border);
-    }
-}
-html[data-mt-list-style="clean"] .o_list_renderer .o_list_table > tbody > tr.o_data_row > td {
-    border-bottom-color: color-mix(in srgb, var(--mt-border) 70%, transparent);
-}
 
 // ---------------------------------------------------------------------------
 // Kanban: see kanban.scss (one board design for every app).
@@ -277,28 +264,6 @@ html[data-mt-list-style="clean"] .o_list_renderer .o_list_table > tbody > tr.o_d
         font-size: 0.6875rem;
         line-height: 1;
     }
-}
-
-// Form style option: "Card sections" turns each group/notebook into its own card.
-html[data-mt-form-style="cards"] .o_form_view:not(.o-settings-form-view):not(.o_base_settings) .o_form_sheet_bg {
-    .o_form_sheet {
-        background: transparent;
-        border: 0 !important;
-        box-shadow: none;
-        padding-inline: 0;
-    }
-    .o_form_sheet > .oe_title,
-    .o_form_sheet > .o_group,
-    .o_form_sheet > .o_notebook,
-    .o_form_sheet > .oe_button_box + .oe_title {
-        background: var(--mt-card);
-        border: 1px solid var(--mt-border);
-        border-radius: var(--mt-radius-card);
-        box-shadow: var(--mt-card-shadow);
-        padding: var(--mt-card-pad) calc(var(--mt-card-pad) * 1.25);
-        margin-bottom: var(--mt-gap);
-    }
-    .o_form_sheet > .o_notebook > .tab-content { padding-top: var(--mt-gap); }
 }
 
 // ---------------------------------------------------------------------------

@@ -11,6 +11,8 @@ html[data-mt-theme] {
     .o_readonly .o_field_html {
         color: var(--mt-foreground);
     }
+    // Views take the card surface inside the inset frame, not Odoo's darker canvas.
+    .o_action_manager > .o_action { background-color: var(--mt-card) !important; }
     .o-mail-Message.o-card { background-color: var(--mt-muted); }
     .o_kanban_record .o_kanban_image_fill_left,
     .o_kanban_record img.o_avatar { box-shadow: 0 0 0 1px var(--mt-border-base); }

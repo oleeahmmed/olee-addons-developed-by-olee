@@ -1,1 +1,1 @@
-from . import main
+# Modern Theme no longer exposes HTTP endpoints.

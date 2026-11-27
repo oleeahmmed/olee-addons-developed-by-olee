@@ -1,7 +1,7 @@
-// Modern Theme — employee_modern: every style of the app lives here (moved out of
-// employee_modern/static/src/scss so the app ships no stylesheet of its own).
+// Modern Theme — modern_hrm: every style of the app lives here (moved out of
+// modern_hrm/static/src/scss so the HRM addon ships no stylesheet of its own).
 
-// ---- from employee_modern/static/src/scss/app.scss
+// ---- from modern_hrm/static/src/scss/app.scss
 // Modern Employees: pages, lists, dashboards and controls come from Modern Theme's shared
 // app kit (modern_theme/static/src/scss/kit/). This app only passes its prefix.
 @include mt-app-tokens(em);
@@ -21,7 +21,7 @@
     > .od-card:last-child { flex: 1 1 auto; }
 }
 
-// ---- from employee_modern/static/src/scss/hr_views.scss
+// ---- from modern_hrm/static/src/scss/hr_views.scss
 // Modern Employees: shadcn look for Odoo's own HR views (employee / department / job
 // kanban, employee form, time off and attendance views). Only Odoo's own class names are
 // used, and only for looks (sizes, colours, spacing): the views, fields and buttons stay
@@ -355,7 +355,7 @@ html[data-mt-app="hr_attendance"] { --mt-app-chart-2: #2563eb; }
     color: $em-muted-fg;
 }
 
-// ---- from employee_modern/static/src/scss/hr_forms.scss
+// ---- from modern_hrm/static/src/scss/hr_forms.scss
 // Modern Employees: HR forms in the same look as the quotation form of the theme —
 // the main fields in one rounded card (label above a rounded input), tabs and their
 // cards below, Odoo's organization chart and chatter untouched.
@@ -500,7 +500,7 @@ html[data-mt-theme]:not(#hf-x) .o_form_view {
     }
 }
 
-// ---- from employee_modern/static/src/scss/drawer.scss
+// ---- from modern_hrm/static/src/scss/drawer.scss
 // HR drawers (department, job position, attendance) use the theme's CRM drawer look
 // (modern_theme sheet.scss: .o_or_sheet / .or-*). Only small HR additions here.
 .modal-content.o_em_sheet {

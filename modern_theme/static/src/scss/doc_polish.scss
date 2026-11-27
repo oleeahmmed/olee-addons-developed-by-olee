@@ -34,20 +34,20 @@ $dp-form: 'html[data-mt-theme] .o_web_client > .o_action_manager > .o_form_view.
         gap: 0.875rem 1rem !important;
     }
 
-    // soft filled inputs: no border at rest, a border on hover, the theme ring on focus
+    // inputs: white surface, 1px input border, 8px radius (shadcn)
     .o_form_sheet > .o_group .o_input {
         min-height: 2.25rem;
-        border: 1px solid transparent !important;
+        border: 1px solid var(--mt-input) !important;
         border-radius: 0.5rem !important;
-        background: color-mix(in srgb, var(--mt-muted) 70%, var(--mt-card)) !important;
+        background: var(--mt-card) !important;
         box-shadow: none !important;
-        transition: border-color 120ms ease, background-color 120ms ease, box-shadow 120ms ease;
+        transition: border-color 120ms ease, box-shadow 120ms ease;
 
-        &:hover { border-color: var(--mt-border) !important; }
+        &:hover { border-color: color-mix(in srgb, var(--mt-foreground) 25%, var(--mt-input)) !important; }
         &:focus {
-            border-color: color-mix(in srgb, var(--mt-primary) 55%, var(--mt-border)) !important;
+            border-color: var(--mt-foreground) !important;
             background: var(--mt-card) !important;
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--mt-primary) 15%, transparent) !important;
+            box-shadow: 0 0 0 3px var(--mt-ring) !important;
         }
     }
     // read-only values stay plain text
@@ -119,22 +119,22 @@ $dp-form: 'html[data-mt-theme] .o_web_client > .o_action_manager > .o_form_view.
         }
     }
 
-    // terms: one soft memo block; the html editor must not draw its own white,
-    // rounded box inside it (that second frame read as an empty phantom card)
+    // terms: a tinted frame around a white memo surface (the section card's language)
     .o_notebook .o_field_html[name="note"],
     .o_notebook .o_field_html[name="narration"],
     .o_notebook .o_field_html[name="notes"] {
-        border: 1px solid var(--mt-border) !important;
-        border-radius: 0.75rem !important;
-        background: color-mix(in srgb, var(--mt-muted) 45%, var(--mt-card)) !important;
+        padding: 0.25rem !important;
+        border: 1px solid color-mix(in srgb, var(--mt-border) 80%, transparent) !important;
+        border-radius: 0.875rem !important;
+        background: var(--mt-muted) !important;
         box-shadow: none !important;
 
         .o-wysiwyg,
         .note-editable,
         .odoo-editor-editable {
             border: 0 !important;
-            border-radius: inherit;
-            background: transparent !important;
+            border-radius: 0.625rem !important;
+            background: var(--mt-card) !important;
             box-shadow: none !important;
         }
         .note-editable,
@@ -157,10 +157,10 @@ $dp-form: 'html[data-mt-theme] .o_web_client > .o_action_manager > .o_form_view.
     .o_notebook > .o_notebook_headers > .nav-tabs { padding-left: 1.25rem !important; }
 }
 
-// info card columns follow the sheet's width: 1 → 2 → 4
+// info card columns follow the sheet's width: 1 → 2 → 3
 @container mt-sheet (min-width: 30rem) {
     #{$dp-form}.mt-doc:not(#mt-dp) .o_form_sheet > .o_group { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
 }
 @container mt-sheet (min-width: 38rem) {
-    #{$dp-form}.mt-doc:not(#mt-dp) .o_form_sheet > .o_group { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+    #{$dp-form}.mt-doc:not(#mt-dp) .o_form_sheet > .o_group { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
 }

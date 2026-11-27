@@ -1,19 +1,19 @@
 // Compact-head document forms (quotations / orders, purchase, invoices / bills,
-// transfers): ONE soft frame (the grey canvas behind the whole form) holds white cards
-// with light hairline borders - header row, details card, tabs card. Inside the
-// cards, the summary (totals) and the Other Info sections keep their tinted card look.
-// The chatter column is styled in chatter.scss. :not(#mt-df) adds an id's weight over
-// the theme's generic form rules.
+// transfers): the page itself is white; every area is a white card with a tinted
+// frame ring - the same "Delivery" card language as the sections and totals
+// inside (doc_sections.scss). The chatter column follows in chatter.scss.
+// :not(#mt-df) adds an id's weight over the theme's generic form rules.
 
 $df-form: 'html[data-mt-theme] .o_web_client > .o_action_manager > .o_form_view.mt-compact-head:not(.o_base_settings):not(.o_base_settings_view)';
 $df-line: unquote("color-mix(in srgb, var(--mt-border) 80%, transparent)");
 $df-lift: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.02);
+$df-frame: 4px; // the tinted frame around each card
 
-// the frame colour: a soft grey in light mode (dark mode sets it in dark.scss)
-html[data-mt-theme] { --mt-df-canvas: color-mix(in srgb, var(--mt-muted) 75%, var(--mt-card)); }
+// the page behind the cards: white in light mode (dark mode sets it in dark.scss)
+html[data-mt-theme] { --mt-df-canvas: var(--mt-card); }
 
 #{$df-form}:not(#mt-df) {
-    // ---- the one frame: a soft canvas behind everything --------------------------------
+    // ---- the white page ---------------------------------------------------------------
     background: var(--mt-df-canvas) !important;
 
     .o_form_view_container,
@@ -41,21 +41,16 @@ html[data-mt-theme] { --mt-df-canvas: color-mix(in srgb, var(--mt-muted) 75%, va
         }
     }
 
-    // ---- details card and tabs card: white cards, light border -------------------------
-    .o_form_sheet > .o_group {
-        margin: 0 0 1rem !important;
-        border: 1px solid #{$df-line} !important;
-        border-radius: 0.875rem !important;
-        background: var(--mt-card) !important;
-        box-shadow: #{$df-lift} !important;
-    }
+    // ---- top info and tabs: tinted frame ring around the white card -------------------
+    .o_form_sheet > .o_group,
     .o_form_sheet > .o_notebook {
-        margin-top: 0 !important;
-        border: 1px solid #{$df-line} !important;
-        border-radius: 0.875rem !important;
+        margin: 0 0 1rem !important;
+        border: #{$df-frame} solid var(--mt-muted) !important;
+        border-radius: 1rem !important;
         background: var(--mt-card) !important;
-        box-shadow: #{$df-lift} !important;
+        box-shadow: 0 0 0 1px #{$df-line}, #{$df-lift} !important;
     }
+    .o_form_sheet > .o_notebook { margin-top: 0 !important; }
 }
 
 #{$df-form} {

@@ -1,54 +1,29 @@
 # Modern Theme (Odoo 19 Community)
 
-A token-based backend theme: one global sidebar in four styles, Ctrl+K search,
-light / dark / auto modes, and more than 20 design options. Every option can be set
-company-wide in Settings and overridden by each user.
+The Odoo backend styled as shadcn/ui defaults: one fixed look (neutral palette,
+Inter, 10px controls, 14px cards, `#fafafa` sidebar, inset content card on a grey
+canvas) with a single light / dark switch. There are no theme options to choose
+from — every company and user gets the same interface.
 
 ## Install / upgrade
 
 ```bash
 # first install
 python odoo-bin -c odoo.conf -d <db> -i modern_theme
-# upgrade (3.x migrates the 2.x preset and dark-mode settings automatically)
+# upgrade
 python odoo-bin -c odoo.conf -d <db> -u modern_theme,crm_modern,sales_modern,inventory_modern,purchase_modern,mrp_modern
 ```
 
 Then hard-refresh the browser (Ctrl+Shift+R) once.
 
-## Where to configure
+## Appearance
 
 | Who | Where | What |
 |---|---|---|
-| Administrator | **Settings > Modern Theme** | Company defaults for every option, with a live preview. Also: export / import a preset (JSON) and reset to factory defaults. Save applies them for everyone. |
-| Every user | **Top bar > paint-brush icon**, or **user menu > Appearance**, or **Ctrl+K > "My appearance…"** | Personal overrides. Each option shows "Company default" until the user changes it; "Use default" goes back. |
-| Every user | **Top bar > sun/moon icon** | One-click light/dark switch (no page reload). |
+| Every user | **Top bar > sun/moon icon** | Light / dark switch (no page reload). Remembered per browser in the `color_scheme` cookie. |
 
-## Options
-
-| Group | Option | Values |
-|---|---|---|
-| Colors | Color mode | Light, Dark, Auto (follows the operating system, live) |
-| | Brand color | Indigo, Blue, Sky, Teal, Emerald, Green, Amber, Yellow, Orange, Red, Rose, Violet, Slate, Zinc, Stone, Gray, Neutral, or a custom hex color (text color on it is computed for contrast) |
-| | Accent color | Optional second color for active markers and the "+ New" button |
-| Typography | Font | Inter, Poppins, Roboto, Nunito, DM Sans, Plus Jakarta Sans, Hind Siliguri, Noto Sans Bengali, System. Bengali text always uses a Bengali font. All fonts are bundled (no internet needed). |
-| | Text size | Small, Normal, Large (scales text, spacing and controls together) |
-| Shape | Corner radius | None, Small, Medium, Large, Pill |
-| | Density | Compact, Comfortable, Spacious |
-| | Borders | None, Subtle, Normal, Strong |
-| | Card shadow | None, Soft, Medium, Strong |
-| Navigation | Sidebar style | Classic (shadcn/ui, default), Tree, Icon rail + panel, Floating glass |
-| | Sidebar background | Solid, Brand tint, Gradient, Glass |
-| | Sidebar width | Narrow, Normal, Wide |
-| | Start collapsed | On / Off (each browser remembers the user's own choice) |
-| | Top bar | Solid, Blend with canvas, Floating card |
-| | Top bar height | Compact, Normal, Tall |
-| Content | Content width | Full, Boxed (90rem max) |
-| | Content frame | Rounded card on a canvas, Flat |
-| | Lists | Clean, Striped, Bordered |
-| | Forms | Classic, Card sections |
-| | Animations | On / Off (the OS "reduce motion" setting always wins) |
-| Login | Style | Split screen, Centered card, Minimal |
-| | Background picture, tagline | Shown on the login page |
+That is the whole appearance menu. The look, spacing and colours below are fixed
+in the stylesheets.
 
 ## The sidebar
 
@@ -56,32 +31,23 @@ The sidebar lists only each app's everyday pages. The current app's less used me
 to the **top bar**: Odoo's other groups under **More**, then **Reporting** and
 **Configuration** (detected from the menu xml ids, so it works for any app). On phones
 everything stays in the sidebar drawer. App icons drawn as a single white or black glyph
-(Odoo 19's Discuss, Apps, Settings) get a brand-coloured tile so they read in light and
+(Odoo 19's Discuss, Apps, Settings) get a neutral tile so they read in light and
 dark mode.
 
-An **apps menu** (grid icon) is always at the start of the top bar, in every style and on
-phones: it opens any app.
+An **apps menu** (grid icon) is always at the start of the top bar, on phones too:
+it opens any app.
 
-* **Classic** (default): a copy of the shadcn/ui sidebar. Workspace header (company logo
-  and name), a search field with its Ctrl K shortcut, the current app's everyday menus as
-  one labelled group of 32px rows (16px Lucide icon + label), collapsible items whose
-  sub-items have no icons and hang on a hairline, counters on the right, the user card in
-  the footer. The toggle button sits in the top bar (like shadcn's SidebarTrigger);
-  collapsed, it becomes a 64px icon rail and groups open as flyouts. With the "Solid"
-  sidebar background it uses shadcn's neutral colours in light and dark
-  (`scss/sidebar_shadcn.scss`).
-* **Tree**: every app is an accordion row; the current app is open, with
-  nested menus, indent guide lines and an active bar. Collapsed, it becomes an
-  icon rail with hover flyouts.
-* **Icon rail + panel**: apps as a rail of icons (with labels); the current app's menu
-  sits in a docked panel. Unpin the panel and it shows as a flyout on hover.
-* **Floating glass**: a floating rounded card with an app switcher (grid), titled
-  sections and pill-shaped items. Collapsed, it shows mini icons with popovers.
+The sidebar itself is the shadcn/ui one (`scss/sidebar_shadcn.scss`): workspace header
+(company logo and name), a search field with its Ctrl K shortcut, the current app's
+everyday menus as one labelled group of 32px rows (16px Lucide icon + label),
+collapsible items whose sub-items have no icons and hang on a hairline, counters on
+the right, the user card in the footer. The toggle button sits in the top bar (like
+shadcn's SidebarTrigger); collapsed, it becomes a 64px icon rail and groups open as
+flyouts. It shares:
 
-All four share:
 * **Ctrl+K** (or the search button): apps, menus with their path, pinned and recent
-  menus, records (contacts, and whatever apps register), plus theme actions. Odoo's
-  own command palette is the "Odoo commands…" entry.
+  menus, records (contacts, and whatever apps register), plus the light/dark switch.
+  Odoo's own command palette is the "Odoo commands…" entry.
 * **Pinned menus**: hover a menu and click the star. Pins are stored on the user, so
   they follow the user to any device. **Recent** menus are kept per browser.
 * Counter badges, keyboard navigation (arrows, Left/Right to close/open groups, Esc),
@@ -91,34 +57,26 @@ All four share:
   page title (lists, kanban, forms), or top right on home pages and dashboards.
 * Menus come from `ir.ui.menu`: Odoo's groups and installed modules decide what shows.
 
-## Look: shadcn/ui base colours (light and dark)
-
-Surfaces follow the shadcn/ui base colour. Neutral (and the default "Once" preset) use
-shadcn's neutral grey scale below; Slate, Zinc, Stone and Gray use their own tinted
-greys (page, cards, sidebar, borders, text). The coloured presets (Indigo, Blue, Red…)
-keep the neutral surfaces and only change the accent (buttons, links, focus ring,
-active menu tint), exactly like shadcnuikit (`scss/mt_maps.scss`):
+## Look: shadcn/ui neutral base (light and dark)
 
 | Token | Light | Dark |
 |---|---|---|
-| page (`--mt-background`) | `#ffffff` | `#0a0a0a` |
-| card / popover / sidebar | `#ffffff` / `#ffffff` / `#f7f6f6` | `#171717` |
+| page / canvas (`--mt-content-bg`) | `#f5f5f5` | `#0a0a0a` |
+| card / popover | `#ffffff` | `#171717` |
 | muted / secondary / accent | `#f5f5f5` | `#262626` |
 | text / muted text | `#0a0a0a` / `#737373` | `#fafafa` / `#a1a1a1` |
-| border / input | `#e5e5e5` | white 10% / white 15% |
-| sidebar text / hover | `#646464` / `#e1e1e1` | `#b0b0b0` / `#2c2c2c` |
-| top bar | page colour + hairline | page colour + hairline |
+| border / input | `#e5e5e5` / `#e5e5e5` | white 10% / white 15% |
+| ring / focus | `#a1a1a1` | `#737373` |
+| sidebar | `#fafafa`, text `#525252`, hover `#efefef` | `#171717`, text `#a1a1a1`, hover `#262626` |
+| primary (buttons, active states) | `#171717` on `#fafafa` text | `#e5e5e5` on `#171717` text |
+| status | success `#16a34a`, warning `#d97706`, danger `#ef4444`, info `#0284c7` | `#4ade80`, `#fbbf24`, `#ff6467`, `#38bdf8` |
 
-Slate / Zinc / Stone / Gray replace these surfaces with their own base palette (for
-example Slate: muted `#f1f5f9` and border `#e2e8f0` in light, page `#020618`, card
-`#0f172b` and muted `#1d293d` in dark). The exact values live in `$mt-neutrals`
-(`scss/mt_maps.scss`).
-
-The default preset is shadcn's own: near-black primary in light (`#171717`), near-white
-in dark (`#e5e5e5`). The colour presets are shadcnuikit's theme colours (Tailwind
-`*-600`: red `#e40014`, blue `#155dfc`, …), the same value in light and dark, with white
-text; links use a lighter tone in dark mode so they stay readable. Menu and chrome icons
-are Lucide line icons drawn over the Font Awesome names (`scss/icons.scss`).
+Cards are flat: 1px border, 12–14px radius, no shadow. Popovers, dropdowns and
+dialogs get one soft shadow. Controls are 36px tall with an 8–10px radius and a
+3px grey focus ring. Lists are a rounded bordered card with a hairline under the
+40px header row; forms are white cards inside a 14px-radius page frame. Menu and
+chrome icons are Lucide line icons drawn over the Font Awesome names
+(`scss/icons.scss`). The exact palette lives in `$mt-shadcn` (`scss/mt_maps.scss`).
 
 ## Sidebar API (for app addons)
 
@@ -163,14 +121,15 @@ registerModernHome("sales_modern.home", {
 
 ## Kanban boards
 
-One design for every kanban in every app (`scss/kanban.scss`): dotted board, one
-soft lane per stage (sticky header in the same colour, count pill, full-width
+One design for every kanban in every app (`scss/kanban.scss`): a plain canvas,
+one soft lane per stage (sticky header in the same colour, count pill, full-width
 progress bar, amount), cards with an even gap, colour tag as a left bar, ribbons
 (Won/Lost) clipped to the card corner, dashed drop placeholder, quick-create and
-folded lanes. It follows the theme options (radius, density, borders, shadow,
-light/dark). Tokens: `--mt-board-bg`, `--mt-board-dot`, `--mt-lane-bg`,
-`--mt-lane-border`, `--mt-lane-radius`, `--mt-card-gap`, `--mt-kanban-card-radius`.
-App addons only style what is inside their own cards.
+folded lanes. Contact cards (`scss/partner_kanban.scss`) get a circular avatar and
+a hairline footer with outline stat pills. Tokens: `--mt-board-bg`,
+`--mt-board-dot`, `--mt-lane-bg`, `--mt-lane-border`, `--mt-lane-radius`,
+`--mt-card-gap`, `--mt-kanban-card-radius`. App addons only style what is inside
+their own cards.
 
 ## App kit (shared by the modern app addons)
 
@@ -233,30 +192,26 @@ Components only use CSS custom properties. The main ones:
   `--mt-field-gap`, `--mt-sb-item-h`, `--mt-topbar-h`, `--mt-sb-w`.
 * Elevation: `--mt-shadow-xs|sm|md|lg|xl`, `--mt-card-shadow`, `--mt-card-shadow-hover`.
 * Sidebar: `--mt-sidebar-bg|bg-image|fg|muted-fg|accent|active-bg|active-fg|indicator|border|guide|blur`.
-* Font: `--mt-font-family`, `--mt-font-mono`.
+* Font: `--mt-font-family` (Inter, with Hind Siliguri / Noto Sans Bengali fallbacks for
+  Bangla text), `--mt-font-mono`.
 
-Every palette was checked for WCAG AA (4.5:1) text contrast, in light and dark mode.
+The palette was checked for WCAG AA (4.5:1) text contrast, in light and dark mode.
 
 ## How it works (for developers)
 
-* `models/theme_options.py` lists every option once; `res.company` holds the
-  defaults, `res.users` holds personal overrides (empty = follow the company).
-* The server renders the effective values as `data-mt-*` attributes on `<html>`
-  (`webclient_templates.xml`) and picks the light or dark CSS bundle, so the first paint
-  is already right. Sidebar collapse and pin states come from cookies for the same reason.
-* `js/theme/theme_service.js` (`mt_theme` service) updates those attributes live,
-  swaps the CSS bundle for light/dark without reloading, and follows the OS in auto mode.
+* `models/theme_options.py` lists the fixed `data-mt-*` attribute values once; the
+  server renders them on `<html>` (`webclient_templates.xml`) so the first paint is
+  already right. Only `data-mt-scheme` (light/dark) varies, from the `color_scheme`
+  cookie. Sidebar collapse and pin states also come from cookies for the same reason.
+* `js/theme/theme_service.js` (`mt_theme` service) updates `data-mt-scheme` and swaps
+  the light/dark CSS bundle without reloading.
 * SCSS: `mt_maps.scss` (palette data), `tokens*.scss` (custom properties),
   `bridge.scss` (Bootstrap/Odoo variables), `components.scss`, `views.scss`,
-  `layout.scss`, `sidebar.scss`, `palette.scss`, `settings_ui.scss`, `login.scss`.
+  `layout.scss`, `sidebar_shadcn.scss`, `palette.scss`, `login.scss`.
   `workspace.scss`, `form.scss`, `kanban.scss`, `sheet.scss` and `legacy_shell.scss`
   style the modern app addons' own pages (scoped to `html.mt-app-modern`).
 
 ## Known limits
 
 * The top bar never scrolls away: Odoo's layout keeps it outside the scrolling area.
-  "Top bar style" is therefore Solid / Blend / Floating rather than Sticky / Static.
-* "Floating labels" were not added as a global form style: they would break many
-  Odoo widgets (many2one, tags, monetary…). The modern app addons keep their own
-  labelled field boxes.
 * Charts re-read the theme colors the next time they render (not mid-animation).

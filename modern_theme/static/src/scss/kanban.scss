@@ -361,7 +361,7 @@ html[data-mt-scheme="dark"] {
 // for every kanban in every app. Loaded after kanban.scss and wins over it (and over the
 // app addons' card rules) through :not(#mt-kb), which adds id-level weight.
 //
-//   board : plain page background, 16px between lanes
+//   board : white page (dark: page canvas), 16px between lanes
 //   lane  : muted surface, 12px radius, hairline border, 10px padding, 8px between cards
 //   header: 14px semibold title + count in an outline pill, buttons on the right
 //   card  : white surface, 12px radius, 1px border + xs shadow, 16px padding, 16px
@@ -376,6 +376,9 @@ $kb: 'html[data-mt-theme]:not(#mt-kb) .o_web_client';
 // Tokens: the shadcn neutrals in every style (the brand colour is only an accent)
 // ---------------------------------------------------------------------------
 html[data-mt-theme] {
+    // The board is the page itself: white in light so the muted lanes read as
+    // wrapped groups; in dark the page canvas stays behind the lighter lanes.
+    --kb-board: var(--mt-card);
     --kb-lane: var(--mt-muted);
     --kb-card: var(--mt-card);
     --kb-fg: var(--mt-foreground);
@@ -383,6 +386,9 @@ html[data-mt-theme] {
     --kb-border: var(--mt-border);
     --kb-ring: color-mix(in srgb, var(--mt-foreground) 10%, transparent);
     --kb-ring-hover: color-mix(in srgb, var(--mt-foreground) 20%, transparent);
+}
+html[data-mt-scheme="dark"] {
+    --kb-board: var(--mt-content-bg);
 }
 
 #{$kb} {
@@ -396,7 +402,7 @@ html[data-mt-theme] {
         --KanbanRecord-padding-h: 1rem;
         --KanbanRecord-margin-v: 0.5rem;
         --KanbanRecord-margin-h: 0;
-        background: var(--mt-board-bg) !important;
+        background: var(--kb-board) !important;
         background-image: none !important;
     }
     .o_kanban_renderer.o_kanban_grouped {

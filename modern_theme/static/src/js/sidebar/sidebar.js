@@ -28,25 +28,6 @@ const PIN_COOKIE = "mt_sb_pinned";
 const MAX_RECENT = 6;
 const BADGE_TTL = 60_000;
 
-// Sidebar "+ New" labels per page (keyed by menu name), so the button reads like
-// the page's own action ("New Campaign", "New Lead", …) instead of a bare "New".
-const CREATE_LABELS = {
-    campaigns: "New Campaign",
-    leads: "New Lead",
-    pipeline: "New Opportunity",
-    activities: "New Activity",
-    users: "New User",
-    quotations: "New Quotation",
-    "sales orders": "New Sales Order",
-    customers: "New Customer",
-    "sales teams": "New Sales Team",
-    "pipeline stages": "New Stage",
-    "activity types": "New Activity Type",
-    "activity plans": "New Activity Plan",
-    tags: "New Tag",
-    "lost reasons": "New Lost Reason",
-};
-
 function readJSON(key, fallback) {
     try {
         return JSON.parse(browser.localStorage.getItem(key)) ?? fallback;
@@ -174,7 +155,7 @@ export class MtSidebar extends Component {
     // Data
     // ------------------------------------------------------------------
     get style() {
-        return this.themeState.values.sidebar_style || "classic";
+        return "classic";
     }
     /** Style drawn: on phones the rail and floating styles become the classic drawer. */
     get dataStyle() {
@@ -364,9 +345,9 @@ export class MtSidebar extends Component {
     // Classic style: every other installed app, as collapsible items (shadcn
     // "E-commerce ›" rows) whose sub-items are that app's everyday pages.
     // ------------------------------------------------------------------
-    /** Classic style: "top" / "bottom" / "hidden" (theme option "Current app menu"). */
+    /** Classic style: the open app's menus sit above the apps list. */
     get appMenuPosition() {
-        return this.themeState.values.sidebar_app_menu || "top";
+        return "top";
     }
     get showAppGroup() {
         return Boolean(this.currentApp && this.sideTree.length && this.appMenuPosition !== "hidden");
@@ -574,37 +555,6 @@ export class MtSidebar extends Component {
     }
 
     // ------------------------------------------------------------------
-    // "+ New" in the sidebar footer: the page's own New button is hidden in the
-    // control panel (list_shadcn.scss); this one clicks it, so ACL, view type
-    // and defaults stay exactly the same as Odoo's.
-    // ------------------------------------------------------------------
-    get createButton() {
-        const selector =
-            ".o_action_manager .o_control_panel .o_list_button_add, " +
-            ".o_action_manager .o_control_panel .o-kanban-button-new, " +
-            ".o_action_manager .o_control_panel .o_form_button_create";
-        return [...document.querySelectorAll(selector)].find(
-            (el) => !el.disabled && !el.classList.contains("d-none")
-        ) || null;
-    }
-    get canCreate() {
-        this.state.rev;
-        return Boolean(this.createButton);
-    }
-    // "New Campaign" on Campaigns, "New Lead" on Leads… ; plain "New" elsewhere.
-    get createLabel() {
-        const name = (this.activeLeaf?.node?.name || "").toLowerCase();
-        return CREATE_LABELS[name] || "New";
-    }
-    onCreate() {
-        this.state.mobileOpen = false;
-        const btn = this.createButton;
-        if (btn) {
-            btn.click();
-        }
-    }
-
-    // ------------------------------------------------------------------
     // Favorites, search, user menu
     // ------------------------------------------------------------------
     isFavorite(node) {
@@ -632,7 +582,7 @@ export class MtSidebar extends Component {
         element.callback?.();
     }
     setMode(mode) {
-        this.theme.setUser({ color_mode: mode });
+        this.theme.setScheme(mode);
     }
 
     // ------------------------------------------------------------------
@@ -660,7 +610,7 @@ export class MtSidebar extends Component {
     }
 
     get modeLabel() {
-        return { light: _t("Light"), dark: _t("Dark"), auto: _t("Auto") }[this.themeState.values.color_mode] || "";
+        return this.themeState.scheme === "dark" ? _t("Dark") : _t("Light");
     }
 }
 

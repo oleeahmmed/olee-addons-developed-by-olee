@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-06 23:37+0000\n"
-"PO-Revision-Date: 2026-11-06 23:37+0000\n"
+"POT-Creation-Date: 2026-11-27 06:43+0000\n"
+"PO-Revision-Date: 2026-11-27 06:43+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: bn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
+"Language: bn\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: modern_theme
@@ -29,14 +29,8 @@ msgid "%s days overdue"
 msgstr ""
 
 #. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid ""
-"17 contrast-checked palettes (WCAG AA in light and dark) or your own color."
-msgstr ""
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "<span class=\"o_form_label\">Custom primary</span>"
+#: model_terms:ir.ui.view,arch_db:modern_theme.login_oauth_modern
+msgid "<span>Or continue with</span>"
 msgstr ""
 
 #. module: modern_theme
@@ -51,8 +45,7 @@ msgstr "যে ব্যাংকে আপনার কোম্পানি �
 msgid ""
 "A building or godown with its own stock. Routes and operation types are "
 "created for you."
-msgstr ""
-"নিজস্ব স্টকসহ একটি ভবন বা গোডাউন। রুট ও অপারেশন টাইপ নিজে থেকেই তৈরি হয়।"
+msgstr "নিজস্ব স্টকসহ একটি ভবন বা গোডাউন। রুট ও অপারেশন টাইপ নিজে থেকেই তৈরি হয়।"
 
 #. module: modern_theme
 #. odoo-javascript
@@ -76,18 +69,6 @@ msgstr "পাইপলাইনে ডিল যে ধাপগুলো প�
 #. odoo-javascript
 #: code:addons/modern_theme/static/src/js/print/print.xml:0
 msgid "A4"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_accent_color
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_accent_color
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_accent_color
-msgid "Accent Color"
-msgstr ""
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Accent color"
 msgstr ""
 
 #. module: modern_theme
@@ -122,7 +103,14 @@ msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
+#: code:addons/modern_theme/static/src/js/chatter_activity.js:0
+msgid "Activity scheduled"
+msgstr ""
+
+#. module: modern_theme
+#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
+#: code:addons/modern_theme/static/src/xml/chatter_activity.xml:0
 msgid "Activity type"
 msgstr "অ্যাক্টিভিটির ধরন"
 
@@ -131,12 +119,6 @@ msgstr "অ্যাক্টিভিটির ধরন"
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Address"
 msgstr "ঠিকানা"
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/topbar/topbar.xml:0
-msgid "All appearance options…"
-msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
@@ -152,14 +134,6 @@ msgstr "বিকল্প ওয়ার্ক সেন্টার"
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_preset__amber
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_preset__amber
-msgid "Amber"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "An account of the chart of accounts."
 msgstr "হিসাবের তালিকার একটি অ্যাকাউন্ট।"
@@ -169,16 +143,6 @@ msgstr "হিসাবের তালিকার একটি অ্যাক
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Analytic account"
 msgstr "অ্যানালিটিক অ্যাকাউন্ট"
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_animations
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_animations
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_animations
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Animations"
-msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
@@ -195,17 +159,7 @@ msgstr ""
 #. module: modern_theme
 #. odoo-javascript
 #: code:addons/modern_theme/static/src/js/palette/command_palette.js:0
-#: code:addons/modern_theme/static/src/js/settings/appearance_dialog.js:0
-#: code:addons/modern_theme/static/src/js/settings/appearance_dialog.xml:0
-#: code:addons/modern_theme/static/src/js/topbar/topbar.xml:0
-#: model:ir.actions.client,name:modern_theme.action_my_appearance
 msgid "Appearance"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/appearance_dialog.xml:0
-msgid "Appearance sections"
 msgstr ""
 
 #. module: modern_theme
@@ -224,25 +178,15 @@ msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
-msgid "Attribute"
-msgstr "অ্যাট্রিবিউট"
+#: code:addons/modern_theme/static/src/xml/chatter_activity.xml:0
+msgid "Assigned to"
+msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: code:addons/modern_theme/static/src/js/sidebar/sidebar.js:0
-#: code:addons/modern_theme/static/src/js/sidebar/sidebar.xml:0
-#: code:addons/modern_theme/static/src/js/topbar/topbar.xml:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_color_mode__auto
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_color_mode__auto
-msgid "Auto"
-msgstr ""
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Background picture"
-msgstr ""
+#: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
+msgid "Attribute"
+msgstr "অ্যাট্রিবিউট"
 
 #. module: modern_theme
 #. odoo-javascript
@@ -257,122 +201,15 @@ msgid "Bank account"
 msgstr "ব্যাংক অ্যাকাউন্ট"
 
 #. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid ""
-"Bengali text always uses a Bengali font (Hind Siliguri / Noto Sans Bengali),"
-" whatever Latin font you pick. Fonts are bundled: no internet needed."
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-msgid "Blend"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_topbar_style__blend
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_topbar_style__blend
-msgid "Blend with canvas"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_preset__blue
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_preset__blue
-msgid "Blue"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_list_style__bordered
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_list_style__bordered
-msgid "Bordered"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_border
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_border
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_border
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Borders"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_sidebar_app_menu__bottom
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_sidebar_app_menu__bottom
-msgid "Bottom"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_content_width__boxed
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_content_width__boxed
-msgid "Boxed"
-msgstr ""
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Boxed keeps very wide screens readable (max 1440px)."
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/appearance_dialog.xml:0
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-#: code:addons/modern_theme/static/src/js/topbar/topbar.xml:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Brand color"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_sidebar_bg__tinted
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_sidebar_bg__tinted
-msgid "Brand tint"
-msgstr ""
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Buttons, inputs, cards, dialogs, kanban cards and badges."
-msgstr ""
-
-#. module: modern_theme
 #. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Call, email, meeting… and when it is due."
 msgstr "কল, ইমেইল, মিটিং… এবং কবে করতে হবে।"
 
 #. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_shadow
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_shadow
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_shadow
-msgid "Card Shadow"
-msgstr ""
-
-#. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_form_style__cards
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_form_style__cards
-msgid "Card sections"
-msgstr ""
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Card sections puts each group and the notebook in its own card."
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Card shadow"
+#: code:addons/modern_theme/static/src/xml/chatter_activity.xml:0
+msgid "Cancel"
 msgstr ""
 
 #. module: modern_theme
@@ -386,56 +223,6 @@ msgstr "ক্যাশ রাউন্ডিং"
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Casual, sick, annual leave… and how it is requested and approved."
 msgstr "নৈমিত্তিক, অসুস্থতা, বার্ষিক ছুটি… এবং কীভাবে চাওয়া ও অনুমোদন হয়।"
-
-#. module: modern_theme
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_login_style__centered
-msgid "Centered card"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-msgid "Chattogram Port Ltd"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: code:addons/modern_theme/static/src/js/topbar/topbar.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_form_style__classic
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_sidebar_style__classic
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_form_style__classic
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_sidebar_style__classic
-msgid "Classic"
-msgstr ""
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid ""
-"Classic (shadcn/ui sidebar), tree, icon rail with a menu panel, or a "
-"floating glass card. Ctrl+K search and pinned menus work in all four."
-msgstr ""
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid ""
-"Classic sidebar: show the open app's own menus above the Apps list, below "
-"it, or hide them (the app then opens in the Apps list)."
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields,help:modern_theme.field_res_company__mt_sidebar_app_menu
-#: model:ir.model.fields,help:modern_theme.field_res_config_settings__mt_sidebar_app_menu
-msgid "Classic sidebar: where the open app's own menu group sits, or hide it."
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_list_style__clean
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_list_style__clean
-msgid "Clean"
-msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
@@ -456,73 +243,21 @@ msgid "Close menu"
 msgstr ""
 
 #. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_color_mode
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_color_mode
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_color_mode
-msgid "Color Mode"
-msgstr ""
-
-#. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
 #: code:addons/modern_theme/static/src/js/sidebar/sidebar.xml:0
-#: code:addons/modern_theme/static/src/js/topbar/topbar.xml:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
 msgid "Color mode"
 msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/appearance_dialog.xml:0
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Colors"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-python
-#: code:addons/modern_theme/models/res_company.py:0
-msgid "Colors must be written as #RRGGBB, e.g. #4f46e5."
-msgstr ""
-
-#. module: modern_theme
-#. odoo-python
-#: code:addons/modern_theme/models/res_users.py:0
-msgid "Colors must be written as #RRGGBB."
+#: code:addons/modern_theme/static/src/js/app_kit/sale_pages.js:0
+msgid "Confirmed orders — deliver, invoice and follow payment"
 msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_density__comfortable
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_density__comfortable
-msgid "Comfortable"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_density__compact
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_topbar_height__compact
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_density__compact
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_topbar_height__compact
-msgid "Compact"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model,name:modern_theme.model_res_company
-msgid "Companies"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/appearance_dialog.xml:0
-msgid "Company default"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model,name:modern_theme.model_res_config_settings
-msgid "Config Settings"
+#: code:addons/modern_theme/static/src/js/app_kit/sale_pages.js:0
+msgid "Confirmed quotations become sales orders and show up here."
 msgstr ""
 
 #. module: modern_theme
@@ -539,57 +274,14 @@ msgstr "কন্টাক্ট ট্যাগ"
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Content"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_content_frame
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_content_frame
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_content_frame
-msgid "Content Frame"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_content_width
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_content_width
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_content_width
-msgid "Content Width"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Content frame"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Content width"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Contract type"
 msgstr "চুক্তির ধরন"
 
 #. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_radius
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_radius
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_radius
-msgid "Corner Radius"
-msgstr ""
-
-#. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Corner radius"
+#: code:addons/modern_theme/static/src/js/app_kit/sale_pages.js:0
+msgid "Create one in a few seconds: pick the customer, add products, send it."
 msgstr ""
 
 #. module: modern_theme
@@ -601,55 +293,8 @@ msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/palette/command_palette.js:0
-msgid "Current"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_sidebar_app_menu
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_sidebar_app_menu
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_sidebar_app_menu
-msgid "Current App Menu"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Current app menu"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_primary_color
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_primary_color
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_primary_color
-msgid "Custom Primary Color"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/appearance_dialog.js:0
-#: code:addons/modern_theme/static/src/js/settings/appearance_dialog.xml:0
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_preset__custom
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_preset__custom
-msgid "Custom color"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_font__dm_sans
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_font__dm_sans
-msgid "DM Sans"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
 #: code:addons/modern_theme/static/src/js/sidebar/sidebar.js:0
 #: code:addons/modern_theme/static/src/js/sidebar/sidebar.xml:0
-#: code:addons/modern_theme/static/src/js/topbar/topbar.xml:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_color_mode__dark
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_color_mode__dark
 msgid "Dark"
 msgstr ""
 
@@ -667,45 +312,9 @@ msgstr "যেদিন কেউ ছুটি নিতে পারবে ন�
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_preset__once
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_preset__once
-msgid "Default (shadcn neutral)"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Default taxes"
 msgstr "ডিফল্ট কর"
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_density
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_density
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_density
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Density"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/palette/command_palette.js:0
-msgid "Density: comfortable"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/palette/command_palette.js:0
-msgid "Density: compact"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/palette/command_palette.js:0
-msgid "Density: spacious"
-msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
@@ -728,8 +337,6 @@ msgstr "চলে যাওয়ার কারণ"
 #. module: modern_theme
 #: model:ir.model.fields,field_description:modern_theme.field_ir_http__display_name
 #: model:ir.model.fields,field_description:modern_theme.field_ir_ui_menu__display_name
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__display_name
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__display_name
 #: model:ir.model.fields,field_description:modern_theme.field_res_users__display_name
 msgid "Display Name"
 msgstr ""
@@ -748,12 +355,6 @@ msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/appearance_dialog.xml:0
-msgid "Done"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/print/print.xml:0
 msgid "Download PDF"
 msgstr ""
@@ -766,10 +367,8 @@ msgstr "ড্রয়ারের কাজ"
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_preset__emerald
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_preset__emerald
-msgid "Emerald"
+#: code:addons/modern_theme/static/src/xml/chatter_activity.xml:0
+msgid "Due date"
 msgstr ""
 
 #. module: modern_theme
@@ -779,35 +378,14 @@ msgid "Employee tag"
 msgstr "কর্মীর ট্যাগ"
 
 #. module: modern_theme
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_accent_color
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_animations
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_border
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_color_mode
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_content_frame
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_content_width
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_density
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_font
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_font_scale
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_form_style
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_list_style
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_preset
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_primary_color
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_radius
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_shadow
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_sidebar_app_menu
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_sidebar_bg
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_sidebar_collapsed
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_sidebar_style
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_sidebar_width
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_topbar_height
-#: model:ir.model.fields,help:modern_theme.field_res_users__mt_topbar_style
-msgid "Empty = company default."
-msgstr ""
-
-#. module: modern_theme
 #. odoo-javascript
 #: code:addons/modern_theme/static/src/js/palette/command_palette.xml:0
 msgid "Enter"
+msgstr ""
+
+#. module: modern_theme
+#: model_terms:ir.ui.view,arch_db:modern_theme.login_form_modern
+msgid "Enter your email below to login to your account."
 msgstr ""
 
 #. module: modern_theme
@@ -820,111 +398,6 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/modern_theme/static/src/js/print/print.xml:0
 msgid "Exactly the document Odoo prints. Use"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-msgid "Export"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.js:0
-msgid "Factory defaults loaded. Save to apply them for everyone."
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_content_frame__flat
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_content_frame__flat
-msgid "Flat"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: code:addons/modern_theme/static/src/js/topbar/topbar.js:0
-msgid "Floating"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_topbar_style__floating
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_topbar_style__floating
-msgid "Floating card"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_sidebar_style__floating
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_sidebar_style__floating
-msgid "Floating glass"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/sidebar/sidebar.xml:0
-msgid "Follow system"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/palette/command_palette.js:0
-msgid "Follow system theme"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Font"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_font_scale
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_font_scale
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_font_scale
-msgid "Font Size"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_form_style
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_form_style
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_form_style
-msgid "Form Style"
-msgstr ""
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Form views"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-msgid "Forms"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-msgid "Full"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_content_width__full
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_content_width__full
-msgid "Full width"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_sidebar_bg__glass
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_sidebar_bg__glass
-msgid "Glass"
 msgstr ""
 
 #. module: modern_theme
@@ -947,30 +420,6 @@ msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_sidebar_bg__gradient
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_sidebar_bg__gradient
-msgid "Gradient"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_preset__gray
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_preset__gray
-msgid "Gray"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_preset__green
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_preset__green
-msgid "Green"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid ""
 "Groups of products. Inventory and accounting settings are inherited by its "
@@ -984,22 +433,8 @@ msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_sidebar_app_menu__hidden
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_sidebar_app_menu__hidden
-msgid "Hidden"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/dash_kit.js:0
 msgid "High"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_font__hind
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_font__hind
-msgid "Hind Siliguri (বাংলা)"
 msgstr ""
 
 #. module: modern_theme
@@ -1011,24 +446,14 @@ msgstr "পণ্য কীভাবে গোনা হয়: পিস, ক�
 #. module: modern_theme
 #: model:ir.model.fields,field_description:modern_theme.field_ir_http__id
 #: model:ir.model.fields,field_description:modern_theme.field_ir_ui_menu__id
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__id
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__id
 #: model:ir.model.fields,field_description:modern_theme.field_res_users__id
 msgid "ID"
 msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_sidebar_style__rail
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_sidebar_style__rail
-msgid "Icon rail + panel"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-msgid "Import"
+#: code:addons/modern_theme/static/src/js/chatter_activity.js:0
+msgid "In %(count)s %(unit)s"
 msgstr ""
 
 #. module: modern_theme
@@ -1051,29 +476,9 @@ msgstr "ইনকোটার্ম"
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_preset__indigo
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_preset__indigo
-msgid "Indigo"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Industry"
 msgstr "শিল্প"
-
-#. module: modern_theme
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_font__inter
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_font__inter
-msgid "Inter"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-python
-#: code:addons/modern_theme/models/res_users.py:0
-msgid "Invalid value %(value)s for %(key)s."
-msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
@@ -1118,22 +523,8 @@ msgstr "পণ্য সাজানো, ফিল্টার ও খোঁজ�
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_font_scale__lg
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_radius__lg
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_font_scale__lg
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_radius__lg
-msgid "Large"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
 #: code:addons/modern_theme/static/src/js/sidebar/sidebar.js:0
 #: code:addons/modern_theme/static/src/js/sidebar/sidebar.xml:0
-#: code:addons/modern_theme/static/src/js/topbar/topbar.xml:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_color_mode__light
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_color_mode__light
 msgid "Light"
 msgstr ""
 
@@ -1144,69 +535,20 @@ msgid "Light mode"
 msgstr ""
 
 #. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid ""
-"Light, dark, or follow each computer's system setting. Users can change it "
-"for themselves from the top bar."
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_list_style
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_list_style
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_list_style
-msgid "List Style"
-msgstr ""
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "List views"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-msgid "Lists"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Live preview"
-msgstr ""
-
-#. module: modern_theme
 #. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Location"
 msgstr "লোকেশন"
 
 #. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_login_background
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_login_background
-msgid "Login Background"
+#. odoo-javascript
+#: code:addons/modern_theme/static/src/xml/chatter_activity.xml:0
+msgid "Log a note with this activity (optional)…"
 msgstr ""
 
 #. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_login_style
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_login_style
-msgid "Login Page Style"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_login_tagline
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_login_tagline
-msgid "Login Tagline"
-msgstr ""
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Login page"
-msgstr ""
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Login style"
+#: model_terms:ir.ui.view,arch_db:modern_theme.login_form_modern
+msgid "Login to your account"
 msgstr ""
 
 #. module: modern_theme
@@ -1249,11 +591,6 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/dash_kit.js:0
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_radius__md
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_shadow__md
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_radius__md
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_shadow__md
 msgid "Medium"
 msgstr "মাধ্যম"
 
@@ -1268,22 +605,6 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/modern_theme/static/src/js/palette/command_palette.js:0
 msgid "Menus"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_login_style__minimal
-msgid "Minimal"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/topbar/topbar.xml:0
-msgid "Mode"
-msgstr ""
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Modern Theme"
 msgstr ""
 
 #. module: modern_theme
@@ -1313,12 +634,6 @@ msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-msgid "Mostafa Group ERP"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/smart_drawer.xml:0
 msgid "Move down"
 msgstr "নিচে নিন"
@@ -1331,37 +646,7 @@ msgstr "উপরে নিন"
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/palette/command_palette.js:0
-msgid "My appearance…"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_sidebar_width__narrow
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_sidebar_width__narrow
-msgid "Narrow"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Navigation"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_preset__neutral
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_preset__neutral
-msgid "Neutral"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/list_page.js:0
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
 msgid "New"
 msgstr "নতুন"
 
@@ -1400,13 +685,6 @@ msgstr "নতুন ব্যাংক"
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "New bank account"
 msgstr "নতুন ব্যাংক অ্যাকাউন্ট"
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid ""
-"New browsers open with the sidebar collapsed to icons. Each user's own "
-"choice is remembered."
-msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
@@ -1506,6 +784,12 @@ msgstr "নতুন অপারেশন টাইপ"
 
 #. module: modern_theme
 #. odoo-javascript
+#: code:addons/modern_theme/static/src/js/app_kit/sale_pages.js:0
+msgid "New order"
+msgstr ""
+
+#. module: modern_theme
+#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "New package type"
 msgstr "নতুন প্যাকেজ টাইপ"
@@ -1539,6 +823,12 @@ msgstr "নতুন প্রজেক্ট ধাপ"
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "New putaway rule"
 msgstr "নতুন পুটঅ্যাওয়ে নিয়ম"
+
+#. module: modern_theme
+#. odoo-javascript
+#: code:addons/modern_theme/static/src/js/app_kit/sale_pages.js:0
+msgid "New quotation"
+msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
@@ -1626,20 +916,26 @@ msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
+#: code:addons/modern_theme/static/src/js/chatter_activity.js:0
+msgid "Next week"
+msgstr ""
+
+#. module: modern_theme
+#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/smart_drawer.xml:0
 msgid "No match"
 msgstr "কিছু পাওয়া যায়নি"
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_border__none
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_radius__none
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_shadow__none
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_border__none
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_radius__none
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_shadow__none
-msgid "None"
+#: code:addons/modern_theme/static/src/js/app_kit/sale_pages.js:0
+msgid "No open quotation"
+msgstr ""
+
+#. module: modern_theme
+#. odoo-javascript
+#: code:addons/modern_theme/static/src/js/app_kit/sale_pages.js:0
+msgid "No sales order yet"
 msgstr ""
 
 #. module: modern_theme
@@ -1656,16 +952,8 @@ msgstr "কিছু না বাছলে = সব টিম।"
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_border__normal
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_font_scale__md
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_sidebar_width__normal
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_topbar_height__normal
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_border__normal
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_font_scale__md
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_sidebar_width__normal
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_topbar_height__normal
-msgid "Normal"
+#: code:addons/modern_theme/static/src/xml/chatter_activity.xml:0
+msgid "Note"
 msgstr ""
 
 #. module: modern_theme
@@ -1693,15 +981,9 @@ msgid "Nothing to print"
 msgstr ""
 
 #. module: modern_theme
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_font__noto_bn
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_font__noto_bn
-msgid "Noto Sans Bengali (বাংলা)"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_font__nunito
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_font__nunito
-msgid "Nunito"
+#. odoo-javascript
+#: code:addons/modern_theme/static/src/js/views/compact_form_head.js:0
+msgid "Number"
 msgstr ""
 
 #. module: modern_theme
@@ -1712,24 +994,14 @@ msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/appearance_dialog.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_animations__no
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_sidebar_collapsed__no
-msgid "Off"
+#: code:addons/modern_theme/static/src/xml/chatter_activity.xml:0
+msgid "Odoo scheduler: activity plans and details"
 msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/appearance_dialog.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_animations__yes
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_sidebar_collapsed__yes
-msgid "On"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-python
-#: code:addons/modern_theme/models/res_users.py:0
-msgid "Only administrators can change the company theme."
+#: code:addons/modern_theme/static/src/js/app_kit/sale_pages.js:0
+msgid "Offers waiting for the customer — send, follow up, confirm"
 msgstr ""
 
 #. module: modern_theme
@@ -1752,27 +1024,6 @@ msgstr "অপারেশন টাইপ"
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-msgid "Opportunity"
-msgstr ""
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid ""
-"Optional second color for active markers and highlights. Leave empty to use "
-"the brand color."
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_preset__orange
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_preset__orange
-msgid "Orange"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Package type"
 msgstr "প্যাকেজ টাইপ"
@@ -1784,17 +1035,9 @@ msgid "Period"
 msgstr ""
 
 #. module: modern_theme
-#: model:ir.model.fields,help:modern_theme.field_res_company__mt_login_background
-#: model:ir.model.fields,help:modern_theme.field_res_config_settings__mt_login_background
-msgid "Picture shown on the login page (split-screen and centered styles)."
-msgstr ""
-
-#. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_radius__pill
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_radius__pill
-msgid "Pill"
+#: code:addons/modern_theme/static/src/xml/chatter_activity.xml:0
+msgid "Pick a date"
 msgstr ""
 
 #. module: modern_theme
@@ -1813,36 +1056,6 @@ msgstr ""
 #. module: modern_theme
 #: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_sidebar_favorites
 msgid "Pinned Menus"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-msgid "Pipeline"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-python
-#: code:addons/modern_theme/models/res_users.py:0
-msgid "Please log in first."
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_font__jakarta
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_font__jakarta
-msgid "Plus Jakarta Sans"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_font__poppins
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_font__poppins
-msgid "Poppins"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.js:0
-msgid "Preset imported. Save to apply it for everyone."
 msgstr ""
 
 #. module: modern_theme
@@ -1907,21 +1120,9 @@ msgstr "প্রজেক্ট"
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-msgid "Proposal"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Putaway rule"
 msgstr "পুটঅ্যাওয়ে নিয়ম"
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-msgid "Qualified"
-msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
@@ -1931,8 +1132,8 @@ msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/topbar/topbar.js:0
-msgid "Rail"
+#: code:addons/modern_theme/static/src/js/app_kit/sale_pages.js:0
+msgid "Quotations"
 msgstr ""
 
 #. module: modern_theme
@@ -1956,10 +1157,8 @@ msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_preset__red
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_preset__red
-msgid "Red"
+#: code:addons/modern_theme/static/src/js/views/compact_form_head.js:0
+msgid "Reference"
 msgstr ""
 
 #. module: modern_theme
@@ -1970,53 +1169,14 @@ msgstr "সরান"
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-msgid "Reports"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-msgid "Reset to default"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-msgid "Revenue"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_font__roboto
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_font__roboto
-msgid "Roboto"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_preset__rose
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_preset__rose
-msgid "Rose"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Round cash totals to the smallest coin, e.g. to 1 Taka."
 msgstr "ক্যাশের মোট সবচেয়ে ছোট কয়েনে রাউন্ড করুন, যেমন ১ টাকায়।"
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_content_frame__card
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_content_frame__card
-msgid "Rounded card"
-msgstr ""
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Row height, padding and field spacing everywhere."
+#: code:addons/modern_theme/static/src/js/app_kit/sale_pages.js:0
+msgid "Sales Orders"
 msgstr ""
 
 #. module: modern_theme
@@ -2033,19 +1193,14 @@ msgstr "সেভ হয়েছে"
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/appearance_dialog.xml:0
-msgid "Saved automatically"
+#: code:addons/modern_theme/static/src/xml/chatter_activity.xml:0
+msgid "Schedule"
 msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/appearance_dialog.xml:0
-msgid "Saving…"
-msgstr ""
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Scales text, spacing and controls together."
+#: code:addons/modern_theme/static/src/xml/chatter_activity.xml:0
+msgid "Schedule activity"
 msgstr ""
 
 #. module: modern_theme
@@ -2106,28 +1261,8 @@ msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
 #: code:addons/modern_theme/static/src/js/sidebar/sidebar.xml:0
 msgid "Search…"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.js:0
-msgid "Segmented choice"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/palette/command_palette.js:0
-msgid "Settings"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Shape & spacing"
 msgstr ""
 
 #. module: modern_theme
@@ -2135,104 +1270,6 @@ msgstr ""
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Short name, up to 5 letters: used in references (WH/IN/0001)."
 msgstr "ছোট নাম, ৫ অক্ষর পর্যন্ত: রেফারেন্সে ব্যবহার হয় (WH/IN/0001)।"
-
-#. module: modern_theme
-#: model:ir.model.fields,help:modern_theme.field_res_company__mt_login_tagline
-#: model:ir.model.fields,help:modern_theme.field_res_config_settings__mt_login_tagline
-msgid "Short sentence under the company name on the login page."
-msgstr ""
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Show each page in a rounded card on a soft canvas, or edge to edge."
-msgstr ""
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid ""
-"Shown by the split-screen and centered styles. The company logo is used "
-"automatically."
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/topbar/topbar.xml:0
-msgid "Sidebar"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_sidebar_bg
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_sidebar_bg
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_sidebar_bg
-msgid "Sidebar Background"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_sidebar_collapsed
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_sidebar_collapsed
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_sidebar_collapsed
-msgid "Sidebar Collapsed"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_sidebar_style
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_sidebar_style
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_sidebar_style
-msgid "Sidebar Style"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_sidebar_width
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_sidebar_width
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_sidebar_width
-msgid "Sidebar Width"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Sidebar background"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: code:addons/modern_theme/static/src/js/topbar/topbar.xml:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Sidebar style"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.js:0
-msgid "Sidebar style cards"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Sidebar width"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/palette/command_palette.js:0
-msgid "Sidebar: classic tree"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/palette/command_palette.js:0
-msgid "Sidebar: floating glass"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/palette/command_palette.js:0
-msgid "Sidebar: icon rail + panel"
-msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
@@ -2244,84 +1281,15 @@ msgstr "সাইজ, রং, উপাদান… এবং তাদের �
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_preset__sky
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_preset__sky
-msgid "Sky"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_preset__slate
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_preset__slate
-msgid "Slate"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_font_scale__sm
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_radius__sm
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_font_scale__sm
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_radius__sm
-msgid "Small"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_shadow__sm
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_shadow__sm
-msgid "Soft"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_sidebar_bg__solid
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_sidebar_bg__solid
-msgid "Solid"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_topbar_style__solid
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_topbar_style__solid
-msgid "Solid bar"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Source"
 msgstr "উৎস"
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_density__spacious
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_density__spacious
-msgid "Spacious"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_login_style__split
-msgid "Split screen"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
 msgid "Stage"
 msgstr "ধাপ"
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Start collapsed"
-msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
@@ -2337,42 +1305,14 @@ msgstr "স্টক, মুভ ও ট্রেসেবিলিটি পূ�
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_preset__stone
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_preset__stone
-msgid "Stone"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Storage category"
 msgstr "স্টোরেজ ক্যাটাগরি"
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_list_style__striped
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_list_style__striped
-msgid "Striped"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_border__strong
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_shadow__lg
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_border__strong
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_shadow__lg
-msgid "Strong"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_border__subtle
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_border__subtle
-msgid "Subtle"
+#: code:addons/modern_theme/static/src/xml/chatter_activity.xml:0
+msgid "Summary"
 msgstr ""
 
 #. module: modern_theme
@@ -2383,36 +1323,15 @@ msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_font__system
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_font__system
-msgid "System font"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Tag"
 msgstr "ট্যাগ"
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Tagline"
-msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Tags"
 msgstr "ট্যাগ"
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_topbar_height__tall
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_topbar_height__tall
-msgid "Tall"
-msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
@@ -2428,62 +1347,8 @@ msgstr "কর গ্রুপ"
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_preset__teal
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_preset__teal
-msgid "Teal"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Text size"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/dash_kit.js:0
 msgid "The dashboard could not be refreshed: %s"
-msgstr ""
-
-#. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "The top bar always stays visible while the page scrolls."
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-msgid ""
-"The whole interface shows these settings now. Save to apply them for "
-"everyone; your personal choices (Appearance menu) still win for you."
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_preset
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_preset
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_preset
-msgid "Theme Color"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_font
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_font
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_font
-msgid "Theme Font"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/palette/command_palette.js:0
-msgid "Theme settings (company)"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.js:0
-msgid "Theme swatches"
 msgstr ""
 
 #. module: modern_theme
@@ -2494,25 +1359,14 @@ msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.js:0
-msgid "This file is not a Modern Theme preset."
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Time off type"
 msgstr "ছুটির ধরন"
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-msgid "Tint"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/utils.js:0
+#: code:addons/modern_theme/static/src/js/chatter_activity.js:0
 msgid "Today"
 msgstr ""
 
@@ -2525,52 +1379,8 @@ msgstr ""
 #. module: modern_theme
 #. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/utils.js:0
+#: code:addons/modern_theme/static/src/js/chatter_activity.js:0
 msgid "Tomorrow"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_sidebar_app_menu__top
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_sidebar_app_menu__top
-msgid "Top"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_topbar_height
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_topbar_height
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_topbar_height
-msgid "Top Bar Height"
-msgstr ""
-
-#. module: modern_theme
-#: model:ir.model.fields,field_description:modern_theme.field_res_company__mt_topbar_style
-#: model:ir.model.fields,field_description:modern_theme.field_res_config_settings__mt_topbar_style
-#: model:ir.model.fields,field_description:modern_theme.field_res_users__mt_topbar_style
-msgid "Top Bar Style"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Top bar"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Top bar height"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: code:addons/modern_theme/static/src/js/topbar/topbar.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_sidebar_style__tree
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_sidebar_style__tree
-msgid "Tree"
 msgstr ""
 
 #. module: modern_theme
@@ -2580,24 +1390,10 @@ msgid "Try again"
 msgstr ""
 
 #. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid ""
-"Turn off for slower computers. Users who ask their system to reduce motion "
-"never get animations."
-msgstr ""
-
-#. module: modern_theme
 #. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Type a value (S, M, L…) and press Enter"
 msgstr "একটি মান লিখে (S, M, L…) Enter চাপুন"
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "Typography"
-msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
@@ -2609,18 +1405,6 @@ msgstr "একক"
 #. odoo-javascript
 #: code:addons/modern_theme/static/src/js/sidebar/sidebar.xml:0
 msgid "Unpin"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/appearance_dialog.xml:0
-msgid "Use company defaults"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/appearance_dialog.xml:0
-msgid "Use default"
 msgstr ""
 
 #. module: modern_theme
@@ -2642,14 +1426,6 @@ msgstr "ভেন্ডর দাম"
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_preset__violet
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_preset__violet
-msgid "Violet"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Warehouse"
 msgstr "গুদাম"
@@ -2666,9 +1442,7 @@ msgstr "একজন ভেন্ডর একটি পণ্যের জন�
 msgid ""
 "Where entries are recorded: sales, purchases, a bank, cash… Payment methods "
 "and advanced options are in the full form."
-msgstr ""
-"যেখানে এন্ট্রি লেখা হয়: বিক্রি, কেনা, ব্যাংক, ক্যাশ… পেমেন্ট পদ্ধতি ও "
-"অ্যাডভান্সড অপশন পূর্ণ ফর্মে।"
+msgstr "যেখানে এন্ট্রি লেখা হয়: বিক্রি, কেনা, ব্যাংক, ক্যাশ… পেমেন্ট পদ্ধতি ও অ্যাডভান্সড অপশন পূর্ণ ফর্মে।"
 
 #. module: modern_theme
 #. odoo-javascript
@@ -2681,26 +1455,6 @@ msgstr "আসা পণ্য নিজে থেকে কোথায় য�
 #: code:addons/modern_theme/static/src/js/app_kit/drawer_specs.js:0
 msgid "Why a deal was lost — salespeople pick one of these."
 msgstr "কেন ডিল হাতছাড়া হলো — বিক্রয়কর্মীরা এগুলোর একটি বাছেন।"
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_sidebar_width__wide
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_sidebar_width__wide
-msgid "Wide"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-msgid "Win rate"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-msgid "Won"
-msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
@@ -2728,36 +1482,20 @@ msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_preset__yellow
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_preset__yellow
-msgid "Yellow"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/utils.js:0
 msgid "Yesterday"
 msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/appearance_dialog.js:0
-msgid "You now follow the company appearance."
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/options.js:0
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_company__mt_preset__zinc
-#: model:ir.model.fields.selection,name:modern_theme.selection__res_users__mt_preset__zinc
-msgid "Zinc"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/palette/command_palette.xml:0
 msgid "close"
+msgstr ""
+
+#. module: modern_theme
+#. odoo-javascript
+#: code:addons/modern_theme/static/src/js/chatter_activity.js:0
+msgid "days"
 msgstr ""
 
 #. module: modern_theme
@@ -2833,11 +1571,6 @@ msgid "e.g. Size"
 msgstr "যেমন সাইজ"
 
 #. module: modern_theme
-#: model_terms:ir.ui.view,arch_db:modern_theme.res_config_settings_view_form
-msgid "e.g. Your business, one place."
-msgstr ""
-
-#. module: modern_theme
 #. odoo-javascript
 #: code:addons/modern_theme/static/src/js/print/print.xml:0
 msgid "for the PDF file."
@@ -2845,14 +1578,14 @@ msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/palette/command_palette.xml:0
-msgid "navigate"
+#: code:addons/modern_theme/static/src/js/chatter_activity.js:0
+msgid "months"
 msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
-#: code:addons/modern_theme/static/src/js/app_kit/dash_kit.js:0
-msgid "of"
+#: code:addons/modern_theme/static/src/js/palette/command_palette.xml:0
+msgid "navigate"
 msgstr ""
 
 #. module: modern_theme
@@ -2887,24 +1620,12 @@ msgstr ""
 
 #. module: modern_theme
 #. odoo-javascript
+#: code:addons/modern_theme/static/src/js/chatter_activity.js:0
+msgid "weeks"
+msgstr ""
+
+#. module: modern_theme
+#. odoo-javascript
 #: code:addons/modern_theme/static/src/js/app_kit/dash_kit.xml:0
 msgid "year to date"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-msgid "নতুন গ্রাহক — Dhaka"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-msgid "৳ 12.4L"
-msgstr ""
-
-#. module: modern_theme
-#. odoo-javascript
-#: code:addons/modern_theme/static/src/js/settings/settings_widgets.xml:0
-msgid "৳ 4.1L"
 msgstr ""

@@ -1,11 +1,11 @@
 // Contact / customer kanban card (Contacts, Customers): Odoo's own res.partner
-// card markup, arranged like the reference kit's kanban card — rounded avatar
-// tile, strong name, quiet contact lines, hairline footer with stat pills.
+// card markup, arranged like the reference kit's kanban card — circular avatar,
+// strong name, quiet contact lines, hairline footer with stat pills.
 //
 //   ┌────────────────────────────────────────┐
-//   │ ┌────┐  Azure Interior                  │   name 1rem/650
-//   │ │ 👤 │  ✉ info@azure.com              │   quiet contact lines
-//   │ └────┘  ☎ +1 555 0100                  │
+//   │  ╭──╮   Azure Interior                  │   name 1rem/650
+//   │  │👤│   ✉ info@azure.com              │   quiet contact lines
+//   │  ╰──╯   ☎ +1 555 0100                  │
 //   │ ───────────────────────────────────────│   hairline
 //   │ (2 Sales) (1 Purchase)            ○    │   outline pills left, activity right
 //   └────────────────────────────────────────┘
@@ -25,7 +25,7 @@ $pk-radius: var(--mt-kanban-card-radius, 0.75rem);
     border-radius: $pk-radius !important;
     box-shadow: var(--mt-shadow-xs, 0 1px 2px rgba(0, 0, 0, 0.05)) !important;
 
-    // ---- avatar: rounded tile, image covers it
+    // ---- avatar: circular, like the reference kit's people rows
     > aside.o_kanban_aside_full {
         flex: 0 0 3.25rem;
         width: 3.25rem !important;
@@ -33,7 +33,7 @@ $pk-radius: var(--mt-kanban-card-radius, 0.75rem);
         min-height: 0 !important;
         margin: 0.125rem 0.875rem 0 0 !important;
         border: 1px solid $pk-line;
-        border-radius: 0.75rem;
+        border-radius: 999px;
         overflow: hidden;
         background: color-mix(in srgb, var(--mt-muted) 60%, var(--mt-card));
 
@@ -89,7 +89,7 @@ $pk-radius: var(--mt-kanban-card-radius, 0.75rem);
     [name="properties"]:not(:has(.o_property_field)) { display: none !important; }
 
     // ---- footer: hairline under the info column, stat pills, activity right
-    > main > footer {
+        > main > footer {
         display: flex;
         align-items: center;
         gap: 0.375rem;
@@ -98,6 +98,13 @@ $pk-radius: var(--mt-kanban-card-radius, 0.75rem);
         padding: 0.625rem 0 0.125rem !important;
         border-top: 1px solid $pk-line !important;
         background: transparent;
+
+        // a card with nothing but the activity clock needs no divider above it
+        &:not(:has(.badge)) {
+            border-top-color: transparent !important;
+            padding-top: 0.125rem !important;
+            margin-top: 0.25rem !important;
+        }
 
         .badge {
             display: inline-flex;

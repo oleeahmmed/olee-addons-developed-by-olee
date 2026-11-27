@@ -139,32 +139,6 @@ html[data-mt-scheme="dark"] .mt-app-icon.is-generated {
     font-family: var(--mt-font-family);
     white-space: nowrap;
 }
-.mt-sb-new {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    height: var(--mt-btn-h);
-    padding: 0 0.875rem;
-    border: 0;
-    border-radius: var(--mt-radius-btn);
-    background: var(--mt-brand-accent);
-    color: var(--mt-brand-accent-fg);
-    font-size: 0.8125rem;
-    font-weight: 600;
-    box-shadow: 0 1px 2px color-mix(in srgb, var(--mt-brand-accent) 35%, transparent);
-    transition: filter var(--mt-duration) var(--mt-ease), transform var(--mt-duration) var(--mt-ease);
-    .mt-sb-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    &:hover { filter: brightness(1.06) saturate(1.05); }
-    &:active { transform: translateY(1px); }
-}
-// Footer "+ New": full width above the user card.
-.mt-sb-user .mt-sb-new { width: 100%; margin-bottom: 0.5rem; }
-// On the brand gradient, the create button inverts so it stays visible.
-html[data-mt-sidebar-bg="gradient"]:not([data-mt-scheme="dark"]) .mt-sb-new {
-    background: var(--mt-primary-foreground);
-    color: var(--mt-primary);
-}
 
 .mt-sb-nav {
     flex: 1 1 auto;
@@ -345,10 +319,6 @@ html[data-mt-sidebar-bg="gradient"]:not([data-mt-scheme="dark"]) .mt-sb-new {
     background: var(--mt-sidebar-indicator);
     color: var(--mt-brand-accent-fg);
 }
-html[data-mt-sidebar-bg="gradient"]:not([data-mt-scheme="dark"]) .mt-sb-link.active .mt-sb-badge {
-    background: var(--mt-primary-foreground);
-    color: var(--mt-primary);
-}
 .mt-sb-pin {
     display: grid;
     place-items: center;
@@ -484,7 +454,7 @@ html[data-mt-sidebar-bg="gradient"]:not([data-mt-scheme="dark"]) .mt-sb-link.act
     .mt-sb-brand { justify-content: center; padding: 0; flex-direction: column; gap: 0.375rem; padding-block: 0.625rem; min-height: 0; }
     .mt-sb-brand-text, .mt-sb-label, .mt-sb-kbd, .mt-sb-heading .mt-sb-label, .mt-sb-chevron, .mt-sb-user-text, .mt-sb-user-more, .mt-sb-badge, .mt-sb-pin, .mt-sb-sub { display: none; }
     .mt-sb-tools { padding-inline: 0.625rem; align-items: center; }
-    .mt-sb-search, .mt-sb-new { width: 2.25rem; padding: 0; justify-content: center; }
+    .mt-sb-search { width: 2.25rem; padding: 0; justify-content: center; }
     .mt-sb-heading { justify-content: center; padding-inline: 0; }
     .mt-sb-nav { padding-inline: 0.5rem; scrollbar-width: none; }
     .mt-sb-link { justify-content: center; padding: 0; }
@@ -618,7 +588,6 @@ html[data-mt-sidebar-bg="gradient"]:not([data-mt-scheme="dark"]) .mt-sb-link.act
     overflow: hidden;
     text-overflow: ellipsis;
 }
-html[data-mt-density="compact"] .mt-sb-rail-label { display: none; }
 .mt-sb-rail-foot {
     display: flex;
     flex-direction: column;
@@ -628,13 +597,6 @@ html[data-mt-density="compact"] .mt-sb-rail-label { display: none; }
     border-top: 1px solid var(--mt-sidebar-border);
     width: 2.75rem;
     .mt-sb-user { padding-inline: 0.25rem; }
-    .mt-sb-new {
-        width: 2rem;
-        height: 2rem;
-        padding: 0;
-        justify-content: center;
-        .mt-sb-label { display: none; }
-    }
 }
 
 // ---------------------------------------------------------------------------
@@ -716,7 +678,7 @@ html[data-mt-sidebar-bg="solid"] .o_mt_sidebar[data-style="floating"] .mt-sb-flo
     .mt-sb-appswitch { flex: 0 0 auto; padding: 0.25rem; .mt-sb-brand-text, > .fa { display: none; } }
     .mt-sb-label, .mt-sb-kbd, .mt-sb-badge, .mt-sb-pin, .mt-sb-sub, .mt-sb-user-text, .mt-sb-user-more, .mt-sb-caret { display: none; }
     .mt-sb-tools { align-items: center; padding-inline: 0.5rem; }
-    .mt-sb-search, .mt-sb-new { width: 2.25rem; padding: 0; justify-content: center; }
+    .mt-sb-search { width: 2.25rem; padding: 0; justify-content: center; }
     .mt-sb-nav { padding-inline: 0.5rem; scrollbar-width: none; }
     .mt-sb-heading { justify-content: center; padding-inline: 0; }
     .mt-sb-link { justify-content: center; padding: 0; }

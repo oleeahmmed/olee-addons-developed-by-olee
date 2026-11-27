@@ -56,7 +56,7 @@ html[data-mt-sidebar-bg="solid"] .o_mt_sidebar[data-style="classic"] {
     --sc-strong: var(--mt-foreground);
     --sc-label: color-mix(in srgb, var(--mt-sidebar-fg-base) 70%, transparent);
     --sc-accent: var(--mt-sidebar-accent-base);
-    --sc-accent-fg: var(--mt-foreground);
+    --sc-accent-fg: var(--mt-primary-text);
     --sc-border: var(--mt-border-base);
     --sc-input-bg: var(--mt-card);
     --sc-input-border: var(--mt-input);
@@ -67,16 +67,13 @@ html[data-mt-sidebar-bg="solid"] .o_mt_sidebar[data-style="classic"] {
 html[data-mt-scheme="dark"][data-mt-sidebar-bg="solid"]:not(#mt-np) {
     --mt-sidebar-bg: var(--mt-sidebar-base);
 }
-html[data-mt-scheme="dark"] .o_mt_sidebar[data-style="classic"] {
-    --sc-active-bg: color-mix(in srgb, var(--mt-primary) 24%, var(--sc-bg));
-}
 html[data-mt-scheme="dark"][data-mt-sidebar-bg="solid"] .o_mt_sidebar[data-style="classic"] {
     --sc-bg: var(--mt-sidebar-base);
     --sc-fg: var(--mt-sidebar-fg-base);
     --sc-strong: var(--mt-foreground);
     --sc-label: color-mix(in srgb, var(--mt-sidebar-fg-base) 70%, transparent);
     --sc-accent: var(--mt-sidebar-accent-base);
-    --sc-accent-fg: var(--mt-foreground);
+    --sc-accent-fg: var(--mt-primary-text);
     --sc-border: var(--mt-border-base);
     --sc-input-bg: color-mix(in srgb, var(--mt-sidebar-fg-base) 6%, transparent);
     --sc-input-border: var(--mt-input);
@@ -85,22 +82,10 @@ html[data-mt-scheme="dark"][data-mt-sidebar-bg="solid"] .o_mt_sidebar[data-style
     --sc-ring: var(--mt-ring-base);
 }
 
-// Hover / active, exactly as shadcnuikit's colour presets do it: the default (neutral)
-// preset uses --sidebar-accent (#e1e1e1 / #2c2c2c) for both; a colour preset sets
-// --sidebar-accent to its colour at 15% (hover and active alike), text black / white.
+// Hover / active: the neutral sidebar accent (#efefef / #262626) for both.
 html[data-mt-sidebar-bg="solid"]:not(#mt-np) .o_mt_sidebar[data-style="classic"] {
     --sc-active-bg: var(--sc-accent);
     --sc-active-fg: var(--sc-accent-fg);
-}
-html[data-mt-sidebar-bg="solid"]:not([data-mt-theme="once"]):not([data-mt-theme="neutral"]):not([data-mt-theme="slate"]):not([data-mt-theme="zinc"]):not([data-mt-theme="stone"]):not([data-mt-theme="gray"]):not(#mt-np) .o_mt_sidebar[data-style="classic"] {
-    --sc-accent: color-mix(in srgb, var(--mt-primary) 15%, transparent);
-    --sc-accent-fg: #000000;
-    --sc-active-bg: var(--sc-accent);
-    --sc-active-fg: #000000;
-}
-html[data-mt-scheme="dark"][data-mt-sidebar-bg="solid"]:not([data-mt-theme="once"]):not([data-mt-theme="neutral"]):not([data-mt-theme="slate"]):not([data-mt-theme="zinc"]):not([data-mt-theme="stone"]):not([data-mt-theme="gray"]):not(#mt-np) .o_mt_sidebar[data-style="classic"] {
-    --sc-accent-fg: #ffffff;
-    --sc-active-fg: #ffffff;
 }
 // shadcn header: h-14 (56px)
 html[data-mt-sidebar-style="classic"][data-mt-topbar-height="normal"] { --mt-topbar-h: 3.5rem; }
@@ -410,7 +395,7 @@ html[data-mt-sidebar-style="classic"][data-mt-topbar-height="normal"] { --mt-top
         gap: 0.5rem;
         padding: 0.5rem;
         flex: 0 0 auto;
-        > .o-dropdown, > div, > .mt-sb-new { width: 100%; }
+        > .o-dropdown, > div { width: 100%; }
     }
     .mt-sc-user {
         height: 3rem;
@@ -461,13 +446,6 @@ html[data-mt-sidebar-style="classic"][data-mt-topbar-height="normal"] { --mt-top
             &:hover { background: var(--sc-accent); color: var(--sc-accent-fg); }
         }
         .mt-sc-search-icon { position: static; transform: none; opacity: 1; color: inherit; }
-        .mt-sb-new {
-            width: 2rem;
-            height: 2rem;
-            padding: 0;
-            justify-content: center;
-            .mt-sb-label { display: none; }
-        }
         .mt-sc-menu { align-items: center; }
         .mt-sc-btn { width: 2rem; height: 2rem; padding: 0.5rem; justify-content: center; }
         .mt-sc-user { width: 2rem; height: 2rem; padding: 0; }
@@ -497,13 +475,13 @@ html[data-mt-theme][data-mt-scheme="dark"]:not(#mt-np) {
     --sc-inset-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
 }
 
-// Inset frame (desktop): the client sits in a rounded card on the sidebar colour.
+// Inset frame (desktop): a white card on the grey page ground, shadcn style.
 @media (min-width: $mt-sc-desktop) {
     html[data-mt-theme][data-mt-sidebar-style="classic"]:not(.mt-fullscreen) {
         .o_mt_sidebar[data-style="classic"] .mt-sc { border-inline-end: 0; }
         .o_web_client {
-            padding: var(--sc-inset-gap) var(--sc-inset-gap) var(--sc-inset-gap) calc(var(--mt-sb-offset)) !important;
-            background-color: var(--mt-sidebar-bg) !important;
+            padding: var(--sc-inset-gap) var(--sc-inset-gap) var(--sc-inset-gap) calc(var(--mt-sb-offset) + var(--sc-inset-gap)) !important;
+            background-color: var(--mt-content-bg) !important;
             background-image: none !important;
             background-clip: border-box !important;
         }
@@ -512,40 +490,38 @@ html[data-mt-theme][data-mt-scheme="dark"]:not(#mt-np) {
             position: relative;
             z-index: 1;
             padding: 0 !important;
+            border: 1px solid var(--mt-border-base);
+            border-bottom: 0;
             border-radius: var(--sc-inset-radius) var(--sc-inset-radius) 0 0;
-            background: var(--mt-content-bg) !important;
-            box-shadow: var(--sc-inset-shadow);
-            clip-path: inset(-6px -6px 0 -6px round var(--sc-inset-radius) var(--sc-inset-radius) 0 0);
+            background: var(--mt-card) !important;
             .o_main_navbar {
                 border: 0 !important;
                 border-bottom: 1px solid var(--mt-border) !important;
                 border-radius: var(--sc-inset-radius) var(--sc-inset-radius) 0 0;
-                background: var(--mt-content-bg) !important;
+                background: var(--mt-card) !important;
                 box-shadow: none !important;
             }
         }
         // the page: rest of the card
         .o_web_client > .o_action_manager {
             min-height: 0;
+            border: 1px solid var(--mt-border-base);
+            border-top: 0;
             border-radius: 0 0 var(--sc-inset-radius) var(--sc-inset-radius);
-            background: var(--mt-content-bg) !important;
-            box-shadow: var(--sc-inset-shadow);
-            clip-path: inset(0 -6px -6px -6px round 0 0 var(--sc-inset-radius) var(--sc-inset-radius));
+            background: var(--mt-card) !important;
             overflow: hidden;
         }
-        // no second frame inside the card (the "Content frame: card" option)
+        // no second frame inside the card
         &[data-mt-content-frame="card"] .o_web_client > .o_action_manager {
             padding: 0 !important;
             > .o_action {
                 border: 0 !important;
                 border-radius: 0 !important;
                 box-shadow: none !important;
-                background: var(--mt-content-bg) !important;
+                background: transparent !important;
             }
             > .o_action > .o_control_panel { border-radius: 0 !important; }
         }
-        // floating top bar option does not apply inside the card
-        &[data-mt-topbar-style="floating"] .o_navbar { padding: 0 !important; }
     }
     // Scrolled (shadcn inset): the top gap and the card's rounded top corners scroll
     // away, the header stays flush with the top of the window.
@@ -557,7 +533,6 @@ html[data-mt-theme][data-mt-scheme="dark"]:not(#mt-np) {
         .o_web_client { padding-top: 0 !important; }
         .o_web_client > .o_navbar {
             border-radius: 0;
-            clip-path: inset(0 -6px 0 -6px);
             .o_main_navbar { border-radius: 0; }
         }
     }

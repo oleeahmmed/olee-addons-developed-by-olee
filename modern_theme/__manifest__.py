@@ -1,31 +1,26 @@
 {
     "name": "Modern Theme",
-    "summary": "Premium backend theme for Odoo 19: design tokens, light/dark/auto, 4 sidebar styles (shadcn classic by default), Ctrl+K search, live settings.",
+    "summary": "Odoo 19 backend with one fixed shadcn/ui look: neutral palette, #fafafa sidebar, light/dark.",
     "description": """
-Modern Theme turns the Odoo 19 backend into a clean admin dashboard:
+Modern Theme turns the Odoo 19 backend into a clean shadcn/ui admin dashboard:
 
-* One global sidebar for every app, in four styles (classic shadcn/ui sidebar, tree,
-  icon rail + panel, floating glass), with pinned and recent menus, counters, keyboard
-  navigation and a mobile drawer. An apps menu is always in the top bar.
-* shadcn/ui base-colour surfaces in light and dark: Neutral (default) uses the neutral
-  grey scale, Slate/Zinc/Stone/Gray use their own tinted greys; coloured presets change
-  only the accent, never the page, sidebar, top bar or cards.
-* Ctrl+K command palette: apps, menus, records and quick theme actions.
-* Light, dark and auto (follow the system) modes, switched instantly without reloading.
-* 17 contrast-checked palettes (WCAG AA) or your own brand colour, 9 fonts with full
-  Bengali support (self-hosted), 5 radius levels, 3 densities, border and shadow levels,
-  top bar, content and list/form styles, 3 login page styles.
-* Company defaults in Settings > Modern Theme (live preview, JSON export/import, reset)
-  and a personal override for every user (Appearance menu).
+* One fixed design, copied from shadcn/ui defaults: neutral palette, white cards on a
+  soft grey page, #fafafa sidebar with #efefef active rows, 10px controls, 14px cards,
+  Inter with full Bengali fallback. There are no palette, font, radius or density options.
+* A single global sidebar for every app (shadcn classic): pinned and recent menus,
+  counters, keyboard navigation and a mobile drawer. An apps menu is always in the top bar.
+* Ctrl+K command palette: apps, menus, records and a light/dark switch.
+* Light and dark (shadcn dark palette), switched instantly without reloading.
+* Login page rebuilt as the shadcn card; every Odoo form, list, kanban and dialog keeps
+  its own features and behaviour.
     """,
-    "version": "19.0.6.2.0",
+    "version": "19.0.7.0.0",
     "category": "Themes/Backend",
     "author": "Olee",
     "license": "LGPL-3",
     "depends": ["web", "base_setup", "mail"],
     "data": [
         "views/webclient_templates.xml",
-        "views/res_config_settings_views.xml",
         "views/res_users_views.xml",
     ],
     "assets": {
