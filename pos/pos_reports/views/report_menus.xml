@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- The three stock reports are replaced by the list-style reports below. -->
+    <record id="point_of_sale.menu_report_pos_order_all" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="point_of_sale.menu_report_order_details" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="point_of_sale.menu_report_daily_details" model="ir.ui.menu">
+        <field name="active" eval="False"/>
+    </record>
+
+    <menuitem id="menu_pos_reports_data"
+              name="POS Data"
+              parent="point_of_sale.menu_point_rep"
+              action="action_pos_report_data"
+              sequence="1"
+              groups="point_of_sale.group_pos_user,point_of_sale.group_pos_manager"/>
+
+    <menuitem id="menu_pos_reports_daily_summary"
+              name="Daily Business Summary"
+              parent="point_of_sale.menu_point_rep"
+              action="action_report_pos_daily_summary"
+              sequence="2"
+              groups="point_of_sale.group_pos_user,point_of_sale.group_pos_manager"/>
+
+    <menuitem id="menu_pos_reports_product_profit"
+              name="Product Profit"
+              parent="point_of_sale.menu_point_rep"
+              action="action_report_pos_product_profit"
+              sequence="3"
+              groups="point_of_sale.group_pos_user,point_of_sale.group_pos_manager"/>
+
+    <menuitem id="menu_pos_reports_session_close"
+              name="Session Closing"
+              parent="point_of_sale.menu_point_rep"
+              action="action_report_pos_session_close"
+              sequence="4"
+              groups="point_of_sale.group_pos_user,point_of_sale.group_pos_manager"/>
+
+    <menuitem id="menu_pos_reports_stock_flow"
+              name="Stock Movement"
+              parent="point_of_sale.menu_point_rep"
+              action="action_report_pos_stock_flow"
+              sequence="5"
+              groups="point_of_sale.group_pos_user,point_of_sale.group_pos_manager"/>
+
+</odoo>

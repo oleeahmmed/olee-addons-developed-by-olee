@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_report_pos_product_profit_list" model="ir.ui.view">
+        <field name="name">report.pos.product.profit.list</field>
+        <field name="model">report.pos.product.profit</field>
+        <field name="arch" type="xml">
+            <list string="Product Profit" create="0" edit="0" delete="0"
+                  decoration-danger="profit &lt; 0">
+                <field name="date_order" string="Date"/>
+                <field name="order_name" string="Order"/>
+                <field name="config_id" string="Point of Sale" optional="hide"/>
+                <field name="product_id"/>
+                <field name="categ_id" string="Category"/>
+                <field name="qty" sum="Qty"/>
+                <field name="price_unit" string="Unit Price"/>
+                <field name="discount" optional="hide"/>
+                <field name="gross_amount" string="Gross" sum="Gross" optional="hide"/>
+                <field name="net_sales" string="Net Sales" sum="Net Sales"/>
+                <field name="total_with_tax" string="Total (incl. tax)" sum="Total" optional="hide"/>
+                <field name="cost" sum="Cost"/>
+                <field name="profit" sum="Profit"/>
+                <field name="margin" string="Margin (%)"/>
+                <field name="partner_id" optional="hide"/>
+                <field name="cashier_id" string="Cashier" optional="hide"/>
+                <field name="company_id" optional="hide"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_report_pos_product_profit_pivot" model="ir.ui.view">
+        <field name="name">report.pos.product.profit.pivot</field>
+        <field name="model">report.pos.product.profit</field>
+        <field name="arch" type="xml">
+            <pivot string="Product Profit">
+                <field name="product_id" type="row"/>
+                <field name="categ_id" type="col"/>
+                <field name="qty" type="measure"/>
+                <field name="net_sales" type="measure"/>
+                <field name="cost" type="measure"/>
+                <field name="profit" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_report_pos_product_profit_search" model="ir.ui.view">
+        <field name="name">report.pos.product.profit.search</field>
+        <field name="model">report.pos.product.profit</field>
+        <field name="arch" type="xml">
+            <search string="Product Profit">
+                <field name="product_id"/>
+                <field name="categ_id" string="Category"/>
+                <field name="order_name" string="Order"/>
+                <field name="partner_id" string="Customer"/>
+                <field name="date_order" string="Date"/>
+                <filter name="today" string="Today"
+                        domain="[('date_order', '&gt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="week" string="Last 7 Days"
+                        domain="[('date_order', '&gt;=', (context_today() + relativedelta(days=-6)).strftime('%Y-%m-%d'))]"/>
+                <filter name="month" string="This Month"
+                        domain="[('date_order', '&gt;=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
+                <filter name="year" string="This Year"
+                        domain="[('date_order', '&gt;=', (context_today() + relativedelta(month=1, day=1)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter name="loss" string="Loss Making" domain="[('profit', '&lt;', 0)]"/>
+                <separator/>
+                <filter name="group_product" string="Product" context="{'group_by': 'product_id'}"/>
+                <filter name="group_category" string="Category" context="{'group_by': 'categ_id'}"/>
+                <filter name="group_config" string="Point of Sale" context="{'group_by': 'config_id'}"/>
+                <filter name="group_order" string="Order" context="{'group_by': 'order_name'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_report_pos_product_profit" model="ir.actions.act_window">
+        <field name="name">Product Profit</field>
+        <field name="res_model">report.pos.product.profit</field>
+        <field name="view_mode">list,pivot</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No product sales in this period</p>
+            <p>Every sold line with its cost, profit and margin. Switch to the pivot view to see the most and least profitable products at a glance.</p>
+        </field>
+    </record>
+
+</odoo>

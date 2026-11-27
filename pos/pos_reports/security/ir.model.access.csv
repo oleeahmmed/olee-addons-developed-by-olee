@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_report_pos_daily_summary_user,report.pos.daily.summary user,model_report_pos_daily_summary,point_of_sale.group_pos_user,1,0,0,0
+access_report_pos_daily_summary_manager,report.pos.daily.summary manager,model_report_pos_daily_summary,point_of_sale.group_pos_manager,1,0,0,0
+access_report_pos_product_profit_user,report.pos.product.profit user,model_report_pos_product_profit,point_of_sale.group_pos_user,1,0,0,0
+access_report_pos_product_profit_manager,report.pos.product.profit manager,model_report_pos_product_profit,point_of_sale.group_pos_manager,1,0,0,0
+access_report_pos_session_close_user,report.pos.session.close user,model_report_pos_session_close,point_of_sale.group_pos_user,1,0,0,0
+access_report_pos_session_close_manager,report.pos.session.close manager,model_report_pos_session_close,point_of_sale.group_pos_manager,1,0,0,0
+access_report_pos_stock_flow_user,report.pos.stock.flow user,model_report_pos_stock_flow,point_of_sale.group_pos_user,1,0,0,0
+access_report_pos_stock_flow_manager,report.pos.stock.flow manager,model_report_pos_stock_flow,point_of_sale.group_pos_manager,1,0,0,0

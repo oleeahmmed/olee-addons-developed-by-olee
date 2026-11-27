@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_pos_order_report_list" model="ir.ui.view">
+        <field name="name">pos.order.report.list</field>
+        <field name="model">pos.order</field>
+        <field name="arch" type="xml">
+            <list string="POS Data" create="0" edit="0" delete="0">
+                <field name="date_order" string="Date"/>
+                <field name="name" string="Order Ref"/>
+                <field name="config_id" string="Point of Sale"/>
+                <field name="session_id" string="Session"/>
+                <field name="partner_id" string="Customer"/>
+                <field name="user_id" string="Cashier"/>
+                <field name="amount_tax" string="Tax" sum="Tax" optional="hide"/>
+                <field name="amount_total" string="Total" sum="Total"/>
+                <field name="amount_paid" string="Paid" sum="Paid" optional="hide"/>
+                <field name="state" string="Status" widget="badge"
+                    decoration-success="state in ('paid', 'done')"
+                    decoration-muted="state == 'cancel'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_pos_order_report_search" model="ir.ui.view">
+        <field name="name">pos.order.report.search</field>
+        <field name="model">pos.order</field>
+        <field name="arch" type="xml">
+            <search string="POS Data">
+                <field name="name" string="Order Ref"/>
+                <field name="partner_id" string="Customer"/>
+                <field name="session_id" string="Session"/>
+                <field name="user_id" string="Cashier"/>
+                <field name="date_order" string="Date"/>
+                <filter name="today" string="Today"
+                        domain="[('date_order', '&gt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="week" string="Last 7 Days"
+                        domain="[('date_order', '&gt;=', (context_today() + relativedelta(days=-6)).strftime('%Y-%m-%d'))]"/>
+                <filter name="month" string="This Month"
+                        domain="[('date_order', '&gt;=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
+                <filter name="year" string="This Year"
+                        domain="[('date_order', '&gt;=', (context_today() + relativedelta(month=1, day=1)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter name="paid" string="Paid" domain="[('state', 'in', ('paid', 'done'))]"/>
+                <filter name="refunds" string="Refunds" domain="[('amount_total', '&lt;', 0)]"/>
+                <filter name="cancelled" string="Cancelled" domain="[('state', '=', 'cancel')]"/>
+                <separator/>
+                <filter name="group_config" string="Point of Sale" context="{'group_by': 'config_id'}"/>
+                <filter name="group_session" string="Session" context="{'group_by': 'session_id'}"/>
+                <filter name="group_cashier" string="Cashier" context="{'group_by': 'user_id'}"/>
+                <filter name="group_customer" string="Customer" context="{'group_by': 'partner_id'}"/>
+                <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                <filter name="group_date" string="Date" context="{'group_by': 'date_order:day'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_pos_report_data" model="ir.actions.act_window">
+        <field name="name">POS Data</field>
+        <field name="res_model">pos.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_pos_order_report_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('point_of_sale.view_pos_pos_form')})]"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">No POS orders in this period</p>
+            <p>Every POS order is listed here. Use the date filters or add a custom date range to narrow the list, then export it to Excel from the list menu.</p>
+        </field>
+    </record>
+
+</odoo>
