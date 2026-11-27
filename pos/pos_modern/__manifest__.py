@@ -30,6 +30,7 @@ pos_pharmacy, pos_restaurant_bd, pos_retail_bd.
         'security/ir.model.access.csv',
         'views/pos_modern_views.xml',
         'views/pos_counter_views.xml',
+        'views/pos_payment_method_views.xml',
         'views/pos_modern_actions.xml',
         'views/pos_modern_menus.xml',
     ],

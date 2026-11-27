@@ -27,6 +27,7 @@ with a modern look.
     'data': [
         'security/invoice_modern_groups.xml',
         'views/invoice_modern_actions.xml',
+        'views/payment_method_views.xml',
         'views/invoice_modern_accounting_actions.xml',
         'views/invoice_modern_menus.xml',
         'views/invoice_modern_accounting_menus.xml',

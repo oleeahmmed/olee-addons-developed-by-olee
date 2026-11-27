@@ -808,11 +808,32 @@ class PosConfig(models.Model):
 
     def pos_modern_holds(self):
         self.ensure_one()
-        return [h._pos_modern_row() for h in self.env['pos.modern.hold'].search([('config_id', '=', self.id)])]
+        return [h._pos_modern_row() for h in self.env['pos.modern.hold'].search([('config_id', '=', self.id)])
+                if not self._pos_modern_reservation(h)]
 
     # ------------------------------------------------------------------
     # Tables (Point of Sale restaurant option)
     # ------------------------------------------------------------------
+    @api.model
+    def _pos_modern_reservation(self, hold):
+        """A reservation is a hold without lines, tagged in its cart payload (no extra table)."""
+        return ((hold.payload or {}).get('extra') or {}).get('reservation') or {}
+
+    @api.model
+    def _pos_modern_table_label(self, table):
+        return '%s · %s %s' % (table.floor_id.name or '', _('Table'), table.table_number)
+
+    @api.model
+    def _pos_modern_waiter(self, extra):
+        if 'pos.rb.staff' in self.env and extra.get('waiter_id'):
+            return self.env['pos.rb.staff'].browse(int(extra['waiter_id'])).exists().name or ''
+        return ''
+
+    @api.model
+    def _pos_modern_minutes(self, since):
+        since = fields.Datetime.to_datetime(since)
+        return max(0, int((fields.Datetime.now() - since).total_seconds() // 60)) if since else 0
+
     @api.model
     def pos_modern_tables(self, config_id=False):
         if 'restaurant.table' not in self.env:
@@ -821,35 +842,252 @@ class PosConfig(models.Model):
                                   order='name')
         config = restaurants.filtered(lambda c: c.id == config_id)[:1] or restaurants[:1]
         floors = config.floor_ids if config else self.env['restaurant.floor']
-        busy = {}
-        held = {}
+        drafts = {}
+        bills = {}
+        reservations = {}
         if config:
-            for table, count in self.env['pos.order']._read_group(
+            for order in self.env['pos.order'].search_read(
                     [('config_id', '=', config.id), ('state', '=', 'draft'), ('table_id', '!=', False)],
-                    ['table_id'], ['__count']):
-                busy[table.id] = count
-            for hold in self.env['pos.modern.hold'].search([('config_id', '=', config.id), ('table_ref', '!=', 0)]):
-                held.setdefault(hold.table_ref, []).append({'id': hold.id, 'total': hold.amount_total,
-                                                            'name': hold.display_name})
+                    ['table_id', 'customer_count', 'date_order', 'amount_total']):
+                drafts.setdefault(order['table_id'][0], []).append(order)
+            for hold in self.env['pos.modern.hold'].search(
+                    [('config_id', '=', config.id), ('table_ref', '!=', 0)], order='id'):
+                if self._pos_modern_reservation(hold):
+                    reservations[hold.table_ref] = hold
+                else:
+                    bills.setdefault(hold.table_ref, []).append(hold)
+
+        def table_row(t):
+            holds = bills.get(t.id, [])
+            res = reservations.get(t.id)
+            res_info = self._pos_modern_reservation(res) if res else {}
+            orders = drafts.get(t.id, [])
+            extra = (holds[0].payload or {}).get('extra') or {} if holds else {}
+            minutes = 0
+            if holds:
+                minutes = self._pos_modern_minutes(min(holds, key=lambda h: h.create_date or fields.Datetime.now()).create_date)
+            elif orders:
+                minutes = self._pos_modern_minutes(min(orders, key=lambda o: o['date_order'])['date_order'])
+            total = sum(h.amount_total for h in holds) + sum(o['amount_total'] for o in orders)
+            guests = max(
+                [int(((h.payload or {}).get('extra') or {}).get('guests') or 0) for h in holds]
+                + [o['customer_count'] or 0 for o in orders]
+                + [0]
+            )
+            bill_requested = any(((h.payload or {}).get('extra') or {}).get('bill_requested') for h in holds)
+            if holds or orders:
+                status = 'billing' if bill_requested else 'occupied'
+            elif res:
+                status = 'reserved'
+            else:
+                status = 'available'
+            shape = 'round' if t.shape == 'round' or (t.seats or 0) <= 2 else ('rect' if (t.seats or 0) >= 6 else 'square')
+            return {
+                'id': t.id,
+                'number': t.table_number,
+                'seats': t.seats,
+                'shape': t.shape,
+                'shape_class': shape,
+                'status': status,
+                'orders': len(orders) + len(holds),
+                'guests': guests,
+                'minutes': minutes,
+                'total': total,
+                'waiter': self._pos_modern_waiter(extra),
+                'bill': bill_requested,
+                'bill_id': holds[0].id if holds else False,
+                'holds': [{'id': h.id, 'total': h.amount_total, 'name': h.display_name} for h in holds],
+                'reserved': {
+                    'hold_id': res.id,
+                    'at': res_info.get('at') or '',
+                    'guests': int(res_info.get('guests') or 0),
+                    'name': res_info.get('name') or '',
+                } if res else False,
+            }
+
         return {
             'installed': True,
             'config_id': config.id if config else False,
             'config_name': config.name if config else '',
             'currency_id': config.currency_id.id if config else False,
+            'receipt_width': config.pm_receipt_width or '80',
+            'server': {'name': self.env.user.name, 'login': self.env.user.login},
             'shops': [{'id': c.id, 'name': c.name} for c in restaurants],
             'floors': [{
                 'id': floor.id,
                 'name': floor.name,
-                'tables': [{
-                    'id': t.id,
-                    'number': t.table_number,
-                    'seats': t.seats,
-                    'shape': t.shape,
-                    'orders': busy.get(t.id, 0) + len(held.get(t.id, [])),
-                    'holds': held.get(t.id, []),
-                } for t in floor.table_ids.filtered('active').sorted('table_number')],
+                'tables': [table_row(t) for t in floor.table_ids.filtered('active').sorted('table_number')],
             } for floor in floors.sorted('sequence')],
         }
+
+    def pos_modern_table_detail(self, table_id, bill_id=False):
+        """Live summary of one table for the Tables sidebar: bills, items, guests, timer."""
+        self.ensure_one()
+        table = self.env['restaurant.table'].browse(int(table_id or 0)).exists()
+        if not table:
+            raise UserError(_("The table is gone."))
+        holds = self.env['pos.modern.hold'].search(
+            [('config_id', '=', self.id), ('table_ref', '=', table.id)], order='id')
+        bills = holds.filtered(lambda h: not self._pos_modern_reservation(h))
+        res = holds.filtered(lambda h: self._pos_modern_reservation(h))[:1]
+        res_info = self._pos_modern_reservation(res) if res else {}
+        bill_rows = [{
+            'id': h.id,
+            'label': h.display_name,
+            'total': h.amount_total,
+            'guests': int(((h.payload or {}).get('extra') or {}).get('guests') or 0),
+            'minutes': self._pos_modern_minutes(h.create_date),
+            'bill_requested': bool(((h.payload or {}).get('extra') or {}).get('bill_requested')),
+        } for h in bills]
+        chosen = bills.filtered(lambda h: h.id == int(bill_id or 0))[:1] or bills[:1]
+        draft = self.env['pos.order']
+        items = []
+        total = 0.0
+        guests = 0
+        minutes = 0
+        waiter = ''
+        if chosen:
+            payload = chosen.payload or {}
+            extra = payload.get('extra') or {}
+            quote = self._pos_modern_quote(payload)
+            total = quote['total']
+            guests = int(extra.get('guests') or 0)
+            minutes = self._pos_modern_minutes(chosen.create_date)
+            waiter = self._pos_modern_waiter(extra)
+            items = [{
+                'key': line['key'],
+                'name': line['product'].with_context(display_default_code=False).display_name,
+                'qty': line['qty'],
+                'note': line['note'],
+                'total': line['subtotal_incl'],
+                'price_unit': line['price_unit'],
+            } for line in quote['lines']]
+        else:
+            draft = self.env['pos.order'].search(
+                [('config_id', '=', self.id), ('state', '=', 'draft'), ('table_id', '=', table.id)],
+                order='date_order', limit=1)
+            if draft:
+                total = draft.amount_total
+                guests = draft.customer_count or 0
+                minutes = self._pos_modern_minutes(draft.date_order)
+                waiter = draft.rb_waiter_id.name if 'rb_waiter_id' in draft._fields else ''
+                items = [{
+                    'key': str(line.id),
+                    'name': line.full_product_name or line.product_id.display_name,
+                    'qty': line.qty,
+                    'note': line.customer_note or '',
+                    'total': line.price_subtotal_incl,
+                    'price_unit': line.price_unit,
+                } for line in draft.lines]
+        selected_bill = chosen[:1]
+        if selected_bill and ((selected_bill.payload or {}).get('extra') or {}).get('bill_requested'):
+            status = 'billing'
+        elif selected_bill or draft:
+            status = 'occupied'
+        elif res:
+            status = 'reserved'
+        else:
+            status = 'available'
+        return {
+            'table': {'id': table.id, 'number': table.table_number, 'seats': table.seats,
+                      'floor': table.floor_id.name or ''},
+            'status': status,
+            'currency_id': self.currency_id.id,
+            'bills': bill_rows,
+            'selected_bill_id': selected_bill.id if selected_bill else False,
+            'items': items,
+            'total': total,
+            'guests': guests,
+            'minutes': minutes,
+            'waiter': waiter,
+            'reserved': {
+                'hold_id': res.id,
+                'at': res_info.get('at') or '',
+                'guests': int(res_info.get('guests') or 0),
+                'name': res_info.get('name') or '',
+            } if res else False,
+        }
+
+    def pos_modern_table_reserve(self, table_id, at='', guests=0, name=''):
+        """Reserve a table: a line-less hold tagged as a reservation (no extra table)."""
+        self.ensure_one()
+        table = self.env['restaurant.table'].browse(int(table_id or 0)).exists()
+        if not table:
+            raise UserError(_("The table is gone."))
+        Hold = self.env['pos.modern.hold']
+        holds = Hold.search([('config_id', '=', self.id), ('table_ref', '=', table.id)])
+        if holds.filtered(lambda h: not self._pos_modern_reservation(h)):
+            raise UserError(_("Table %s has an open bill.", table.table_number))
+        holds.filtered(lambda h: self._pos_modern_reservation(h)).unlink()
+        label = self._pos_modern_table_label(table)
+        hold = Hold.create({
+            'config_id': self.id,
+            'name': label,
+            'table_ref': table.id,
+            'table_name': label,
+            'payload': {
+                'lines': [],
+                'table_id': table.id,
+                'table_name': label,
+                'extra': {'reservation': {'at': str(at or '')[:8], 'guests': int(guests or 0),
+                                          'name': str(name or '')[:64]}},
+            },
+            'amount_total': 0.0,
+            'item_count': 0.0,
+        })
+        return hold._pos_modern_row()
+
+    def pos_modern_table_unreserve(self, hold_id):
+        self.ensure_one()
+        hold = self.env['pos.modern.hold'].browse(int(hold_id or 0)).exists()
+        if not hold or hold.config_id != self or not self._pos_modern_reservation(hold):
+            raise UserError(_("This reservation is gone."))
+        hold.unlink()
+        return True
+
+    def pos_modern_table_split(self, bill_id, keys):
+        """Move the picked items of a table bill to a second bill of the same table."""
+        self.ensure_one()
+        hold = self.env['pos.modern.hold'].browse(int(bill_id or 0)).exists()
+        if not hold or hold.config_id != self:
+            raise UserError(_("The bill is gone."))
+        if self._pos_modern_reservation(hold):
+            raise UserError(_("A reservation cannot be split."))
+        keys = {str(k) for k in (keys or [])}
+        payload = dict(hold.payload or {})
+        lines = [dict(line) for line in payload.get('lines') or []]
+        chosen = [line for line in lines if str(line.get('key')) in keys]
+        rest = [line for line in lines if str(line.get('key')) not in keys]
+        if not chosen:
+            raise UserError(_("Pick the items of the new bill."))
+        if not rest:
+            raise UserError(_("Keep at least one item on the original bill."))
+        extra = dict(payload.get('extra') or {})
+        sent = dict(extra.get('sent') or {})
+        new_sent = {key: sent.pop(key) for key in list(sent) if key in keys}
+        rest_payload = dict(payload, lines=rest, extra=extra)
+        new_payload = dict(payload, lines=chosen, extra=dict(extra, sent=new_sent))
+        new_payload.pop('uuid', None)
+        new_payload.pop('hold_id', None)
+        label = (hold.name or hold.table_name or _('Bill'))[:40]
+        new_hold = self.env['pos.modern.hold'].create({
+            'config_id': self.id,
+            'name': _('%s (split)', label),
+            'partner_id': hold.partner_id.id,
+            'table_ref': hold.table_ref,
+            'table_name': hold.table_name,
+            'payload': new_payload,
+            'amount_total': 0.0,
+            'item_count': 0.0,
+        })
+        for record, data in ((hold, rest_payload), (new_hold, new_payload)):
+            quote = self._pos_modern_quote(data)
+            record.write({
+                'payload': data,
+                'amount_total': quote['total'],
+                'item_count': sum(_num(line.get('qty')) for line in data.get('lines') or []),
+            })
+        return {'bill_id': hold.id, 'new_bill_id': new_hold.id}
 
     # ------------------------------------------------------------------
     # Counter settings page (a standalone form, no xpath into Odoo's)

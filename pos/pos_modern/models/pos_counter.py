@@ -59,6 +59,8 @@ class PosModernHold(models.Model):
     def pos_modern_take(self):
         """The cart of a held bill (the bill is removed once the order is paid)."""
         self.ensure_one()
+        if ((self.payload or {}).get('extra') or {}).get('reservation'):
+            raise UserError(_("This is a table reservation, not a bill."))
         return self._pos_modern_row()
 
 

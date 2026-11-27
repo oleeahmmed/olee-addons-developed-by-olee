@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <record id="payment_method_view_form" model="ir.ui.view">
+        <field name="name">modern.reports.payment.method.form</field>
+        <field name="model">modern.reports.payment.method</field>
+        <field name="arch" type="xml">
+            <!-- Same page as the POS / Invoicing payment methods (scss/apps/payment_form.scss). -->
+            <form string="Payment Method on Documents">
+                <sheet>
+                    <div class="o_pm" aria-hidden="true"/>
+                    <div class="oe_title">
+                        <label for="name" string="Card title"/>
+                        <h1><field name="name" placeholder="e.g. bKash"/></h1>
+                        <div class="o_pm-sub">Printed as a card on invoices, quotations and
+                            receipts, with the account or wallet number the customer must use.</div>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="kind"/>
+                            <field name="detail" placeholder="Dutch-Bangla Bank PLC"/>
+                            <field name="value" placeholder="123-110-0045678"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="highlight"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
     <record id="payment_method_view_list" model="ir.ui.view">
         <field name="name">modern.reports.payment.method.list</field>
         <field name="model">modern.reports.payment.method</field>
@@ -21,7 +53,7 @@
     <record id="action_payment_methods" model="ir.actions.act_window">
         <field name="name">Payment Methods on Documents</field>
         <field name="res_model">modern.reports.payment.method</field>
-        <field name="view_mode">list</field>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">Add the payment methods printed on invoices and quotations</p>
             <p>e.g. Bank Transfer, bKash, Nagad, Cash. Without any, the company bank accounts are printed.</p>

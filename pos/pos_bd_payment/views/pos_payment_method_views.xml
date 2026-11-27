@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Bangladesh settings inside the unified payment-method form (the same page in
+         POS and Invoicing, see modern_theme/scss/apps/payment_form.scss). -->
+    <record id="pos_payment_method_view_form_bd" model="ir.ui.view">
+        <field name="name">pos.payment.method.form.bd</field>
+        <field name="model">pos.payment.method</field>
+        <field name="inherit_id" ref="point_of_sale.pos_payment_method_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group[@name='Payment methods']" position="after">
+                <div class="o_pm-sec">Bangladesh wallet</div>
+                <group name="bd_payment">
+                    <group>
+                        <field name="bd_provider"/>
+                        <field name="bd_merchant_number" invisible="not bd_provider"
+                               placeholder="01XXXXXXXXX"/>
+                    </group>
+                    <group>
+                        <field name="bd_needs_trx" invisible="not bd_provider"/>
+                        <field name="bd_needs_phone" invisible="not bd_provider"/>
+                        <field name="bd_trx_pattern" invisible="not bd_provider"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
     <!-- Standalone list of the payment methods with the Bangladesh columns (no xpath into Odoo's views) -->
     <record id="pos_payment_method_bd_list" model="ir.ui.view">
         <field name="name">pos.payment.method.list.bd</field>

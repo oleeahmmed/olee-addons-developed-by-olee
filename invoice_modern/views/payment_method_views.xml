@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Invoicing / Sales ▸ Configuration ▸ Online Payments ▸ Payment Methods, in the
+         same layout as the POS payment-method form (modern_theme scss/apps/payment_form.scss).
+         Only classes and quiet notes: provider and brand fields stay Odoo's own. -->
+    <record id="payment_method_form_modern" model="ir.ui.view">
+        <field name="name">payment.method.form (modern)</field>
+        <field name="model">payment.method</field>
+        <field name="inherit_id" ref="payment.payment_method_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet" position="inside">
+                <div class="o_pm" aria-hidden="true"/>
+            </xpath>
+            <xpath expr="//form/sheet/div[hasclass('oe_title')]" position="inside">
+                <div class="o_pm-sub">The payment method offered on invoices, quotations and
+                    online orders. Its providers and options are managed below.</div>
+            </xpath>
+            <xpath expr="//form/sheet/group[1]" position="before">
+                <div class="o_pm-sec">General</div>
+            </xpath>
+            <xpath expr="//form/sheet/group[1]" position="after">
+                <div class="o_pm-note">
+                    <i class="fa fa-circle-info" title="Note" aria-hidden="true"/>
+                    <div>This method is set by the payment providers and matches their
+                        behaviour: code, active state and supported countries / currencies
+                        cannot be changed by hand.</div>
+                </div>
+            </xpath>
+            <xpath expr="//form/sheet/notebook" position="before">
+                <div class="o_pm-sec">Providers &amp; brands</div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

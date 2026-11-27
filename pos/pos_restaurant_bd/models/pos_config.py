@@ -250,25 +250,12 @@ class PosConfig(models.Model):
             return data
         config = self.browse(data['config_id'])
         tables = {t.id: t for t in config.floor_ids.table_ids}
-        holds = {h.table_ref: h for h in self.env['pos.modern.hold'].search(
-            [('config_id', '=', config.id), ('table_ref', '!=', 0)])}
-        staff = {s.id: s.name for s in self.env['pos.rb.staff'].search([])}
-        now = fields.Datetime.now()
         for floor in data['floors']:
             for row in floor['tables']:
                 table = tables.get(row['id'])
                 if table:
                     row.update({'x': table.position_h, 'y': table.position_v, 'w': table.width or 80,
                                 'h': table.height or 80})
-                hold = holds.get(row['id'])
-                if hold:
-                    extra = (hold.payload or {}).get('extra') or {}
-                    row.update({
-                        'bill': bool(extra.get('bill_requested')),
-                        'waiter': staff.get(int(extra.get('waiter_id') or 0), ''),
-                        'guests': int(extra.get('guests') or 0),
-                        'minutes': int((now - hold.create_date).total_seconds() // 60) if hold.create_date else 0,
-                    })
         return data
 
     def pos_rb_kds(self):

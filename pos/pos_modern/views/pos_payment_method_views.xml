@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- The POS payment-method form, in the same layout as the Invoicing / Sales one
+         (modern_theme/static/src/scss/apps/payment_form.scss): header card with the image
+         and the name, one card of fields, a note for credit sales. Every Odoo field and
+         every extension of other modules stays put. -->
+    <record id="pos_payment_method_view_form_payment" model="ir.ui.view">
+        <field name="name">pos.payment.method.form (modern)</field>
+        <field name="model">pos.payment.method</field>
+        <field name="inherit_id" ref="point_of_sale.pos_payment_method_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet" position="inside">
+                <div class="o_pm" aria-hidden="true"/>
+            </xpath>
+            <!-- stock header row: put the image and the title straight in the sheet, so
+                 the theme's record-header card frames them (same as Invoicing) -->
+            <xpath expr="//form/sheet/div[hasclass('d-flex')]" position="replace">
+                <field name="image" class="oe_avatar" widget="image"/>
+                <div class="oe_title">
+                    <label for="name"/>
+                    <h1><field name="name" placeholder="e.g. Cash" class="oe_inline"/></h1>
+                    <div class="o_pm-sub">How the cashier takes this payment, which shops it
+                        belongs to, and where its money is booked.</div>
+                </div>
+            </xpath>
+            <xpath expr="//form/sheet/group[@name='Payment methods']" position="before">
+                <div class="o_pm-sec">Cashier setup</div>
+            </xpath>
+            <xpath expr="//form/sheet/group[@name='Payment methods']" position="after">
+                <div class="o_pm-note">
+                    <i class="fa fa-circle-info" title="Note" aria-hidden="true"/>
+                    <div><strong>Credit sale (Customer Account):</strong> leave the Journal
+                        empty and tick <em>Identify Customer</em>. The bill is charged to the
+                        customer's receivable account and collected later from
+                        Invoicing ▸ Payments, its invoice, or Settle orders.</div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

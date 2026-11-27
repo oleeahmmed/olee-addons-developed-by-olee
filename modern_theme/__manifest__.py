@@ -35,6 +35,7 @@ Modern Theme turns the Odoo 19 backend into a clean shadcn/ui admin dashboard:
             "modern_theme/static/src/scss/components.scss",
             "modern_theme/static/src/scss/views.scss",
             "modern_theme/static/src/scss/layout.scss",
+            "modern_theme/static/src/scss/page_frame.scss",
             "modern_theme/static/src/scss/sidebar.scss",
             "modern_theme/static/src/scss/sidebar_shadcn.scss",
             "modern_theme/static/src/scss/icons.scss",
@@ -95,6 +96,7 @@ Modern Theme turns the Odoo 19 backend into a clean shadcn/ui admin dashboard:
             "modern_theme/static/src/scss/apps/purchase.scss",
             "modern_theme/static/src/scss/apps/sales.scss",
             "modern_theme/static/src/scss/apps/pos.scss",
+            "modern_theme/static/src/scss/apps/payment_form.scss",
         ],
         "web.report_assets_common": [
             "modern_theme/static/src/scss/report_modern.scss",

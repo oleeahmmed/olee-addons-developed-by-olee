@@ -69,28 +69,34 @@
         </xpath>
     </t>
 
-    <!-- visual floor plan (Odoo's table positions) -->
+    <!-- visual floor plan (Odoo's table positions): shown for the whole floor, grid for a filtered list -->
     <t t-inherit="pos_modern.Tables" t-inherit-mode="extension">
-        <xpath expr="//div[hasclass('ps-table-grid')]" position="before">
+        <xpath expr="//nav[hasclass('ps-tbl-floors')]" position="after">
+            <t t-if="planOf(floor)">
+                <button type="button" t-attf-class="ps-floor ps-plan-toggle {{ state.planView ? 'is-on' : '' }}" t-on-click="() => this.togglePlan()" title="Switch between the arrangement and the card grid">
+                    <i class="fa fa-map-o" aria-hidden="true"/> Floor plan
+                </button>
+            </t>
+        </xpath>
+        <xpath expr="//div[hasclass('ps-tbl-grid')]" position="before">
             <t t-set="plan" t-value="planOf(floor)"/>
-            <t t-if="plan">
-                <div class="ps-legend"><span>Free</span><span class="is-busy">Occupied</span><span class="is-bill">Bill asked</span></div>
+            <t t-if="plan and state.planView and state.filter === 'all' and !state.query.trim()">
                 <div class="ps-floorplan" t-attf-style="height:{{ plan.h }}px">
-                    <t t-foreach="floor.tables" t-as="t" t-key="t.id">
-                        <button type="button" t-attf-class="ps-ftable ps-ftable--{{ t.shape }} {{ t.bill ? 'is-bill' : (t.orders ? 'is-busy' : '') }}"
-                                t-att-style="tableStyle(t)" t-on-click="() => this.openTable(t)">
+                    <t t-foreach="allTables" t-as="t" t-key="t.id">
+                        <button type="button" t-attf-class="ps-ftable ps-ftable--{{ t.shape }} {{ t.status === 'billing' ? 'is-bill' : (t.status === 'occupied' ? 'is-busy' : (t.status === 'reserved' ? 'is-resv' : '')) }}"
+                                t-att-style="tableStyle(t)" t-on-click="() => this.select(t)">
                             <strong t-esc="t.number"/>
-                            <small t-if="t.holds and t.holds.length" t-esc="money(t.holds[0].total)"/>
+                            <small t-if="t.total" t-esc="money(t.total)"/>
                             <small t-else=""><i class="fa fa-user-o" aria-hidden="true"/> <t t-esc="t.seats"/></small>
-                            <small t-if="t.waiter" t-esc="t.waiter"/>
+                            <small t-if="t.reserved.at" t-esc="t.reserved.at"/>
                             <small t-if="t.minutes"><t t-esc="t.minutes"/> min</small>
                         </button>
                     </t>
                 </div>
             </t>
         </xpath>
-        <xpath expr="//div[hasclass('ps-table-grid')]" position="attributes">
-            <attribute name="t-if">!planOf(floor)</attribute>
+        <xpath expr="//div[hasclass('ps-tbl-grid')]" position="attributes">
+            <attribute name="t-if">!state.planView or !planOf(floor) or state.filter !== 'all' or !!state.query.trim()</attribute>
         </xpath>
     </t>
 

@@ -177,14 +177,24 @@ patch(PosMenu.prototype, {
     },
 });
 
+const PosTablesSetup = PosTables.prototype.setup;
+
 patch(PosTables.prototype, {
+    setup() {
+        PosTablesSetup.call(this);
+        this.state.planView = false;
+    },
+    togglePlan() {
+        this.state.planView = !this.state.planView;
+    },
     planOf(floor) {
         const tables = floor?.tables || [];
-        if (!tables.length || !tables.some((t) => t.x !== undefined)) {
+        // a floor plan only makes sense once a table was moved from its default spot
+        if (!tables.length || !tables.some((t) => (t.x || 0) !== 10 || (t.y || 0) !== 10)) {
             return null;
         }
-        const w = Math.max(...tables.map((t) => (t.x || 0) + (t.w || 80))) + 24;
-        const h = Math.max(...tables.map((t) => (t.y || 0) + (t.h || 80))) + 24;
+        const w = Math.max(...tables.map((t) => (t.x || 0) + Math.max(t.w || 80, 64))) + 8;
+        const h = Math.max(...tables.map((t) => (t.y || 0) + Math.max(t.h || 80, 64))) + 8;
         return { w, h };
     },
     tableStyle(t) {

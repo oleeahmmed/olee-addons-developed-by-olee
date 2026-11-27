@@ -10,16 +10,8 @@ import { CategoryDrawer } from "./drawer";
  */
 const forms = {
     "pos.category": { component: CategoryDrawer },
-    // only what a cashier's payment method needs; accounts stay in the full form
-    "pos.payment.method": {
-        title: _t("Payment method"),
-        newTitle: _t("New payment method"),
-        fields: [
-            { name: "name", placeholder: _t("e.g. Cash") },
-            { name: "journal_id", label: _t("Journal"), domain: [["type", "in", ["cash", "bank"]]] },
-            { name: "config_ids", label: _t("Shops"), widget: "chips" },
-        ],
-    },
+    // payment methods are edited in the unified full form (no drawer),
+    // see views/pos_payment_method_views.xml
     // a new shop from "+ New Shop" (settings) or a list: name and restaurant switch.
     // Opening a shop keeps Odoo's settings page (open: false).
     "pos.config": {

@@ -1,0 +1,149 @@
+// Payment-method forms, one look everywhere: POS ▸ Configuration ▸ Payment
+// Methods (pos.payment.method), Invoicing / Sales ▸ Online Payments ▸ Payment
+// Methods (payment.method) and Document Payment Methods (modern_reports).
+//
+// The views only add the class .o_pm to Odoo's own form: every field, widget
+// and module extension stays in place, so the page survives upgrades. This file
+// arranges the header, separates the field cards and styles the quiet notes;
+// the fields themselves keep the shared form look of form.scss.
+
+// The views drop an empty <div class="o_pm"/> marker in the sheet (Odoo does not
+// keep a class on <form>); the marker is display:contents, so it paints nothing.
+$pm: 'html[data-mt-theme] .o_web_client .o_form_view:has(.o_pm)';
+
+#{$pm} {
+    .o_pm { display: contents; }
+
+    .o_form_sheet {
+        max-width: 62rem !important;
+        padding: 1.5rem 1.75rem 2rem !important;
+    }
+
+    // ---- header: the theme's record header card (image tile, title) carries the
+    // name; payment.method and pos.payment.method both put the image and .oe_title
+    // straight in the sheet, so both get that card.
+    .oe_title {
+        margin-bottom: 0.25rem !important;
+
+        > label,
+        .o_form_label {
+            display: block !important;
+            margin-bottom: 0.25rem !important;
+            color: var(--mt-muted-foreground) !important;
+            font-size: 0.6875rem !important;
+            font-weight: 600 !important;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.625rem;
+            font-weight: 650;
+            letter-spacing: -0.015em;
+            line-height: 1.2;
+
+            .o_field_widget,
+            .o_input {
+                font-size: inherit;
+                font-weight: inherit;
+                color: var(--mt-foreground);
+            }
+
+            .o_input {
+                min-height: 2.5rem;
+                padding: 0.125rem 0.5rem;
+                border: 1px solid transparent !important;
+                border-radius: 0.5rem !important;
+                background: transparent !important;
+                box-shadow: none !important;
+
+                &:hover { border-color: var(--mt-border) !important; }
+
+                &:focus {
+                    border-color: var(--mt-focus-border) !important;
+                    background: var(--mt-field-bg) !important;
+                    box-shadow: 0 0 0 3px var(--mt-focus-ring) !important;
+                }
+            }
+        }
+    }
+
+    .o_pm-sub {
+        max-width: 44rem;
+        margin-top: 0.5rem;
+        color: var(--mt-muted-foreground);
+        font-size: 0.8125rem;
+        line-height: 1.5;
+    }
+
+    // document methods: the title block is the sheet's record card, full width
+    .o_form_sheet > .oe_title {
+        width: 100% !important;
+        max-width: none !important;
+    }
+
+    // ---- a quiet section heading between the cards ("General", "Cashier setup"…)
+    .o_pm-sec {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 0.75rem 0.125rem -0.125rem;
+        color: var(--mt-muted-foreground);
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+
+        &::before {
+            content: "";
+            width: 0.375rem;
+            height: 0.375rem;
+            border-radius: 999px;
+            background: color-mix(in srgb, var(--mt-primary) 65%, transparent);
+        }
+    }
+
+    // ---- closing note (credit sales, provider-managed fields…)
+    .o_pm-note {
+        display: flex;
+        gap: 0.625rem;
+        margin-top: 0.25rem;
+        padding: 0.75rem 0.875rem;
+        border: 1px solid var(--mt-border);
+        border-radius: 0.875rem;
+        background: color-mix(in srgb, var(--mt-primary) 4%, var(--mt-card));
+        color: var(--mt-muted-foreground);
+        font-size: 0.8125rem;
+        line-height: 1.5;
+
+        > i {
+            margin-top: 0.125rem;
+            color: var(--mt-primary);
+        }
+
+        strong {
+            color: var(--mt-foreground);
+            font-weight: 600;
+        }
+    }
+
+    // ---- fields: a little more air between the stacked rows of the card
+    .o_inner_group > .mt-row { margin-bottom: 0.625rem; }
+
+    // "All countries are supported.": the read-only tags widget has nothing to
+    // show, so its empty input frame must not draw, only the muted sentence.
+    .o_field_many2many_tags.o_readonly_modifier .o_field_tags:not(:has(.o_tag)) { display: none !important; }
+
+    // the tabs (Providers / Brands / Configuration) close the page
+    .o_notebook { margin-top: 0.25rem; }
+
+    // read-only fields printed as plain text, not as disabled inputs
+    .o_field_widget.o_readonly_modifier:not(.o_field_many2many_tags) > span:only-child,
+    .o_field_widget.o_readonly_modifier:not(.o_field_many2many_tags) > a:only-child {
+        display: inline-block;
+        padding: 0.125rem 0;
+        color: var(--mt-foreground);
+        font-size: 0.875rem;
+    }
+}

@@ -12,6 +12,7 @@ import { printReceipt, printTemplate } from "./counter/print";
 import { PsExpenseDialog, PsLabelsDialog, PsModifierDialog, PsQtyDialog, PsReturnDialog, PsStockToolDialog } from "./counter/tools";
 import { Dropdown } from "@web/core/dropdown/dropdown";
 import { DropdownItem } from "@web/core/dropdown/dropdown_item";
+import { Dialog } from "@web/core/dialog/dialog";
 
 const SHOP_KEY = "pos_modern.menu.shop";
 // Counter layout per browser: "cart" (product grid + cart rail) or "bill" (bill table + product panel).
@@ -1204,7 +1205,64 @@ export class PosMenu extends Component {
 
 registry.category("actions").add("pos_modern.menu", PosMenu);
 
-/** Tables of a restaurant shop: free / occupied; a table opens the Menu for it. */
+/** Reserve a table: guest name, time and cover count (stored on a line-less hold). */
+export class TablesReserveDialog extends Component {
+    static template = "pos_modern.TablesReserve";
+    static components = { Dialog };
+    static props = { table: Object, onSave: Function, close: Function };
+
+    setup() {
+        const soon = new Date(Date.now() + 30 * 60000);
+        const at = `${String(soon.getHours()).padStart(2, "0")}:${String(soon.getMinutes()).padStart(2, "0")}`;
+        this.state = useState({ at, guests: 2, name: "" });
+    }
+    save() {
+        this.props.onSave({
+            at: this.state.at,
+            guests: Number(this.state.guests) || 0,
+            name: this.state.name.trim(),
+        });
+        this.props.close();
+    }
+}
+
+/** Pick the items that move to the second bill of the table. */
+export class TablesSplitDialog extends Component {
+    static template = "pos_modern.TablesSplit";
+    static components = { Dialog };
+    static props = { detail: Object, money: Function, onSplit: Function, close: Function };
+
+    setup() {
+        this.state = useState({ keys: [] });
+    }
+    get items() {
+        return this.props.detail?.items || [];
+    }
+    toggle(key) {
+        this.state.keys = this.state.keys.includes(key)
+            ? this.state.keys.filter((k) => k !== key)
+            : [...this.state.keys, key];
+    }
+    get selectedTotal() {
+        return this.items.filter((l) => this.state.keys.includes(l.key)).reduce((s, l) => s + (l.total || 0), 0);
+    }
+    get canSplit() {
+        return this.state.keys.length > 0 && this.state.keys.length < this.items.length;
+    }
+    confirm() {
+        if (!this.canSplit) {
+            return;
+        }
+        this.props.onSplit(this.state.keys);
+        this.props.close();
+    }
+}
+
+/**
+ * Tables: the restaurant floor plan. Floors, search and status pills on top; the floor
+ * canvas on the left; the selected table's live bill with Add Items / Print KOT /
+ * Split Bill / Settle Payment on the right. A table opens the Menu for it.
+ */
 export class PosTables extends Component {
     static template = "pos_modern.Tables";
     static props = ["*"];
@@ -1212,42 +1270,229 @@ export class PosTables extends Component {
     setup() {
         this.orm = useService("orm");
         this.action = useService("action");
+        this.dialog = useService("dialog");
+        this.notification = useService("notification");
         usePinApp(APP_XMLID);
         const ctx = this.props.action?.context || {};
-        this.state = useState({ loading: true, data: null, floorId: false, shops: [] });
+        this.state = useState({
+            loading: true,
+            data: null,
+            floorId: false,
+            shops: [],
+            query: "",
+            filter: "all",
+            selId: false,
+            detail: null,
+            now: Date.now(),
+        });
         this.configId = ctx.pos_modern_config_id || readShop();
+        this.presetTableId = ctx.pos_modern_table_id || false;
         onWillStart(() => this.load());
+        onMounted(() => {
+            this.clock = setInterval(() => (this.state.now = Date.now()), 30000);
+            this.poller = setInterval(() => this.refresh(), 30000);
+        });
+        onWillUnmount(() => {
+            clearInterval(this.clock);
+            clearInterval(this.poller);
+        });
     }
-    async load(configId = this.configId) {
+    async load(configId = this.configId, keep = false) {
         const data = await this.orm.call("pos.config", "pos_modern_tables", [configId || false]);
         this.state.data = data;
         this.state.shops = data.shops || [];
         this.configId = data.config_id || configId;
-        if (!data.floors.some((f) => f.id === this.state.floorId)) {
-            this.state.floorId = data.floors[0]?.id || false;
+        this.loadedAt = Date.now();
+        const floors = data.floors || [];
+        if (!keep || !floors.some((f) => f.id === this.state.floorId)) {
+            this.state.floorId = floors[0]?.id || false;
         }
+        const ids = new Set((this.floor?.tables || []).map((t) => t.id));
+        if (!keep || !ids.has(this.state.selId)) {
+            this.state.selId = this.presetTableId && ids.has(this.presetTableId)
+                ? this.presetTableId
+                : (this.floor?.tables?.[0]?.id || false);
+        }
+        this.presetTableId = false;
         this.state.loading = false;
+        await this.loadDetail();
     }
+    async refresh() {
+        if (!this.state.data?.installed) {
+            return;
+        }
+        await this.load(this.configId, true);
+    }
+    async loadDetail(billId = false) {
+        if (!this.state.selId) {
+            this.state.detail = null;
+            return;
+        }
+        this.state.detail = await this.orm.silent.call(
+            "pos.config", "pos_modern_table_detail", [[this.configId], this.state.selId, billId || false]
+        );
+    }
+
     get floor() {
         return (this.state.data?.floors || []).find((f) => f.id === this.state.floorId);
+    }
+    get allTables() {
+        return this.floor?.tables || [];
+    }
+    get tables() {
+        const q = this.state.query.trim().toLowerCase();
+        return this.allTables.filter((t) => {
+            if (this.state.filter !== "all" && t.status !== this.state.filter) {
+                return false;
+            }
+            return !q || String(t.number).includes(q) || (t.reserved?.name || "").toLowerCase().includes(q);
+        });
+    }
+    get counts() {
+        const counts = { all: this.allTables.length, available: 0, occupied: 0, reserved: 0, billing: 0 };
+        for (const t of this.allTables) {
+            counts[t.status] = (counts[t.status] || 0) + 1;
+        }
+        return counts;
+    }
+    get selected() {
+        return this.allTables.find((t) => t.id === this.state.selId);
+    }
+    get detail() {
+        return this.state.detail;
+    }
+    get filters() {
+        return [
+            ["all", _t("All")],
+            ["available", _t("Available")],
+            ["occupied", _t("Occupied")],
+            ["reserved", _t("Reserved")],
+            ["billing", _t("Billing")],
+        ];
+    }
+    statusLabel(status) {
+        return { available: _t("Available"), occupied: _t("Occupied"), reserved: _t("Reserved"), billing: _t("Bill printed") }[status] || "";
     }
     money(v) {
         return this.state.data?.currency_id ? formatCurrency(v || 0, this.state.data.currency_id) : String(v);
     }
+    initials(name) {
+        const words = String(name || "?").trim().split(/\s+/);
+        return ((words[0] || "?")[0] + (words.length > 1 ? words[1][0] : "")).toUpperCase();
+    }
+    minutes(table) {
+        const extra = Math.floor((this.state.now - (this.loadedAt || Date.now())) / 60000);
+        return (table.minutes || 0) + extra;
+    }
+    elapsed(table) {
+        const m = this.minutes(table);
+        return m >= 60 ? `${Math.floor(m / 60)}h ${String(m % 60).padStart(2, "0")}` : `${m} min`;
+    }
+    setFloor(id) {
+        this.state.floorId = id;
+        this.state.selId = (this.floor?.tables || [])[0]?.id || false;
+        this.state.detail = null;
+        this.loadDetail();
+    }
+    select(table) {
+        if (this.state.selId === table.id) {
+            return;
+        }
+        this.state.selId = table.id;
+        this.state.detail = null;
+        this.loadDetail();
+    }
+    selectBill(billId) {
+        this.loadDetail(billId);
+    }
     onShop(ev) {
         const id = Number(ev.target.value) || false;
         storeShop(id);
+        this.state.query = "";
+        this.state.filter = "all";
         return this.load(id);
     }
-    openTable(table) {
+
+    openMenu(billId = false) {
+        const table = this.selected;
+        if (!table) {
+            return;
+        }
         return this.action.doAction("pos_modern.action_menu", {
             additionalContext: {
                 pos_modern_config_id: this.configId,
                 pos_modern_table_id: table.id,
                 pos_modern_table_name: `${this.floor?.name || ""} · ${_t("Table")} ${table.number}`,
-                pos_modern_hold_id: table.holds?.[0]?.id || false,
+                pos_modern_hold_id: billId || false,
             },
         });
+    }
+    addItems() {
+        return this.openMenu(this.state.detail?.selected_bill_id);
+    }
+    settle() {
+        return this.openMenu(this.state.detail?.selected_bill_id);
+    }
+    printKot() {
+        const detail = this.state.detail;
+        if (!detail?.items?.length) {
+            return;
+        }
+        printTemplate("pos_modern.KOT", {
+            shop: this.state.data.config_name,
+            order: detail.table.number,
+            table: `${this.floor?.name || ""} · ${_t("Table")} ${detail.table.number}`,
+            note: "",
+            now: new Date().toLocaleString(),
+            lines: detail.items.map((l) => ({ qty: l.qty, name: l.name, note: l.note })),
+        }, this.state.data.receipt_width);
+    }
+    split() {
+        const detail = this.state.detail;
+        if (!detail || (detail.items || []).length < 2) {
+            this.notification.add(_t("At least two items are needed to split the bill."), { type: "warning" });
+            return;
+        }
+        this.dialog.add(TablesSplitDialog, {
+            detail,
+            money: (v) => this.money(v),
+            onSplit: async (keys) => {
+                await this.orm.call("pos.config", "pos_modern_table_split", [[this.configId], detail.selected_bill_id, keys]);
+                this.notification.add(_t("Bill split in two."), { type: "success" });
+                await this.load(this.configId, true);
+            },
+        });
+    }
+    reserve() {
+        const table = this.selected;
+        if (!table) {
+            return;
+        }
+        this.dialog.add(TablesReserveDialog, {
+            table,
+            onSave: async (vals) => {
+                await this.orm.call("pos.config", "pos_modern_table_reserve",
+                    [[this.configId], table.id, vals.at, vals.guests, vals.name]);
+                await this.load(this.configId, true);
+            },
+        });
+    }
+    async cancelReservation() {
+        const holdId = this.state.detail?.reserved?.hold_id;
+        if (!holdId) {
+            return;
+        }
+        await this.orm.call("pos.config", "pos_modern_table_unreserve", [[this.configId], holdId]);
+        await this.load(this.configId, true);
+    }
+    async seat() {
+        const table = this.selected;
+        const holdId = this.state.detail?.reserved?.hold_id;
+        if (holdId) {
+            await this.orm.call("pos.config", "pos_modern_table_unreserve", [[this.configId], holdId]);
+            await this.load(this.configId, true);
+        }
+        return this.openMenu(false);
     }
 }
 

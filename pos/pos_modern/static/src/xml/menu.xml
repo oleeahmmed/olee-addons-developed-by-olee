@@ -73,31 +73,41 @@
                         </button>
                         <div class="ps-hook-head-actions"/>
                         <button type="button" class="ps-btn ps-btn--primary" t-on-click="newBill" title="Start a new bill"><i class="fa fa-plus" aria-hidden="true"/> New</button>
-                        <button type="button" class="ps-btn" t-on-click="openReturn" title="Return or exchange an earlier bill"><i class="fa fa-undo" aria-hidden="true"/> Order Menus</button>
                         <button type="button" class="ps-btn" t-on-click="openHeld" title="Held bills (F7)">
                             <i class="fa fa-pause-circle-o" aria-hidden="true"/> Draft List<span t-if="d.held_count" class="ps-btn-badge" t-esc="d.held_count"/>
                         </button>
-                        <button t-if="d.restaurant" type="button" class="ps-btn ps-btn--warn" t-on-click="goTables"><i class="fa fa-th" aria-hidden="true"/> Table Order</button>
-                        <span class="ps2-icons">
-                            <button type="button" class="ps-btn ps-btn--icon" t-on-click="openLabels" title="Barcode labels"><i class="fa fa-barcode" aria-hidden="true"/></button>
-                            <button t-if="session" type="button" class="ps-btn ps-btn--icon" t-on-click="dayEnd" title="X / Z report, cash in / out, close the day"><i class="fa fa-calendar-check-o" aria-hidden="true"/></button>
-                            <Dropdown position="'bottom-end'">
-                                <button type="button" class="ps-btn ps-btn--icon" title="Expenses, damage and the stock count"><i class="fa fa-ellipsis-h" aria-hidden="true"/></button>
-                                <t t-set-slot="content">
-                                    <DropdownItem onSelected="() => this.openExpense()">
-                                        <i class="fa fa-money" aria-hidden="true"/> Expense (cash out)
-                                    </DropdownItem>
-                                    <DropdownItem onSelected="() => this.openStockTool('scrap')">
-                                        <i class="fa fa-trash-o" aria-hidden="true"/> Damage / scrap
-                                    </DropdownItem>
-                                    <DropdownItem onSelected="() => this.openStockTool('count')">
-                                        <i class="fa fa-cubes" aria-hidden="true"/> Stock adjustment
-                                    </DropdownItem>
-                                </t>
-                            </Dropdown>
-                            <button type="button" class="ps-btn ps-btn--icon" t-on-click="newProduct" title="New product"><i class="fa fa-plus" aria-hidden="true"/></button>
-                            <button t-if="features.is_manager" type="button" class="ps-btn ps-btn--icon" t-on-click="openSettings" title="Counter settings"><i class="fa fa-cog" aria-hidden="true"/></button>
-                        </span>
+                        <Dropdown position="'bottom-end'">
+                            <button type="button" class="ps-btn ps-btn--icon" title="More: returns, tables, labels, day end, stock"><i class="fa fa-ellipsis-h" aria-hidden="true"/></button>
+                            <t t-set-slot="content">
+                                <DropdownItem onSelected="() => this.openReturn()">
+                                    <i class="fa fa-undo" aria-hidden="true"/> Return / exchange
+                                </DropdownItem>
+                                <DropdownItem t-if="d.restaurant" onSelected="() => this.goTables()">
+                                    <i class="fa fa-th" aria-hidden="true"/> Table Order
+                                </DropdownItem>
+                                <DropdownItem onSelected="() => this.openLabels()">
+                                    <i class="fa fa-barcode" aria-hidden="true"/> Barcode labels
+                                </DropdownItem>
+                                <DropdownItem t-if="session" onSelected="() => this.dayEnd()">
+                                    <i class="fa fa-calendar-check-o" aria-hidden="true"/> Day end / X report
+                                </DropdownItem>
+                                <DropdownItem onSelected="() => this.openExpense()">
+                                    <i class="fa fa-money" aria-hidden="true"/> Expense (cash out)
+                                </DropdownItem>
+                                <DropdownItem onSelected="() => this.openStockTool('scrap')">
+                                    <i class="fa fa-trash-o" aria-hidden="true"/> Damage / scrap
+                                </DropdownItem>
+                                <DropdownItem onSelected="() => this.openStockTool('count')">
+                                    <i class="fa fa-cubes" aria-hidden="true"/> Stock adjustment
+                                </DropdownItem>
+                                <DropdownItem onSelected="() => this.newProduct()">
+                                    <i class="fa fa-plus" aria-hidden="true"/> New product
+                                </DropdownItem>
+                                <DropdownItem t-if="features.is_manager" onSelected="() => this.openSettings()">
+                                    <i class="fa fa-cog" aria-hidden="true"/> Counter settings
+                                </DropdownItem>
+                            </t>
+                        </Dropdown>
                     </div>
                 </header>
 
@@ -161,43 +171,38 @@
 
                 <!-- cart / payment -->
                 <aside class="ps-cart ps2-card" aria-label="Your Cart">
-                    <div class="ps2-bar ps2-bar--order">
-                        <label class="ps-search ps2-search">
-                            <i class="fa fa-search" aria-hidden="true"/>
-                            <input type="search" placeholder="Search in Existing" t-model="state.search" aria-label="Search existing products"/>
-                        </label>
-                        <div t-if="d.restaurant and floors.length" class="ps2-dining">
-                            <label class="ps2-mini">
-                                <span>Select Dining</span>
-                                <select t-on-change="onFloor" aria-label="Select dining">
-                                    <t t-foreach="floors" t-as="f" t-key="f.id">
-                                        <option t-att-value="f.id" t-att-selected="state.floorId === f.id" t-esc="f.name"/>
+                    <div class="ps-cart-top">
+                        <t t-if="state.mode !== 'pay'">
+                            <div class="ps-cart-title">
+                                <span class="ps-cart-title-label">Order</span>
+                                <strong t-esc="'#' + orderNumber"/>
+                                <span t-if="itemCount" class="ps-cart-count" t-esc="itemCount"/>
+                                <span t-if="state.holdId" class="ps-pill ps-pill--info">Held bill</span>
+                            </div>
+                            <div class="ps-billadd">
+                                <i class="fa fa-barcode" aria-hidden="true"/>
+                                <input t-ref="billadd" type="search" placeholder="Scan or type a product…"
+                                       t-model="state.billQuery" t-on-input="() => this.state.billActive = 0" t-on-keydown="onBillKey"
+                                       aria-label="Add a product to the bill" autocomplete="off"/>
+                                <ul t-if="billResults.length" class="ps-billadd-menu" role="listbox">
+                                    <t t-foreach="billResults" t-as="p" t-key="p.id">
+                                        <li role="option" t-att-class="{ 'is-on': p_index === state.billActive }" t-on-mousedown.prevent="() => this.billAdd(p)">
+                                            <span class="ps-billadd-img">
+                                                <img t-if="p.image" t-att-src="productImage(p)" alt=""/>
+                                                <span t-else="" t-attf-class="ps-prod-ph ps-tone-{{ tone(p.id) }}" t-esc="initials(p.name)"/>
+                                            </span>
+                                            <span class="ps-billadd-name"><t t-esc="p.name"/><small t-if="p.code or p.barcode" t-esc="p.code or p.barcode"/></span>
+                                            <span class="ps-billadd-price" t-esc="money(price(p))"/>
+                                        </li>
                                     </t>
-                                </select>
-                            </label>
-                            <label class="ps2-mini">
-                                <span>Select Table</span>
-                                <select t-on-change="onTable" aria-label="Select table">
-                                    <option value="">—</option>
-                                    <t t-foreach="floorTables" t-as="tb" t-key="tb.id">
-                                        <option t-att-value="tb.id" t-att-selected="state.tableId === tb.id" t-esc="'Table ' + tb.number"/>
-                                    </t>
-                                </select>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="ps-cart-head">
-                        <h2 t-if="state.mode === 'pay'">Payment</h2>
-                        <h2 t-else="">Order <t t-esc="'#' + orderNumber"/></h2>
-                        <span t-if="itemCount" class="ps-cart-count" t-esc="itemCount"/>
-                        <span t-if="state.holdId" class="ps-pill ps-pill--info">Held bill</span>
-                        <button t-if="state.mode === 'pay'" type="button" class="ps-link ms-auto" t-on-click="backToCart"><i class="fa fa-arrow-left" aria-hidden="true"/> Cart</button>
-                        <button t-elif="state.cart.length" type="button" class="ps-link ms-auto" t-on-click="clearCart">Clear</button>
-                    </div>
-                    <div t-if="state.tableId" class="ps-cart-table">
-                        <i class="fa fa-cutlery" aria-hidden="true"/> <span t-esc="state.tableName or 'Table'"/>
-                        <button type="button" class="ps-link ms-auto" t-on-click="clearTable" title="Remove the table">&#215;</button>
+                                </ul>
+                            </div>
+                            <button t-if="state.cart.length" type="button" class="ps-link" t-on-click="clearCart">Clear</button>
+                        </t>
+                        <t t-else="">
+                            <div class="ps-cart-title"><strong>Payment</strong></div>
+                            <button type="button" class="ps-link ms-auto" t-on-click="backToCart"><i class="fa fa-arrow-left" aria-hidden="true"/> Cart</button>
+                        </t>
                     </div>
                     <div class="ps-hook-cart-top"/>
 
@@ -299,25 +304,6 @@
 
                     <!-- cart -->
                     <t t-else="">
-                        <div t-if="state.layout === 'bill'" class="ps-billadd">
-                            <i class="fa fa-barcode" aria-hidden="true"/>
-                            <input t-ref="billadd" type="search" placeholder="Scan a barcode or type a product, then Enter"
-                                   t-model="state.billQuery" t-on-input="() => this.state.billActive = 0" t-on-keydown="onBillKey"
-                                   aria-label="Add a product to the bill" autocomplete="off"/>
-                            <kbd>F2</kbd>
-                            <ul t-if="billResults.length" class="ps-billadd-menu" role="listbox">
-                                <t t-foreach="billResults" t-as="p" t-key="p.id">
-                                    <li role="option" t-att-class="{ 'is-on': p_index === state.billActive }" t-on-mousedown.prevent="() => this.billAdd(p)">
-                                        <span class="ps-billadd-img">
-                                            <img t-if="p.image" t-att-src="productImage(p)" alt=""/>
-                                            <span t-else="" t-attf-class="ps-prod-ph ps-tone-{{ tone(p.id) }}" t-esc="initials(p.name)"/>
-                                        </span>
-                                        <span class="ps-billadd-name"><t t-esc="p.name"/><small t-if="p.code or p.barcode" t-esc="p.code or p.barcode"/></span>
-                                        <span class="ps-billadd-price" t-esc="money(price(p))"/>
-                                    </li>
-                                </t>
-                            </ul>
-                        </div>
                         <div t-if="!cartLines.length" class="ps-cart-empty">
                             <span class="ps-cart-empty-icon"><i class="fa fa-shopping-basket" aria-hidden="true"/></span>
                             <span>Your cart is empty.</span>
@@ -465,8 +451,29 @@
                         </ul>
 
                         <div class="ps-cart-foot">
-                            <div class="ps-cart-customer">
-                                <PsCustomerPicker configId="d.config_id" value="state.partner" onSelect.bind="setPartner"/>
+                            <div class="ps-cart-customer-row">
+                                <div class="ps-cart-customer">
+                                    <PsCustomerPicker configId="d.config_id" value="state.partner" onSelect.bind="setPartner"/>
+                                </div>
+                                <t t-if="d.restaurant and floorTables.length">
+                                    <label t-if="floors.length > 1" class="ps-cart-pick">
+                                        <i class="fa fa-layer-group" aria-hidden="true"/>
+                                        <select t-on-change="onFloor" aria-label="Floor">
+                                            <t t-foreach="floors" t-as="f" t-key="f.id">
+                                                <option t-att-value="f.id" t-att-selected="state.floorId === f.id" t-esc="f.name"/>
+                                            </t>
+                                        </select>
+                                    </label>
+                                    <label class="ps-cart-pick">
+                                        <i class="fa fa-cutlery" aria-hidden="true"/>
+                                        <select t-on-change="onTable" aria-label="Table">
+                                            <option value="">No table</option>
+                                            <t t-foreach="floorTables" t-as="tb" t-key="tb.id">
+                                                <option t-att-value="tb.id" t-att-selected="state.tableId === tb.id" t-esc="'Table ' + tb.number"/>
+                                            </t>
+                                        </select>
+                                    </label>
+                                </t>
                             </div>
                             <div class="ps-hook-cart-foot"/>
                             <div t-if="cartLines.length" class="ps-row ps-row--tight">
@@ -479,8 +486,8 @@
                             </div>
                             <dl class="ps-sum">
                                 <div><dt>Sub total</dt><dd t-esc="money(grossSubtotal)"/></div>
-                                <div class="ps-sum-disc"><dt>Product Discount</dt><dd><t t-if="productDiscount">−</t><t t-esc="money(productDiscount)"/></dd></div>
-                                <div class="ps-sum-disc"><dt>Extra Discount</dt><dd><t t-if="extraDiscount">−</t><t t-esc="money(extraDiscount)"/></dd></div>
+                                <div t-if="productDiscount" class="ps-sum-disc"><dt>Product Discount</dt><dd>−<t t-esc="money(productDiscount)"/></dd></div>
+                                <div t-if="extraDiscount" class="ps-sum-disc"><dt>Extra Discount</dt><dd>−<t t-esc="money(extraDiscount)"/></dd></div>
                                 <div t-if="tax"><dt>Tax</dt><dd t-esc="money(tax)"/></div>
                                 <div t-if="rounding" class="ps-sum-muted"><dt>Rounding</dt><dd t-esc="money(rounding)"/></div>
                                 <div class="ps-sum-total"><dt>Total</dt><dd t-esc="money(payable)"/></div>
@@ -540,6 +547,54 @@
         </div>
     </t>
 
+    <t t-name="pos_modern.TablesReserve">
+        <Dialog title="'Reserve table ' + props.table.number" size="'sm'" contentClass="'o_ps ps-dialog ps-dialog--reserve'">
+            <div class="ps-resv">
+                <label class="ps-field"><span>Guest name</span>
+                    <input class="ps-input" type="text" t-model="state.name" placeholder="Optional"/>
+                </label>
+                <div class="ps-row">
+                    <label class="ps-field"><span>Time</span>
+                        <input class="ps-input" type="time" t-model="state.at"/>
+                    </label>
+                    <label class="ps-field"><span>Guests</span>
+                        <input class="ps-input" type="number" min="1" t-model.number="state.guests"/>
+                    </label>
+                </div>
+            </div>
+            <t t-set-slot="footer">
+                <button type="button" class="ps-btn" t-on-click="() => this.props.close()">Cancel</button>
+                <button type="button" class="ps-btn ps-btn--primary" t-on-click="save">
+                    <i class="fa fa-calendar-check-o" aria-hidden="true"/> Reserve
+                </button>
+            </t>
+        </Dialog>
+    </t>
+
+    <t t-name="pos_modern.TablesSplit">
+        <Dialog title="'Split the bill'" size="'md'" contentClass="'o_ps ps-dialog ps-dialog--split'">
+            <p class="ps-muted">Pick the items that move to the second bill. The rest stays on this bill.</p>
+            <div class="ps-split-list">
+                <label class="ps-split-row" t-foreach="items" t-as="l" t-key="l.key">
+                    <input type="checkbox" t-att-checked="state.keys.includes(l.key)" t-on-change="() => this.toggle(l.key)"/>
+                    <span class="ps-side-qty" t-esc="l.qty"/> <span class="ps-side-x">×</span>
+                    <span class="ps-split-name">
+                        <t t-esc="l.name"/>
+                        <small t-if="l.note" t-esc="l.note"/>
+                    </span>
+                    <span class="ps-split-amt" t-esc="props.money(l.total)"/>
+                </label>
+            </div>
+            <div class="ps-side-total"><span>Second bill</span><strong t-esc="props.money(selectedTotal)"/></div>
+            <t t-set-slot="footer">
+                <button type="button" class="ps-btn" t-on-click="() => this.props.close()">Cancel</button>
+                <button type="button" class="ps-btn ps-btn--primary" t-att-disabled="!canSplit" t-on-click="confirm">
+                    <i class="fa fa-columns" aria-hidden="true"/> Split Bill
+                </button>
+            </t>
+        </Dialog>
+    </t>
+
     <t t-name="pos_modern.Tables">
         <div class="o_ps ps-tables">
             <t t-if="state.loading">
@@ -547,23 +602,48 @@
                 <div class="ps-skel u-h-24 u-mt-1"/>
             </t>
             <t t-else="">
-                <header class="ps-pos-head">
-                    <div class="ps-pos-title">
-                        <h1>Tables</h1>
-                        <div class="ps-pos-shop" t-if="state.shops.length">
-                            <label class="ps-select">
-                                <i class="fa fa-shopping-basket" aria-hidden="true"/>
-                                <select t-on-change="onShop" aria-label="Shop">
-                                    <t t-foreach="state.shops" t-as="s" t-key="s.id">
-                                        <option t-att-value="s.id" t-att-selected="s.id === state.data.config_id" t-esc="s.name"/>
-                                    </t>
-                                </select>
-                            </label>
+                <header class="ps-tbl-head">
+                    <div class="ps-tbl-top">
+                        <div class="ps-tbl-title">
+                            <h1>Tables</h1>
+                            <t t-if="state.shops.length">
+                                <label class="ps-select">
+                                    <i class="fa fa-shopping-basket" aria-hidden="true"/>
+                                    <select t-on-change="onShop" aria-label="Shop">
+                                        <t t-foreach="state.shops" t-as="s" t-key="s.id">
+                                            <option t-att-value="s.id" t-att-selected="s.id === state.data.config_id" t-esc="s.name"/>
+                                        </t>
+                                    </select>
+                                </label>
+                            </t>
+                        </div>
+                        <div class="ps-tbl-search">
+                            <i class="fa fa-search" aria-hidden="true"/>
+                            <input type="search" t-model="state.query" placeholder="Search table or guest…" aria-label="Search table"/>
+                        </div>
+                        <div class="ps-tbl-server" t-if="state.data.server">
+                            <span class="ps-tbl-avatar" t-esc="initials(state.data.server.name)"/>
+                            <span class="ps-tbl-server-text">
+                                <strong t-esc="state.data.server.name"/>
+                                <small>Server</small>
+                            </span>
                         </div>
                     </div>
-                    <div class="ps-pos-actions">
-                        <div class="ps-hook-tables-actions"/>
-                        <button type="button" class="ps-btn" t-on-click="() => this.action.doAction('pos_modern.action_menu')"><i class="fa fa-cutlery" aria-hidden="true"/> Menu</button>
+                    <div class="ps-tbl-filters">
+                        <nav class="ps-tbl-floors" aria-label="Floors">
+                            <t t-foreach="state.data.floors" t-as="f" t-key="f.id">
+                                <button type="button" class="ps-floor" t-att-class="{ 'is-on': state.floorId === f.id }" t-on-click="() => this.setFloor(f.id)">
+                                    <i class="fa fa-layer-group" aria-hidden="true"/><t t-esc="f.name"/>
+                                </button>
+                            </t>
+                        </nav>
+                        <div class="ps-tbl-pills" role="tablist">
+                            <t t-foreach="filters" t-as="f" t-key="f[0]">
+                                <button type="button" t-attf-class="ps-pill ps-pill--{{ f[0] }} {{ state.filter === f[0] ? 'is-on' : '' }}" t-on-click="() => this.state.filter = f[0]">
+                                    <t t-esc="f[1]"/><span class="ps-pill-count" t-esc="counts[f[0]]"/>
+                                </button>
+                            </t>
+                        </div>
                     </div>
                 </header>
                 <div t-if="!state.data.installed or !state.data.floors.length" class="ps-pos-empty ps-pos-empty--inline">
@@ -571,26 +651,129 @@
                     <strong>No table yet</strong>
                     <span>Turn on "Is a Bar/Restaurant" in the shop's settings and add floors and tables.</span>
                 </div>
-                <t t-else="">
-                    <nav class="ps-floors" aria-label="Floors">
-                        <t t-foreach="state.data.floors" t-as="f" t-key="f.id">
-                            <button type="button" class="ps-floor" t-att-class="{ 'is-on': state.floorId === f.id }" t-on-click="() => this.state.floorId = f.id" t-esc="f.name"/>
+                <div t-else="" class="ps-tbl-body">
+                    <main class="ps-tbl-canvas" aria-label="Floor plan">
+                        <div t-if="!tables.length" class="ps-tbl-noresult">
+                            <i class="fa fa-search" aria-hidden="true"/>
+                            <span>No table matches this filter.</span>
+                        </div>
+                        <div t-else="" class="ps-tbl-grid">
+                            <t t-foreach="tables" t-as="t" t-key="t.id">
+                                <button type="button" t-attf-class="ps-ttable ps-ttable--{{ t.shape_class }} ps-ttable--{{ t.status }} {{ t.id === state.selId ? 'is-selected' : '' }}"
+                                        t-on-click="() => this.select(t)">
+                                    <span class="ps-ttable-top">
+                                        <span class="ps-ttable-no" t-esc="t.number"/>
+                                        <span class="ps-ttable-seats"><i class="fa fa-user-o" aria-hidden="true"/> <t t-esc="t.seats"/></span>
+                                    </span>
+                                    <span class="ps-ttable-mid">
+                                        <t t-if="t.status === 'occupied' or t.status === 'billing'">
+                                            <span class="ps-ttable-amount" t-esc="money(t.total)"/>
+                                            <span class="ps-ttable-meta"><i class="fa fa-clock-o" aria-hidden="true"/> <t t-esc="elapsed(t)"/><t t-if="t.guests"> · <i class="fa fa-users" aria-hidden="true"/> <t t-esc="t.guests"/></t></span>
+                                        </t>
+                                        <t t-elif="t.status === 'reserved'">
+                                            <span class="ps-ttable-time"><i class="fa fa-clock-o" aria-hidden="true"/> <t t-esc="t.reserved.at or '—'"/></span>
+                                            <span class="ps-ttable-meta">
+                                                <t t-if="t.reserved.name" t-esc="t.reserved.name"/><t t-if="t.reserved.name and t.reserved.guests"> · </t><t t-if="t.reserved.guests"><t t-esc="t.reserved.guests"/> guests</t>
+                                                <t t-if="!t.reserved.name and !t.reserved.guests">Reserved</t>
+                                            </span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="ps-ttable-free">Tap to seat</span>
+                                        </t>
+                                    </span>
+                                    <span class="ps-ttable-badge">
+                                        <span class="ps-dot"/><t t-esc="statusLabel(t.status)"/>
+                                    </span>
+                                    <span t-if="t.waiter" class="ps-ttable-waiter" t-esc="t.waiter"/>
+                                </button>
+                            </t>
+                        </div>
+                    </main>
+
+                    <aside class="ps-tbl-side" aria-label="Selected table">
+                        <div t-if="!selected or !detail" class="ps-tbl-side-empty">
+                            <i class="fa fa-hand-pointer-o" aria-hidden="true"/>
+                            <span>Pick a table to see its bill.</span>
+                        </div>
+                        <t t-else="">
+                            <header class="ps-side-head">
+                                <div>
+                                    <h2>Table <t t-esc="detail.table.number"/></h2>
+                                    <small><t t-esc="detail.table.floor"/> · <t t-esc="detail.table.seats"/> seats</small>
+                                </div>
+                                <span t-attf-class="ps-badge ps-badge--{{ detail.status }}"><span class="ps-dot"/><t t-esc="statusLabel(detail.status)"/></span>
+                            </header>
+
+                            <div class="ps-side-meta" t-if="detail.guests or detail.minutes or detail.waiter">
+                                <span t-if="detail.guests"><i class="fa fa-users" aria-hidden="true"/> <t t-esc="detail.guests"/> guests</span>
+                                <span t-if="detail.minutes"><i class="fa fa-clock-o" aria-hidden="true"/> <t t-esc="detail.minutes"/> min</span>
+                                <span t-if="detail.waiter"><i class="fa fa-id-badge" aria-hidden="true"/> <t t-esc="detail.waiter"/></span>
+                            </div>
+
+                            <div class="ps-side-bills" t-if="detail.bills.length > 1">
+                                <t t-foreach="detail.bills" t-as="b" t-key="b.id">
+                                    <button type="button" class="ps-bill-tab" t-att-class="{ 'is-on': b.id === detail.selected_bill_id }" t-on-click="() => this.selectBill(b.id)">
+                                        Bill <t t-esc="b_index + 1"/> · <t t-esc="money(b.total)"/>
+                                    </button>
+                                </t>
+                            </div>
+
+                            <div class="ps-side-reserved" t-if="detail.reserved and !detail.bills.length">
+                                <i class="fa fa-calendar-check-o" aria-hidden="true"/>
+                                <div>
+                                    <strong>Reserved<t t-if="detail.reserved.at"> for <t t-esc="detail.reserved.at"/></t></strong>
+                                    <span t-if="detail.reserved.name" t-esc="detail.reserved.name"/>
+                                    <span t-if="detail.reserved.guests"><t t-esc="detail.reserved.guests"/> guests</span>
+                                </div>
+                            </div>
+
+                            <div class="ps-side-items">
+                                <div t-if="!detail.items.length" class="ps-side-noitems">
+                                    <i class="fa fa-cutlery" aria-hidden="true"/>
+                                    <span t-if="detail.status === 'reserved'">Seat the guests to start the bill.</span>
+                                    <span t-else="">No item yet. Add items to start the bill.</span>
+                                </div>
+                                <t t-else="">
+                                    <div class="ps-side-item" t-foreach="detail.items" t-as="l" t-key="l.key">
+                                        <span class="ps-side-qty" t-esc="l.qty"/><span class="ps-side-x">×</span>
+                                        <span class="ps-side-name">
+                                            <t t-esc="l.name"/>
+                                            <small t-if="l.note" t-esc="l.note"/>
+                                        </span>
+                                        <span class="ps-side-amt" t-esc="money(l.total)"/>
+                                    </div>
+                                </t>
+                            </div>
+
+                            <footer class="ps-side-foot">
+                                <div class="ps-side-total">
+                                    <span>Total</span>
+                                    <strong t-esc="money(detail.total)"/>
+                                </div>
+                                <t t-if="detail.status === 'reserved'">
+                                    <div class="ps-side-actions">
+                                        <button type="button" class="ps-act ps-act--primary" t-on-click="seat"><i class="fa fa-users" aria-hidden="true"/> Seat Guests</button>
+                                        <button type="button" class="ps-act" t-on-click="cancelReservation"><i class="fa fa-times" aria-hidden="true"/> Cancel</button>
+                                    </div>
+                                </t>
+                                <t t-elif="detail.status === 'available'">
+                                    <div class="ps-side-actions">
+                                        <button type="button" class="ps-act ps-act--primary" t-on-click="addItems"><i class="fa fa-plus" aria-hidden="true"/> Add Items</button>
+                                        <button type="button" class="ps-act" t-on-click="reserve"><i class="fa fa-calendar-o" aria-hidden="true"/> Reserve</button>
+                                    </div>
+                                </t>
+                                <t t-else="">
+                                    <div class="ps-side-actions">
+                                        <button type="button" class="ps-act ps-act--primary" t-on-click="addItems"><i class="fa fa-plus" aria-hidden="true"/> Add Items</button>
+                                        <button type="button" class="ps-act" t-on-click="printKot" t-att-disabled="!detail.items.length"><i class="fa fa-print" aria-hidden="true"/> Print KOT</button>
+                                        <button type="button" class="ps-act" t-on-click="split" t-att-disabled="(detail.items || []).length &lt; 2"><i class="fa fa-columns" aria-hidden="true"/> Split Bill</button>
+                                        <button type="button" class="ps-act ps-act--settle" t-on-click="settle"><i class="fa fa-money" aria-hidden="true"/> Settle Payment</button>
+                                    </div>
+                                </t>
+                            </footer>
                         </t>
-                    </nav>
-                    <div class="ps-table-grid">
-                        <t t-foreach="floor ? floor.tables : []" t-as="t" t-key="t.id">
-                            <button type="button" t-attf-class="ps-table ps-table--{{ t.shape }} {{ t.orders ? 'is-busy' : '' }}" t-on-click="() => this.openTable(t)">
-                                <span class="ps-table-no" t-esc="t.number"/>
-                                <span class="ps-table-seats"><i class="fa fa-user-o" aria-hidden="true"/> <t t-esc="t.seats"/></span>
-                                <span class="ps-table-state">
-                                    <t t-if="t.holds and t.holds.length"><t t-esc="money(t.holds[0].total)"/></t>
-                                    <t t-elif="t.orders">Occupied</t>
-                                    <t t-else="">Free</t>
-                                </span>
-                            </button>
-                        </t>
-                    </div>
-                </t>
+                    </aside>
+                </div>
             </t>
         </div>
     </t>
