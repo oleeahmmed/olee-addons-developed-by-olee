@@ -54,7 +54,7 @@ flyouts. It shares:
   remembered collapse state, and a **drawer on phones** (burger button in the top bar).
 * Apps without an icon get a generated one (initials on a stable color).
 * No "+ New" in the sidebar: every page has exactly one "New" button, left of the
-  page title (lists, kanban, forms), or top right on home pages and dashboards.
+  page title (lists, kanban, forms), or top right on the CRM home page.
 * Menus come from `ir.ui.menu`: Odoo's groups and installed modules decide what shows.
 
 ## Look: shadcn/ui neutral base (light and dark)
@@ -109,16 +109,6 @@ registry.category("modern_theme.moved_menus").add("some.addon_menu", "other_app.
 registry.category("modern_theme.palette_models").add("crm.lead", { label: "Opportunity", icon: "fa-handshake-o" });
 ```
 
-## Home pages
-
-```js
-registerModernHome("sales_modern.home", {
-    title: _t("Sales"),
-    cards: [/* shortcut cards */],
-    create: { resModel: "sale.order", label: _t("New quotation") }, // the page's "+ New" button
-});
-```
-
 ## Kanban boards
 
 One design for every kanban in every app (`scss/kanban.scss`): a plain canvas,
@@ -144,7 +134,6 @@ addon passes its prefix and gets the full page kit:
 @include mt-app-list(ss);
 @include mt-app-controls(ss);
 @include mt-app-helpers(ss);
-@include mt-app-dash(ss);      // dashboards: KPI tiles, chart cards, ranked lists
 // app.dark.scss (web.assets_web_dark)
 @include mt-app-tokens-dark(ss);
 ```
@@ -157,18 +146,15 @@ modern apps use one stylesheet: `scss/report_modern.scss`.
 
 **JS kit** (`js/app_kit/`): `ListPage` (one page = Odoo's own control panel and views,
 subclasses only give model, view ids, domain and context), `loadViewIds`, `openFullForm`,
-the dashboard components `OD_COMPONENTS` (KPI tile, combo chart, donut, ranked list,
-attention list, ageing bar, period filter, error card), `loadDashboard` (latest request
-wins, error card instead of a crash), `moneyFormatters` (৳ lakh / crore for BDT; `record()`
-formats one document in its own currency) and `dayStart` (local midnight in UTC for
-datetime domains).
+`moneyFormatters` (৳ lakh / crore for BDT; `record()` formats one document in its own
+currency) and `dayStart` (local midnight in UTC for datetime domains).
 
 **Print** (`js/print/`): the form header "Print / Preview" menu and the print preview of
 quotations, orders, purchase orders, invoices, transfers and manufacturing orders, for all
 modern apps.
 
-**Python** (`tools.py`): `local_midnight`, `period_bounds`, `growth`, `month_key` for the
-dashboards. `ir.ui.menu._mt_menu_requirements()` hides a menu when the optional app it needs
+**Python** (`tools.py`): `local_midnight` (a date → the naive UTC datetime Odoo stores).
+`ir.ui.menu._mt_menu_requirements()` hides a menu when the optional app it needs
 is not installed:
 
 ```python

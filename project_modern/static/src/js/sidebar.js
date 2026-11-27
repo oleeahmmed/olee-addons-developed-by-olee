@@ -9,7 +9,7 @@ import { ProjectDrawer, StageDrawer, TagDrawer, TaskDrawer } from "./drawer";
  * Modern Theme draws one sidebar for every app from Odoo's own menus (so groups,
  * settings and installed modules always decide what is shown). This file only says how
  * to arrange the Project app:
- *   sidebar  = Dashboard, Projects, My Tasks, All Tasks (everyday work)
+ *   sidebar  = Projects, My Tasks, All Tasks (everyday work)
  *   top bar  = More (overdue, unassigned, closed tasks), Odoo's Reporting and
  *              Configuration (used less)
  * Odoo's own Projects / Tasks entries are hidden: our pages show the same records with
@@ -29,7 +29,6 @@ const REPLACED = new Set([
     "project.menu_project_tags_act",
 ]);
 const ORDER = [
-    "project_modern.menu_dashboard",
     "project_modern.menu_projects",
     "project_modern.menu_my_tasks",
     "project_modern.menu_all_tasks",
@@ -38,7 +37,6 @@ const ORDER = [
 /** Font Awesome icon per menu xmlid (Odoo ships FA 4.7). */
 export const menuIcons = registry.category("project_modern.menu_icons");
 for (const [xmlid, icon] of Object.entries({
-    "project_modern.menu_dashboard": "fa-th-large",
     "project_modern.menu_projects": "fa-folder-open-o",
     "project_modern.menu_my_tasks": "fa-check-square-o",
     "project_modern.menu_all_tasks": "fa-tasks",
@@ -70,7 +68,6 @@ for (const [xmlid, spec] of Object.entries({
     "project_modern.menu_projects": { resModel: "project.project", label: _t("New project") },
     "project_modern.menu_my_tasks": { resModel: "project.task", label: _t("New task") },
     "project_modern.menu_all_tasks": { resModel: "project.task", label: _t("New task") },
-    "project_modern.menu_dashboard": { resModel: "project.task", label: _t("New task") },
     "project_modern.menu_overdue": { resModel: "project.task", label: _t("New task") },
     "project_modern.menu_unassigned": { resModel: "project.task", label: _t("New task") },
     "project_modern.menu_stages": { resModel: "project.task.type", label: _t("New stage") },

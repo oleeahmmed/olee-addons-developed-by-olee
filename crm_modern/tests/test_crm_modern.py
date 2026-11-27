@@ -27,7 +27,7 @@ class TestCrmModern(TransactionCase):
         self.assertFalse(missing, f"Views no longer found after update: {missing}")
 
     def test_client_actions_and_menus(self):
-        for xmlid in ('dashboard', 'pipeline', 'leads', 'activities', 'campaigns', 'campaign', 'salespeople',
+        for xmlid in ('pipeline', 'leads', 'activities', 'campaigns', 'campaign', 'salespeople',
                       'teams', 'stages', 'activity_types', 'activity_plans', 'tags', 'lost_reasons', 'record',
                       'team', 'customers', 'users'):
             action = self.env.ref(f'crm_modern.action_{xmlid}')
@@ -62,11 +62,7 @@ class TestCrmModern(TransactionCase):
         self.assertEqual(set(features) >= {'use_leads', 'sale'}, True)
         self.assertEqual(features['use_leads'], self.env.user.has_group('crm.group_use_lead'))
 
-    def test_dashboard_and_stats(self):
-        data = self.Lead.crm_modern_dashboard()
-        self.assertEqual(len(data['trend']), 6)
-        for key in ('pipeline', 'weighted', 'won_month', 'win_rate', 'new_leads'):
-            self.assertIn(key, data['kpis'])
+    def test_team_detail(self):
         detail = self.Lead.crm_modern_team_detail(self.team.id)
         self.assertEqual(detail['team']['name'], self.team.name)
 
@@ -144,14 +140,14 @@ class TestCrmModern(TransactionCase):
         self.env['crm.team'].get_view(kanban.id, 'kanban')
 
     def test_lives_inside_the_crm_app(self):
-        """No app of its own: opening CRM from the home screen opens the Modern CRM Dashboard."""
+        """No app of its own: everything lives inside Odoo's CRM app."""
         Menu = self.env['ir.ui.menu']
         self.assertFalse(self.env.ref('crm_modern.menu_root', raise_if_not_found=False))
         crm_root = self.env.ref('crm.crm_menu_root')
         self.assertFalse(self.env.ref('crm_modern.menu_home', raise_if_not_found=False))
-        self.assertEqual(self.env.ref('crm_modern.menu_dashboard').parent_id, crm_root)
+        self.assertFalse(self.env.ref('crm_modern.menu_dashboard', raise_if_not_found=False))
         menus = Menu.load_web_menus(False)
-        self.assertEqual(menus[crm_root.id]['actionID'], self.env.ref('crm_modern.action_dashboard').id)
+        self.assertEqual(menus[crm_root.id]['actionID'], self.env.ref('crm_modern.action_campaigns').id)
         # Odoo's own CRM menus are untouched
         for xmlid in ('crm.crm_menu_sales', 'crm.crm_menu_report', 'crm.crm_menu_config'):
             self.assertEqual(self.env.ref(xmlid).parent_id, crm_root)
@@ -165,7 +161,7 @@ class TestCrmModern(TransactionCase):
         self.env['res.users']._crm_modern_set_default_home_action()
         admin = self.env.ref('base.user_admin')
         # action_id is an ir.actions.actions record: compare ids, not model classes
-        self.assertEqual(admin.action_id.id, self.env.ref('crm_modern.action_dashboard').id)
+        self.assertEqual(admin.action_id.id, self.env.ref('crm_modern.action_pipeline').id)
 
     def test_rights_follow_odoo_rules(self):
         """A salesperson limited to "own documents" only sees and edits their own opportunities,
@@ -189,36 +185,7 @@ class TestCrmModern(TransactionCase):
         self.assertTrue(mine.with_user(own).has_access('write'))
         self.assertFalse(theirs.with_user(own).has_access('write'))
         self.assertFalse(theirs.with_user(own).has_access('unlink'))
-        # the dashboard aggregates with the user's own rights
-        everyone = self.Lead.crm_modern_dashboard()['kpis']['pipeline']
-        own_only = Lead.crm_modern_dashboard()['kpis']['pipeline']
-        self.assertLessEqual(own_only, everyone - 9999)
 
-
-@tagged('post_install', '-at_install')
-class TestCrmModernOwnerDashboard(TransactionCase):
-
-    def test_owner_dashboard(self):
-        Lead = self.env['crm.lead']
-        team = self.env['crm.team'].create({'name': 'Owner dashboard CRM team'})
-        open_deal = Lead.create({'name': 'Open deal', 'type': 'opportunity', 'team_id': team.id,
-                                 'expected_revenue': 1000, 'user_id': self.env.user.id})
-        won_deal = Lead.create({'name': 'Won deal', 'type': 'opportunity', 'team_id': team.id,
-                                'expected_revenue': 500, 'user_id': self.env.user.id})
-        won_deal.action_set_won()
-        for period in ('month', 'quarter', 'year'):
-            data = Lead.crm_modern_owner_dashboard(period)
-            self.assertEqual(len(data['months']), 12)
-            self.assertEqual(len(data['forecast']), 3)
-            for key in ('pipeline', 'weighted', 'won', 'win_rate', 'avg_deal', 'cycle', 'new', 'overdue_activities'):
-                self.assertIn(key, data['kpis'])
-        data = Lead.crm_modern_owner_dashboard('month', team.id)
-        self.assertEqual(data['kpis']['pipeline'], open_deal.expected_revenue)
-        self.assertEqual(data['kpis']['won'], 500)
-        self.assertEqual(data['kpis']['win_rate'], 100)
-        self.assertTrue(data['funnel'][-1]['won'])
-        self.assertEqual([t['id'] for t in data['teams']], [team.id])
-        self.assertIn(self.env.user.id, [s['id'] for s in data['salespeople']])
 
 
 @tagged('post_install', '-at_install')
@@ -301,7 +268,6 @@ class TestCrmModernCampaigns(TransactionCase):
             self.assertEqual(self.env.ref(f'crm_modern.{xmlid}').parent_id, crm_group)
         for xmlid in ('menu_quotations', 'menu_sale_orders', 'menu_customers'):
             self.assertEqual(self.env.ref(f'crm_modern.{xmlid}').parent_id, sales_group)
-        self.assertEqual(self.env.ref('crm_modern.menu_dashboard').parent_id, self.env.ref('crm.crm_menu_root'))
         crm_order = ('menu_campaigns', 'menu_leads', 'menu_pipeline', 'menu_activities')
         sales_order = ('menu_quotations', 'menu_sale_orders', 'menu_customers')
         crm_seqs = [self.env.ref(f'crm_modern.{name}').sequence for name in crm_order]
@@ -347,12 +313,10 @@ class TestCrmModernCampaigns(TransactionCase):
         if has_sale(self.env):
             self.assertNotIn(quote_menu.id, black)
             self.assertNotIn(order_menu.id, black)
-            self.assertTrue(Lead.crm_modern_sale_dashboard())
             return
 
         self.assertIn(quote_menu.id, black)
         self.assertIn(order_menu.id, black)
-        self.assertFalse(Lead.crm_modern_sale_dashboard())
         ids = Lead.crm_modern_view_ids()
         self.assertFalse(any(key.startswith(('quotation_', 'order_')) for key in ids))
         lead = Lead.create({'name': 'CRM without Sales', 'type': 'opportunity'})

@@ -3,7 +3,7 @@
 //     @include mt-app-helpers(ss);   // sales_modern -> .o_ss, --ss-*
 // Defined in web._assets_backend_helpers, so it is available in every backend bundle.
 @mixin mt-app-helpers($p) {
-    // modern app specific styles: dashboard bits. Form pages are styled by modern_theme (form.scss).
+    // modern app specific styles. Form pages are styled by modern_theme (form.scss).
 
     .o_#{$p} {
         .#{$p}-text-danger { color: var(--#{$p}-danger); font-weight: 500; }

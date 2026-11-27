@@ -6,7 +6,7 @@ import { registry } from "@web/core/registry";
  * Modern Theme draws one sidebar for every app from Odoo's own menus (so groups,
  * settings and installed modules always decide what is shown). This file only says how
  * to arrange the Employees app:
- *   sidebar  = Dashboard, Employees, Departments (everyday work)
+ *   sidebar  = Employees, Departments (everyday work)
  *   top bar  = Records (new hires, contracts ending, former employees, job positions,
  *              history), Odoo's Reporting and Configuration (used less)
  * Odoo's own Employees / Departments entries are hidden: our pages show the same records
@@ -24,7 +24,6 @@ const REPLACED = new Set(["hr.menu_hr_employee_payroll", "hr.menu_hr_department_
 /** Font Awesome icon per menu xmlid (Odoo ships FA 4.7). Other addons may add entries. */
 export const menuIcons = registry.category("modern_hrm.employee_menu_icons");
 for (const [xmlid, icon] of Object.entries({
-    "modern_hrm.employee_menu_dashboard": "fa-th-large",
     "modern_hrm.employee_menu_employees": "fa-users",
     "modern_hrm.employee_menu_departments": "fa-sitemap",
     "modern_hrm.employee_menu_records": "fa-folder-open-o",
@@ -71,7 +70,7 @@ registry.category("modern_theme.sidebar_apps").add(APP_XMLID, {
     mergeInto: {},
     replaced: REPLACED,
     secondary: SECONDARY,
-    order: ["modern_hrm.employee_menu_dashboard", "modern_hrm.employee_menu_employees", "modern_hrm.employee_menu_departments", "modern_hrm.employee_menu_records"],
+    order: ["modern_hrm.employee_menu_employees", "modern_hrm.employee_menu_departments", "modern_hrm.employee_menu_records"],
     icons: menuIcons,
 });
 

@@ -323,7 +323,7 @@ html[data-mt-theme] {
     }
 }
 
-// Empty views: some list renderers (e.g. Purchase's dashboard list) shrink to the
+// Empty views: some list renderers (e.g. Purchase's overview list) shrink to the
 // header row, and Odoo centres its absolutely-positioned helper over that box —
 // so give the renderer room for the illustration and text below the header.
 .o_list_renderer:has(> .o_view_nocontent),
@@ -376,65 +376,6 @@ html[data-mt-theme] {
     cursor: pointer;
 }
 
-.mt-home {
-    box-sizing: border-box;
-    padding: 1.25rem 1.5rem 1.5rem;
-    background: var(--mt-card);
-    border: 1px solid var(--mt-border);
-    border-radius: var(--mt-shell-radius);
-    box-shadow: var(--mt-shell-shadow);
-    min-height: calc(100vh - 7rem);
-}
-
-.mt-home-head {
-    margin-bottom: 1.25rem;
-    h1 {
-        margin: 0;
-        font-size: 1.125rem;
-        font-weight: 650;
-        color: var(--mt-foreground);
-    }
-    p {
-        margin: 0.375rem 0 0;
-        font-size: 0.8125rem;
-        color: var(--mt-muted-foreground);
-    }
-}
-
-.mt-home-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(11.5rem, 1fr));
-    gap: 0.75rem;
-}
-
-.mt-home-card {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.375rem;
-    padding: 1rem 1.125rem;
-    text-align: start;
-    border: 1px solid var(--mt-border);
-    border-radius: calc(var(--mt-radius, 0.5rem) + 0.125rem);
-    background: var(--mt-card);
-    color: var(--mt-foreground);
-    cursor: pointer;
-    transition: border-color 150ms ease, box-shadow 150ms ease;
-
-    strong {
-        font-size: 0.875rem;
-        font-weight: 600;
-    }
-    small {
-        font-size: 0.75rem;
-        color: var(--mt-muted-foreground);
-    }
-    &:hover {
-        border-color: color-mix(in srgb, var(--mt-primary) 35%, var(--mt-border));
-        box-shadow: var(--mt-shadow-md);
-    }
-}
-
 // Push registration fails in a normal browser tab. Keep the warning, but
 // dock it so it does not cover search and the page actions.
 .o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_sidebar, .o_mr_sidebar) .o_notification_manager {
@@ -444,7 +385,7 @@ html[data-mt-theme] {
     right: 1rem;
 }
 
-// List, kanban and dashboard "New …" actions use the drawer Save pill.
+// List and kanban "New …" actions use the drawer Save pill.
 .o_web_client:has(.o_ss_sidebar, .o_cm_sidebar, .o_im_sidebar, .o_mp_sidebar, .o_mr_sidebar) {
     .o_list_button_add,
     .o-kanban-button-new,

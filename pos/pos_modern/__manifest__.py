@@ -3,12 +3,12 @@
     'summary': "POS core for every shop: fast counter (split payment, change, hold bill, discounts + manager PIN, 58/80 mm receipt, shortcuts, stock, offline queue, X/Z day end) on Odoo's own POS, plus a modern back office",
     'description': """
 Modern POS gives the back office of Odoo's Point of Sale the look of Modern CRM: a clean
-sidebar, a top bar for what is used less, a sales dashboard, CRM-style shop and order
+sidebar, a top bar for what is used less, CRM-style shop and order
 cards and the CRM drawer for simple records.
 
 Sidebar, as simple as the shadcn POS app: Menu (pick a category, tap products, adjust
 the cart, choose the payment and "Create Order"), Tables (restaurants) and Orders.
-Top bar: More (dashboard, shops, sessions, products, customers, payments, refunds,
+Top bar: More (shops, sessions, products, customers, payments, refunds,
 ongoing orders), Reporting and Configuration.
 
 Everything runs on Odoo's own pos.config / pos.session / pos.order / pos.payment and
@@ -41,7 +41,6 @@ pos_pharmacy, pos_restaurant_bd, pos_retail_bd.
             'pos_modern/static/src/js/drawer.js',
             'pos_modern/static/src/js/drawer_forms.js',
             'pos_modern/static/src/js/pages.js',
-            'pos_modern/static/src/js/dashboard.js',
             'pos_modern/static/src/js/counter/print.js',
             'pos_modern/static/src/js/counter/offline.js',
             'pos_modern/static/src/js/counter/dialogs.js',
@@ -49,7 +48,6 @@ pos_pharmacy, pos_restaurant_bd, pos_retail_bd.
             'pos_modern/static/src/js/menu.js',
             'pos_modern/static/src/js/sidebar.js',
             'pos_modern/static/src/xml/drawer.xml',
-            'pos_modern/static/src/xml/dashboard.xml',
             'pos_modern/static/src/xml/counter.xml',
             'pos_modern/static/src/xml/menu.xml',
         ],

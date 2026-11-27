@@ -2,13 +2,11 @@
 <odoo>
     <!--
         No app of its own: everything lives inside Odoo's Purchase app (purchase.menu_purchase_root).
-        The Dashboard comes first, so opening Purchase from the home screen opens Modern Purchase.
+        The sidebar lists Buy first, so opening Purchase from the home screen opens Modern Purchase.
         Odoo's own Purchase menus are left untouched; the sidebar shows them under
         "Reporting" and "Configuration", so every standard screen stays one click away.
         Visibility comes from Odoo's groups (Purchase app rights).
     -->
-    <menuitem id="menu_dashboard" name="Dashboard" parent="purchase.menu_purchase_root" action="action_dashboard"
-              sequence="-110" groups="purchase.group_purchase_user"/>
 
     <menuitem id="menu_buy" name="Buy" parent="purchase.menu_purchase_root" sequence="-90" groups="purchase.group_purchase_user"/>
     <menuitem id="menu_rfqs" name="Requests for Quotation" parent="menu_buy" action="action_rfqs" sequence="1"/>

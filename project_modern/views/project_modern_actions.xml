@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- One client action per page; each page is an OWL component registered under the same tag. -->
-    <record id="action_dashboard" model="ir.actions.client">
-        <field name="name">Dashboard</field>
-        <field name="tag">project_modern.dashboard</field>
-        <field name="path">modern-project</field>
-    </record>
+    <!-- One client action per page; each page is an OWL component registered under the same tag. -->
     <record id="action_projects" model="ir.actions.client">
         <field name="name">Projects</field>
         <field name="tag">project_modern.projects</field>

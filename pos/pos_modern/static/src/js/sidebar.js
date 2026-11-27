@@ -9,7 +9,7 @@ import { CategoryDrawer, CustomerDrawer, ProductDrawer, ShopDrawer } from "./dra
  * settings and installed modules always decide what is shown). This file only says how
  * to arrange the Point of Sale back office:
  *   sidebar  = Menu (sell), Tables (restaurants), Orders — as simple as the shadcn POS app
- *   top bar  = More (dashboard, shops, sessions, products, customers, payments, refunds,
+ *   top bar  = More (shops, sessions, products, customers, payments, refunds,
  *              ongoing orders, Odoo's catalog entries), Reporting and Configuration
  * Odoo's own entries for the same pages are hidden: ours show the same records with the
  * same views, filters and forms.
@@ -21,7 +21,6 @@ const SECONDARY = new Set([
     "point_of_sale.menu_point_config_product",
 ]);
 const REPLACED = new Set([
-    "point_of_sale.menu_pos_dashboard",
     "point_of_sale.menu_point_ofsale",
     "point_of_sale.menu_pos_session_all",
     "point_of_sale.menu_pos_payment",
@@ -52,7 +51,6 @@ export const menuIcons = registry.category("pos_modern.menu_icons");
 for (const [xmlid, icon] of Object.entries({
     "pos_modern.menu_menu": "fa-th-large",
     "pos_modern.menu_tables": "fa-th",
-    "pos_modern.menu_dashboard": "fa-bar-chart",
     "pos_modern.menu_shops": "fa-shopping-basket",
     "pos_modern.menu_orders": "fa-shopping-cart",
     "pos_modern.menu_sessions": "fa-clock-o",
@@ -91,7 +89,6 @@ for (const [xmlid, icon] of Object.entries({
 export const createTargets = registry.category("pos_modern.create_targets");
 for (const [xmlid, spec] of Object.entries({
     "pos_modern.menu_menu": { resModel: "product.template", label: _t("New product") },
-    "pos_modern.menu_dashboard": { resModel: "product.template", label: _t("New product") },
     "pos_modern.menu_shops": { resModel: "pos.config", label: _t("New shop") },
     "pos_modern.menu_products": { resModel: "product.template", label: _t("New product") },
     "pos_modern.menu_customers": { resModel: "res.partner", label: _t("New customer") },

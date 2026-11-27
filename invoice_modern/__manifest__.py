@@ -19,7 +19,7 @@ with a modern look.
 * Rights, record rules, journals, taxes, settings and reports are Odoo's own.
   Odoo's Reporting and Configuration menus stay available in the top bar.
     """,
-    'version': '19.0.1.2.0',
+    'version': '19.0.1.2.2',
     'category': 'Accounting/Accounting',
     'author': 'Olee',
     'license': 'LGPL-3',

@@ -9,7 +9,6 @@ import { registry } from "@web/core/registry";
  */
 const MOVED = {
     // hr_modern (Employees)
-    "hr_modern.dashboard": "modern_hrm.employee_action_dashboard",
     "hr_modern.employees": "modern_hrm.employee_action_employees",
     "hr_modern.departments": "modern_hrm.employee_action_departments",
     "hr_modern.jobs": "modern_hrm.employee_action_jobs",
@@ -18,20 +17,16 @@ const MOVED = {
     "hr_modern.former": "modern_hrm.employee_action_former",
     "hr_modern.records": "modern_hrm.employee_action_records",
     // Time Off, first inside Employees, then hr_modern_holidays
-    "hr_modern.timeoff_dashboard": "modern_hrm.time_off_action_dashboard",
     "hr_modern.timeoff_approve": "modern_hrm.time_off_action_requests",
     "hr_modern.timeoff_all": "modern_hrm.time_off_action_requests",
     "hr_modern.timeoff_requests": "modern_hrm.time_off_action_requests",
     "hr_modern.timeoff_allocations": "modern_hrm.time_off_action_allocations",
-    "hr_modern_holidays.dashboard": "modern_hrm.time_off_action_dashboard",
     "hr_modern_holidays.requests": "modern_hrm.time_off_action_requests",
     "hr_modern_holidays.allocations": "modern_hrm.time_off_action_allocations",
     // Attendances, first inside Employees, then hr_modern_attendance
-    "hr_modern.attendance_dashboard": "modern_hrm.attendance_action_dashboard",
     "hr_modern.attendance_all": "modern_hrm.attendance_action_attendances",
     "hr_modern.attendance_at_work": "modern_hrm.attendance_action_at_work",
     "hr_modern.attendance_overtime": "modern_hrm.attendance_action_extra_hours",
-    "hr_modern_attendance.dashboard": "modern_hrm.attendance_action_dashboard",
     "hr_modern_attendance.attendances": "modern_hrm.attendance_action_attendances",
     "hr_modern_attendance.at_work": "modern_hrm.attendance_action_at_work",
     "hr_modern_attendance.extra_hours": "modern_hrm.attendance_action_extra_hours",
@@ -51,7 +46,7 @@ for (const [tag, xmlid] of Object.entries(MOVED)) {
                 _t("This page moved. Upgrade Modern Employees (and Modern Time Off / Modern Attendances) from Apps."),
                 { type: "warning", sticky: false }
             );
-            return env.services.action.doAction("modern_hrm.employee_action_dashboard", options);
+            return env.services.action.doAction("modern_hrm.employee_action_employees", options);
         }
     });
 }

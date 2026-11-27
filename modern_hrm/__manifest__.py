@@ -4,10 +4,10 @@
     'description': """
 Modern HRM gives Odoo's HR apps one clean, modern interface (shadcn/ui look):
 
-* Employees: dashboard, employees, departments, new hires, contracts ending, former
+* Employees: employees, departments, new hires, contracts ending, former
   employees and employee history.
-* Attendances: dashboard, at work, attendances, extra hours.
-* Time Off: dashboard, requests, allocations, team calendar.
+* Attendances: at work, attendances, extra hours.
+* Time Off: requests, allocations, team calendar.
 
 No new app, table or field: every screen reads and writes Odoo's own hr.employee,
 hr.department, hr.job, hr.attendance, hr.leave and hr.leave.allocation through Odoo's
@@ -33,22 +33,15 @@ addon only holds the custom views.
             'modern_hrm/static/src/js/drawer/record_drawer.js',
             'modern_hrm/static/src/js/pages/app_context.js',
             'modern_hrm/static/src/js/pages/list_pages.js',
-            'modern_hrm/static/src/js/pages/dashboard.js',
             'modern_hrm/static/src/js/pages/time_base.js',
             'modern_hrm/static/src/js/pages/legacy_actions.js',
             'modern_hrm/static/src/js/attendance/attendance_drawer.js',
-            'modern_hrm/static/src/js/attendance/dashboard.js',
             'modern_hrm/static/src/js/attendance/pages.js',
             'modern_hrm/static/src/js/attendance/sidebar.js',
-            'modern_hrm/static/src/js/time_off/dashboard.js',
             'modern_hrm/static/src/js/time_off/pages.js',
             'modern_hrm/static/src/js/time_off/sidebar.js',
-            'modern_hrm/static/src/xml/dashboard.xml',
-            'modern_hrm/static/src/xml/time_base.xml',
             'modern_hrm/static/src/xml/record_drawer.xml',
             'modern_hrm/static/src/xml/attendance_drawer.xml',
-            'modern_hrm/static/src/xml/attendance_dashboard.xml',
-            'modern_hrm/static/src/xml/time_off_dashboard.xml',
         ],
     },
     'installable': True,

@@ -3,10 +3,10 @@
     'summary': 'A simple, modern workspace for the Odoo Contacts app — built only on the standard models',
     'description': """
 Modern Contacts gives Odoo's Contacts app a clean, modern interface with a left sidebar:
-a dashboard, all contacts, companies, people, customers and vendors.
+all contacts, companies, people, customers and vendors.
 Adding, viewing and editing all use Odoo's own contact form, with a modern look.
 
-* No new app: it lives inside the Contacts app, which now opens on its dashboard.
+* No new app: it lives inside the Contacts app, which now opens straight on the records.
 * No new tables or fields: every screen reads and writes res.partner through Odoo's
   own views and methods.
 * Sales, purchase and invoicing figures only show when those apps are installed and

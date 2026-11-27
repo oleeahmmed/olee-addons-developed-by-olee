@@ -3,17 +3,17 @@
     'summary': 'A simple, modern workspace for the Odoo Manufacturing app — built only on the standard models',
     'description': """
 Manufacturing Modern gives Odoo's Manufacturing app a clean, modern interface with
-a left sidebar: a dashboard, manufacturing orders, bills of materials, unbuild
+a left sidebar: manufacturing orders, bills of materials, unbuild
 orders, work orders, work centers and products.
 Adding, viewing and editing all use Odoo's own forms, with a modern look.
 
-* No new app: it lives inside the Manufacturing app, which now opens on its dashboard.
+* No new app: it lives inside the Manufacturing app, which now opens straight on the records.
 * No new tables or fields: every screen reads and writes mrp.production, mrp.bom,
   mrp.workorder, product.template... through Odoo's own views, wizards and methods.
 * Rights, record rules, work orders, settings and reports are Odoo's own.
   Odoo's original Manufacturing menus stay available (sidebar groups and top-bar menus).
     """,
-    'version': '19.0.1.2.1',
+    'version': '19.0.1.2.3',
     'category': 'Manufacturing/Manufacturing',
     'author': 'Olee',
     'license': 'LGPL-3',
@@ -26,7 +26,7 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
         'web.assets_backend': [
             'mrp_modern/static/src/js/sidebar/*.js',
             'mrp_modern/static/src/js/pages/*.js',
-            'mrp_modern/static/src/xml/dashboard.xml',
+
         ],
     },
     'installable': True,

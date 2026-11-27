@@ -1,1 +1,1 @@
-from . import stock_dashboard
+from . import stock_views

@@ -498,7 +498,7 @@ html[data-mt-theme] input:-webkit-autofill:focus {
     transition: background-color 9999s ease-out 0s;
 }
 
-// Small text helpers for the modern apps' own templates (dashboards, CRM pages, POS),
+// Small text helpers for the modern apps' own templates (CRM pages, POS),
 // so those templates carry classes instead of inline styles.
 .od-text-sm { font-size: 0.8125rem; }
 .od-text-xs { font-size: 0.75rem; }
@@ -506,8 +506,3 @@ html[data-mt-theme] input:-webkit-autofill:focus {
 .od-fine { font-size: 0.75rem; margin: 0; }
 .od-w-10 { max-width: 10rem; }
 .od-w-14 { max-width: 14rem; }
-// Skeleton sizes of the dashboards' loading page (every app, CRM included).
-.od-skel-title { height: 3.75rem; width: 22rem; max-width: 100%; }
-.od-skel-sub { height: 2.25rem; width: 20rem; max-width: 100%; }
-.od-skel-kpi { height: 8.5rem; }
-.od-skel-panel { height: 22rem; }

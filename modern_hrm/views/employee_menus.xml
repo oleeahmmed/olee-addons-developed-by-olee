@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!--
-        Inside Odoo's Employees app (hr.menu_hr_root), which now opens on its Dashboard.
-        Sidebar = everyday work: Dashboard, Employees, Departments.
+        Inside Odoo's Employees app (hr.menu_hr_root).
+        Sidebar = everyday work: Employees, Departments, Records.
         Top bar = used less: "Records" (new hires, contracts ending, former employees, job
         positions, employee history), Odoo's Reporting and Configuration.
         Time Off and Attendances stay separate apps (Modern Time Off / Modern Attendances).
     -->
-    <menuitem id="employee_menu_dashboard" name="Dashboard" parent="hr.menu_hr_root" action="employee_action_dashboard"
-              sequence="-110" groups="hr.group_hr_user"/>
     <menuitem id="employee_menu_employees" name="Employees" parent="hr.menu_hr_root" action="employee_action_employees"
               sequence="-105" groups="hr.group_hr_user"/>
     <menuitem id="employee_menu_departments" name="Departments" parent="hr.menu_hr_root" action="employee_action_departments"

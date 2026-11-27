@@ -1,7 +1,7 @@
 import { useService } from "@web/core/utils/hooks";
 
 /**
- * Pages opened by URL or from another app's link (dashboard, Ctrl+K…) set the Point of Sale app
+ * Pages opened by URL or from another app's link (Ctrl+K…) set the Point of Sale app
  * as the current app, so the sidebar and the top bar show the POS own menus.
  */
 export function usePinApp(appXmlid) {

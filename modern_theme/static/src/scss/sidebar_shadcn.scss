@@ -547,11 +547,9 @@ html[data-mt-theme]:not(#mt-np) [class*="-compose--note"] {
     border-color: var(--mt-input);
 }
 
-// Dashboards of the modern apps: no brand glow behind the page and no tinted
-// "featured" KPI card; the brand colour stays on its icon, border, charts and bars.
+// Custom pages (CRM home): no brand glow behind the page.
 html[data-mt-theme]:not(#mt-np) {
     .od-page { background-image: none !important; }
-    .od-kpi--featured { background-image: none !important; background-color: var(--mt-card) !important; }
 }
 
 // The open app's own group (theme option "Current app menu"): its label folds the group

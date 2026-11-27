@@ -2,7 +2,7 @@
 // mrp_modern/static/src/scss so the app ships no stylesheet of its own).
 
 // ---- from mrp_modern/static/src/scss/app.scss
-// Manufacturing Modern: pages, lists, dashboards and controls come from Modern Theme's shared
+// Manufacturing Modern: pages, lists and controls come from Modern Theme's shared
 // app kit (modern_theme/static/src/scss/kit/). This app only passes its prefix,
 // so .o_mr pages and --mr-* tokens get the same look as every other modern app.
 @include mt-app-tokens(mr);
@@ -10,4 +10,3 @@
 @include mt-app-list(mr);
 @include mt-app-controls(mr);
 @include mt-app-helpers(mr);
-@include mt-app-dash(mr);

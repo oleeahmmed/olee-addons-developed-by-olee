@@ -2,13 +2,11 @@
 <odoo>
     <!--
         No app of its own: everything lives inside Odoo's Contacts app (contacts.menu_contacts).
-        The Dashboard comes first, so opening Contacts from the home screen opens it.
+        Opening Contacts from the home screen goes straight to All Contacts.
         Odoo's own Contacts menu is replaced in the sidebar by "All contacts" (same records,
         same views); Odoo's Configuration stays at the bottom of the sidebar.
         Customers / Vendors are hidden when Invoicing is not installed (models/ir_ui_menu.py).
     -->
-    <menuitem id="menu_dashboard" name="Dashboard" parent="contacts.menu_contacts" action="action_dashboard"
-              sequence="-110" groups="base.group_user"/>
     <menuitem id="menu_directory" name="Directory" parent="contacts.menu_contacts" sequence="-90" groups="base.group_user"/>
     <menuitem id="menu_all" name="All Contacts" parent="menu_directory" action="action_contacts" sequence="1"/>
     <menuitem id="menu_companies" name="Companies" parent="menu_directory" action="action_companies" sequence="2"/>

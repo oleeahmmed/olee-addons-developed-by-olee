@@ -5,14 +5,13 @@
 // their own. They use the ps-* classes below and the theme tokens (--mt-*, --ps-*), so the
 // theme preset, light / dark mode, radius and density apply to every screen.
 //
-// Pages, lists, dashboards and controls come from Modern Theme's shared app kit
+// Pages, lists and controls come from Modern Theme's shared app kit
 // (scss/kit/); the POS only passes its prefix.
 @include mt-app-tokens(ps);
 @include mt-app-pages(ps);
 @include mt-app-list(ps);
 @include mt-app-controls(ps);
 @include mt-app-helpers(ps);
-@include mt-app-dash(ps);
 
 // ---------------------------------------------------------------- shop & order cards
 // Modern POS: shop and order cards drawn like Modern CRM's deal cards
@@ -23,7 +22,7 @@
 .o_ps .ps-native :is(.o_ps_shop_kanban, .o_ps_order_kanban) {
     .ps-kc-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem; padding-right: 1.25rem; }
     .ps-kc-title, .ps-sc-title {
-        display: block; min-width: 0; font-size: 0.875rem; font-weight: 600; line-height: 1.35; color: var(--ps-fg);
+        display: block; min-width: 0; font-size: 1rem; font-weight: 600; line-height: 1.375; color: var(--ps-fg);
         span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     }
     .ps-kc-line {

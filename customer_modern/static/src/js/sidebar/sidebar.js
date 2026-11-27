@@ -19,7 +19,6 @@ const REPLACED = new Set(["contacts.res_partner_menu_contacts"]);
 /** Font Awesome icon per menu xmlid (Odoo ships FA 4.7). Other addons may add entries. */
 export const menuIcons = registry.category("customer_modern.menu_icons");
 for (const [xmlid, icon] of Object.entries({
-    "customer_modern.menu_dashboard": "fa-th-large",
     "customer_modern.menu_directory": "fa-address-book-o",
     "customer_modern.menu_all": "fa-address-card-o",
     "customer_modern.menu_companies": "fa-building-o",

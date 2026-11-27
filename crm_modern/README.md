@@ -7,7 +7,7 @@ styles, Ctrl+K search, pinned menus); CRM only tells it how to organise the CRM 
 (`static/src/js/sidebar/sidebar.js`).
 
 ## Inside the CRM app
-* Menus are children of `crm.crm_menu_root`; the Dashboard comes first, so it is what
+* Menus are children of `crm.crm_menu_root`; the Pipeline comes first, so it is what
   CRM opens. Odoo's own CRM menus are untouched and all shown in the sidebar, merged into
   the matching group (Deals, Reporting, Configuration with sub-headings); menus other apps
   add to CRM appear as their own group. Team, Reporting and Configuration sit at the
@@ -26,7 +26,6 @@ styles, Ctrl+K search, pinned menus); CRM only tells it how to organise the CRM 
 
 | Sidebar page | Odoo model(s) |
 |---|---|
-| Dashboard | `crm.lead` (aggregated with `_read_group`), `mail.activity`, `utm.campaign` |
 | Pipeline (board + list, drag & drop) | `crm.lead` (type = opportunity), `crm.stage`; board cards from the standalone view `crm_modern.crm_lead_kanban_modern` |
 | Leads (bulk assign / convert / lost) | `crm.lead` (type = lead), Odoo convert & lost wizards |
 | Opportunity / lead page | `crm.lead`, `mail.activity`, Odoo's Chatter timeline; one compact tabbed card: Send message · Log note · Activity (quick scheduler) · extra tabs from other addons |
@@ -76,7 +75,7 @@ python odoo-bin -c odoo.conf -d <db> -u crm_modern --stop-after-init
 
 ## CRM Settings ▸ Leads
 Everything lead-related follows the standard setting (group `crm.group_use_lead`):
-the Leads menu, the dashboard's lead figures, the campaign "Leads" column, CRM
+the Leads menu, the campaign "Leads" column, CRM
 Simple's upload "Add as Lead" option, and CSV import (leads are created as
 opportunities when the setting is off).
 
@@ -92,8 +91,7 @@ opportunities when the setting is off).
   extension. All other screens are Odoo's own views, referenced by xml id with
   `raise_if_not_found=False`.
 * Extension points for other addons: registries `crm_modern.record_tabs` (tabs of the
-  record page's action card), `crm_modern.record_sections`, `crm_modern.dashboard_sections`,
-  `crm_modern.menu_icons`.
+  record page's action card), `crm_modern.record_sections`, `crm_modern.menu_icons`.
 * The pipeline card view is standalone (no `inherit_id` / xpath on Odoo's kanban).
   Closing dates turn amber within 7 days and red when late (open deals only).
 * Automated checks — run after every Odoo update:
@@ -110,7 +108,6 @@ depends on it:
   Create & send / Confirm order; Send, Confirm, Invoice, Print, Cancel on existing ones);
 * Deals: **Quotations** and **Sales Orders** pages (hidden through
   `ir.ui.menu._load_menus_blacklist` when Sales is missing);
-* dashboard: open quotations, orders this month, quote > order rate;
 * team cards: invoiced this month vs target and number of sales orders.
 
 The former bridge module `crm_modern_sale` is merged into this one (uninstall it first).
@@ -120,8 +117,6 @@ The former bridge module `crm_modern_sale` is merged into this one (uninstall it
 * Sidebar moved to Modern Theme (3 styles, Ctrl+K, pinned / recent menus, badges, mobile drawer).
 * Fixed: "Open leads" from a campaign now shows that campaign's leads only.
 * Fixed: editing Call / Email / To-Do from CRM no longer restricts them to CRM.
-* Fixed: dashboard periods use the user's timezone (were 6 h off in Bangladesh).
-* Fixed: dashboard shows the 8 best teams, not 8 arbitrary ones.
 * Fixed: CSV import matches tags, salespeople and sources literally (`%` and `_` are no
   longer wildcards).
 * Fixed: "Mark done" dialog stays usable after a server error.

@@ -3,7 +3,7 @@
     'summary': 'A modern, sidebar-driven CRM workspace built on the standard Odoo CRM models',
     'description': """
 Modern CRM gives Odoo CRM a clean, shadcn-style interface with a left sidebar:
-dashboard, pipeline board, leads, activities, campaigns, salespeople, sales teams,
+pipeline board, leads, activities, campaigns, salespeople, sales teams,
 stages, activity types, activity plans and tags.
 
 No new tables: everything reads and writes the standard models

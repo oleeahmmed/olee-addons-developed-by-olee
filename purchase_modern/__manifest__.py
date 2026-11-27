@@ -3,16 +3,16 @@
     'summary': 'A simple, modern workspace for the Odoo Purchase app — built only on the standard models',
     'description': """
 Modern Purchase gives Odoo's Purchase app a clean, modern interface with a left sidebar:
-a dashboard, requests for quotation, purchase orders, orders to bill, vendors and products.
+requests for quotation, purchase orders, orders to bill, vendors and products.
 Adding, viewing and editing all use Odoo's own forms, with a modern look.
 
-* No new app: it lives inside the Purchase app, which now opens on its dashboard.
+* No new app: it lives inside the Purchase app, which now opens straight on the records.
 * No new tables or fields: every screen reads and writes purchase.order, res.partner,
   product.template... through Odoo's own views, wizards and methods.
 * Rights, record rules, settings, mail templates and invoicing are Odoo's own.
   Odoo's original Purchase menus stay available in the sidebar.
     """,
-    'version': '19.0.2.1.1',
+    'version': '19.0.2.1.3',
     'category': 'Inventory/Purchase',
     'author': 'Olee',
     'license': 'LGPL-3',
@@ -26,7 +26,7 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
         'web.assets_backend': [
             'purchase_modern/static/src/js/sidebar/*.js',
             'purchase_modern/static/src/js/pages/*.js',
-            'purchase_modern/static/src/xml/dashboard.xml',
+
         ],
     },
     'installable': True,

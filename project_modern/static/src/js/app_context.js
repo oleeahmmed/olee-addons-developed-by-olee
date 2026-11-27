@@ -1,7 +1,7 @@
 import { useService } from "@web/core/utils/hooks";
 
 /**
- * Pages opened by URL or from another app's link (dashboard, Ctrl+K…) set the Project app
+ * Pages opened by URL or from another app's link (Ctrl+K…) set the Project app
  * as the current app, so the sidebar and the top bar show Project's own menus.
  */
 export function usePinApp(appXmlid) {

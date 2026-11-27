@@ -4,12 +4,11 @@
 
 A simple, modern workspace for Odoo 19's **Sales** app, in the same design as Modern CRM.
 No new app, no new tables or fields: it lives inside the Sales app (opening Sales from
-the home screen opens its dashboard) and every screen uses Odoo's own models, views,
+the home screen opens Quotations) and every screen uses Odoo's own models, views,
 wizards and methods.
 
 | Sidebar page | What it uses |
 |---|---|
-| Dashboard | `sale.order` counts, `sale.report` amounts (company currency): open quotations, sold this month, to invoice, quote → order rate, 6-month trend, best-selling products, top customers, quotations to follow up, orders ready to invoice |
 | Quotations / Sales Orders | Odoo's sale.order list, kanban, calendar, pivot, graph and activity views with search, filters, export and actions; records open in Odoo's full quotation form |
 | To Invoice | orders with `invoice_status = to invoice`; select them, then Actions ▸ Create invoices (Odoo's invoice wizard) |
 | Customers | Odoo's `res.partner` kanban, list and activity views, search and filters; details in Odoo's customer form |
@@ -31,7 +30,7 @@ underline tabs, a clean order-lines table, a totals card and a fixed-width chatt
 
 ## Sidebar
 Modern Theme draws one sidebar for every app, from Odoo's own menus. Sales opens on
-**Dashboard**, then **Sell** (Quotations, Sales Orders, To Invoice, Customers and Odoo's
+**Sell** (Quotations, Sales Orders, To Invoice, Customers and Odoo's
 Orders to Upsell), **Catalog** (Products, Product Variants, Pricelists when enabled), and
 at the bottom, closed: **Team** (managers), **Reporting** and **Configuration**. Odoo
 entries that a modern page already shows are not listed twice. Menus of apps that are not
@@ -41,7 +40,7 @@ Each list page has a single **New** button, top left next to the page title.
 
 ## Theme
 Colours come from the `modern_theme` addon: install it and the sidebar, the top
-bar, the dashboards, the lists and the forms all follow the preset chosen in
+bar, the lists and the forms all follow the preset chosen in
 **Settings ▸ Modern Theme** (Indigo by default) and switch to dark mode with the
 user's own toggle. Sales Modern keeps working, with its own colours, if
 `modern_theme` is not installed.
@@ -67,7 +66,7 @@ odoo-bin -c odoo.conf -d <db> -i sales_modern --stop-after-init
 odoo-bin -c odoo.conf -d <db> -u sales_modern --test-tags /sales_modern --stop-after-init
 ```
 The tests check that every embedded view, action and report field still exists, that the
-Sales app opens the dashboard, and run the quotation → send → confirm flow.
+Sales app opens Quotations, and run the quotation → send → confirm flow.
 
 ## Upgrade safety
 * No template overrides of Odoo's web client: the sidebar is a standalone main component;

@@ -1,13 +1,7 @@
-from dateutil.relativedelta import relativedelta
-
-from odoo import Command, api, fields, models
+from odoo import Command, api, models
 from odoo.exceptions import UserError
-from odoo.tools import date_utils
-
 from odoo.addons.modern_theme.models.shared_views import shared_view_ids
 
-QUOTATION_STATES = ('draft', 'sent')
-ORDER_STATES = ('sale',)
 ORDER_FIELDS = [
     'name', 'state', 'partner_id', 'user_id', 'date_order', 'validity_date', 'amount_untaxed',
     'amount_total', 'currency_id', 'invoice_status', 'invoice_count', 'locked',
@@ -105,34 +99,3 @@ class CrmLead(models.Model):
             action = order.action_quotation_send()
         return {'order_id': order.id, 'name': order.name, 'action': action}
 
-    @api.model
-    def crm_modern_sale_dashboard(self):
-        """Sales figures coming from CRM opportunities (orders linked to an opportunity)."""
-        if not has_sale(self.env):
-            return False
-        SaleOrder = self.env['sale.order']
-        from_crm = [('opportunity_id', '!=', False)]
-        month_start = date_utils.start_of(fields.Date.context_today(self), 'month')
-
-        def total(domain):
-            [(count, amount)] = SaleOrder._read_group(domain, aggregates=['__count', 'amount_untaxed:sum'])
-            return count, amount or 0.0
-
-        open_count, open_amount = total(from_crm + [('state', 'in', QUOTATION_STATES)])
-        month_count, month_amount = total(from_crm + [('state', 'in', ORDER_STATES), ('date_order', '>=', month_start)])
-        since = month_start - relativedelta(months=2)
-        won_count, _won = total(from_crm + [('state', 'in', ORDER_STATES), ('date_order', '>=', since)])
-        lost_count, _lost = total(from_crm + [('state', '=', 'cancel'), ('date_order', '>=', since)])
-        sent_count, _sent = total(from_crm + [('state', 'in', QUOTATION_STATES + ORDER_STATES + ('cancel',)), ('date_order', '>=', since)])
-        recent = SaleOrder.search_read(from_crm, ORDER_FIELDS + ['opportunity_id'], order='date_order desc, id desc', limit=6)
-        return {
-            'currency_id': self.env.company.currency_id.id,
-            'lakh': self.env.company.currency_id.name == 'BDT',
-            'open_quotations': open_count,
-            'open_quotation_amount': open_amount,
-            'orders_month': month_count,
-            'orders_month_amount': month_amount,
-            'conversion': round(won_count * 100 / sent_count) if sent_count else 0,
-            'cancelled': lost_count,
-            'recent': recent,
-        }

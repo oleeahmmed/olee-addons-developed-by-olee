@@ -1,17 +1,10 @@
 import re
-from datetime import timedelta
-
-from dateutil.relativedelta import relativedelta
-
 from odoo import api, fields, models
 from odoo.exceptions import UserError
-from odoo.tools import date_utils, html2plaintext, plaintext2html
+from odoo.tools import html2plaintext, plaintext2html
 from odoo.tools.sql import escape_psql
 
 
-# Won / lost deals are archived or not depending on settings; open ("pending") deals
-# only count while active, so archived ones never inflate the pipeline.
-LIVE_OR_CLOSED = ['|', ('active', '=', True), ('won_status', '!=', 'pending')]
 
 
 class CrmLead(models.Model):
@@ -44,9 +37,6 @@ class CrmLead(models.Model):
             vals['name'] = fallback
         return super().create(vals_list)
 
-    # ------------------------------------------------------------------
-    # Dashboard / statistics (read-only aggregations, no stored data)
-    # ------------------------------------------------------------------
 
     @api.model
     def crm_modern_features(self):
@@ -59,138 +49,6 @@ class CrmLead(models.Model):
             'use_leads': self.env.user.has_group('crm.group_use_lead'),
             'sale': False,
         }
-
-    @api.model
-    def crm_modern_dashboard(self):
-        """Everything the dashboard needs in one round trip."""
-        Lead = self.with_context(active_test=False)
-        today = fields.Date.context_today(self)
-        month_start = date_utils.start_of(today, 'month')
-        opp = [('type', '=', 'opportunity')]
-
-        def total(domain, field='expected_revenue'):
-            [(count, amount)] = Lead._read_group(domain, aggregates=['__count', f'{field}:sum'])
-            return count, amount or 0.0
-
-        open_domain = opp + [('active', '=', True), ('won_status', '=', 'pending')]
-        open_count, pipeline = total(open_domain)
-        _count, weighted = total(open_domain, 'prorated_revenue')
-        won_count, won_month = total(opp + [('won_status', '=', 'won'), ('date_closed', '>=', month_start)])
-
-        since = today - timedelta(days=90)
-        closed = dict(Lead._read_group(
-            opp + [('won_status', 'in', ('won', 'lost')), ('date_closed', '>=', since)],
-            ['won_status'], ['__count']))
-        decided = closed.get('won', 0) + closed.get('lost', 0)
-        new_leads = self.search_count([('type', '=', 'lead'), ('create_date', '>=', today - timedelta(days=7))])
-
-        trend_start = month_start - relativedelta(months=5)
-        by_month = {
-            month.date() if hasattr(month, 'date') else month: amount or 0.0
-            for month, amount in Lead._read_group(
-                opp + [('won_status', '=', 'won'), ('date_closed', '>=', trend_start)],
-                ['date_closed:month'], ['expected_revenue:sum'])
-        }
-        trend = []
-        for i in range(6):
-            month = trend_start + relativedelta(months=i)
-            trend.append({'label': month.strftime('%b'), 'value': by_month.get(month, 0.0)})
-
-        stages = self.env['crm.stage'].search([])
-        per_stage = {
-            stage.id: (count, amount or 0.0)
-            for stage, count, amount in self._read_group(
-                opp + [('won_status', '!=', 'lost')], ['stage_id'], ['__count', 'expected_revenue:sum'])
-        }
-        by_stage = [{
-            'id': s.id, 'label': s.name,
-            'count': per_stage.get(s.id, (0, 0.0))[0], 'value': per_stage.get(s.id, (0, 0.0))[1],
-        } for s in stages]
-
-        leaderboard = self._crm_modern_user_stats(limit=5)
-
-        campaigns = self._crm_modern_campaign_stats(limit=6)
-
-        return {
-            'currency_id': self.env.company.currency_id.id,
-            'kpis': {
-                'pipeline': pipeline, 'weighted': weighted, 'open_count': open_count,
-                'won_month': won_month, 'won_month_count': won_count,
-                'win_rate': round(closed.get('won', 0) * 100 / decided) if decided else 0,
-                'new_leads': new_leads,
-            },
-            'trend': trend,
-            'by_stage': by_stage,
-            'leaderboard': leaderboard,
-            'campaigns': campaigns,
-        }
-
-    @api.model
-    def _crm_modern_campaign_stats(self, team_id=False, limit=6):
-        """Campaign results computed from crm.lead (campaign_id, team_id, won_status): no stored fields."""
-        Lead = self.with_context(active_test=False)
-        domain = [('campaign_id', '!=', False)] + ([('team_id', '=', int(team_id))] if team_id else [])
-        stats = {}
-        for campaign, kind, status, count, amount in Lead._read_group(
-                domain + ['|', ('active', '=', True), ('won_status', '!=', 'pending')],
-                ['campaign_id', 'type', 'won_status'], ['__count', 'expected_revenue:sum']):
-            row = stats.setdefault(campaign, {
-                'id': campaign.id, 'title': campaign.title or campaign.name, 'user_id': campaign.user_id.id and [campaign.user_id.id, campaign.user_id.name],
-                'lead_count': 0, 'opportunity_count': 0, 'open_count': 0, 'won_count': 0, 'won_revenue': 0.0, 'total': 0,
-            })
-            row['total'] += count
-            if kind == 'lead':
-                row['lead_count'] += count
-            else:
-                row['opportunity_count'] += count
-                if status == 'won':
-                    row['won_count'] += count
-                    row['won_revenue'] += amount or 0.0
-                elif status == 'pending':
-                    row['open_count'] += count
-        # the team working a campaign: the team most of its leads belong to
-        teams = {}
-        for campaign, team, count in Lead._read_group(domain + [('team_id', '!=', False)], ['campaign_id', 'team_id'], ['__count']):
-            if campaign in stats and count > teams.get(campaign, (None, 0))[1]:
-                teams[campaign] = ((team.id, team.name), count)
-        rows = list(stats.values())
-        for campaign, row in stats.items():
-            row['team'] = list(teams[campaign][0]) if campaign in teams else False
-        rows.sort(key=lambda r: (r['won_revenue'], r['total']), reverse=True)
-        return rows[:limit] if limit else rows
-
-    @api.model
-    def _crm_modern_user_stats(self, user_ids=None, limit=None):
-        Lead = self.with_context(active_test=False)
-        domain = [('type', '=', 'opportunity'), ('user_id', '!=', False)] + LIVE_OR_CLOSED
-        if user_ids is not None:
-            domain.append(('user_id', 'in', user_ids))
-        stats = {}
-        for user, status, count, amount in Lead._read_group(
-                domain, ['user_id', 'won_status'], ['__count', 'expected_revenue:sum']):
-            row = stats.setdefault(user.id, {
-                'user_id': user.id, 'name': user.name,
-                'open_count': 0, 'pipeline': 0.0, 'won_count': 0, 'won': 0.0, 'lost_count': 0,
-            })
-            if status == 'won':
-                row['won_count'] += count
-                row['won'] += amount or 0.0
-            elif status == 'lost':
-                row['lost_count'] += count
-            else:
-                row['open_count'] += count
-                row['pipeline'] += amount or 0.0
-        overdue = dict(self.env['mail.activity']._read_group(
-            [('res_model', '=', 'crm.lead'), ('date_deadline', '<', fields.Date.context_today(self))]
-            + ([('user_id', 'in', user_ids)] if user_ids is not None else []),
-            ['user_id'], ['__count']))
-        rows = list(stats.values())
-        for row in rows:
-            decided = row['won_count'] + row['lost_count']
-            row['win_rate'] = round(row['won_count'] * 100 / decided) if decided else None
-            row['overdue'] = next((c for u, c in overdue.items() if u.id == row['user_id']), 0)
-        rows.sort(key=lambda r: (r['won'] + r['pipeline'] * 0.3), reverse=True)
-        return rows[:limit] if limit else rows
 
     @api.model
     def crm_modern_team_detail(self, team_id):

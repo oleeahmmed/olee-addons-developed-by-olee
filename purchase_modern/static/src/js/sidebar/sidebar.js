@@ -27,7 +27,6 @@ const REPLACED = new Set([
 /** Font Awesome icon per menu xmlid (Odoo ships FA 4.7). Other addons may add entries. */
 export const menuIcons = registry.category("purchase_modern.menu_icons");
 for (const [xmlid, icon] of Object.entries({
-    "purchase_modern.menu_dashboard": "fa-th-large",
     "purchase_modern.menu_buy": "fa-shopping-bag",
     "purchase_modern.menu_catalog": "fa-cube",
     "purchase_modern.menu_rfqs": "fa-file-text-o",

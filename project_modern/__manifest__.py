@@ -1,12 +1,12 @@
 {
     'name': 'Modern Project',
-    'summary': "Modern look and a simple sidebar for Odoo's Project app: dashboard, projects, task boards by stage, my tasks, subtasks",
+    'summary': "Modern look and a simple sidebar for Odoo's Project app: projects, task boards by stage, my tasks, subtasks",
     'description': """
 Modern Project gives Odoo's Project app the look of Modern CRM: a clean sidebar,
-a top bar for what is used less, a dashboard, CRM-style task and project cards and
+a top bar for what is used less, CRM-style task and project cards and
 the CRM drawer for simple records.
 
-Sidebar: Dashboard, Projects, My Tasks, All Tasks.
+Sidebar: Projects, My Tasks, All Tasks.
 Top bar: More (overdue, unassigned and closed tasks), Reporting and Configuration
 (task stages and tags open in the CRM-style drawer).
 
@@ -30,10 +30,8 @@ ratings and access rights stay Odoo's. No new table or field: only extra views
             'project_modern/static/src/js/app_context.js',
             'project_modern/static/src/js/drawer.js',
             'project_modern/static/src/js/pages.js',
-            'project_modern/static/src/js/dashboard.js',
             'project_modern/static/src/js/sidebar.js',
             'project_modern/static/src/xml/drawer.xml',
-            'project_modern/static/src/xml/dashboard.xml',
         ],
     },
     'installable': True,

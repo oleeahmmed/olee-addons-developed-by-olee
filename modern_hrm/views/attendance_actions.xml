@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Odoo's own hr.attendance views in the modern page (static/src/js) -->
-    <record id="attendance_action_dashboard" model="ir.actions.client">
-        <field name="name">Attendance Dashboard</field>
-        <field name="tag">modern_hrm.attendance_dashboard</field>
-        <field name="path">modern-attendance</field>
-    </record>
     <record id="attendance_action_at_work" model="ir.actions.client">
         <field name="name">At Work</field>
         <field name="tag">modern_hrm.attendance_at_work</field>

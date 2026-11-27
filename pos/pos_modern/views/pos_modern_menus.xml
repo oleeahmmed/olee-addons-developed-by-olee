@@ -4,7 +4,7 @@
         Inside Odoo's own Point of Sale app (point_of_sale.menu_point_root). Kept as simple
         as the shadcn POS app: the sidebar has Menu (sell: pick products, cart, pay),
         Tables (restaurants only) and Orders. Everything else is in the top bar: More
-        (dashboard, shops, sessions, products, customers, payments, refunds, ongoing
+        (shops, sessions, products, customers, payments, refunds, ongoing
         orders), Odoo's Reporting and Configuration.
         Visibility comes from Odoo's groups (POS user / manager).
     -->
@@ -13,7 +13,6 @@
     <menuitem id="menu_orders" name="Orders" parent="point_of_sale.menu_point_root" action="action_orders" sequence="-120"/>
 
     <menuitem id="menu_more" name="More" parent="point_of_sale.menu_point_root" sequence="-50"/>
-    <menuitem id="menu_dashboard" name="Dashboard" parent="menu_more" action="action_dashboard" sequence="1"/>
     <menuitem id="menu_shops" name="Shops" parent="menu_more" action="action_shops" sequence="2"/>
     <menuitem id="menu_sessions" name="Sessions" parent="menu_more" action="action_sessions" sequence="3"/>
     <menuitem id="menu_products" name="Products" parent="menu_more" action="action_products" sequence="4"/>

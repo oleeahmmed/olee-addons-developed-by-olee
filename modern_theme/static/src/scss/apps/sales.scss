@@ -2,7 +2,7 @@
 // sales_modern/static/src/scss so the app ships no stylesheet of its own).
 
 // ---- from sales_modern/static/src/scss/app.scss
-// Sales Modern: pages, lists, dashboards and controls come from Modern Theme's shared
+// Sales Modern: pages, lists and controls come from Modern Theme's shared
 // app kit (modern_theme/static/src/scss/kit/). This app only passes its prefix,
 // so .o_ss pages and --ss-* tokens get the same look as every other modern app.
 @include mt-app-tokens(ss);
@@ -10,7 +10,6 @@
 @include mt-app-list(ss);
 @include mt-app-controls(ss);
 @include mt-app-helpers(ss);
-@include mt-app-dash(ss);
 
 // The Sales Teams page uses the Modern CRM Sales Teams design: its o_cm_team_kanban
 // card and cm-tc-* styles live with the rest of the CRM styles in apps/crm.scss.

@@ -165,18 +165,16 @@ $pkb-line: unquote("color-mix(in srgb, var(--mt-border) 75%, transparent)");
         > div:empty { display: none !important; }
     }
 
-    // ---- on hand: tinted footer band, label left, value right
+    // ---- on hand: hairline footer, label left, value right (like the pipeline card)
     > main > div:not([class]):not([name]) {
         order: 4;
         display: flex !important;
         align-items: baseline;
         flex: 1 0 100%;
-        // reach the card edge on the right too (the image tile column sits there)
-        margin: 0.875rem calc(-5.25rem - 1rem) -0.875rem -1.0625rem !important;
-        padding: 0.625rem 1rem 0.625rem 1.0625rem;
+        margin: 0.875rem 0 -0.875rem 0 !important;
+        padding: 0.625rem 0;
         border-top: 1px solid $pkb-line;
-        border-radius: 0 0 var(--mt-kanban-card-radius, 0.75rem) 0;
-        background: var(--mt-muted);
+        background: transparent;
         font-size: 0;
         line-height: 1.25rem;
 

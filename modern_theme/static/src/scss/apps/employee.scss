@@ -2,24 +2,13 @@
 // modern_hrm/static/src/scss so the HRM addon ships no stylesheet of its own).
 
 // ---- from modern_hrm/static/src/scss/app.scss
-// Modern Employees: pages, lists, dashboards and controls come from Modern Theme's shared
+// Modern Employees: pages, lists and controls come from Modern Theme's shared
 // app kit (modern_theme/static/src/scss/kit/). This app only passes its prefix.
 @include mt-app-tokens(em);
 @include mt-app-pages(em);
 @include mt-app-list(em);
 @include mt-app-controls(em);
 @include mt-app-helpers(em);
-@include mt-app-dash(em);
-
-// Two cards stacked in one grid column (birthdays above the gender split).
-.o_em .od-stack-col {
-    display: flex;
-    flex-direction: column;
-    gap: inherit;
-    min-width: 0;
-    > .od-card { flex: 0 0 auto; }
-    > .od-card:last-child { flex: 1 1 auto; }
-}
 
 // ---- from modern_hrm/static/src/scss/hr_views.scss
 // Modern Employees: shadcn look for Odoo's own HR views (employee / department / job
@@ -97,9 +86,9 @@ html:not(#em-x):not(#em-y) .o_kanban_view.o_hr_employee_kanban {
             > div { margin-bottom: 0.125rem; }
             .fs-5 {
                 display: block;
-                font-size: 0.9375rem !important;
+                font-size: 1rem !important;
                 font-weight: 600 !important;
-                line-height: 1.3;
+                line-height: 1.375;
                 color: $em-fg;
                 margin-bottom: 0.25rem;
                 overflow: hidden;
@@ -116,9 +105,10 @@ html:not(#em-x):not(#em-y) .o_kanban_view.o_hr_employee_kanban {
                 padding: 0.125rem 0.5rem;
             }
             footer {
-                margin-top: 0.25rem;
-                padding: 0 !important;
+                margin-top: 0.75rem;
+                padding: 0.5rem 0 0 !important;
                 border: 0 !important;
+                border-top: 1px solid color-mix(in srgb, #{$em-border} 75%, transparent) !important;
                 min-height: 0;
                 .o-mail-ActivityButton .fa { font-size: 0.875rem; color: $em-muted-fg !important; }
             }
@@ -140,8 +130,8 @@ html:not(#em-x):not(#em-y) .o_kanban_view.o_hr_department_kanban {
         background: $em-card;
         box-shadow: var(--mt-shadow-xs, 0 1px 2px rgba(0, 0, 0, 0.04));
         overflow: hidden;
-        // Odoo's colour stripe stays, thinner
-        &::after { width: 3px !important; }
+        // no colour stripe: the department colour stays on its icon and tags
+        &::after { display: none !important; }
         .o_kanban_card_header_title, .o_primary, .fw-bold, .fs-4, .fs-5 { font-weight: 600 !important; color: $em-fg; }
         .btn-primary {
             background: $em-muted !important;
@@ -206,8 +196,8 @@ html:not(#em-x):not(#em-y) .o_form_view .o_horizontal_separator::first-letter { 
 // ===========================================================================
 $em-apps: 'html:is([data-mt-app="hr"], [data-mt-app="hr_holidays"], [data-mt-app="hr_attendance"]):not(#em-x):not(#em-y)';
 
-// App accent: Employees blue, Time Off violet, Attendances teal. Used by the
-// dashboard charts and by Odoo's graph views (modern_theme reads --mt-app-chart-*).
+// App accent: Employees blue, Time Off violet, Attendances teal. Used by Odoo's
+// graph views (modern_theme reads --mt-app-chart-*).
 html[data-mt-app="hr"] { --em-accent: #2563eb; }
 html[data-mt-app="hr_holidays"] { --em-accent: #7c3aed; }
 html[data-mt-app="hr_attendance"] { --em-accent: #0d9488; }
@@ -303,7 +293,7 @@ html[data-mt-app="hr_attendance"] { --mt-app-chart-2: #2563eb; }
     td:hover { background: color-mix(in srgb, var(--em-accent, #2563eb) 6%, transparent); }
 }
 
-// Graph: on a card, like the dashboards
+// Graph: on a card
 #{$em-apps} .o_graph_view .o_graph_renderer {
     margin: 0.25rem 1rem 1rem;
     padding: 1rem;
@@ -327,7 +317,7 @@ html[data-mt-app="hr_attendance"] { --mt-app-chart-2: #2563eb; }
             margin: 0 0.875rem 0 0 !important;
         }
         .o_hr_holidays_kanban { display: flex; align-items: center; }
-        .fs-3 { font-size: 0.9375rem !important; font-weight: 600 !important; color: $em-fg; margin: 0 !important; }
+        .fs-3 { font-size: 1rem !important; font-weight: 600 !important; color: $em-fg; margin: 0 !important; }
         .o_hr_holidays_card, .o_hr_holidays_name { font-size: 0.8125rem; color: $em-muted-fg; }
         .o_hr_holidays_card .fw-bold, .o_hr_holidays_name .fw-bold { color: $em-fg; font-weight: 600 !important; }
         .o_hr_holidays_value { display: flex; align-items: center; gap: 0.5rem; }
@@ -349,7 +339,7 @@ html[data-mt-app="hr_attendance"] { --mt-app-chart-2: #2563eb; }
     background: $em-card;
     box-shadow: var(--mt-shadow-xs, 0 1px 2px rgba(0, 0, 0, 0.04));
     hr { display: none; }
-    .fs-5 { font-size: 0.9375rem !important; font-weight: 600 !important; margin-bottom: 0.25rem !important; }
+    .fs-5 { font-size: 1rem !important; font-weight: 600 !important; margin-bottom: 0.25rem !important; }
     .fa-calendar { color: $em-muted-fg; }
     font-size: 0.8125rem;
     color: $em-muted-fg;

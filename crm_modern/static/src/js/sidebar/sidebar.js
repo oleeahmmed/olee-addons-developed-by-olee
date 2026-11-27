@@ -22,7 +22,6 @@ const MERGE_INTO = {
     "crm.crm_menu_config": "crm_modern.menu_config",
 };
 const SIDEBAR_ORDER = [
-    "crm_modern.menu_dashboard",
     "crm_modern.menu_marketing",
     "crm_modern.menu_sales",
     "crm_modern.menu_users",
@@ -104,7 +103,6 @@ const REPLACEMENTS = {
 /** Font Awesome icon per menu xmlid (Odoo ships FA 4.7). Other addons may add entries. */
 export const menuIcons = registry.category("crm_modern.menu_icons");
 for (const [xmlid, icon] of Object.entries({
-    "crm_modern.menu_dashboard": "fa-th-large",
     "crm_modern.menu_pipeline": "fa-columns",
     "crm_modern.menu_leads": "fa-user-plus",
     "crm_modern.menu_activities": "fa-clock-o",

@@ -2,12 +2,11 @@
 <odoo>
     <!--
         Inside Odoo's own Project app (project.menu_main_pm), like Modern CRM inside CRM.
-        Sidebar (everyday work): Dashboard, Projects, My Tasks, All Tasks.
+        Sidebar (everyday work): Projects, My Tasks, All Tasks.
         Top bar: More (overdue, unassigned, closed tasks), Odoo's Reporting and
         Configuration (task stages and tags replaced by pages with the CRM drawer).
         Visibility comes from Odoo's groups (Project user / manager).
-    -->
-    <menuitem id="menu_dashboard" name="Dashboard" parent="project.menu_main_pm" action="action_dashboard" sequence="-120"/>
+    -->
     <menuitem id="menu_projects" name="Projects" parent="project.menu_main_pm" action="action_projects" sequence="-110"/>
     <menuitem id="menu_my_tasks" name="My Tasks" parent="project.menu_main_pm" action="action_my_tasks" sequence="-100"/>
     <menuitem id="menu_all_tasks" name="All Tasks" parent="project.menu_main_pm" action="action_all_tasks" sequence="-90"

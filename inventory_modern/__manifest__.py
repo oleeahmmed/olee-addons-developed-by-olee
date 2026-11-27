@@ -3,17 +3,17 @@
     'summary': 'A simple, modern workspace for the Odoo Inventory app — built only on the standard models',
     'description': """
 Inventory Modern gives Odoo's Inventory app the same clean, modern interface as
-CRM Modern and Sales Modern: a left sidebar, an owner dashboard, receipts,
+CRM Modern and Sales Modern: a left sidebar, receipts,
 deliveries, internal transfers, products, stock on hand and moves history.
 Adding, viewing and editing all use Odoo's own forms, with a modern look.
 
-* No new app: it lives inside the Inventory app, which now opens on its dashboard.
+* No new app: it lives inside the Inventory app, which now opens straight on the records.
 * No new tables or fields: every screen reads and writes stock.picking, stock.quant,
   stock.move.line, product.template... through Odoo's own views, wizards and methods.
 * Rights, record rules, routes, settings and reports are Odoo's own. Odoo's
   original Inventory menus stay available (sidebar groups and top-bar menus).
     """,
-    'version': '19.0.2.1.1',
+    'version': '19.0.2.1.3',
     'category': 'Inventory/Inventory',
     'author': 'Your Name',
     'license': 'LGPL-3',
@@ -27,7 +27,7 @@ Adding, viewing and editing all use Odoo's own forms, with a modern look.
         'web.assets_backend': [
             'inventory_modern/static/src/js/sidebar/*.js',
             'inventory_modern/static/src/js/pages/*.js',
-            'inventory_modern/static/src/xml/dashboard.xml',
+
         ],
     },
     'post_init_hook': 'post_init_hook',

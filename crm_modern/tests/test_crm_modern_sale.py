@@ -50,8 +50,6 @@ class TestCrmModernSale(TransactionCase):
         self.assertEqual((data['quotation_count'], data['sale_order_count']), (0, 1))
         self.assertEqual(data['orders'][0]['state'], 'sale')
 
-        dash = self.env['crm.lead'].crm_modern_sale_dashboard()
-        self.assertGreaterEqual(dash['orders_month'], 1)
 
     def test_quick_quotation_from_record_page(self):
         lead = self.env['crm.lead'].create({'name': 'Quick quote deal', 'type': 'opportunity', 'partner_name': 'Quick Quote Ltd'})

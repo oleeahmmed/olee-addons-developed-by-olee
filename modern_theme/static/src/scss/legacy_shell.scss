@@ -27,7 +27,7 @@ html.mt-app-modern .o_web_client > .o_action_manager {
         }
 
         > .od-page {
-            height: 100%; // the dashboard scrolls inside the content card (the action manager does not)
+            height: 100%; // the page scrolls inside the content card (the action manager does not)
             overflow-y: auto;
         }
 
@@ -105,7 +105,7 @@ html[data-mt-theme] .o_web_client {
     .o_cp_searchview {
         min-height: var(--mt-control-h);
     }
-    // List, kanban and dashboard "New" buttons use the primary pill.
+    // List and kanban "New" buttons use the primary pill.
     .o_list_button_add,
     .o-kanban-button-new,
     .od-btn.od-btn--primary {

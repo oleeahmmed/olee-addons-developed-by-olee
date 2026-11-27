@@ -718,7 +718,7 @@ $mt-bar-height: 3.5rem;
 
     // Named sections (Sales, Invoicing, Delivery, Tracking…) sit in a two-column
     // card grid, the same rounded bordered panels OmniRouters uses on profile
-    // and the dashboard.
+    // pages.
     .o_group.row:has(> .o_inner_group .o_horizontal_separator) {
         display: grid !important;
         grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -1,108 +1,26 @@
-// Modern Theme: the neutral shadcn look for the dashboards (light).
-// Palette comes from tokens.scss; this file only maps the dashboard
-// components onto it: neutral chart tones, white stat cards, colour only
-// where it means something (green = good, red = bad / overdue).
+// Modern Theme: the neutral shadcn look for the CRM home page (light).
+// Palette comes from tokens.scss; cards stay white, colour only where it
+// means something (green = live, dark = primary).
 
 $sl: 'html[data-mt-theme="once"]:not([data-mt-scheme="dark"])';
 
 // ---------------------------------------------------------------------------
-// 1. Dashboards: neutral chart colours, colour only where it means something
+// 1. Home page: white cards, neutral buttons, live dot
 // ---------------------------------------------------------------------------
 #{$sl} .od-page {
-    .od-tone-blue   { --od-c: #262626; }
-    .od-tone-teal   { --od-c: #737373; }
-    .od-tone-violet { --od-c: #525252; }
-    .od-tone-sky, .od-tone-info { --od-c: #404040; }
-    .od-tone-slate, .od-tone-muted { --od-c: #737373; }
-    .od-tone-amber, .od-tone-warning, .od-tone-orange { --od-c: #525252; }
-    .od-tone-green, .od-tone-success { --od-c: #16a34a; }
-    .od-tone-rose, .od-tone-red, .od-tone-danger { --od-c: #ef4444; }
-    [class*="od-tone-"] { --od-soft: color-mix(in srgb, var(--od-c) 9%, #ffffff); }
-
-    // donut / pie: shadcn chart-5 … chart-1, one per slice
-    .od-chart-1 { --od-c: #262626; }
-    .od-chart-2 { --od-c: #737373; }
-    .od-chart-3 { --od-c: #d4d4d4; }
-    .od-chart-4 { --od-c: #404040; }
-    .od-chart-5 { --od-c: #a1a1a1; }
-
-    // stat cards: plain white, no tinted "featured" card, neutral sparkline
-    .od-kpi, .od-kpi.od-kpi--featured { background: #ffffff; border-color: #e5e5e5; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
-    .od-kpi .od-spark { color: #171717; opacity: 0.85; }
-    .od-delta.od-delta--good { color: #16a34a; }
-    .od-delta.od-delta--bad { color: #ef4444; }
     .od-card { background: #ffffff; border-color: #e5e5e5; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
-    .od-card-icon, .od-kpi-icon, .od-att-icon { background: #f5f5f5 !important; color: #171717 !important; }
     .od-eyebrow .od-live { background: #16a34a; box-shadow: 0 0 0 3px color-mix(in srgb, #16a34a 20%, transparent); }
 
-    // charts
-    .od-bar { fill: #262626; &.od-bar--active { fill: #171717; } &.od-bar--future { fill: #f5f5f5; } }
-    .od-hover-band { fill: #f5f5f5; }
-    .od-swatch--bar { background: #171717; }
-    .od-swatch--line { border-top-color: #a1a1a1; }
-    .od-prev-line { stroke: #a1a1a1; }
-    .od-prev-dot { stroke: #a1a1a1; fill: #ffffff; }
-    .od-grid-line { stroke: #e5e5e5; }
-    .od-axis { fill: #737373; }
-    .od-tooltip { background: #ffffff; color: #0a0a0a; border: 1px solid #e5e5e5;
-        .od-tooltip-row { color: #737373; strong { color: #0a0a0a; } }
-        .od-tooltip-growth.is-good { color: #16a34a; } .od-tooltip-growth.is-bad { color: #ef4444; }
-    }
-    .od-donut-track { stroke: #f5f5f5; }
-    .od-funnel-track, .od-rank-bar, .od-plist-track, .od-goal-track, .od-meter-track, .od-stack-bar { background: #f5f5f5; }
-    .od-funnel-track span { background: #171717; }
-    li.is-won .od-funnel-track span { background: #16a34a; }
-    .od-funnel-name .fa-trophy { color: #171717; }
-    .od-forecast-weighted { background: #171717 !important; }
-    .od-rank-no.is-first { background: #171717; color: #fafafa; }
-    .od-allclear { background: #f5f5f5;
-        .od-allclear-icon { background: #171717; color: #fafafa; }
-    }
-
-    // buttons, filters, links: shadcn outline / secondary / ghost
+    // buttons, links: shadcn outline / secondary / ghost
     .od-btn { background: #ffffff; border-color: #e5e5e5; color: #0a0a0a; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
         &:hover { background: #f5f5f5; border-color: #e5e5e5; }
         &.od-btn--primary { background: #171717; border-color: #171717; color: #fafafa; &:hover { background: #2e2e2e; } }
     }
-    .od-seg { background: #f5f5f5; border-color: transparent;
-        button { color: #737373; &.is-active { background: #ffffff; color: #0a0a0a; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); } }
-    }
-    .od-select { background: #ffffff; border-color: #e5e5e5; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
     .od-link { color: #0a0a0a; &:hover { background: #f5f5f5; } }
-    .od-pill { background: #f5f5f5; color: #171717; }
-    .od-pill[class*="od-tone-green"], .od-pill.od-tone-success { background: color-mix(in srgb, #16a34a 10%, #ffffff); color: #15803d; }
-    .od-pill:is(.od-tone-rose, .od-tone-red, .od-tone-danger) { background: color-mix(in srgb, #ef4444 9%, #ffffff); color: #dc2626; }
-    .od-note { background: #f5f5f5; color: #737373; }
-    .od-table th { background: transparent; color: #737373; }
-    .od-table tbody tr.od-clickable:hover td { background: color-mix(in srgb, #f5f5f5 50%, #ffffff); }
-    .od-skel { background: linear-gradient(90deg, #f5f5f5 0%, #fafafa 50%, #f5f5f5 100%) 0 0 / 200% 100%; }
-
-    // shadcn badges: default (primary), secondary, destructive, outline
-    .od-badge { background: #f5f5f5; color: #171717; }
-    .od-badge.od-badge--medium { background: #171717; color: #fafafa; }
-    .od-badge.od-badge--high { background: #ef4444; color: #ffffff; }
-    .od-badge.od-badge--low { background: #f5f5f5; color: #171717; }
-    .od-badge.od-badge--outline { background: transparent; border-color: #e5e5e5; color: #0a0a0a; }
-    .od-badge.od-badge--outline:is(.od-tone-rose, .od-tone-red, .od-tone-danger) { color: #dc2626; border-color: color-mix(in srgb, #ef4444 30%, #e5e5e5); }
-    .od-badge.od-badge--soft { background: #f5f5f5; color: #171717; }
-    .od-badge.od-badge--soft:is(.od-tone-green, .od-tone-success) { background: color-mix(in srgb, #16a34a 10%, #ffffff); color: #15803d; }
-    .od-badge.od-badge--soft:is(.od-tone-rose, .od-tone-red, .od-tone-danger) { background: color-mix(in srgb, #ef4444 9%, #ffffff); color: #dc2626; }
-
-    // avatars without a photo: muted circle
-    span.od-person-avatar, .od-rank-mono { background: #f5f5f5 !important; color: #171717 !important; }
-
-    // status tiles: a neutral marker, colour only for good / bad
-    .od-tile::before { background: var(--od-c, #171717); }
-    .od-tile .od-tile-top .fa { color: #737373; }
-    .od-tile.od-clickable:hover { background: #fafafa; border-color: #d4d4d4; }
-    .od-goal .od-goal-icon { background: #f5f5f5; color: #171717; }
-    .od-goal .od-goal-track span, .od-plist-track span { background: #171717; }
-    .od-plist-track span.od-tone-green { background: #16a34a; }
-    .od-task-check[aria-pressed="true"] { background: #171717; border-color: #171717; color: #fafafa; }
 }
 
 // ---------------------------------------------------------------------------
-// 2. Plain surfaces: no brand glow behind dashboards, no dotted boards
+// 2. Plain surfaces: no brand glow behind the page, no dotted boards
 // ---------------------------------------------------------------------------
 #{$sl} {
     --mt-board-dot: transparent;

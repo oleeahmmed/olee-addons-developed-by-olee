@@ -2,15 +2,11 @@
 <odoo>
     <!--
         No app of its own: everything lives inside Odoo's CRM app (crm.crm_menu_root).
-        The Dashboard is the first top-level page (the app opens on it). Everyday work
-        is two sidebar groups: CRM (Campaigns first, Leads, Pipeline, Activities) and
+        Everyday work is two sidebar groups (Campaigns first, so the app opens on it): CRM (Campaigns first, Leads, Pipeline, Activities) and
         Sales (Quotations, Sales Orders, Customers). Team, Reporting and Configuration
         stay grouped for the top-bar dropdowns.
         Visibility comes from Odoo's groups (CRM app rights, CRM Settings).
     -->
-    <!-- Dashboard first: opening the CRM app goes straight to it, like the other modern apps. -->
-    <menuitem id="menu_dashboard" name="Dashboard" parent="crm.crm_menu_root" action="action_dashboard" sequence="-120"/>
-
     <menuitem id="menu_marketing" name="CRM" parent="crm.crm_menu_root" sequence="-100" groups="sales_team.group_sale_salesman" active="True"/>
     <menuitem id="menu_campaigns" name="Campaigns" parent="menu_marketing" action="action_campaigns" sequence="1" groups="sales_team.group_sale_salesman"/>
     <!-- Shown only when CRM ▸ Settings ▸ "Leads" is enabled, exactly like the standard CRM Leads menu. -->

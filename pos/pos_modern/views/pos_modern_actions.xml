@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- One client action per page; each page is an OWL component registered under the same tag.
-         The Dashboard comes first: it gave its old path (modern-pos) to the Menu page. -->
-    <record id="action_dashboard" model="ir.actions.client">
-        <field name="name">Dashboard</field>
-        <field name="tag">pos_modern.dashboard</field>
-        <field name="path">modern-pos-dashboard</field>
-    </record>
+    <!-- One client action per page; each page is an OWL component registered under the same tag. -->
     <record id="action_menu" model="ir.actions.client">
         <field name="name">Menu</field>
         <field name="tag">pos_modern.menu</field>
