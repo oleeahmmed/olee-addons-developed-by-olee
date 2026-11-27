@@ -6,7 +6,7 @@
         into the empty .ps-hook-* elements: they are kept from version to version.
     -->
     <t t-name="pos_modern.Menu">
-        <div class="o_ps ps-pos ps2" t-att-class="{ 'is-paying': state.mode === 'pay', 'ps-layout-bill': state.layout === 'bill', 'ps-layout-cart': state.layout !== 'bill', 'ps-hide-grid': state.layout === 'bill' and !state.showGrid }">
+        <div class="o_ps ps-pos ps2" t-att-class="{ 'is-paying': state.mode === 'pay', 'ps-layout-bill': state.layout === 'bill', 'ps-layout-cart': state.layout !== 'bill', 'ps-hide-grid': state.layout === 'bill' and !state.showGrid, 'ps-mob-order': state.mobTab === 'order' or !sessionOpen or state.mode === 'pay' or !!state.done }">
             <t t-if="state.loading">
                 <div class="ps2-shell">
                     <div class="ps2-head"><div class="ps-skel u-h-3 u-w-18"/></div>
@@ -68,7 +68,7 @@
                                 <i class="fa fa-list-ul" aria-hidden="true"/> Bill
                             </button>
                         </div>
-                        <button t-if="state.layout === 'bill'" type="button" class="ps-btn ps-btn--icon" t-att-class="{ 'is-on': state.showGrid }" t-on-click="toggleGrid" title="Show or hide the products">
+                        <button t-if="state.layout === 'bill'" type="button" class="ps-btn ps-btn--icon ps2-billgrid" t-att-class="{ 'is-on': state.showGrid }" t-on-click="toggleGrid" title="Show or hide the products">
                             <i class="fa fa-columns" aria-hidden="true"/>
                         </button>
                         <div class="ps-hook-head-actions"/>
@@ -513,6 +513,18 @@
                     </t>
                 </aside>
                 </div>
+
+                <!-- phone: bottom tabs, one screen at a time -->
+                <nav t-if="sessionOpen and state.mode !== 'pay' and !state.done" class="ps-mobtabs" aria-label="Counter screens">
+                    <button type="button" t-att-class="{ 'is-on': state.mobTab !== 'order' }" t-on-click="() => this.state.mobTab = 'menu'">
+                        <i class="fa fa-th-large" aria-hidden="true"/> Menu
+                    </button>
+                    <button type="button" t-att-class="{ 'is-on': state.mobTab === 'order' }" t-on-click="() => this.state.mobTab = 'order'">
+                        <i class="fa fa-shopping-basket" aria-hidden="true"/> Order
+                        <span t-if="itemCount" class="ps-mobtabs-count" t-esc="itemCount"/>
+                        <strong t-if="cartLines.length" t-esc="money(payable)"/>
+                    </button>
+                </nav>
                 </div>
             </t>
         </div>

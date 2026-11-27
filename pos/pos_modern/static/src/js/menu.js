@@ -115,6 +115,7 @@ export class PosMenu extends Component {
             showGrid: readPref(GRID_KEY, "1") === "1", // bill layout: product panel on the right
             billQuery: "",
             billActive: 0,
+            mobTab: "menu", // phone: menu | order
         });
         this.orderUuid = newUuid();
         this.quoteTimer = null;
@@ -744,6 +745,7 @@ export class PosMenu extends Component {
             extra: p.extra || {},
             done: null,
             mode: "cart",
+            mobTab: "order",
         });
         this.orderUuid = p.uuid || newUuid();
         this.cartChanged();
@@ -755,6 +757,7 @@ export class PosMenu extends Component {
             return;
         }
         this.state.mode = "pay";
+        this.state.mobTab = "order";
         this.state.error = "";
         if (!this.state.payments.length && Math.abs(this.payable) >= 0.005) {
             const m = this.methods.find((x) => x.is_cash) || this.methods[0];
@@ -1026,7 +1029,7 @@ export class PosMenu extends Component {
         this.clearTable();
     }
     newOrder() {
-        Object.assign(this.state, { done: null, error: "" });
+        Object.assign(this.state, { done: null, error: "", mobTab: "menu" });
         this.clearCart();
         this.state.partner = false;
     }
