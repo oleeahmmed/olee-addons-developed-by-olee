@@ -1,0 +1,32 @@
+// Theme colour (Settings > Modern Theme > Theme color), rendered as html[data-mt-color].
+// "neutral" keeps the shadcn neutral palette of mt_maps.scss. Each entry:
+// (light primary, light fg, light text, light hover, dark primary, dark fg, dark text, dark hover)
+$mt-colors: (
+    "blue":   (#2563eb, #ffffff, #2563eb, #1d4ed8, #3b82f6, #ffffff, #60a5fa, #2563eb),
+    "green":  (#16a34a, #ffffff, #15803d, #15803d, #22c55e, #052e16, #4ade80, #16a34a),
+    "orange": (#ea580c, #ffffff, #c2410c, #c2410c, #f97316, #ffffff, #fb923c, #ea580c),
+    "rose":   (#e11d48, #ffffff, #be123c, #be123c, #f43f5e, #ffffff, #fb7185, #e11d48),
+    "red":    (#dc2626, #ffffff, #b91c1c, #b91c1c, #ef4444, #ffffff, #f87171, #dc2626),
+    "violet": (#7c3aed, #ffffff, #6d28d9, #6d28d9, #8b5cf6, #ffffff, #a78bfa, #7c3aed),
+    "yellow": (#eab308, #422006, #a16207, #ca8a04, #facc15, #422006, #fde047, #eab308),
+);
+
+@mixin mt-color-vars($p, $fg, $text, $hover) {
+    --mt-primary: #{$p};
+    --mt-primary-rgb: #{red($p)}, #{green($p)}, #{blue($p)};
+    --mt-primary-foreground: #{$fg};
+    --mt-primary-text: #{$text};
+    --mt-primary-text-rgb: #{red($text)}, #{green($text)}, #{blue($text)};
+    --mt-solid: #{$p};
+    --mt-solid-fg: #{$fg};
+    --mt-solid-hover: #{$hover};
+}
+
+@each $name, $c in $mt-colors {
+    html[data-mt-color="#{$name}"] {
+        @include mt-color-vars(nth($c, 1), nth($c, 2), nth($c, 3), nth($c, 4));
+    }
+    html[data-mt-color="#{$name}"][data-mt-scheme="dark"] {
+        @include mt-color-vars(nth($c, 5), nth($c, 6), nth($c, 7), nth($c, 8));
+    }
+}

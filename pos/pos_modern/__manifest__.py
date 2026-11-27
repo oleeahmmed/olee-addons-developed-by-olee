@@ -1,6 +1,6 @@
 {
     'name': 'Modern POS',
-    'summary': "POS core for every shop: fast counter (split payment, change, hold bill, discounts + manager PIN, 58/80 mm receipt, shortcuts, stock, offline queue, X/Z day end) on Odoo's own POS, plus a modern back office",
+    'summary': "POS core for every shop: fast counter (split payment, change, hold bill, discounts + manager PIN, 58/80 mm receipt, shortcuts, stock, offline queue, X/Z day end, expenses, damage / scrap, stock count) on Odoo's own POS, plus a modern back office",
     'description': """
 Modern POS gives the back office of Odoo's Point of Sale the look of Modern CRM: a clean
 sidebar, a top bar for what is used less, CRM-style shop and order
@@ -21,7 +21,7 @@ pos_bd_payment (bKash / Nagad / Rocket / Upay + TrxID, reconciliation, SMS recei
 l10n_bd_pos (BIN, Mushak-6.3 / 6.7, VAT register, Bangla receipt),
 pos_pharmacy, pos_restaurant_bd, pos_retail_bd.
     """,
-    'version': '19.0.3.3.0',
+    'version': '19.0.3.6.0',
     'category': 'Sales/Point of Sale',
     'author': 'Olee',
     'license': 'LGPL-3',

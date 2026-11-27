@@ -14,7 +14,7 @@ Modern Theme turns the Odoo 19 backend into a clean shadcn/ui admin dashboard:
 * Login page rebuilt as the shadcn card; every Odoo form, list, kanban and dialog keeps
   its own features and behaviour.
     """,
-    "version": "19.0.7.0.2",
+    "version": "19.0.7.1.0",
     "category": "Themes/Backend",
     "author": "Olee",
     "license": "LGPL-3",
@@ -22,6 +22,7 @@ Modern Theme turns the Odoo 19 backend into a clean shadcn/ui admin dashboard:
     "data": [
         "views/webclient_templates.xml",
         "views/res_users_views.xml",
+        "views/res_config_settings_views.xml",
     ],
     "assets": {
         "web.assets_web": [
@@ -29,6 +30,7 @@ Modern Theme turns the Odoo 19 backend into a clean shadcn/ui admin dashboard:
             "modern_theme/static/src/scss/mt_maps.scss",
             "modern_theme/static/src/scss/fonts.scss",
             "modern_theme/static/src/scss/tokens.scss",
+            "modern_theme/static/src/scss/color_themes.scss",
             "modern_theme/static/src/scss/bridge.scss",
             "modern_theme/static/src/scss/components.scss",
             "modern_theme/static/src/scss/views.scss",

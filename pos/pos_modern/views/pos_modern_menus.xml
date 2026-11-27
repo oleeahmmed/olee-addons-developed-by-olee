@@ -20,6 +20,9 @@
     <menuitem id="menu_payments" name="Payments" parent="menu_more" action="action_payments" sequence="6"/>
     <menuitem id="menu_refunds" name="Refunds" parent="menu_more" action="action_refunds" sequence="7"/>
     <menuitem id="menu_ongoing" name="Ongoing Orders" parent="menu_more" action="action_ongoing" sequence="8"/>
+    <!-- Stock records of the shops: Odoo's own scrap documents and inventory adjustments -->
+    <menuitem id="menu_damage" name="Damage / Scrap" parent="menu_more" action="stock.action_stock_scrap" sequence="9" groups="point_of_sale.group_pos_manager"/>
+    <menuitem id="menu_stock_count" name="Stock Adjustment" parent="menu_more" action="stock.action_view_inventory_tree" sequence="10" groups="point_of_sale.group_pos_manager"/>
 
     <!-- Configuration ▸ Products: the POS categories as a Modern page -->
     <menuitem id="menu_categories" name="PoS Product Categories" parent="point_of_sale.pos_menu_products_configuration"

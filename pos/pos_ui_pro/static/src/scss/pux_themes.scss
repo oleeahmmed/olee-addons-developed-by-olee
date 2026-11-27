@@ -1,0 +1,22 @@
+// Brand colour per business type. Every component reads --pux-accent*.
+@mixin pux-accent($c, $c700, $c200, $c50, $shadow) {
+    --pux-accent: #{$c};
+    --pux-accent-700: #{$c700};
+    --pux-accent-200: #{$c200};
+    --pux-accent-50: #{$c50};
+    --pux-accent-shadow: #{$shadow};
+}
+
+.pos.pux {
+    --pux-ink: #1d2939;
+    @include pux-accent(#4f46e5, #4338ca, #c7d2fe, #eef2ff, rgba(79, 70, 229, .28)); // fallback
+
+    &.pux-restaurant { @include pux-accent(#f97316, #c2410c, #fed7aa, #fff7ed, rgba(249, 115, 22, .30)); }
+    &.pux-cafe       { @include pux-accent(#a16207, #854d0e, #fde68a, #fefce8, rgba(161, 98, 7, .28)); }
+    &.pux-fastfood   { @include pux-accent(#dc2626, #b91c1c, #fecaca, #fef2f2, rgba(220, 38, 38, .28)); }
+    &.pux-bakery     { @include pux-accent(#db2777, #be185d, #fbcfe8, #fdf2f8, rgba(219, 39, 119, .26)); }
+    &.pux-retail     { @include pux-accent(#4f46e5, #4338ca, #c7d2fe, #eef2ff, rgba(79, 70, 229, .28)); }
+    &.pux-grocery    { @include pux-accent(#16a34a, #15803d, #bbf7d0, #f0fdf4, rgba(22, 163, 74, .28)); }
+    &.pux-fashion    { @include pux-accent(#2563eb, #1d4ed8, #bfdbfe, #eff6ff, rgba(37, 99, 235, .28)); }
+    &.pux-pharmacy   { @include pux-accent(#0d9488, #0f766e, #99f6e4, #f0fdfa, rgba(13, 148, 136, .28)); }
+}

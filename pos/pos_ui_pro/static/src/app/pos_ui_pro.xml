@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <!-- Layout classes on the POS root: business, catalogue layout, density, Cart/Bill style -->
+    <t t-inherit="point_of_sale.Chrome" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('pos')]" position="attributes">
+            <attribute name="t-att-class">this.pos.puxClass</attribute>
+        </xpath>
+    </t>
+
+    <!-- Order screen: top bar across the screen, our cart/bill on top of the order pane.
+         Odoo's own blocks (order summary, numpad, Payment/Send) stay in place. -->
+    <t t-inherit="point_of_sale.ProductScreen" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('product-screen')]" position="inside">
+            <PuxBar/>
+        </xpath>
+        <xpath expr="//OrderSummary" position="before">
+            <PuxCart/>
+        </xpath>
+    </t>
+
+    <!-- ===================== top bar ===================== -->
+    <t t-name="pos_ui_pro.PuxBar">
+        <div class="pux-bar">
+            <div class="pux-bar-group">
+                <span class="pux-badge">
+                    <i t-attf-class="fa {{pos.puxProfile.icon}}"/>
+                    <span t-esc="pos.puxProfile.label"/>
+                </span>
+                <div class="pux-seg" role="tablist" aria-label="POS style">
+                    <button t-att-class="{'active': ui.style !== 'bill'}" t-on-click="() => pos.puxSetStyle('cart')" title="Products with a cart">
+                        <i class="fa fa-th-large"/><span>Cart</span>
+                    </button>
+                    <button t-att-class="{'active': ui.style === 'bill'}" t-on-click="() => pos.puxSetStyle('bill')" title="Bill table: scan or type to add">
+                        <i class="fa fa-list"/><span>Bill</span>
+                    </button>
+                </div>
+                <button t-if="ui.style === 'bill'" class="pux-btn pux-btn-ghost" t-att-class="{'pux-on': ui.catalog}"
+                        t-on-click="() => pos.puxToggleCatalog()" title="Show or hide the product panel">
+                    <i class="fa fa-columns"/><span>Products</span>
+                </button>
+            </div>
+            <div class="pux-bar-group pux-bar-actions">
+                <button class="pux-btn pux-btn-primary" t-on-click="newOrder" title="Keep this order open and start a new one">
+                    <i class="fa fa-plus"/><span>New</span>
+                </button>
+                <button t-if="hasTables" class="pux-btn" t-on-click="tables">
+                    <i class="fa fa-th"/><span>Tables</span>
+                </button>
+                <button class="pux-btn" t-att-disabled="isEmpty" t-on-click="saveDraft" title="Save as draft and start a new order">
+                    <i class="fa fa-bookmark-o"/><span>Draft</span>
+                </button>
+                <button class="pux-btn" t-on-click="openOrders">
+                    <i class="fa fa-list-alt"/><span>Orders</span>
+                </button>
+                <button class="pux-btn" t-on-click="refund">
+                    <i class="fa fa-undo"/><span>Refund</span>
+                </button>
+                <button t-if="canCashMove" class="pux-btn" t-on-click="cashMove">
+                    <i class="fa fa-exchange"/><span>Cash in/out</span>
+                </button>
+                <button class="pux-btn pux-btn-icon" t-on-click="() => pos.puxToggleDark()" t-att-title="ui.dark ? 'Light mode' : 'Dark mode'">
+                    <i t-attf-class="fa {{ui.dark ? 'fa-sun-o' : 'fa-moon-o'}}"/>
+                </button>
+                <button class="pux-btn pux-btn-destructive" t-on-click="closeSession">
+                    <i class="fa fa-power-off"/><span>Close session</span>
+                </button>
+            </div>
+        </div>
+    </t>
+
+    <!-- ===================== cart / bill ===================== -->
+    <t t-name="pos_ui_pro.PuxCart">
+        <div class="pux-cart" t-att-class="{'is-bill': isBill}">
+            <div class="pux-cart-head">
+                <div class="pux-cart-title">
+                    <span class="pux-cart-h" t-esc="isBill ? 'Bill' : 'Current order'"/>
+                    <span t-if="orderLabel" class="pux-chip" t-esc="'#' + orderLabel"/>
+                    <span class="pux-muted"><t t-esc="itemCount"/> items</span>
+                </div>
+                <button class="pux-btn pux-btn-sm" t-on-click="editCustomer">
+                    <i class="fa fa-user-o"/>
+                    <span t-esc="order?.getPartner()?.name or 'Customer'"/>
+                </button>
+            </div>
+
+            <!-- bill: type or scan to add -->
+            <div t-if="isBill" class="pux-addrow">
+                <i class="fa fa-search"/>
+                <input type="text" class="pux-input" placeholder="Scan a barcode or type a product, then Enter"
+                       t-model="state.query" t-on-keydown.stop="onKeydown"/>
+                <kbd>Enter</kbd>
+                <div t-if="results.length" class="pux-results">
+                    <button t-foreach="results" t-as="p" t-key="p.id" class="pux-result"
+                            t-att-class="{'active': p_index === state.active}"
+                            t-on-mousedown.prevent="() => this.add(p)">
+                        <span class="pux-result-name" t-esc="p.display_name"/>
+                        <span class="pux-result-price" t-esc="priceOf(p)"/>
+                    </button>
+                </div>
+            </div>
+
+            <div class="pux-lines">
+                <t t-if="!lines.length">
+                    <div class="pux-empty">
+                        <i class="fa fa-shopping-cart"/>
+                        <div class="pux-empty-t">No items yet</div>
+                        <div class="pux-muted" t-esc="isBill ? 'Scan a barcode or type a product name above.' : 'Tap a product or scan a barcode to add it.'"/>
+                    </div>
+                </t>
+
+                <!-- bill table -->
+                <table t-elif="isBill" class="pux-table">
+                    <thead>
+                        <tr>
+                            <th class="pux-col-no">#</th>
+                            <th>Item</th>
+                            <th class="pux-col-qty">Qty</th>
+                            <th class="pux-col-num">Price</th>
+                            <th class="pux-col-num">Disc.</th>
+                            <th class="pux-col-num">Amount</th>
+                            <th class="pux-col-x"/>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="lines" t-as="line" t-key="line.uuid"
+                            t-att-class="{'selected': line.isSelected(), 'is-child': line.combo_parent_id}"
+                            t-on-click="() => this.select(line)">
+                            <td class="pux-col-no" t-esc="line_index + 1"/>
+                            <td>
+                                <div class="pux-line-name" t-esc="lineName(line)"/>
+                                <div t-if="lineAttrs(line)" class="pux-muted pux-small" t-esc="lineAttrs(line)"/>
+                            </td>
+                            <td class="pux-col-qty">
+                                <div t-if="!line.combo_parent_id" class="pux-stepper">
+                                    <button t-on-click.stop="() => this.step(line, -1)" aria-label="Less">−</button>
+                                    <span t-esc="fmtQty(line)"/>
+                                    <button t-on-click.stop="() => this.step(line, 1)" aria-label="More">+</button>
+                                </div>
+                                <span t-else="" t-esc="fmtQty(line)"/>
+                            </td>
+                            <td class="pux-col-num" t-esc="line.currencyDisplayPriceUnit"/>
+                            <td class="pux-col-num pux-muted" t-esc="lineDiscount(line) or '—'"/>
+                            <td class="pux-col-num pux-strong" t-esc="line.combo_parent_id ? '' : line.currencyDisplayPrice"/>
+                            <td class="pux-col-x">
+                                <button t-if="!line.combo_parent_id" class="pux-icon-btn" t-on-click.stop="() => this.remove(line)" aria-label="Remove">
+                                    <i class="fa fa-trash-o"/>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- e-commerce cart -->
+                <t t-else="">
+                    <div t-foreach="lines" t-as="line" t-key="line.uuid" class="pux-item"
+                         t-att-class="{'selected': line.isSelected(), 'is-child': line.combo_parent_id}"
+                         t-on-click="() => this.select(line)">
+                        <div class="pux-thumb">
+                            <img t-if="lineImage(line)" t-att-src="lineImage(line)" alt="" loading="lazy"/>
+                            <i t-else="" class="fa fa-cube"/>
+                        </div>
+                        <div class="pux-item-body">
+                            <div class="pux-item-top">
+                                <div class="pux-line-name" t-esc="lineName(line)"/>
+                                <div class="pux-strong" t-esc="line.combo_parent_id ? '' : line.currencyDisplayPrice"/>
+                            </div>
+                            <div class="pux-muted pux-small">
+                                <t t-esc="line.currencyDisplayPriceUnit"/>
+                                <t t-if="lineAttrs(line)"> · <t t-esc="lineAttrs(line)"/></t>
+                                <span t-if="lineDiscount(line)" class="pux-chip pux-chip-success" t-esc="'-' + lineDiscount(line)"/>
+                            </div>
+                            <div t-if="!line.combo_parent_id" class="pux-item-actions">
+                                <div class="pux-stepper">
+                                    <button t-on-click.stop="() => this.step(line, -1)" aria-label="Less">−</button>
+                                    <span t-esc="fmtQty(line)"/>
+                                    <button t-on-click.stop="() => this.step(line, 1)" aria-label="More">+</button>
+                                </div>
+                                <button class="pux-icon-btn" t-on-click.stop="() => this.remove(line)" aria-label="Remove">
+                                    <i class="fa fa-trash-o"/>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div>
+
+            <div t-if="order and lines.length" class="pux-summary">
+                <div class="pux-sum-row"><span>Subtotal</span><span t-esc="order.currencyDisplayPriceExcl"/></div>
+                <div class="pux-sum-row"><span>Taxes</span><span t-esc="order.currencyAmountTaxes"/></div>
+                <div class="pux-sum-row pux-sum-total"><span>Total</span><span t-esc="order.currencyDisplayPrice"/></div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Product tile: price + Add button (Odoo's tax-aware unit price) -->
+    <t t-inherit="point_of_sale.ProductCard" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('product-name')]" position="after">
+            <t t-if="!props.isComboPopup">
+                <t t-set="pux_price" t-value="props.product?.displayPriceUnit"/>
+                <div class="pux-card-foot">
+                    <span t-if="pux_price" class="pux-price" t-esc="pux_price"/>
+                    <span class="pux-add"><i class="fa fa-plus"/><span>Add</span></span>
+                </div>
+            </t>
+        </xpath>
+    </t>
+
+</templates>

@@ -3,3 +3,16 @@
 
 // the printed receipt stays black on white in dark mode
 .ps-receipt { background: #fff; color: #000; }
+
+// pos_ui_pro theme colours, dark values
+.o_ps.ps-pos {
+    --mt-primary: #3b82f6; --mt-primary-foreground: #ffffff; --mt-primary-text: #60a5fa;
+    --mt-solid: #3b82f6; --mt-solid-fg: #ffffff;
+    &[data-pux-color="neutral"] { --mt-primary: #e5e5e5; --mt-primary-foreground: #171717; --mt-primary-text: #fafafa; --mt-solid: #e5e5e5; --mt-solid-fg: #171717; }
+    &[data-pux-color="zinc"] { --mt-primary: #e4e4e7; --mt-primary-foreground: #18181b; --mt-primary-text: #fafafa; --mt-solid: #e4e4e7; --mt-solid-fg: #18181b; }
+    &[data-pux-color="green"] { --mt-primary: #22c55e; --mt-primary-foreground: #052e16; --mt-primary-text: #4ade80; --mt-solid: #22c55e; --mt-solid-fg: #052e16; }
+    &[data-pux-color="orange"] { --mt-primary: #f97316; --mt-primary-foreground: #ffffff; --mt-primary-text: #fb923c; --mt-solid: #f97316; --mt-solid-fg: #ffffff; }
+    &[data-pux-color="rose"] { --mt-primary: #f43f5e; --mt-primary-foreground: #ffffff; --mt-primary-text: #fb7185; --mt-solid: #f43f5e; --mt-solid-fg: #ffffff; }
+    &[data-pux-color="violet"] { --mt-primary: #8b5cf6; --mt-primary-foreground: #ffffff; --mt-primary-text: #a78bfa; --mt-solid: #8b5cf6; --mt-solid-fg: #ffffff; }
+    &[data-pux-color="yellow"] { --mt-primary: #facc15; --mt-primary-foreground: #422006; --mt-primary-text: #fde047; --mt-solid: #facc15; --mt-solid-fg: #422006; }
+}

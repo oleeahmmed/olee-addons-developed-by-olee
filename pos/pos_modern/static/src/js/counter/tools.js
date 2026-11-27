@@ -1,4 +1,4 @@
-import { Component, onMounted, useRef, useState } from "@odoo/owl";
+import { Component, onMounted, onWillUnmount, useRef, useState } from "@odoo/owl";
 import { Dialog } from "@web/core/dialog/dialog";
 import { formatCurrency } from "@web/core/currency";
 import { _t } from "@web/core/l10n/translation";
@@ -7,7 +7,8 @@ import { printTemplate } from "./print";
 
 /**
  * Counter tools shared by every shop: quantity pad (kg, metre, yard…), modifiers,
- * return / exchange of an earlier bill, barcode labels and a generic choice dialog.
+ * return / exchange of an earlier bill, barcode labels, daily expenses, damage
+ * (scrap) and the stock count, and a generic choice dialog.
  */
 
 /** Quantity of a weighed / measured item. */
@@ -269,6 +270,119 @@ export class PsLabelsDialog extends Component {
                 },
                 `label-${this.props.size}`
             );
+        } finally {
+            this.state.busy = false;
+        }
+    }
+}
+
+/** Daily expense paid from the drawer: Odoo's own cash out, so the day-end cash nets it. */
+export class PsExpenseDialog extends Component {
+    static template = "pos_modern.ExpenseDialog";
+    static components = { Dialog };
+    static props = { configId: Number, currencyId: Number, close: Function,
+        onSaved: { type: Function, optional: true } };
+
+    setup() {
+        this.orm = useService("orm");
+        this.notification = useService("notification");
+        this.amountRef = useRef("amount");
+        this.state = useState({ amount: "", reason: "", busy: false, error: "" });
+        onMounted(() => this.amountRef.el?.focus());
+    }
+    money(v) {
+        return formatCurrency(v || 0, this.props.currencyId);
+    }
+    async save() {
+        const amount = Number(this.state.amount) || 0;
+        if (amount <= 0) {
+            this.state.error = _t("Type the amount paid.");
+            return;
+        }
+        this.state.busy = true;
+        this.state.error = "";
+        try {
+            await this.orm.call("pos.config", "pos_modern_expense", [[this.props.configId], amount, this.state.reason.trim()]);
+            this.notification.add(_t("Expense of %s recorded", this.money(amount)), { type: "success" });
+            this.props.onSaved?.();
+            this.props.close();
+        } catch (error) {
+            this.state.error = error?.data?.message || error?.message || String(error);
+        } finally {
+            this.state.busy = false;
+        }
+    }
+}
+
+/** Damage (Odoo scrap) and the stock count (Odoo inventory adjustment) of one product. */
+export class PsStockToolDialog extends Component {
+    static template = "pos_modern.StockToolDialog";
+    static components = { Dialog };
+    static props = { configId: Number, mode: String, close: Function,
+        onSaved: { type: Function, optional: true } };
+
+    setup() {
+        this.orm = useService("orm");
+        this.notification = useService("notification");
+        this.state = useState({ q: "", rows: [], loading: true, product: null, qty: "", reason: "", busy: false, error: "" });
+        this.timer = null;
+        onWillUnmount(() => clearTimeout(this.timer));
+        this.search("");
+    }
+    get isScrap() {
+        return this.props.mode === "scrap";
+    }
+    async search(q) {
+        this.state.loading = true;
+        try {
+            this.state.rows = await this.orm.silent.call("pos.config", "pos_modern_stock_lookup", [[this.props.configId], q]);
+        } finally {
+            this.state.loading = false;
+        }
+    }
+    onInput(ev) {
+        this.state.q = ev.target.value;
+        clearTimeout(this.timer);
+        this.timer = setTimeout(() => this.search(this.state.q.trim()), 220);
+    }
+    pick(row) {
+        this.state.product = row;
+        this.state.qty = this.isScrap ? 1 : row.qty;
+        this.state.reason = "";
+        this.state.error = "";
+    }
+    back() {
+        this.state.product = null;
+        this.search(this.state.q.trim());
+    }
+    step(d) {
+        this.state.qty = Math.max(1, (Number(this.state.qty) || 1) + d);
+    }
+    async save() {
+        const product = this.state.product;
+        if (!product) {
+            return;
+        }
+        this.state.busy = true;
+        this.state.error = "";
+        try {
+            if (this.isScrap) {
+                const res = await this.orm.call("pos.config", "pos_modern_scrap",
+                    [[this.props.configId], product.id, Number(this.state.qty) || 0, this.state.reason.trim()]);
+                this.notification.add(_t("%(qty)s %(uom)s of %(name)s scrapped (%(ref)s)", {
+                    qty: res.qty, uom: res.uom, name: res.product, ref: res.name,
+                }), { type: "success" });
+            } else {
+                const res = await this.orm.call("pos.config", "pos_modern_set_stock",
+                    [[this.props.configId], product.id, Number(this.state.qty) || 0, this.state.reason.trim()]);
+                this.notification.add(_t("Stock of %(name)s set to %(qty)s %(uom)s", {
+                    name: res.product, qty: res.qty, uom: res.uom,
+                }), { type: "success" });
+            }
+            this.props.onSaved?.();
+            this.props.close();
+        } catch (error) {
+            this.state.error = error?.data?.message || error?.message || String(error);
         } finally {
             this.state.busy = false;
         }

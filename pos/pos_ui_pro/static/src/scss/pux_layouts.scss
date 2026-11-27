@@ -1,0 +1,222 @@
+// Catalogue layouts (rail / chips), tile densities, and table-service screens.
+
+.pos.pux {
+    // cart on the right for every business: catalogue first, then pay
+    .product-screen {
+        flex-direction: row-reverse !important;
+        .leftpane {
+            border-right: 0 !important;
+            border-left: 1px solid var(--pux-line) !important;
+            box-shadow: -4px 0 16px rgba(16, 24, 40, .04);
+        }
+    }
+
+    // ---------- chips: one scrollable row of pill categories ----------
+    @mixin pux-chips {
+        display: flex !important;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 8px !important;
+        padding: 12px 16px !important;
+        scrollbar-width: none;
+        &::-webkit-scrollbar { display: none; }
+
+        .category-button {
+            flex: 0 0 auto;
+            width: auto !important;
+            height: 40px !important;
+            min-height: 0 !important;
+            padding: 0 16px !important;
+            border-radius: 999px !important;
+            background: var(--pux-surface) !important;
+            border: 1px solid var(--pux-line) !important;
+            color: var(--pux-text) !important;
+            font-weight: 600;
+            opacity: 1 !important;
+            .ratio, .category-img-thumb { display: none !important; }
+            .line-clamp-3 { width: auto !important; white-space: nowrap; }
+            &:hover { border-color: var(--pux-accent) !important; }
+            &:not(.border-0) {
+                background: var(--pux-accent) !important;
+                border-color: var(--pux-accent) !important;
+                color: #fff !important;
+            }
+        }
+    }
+    &.pux-l-chips .product-screen .category-list { @include pux-chips; }
+
+    // ---------- rail: menu groups down the left (tablet & desktop) ----------
+    @media (min-width: 992px) {
+        &.pux-l-rail .product-screen {
+            .rightpane > .position-relative { flex-direction: row !important; }
+            .category-list {
+                display: flex !important;
+                flex-direction: column;
+                flex: 0 0 196px;
+                align-self: stretch;
+                height: auto !important;
+                gap: 8px !important;
+                padding: 12px !important;
+                overflow-y: auto;
+                background: var(--pux-surface);
+                border-right: 1px solid var(--pux-line);
+
+                .category-button {
+                    justify-content: flex-start !important;
+                    min-height: 54px;
+                    padding: 8px 12px !important;
+                    border-radius: 12px !important;
+                    font-weight: 700;
+                    box-shadow: var(--pux-shadow);
+                    .ratio { width: 36px !important; flex: 0 0 36px; }
+                    .line-clamp-3 { width: auto !important; text-align: left; span { text-align: left !important; } }
+                    &:not(.border-0) {
+                        opacity: 1 !important;
+                        outline: 3px solid var(--pux-accent);
+                        outline-offset: -3px;
+                    }
+                }
+            }
+            .rightpane > .position-relative > .overflow-y-auto { flex: 1 1 auto; padding-top: 12px; }
+            .search-more-button { position: absolute; right: 16px; bottom: 8px; }
+        }
+    }
+    @media (max-width: 991.98px) {
+        &.pux-l-rail .product-screen .category-list { @include pux-chips; }
+    }
+
+    // ---------- tile densities ----------
+    // text-only tiles keep a tidy left-aligned layout
+    .product-screen .rightpane .product .product-name.no-image {
+        aspect-ratio: auto !important;
+        min-height: 2.6em;
+        justify-content: flex-start !important;
+        align-items: flex-start !important;
+        text-align: left !important;
+    }
+
+    // dishes: colour stripe from the POS category colour
+    &.pux-restaurant, &.pux-cafe, &.pux-fastfood, &.pux-bakery {
+        .product-screen .rightpane .product {
+            border-left: 5px solid var(--border-color, var(--pux-accent)) !important;
+            .product-name { font-size: 1.02rem; font-weight: 700; }
+        }
+    }
+    &.pux-fastfood .product-screen .product-list:not(.category-list) {
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)) !important;
+    }
+
+    // grocery: more items per screen
+    &.pux-d-dense .product-screen {
+        .product-list:not(.category-list) {
+            grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)) !important;
+            gap: 10px !important;
+        }
+        .rightpane .product {
+            .product-img { --bs-aspect-ratio: 70% !important; }
+            .product-name { font-size: .88rem; }
+            .pux-price { font-size: .95rem; }
+        }
+    }
+
+    // fashion / electronics: tall photo cards
+    &.pux-d-tall .product-screen {
+        .product-list:not(.category-list) {
+            grid-template-columns: repeat(auto-fill, minmax(176px, 1fr)) !important;
+            gap: 14px !important;
+        }
+        .rightpane .product .product-img {
+            --bs-aspect-ratio: 120% !important;
+            margin: 8px 8px 0;
+            border-radius: 10px !important;
+            img { border-radius: 10px !important; }
+        }
+    }
+
+    // pharmacy / cosmetics: dense list rows, name left and price right
+    &.pux-d-list .product-screen {
+        .product-list:not(.category-list) {
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+            gap: 8px !important;
+        }
+        .rightpane .product {
+            flex-direction: row !important;
+            align-items: center !important;
+            min-height: 64px !important;
+            .product-img {
+                flex: 0 0 56px;
+                width: 56px;
+                height: 56px;
+                margin: 4px 0 4px 6px;
+                border-radius: 8px !important;
+                img { border-radius: 8px !important; }
+            }
+            .product-content {
+                flex: 1 1 auto;
+                flex-direction: row !important;
+                align-items: center !important;
+                justify-content: space-between;
+            }
+            .product-name { -webkit-line-clamp: 2; }
+            .pux-card-foot { margin-top: 0; flex: 0 0 auto; }
+        }
+    }
+
+    // ---------- table service ----------
+    .actionpad {
+        .submit-order,
+        .fire-btn {
+            background: var(--pux-accent) !important;
+            border-color: var(--pux-accent) !important;
+            color: #fff !important;
+            border-radius: var(--pux-radius) !important;
+            min-height: 64px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            box-shadow: 0 6px 16px var(--pux-accent-shadow);
+        }
+    }
+    &.pux-restaurant .actionpad .pay-order-button {
+        background: var(--pux-ink) !important;
+        border-color: var(--pux-ink) !important;
+        box-shadow: 0 6px 16px rgba(29, 41, 57, .25);
+    }
+
+    .floor-screen {
+        --table-bg-color: #ffffff;
+        --table-color: var(--pux-text);
+        --tableOccupied-bg-color: var(--pux-accent);
+        --tableOccupied-color: #ffffff;
+
+        background-color: #eef0f4 !important;
+        background-image: radial-gradient(#d5d9e0 1px, transparent 1px);
+        background-size: 22px 22px;
+
+        .floor-selector .button-floor {
+            border-radius: 999px !important;
+            background: var(--pux-surface);
+            border-color: var(--pux-line) !important;
+            font-weight: 700;
+            &.active, &.btn-secondary {
+                background: var(--pux-accent) !important;
+                border-color: var(--pux-accent) !important;
+                color: #fff !important;
+            }
+        }
+        .floor-table {
+            box-shadow: var(--pux-shadow-lg);
+            transition: transform .12s ease, box-shadow .12s ease;
+            .label { font-weight: 800 !important; }
+            &:hover { transform: translateY(-2px); }
+            &.occupied { box-shadow: 0 8px 22px var(--pux-accent-shadow); }
+            &.selected { outline: 4px solid var(--pux-ink); outline-offset: 3px; }
+        }
+        .new-order {
+            background: var(--pux-accent) !important;
+            color: #fff !important;
+            border-radius: var(--pux-radius) !important;
+            font-weight: 800;
+            box-shadow: 0 6px 16px var(--pux-accent-shadow);
+        }
+    }
+}

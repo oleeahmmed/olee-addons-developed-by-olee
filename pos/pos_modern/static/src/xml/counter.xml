@@ -97,6 +97,7 @@
                     <div class="ps-kpi"><span>Refunds</span><strong t-esc="money(r.refunds)"/></div>
                     <div class="ps-kpi"><span>Discounts</span><strong t-esc="money(r.discount)"/></div>
                     <div class="ps-kpi"><span>Tax</span><strong t-esc="money(r.tax)"/></div>
+                    <div class="ps-kpi"><span>Expenses</span><strong t-esc="money(r.cash.expenses)"/></div>
                     <div class="ps-kpi"><span>Average bill</span><strong t-esc="money(r.average)"/></div>
                 </div>
                 <div class="ps-cols">
@@ -130,6 +131,13 @@
                             <div><dt>Cash in / out</dt><dd t-esc="money(r.cash.moves_total)"/></div>
                             <div class="ps-sum-total"><dt>Expected</dt><dd t-esc="money(r.cash.expected)"/></div>
                         </dl>
+                        <div t-if="r.cash.moves.length" class="ps-moves">
+                            <div class="ps-moves-h">Expenses &amp; cash moves</div>
+                            <div t-foreach="r.cash.moves" t-as="m" t-key="m.name" class="ps-move">
+                                <span class="ps-move-reason"><i t-attf-class="fa {{ m.amount &lt; 0 ? 'fa-arrow-up' : 'fa-arrow-down' }}" aria-hidden="true"/> <t t-esc="m.reason"/></span>
+                                <span t-attf-class="ps-move-amount {{ m.amount &lt; 0 ? 'is-out' : '' }}" t-esc="money(m.amount)"/>
+                            </div>
+                        </div>
                         <t t-if="!state.closed and r.state !== 'closed'">
                             <div class="ps-row ps-row--tight">
                                 <select class="ps-input ps-input--auto" t-model="state.move.kind" aria-label="Cash in or out">
@@ -463,4 +471,84 @@
         </div>
     </t>
 
+
+    <!-- ============================================================ expense (cash out) -->
+    <t t-name="pos_modern.ExpenseDialog">
+        <Dialog title="'Expense'" size="'sm'" contentClass="'o_ps ps-dialog'">
+            <div class="ps-tool-form">
+                <p class="ps-muted">Paid from this shop's drawer. The day-end cash is reduced by it, so the over / short stays right.</p>
+                <label class="ps-field">
+                    <span>Amount</span>
+                    <input t-ref="amount" type="number" min="0" step="0.01" inputmode="decimal" class="ps-input ps-input--lg" t-model="state.amount" placeholder="0"/>
+                </label>
+                <label class="ps-field">
+                    <span>Reason</span>
+                    <input type="text" class="ps-input" t-model="state.reason" placeholder="Tea, transport, cleaning, supplies…"/>
+                </label>
+                <div t-if="state.error" class="ps-error" t-esc="state.error"/>
+            </div>
+            <t t-set-slot="footer">
+                <button type="button" class="ps-btn ps-btn--primary" t-att-disabled="state.busy" t-on-click="save">Save expense</button>
+                <button type="button" class="ps-btn" t-on-click="props.close">Cancel</button>
+            </t>
+        </Dialog>
+    </t>
+
+    <!-- ============================================================ damage / stock count -->
+    <t t-name="pos_modern.StockToolDialog">
+        <Dialog title="isScrap ? 'Damage / scrap' : 'Stock adjustment'" size="'md'" contentClass="'o_ps ps-dialog'">
+            <div t-if="!state.product" class="ps-tool-form">
+                <p class="ps-muted">
+                    <t t-if="isScrap">Damaged, expired or lost stock leaves this shop's stock (Odoo scrap document and move).</t>
+                    <t t-else="">Type what you counted; Odoo adjusts the shop's stock to it (inventory adjustment).</t>
+                </p>
+                <label class="ps-search ps-search--block">
+                    <i class="fa fa-search" aria-hidden="true"/>
+                    <input type="search" placeholder="Product: name, code or barcode" t-att-value="state.q" t-on-input="onInput" autocomplete="off"/>
+                </label>
+                <ul class="ps-list">
+                    <t t-foreach="state.rows" t-as="r" t-key="r.id">
+                        <li class="ps-list-row">
+                            <button type="button" class="ps-list-main" t-on-click="() => this.pick(r)">
+                                <strong t-esc="r.name"/>
+                                <small><t t-if="r.code or r.barcode" t-esc="r.code or r.barcode"/> <t t-esc="r.qty"/> <t t-esc="r.uom"/> in stock</small>
+                            </button>
+                            <i class="fa fa-chevron-right ps-muted" aria-hidden="true"/>
+                        </li>
+                    </t>
+                </ul>
+                <div t-if="!state.rows.length and !state.loading" class="ps-muted">No product found.</div>
+            </div>
+            <div t-else="" class="ps-tool-form">
+                <div class="ps-tool-product">
+                    <span class="ps-tool-avatar"><i class="fa fa-cube" aria-hidden="true"/></span>
+                    <span class="ps-tool-text">
+                        <strong t-esc="state.product.name"/>
+                        <small>In stock now: <t t-esc="state.product.qty"/> <t t-esc="state.product.uom"/></small>
+                    </span>
+                    <button type="button" class="ps-link" t-on-click="back">Change</button>
+                </div>
+                <label class="ps-field">
+                    <span t-esc="isScrap ? 'How many are damaged' : 'Counted quantity'"/>
+                    <div class="ps-tool-qty">
+                        <button t-if="isScrap" type="button" class="ps-btn ps-btn--sm" t-on-click="() => this.step(-1)">−</button>
+                        <input type="number" min="0" step="0.01" inputmode="decimal" class="ps-input ps-input--lg" t-model="state.qty"/>
+                        <button t-if="isScrap" type="button" class="ps-btn ps-btn--sm" t-on-click="() => this.step(1)">+</button>
+                        <span class="ps-muted" t-esc="state.product.uom"/>
+                    </div>
+                </label>
+                <label class="ps-field">
+                    <span>Reason (optional)</span>
+                    <input type="text" class="ps-input" t-model="state.reason" t-att-placeholder="isScrap ? 'Broken, expired, lost…' : 'Monthly count, recount…'"/>
+                </label>
+                <div t-if="state.error" class="ps-error" t-esc="state.error"/>
+            </div>
+            <t t-set-slot="footer">
+                <button type="button" class="ps-btn ps-btn--primary" t-att-disabled="!state.product or state.busy" t-on-click="save">
+                    <t t-esc="isScrap ? 'Record damage' : 'Apply count'"/>
+                </button>
+                <button type="button" class="ps-btn" t-on-click="props.close">Cancel</button>
+            </t>
+        </Dialog>
+    </t>
 </templates>

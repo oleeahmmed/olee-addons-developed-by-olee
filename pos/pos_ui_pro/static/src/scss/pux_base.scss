@@ -1,0 +1,405 @@
+// POS UI Pro — shared design system for both layouts.
+// Everything is scoped under `.pos.pux`, so Odoo's own styles stay untouched
+// when the module is uninstalled. Utilities from Bootstrap carry !important,
+// so layout overrides below need it too.
+
+.pos.pux {
+    --pux-bg: #f4f5f7;
+    --pux-surface: #ffffff;
+    --pux-line: #e6e8ec;
+    --pux-text: #101828;
+    --pux-muted: #667085;
+    --pux-soft: #f2f4f7;
+    --pux-radius: 14px;
+    --pux-radius-sm: 10px;
+    --pux-shadow: 0 1px 2px rgba(16, 24, 40, .06), 0 1px 3px rgba(16, 24, 40, .08);
+    --pux-shadow-lg: 0 8px 24px rgba(16, 24, 40, .12);
+    --pux-pane: 400px;
+    // accent colours: pux_themes.scss
+
+    color: var(--pux-text);
+    font-feature-settings: "tnum" 1; // aligned digits in prices
+
+    .pos-content {
+        background: var(--pux-bg) !important;
+    }
+
+    // ---------- top bar ----------
+    .pos-topheader {
+        background: var(--pux-surface) !important;
+        border-bottom: 1px solid var(--pux-line);
+        box-shadow: none;
+        min-height: 56px;
+
+        .btn-light,
+        .btn {
+            border-radius: var(--pux-radius-sm);
+        }
+        .btn.active {
+            background: var(--pux-accent-50) !important;
+            color: var(--pux-accent-700) !important;
+            border-color: transparent !important;
+        }
+    }
+    .pos-search-bar {
+        background: var(--pux-soft) !important;
+        border: 1px solid transparent;
+        border-radius: 999px !important;
+        &:focus-within {
+            background: var(--pux-surface) !important;
+            border-color: var(--pux-accent);
+            box-shadow: 0 0 0 3px var(--pux-accent-50);
+        }
+    }
+
+    // ---------- product screen ----------
+    .product-screen {
+        background: var(--pux-bg);
+
+        // order / cart pane
+        .leftpane {
+            background: var(--pux-surface) !important;
+            width: var(--pux-pane);
+            max-width: var(--pux-pane);
+        }
+
+        .rightpane {
+            background: var(--pux-bg) !important;
+        }
+
+        // product grid
+        .product-list:not(.category-list) {
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+            gap: 12px !important;
+            padding: 4px 16px 16px !important;
+        }
+    }
+
+    // product tile
+    .product-screen .rightpane .product {
+        background: var(--pux-surface) !important;
+        border: 1px solid var(--pux-line) !important;
+        border-radius: var(--pux-radius) !important;
+        box-shadow: var(--pux-shadow);
+        overflow: hidden;
+        transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+
+        &:hover {
+            border-color: var(--pux-accent) !important;
+            box-shadow: var(--pux-shadow-lg);
+        }
+        &:active {
+            transform: scale(.97);
+        }
+        &:focus-visible {
+            outline: 3px solid var(--pux-accent-50);
+            outline-offset: 0;
+        }
+
+        .product-img {
+            border-radius: 0 !important;
+            img {
+                border-radius: 0 !important;
+                background: var(--pux-soft) !important;
+            }
+        }
+
+        .product-content {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 4px;
+            padding: 8px 10px 10px !important;
+            margin: 0 !important;
+        }
+
+        .product-name {
+            font-weight: 600;
+            font-size: .95rem;
+            line-height: 1.25;
+            color: var(--pux-text);
+        }
+
+        .pux-card-foot {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+        }
+        .pux-price {
+            font-weight: 800;
+            font-size: 1rem;
+            color: var(--pux-accent-700);
+        }
+        .pux-add {
+            width: 26px;
+            height: 26px;
+            flex: 0 0 26px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            background: var(--pux-accent);
+            color: #fff;
+            font-size: .75rem;
+            box-shadow: 0 2px 6px var(--pux-accent-shadow);
+        }
+
+        // quantity already in cart: pill in the top-right corner
+        .product-cart-qty {
+            top: 8px !important;
+            right: 8px !important;
+            bottom: auto !important;
+            margin: 0 !important;
+            min-width: 28px;
+            text-align: center;
+            font-size: .85rem !important;
+            line-height: 24px;
+            border-radius: 999px !important;
+            background: var(--pux-accent) !important;
+            color: #fff !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
+        }
+    }
+
+    // ---------- order lines ----------
+    .product-screen .leftpane {
+        .order-container {
+            padding: 6px 0;
+        }
+        .orderline {
+            margin: 2px 8px;
+            border-radius: var(--pux-radius-sm);
+            border: 1px solid transparent;
+
+            .product-name {
+                font-weight: 600;
+            }
+            .product-price {
+                font-weight: 700;
+            }
+            .info-list,
+            .price-per-unit {
+                color: var(--pux-muted);
+                font-size: .85rem;
+            }
+            &.selected {
+                background: var(--pux-accent-50) !important;
+                border-color: var(--pux-accent-200);
+                box-shadow: inset 3px 0 0 var(--pux-accent);
+            }
+        }
+
+        // totals
+        .order-summary {
+            border-top: 1px dashed var(--pux-line);
+            border-bottom: 0 !important;
+            padding: 12px 16px !important;
+            .total {
+                font-size: 1.75rem;
+                font-weight: 800;
+                letter-spacing: -.02em;
+            }
+            .subentry {
+                color: var(--pux-muted) !important;
+            }
+        }
+
+        .pads {
+            padding: 0 12px !important;
+        }
+
+        // Customer / Note / Discount … buttons
+        .control-buttons .btn {
+            border-radius: var(--pux-radius-sm) !important;
+            background: var(--pux-soft) !important;
+            border: 0 !important;
+            color: var(--pux-text) !important;
+            font-weight: 600;
+            min-height: 44px;
+            &:hover {
+                background: var(--pux-accent-50) !important;
+                color: var(--pux-accent-700) !important;
+            }
+        }
+    }
+
+    // numpad
+    .numpad {
+        gap: 6px;
+        border: 0 !important;
+        background: transparent !important;
+        .btn,
+        button {
+            border-radius: var(--pux-radius-sm) !important;
+            border: 0 !important;
+            background: var(--pux-soft) !important;
+            font-weight: 600;
+            font-size: 1.15rem;
+            min-height: 52px;
+            &:hover {
+                background: #e9ecf1 !important;
+            }
+            &.active,
+            &.selected-mode {
+                background: var(--pux-accent) !important;
+                color: #fff !important;
+            }
+        }
+    }
+
+    // main action: Payment
+    .actionpad {
+        .pay-order-button {
+            background: var(--pux-accent) !important;
+            border-color: var(--pux-accent) !important;
+            color: #fff !important;
+            border-radius: var(--pux-radius) !important;
+            min-height: 64px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: .01em;
+            box-shadow: 0 6px 16px var(--pux-accent-shadow);
+            &:hover {
+                filter: brightness(1.05);
+            }
+        }
+        .fast-pay-button,
+        .btn-secondary {
+            border-radius: var(--pux-radius) !important;
+            font-weight: 700;
+        }
+    }
+
+    // ---------- payment screen ----------
+    .payment-screen {
+        background: var(--pux-bg) !important;
+        .btn {
+            border-radius: var(--pux-radius-sm) !important;
+        }
+        .btn-primary {
+            background: var(--pux-accent) !important;
+            border-color: var(--pux-accent) !important;
+        }
+        .paymentlines > * {
+            border-radius: var(--pux-radius-sm);
+        }
+    }
+
+    // ---------- order list / receipt ----------
+    .ticket-screen,
+    .receipt-screen {
+        background: var(--pux-bg) !important;
+        .btn-primary {
+            background: var(--pux-accent) !important;
+            border-color: var(--pux-accent) !important;
+            border-radius: var(--pux-radius-sm);
+        }
+    }
+
+    // ---------- one-screen action bar ----------
+    .pux-bar {
+        padding: 10px 16px;
+        background: var(--pux-surface);
+        border-bottom: 1px solid var(--pux-line);
+        overflow-x: auto;
+        scrollbar-width: none;
+        &::-webkit-scrollbar { display: none; }
+
+        .pux-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: var(--pux-accent-50);
+            color: var(--pux-accent-700);
+            font-weight: 800;
+            font-size: .85rem;
+            white-space: nowrap;
+        }
+        .pux-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            height: 40px;
+            padding: 0 14px;
+            border-radius: var(--pux-radius-sm);
+            border: 1px solid var(--pux-line);
+            background: var(--pux-surface);
+            color: var(--pux-text);
+            font-weight: 600;
+            white-space: nowrap;
+            transition: background .12s, border-color .12s;
+            &:hover:not(:disabled) {
+                border-color: var(--pux-accent);
+                color: var(--pux-accent-700);
+            }
+            &:disabled { opacity: .45; }
+            i { font-size: 1rem; }
+        }
+        .pux-btn-accent {
+            background: var(--pux-accent);
+            border-color: var(--pux-accent);
+            color: #fff;
+            &:hover:not(:disabled) { color: #fff; filter: brightness(1.06); }
+        }
+        .pux-btn-danger {
+            color: #b42318;
+            border-color: #fecdca;
+            background: #fef3f2;
+            &:hover:not(:disabled) { border-color: #b42318; color: #b42318; }
+        }
+    }
+    @media (max-width: 991.98px) {
+        .pux-bar .pux-btn span,
+        .pux-bar .pux-badge span { display: none; }
+    }
+
+    // ---------- cart line stepper ----------
+    .pux-line-actions {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 6px;
+        .pux-step,
+        .pux-remove {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            border: 1px solid var(--pux-line);
+            background: var(--pux-surface);
+            font-weight: 800;
+            line-height: 1;
+            color: var(--pux-text);
+            &:hover { border-color: var(--pux-accent); color: var(--pux-accent-700); }
+        }
+        .pux-remove {
+            color: #b42318;
+            border-color: #fecdca;
+            background: #fef3f2;
+        }
+    }
+
+    // generic primary buttons inside the POS
+    .btn-primary {
+        --btn-bg: var(--pux-accent);
+        --btn-border-color: var(--pux-accent);
+        --btn-hover-bg: var(--pux-accent-700);
+        --btn-hover-border-color: var(--pux-accent-700);
+    }
+
+    // phones / small tablets: bottom Pay / Cart bar
+    .switchpane {
+        border-top: 1px solid var(--pux-line) !important;
+        .pay-button.btn-primary {
+            background: var(--pux-accent) !important;
+            border-color: var(--pux-accent) !important;
+            border-radius: var(--pux-radius) !important;
+            font-weight: 800;
+        }
+        .btn {
+            border-radius: var(--pux-radius) !important;
+        }
+    }
+}

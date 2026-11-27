@@ -6,26 +6,40 @@
         into the empty .ps-hook-* elements: they are kept from version to version.
     -->
     <t t-name="pos_modern.Menu">
-        <div class="o_ps ps-pos" t-att-class="{ 'is-paying': state.mode === 'pay' }">
+        <div class="o_ps ps-pos ps2" t-att-class="{ 'is-paying': state.mode === 'pay', 'ps-layout-bill': state.layout === 'bill', 'ps-layout-cart': state.layout !== 'bill', 'ps-hide-grid': state.layout === 'bill' and !state.showGrid }">
             <t t-if="state.loading">
-                <div class="ps-pos-main"><div class="ps-skel u-h-3 u-w-18"/><div class="ps-skel u-h-6 u-mt-1"/><div class="ps-skel u-h-24 u-mt-1"/></div>
-                <aside class="ps-cart"><div class="ps-skel u-h-100pct"/></aside>
+                <div class="ps2-shell">
+                    <div class="ps2-head"><div class="ps-skel u-h-3 u-w-18"/></div>
+                    <div class="ps2-body">
+                        <div class="ps-pos-main"><div class="ps-skel u-h-6 u-mt-1"/><div class="ps-skel u-h-24 u-mt-1"/></div>
+                        <aside class="ps-cart"><div class="ps-skel u-h-100pct"/></aside>
+                    </div>
+                </div>
             </t>
             <t t-elif="!state.data.config_id">
-                <div class="ps-pos-empty">
-                    <i class="fa fa-shopping-basket" aria-hidden="true"/>
-                    <strong>No shop yet</strong>
-                    <span>Create a shop (a register) to start selling.</span>
-                    <button type="button" class="ps-btn ps-btn--primary" t-on-click="() => this.action.doAction('pos_modern.action_shops')">Go to Shops</button>
+                <div class="ps2-shell">
+                    <div class="ps-pos-empty">
+                        <i class="fa fa-shopping-basket" aria-hidden="true"/>
+                        <strong>No shop yet</strong>
+                        <span>Create a shop (a register) to start selling.</span>
+                        <button type="button" class="ps-btn ps-btn--primary" t-on-click="() => this.action.doAction('pos_modern.action_shops')">Go to Shops</button>
+                    </div>
                 </div>
             </t>
             <t t-else="">
                 <t t-set="d" t-value="state.data"/>
-                <!-- products -->
-                <section class="ps-pos-main">
-                    <header class="ps-pos-head">
-                        <div class="ps-pos-title">
-                            <h1>Point of Sale</h1>
+                <div class="ps2-shell">
+
+                <!-- page header -->
+                <header class="ps2-head">
+                    <div class="ps2-head-main">
+                        <nav class="ps2-crumb" aria-label="Breadcrumb">
+                            <span>Dashboard</span>
+                            <i class="fa fa-angle-right" aria-hidden="true"/>
+                            <span>Pos</span>
+                        </nav>
+                        <div class="ps2-head-title">
+                            <h1>Point of Sale (POS)</h1>
                             <div class="ps-pos-shop">
                                 <label class="ps-select">
                                     <i class="fa fa-shopping-basket" aria-hidden="true"/>
@@ -44,36 +58,72 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="ps-pos-actions">
-                            <div class="ps-hook-head-actions"/>
-                            <button type="button" class="ps-btn" t-on-click="openReturn" title="Return or exchange an earlier bill"><i class="fa fa-undo" aria-hidden="true"/> Return</button>
-                            <button type="button" class="ps-btn ps-btn--icon" t-on-click="openLabels" title="Barcode labels"><i class="fa fa-barcode" aria-hidden="true"/></button>
-                            <button type="button" class="ps-btn" t-on-click="openHeld" title="Held bills (F7)">
-                                <i class="fa fa-pause-circle-o" aria-hidden="true"/> Held<span t-if="d.held_count" class="ps-btn-badge" t-esc="d.held_count"/>
+                    </div>
+                    <div class="ps2-head-actions">
+                        <div class="ps2-seg" role="group" aria-label="Counter layout">
+                            <button type="button" t-att-class="{ 'is-on': state.layout !== 'bill' }" t-on-click="() => this.setLayout('cart')" title="Product grid with the cart beside it">
+                                <i class="fa fa-th-large" aria-hidden="true"/> Cart
                             </button>
-                            <button t-if="d.restaurant" type="button" class="ps-btn" t-on-click="goTables"><i class="fa fa-th" aria-hidden="true"/> Tables</button>
-                            <button t-if="session" type="button" class="ps-btn" t-on-click="dayEnd" title="X / Z report, cash in / out, close the day"><i class="fa fa-calendar-check-o" aria-hidden="true"/> Day end</button>
+                            <button type="button" t-att-class="{ 'is-on': state.layout === 'bill' }" t-on-click="() => this.setLayout('bill')" title="Bill table: scan or type to add (F2)">
+                                <i class="fa fa-list-ul" aria-hidden="true"/> Bill
+                            </button>
+                        </div>
+                        <button t-if="state.layout === 'bill'" type="button" class="ps-btn ps-btn--icon" t-att-class="{ 'is-on': state.showGrid }" t-on-click="toggleGrid" title="Show or hide the products">
+                            <i class="fa fa-columns" aria-hidden="true"/>
+                        </button>
+                        <div class="ps-hook-head-actions"/>
+                        <button type="button" class="ps-btn ps-btn--primary" t-on-click="newBill" title="Start a new bill"><i class="fa fa-plus" aria-hidden="true"/> New</button>
+                        <button type="button" class="ps-btn" t-on-click="openReturn" title="Return or exchange an earlier bill"><i class="fa fa-undo" aria-hidden="true"/> Order Menus</button>
+                        <button type="button" class="ps-btn" t-on-click="openHeld" title="Held bills (F7)">
+                            <i class="fa fa-pause-circle-o" aria-hidden="true"/> Draft List<span t-if="d.held_count" class="ps-btn-badge" t-esc="d.held_count"/>
+                        </button>
+                        <button t-if="d.restaurant" type="button" class="ps-btn ps-btn--warn" t-on-click="goTables"><i class="fa fa-th" aria-hidden="true"/> Table Order</button>
+                        <span class="ps2-icons">
+                            <button type="button" class="ps-btn ps-btn--icon" t-on-click="openLabels" title="Barcode labels"><i class="fa fa-barcode" aria-hidden="true"/></button>
+                            <button t-if="session" type="button" class="ps-btn ps-btn--icon" t-on-click="dayEnd" title="X / Z report, cash in / out, close the day"><i class="fa fa-calendar-check-o" aria-hidden="true"/></button>
+                            <Dropdown position="'bottom-end'">
+                                <button type="button" class="ps-btn ps-btn--icon" title="Expenses, damage and the stock count"><i class="fa fa-ellipsis-h" aria-hidden="true"/></button>
+                                <t t-set-slot="content">
+                                    <DropdownItem onSelected="() => this.openExpense()">
+                                        <i class="fa fa-money" aria-hidden="true"/> Expense (cash out)
+                                    </DropdownItem>
+                                    <DropdownItem onSelected="() => this.openStockTool('scrap')">
+                                        <i class="fa fa-trash-o" aria-hidden="true"/> Damage / scrap
+                                    </DropdownItem>
+                                    <DropdownItem onSelected="() => this.openStockTool('count')">
+                                        <i class="fa fa-cubes" aria-hidden="true"/> Stock adjustment
+                                    </DropdownItem>
+                                </t>
+                            </Dropdown>
                             <button type="button" class="ps-btn ps-btn--icon" t-on-click="newProduct" title="New product"><i class="fa fa-plus" aria-hidden="true"/></button>
                             <button t-if="features.is_manager" type="button" class="ps-btn ps-btn--icon" t-on-click="openSettings" title="Counter settings"><i class="fa fa-cog" aria-hidden="true"/></button>
-                            <label class="ps-search">
-                                <i class="fa fa-search" aria-hidden="true"/>
-                                <input t-ref="search" type="search" placeholder="Search or scan… (F2)" t-model="state.search" t-on-keydown="onSearchKey" aria-label="Search products"/>
-                            </label>
-                        </div>
-                    </header>
+                        </span>
+                    </div>
+                </header>
+
+                <div class="ps2-body">
+                <!-- products -->
+                <section class="ps-pos-main ps2-card" aria-label="Products">
+                    <div class="ps2-bar">
+                        <label class="ps-search ps2-search">
+                            <i class="fa fa-search" aria-hidden="true"/>
+                            <input t-ref="search" type="search" placeholder="Search in products" t-model="state.search" t-on-keydown="onSearchKey" aria-label="Search products"/>
+                        </label>
+                        <label class="ps-select ps2-select">
+                            <select t-on-change="(ev) => this.setCategory(ev.target.value === 'all' ? 'all' : Number(ev.target.value))" aria-label="All category">
+                                <option value="all" t-att-selected="state.category === 'all'">All Category</option>
+                                <t t-foreach="categories" t-as="c" t-key="c.id">
+                                    <option t-att-value="c.id" t-att-selected="state.category === c.id" t-esc="c.name"/>
+                                </t>
+                            </select>
+                        </label>
+                    </div>
 
                     <div class="ps-hook-main-top"/>
-                    <nav class="ps-cats" aria-label="Categories">
-                        <button type="button" class="ps-cat" t-att-class="{ 'is-on': state.category === 'all' }" t-on-click="() => this.setCategory('all')">
-                            <span class="ps-cat-icon ps-cat-icon--all"><i class="fa fa-th-large" aria-hidden="true"/></span>
-                            <span class="ps-cat-name">All</span>
-                        </button>
+                    <nav class="ps2-pills" aria-label="Categories">
+                        <button type="button" class="ps2-pill" t-att-class="{ 'is-on': state.category === 'all' }" t-on-click="() => this.setCategory('all')">Show All</button>
                         <t t-foreach="categories" t-as="c" t-key="c.id">
-                            <button type="button" class="ps-cat" t-att-class="{ 'is-on': state.category === c.id }" t-on-click="() => this.setCategory(c.id)">
-                                <img t-if="c.image" class="ps-cat-icon" t-att-src="categoryImage(c)" alt="" loading="lazy"/>
-                                <span t-else="" t-attf-class="ps-cat-icon ps-tone-{{ tone(c.id) }}" t-esc="initials(c.name)"/>
-                                <span class="ps-cat-name" t-esc="c.name"/>
-                            </button>
+                            <button type="button" class="ps2-pill" t-att-class="{ 'is-on': state.category === c.id }" t-on-click="() => this.setCategory(c.id)" t-esc="c.name"/>
                         </t>
                     </nav>
 
@@ -99,7 +149,7 @@
                                         <span class="ps-hook-prod-meta"/>
                                         <span class="ps-prod-price" t-esc="money(price(p))"/>
                                     </span>
-                                    <span class="ps-prod-add" aria-hidden="true"><i class="fa fa-cart-plus"/></span>
+                                    <span class="ps-prod-add" aria-hidden="true"><i class="fa fa-plus"/></span>
                                 </span>
                             </button>
                         </t>
@@ -110,10 +160,36 @@
                 </section>
 
                 <!-- cart / payment -->
-                <aside class="ps-cart" aria-label="Your Cart">
+                <aside class="ps-cart ps2-card" aria-label="Your Cart">
+                    <div class="ps2-bar ps2-bar--order">
+                        <label class="ps-search ps2-search">
+                            <i class="fa fa-search" aria-hidden="true"/>
+                            <input type="search" placeholder="Search in Existing" t-model="state.search" aria-label="Search existing products"/>
+                        </label>
+                        <div t-if="d.restaurant and floors.length" class="ps2-dining">
+                            <label class="ps2-mini">
+                                <span>Select Dining</span>
+                                <select t-on-change="onFloor" aria-label="Select dining">
+                                    <t t-foreach="floors" t-as="f" t-key="f.id">
+                                        <option t-att-value="f.id" t-att-selected="state.floorId === f.id" t-esc="f.name"/>
+                                    </t>
+                                </select>
+                            </label>
+                            <label class="ps2-mini">
+                                <span>Select Table</span>
+                                <select t-on-change="onTable" aria-label="Select table">
+                                    <option value="">—</option>
+                                    <t t-foreach="floorTables" t-as="tb" t-key="tb.id">
+                                        <option t-att-value="tb.id" t-att-selected="state.tableId === tb.id" t-esc="'Table ' + tb.number"/>
+                                    </t>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+
                     <div class="ps-cart-head">
                         <h2 t-if="state.mode === 'pay'">Payment</h2>
-                        <h2 t-else="">Your Cart</h2>
+                        <h2 t-else="">Order <t t-esc="'#' + orderNumber"/></h2>
                         <span t-if="itemCount" class="ps-cart-count" t-esc="itemCount"/>
                         <span t-if="state.holdId" class="ps-pill ps-pill--info">Held bill</span>
                         <button t-if="state.mode === 'pay'" type="button" class="ps-link ms-auto" t-on-click="backToCart"><i class="fa fa-arrow-left" aria-hidden="true"/> Cart</button>
@@ -157,7 +233,7 @@
                             <span>Change</span><strong t-esc="money(state.done.change)"/>
                         </div>
                         <div class="ps-hook-done-extra"/>
-                        <button type="button" class="ps-btn ps-btn--primary ps-btn--block" t-on-click="newOrder"><i class="fa fa-plus" aria-hidden="true"/> New order</button>
+                        <button type="button" class="ps-btn ps-btn--primary ps-btn--block" t-on-click="newBill"><i class="fa fa-plus" aria-hidden="true"/> New order</button>
                         <div class="ps-row">
                             <button type="button" class="ps-btn" t-on-click="() => this.printReceipt()"><i class="fa fa-print" aria-hidden="true"/> Receipt</button>
                             <button t-if="state.done.id" type="button" class="ps-btn" t-on-click="openOrder">View order</button>
@@ -223,10 +299,110 @@
 
                     <!-- cart -->
                     <t t-else="">
+                        <div t-if="state.layout === 'bill'" class="ps-billadd">
+                            <i class="fa fa-barcode" aria-hidden="true"/>
+                            <input t-ref="billadd" type="search" placeholder="Scan a barcode or type a product, then Enter"
+                                   t-model="state.billQuery" t-on-input="() => this.state.billActive = 0" t-on-keydown="onBillKey"
+                                   aria-label="Add a product to the bill" autocomplete="off"/>
+                            <kbd>F2</kbd>
+                            <ul t-if="billResults.length" class="ps-billadd-menu" role="listbox">
+                                <t t-foreach="billResults" t-as="p" t-key="p.id">
+                                    <li role="option" t-att-class="{ 'is-on': p_index === state.billActive }" t-on-mousedown.prevent="() => this.billAdd(p)">
+                                        <span class="ps-billadd-img">
+                                            <img t-if="p.image" t-att-src="productImage(p)" alt=""/>
+                                            <span t-else="" t-attf-class="ps-prod-ph ps-tone-{{ tone(p.id) }}" t-esc="initials(p.name)"/>
+                                        </span>
+                                        <span class="ps-billadd-name"><t t-esc="p.name"/><small t-if="p.code or p.barcode" t-esc="p.code or p.barcode"/></span>
+                                        <span class="ps-billadd-price" t-esc="money(price(p))"/>
+                                    </li>
+                                </t>
+                            </ul>
+                        </div>
                         <div t-if="!cartLines.length" class="ps-cart-empty">
-                            <span class="ps-cart-empty-icon">🛒</span>
+                            <span class="ps-cart-empty-icon"><i class="fa fa-shopping-basket" aria-hidden="true"/></span>
                             <span>Your cart is empty.</span>
                             <small>Tap a product or scan a barcode.</small>
+                        </div>
+                        <div t-elif="state.layout === 'bill'" class="ps-billwrap">
+                            <table class="ps-bill">
+                                <thead>
+                                    <tr>
+                                        <th class="ps-bill-no">#</th>
+                                        <th>Item</th>
+                                        <th class="ps-bill-qty">Qty</th>
+                                        <th class="ps-bill-num">Unit price</th>
+                                        <th class="ps-bill-num">Disc.</th>
+                                        <th class="ps-bill-num">Amount</th>
+                                        <th class="ps-bill-x"/>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="cartLines" t-as="l" t-key="l.key">
+                                        <tr t-att-class="{ 'is-editing': state.editKey === l.key, 'is-back': l.qty &lt; 0 }" t-on-click="() => this.toggleEdit(l)">
+                                            <td class="ps-bill-no" t-esc="l_index + 1"/>
+                                            <td>
+                                                <div class="ps-bill-item">
+                                                    <span class="ps-bill-img">
+                                                        <img t-if="l.product.image" t-att-src="productImage(l.product)" alt=""/>
+                                                        <span t-else="" t-attf-class="ps-prod-ph ps-tone-{{ tone(l.id) }}" t-esc="initials(l.product.name)"/>
+                                                    </span>
+                                                    <span class="ps-bill-name">
+                                                        <t t-esc="l.product.name"/>
+                                                        <small t-if="l.label or (l.quoted and l.quoted.label)" t-esc="l.label or l.quoted.label"/>
+                                                        <small t-if="l.note" class="ps-bill-note"><i class="fa fa-sticky-note-o" aria-hidden="true"/> <t t-esc="l.note"/></small>
+                                                        <span t-if="l.qty &lt; 0" class="ps-tag ps-tag--danger">Return</span>
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td class="ps-bill-qty">
+                                                <span t-if="l.qty &lt; 0" class="ps-line-qty ps-line-qty--back" t-esc="l.qty"/>
+                                                <span t-else="" class="ps-step">
+                                                    <button type="button" aria-label="Decrease" t-on-click.stop="() => this.decrease(l)">−</button>
+                                                    <span t-esc="l.qty"/>
+                                                    <button type="button" aria-label="Increase" t-on-click.stop="() => this.increase(l)">+</button>
+                                                </span>
+                                            </td>
+                                            <td class="ps-bill-num" t-esc="money(price(l.product))"/>
+                                            <td class="ps-bill-num"><span t-if="l.discount" class="ps-tag ps-tag--success">-<t t-esc="l.discount"/>%</span><span t-else="" class="ps-bill-dash">—</span></td>
+                                            <td class="ps-bill-num ps-bill-amount">
+                                                <t t-esc="money(lineTotal(l))"/>
+                                                <s t-if="lineGross(l) - lineTotal(l) > 0.004" class="ps-line-gross" t-esc="money(lineGross(l))"/>
+                                            </td>
+                                            <td class="ps-bill-x">
+                                                <button type="button" class="ps-line-del" t-on-click.stop="() => this.removeLine(l)" title="Remove the line" aria-label="Remove"><i class="fa fa-trash-o" aria-hidden="true"/></button>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="state.editKey === l.key" class="ps-bill-editrow">
+                                            <td/>
+                                            <td colspan="6">
+                                                <div class="ps-line-edit">
+                                                    <label class="ps-field ps-field--inline"><span>Qty</span>
+                                                        <input type="number" min="0" step="0.001" inputmode="decimal" class="ps-input" t-att-value="l.qty" t-on-change="(ev) => this.setQty(l, ev.target.value)"/>
+                                                    </label>
+                                                    <label class="ps-field ps-field--inline"><span>Discount %</span>
+                                                        <input type="number" min="0" max="100" step="0.5" inputmode="decimal" class="ps-input" t-att-value="l.discount" t-on-change="(ev) => this.setLineDiscount(l, ev.target.value)"/>
+                                                    </label>
+                                                    <label class="ps-field ps-field--wide"><span>Note</span>
+                                                        <input type="text" class="ps-input" t-att-value="l.note" t-on-change="(ev) => this.setLineNote(l, ev.target.value)" placeholder="No sugar, gift wrap…"/>
+                                                    </label>
+                                                    <div class="ps-hook-line-edit"/>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-foreach="extraLines" t-as="x" t-key="x.key">
+                                        <tr class="is-extra">
+                                            <td class="ps-bill-no"><i class="fa fa-gift" aria-hidden="true"/></td>
+                                            <td><span class="ps-bill-name"><t t-esc="x.name"/><small t-if="x.label" t-esc="x.label"/></span></td>
+                                            <td class="ps-bill-qty" t-esc="x.qty"/>
+                                            <td class="ps-bill-num"/>
+                                            <td class="ps-bill-num"/>
+                                            <td class="ps-bill-num ps-bill-amount"><t t-if="x.free">Free</t><t t-else="" t-esc="money(x.total)"/></td>
+                                            <td/>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
                         </div>
                         <ul t-else="" class="ps-lines">
                             <t t-foreach="cartLines" t-as="l" t-key="l.key">
@@ -252,6 +428,11 @@
                                             <span t-esc="l.qty"/>
                                             <button type="button" aria-label="Increase" t-on-click="() => this.increase(l)">+</button>
                                         </span>
+                                        <button type="button" class="ps-line-del" t-on-click="() => this.removeLine(l)" title="Remove the line" aria-label="Remove"><i class="fa fa-trash-o" aria-hidden="true"/></button>
+                                    </div>
+                                    <div class="ps-line-tools">
+                                        <button type="button" class="ps-link ps2-addnote" t-on-click="() => this.toggleEdit(l)"><i class="fa fa-pencil" aria-hidden="true"/> Add Notes</button>
+                                        <span t-if="l.qty &lt; 0" class="ps-tag ps-tag--danger">Return</span>
                                     </div>
                                     <div t-if="state.editKey === l.key" class="ps-line-edit">
                                         <label class="ps-field ps-field--inline"><span>Qty</span>
@@ -289,7 +470,7 @@
                             </div>
                             <div class="ps-hook-cart-foot"/>
                             <div t-if="cartLines.length" class="ps-row ps-row--tight">
-                                <label class="ps-bill-discount ps-field ps-field--inline"><span>Bill discount %</span>
+                                <label class="ps-bill-discount ps-field ps-field--inline"><span>Extra discount %</span>
                                     <input type="number" min="0" max="100" step="0.5" inputmode="decimal" class="ps-input" t-att-value="state.billDiscount || ''" placeholder="0" t-on-change="(ev) => this.setBillDiscount(ev.target.value)"/>
                                 </label>
                                 <label class="ps-field ps-field--inline ps-field--grow"><span>Order note</span>
@@ -297,27 +478,65 @@
                                 </label>
                             </div>
                             <dl class="ps-sum">
-                                <div><dt>Subtotal</dt><dd t-esc="money(subtotal)"/></div>
-                                <div t-if="discountAmount > 0" class="ps-sum-disc"><dt>Discount</dt><dd>−<t t-esc="money(discountAmount)"/></dd></div>
-                                <div><dt>Tax</dt><dd t-esc="money(tax)"/></div>
+                                <div><dt>Sub total</dt><dd t-esc="money(grossSubtotal)"/></div>
+                                <div class="ps-sum-disc"><dt>Product Discount</dt><dd><t t-if="productDiscount">−</t><t t-esc="money(productDiscount)"/></dd></div>
+                                <div class="ps-sum-disc"><dt>Extra Discount</dt><dd><t t-if="extraDiscount">−</t><t t-esc="money(extraDiscount)"/></dd></div>
+                                <div t-if="tax"><dt>Tax</dt><dd t-esc="money(tax)"/></div>
                                 <div t-if="rounding" class="ps-sum-muted"><dt>Rounding</dt><dd t-esc="money(rounding)"/></div>
                                 <div class="ps-sum-total"><dt>Total</dt><dd t-esc="money(payable)"/></div>
                             </dl>
                             <div t-if="state.error" class="ps-error" t-esc="state.error"/>
-                            <div class="ps-row">
-                                <button type="button" class="ps-btn ps-btn--lg" t-att-disabled="!cartLines.length or state.busy" t-on-click="holdBill" title="Put the bill aside (F4)">
-                                    <i class="fa fa-pause" aria-hidden="true"/> Hold
+                            <div class="ps2-bills">
+                                <button type="button" class="ps-btn" t-att-disabled="!cartLines.length or state.busy" t-on-click="printKOT" title="Print the kitchen ticket">
+                                    <i class="fa fa-print" aria-hidden="true"/> KOT &amp; Print
                                 </button>
-                                <button type="button" class="ps-btn ps-btn--primary ps-btn--lg ps-btn--grow"
-                                        t-att-disabled="!cartLines.length or state.busy" t-on-click="enterPay">
+                                <button type="button" class="ps-btn ps-btn--ghost" t-att-disabled="!cartLines.length or state.busy" t-on-click="holdBill" title="Put the bill aside (F4)">
+                                    <i class="fa fa-pause" aria-hidden="true"/> Draft
+                                </button>
+                                <button type="button" class="ps-btn ps-btn--accent" t-att-disabled="!cartLines.length or state.busy" t-on-click="enterPay">
+                                    <i t-if="!isRefund" class="fa fa-credit-card" aria-hidden="true"/>
                                     <t t-if="isRefund">Give back · <t t-esc="money(-payable)"/></t>
-                                    <t t-else="">Pay<t t-if="cartLines.length"> · <t t-esc="money(payable)"/></t></t>
+                                    <t t-else="">Bill &amp; Payment</t>
+                                </button>
+                                <button type="button" class="ps-btn ps-btn--success" t-att-disabled="!cartLines.length or state.busy" t-on-click="billAndPrint" title="Take the payment, then print the bill">
+                                    <i class="fa fa-print" aria-hidden="true"/> Bill &amp; Print
                                 </button>
                             </div>
                         </div>
                     </t>
                 </aside>
+                </div>
+                </div>
             </t>
+        </div>
+    </t>
+
+    <t t-name="pos_modern.KOT">
+        <div class="ps-receipt ps-receipt--80 ps-kot">
+            <div class="ps-r-head">
+                <div class="ps-r-company" t-esc="shop"/>
+                <div class="ps-r-text">KITCHEN ORDER</div>
+            </div>
+            <div class="ps-r-title">KITCHEN</div>
+            <div class="ps-r-meta">
+                <div><span>Order</span><span t-esc="'#' + order"/></div>
+                <div><span>Time</span><span t-esc="now"/></div>
+                <div t-if="table"><span>Table</span><span t-esc="table"/></div>
+                <div t-if="note"><span>Note</span><span t-esc="note"/></div>
+            </div>
+            <table class="ps-r-lines">
+                <tbody>
+                    <t t-foreach="lines" t-as="l" t-key="l_index">
+                        <tr>
+                            <td class="ps-r-qty"><t t-esc="l.qty"/></td>
+                            <td>
+                                <t t-esc="l.name"/>
+                                <div t-if="l.note" class="ps-r-sub" t-esc="l.note"/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
         </div>
     </t>
 

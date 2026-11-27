@@ -255,10 +255,17 @@ class PosSession(models.Model):
         # cash in / out typed at the counter or the register ("<session>-in-<reason>"); the
         # lines Odoo adds when the session is closed (cash sales, difference) are left out
         prefix = (self.name or '') + '-'
-        cash_moves = [{
-            'name': line.payment_ref or '',
-            'amount': line.amount,
-        } for line in self.sudo().statement_line_ids if (line.payment_ref or '').startswith(prefix)]
+        cash_moves = []
+        for line in self.sudo().statement_line_ids:
+            ref = line.payment_ref or ''
+            if not ref.startswith(prefix):
+                continue
+            kind, reason = 'in', ref
+            for marker, move_kind in (('-out-', 'out'), ('-in-', 'in')):
+                if marker in ref:
+                    kind, reason = move_kind, ref.split(marker, 1)[1]
+                    break
+            cash_moves.append({'name': ref, 'kind': kind, 'reason': reason, 'amount': line.amount})
         taxes = defaultdict(float)
         for order in orders:
             for tax in order._pos_modern_receipt_taxes():
@@ -304,12 +311,14 @@ class PosSession(models.Model):
         currency = self.currency_id
         sales = currency.round(sum(v['amount'] for m, v in methods.items() if m.is_cash_count))
         moves_total = currency.round(sum(m['amount'] for m in cash_moves))
+        expenses = currency.round(-sum(m['amount'] for m in cash_moves if m['amount'] < 0))
         expected = currency.round(self.cash_register_balance_start + sales + moves_total)
         counted = self.cash_register_balance_end_real if self.state in ('closing_control', 'closed') else False
         return {
             'opening': self.cash_register_balance_start,
             'moves': cash_moves,
             'moves_total': moves_total,
+            'expenses': expenses,
             'sales': sales,
             'expected': expected,
             'counted': counted,
@@ -360,3 +369,99 @@ class PosConfig(models.Model):
         if not session:
             raise UserError(_("%s has no session yet.", self.name))
         return session.pos_modern_session_report()
+
+    # ------------------------------------------------------------------
+    # Counter stock tools: expenses, damage (scrap) and stock adjustment.
+    # Every record stays Odoo's own (cash statement line, stock.scrap, stock.quant).
+    # ------------------------------------------------------------------
+    def _pos_modern_stock_location(self):
+        self.ensure_one()
+        return self.warehouse_id.lot_stock_id or self.env.ref('stock.stock_location_stock')
+
+    def pos_modern_expense(self, amount, reason=''):
+        """Daily small expense paid from the drawer (Odoo's cash out)."""
+        self.ensure_one()
+        session = self.current_session_id
+        if not session or session.state != 'opened':
+            raise UserError(_("Open the shop first: expenses are paid from the drawer."))
+        session.pos_modern_cash_move('out', amount, (reason or '').strip() or _('Expense'))
+        return session.pos_modern_session_report()
+
+    def pos_modern_stock_lookup(self, query=''):
+        """Products of the shop with the stock this location holds (name, code or barcode)."""
+        self.ensure_one()
+        query = (query or '').strip()
+        domain = [('available_in_pos', '=', True), ('is_storable', '=', True)]
+        if query:
+            domain += ['|', '|', ('name', 'ilike', query), ('default_code', 'ilike', query), ('barcode', '=', query)]
+        products = self.env['product.product'].search(domain, order='name', limit=12)
+        location = self._pos_modern_stock_location()
+        return [{
+            'id': product.id,
+            'name': product.display_name,
+            'code': product.default_code or '',
+            'barcode': product.barcode or '',
+            'uom': product.uom_id.name,
+            'qty': product.with_context(location=location.id).qty_available,
+        } for product in products]
+
+    def pos_modern_scrap(self, product_id, qty, reason=''):
+        """Damage: leave the shop's stock with Odoo's own scrap (document + stock move)."""
+        self.ensure_one()
+        product = self.env['product.product'].browse(int(product_id or 0)).exists()
+        if not product:
+            raise UserError(_("Pick the damaged product."))
+        qty = float(qty or 0.0)
+        if qty <= 0:
+            raise UserError(_("Type how many were damaged."))
+        location = self._pos_modern_stock_location()
+        available = product.with_context(location=location.id).qty_available
+        if not product.is_storable:
+            raise UserError(_("%s does not keep stock.", product.display_name))
+        if qty > available:
+            raise UserError(_("Only %(qty)s %(uom)s in stock.", qty=available, uom=product.uom_id.name))
+        scrap = self.env['stock.scrap'].create({
+            'product_id': product.id,
+            'scrap_qty': qty,
+            'product_uom_id': product.uom_id.id,
+            'location_id': location.id,
+            'origin': (reason or '').strip() or _('Damaged in the shop'),
+            'company_id': self.company_id.id,
+        })
+        scrap.action_validate()
+        return {
+            'id': scrap.id,
+            'name': scrap.name,
+            'product': product.display_name,
+            'qty': qty,
+            'uom': product.uom_id.name,
+            'left': product.with_context(location=location.id).qty_available,
+        }
+
+    def pos_modern_set_stock(self, product_id, qty, reason=''):
+        """Stock adjustment: set the counted quantity (Odoo's inventory adjustment)."""
+        self.ensure_one()
+        product = self.env['product.product'].browse(int(product_id or 0)).exists()
+        if not product:
+            raise UserError(_("Pick the product to adjust."))
+        try:
+            qty = float(qty)
+        except (TypeError, ValueError):
+            raise UserError(_("Type the counted quantity."))
+        if qty < 0:
+            raise UserError(_("The quantity cannot be negative."))
+        if not product.is_storable:
+            raise UserError(_("%s does not keep stock.", product.display_name))
+        location = self._pos_modern_stock_location()
+        Quant = self.env['stock.quant'].with_context(inventory_mode=True)
+        quant = Quant.search([('product_id', '=', product.id), ('location_id', '=', location.id)], limit=1)
+        if quant:
+            quant.write({'inventory_quantity': qty})
+        else:
+            quant = Quant.create({'product_id': product.id, 'location_id': location.id, 'inventory_quantity': qty})
+        quant.action_apply_inventory()
+        return {
+            'product': product.display_name,
+            'qty': quant.quantity,
+            'uom': product.uom_id.name,
+        }

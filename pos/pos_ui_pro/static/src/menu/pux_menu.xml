@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-inherit="pos_modern.Menu" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_ps')]" position="attributes">
+            <attribute name="t-att-data-pux-biz">pux.biz</attribute>
+            <attribute name="t-att-data-pux-color">pux.color</attribute>
+        </xpath>
+    </t>
+
+    <!-- Orders page: today at a glance above Odoo's list -->
+    <t t-inherit="modern_theme.AppListPage" t-inherit-mode="extension">
+        <!-- appended (not before AppNativeView: that would break its t-if/t-else chain); CSS moves it on top -->
+        <xpath expr="//AppNativeView/.." position="inside">
+            <PuxOrderStats t-if="state.ready and page.components?.PuxOrderStats"/>
+        </xpath>
+    </t>
+
+    <t t-name="pos_ui_pro.OrderStats">
+        <div class="pux-kpis">
+            <div class="pux-kpi">
+                <span class="pux-kpi-label"><i class="fa fa-line-chart"/> Today's sales</span>
+                <span class="pux-kpi-value" t-esc="state.ready ? money(state.sales) : '…'"/>
+            </div>
+            <div class="pux-kpi">
+                <span class="pux-kpi-label"><i class="fa fa-shopping-cart"/> Orders today</span>
+                <span class="pux-kpi-value" t-esc="state.ready ? state.count : '…'"/>
+            </div>
+            <div class="pux-kpi">
+                <span class="pux-kpi-label"><i class="fa fa-ticket"/> Average ticket</span>
+                <span class="pux-kpi-value" t-esc="state.ready ? money(avg) : '…'"/>
+            </div>
+            <div class="pux-kpi">
+                <span class="pux-kpi-label"><i class="fa fa-undo"/> Refunds today</span>
+                <span class="pux-kpi-value"><t t-esc="state.ready ? money(state.refunds) : '…'"/><small t-if="state.refundCount"> · <t t-esc="state.refundCount"/></small></span>
+            </div>
+            <div class="pux-kpi">
+                <span class="pux-kpi-label"><i class="fa fa-calendar"/> This month</span>
+                <span class="pux-kpi-value" t-esc="state.ready ? money(state.month) : '…'"/>
+            </div>
+        </div>
+    </t>
+</templates>

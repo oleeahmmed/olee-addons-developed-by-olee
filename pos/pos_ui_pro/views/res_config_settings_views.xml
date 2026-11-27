@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_pux" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.pos_ui_pro</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="point_of_sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//setting[@id='is_restaurant']" position="before">
+                <setting id="pux_business_type" string="Business type"
+                         help="Pick your business and save: the POS opens with the screen made for it.">
+                    <field name="pos_pux_business_type" readonly="pos_has_active_session" widget="radio"/>
+                    <div class="text-muted small mt-1" invisible="not pos_has_active_session">
+                        Close the open session to change the business type.
+                    </div>
+                </setting>
+                <setting id="pux_pos_style" string="POS style"
+                         help="Cart: products with a cart beside them. Bill: a bill table you fill by scanning or typing. Cashiers can switch on the POS top bar.">
+                    <field name="pos_pux_pos_style" widget="radio"/>
+                </setting>
+                <setting id="pux_theme_color" string="Theme color"
+                         help="Primary colour of the POS screen. Light / dark is a button on the POS top bar.">
+                    <field name="pos_pux_theme_color"/>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="pos_config_view_form_pux" model="ir.ui.view">
+        <field name="name">pos.config.form.pos_ui_pro</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='title']" position="inside">
+                <div class="mt-2 d-flex align-items-center gap-2">
+                    <label for="pux_business_type" class="fw-bold"/>
+                    <field name="pux_business_type" readonly="has_active_session"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Counter settings (the gear on the Menu page) -->
+    <record id="pos_config_counter_form_pux" model="ir.ui.view">
+        <field name="name">pos.config.counter.form.pos_ui_pro</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="pos_modern.pos_config_counter_form"/>
+        <field name="arch" type="xml">
+            <div name="pm_addons" position="before">
+                <group string="Look" name="pux_look">
+                    <field name="has_active_session" invisible="1"/>
+                    <field name="pux_business_type" readonly="has_active_session"/>
+                    <field name="pux_pos_style" widget="radio" options="{'horizontal': true}"/>
+                    <field name="pux_theme_color"/>
+                </group>
+            </div>
+        </field>
+    </record>
+</odoo>

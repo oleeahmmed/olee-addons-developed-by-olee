@@ -20,6 +20,9 @@ class ResUsers(models.Model):
         cookies = cookies or {}
         attrs = {f"data-mt-{key}": value for key, value in MT_ATTRIBUTES.items()}
         attrs["data-mt-scheme"] = color_scheme
+        attrs["data-mt-color"] = (
+            self.env["ir.config_parameter"].sudo().get_param("modern_theme.primary_color") or "blue"
+        )
         # Per-browser sidebar state (set by the sidebar) so the layout never jumps on load.
         collapsed = cookies.get("mt_sb_collapsed")
         attrs["data-mt-sidebar-collapsed"] = collapsed if collapsed in ("0", "1") else "0"

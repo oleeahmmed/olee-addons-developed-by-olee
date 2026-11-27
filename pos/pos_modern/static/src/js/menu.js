@@ -8,10 +8,29 @@ import { ProductDrawer, openQuickDrawer } from "./drawer";
 import { APP_XMLID } from "./pages";
 import { PsCustomerPicker, PsDayEndDialog, PsHeldDialog, PsPinDialog } from "./counter/dialogs";
 import { flushQueue, isConnectionError, queueOrder, readQueue } from "./counter/offline";
-import { printReceipt } from "./counter/print";
-import { PsLabelsDialog, PsModifierDialog, PsQtyDialog, PsReturnDialog } from "./counter/tools";
+import { printReceipt, printTemplate } from "./counter/print";
+import { PsExpenseDialog, PsLabelsDialog, PsModifierDialog, PsQtyDialog, PsReturnDialog, PsStockToolDialog } from "./counter/tools";
+import { Dropdown } from "@web/core/dropdown/dropdown";
+import { DropdownItem } from "@web/core/dropdown/dropdown_item";
 
 const SHOP_KEY = "pos_modern.menu.shop";
+// Counter layout per browser: "cart" (product grid + cart rail) or "bill" (bill table + product panel).
+const LAYOUT_KEY = "pos_modern.menu.layout";
+const GRID_KEY = "pos_modern.menu.bill_grid";
+function readPref(key, fallback) {
+    try {
+        return window.localStorage.getItem(key) || fallback;
+    } catch {
+        return fallback;
+    }
+}
+function storePref(key, value) {
+    try {
+        window.localStorage.setItem(key, value);
+    } catch {
+        // private window: not remembered
+    }
+}
 
 function readShop() {
     try {
@@ -52,7 +71,7 @@ const round2 = (v) => Math.round((Number(v) || 0) * 100) / 100;
  */
 export class PosMenu extends Component {
     static template = "pos_modern.Menu";
-    static components = { PsCustomerPicker };
+    static components = { PsCustomerPicker, Dropdown, DropdownItem };
     static props = ["*"];
 
     setup() {
@@ -61,6 +80,7 @@ export class PosMenu extends Component {
         this.dialog = useService("dialog");
         this.notification = useService("notification");
         this.searchRef = useRef("search");
+        this.billRef = useRef("billadd");
         usePinApp(APP_XMLID);
         const ctx = this.props.action?.context || {};
         this.state = useState({
@@ -75,7 +95,9 @@ export class PosMenu extends Component {
             holdId: false,
             tableId: ctx.pos_modern_table_id || false,
             tableName: ctx.pos_modern_table_name || "",
+            floorId: false,
             mode: "cart", // cart | pay
+            printNext: false,
             payments: [], // [{ uid, method_id, amount, ref, phone }]
             pin: "",
             quote: null,
@@ -88,6 +110,10 @@ export class PosMenu extends Component {
             queue: readQueue().length,
             online: true,
             extra: {}, // order-level values of shop addons
+            layout: readPref(LAYOUT_KEY, "cart") === "bill" ? "bill" : "cart",
+            showGrid: readPref(GRID_KEY, "1") === "1", // bill layout: product panel on the right
+            billQuery: "",
+            billActive: 0,
         });
         this.orderUuid = newUuid();
         this.quoteTimer = null;
@@ -124,6 +150,10 @@ export class PosMenu extends Component {
         this.state.data = data;
         this.state.online = true;
         this.state.loading = false;
+        const floors = data.floors || [];
+        if (floors.length && !floors.some((f) => f.id === this.state.floorId)) {
+            this.state.floorId = floors[0].id;
+        }
         this.scheduleQuote();
     }
 
@@ -196,6 +226,66 @@ export class PosMenu extends Component {
     }
     setCategory(id) {
         this.state.category = id;
+    }
+
+    // ------------------------------------------------------------------ layout: cart | bill
+    setLayout(layout) {
+        this.state.layout = layout === "bill" ? "bill" : "cart";
+        storePref(LAYOUT_KEY, this.state.layout);
+        if (this.state.layout === "bill") {
+            setTimeout(() => this.billRef.el?.focus(), 50);
+        }
+    }
+    toggleGrid() {
+        this.state.showGrid = !this.state.showGrid;
+        storePref(GRID_KEY, this.state.showGrid ? "1" : "0");
+    }
+    /** Bill add row: best matches for what was typed or scanned. */
+    get billResults() {
+        const q = this.state.billQuery.trim().toLowerCase();
+        if (!q) {
+            return [];
+        }
+        const all = this.state.data?.products || [];
+        const exact = all.filter((p) => p.barcode === q || (p.code || "").toLowerCase() === q);
+        const rest = all.filter((p) => !exact.includes(p) && this.matches(p, q));
+        return [...exact, ...rest].slice(0, 8);
+    }
+    billAdd(p) {
+        if (p) {
+            this.onProduct(p);
+        }
+        this.state.billQuery = "";
+        this.state.billActive = 0;
+        this.billRef.el?.focus();
+    }
+    async onBillKey(ev) {
+        const rows = this.billResults;
+        if (ev.key === "ArrowDown") {
+            ev.preventDefault();
+            this.state.billActive = Math.min(this.state.billActive + 1, Math.max(rows.length - 1, 0));
+        } else if (ev.key === "ArrowUp") {
+            ev.preventDefault();
+            this.state.billActive = Math.max(this.state.billActive - 1, 0);
+        } else if (ev.key === "Escape") {
+            this.state.billQuery = "";
+        } else if (ev.key === "Enter") {
+            ev.preventDefault();
+            const q = this.state.billQuery.trim();
+            if (!q) {
+                return;
+            }
+            if (this.handleScan(q)) {
+                this.state.billQuery = "";
+                return;
+            }
+            if (rows.length) {
+                this.billAdd(rows[this.state.billActive] || rows[0]);
+            } else {
+                await this.searchServer(q);
+                this.state.billQuery = "";
+            }
+        }
     }
     async onSearchKey(ev) {
         if (ev.key !== "Enter") {
@@ -481,6 +571,21 @@ export class PosMenu extends Component {
     get discountAmount() {
         return this.quoteFresh ? this.state.quote.discount : 0;
     }
+    get productDiscount() {
+        return this.state.cart.reduce((s, l) => {
+            const p = this.byId[l.id];
+            return p ? s + p.excl * l.qty * ((l.discount || 0) / 100) : s;
+        }, 0);
+    }
+    get extraDiscount() {
+        return this.state.cart.reduce((s, l) => {
+            const p = this.byId[l.id];
+            return p ? s + p.excl * l.qty * (1 - (l.discount || 0) / 100) * ((this.state.billDiscount || 0) / 100) : s;
+        }, 0);
+    }
+    get grossSubtotal() {
+        return this.subtotal + this.productDiscount + this.extraDiscount;
+    }
     get payable() {
         if (this.quoteFresh) {
             return this.state.quote.payable;
@@ -564,6 +669,24 @@ export class PosMenu extends Component {
             onClosed: () => this.load(),
         });
     }
+    openExpense() {
+        if (!this.session) {
+            this.notification.add(_t("Open the shop first: expenses are paid from the drawer."), { type: "warning" });
+            return;
+        }
+        this.dialog.add(PsExpenseDialog, {
+            configId: this.configId,
+            currencyId: this.state.data.currency_id,
+            onSaved: () => this.load(),
+        });
+    }
+    openStockTool(mode) {
+        this.dialog.add(PsStockToolDialog, {
+            configId: this.configId,
+            mode,
+            onSaved: () => this.load(),
+        });
+    }
 
     // ------------------------------------------------------------------ customer
     setPartner(value) {
@@ -642,6 +765,7 @@ export class PosMenu extends Component {
     backToCart() {
         this.state.mode = "cart";
         this.state.error = "";
+        this.state.printNext = false;
     }
     tender(method, amount) {
         return { uid: newUuid(), method_id: method.id, amount: amount ? round2(amount) : "", ref: "", phone: "" };
@@ -786,13 +910,17 @@ export class PosMenu extends Component {
     orderPaid(result) {
         this.state.done = { ...result, change: result.receipt?.change ?? this.change };
         this.lastReceipt = result.receipt;
+        if (this.state.data.session) {
+            this.state.data.session.orders = (this.state.data.session.orders || 0) + 1;
+        }
         if (this.state.holdId) {
             this.state.data.held_count = Math.max(0, (this.state.data.held_count || 1) - 1);
         }
         this.notification.add(_t("Order %s paid", result.name), { type: "success" });
-        if (this.features.auto_print && result.receipt) {
+        if ((this.features.auto_print || this.state.printNext) && result.receipt) {
             this.printReceipt(result.receipt);
         }
+        this.state.printNext = false;
         this.resetAfterOrder();
     }
     orderOffline(payload) {
@@ -802,9 +930,10 @@ export class PosMenu extends Component {
         this.state.done = { name: receipt.ref, total: receipt.total, change: receipt.change, offline: true, receipt };
         this.lastReceipt = receipt;
         this.notification.add(_t("No connection: the order is kept and will be sent automatically."), { type: "warning" });
-        if (this.features.auto_print) {
+        if (this.features.auto_print || this.state.printNext) {
             this.printReceipt(receipt);
         }
+        this.state.printNext = false;
         this.resetAfterOrder();
     }
     resetAfterOrder() {
@@ -866,6 +995,35 @@ export class PosMenu extends Component {
             printReceipt(receipt);
         }
     }
+    /** Kitchen ticket: what to cook, no prices. */
+    printKOT() {
+        if (!this.cartLines.length) {
+            return;
+        }
+        printTemplate("pos_modern.KOT", {
+            shop: this.state.data.config_name,
+            order: this.orderNumber,
+            table: this.state.tableName,
+            note: this.state.note,
+            now: new Date().toLocaleString(),
+            lines: this.cartLines.map((l) => ({ qty: l.qty, name: l.product.name, note: l.note || "" })),
+        }, "80");
+    }
+    /** Take the payment, then print the bill (receipt) once the order is saved. */
+    billAndPrint() {
+        if (!this.cartLines.length || this.state.busy) {
+            return;
+        }
+        this.state.printNext = true;
+        this.enterPay();
+    }
+    newBill() {
+        if (this.state.busy) {
+            return;
+        }
+        this.newOrder();
+        this.clearTable();
+    }
     newOrder() {
         Object.assign(this.state, { done: null, error: "" });
         this.clearCart();
@@ -887,6 +1045,39 @@ export class PosMenu extends Component {
         this.state.tableName = "";
     }
 
+    // ------------------------------------------------------------------ dining / table
+    get floors() {
+        return this.state.data?.floors || [];
+    }
+    get floor() {
+        return this.floors.find((f) => f.id === this.state.floorId);
+    }
+    get floorTables() {
+        return this.floor?.tables || [];
+    }
+    get orderNumber() {
+        const session = this.state.data?.session;
+        return session ? (session.orders || 0) + 1 : 0;
+    }
+    onFloor(ev) {
+        const id = Number(ev.target.value) || false;
+        this.state.floorId = id;
+        const ids = new Set(this.floorTables.map((t) => t.id));
+        if (this.state.tableId && !ids.has(this.state.tableId)) {
+            this.clearTable();
+        }
+    }
+    onTable(ev) {
+        const id = Number(ev.target.value) || false;
+        if (!id) {
+            this.clearTable();
+            return;
+        }
+        const table = this.floorTables.find((t) => t.id === id);
+        this.state.tableId = id;
+        this.state.tableName = table ? `${this.floor.name} · ${_t("Table")} ${table.number}` : "";
+    }
+
     // ------------------------------------------------------------------ keyboard
     get shortcuts() {
         return [
@@ -905,7 +1096,7 @@ export class PosMenu extends Component {
             return;
         }
         const handlers = {
-            F2: () => this.searchRef.el?.focus(),
+            F2: () => (this.state.layout === "bill" ? this.billRef.el : this.searchRef.el)?.focus(),
             F4: () => this.holdBill(),
             F6: () => document.querySelector(".ps-cust input")?.focus(),
             F7: () => this.openHeld(),
