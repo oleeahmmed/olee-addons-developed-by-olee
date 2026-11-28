@@ -1389,7 +1389,34 @@ export class PosTables extends Component {
     }
     elapsed(table) {
         const m = this.minutes(table);
-        return m >= 60 ? `${Math.floor(m / 60)}h ${String(m % 60).padStart(2, "0")}` : `${m} min`;
+        return m >= 60 ? `${Math.floor(m / 60)}h ${String(m % 60).padStart(2, "0")}m` : `${m} min`;
+    }
+    chairs(table) {
+        const n = Math.min(Math.max(Number(table.seats) || 4, 1), 14);
+        const out = [];
+        if (table.shape_class === "round") {
+            for (let i = 0; i < n; i++) {
+                const a = Math.PI / 2 + (i * 2 * Math.PI) / n;
+                out.push({ x: 60 + 42 * Math.cos(a), y: 60 + 42 * Math.sin(a), rot: (a * 180) / Math.PI + 90 });
+            }
+            return out;
+        }
+        const wide = table.shape_class === "rect";
+        const yTop = wide ? 26 : 20;
+        const yBottom = wide ? 94 : 100;
+        const xSide = wide ? 9 : 20;
+        const xStart = wide ? 34 : 40;
+        const xEnd = wide ? 86 : 80;
+        const base = Math.floor(n / 4);
+        const extra = n % 4;
+        const counts = [base + (extra > 0 ? 1 : 0), base + (extra > 1 ? 1 : 0), base + (extra > 2 ? 1 : 0), base];
+        const spread = (k, start, end) => Array.from({ length: k }, (_, i) =>
+            (k === 1 ? (start + end) / 2 : start + (i * (end - start)) / (k - 1)));
+        for (const x of spread(counts[0], xStart, xEnd)) out.push({ x, y: yTop, rot: 0 });
+        for (const x of spread(counts[1], xStart, xEnd)) out.push({ x, y: yBottom, rot: 180 });
+        for (const y of spread(counts[2], 46, 74)) out.push({ x: xSide, y, rot: -90 });
+        for (const y of spread(counts[3], 46, 74)) out.push({ x: 120 - xSide, y, rot: 90 });
+        return out;
     }
     setFloor(id) {
         this.state.floorId = id;

@@ -633,13 +633,6 @@
                             <i class="fa fa-search" aria-hidden="true"/>
                             <input type="search" t-model="state.query" placeholder="Search table or guest…" aria-label="Search table"/>
                         </div>
-                        <div class="ps-tbl-server" t-if="state.data.server">
-                            <span class="ps-tbl-avatar" t-esc="initials(state.data.server.name)"/>
-                            <span class="ps-tbl-server-text">
-                                <strong t-esc="state.data.server.name"/>
-                                <small>Server</small>
-                            </span>
-                        </div>
                     </div>
                     <div class="ps-tbl-filters">
                         <nav class="ps-tbl-floors" aria-label="Floors">
@@ -673,30 +666,39 @@
                             <t t-foreach="tables" t-as="t" t-key="t.id">
                                 <button type="button" t-attf-class="ps-ttable ps-ttable--{{ t.shape_class }} ps-ttable--{{ t.status }} {{ t.id === state.selId ? 'is-selected' : '' }}"
                                         t-on-click="() => this.select(t)">
-                                    <span class="ps-ttable-top">
+                                    <span class="ps-ttable-art">
+                                        <svg viewBox="0 0 120 120" aria-hidden="true">
+                                            <rect t-foreach="chairs(t)" t-as="c" t-key="c_index" class="ps-ttable-chair"
+                                                  t-att-x="c.x - 6" t-att-y="c.y - 4.5" width="12" height="9" rx="3"
+                                                  t-att-transform="'rotate(' + c.rot + ' ' + c.x + ' ' + c.y + ')'"/>
+                                            <circle t-if="t.shape_class === 'round'" class="ps-ttable-topart" cx="60" cy="60" r="29"/>
+                                            <rect t-elif="t.shape_class === 'rect'" class="ps-ttable-topart" x="20" y="37" width="80" height="46" rx="13"/>
+                                            <rect t-else="" class="ps-ttable-topart" x="31" y="31" width="58" height="58" rx="13"/>
+                                        </svg>
                                         <span class="ps-ttable-no" t-esc="t.number"/>
+                                    </span>
+                                    <span class="ps-ttable-chips">
+                                        <span class="ps-ttable-badge"><span class="ps-dot"/><t t-esc="statusLabel(t.status)"/></span>
                                         <span class="ps-ttable-seats"><i class="fa fa-user-o" aria-hidden="true"/> <t t-esc="t.seats"/></span>
                                     </span>
                                     <span class="ps-ttable-mid">
                                         <t t-if="t.status === 'occupied' or t.status === 'billing'">
-                                            <span class="ps-ttable-amount" t-esc="money(t.total)"/>
-                                            <span class="ps-ttable-meta"><i class="fa fa-clock-o" aria-hidden="true"/> <t t-esc="elapsed(t)"/><t t-if="t.guests"> · <i class="fa fa-users" aria-hidden="true"/> <t t-esc="t.guests"/></t></span>
+                                            <strong class="ps-ttable-amount" t-esc="money(t.total)"/>
+                                            <span class="ps-ttable-meta" t-att-class="{ 'is-late': minutes(t) >= 60 }">
+                                                <i class="fa fa-clock-o" aria-hidden="true"/> <t t-esc="elapsed(t)"/><t t-if="t.guests"> · <i class="fa fa-users" aria-hidden="true"/> <t t-esc="t.guests"/></t>
+                                            </span>
                                         </t>
                                         <t t-elif="t.status === 'reserved'">
-                                            <span class="ps-ttable-time"><i class="fa fa-clock-o" aria-hidden="true"/> <t t-esc="t.reserved.at or '—'"/></span>
+                                            <strong class="ps-ttable-time"><i class="fa fa-clock-o" aria-hidden="true"/> <t t-esc="t.reserved.at or '—'"/></strong>
                                             <span class="ps-ttable-meta">
                                                 <t t-if="t.reserved.name" t-esc="t.reserved.name"/><t t-if="t.reserved.name and t.reserved.guests"> · </t><t t-if="t.reserved.guests"><t t-esc="t.reserved.guests"/> guests</t>
                                                 <t t-if="!t.reserved.name and !t.reserved.guests">Reserved</t>
                                             </span>
                                         </t>
                                         <t t-else="">
-                                            <span class="ps-ttable-free">Tap to seat</span>
+                                            <strong class="ps-ttable-free">Tap to seat</strong>
                                         </t>
                                     </span>
-                                    <span class="ps-ttable-badge">
-                                        <span class="ps-dot"/><t t-esc="statusLabel(t.status)"/>
-                                    </span>
-                                    <span t-if="t.waiter" class="ps-ttable-waiter" t-esc="t.waiter"/>
                                 </button>
                             </t>
                         </div>
@@ -711,7 +713,7 @@
                             <header class="ps-side-head">
                                 <div>
                                     <h2>Table <t t-esc="detail.table.number"/></h2>
-                                    <small><t t-esc="detail.table.floor"/> · <t t-esc="detail.table.seats"/> seats</small>
+                                    <small><t t-esc="detail.table.floor"/> · <t t-esc="detail.table.seats"/> <t t-if="detail.table.seats == 1">seat</t><t t-else="">seats</t></small>
                                 </div>
                                 <span t-attf-class="ps-badge ps-badge--{{ detail.status }}"><span class="ps-dot"/><t t-esc="statusLabel(detail.status)"/></span>
                             </header>
